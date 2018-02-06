@@ -7,7 +7,6 @@ import questions from '~/questions.json';
 
 class Home extends Component {
   render() {
-
 		const QuestionsList = questions.list.map((question,index)=>{
 			return (<QuestionCard style={{width: '70%', marginLeft: 'auto', marginRight: 'auto'}} question={question} key={index}/>);
 		});
@@ -22,4 +21,4 @@ class Home extends Component {
   }
 }
 
-export default Home;
+export default Home

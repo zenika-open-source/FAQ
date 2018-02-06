@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import ReactMarkdown from 'react-markdown';
-import ReactEmojiMixin from 'react-emoji';
 
 import Card from 'react-toolbox/lib/card/Card';
 import CardText from 'react-toolbox/lib/card/CardText';
 import CardTitle from 'react-toolbox/lib/card/CardTitle';
-
-import Table from 'react-toolbox/lib/table/Table';
 
 import './style.css';
 

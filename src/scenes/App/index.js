@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
+
 import './style.css';
 import theme from '~/toolbox/theme'
 import ThemeProvider from 'react-toolbox/lib/ThemeProvider';
 import '~/toolbox/theme.css';
 
 import Home from '~/scenes/Home';
-
 import Navbar from '~/components/Navbar';
 
 class App extends Component {
@@ -25,4 +25,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default App

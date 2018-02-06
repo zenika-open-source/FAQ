@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import * as Actions from '~/actions'
 
 import './style.css';
 
 class Searchbar extends Component {
 	render() {
+		const {text,search} = this.props;
 		return (
-			<div className="Searchbar" {...this.props}>
+			<div className="Searchbar" style={this.props.style}>
 				<div className="search">
-					<input type="text" className="searchTerm" placeholder="Ex: Comment remplir une note de frais ?"/>
+					<input type="text" className="searchTerm" placeholder="Ex: Comment remplir une note de frais ?" value={text} onChange={(e) => search(e.target.value)}/>
 					<button type="submit" className="searchButton">
 						<i className="material-icons">search</i>
 					</button>
@@ -17,4 +21,10 @@ class Searchbar extends Component {
 	}
 }
 
-export default Searchbar;
+const mapStateToProps = state => ({ text: state.search.text })
+
+const mapDispatchToProps = dispatch => ({
+  search: bindActionCreators(Actions, dispatch).search
+})
+
+export default connect(mapStateToProps,mapDispatchToProps)(Searchbar)
