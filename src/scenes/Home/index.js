@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
 
 import Searchbar from '~/components/Searchbar';
 import QuestionCard from '~/components/QuestionCard';
 
-import questions from '~/questions.json';
-
 class Home extends Component {
   render() {
-		const QuestionsList = questions.list.map((question,index)=>{
+		const {questions,filtered} = this.props;
+		console.log(this.props);
+
+		const list = filtered.length > 0 ? filtered.map(x=>x.item) : questions;
+
+		const QuestionsList = list.map((question,index)=>{
 			return (<QuestionCard style={{width: '70%', marginLeft: 'auto', marginRight: 'auto'}} question={question} key={index}/>);
 		});
 
@@ -21,4 +25,6 @@ class Home extends Component {
   }
 }
 
-export default Home
+const mapStateToProps = state => state.questions
+
+export default connect(mapStateToProps)(Home)

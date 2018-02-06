@@ -1,20 +1,18 @@
-{
-	"list": [
-		{
-			"question": "Comment remplir les notes de frais ?",
-			"answer": "Pour remplir les notes de frais (NDF), il faut:\n* Se connecter à [Alibeez](https://zenika.my.alibeez.com/#!home)\n* Aller sur Notes de frais > Mes notes de frais\n* Remplir la description et la période\n* Valider la note de frais"
-		},
-		{
-			"question": "Où trouver le modèle Google Slide des formations ?",
-			"answer": "Le modèle se trouve ..."
-		},
-		{
-			"question": "Quelle est la charte graphique de Zenika ?",
-			"answer": "La charte graphique de Zenika est composée de ..."
-		},
-		{
-			"question": "Est ce que FAQ Zenika gère le markdown ?",
-			"answer": "**Oui!** FAQ Zenika permet d'écrire les réponses en [Github Flavored Markdown](https://guides.github.com/features/mastering-markdown/)\n### Markdown features:\n| Feature | Support |\n|----|----|\n| Headers | ✔ |\n| Emphasis | ✔ |\n| Lists | ✔ |\n| Images | ✔ |\n| Blockquote | ✔ |\n| Code | ✔ (no syntax highlighting)|\n| Task List | ✔ |\n| Tables | ✔ |\n| Emojis | ✘ |"
-		}
-	]
-}
+[
+	{
+		"question": "Comment remplir les notes de frais ?",
+		"answer": "Pour remplir les notes de frais (NDF), il faut:\n* Se connecter à [Alibeez](https://zenika.my.alibeez.com/#!home)\n* Aller sur Notes de frais > Mes notes de frais\n* Remplir la description et la période\n* Valider la note de frais"
+	},
+	{
+		"question": "Où trouver le modèle Google Slide des formations ?",
+		"answer": "Le modèle se trouve ..."
+	},
+	{
+		"question": "Quelle est la charte graphique de Zenika ?",
+		"answer": "La charte graphique de Zenika est composée de ..."
+	},
+	{
+		"question": "Est ce que FAQ Zenika gère le markdown ?",
+		"answer": "**Oui!** FAQ Zenika permet d'écrire les réponses en [Github Flavored Markdown](https://guides.github.com/features/mastering-markdown/)\n### Markdown features:\n| Feature | Support |\n|----|----|\n| Headers | ✔ |\n| Emphasis | ✔ |\n| Lists | ✔ |\n| Images | ✔ |\n| Blockquote | ✔ |\n| Code | ✔ (no syntax highlighting)|\n| Task List | ✔ |\n| Tables | ✔ |\n| Emojis | ✘ |"
+	}
+]
