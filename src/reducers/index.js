@@ -4,8 +4,8 @@ import search from './search'
 import questions from './questions'
 
 const faqApp = combineReducers({
-	questions,
-	search
+  questions,
+  search
 })
 
 export default faqApp
