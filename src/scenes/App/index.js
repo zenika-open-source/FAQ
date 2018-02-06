@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 
-import './style.css'
 import theme from '~/toolbox/theme'
 import ThemeProvider from 'react-toolbox/lib/ThemeProvider'
 import '~/toolbox/theme.css'
