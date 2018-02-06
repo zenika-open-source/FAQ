@@ -1,6 +1,6 @@
 import * as types from '~/constants/ActionTypes'
 
-import questions from '~/questions.json';
+import questions from '~/questions.json'
 import Fuse from 'fuse.js'
 
 const initialState = {
@@ -9,34 +9,33 @@ const initialState = {
 }
 
 const fuseOptions = {
-  shouldSort: true,
+	shouldSort: true,
 	includeScore: true,
-  threshold: 0.6,
-  location: 0,
-  distance: 100,
-  maxPatternLength: 32,
-  minMatchCharLength: 1,
-  keys: [
-    "question",
-		"answer"
+	threshold: 0.6,
+	location: 0,
+	distance: 100,
+	maxPatternLength: 32,
+	minMatchCharLength: 1,
+	keys: [
+		'question',
+		'answer'
 	]
 }
 
 const search = (state = initialState, action) => {
-	console.log(state);
 	switch (action.type) {
-		case types.SEARCH:
-			return {
-				...state,
-				filtered: (new Fuse(state.questions,fuseOptions)).search(action.text)
-			}
-		case types.CLEAR_SEARCH:
-			return {
-				...state,
-				filtered: []
-			}
-		default:
-			return state
+	case types.SEARCH:
+		return {
+			...state,
+			filtered: (new Fuse(state.questions,fuseOptions)).search(action.text)
+		}
+	case types.CLEAR_SEARCH:
+		return {
+			...state,
+			filtered: []
+		}
+	default:
+		return state
 	}
 }
 
