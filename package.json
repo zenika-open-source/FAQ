@@ -18,7 +18,10 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "lint": "eslint src",
-    "deploy": "rm build/static/js/*.map && now build --name faq-zenika --public"
+    "deploy":
+      "rm build/static/js/*.map && now build --name faq-zenika --public",
+    "deploy_ci":
+      "rm build/static/js/*.map && now build --name faq-zenika --public --token $NOW_TOKEN"
   },
   "devDependencies": {
     "eslint": "^4.17.0",
@@ -27,7 +30,8 @@
     "eslint-plugin-node": "^6.0.0",
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-react": "^7.6.1",
-    "eslint-plugin-standard": "^3.0.1"
+    "eslint-plugin-standard": "^3.0.1",
+    "now": "^9.2.8"
   },
   "eslintConfig": {
     "extends": "react-app"
