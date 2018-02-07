@@ -7,11 +7,14 @@ import GithubIcon from './github-icon'
 class Navbar extends Component {
   render () {
     return (
-      <AppBar title='🤔 FAQ Zenika'
+      <AppBar
+        title="🤔 FAQ Zenika"
         rightIcon={<GithubIcon />}
-        onRightIconClick={() => window.open('https://github.com/Zenika/FAQ', '_blank')}
-        className='Navbar'>
-      </AppBar>
+        onRightIconClick={() =>
+          window.open('https://github.com/Zenika/FAQ', '_blank')
+        }
+        className="Navbar"
+      />
     )
   }
 }

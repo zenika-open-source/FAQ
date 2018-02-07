@@ -9,7 +9,6 @@ import Navbar from 'components/Navbar'
 
 class App extends Component {
   render () {
-    console.log('x')
     return (
       <div className="App">
         <ThemeProvider theme={theme}>

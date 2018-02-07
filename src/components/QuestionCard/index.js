@@ -16,13 +16,22 @@ class QuestionCard extends Component {
       <Card className="QuestionCard" {...this.props}>
         <CardTitle
           avatar="https://placeimg.com/80/80/animals"
-          title={question.question}/>
+          title={question.question}
+        />
         <CardText>
-          <ReactMarkdown source={question.answer}
+          <ReactMarkdown
+            source={question.answer}
             renderers={{
-              link: props => <a href={props.href} target="_blank">{props.children}</a>,
-              table: props => <table className='zui-table'>{props.children}</table>
-            }}/>
+              link: props => (
+                <a href={props.href} target="_blank">
+                  {props.children}
+                </a>
+              ),
+              table: props => (
+                <table className="zui-table">{props.children}</table>
+              )
+            }}
+          />
         </CardText>
       </Card>
     )
@@ -30,7 +39,7 @@ class QuestionCard extends Component {
 }
 
 QuestionCard.propTypes = {
-  question: PropTypes.object.required
+  question: PropTypes.object.isRequired
 }
 
 export default QuestionCard

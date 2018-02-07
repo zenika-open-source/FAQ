@@ -1,7 +1,7 @@
 .Searchbar {
   width: 40%;
-	height: 3rem;
-	margin: auto;
+  height: 3rem;
+  margin: auto;
   position: relative;
   /*top: 50%;*/
   /*left: 50%;*/
@@ -10,26 +10,26 @@
 
 .Searchbar .search {
   width: 100%;
-  position: relative
+  position: relative;
 }
 
 .Searchbar .search i {
-	line-height: 1.4;
+  line-height: 1.4;
 }
 
 .Searchbar .searchTerm {
   float: left;
   width: 100%;
-  border: 3px solid #00B4CC;
+  border: 3px solid #00b4cc;
   padding: 5px;
   height: 20px;
   border-radius: 5px;
   outline: none;
-  color: #9DBFAF;
+  color: #9dbfaf;
 }
 
-.Searchbar .searchTerm:focus{
-  color: #00B4CC;
+.Searchbar .searchTerm:focus {
+  color: #00b4cc;
 }
 
 .Searchbar .searchButton {
@@ -37,8 +37,8 @@
   right: -50px;
   width: 40px;
   height: 36px;
-  border: 1px solid #00B4CC;
-  background: #00B4CC;
+  border: 1px solid #00b4cc;
+  background: #00b4cc;
   text-align: center;
   color: #fff;
   border-radius: 5px;
