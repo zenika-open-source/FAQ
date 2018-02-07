@@ -19,9 +19,9 @@
     "eject": "react-scripts eject",
     "lint": "eslint src",
     "deploy":
-      "rm build/static/js/*.map && now build --name faq-zenika --public",
+      "rm build/static/js/*.map && now build --name faq-zenika --public && now alias faq-zenika",
     "deploy_ci":
-      "rm build/static/js/*.map && now build --name faq-zenika --public --token $NOW_TOKEN"
+      "rm build/static/js/*.map && now build --name faq-zenika --public --token $NOW_TOKEN && now alias faq-zenika --token $NOW_TOKEN"
   },
   "devDependencies": {
     "eslint": "^4.17.0",
@@ -36,5 +36,9 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "eslintIgnore": ["src/toolbox"]
+  "eslintIgnore": ["src/toolbox"],
+  "now": {
+    "name": "faq-zenika",
+    "alias": "faq-zenika"
+  }
 }
