@@ -15,6 +15,6 @@
   {
     "question": "Est ce que FAQ Zenika gère le markdown ?",
     "answer":
-      "**Oui!** FAQ Zenika permet d'écrire les réponses en [Github Flavored Markdown](https://guides.github.com/features/mastering-markdown/)\n### Markdown features:\n| Feature | Support |\n|----|----|\n| Headers | ✔ |\n| Emphasis | ✔ |\n| Lists | ✔ |\n| Images | ✔ |\n| Blockquote | ✔ |\n| Code | ✔ (no syntax highlighting)|\n| Task List | ✔ |\n| Tables | ✔ |\n| Emojis | ✘ |"
+      "**Oui!** FAQ Zenika permet d'écrire les questions/réponses en [Github Flavored Markdown](https://guides.github.com/features/mastering-markdown/)\n### Markdown features:\n| Feature | Support |\n|----|----|\n| Headers | ✔ |\n| Emphasis | ✔ |\n| Lists | ✔ |\n| Images | ✔ |\n| Blockquote | ✔ |\n| Code | ✔ (no syntax highlighting)|\n| Task List | ✔ |\n| Tables | ✔ |\n| Emojis | :heavy_check_mark: :100: :D |"
   }
 ]

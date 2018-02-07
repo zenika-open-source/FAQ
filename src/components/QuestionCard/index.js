@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import ReactMarkdown from 'react-markdown'
 
+import MarkdownEmoji from './markdown-emoji'
+
 import Card from 'react-toolbox/lib/card/Card'
 import CardText from 'react-toolbox/lib/card/CardText'
 import CardTitle from 'react-toolbox/lib/card/CardTitle'
@@ -16,7 +18,7 @@ class QuestionCard extends Component {
       <Card className="QuestionCard" {...this.props}>
         <CardTitle
           avatar="https://placeimg.com/80/80/animals"
-          title={question.question}
+          title={MarkdownEmoji(question.question)}
         />
         <CardText>
           <ReactMarkdown
@@ -29,7 +31,8 @@ class QuestionCard extends Component {
               ),
               table: props => (
                 <table className="zui-table">{props.children}</table>
-              )
+              ),
+              text: MarkdownEmoji
             }}
           />
         </CardText>
