@@ -18,7 +18,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "lint": "eslint src",
+    "lint": "eslint src --fix",
     "deploy":
       "rm build/static/js/*.map && now build --name faq-zenika --public && now alias faq-zenika",
     "deploy_ci":

@@ -1,0 +1,10 @@
+.Home .results {
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.Home .indication {
+  color: #fa983a;
+  font-style: italic;
+}
