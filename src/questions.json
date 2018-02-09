@@ -6,15 +6,35 @@
   },
   {
     "question": "Où trouver le modèle Google Slide des formations ?",
-    "answer": "Le modèle se trouve ..."
+    "answer": "Le modèle se trouve... :man_shrugging:"
+  },
+  {
+    "question": "Quelle est l'identité de Zenika ?",
+    "answer":
+      "Zenika, c'est quoi?\n\n**C'est un nom :** Zenika\n\n**C'est un slogan :** <Coding the World/>\n\n**C'est une charte graphique :** (#lien vers la charte graphique)\n\n**Mais surtout, c'est des consultants :** (Liste des consultants?)"
   },
   {
     "question": "Quelle est la charte graphique de Zenika ?",
-    "answer": "La charte graphique de Zenika est composée de ..."
+    "answer":
+      "La charte graphique de Zenika est composée des éléments suivants:\n\n## Logo\n\n![red](/img/charte_graphique/red.png)\n\nLe logo Zenika est composées des lettres ZNK orientées verticalement pour rappeler un caractère japonais.\n\nLe logo est souvent placé au centre d'un rond.\n\n![white_and_red](/img/charte_graphique/white_and_red.png)![red_and_white](/img/charte_graphique/red_and_white.png)\n\nIl est possible de trouver l'ensemble des logos de Zenika et des tribus sur le [Drive](https://drive.google.com/drive/folders/0Bx7qOCA6OCsSTmgtYkdseTV5MkE)\n\n## Couleurs\n\nLes deux couleurs principales de Zenika sont le rouge (#B11E3F) et le blanc (#FFFFFF). Une troisième couleur, le gris (#878483) peut parfois accompagner ces couleurs pour du texte."
   },
   {
     "question": "Est ce que FAQ Zenika gère le markdown ?",
     "answer":
       "**Oui!** FAQ Zenika permet d'écrire les questions/réponses en [Github Flavored Markdown](https://guides.github.com/features/mastering-markdown/)\n### Markdown features:\n| Feature | Support |\n|----|----|\n| Headers | ✔ |\n| Emphasis | ✔ |\n| Lists | ✔ |\n| Images | ✔ |\n| Blockquote | ✔ |\n| Code | ✔ (no syntax highlighting)|\n| Task List | ✔ |\n| Tables | ✔ |\n| Emojis | :heavy_check_mark: :100: :D |"
+  },
+  {
+    "question": "Qu'est ce que la rémunération variable ?",
+    "answer":
+      "La rémunération variable correspondant à un bonus trimestriel du salaire d'un consultant représentant 10% de la marge qu'il a généré."
+  },
+  {
+    "question": "Quelles sont les différentes agences existantes ?",
+    "answer":
+      "Zenika possède 8 agences:\n\n* Paris (2006)\n* Lyon (2009)\n* Rennes (2010)\n* Nantes (2012)\n* Lille (2014)\n* Bordeaux (2015)\n* Singapour (2016)\n* Montréal (2017)"
+  },
+  {
+    "question": "Comment suivre une formation ?",
+    "answer": "Pour suivre une formation... :man_shrugging:"
   }
 ]
