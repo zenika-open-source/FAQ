@@ -5,6 +5,7 @@
   "dependencies": {
     "emoji-dictionary": "^1.0.9",
     "fuse.js": "^3.2.0",
+    "immutadot": "^1.0.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-markdown": "^3.1.5",
@@ -19,10 +20,8 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "lint": "eslint src --fix",
-    "deploy":
-      "rm build/static/js/*.map && now build --name faq-zenika --public && now alias faq-zenika",
-    "deploy_ci":
-      "rm build/static/js/*.map && now build --name faq-zenika --public --token $NOW_TOKEN && now alias faq-zenika --token $NOW_TOKEN"
+    "deploy": "rm build/static/js/*.map && now build --name faq-zenika --public && now alias faq-zenika",
+    "deploy_ci": "rm build/static/js/*.map && now build --name faq-zenika --public --token $NOW_TOKEN && now alias faq-zenika --token $NOW_TOKEN"
   },
   "devDependencies": {
     "eslint": "^4.17.0",
@@ -37,7 +36,9 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "eslintIgnore": ["src/toolbox"],
+  "eslintIgnore": [
+    "src/toolbox"
+  ],
   "now": {
     "name": "faq-zenika",
     "alias": "faq-zenika"

@@ -1,7 +1,8 @@
-import * as types from 'constants/ActionTypes'
-
-import questions from 'questions.json'
+import { set } from 'immutadot'
 import Fuse from 'fuse.js'
+
+import * as types from 'constants/ActionTypes'
+import questions from 'questions.json'
 
 const initialState = {
   questions,
@@ -26,15 +27,9 @@ const search = (state = initialState, action) => {
     const filtered = new Fuse(state.questions, fuseOptions)
       .search(action.text)
       .filter(q => q.score < fuseOptions.threshold)
-    return {
-      ...state,
-      filtered: filtered
-    }
+    return set(state, 'filtered', filtered)
   case types.CLEAR_SEARCH:
-    return {
-      ...state,
-      filtered: []
-    }
+    return set(state, 'filtered', [])
   default:
     return state
   }

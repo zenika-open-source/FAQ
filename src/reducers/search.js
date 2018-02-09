@@ -1,3 +1,5 @@
+import { set } from 'immutadot'
+
 import * as types from 'constants/ActionTypes'
 
 const initialState = {
@@ -7,15 +9,9 @@ const initialState = {
 const search = (state = initialState, action) => {
   switch (action.type) {
   case types.SEARCH:
-    return {
-      ...state,
-      text: action.text
-    }
+    return set(state, 'text', action.text)
   case types.CLEAR_SEARCH:
-    return {
-      ...state,
-      text: ''
-    }
+    return set(state, 'text', action.text)
   default:
     return state
   }
