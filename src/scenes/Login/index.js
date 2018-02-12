@@ -19,7 +19,7 @@ class Login extends Component {
           label="Sign in"
           raised
           primary
-          onClick={() => login({ name: 'ErrOrnAmE' })}
+          onClick={() => login({ name: 'ErrOrnAmE', password: 'password' })}
         />
       </div>
     )
