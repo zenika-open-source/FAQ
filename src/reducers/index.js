@@ -1,9 +1,11 @@
 import { combineReducers } from 'redux'
 
-import search from './search'
+import auth from './auth'
 import questions from './questions'
+import search from './search'
 
 const faqApp = combineReducers({
+  auth,
   questions,
   search
 })
