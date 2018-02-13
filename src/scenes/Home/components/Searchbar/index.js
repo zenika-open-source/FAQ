@@ -1,8 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import * as Actions from 'actions'
 
 import './style.css'
 
@@ -34,10 +31,4 @@ Searchbar.propTypes = {
   style: PropTypes.object
 }
 
-const mapStateToProps = state => ({ text: state.search.text })
-
-const mapDispatchToProps = dispatch => ({
-  search: bindActionCreators(Actions, dispatch).search
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(Searchbar)
+export default Searchbar

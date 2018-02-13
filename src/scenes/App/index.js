@@ -6,9 +6,10 @@ import theme from 'toolbox/theme'
 import ThemeProvider from 'react-toolbox/lib/ThemeProvider'
 import 'toolbox/theme.css'
 
+import Navbar from './components/Navbar'
+
 import Login from 'scenes/Login'
 import Home from 'scenes/Home'
-import Navbar from 'components/Navbar'
 
 class App extends Component {
   render () {
@@ -35,8 +36,8 @@ App.propTypes = {
   auth: PropTypes.object.isRequired
 }
 
-const mapStateToProps = state => ({
-  auth: state.auth
+const mapStateToProps = ({ data: { auth } }) => ({
+  auth: auth
 })
 
 export default connect(mapStateToProps)(App)

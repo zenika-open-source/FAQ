@@ -1,6 +1,6 @@
 import { createLogic } from 'redux-logic'
-import { SEARCH } from 'constants/ActionTypes'
-import { filterQuestions } from 'actions'
+import { SEARCH } from './actions'
+import { filterQuestions } from './data/filtered/actions'
 
 import Fuse from 'fuse.js'
 
@@ -20,7 +20,7 @@ const search = createLogic({
   type: SEARCH,
 
   process ({ getState, action }) {
-    const filtered = new Fuse(getState().questions.questions, fuseOptions)
+    const filtered = new Fuse(getState().data.questions, fuseOptions)
       .search(action.text)
       .filter(q => q.score < fuseOptions.threshold)
 
@@ -28,4 +28,4 @@ const search = createLogic({
   }
 })
 
-export default [search]
+export const logic = [search]

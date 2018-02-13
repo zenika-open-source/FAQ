@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import * as Actions from 'actions'
+import { login } from 'data/auth/actions'
 
 import Button from 'react-toolbox/lib/button/Button'
 
@@ -32,11 +32,11 @@ Login.propTypes = {
 }
 
 const mapStateToProps = state => ({
-  auth: state.auth
+  auth: state.data.auth
 })
 
 const mapDispatchToProps = dispatch => ({
-  login: bindActionCreators(Actions, dispatch).login
+  login: bindActionCreators(login, dispatch)
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login)

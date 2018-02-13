@@ -1,23 +1,20 @@
 import { set } from 'immutadot'
-
-import * as types from 'constants/ActionTypes'
+import { LOGIN_SUCCESSFUL, LOGIN_ERROR, LOGOUT } from './actions'
 
 const initialState = {
   user: null,
   error: null
 }
 
-const auth = (state = initialState, action) => {
+export const reducer = (state = initialState, action) => {
   switch (action.type) {
-  case types.LOGIN_SUCCESSFUL:
+  case LOGIN_SUCCESSFUL:
     return set(state, 'user', action.user)
-  case types.LOGIN_ERROR:
+  case LOGIN_ERROR:
     return set(state, 'error', action.error)
-  case types.LOGOUT:
+  case LOGOUT:
     return set(state, 'user', null)
   default:
     return state
   }
 }
-
-export default auth

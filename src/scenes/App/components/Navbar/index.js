@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import AppBar from 'react-toolbox/lib/app_bar/AppBar'
 
 import './style.css'
-import GithubIcon from './github-icon'
+import GithubIcon from './components/GithubIcon'
 
 class Navbar extends Component {
   render () {

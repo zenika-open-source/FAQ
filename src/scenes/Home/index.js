@@ -1,15 +1,18 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 
-import Searchbar from 'components/Searchbar'
-import QuestionCard from 'components/QuestionCard'
+import { search } from './actions'
+
+import Searchbar from './components/Searchbar'
+import QuestionCard from './components/QuestionCard'
 
 import './style.css'
 
 class Home extends Component {
   render () {
-    const { questions, filtered, searchText } = this.props
+    const { questions, filtered, searchText, searchAction } = this.props
 
     const list =
       filtered.length > 0
@@ -32,7 +35,9 @@ class Home extends Component {
     } else if (filtered.length > 0) {
       Results = (
         <div>
-          <p className="indication">{filtered.length} results found</p>
+          <p className="indication">
+            {filtered.length} result{filtered.length > 1 ? 's' : ''} found
+          </p>
           {QuestionsList}
         </div>
       )
@@ -47,7 +52,11 @@ class Home extends Component {
     return (
       <div className="Home">
         <h1 style={{ textAlign: 'center' }}>FAQ Zenika</h1>
-        <Searchbar style={{ marginTop: '3rem', marginBottom: '2rem' }} />
+        <Searchbar
+          text={searchText}
+          search={searchAction}
+          style={{ marginTop: '3rem', marginBottom: '2rem' }}
+        />
         <div className="results">{Results}</div>
       </div>
     )
@@ -57,13 +66,18 @@ class Home extends Component {
 Home.propTypes = {
   questions: PropTypes.array.isRequired,
   filtered: PropTypes.array.isRequired,
-  searchText: PropTypes.string.isRequired
+  searchText: PropTypes.string.isRequired,
+  searchAction: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
-  questions: state.questions.questions,
-  filtered: state.questions.filtered,
-  searchText: state.search.text
+  questions: state.data.questions,
+  filtered: state.scenes.home.data.filtered,
+  searchText: state.scenes.home.text
 })
 
-export default connect(mapStateToProps)(Home)
+const mapDispatchToProps = dispatch => ({
+  searchAction: bindActionCreators(search, dispatch)
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home)
