@@ -1,43 +1,70 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 
 import theme from 'toolbox/theme'
 import ThemeProvider from 'react-toolbox/lib/ThemeProvider'
 import 'toolbox/theme.css'
 
-import Navbar from './components/Navbar'
+import auth from 'auth'
 
-import Login from 'scenes/Login'
+import { userLoaded } from 'data/user/actions'
+
 import Home from 'scenes/Home'
+import Auth from 'scenes/Auth'
+
+import PrivateRoute from 'components/PrivateRoute'
+import Navbar from './components/Navbar'
 
 class App extends Component {
   render () {
-    const { user } = this.props.auth
-
-    const body = user ? <Home /> : <Login />
-
+    const { user, userLoaded } = this.props
     return (
       <div className="App">
-        <ThemeProvider theme={theme}>
-          <div>
-            <Navbar />
-            <div style={{ flex: 1, overflowY: 'auto', padding: '1.8rem' }}>
-              {body}
+        <Router>
+          <ThemeProvider theme={theme}>
+            <div>
+              <Navbar />
+              <div style={{ flex: 1, overflowY: 'auto', padding: '1.8rem' }}>
+                <Switch>
+                  <PrivateRoute
+                    exact
+                    path="/"
+                    render={() => {
+                      if (auth.isAuthenticated() && !user) {
+                        auth.getProfile((err, profile) => {
+                          if (err) alert(err)
+                          userLoaded(profile)
+                        })
+                      }
+                      return user ? <Home /> : <div>Loading user...</div>
+                    }}
+                  />
+                  <Route path="/auth" component={Auth} />
+                  <Route render={() => 404} />
+                </Switch>
+              </div>
             </div>
-          </div>
-        </ThemeProvider>
+          </ThemeProvider>
+        </Router>
       </div>
     )
   }
 }
 
 App.propTypes = {
-  auth: PropTypes.object.isRequired
+  user: PropTypes.object,
+  userLoaded: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({ data: { auth } }) => ({
-  auth: auth
+const mapStateToProps = state => ({
+  user: state.data.user
 })
 
-export default connect(mapStateToProps)(App)
+const mapDispatchToProps = dispatch => ({
+  userLoaded: bindActionCreators(userLoaded, dispatch)
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)

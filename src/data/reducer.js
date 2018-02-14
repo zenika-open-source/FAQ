@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux'
 
-import { reducer as authReducer } from './auth/reducer'
+import { reducer as userReducer } from './user/reducer'
 import { reducer as questionsReducer } from './questions/reducer'
 
 export const reducer = combineReducers({
-  auth: authReducer,
+  user: userReducer,
   questions: questionsReducer
 })

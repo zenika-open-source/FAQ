@@ -1,10 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import './index.css'
-import App from './scenes/App'
 import { Provider } from 'react-redux'
 
+import App from './scenes/App'
 import store from './store'
+
+import './index.css'
 
 ReactDOM.render(
   <Provider store={store}>
@@ -12,3 +13,8 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root')
 )
+
+// TODO:
+// * Retrieve user profile (img,...)
+// * Refact data/auth => data/user ?
+// * Push !
