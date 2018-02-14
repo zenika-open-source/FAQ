@@ -5,7 +5,7 @@ class Auth {
     this.auth0 = new auth0.WebAuth({
       domain: process.env.REACT_APP_AUTH0_DOMAIN,
       clientID: process.env.REACT_APP_AUTH0_CLIENTID,
-      redirectUri: window.location.origin + '/auth/callback',
+      redirectUri: window.location.origin,
       audience: `https://${process.env.REACT_APP_AUTH0_DOMAIN}/userinfo`,
       responseType: 'token id_token',
       scope: 'openid profile email'
@@ -24,18 +24,23 @@ class Auth {
   }
 
   handleAuthentication (successCallback, errorCallback) {
-    this.auth0.parseHash((err, authResult) => {
-      if (authResult && authResult.accessToken && authResult.idToken) {
-        this.setSession(authResult)
-        successCallback()
-        // errorCallback({ error: 'Not an error' })
-      } else if (err) {
-        alert(`Error: ${err.error}. Check the console for further details.`)
-        errorCallback(err)
-      } else {
-        errorCallback({ error: 'Authentication did not work' })
+    this.auth0.parseHash(
+      {
+        hash: window.location.hash.split('?')[1]
+      },
+      (err, authResult) => {
+        if (authResult && authResult.accessToken && authResult.idToken) {
+          this.setSession(authResult)
+          successCallback()
+          // errorCallback({ error: 'Not an error' })
+        } else if (err) {
+          alert(`Error: ${err.error}. Check the console for further details.`)
+          errorCallback(err)
+        } else {
+          errorCallback({ error: 'Authentication did not work' })
+        }
       }
-    })
+    )
   }
 
   setSession (authResult) {
