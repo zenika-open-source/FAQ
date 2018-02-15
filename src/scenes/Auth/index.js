@@ -7,6 +7,7 @@ import auth from 'auth'
 
 import Login from './Login'
 import Callback from './Callback'
+import AccessToken from './AccessToken'
 import Authenticated from 'components/Authenticated'
 
 class Auth extends Component {
@@ -53,3 +54,5 @@ const mapStateToProps = state => ({
 })
 
 export default connect(mapStateToProps)(Auth)
+
+export { AccessToken }

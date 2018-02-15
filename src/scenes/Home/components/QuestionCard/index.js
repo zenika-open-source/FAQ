@@ -17,7 +17,7 @@ class QuestionCard extends Component {
     return (
       <Card className="QuestionCard" {...this.props}>
         <CardTitle
-          avatar="https://placeimg.com/80/80/animals"
+          avatar={question.avatar || 'https://placeimg.com/80/80/animals'}
           title={MarkdownEmoji(question.question)}
         />
         <CardText>

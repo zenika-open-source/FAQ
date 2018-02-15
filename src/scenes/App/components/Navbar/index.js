@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import { Link as RouterLink, withRouter } from 'react-router-dom'
 
 import AppBar from 'react-toolbox/lib/app_bar/AppBar'
+import Navigation from 'react-toolbox/lib/navigation/Navigation'
+import Link from 'react-toolbox/lib/link/Link'
 import Authenticated from 'components/Authenticated'
 
 import './style.css'
@@ -9,21 +12,40 @@ import GithubIcon from './components/GithubIcon'
 
 class Navbar extends Component {
   render () {
+    const { history } = this.props
+
     return (
       <AppBar
-        title="🤔 FAQ Zenika"
+        title={
+          <RouterLink to="/" className="title">
+            <span role="img" aria-label=":thinking:">
+              🤔
+            </span>
+            FAQ Zenika
+          </RouterLink>
+        }
         rightIcon={<GithubIcon />}
         onRightIconClick={() =>
           window.open('https://github.com/Zenika/FAQ', '_blank')
         }
         className="Navbar"
       >
-        <Authenticated>
-          <Link to="/auth/logout">Sign Out</Link>
-        </Authenticated>
+        <Navigation type="horizontal">
+          <Authenticated>
+            <Link
+              style={{ color: 'white' }}
+              label="Sign Out"
+              onClick={() => history.push('/auth/logout')}
+            />
+          </Authenticated>
+        </Navigation>
       </AppBar>
     )
   }
 }
 
-export default Navbar
+Navbar.propTypes = {
+  history: PropTypes.object.isRequired
+}
+
+export default withRouter(Navbar)

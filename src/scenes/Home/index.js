@@ -2,6 +2,10 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import { Link } from 'react-router-dom'
+
+import Button from 'react-toolbox/lib/button/Button'
+import Tooltip from 'react-toolbox/lib/tooltip/Tooltip'
 
 import { search } from './actions'
 
@@ -9,6 +13,8 @@ import Searchbar from './components/Searchbar'
 import QuestionCard from './components/QuestionCard'
 
 import './style.css'
+
+const TooltipButton = Tooltip()(Button)
 
 class Home extends Component {
   render () {
@@ -58,6 +64,20 @@ class Home extends Component {
           style={{ marginTop: '3rem', marginBottom: '2rem' }}
         />
         <div className="results">{Results}</div>
+        <Link to="/new">
+          <TooltipButton
+            icon="add"
+            tooltip="Ask a new question"
+            floating
+            accent
+            mini
+            style={{
+              position: 'fixed',
+              bottom: '1rem',
+              right: '1rem'
+            }}
+          />
+        </Link>
       </div>
     )
   }

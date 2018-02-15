@@ -16,7 +16,7 @@ const PrivateRoute = ({ component: Component, render, ...rest }) => (
 )
 
 PrivateRoute.propTypes = {
-  component: PropTypes.element,
+  component: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
   render: PropTypes.func
 }
 

@@ -3,3 +3,12 @@
 .Navbar {
   background-color: #fa983a;
 }
+
+.Navbar .title {
+  -webkit-box-flex: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-decoration: none;
+}
