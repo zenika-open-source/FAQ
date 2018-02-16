@@ -1,77 +1,55 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Link } from 'react-router-dom'
 
-import { gql } from 'apollo-boost'
-import { graphql } from 'react-apollo'
-
 import Button from 'react-toolbox/lib/button/Button'
 import Tooltip from 'react-toolbox/lib/tooltip/Tooltip'
 
-import Searchbar from './components/Searchbar'
-import NodeCard from './components/NodeCard'
-
 import { search } from './actions'
+
+import Searchbar from './components/Searchbar'
+import QuestionCard from './components/QuestionCard'
 
 import './style.css'
 
 const TooltipButton = Tooltip()(Button)
 
-const getAllNodes = gql`
-  query {
-    allNodes {
-      id
-      question {
-        title
-      }
-      answer {
-        content
-      }
-    }
-  }
-`
-
 class Home extends Component {
   render () {
-    const { searchText, searchAction } = this.props
-    const { loading, error, allNodes } = this.props.data
+    const { questions, filtered, searchText, searchAction } = this.props
 
-    if (loading) {
-      return <div>Loading...</div>
-    }
+    const list =
+      filtered.length > 0 ? filtered.map(x => x.item) : questions.slice(0, 10)
 
-    if (error) {
-      return <div>Error :(</div>
-    }
-
-    const NodeCards = allNodes.map(node => {
-      return <NodeCard node={node} key={node.id} />
-    })
+    const QuestionsList = list.map((question, index) => (
+      <QuestionCard question={question} key={index} />
+    ))
 
     let Results
 
     if (searchText === '') {
       Results = (
         <div>
-          <p className="indication">Latest question</p>
-          {NodeCards}
+          <p className="indication">Latest questions</p>
+          {QuestionsList}
         </div>
       )
-    } else if (allNodes.length === 0) {
+    } else if (filtered.length > 0) {
+      Results = (
+        <div>
+          <p className="indication">
+            {filtered.length} result{filtered.length > 1 ? 's' : ''} found
+          </p>
+          {QuestionsList}
+        </div>
+      )
+    } else {
       Results = (
         <p className="indication" style={{ textAlign: 'center' }}>
           Nothing found &nbsp;<i className="material-icons">sms_failed</i>
         </p>
-      )
-    } else {
-      Results = (
-        <div>
-          <p className="indication">
-            {allNodes.length} result{allNodes.length > 1 ? 's' : ''} found
-          </p>
-          {NodeCards}
-        </div>
       )
     }
 
@@ -103,7 +81,16 @@ class Home extends Component {
   }
 }
 
+Home.propTypes = {
+  questions: PropTypes.array.isRequired,
+  filtered: PropTypes.array.isRequired,
+  searchText: PropTypes.string.isRequired,
+  searchAction: PropTypes.func.isRequired
+}
+
 const mapStateToProps = state => ({
+  questions: state.data.questions,
+  filtered: state.scenes.home.data.filtered,
   searchText: state.scenes.home.text
 })
 
@@ -111,6 +98,4 @@ const mapDispatchToProps = dispatch => ({
   searchAction: bindActionCreators(search, dispatch)
 })
 
-export default graphql(getAllNodes)(
-  connect(mapStateToProps, mapDispatchToProps)(Home)
-)
+export default connect(mapStateToProps, mapDispatchToProps)(Home)

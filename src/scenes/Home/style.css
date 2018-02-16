@@ -1,5 +1,6 @@
 .Home .results {
   width: 70%;
+  min-width: 800px;
   margin-left: auto;
   margin-right: auto;
 }

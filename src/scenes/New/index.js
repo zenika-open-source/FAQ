@@ -38,7 +38,7 @@ class New extends Component {
     }
 
     if (newQuestionId) {
-      return <Redirect to={`question/${newQuestionId}`} />
+      return <Redirect to={`q/${newQuestionId}`} />
     }
 
     return (

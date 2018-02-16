@@ -1,0 +1,37 @@
+type Node @model {
+  id: ID! @isUnique
+  question: Question @relation(name: "NodeQuestion")
+  answer: Answer @relation(name: "NodeAnswer")
+}
+
+type Question @model {
+  id: ID! @isUnique
+  title: String!
+  description: String
+  node: Node! @relation(name: "NodeQuestion")
+}
+
+type Answer @model {
+  id: ID! @isUnique
+  content: String!
+  node: Node! @relation(name: "NodeAnswer")
+}
+
+# System types
+
+type File @model {
+  contentType: String!
+  createdAt: DateTime!
+  id: ID! @isUnique
+  name: String!
+  secret: String! @isUnique
+  size: Int!
+  updatedAt: DateTime!
+  url: String! @isUnique
+}
+
+type User @model {
+  createdAt: DateTime!
+  id: ID! @isUnique
+  updatedAt: DateTime!
+}
