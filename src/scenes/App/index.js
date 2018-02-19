@@ -1,16 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Route, Switch, withRouter } from 'react-router-dom'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
 
 import theme from 'toolbox/theme'
 import ThemeProvider from 'react-toolbox/lib/ThemeProvider'
 import 'toolbox/theme.css'
 
 import auth from 'auth'
-
-import { userLoaded } from 'data/user/actions'
 
 import Auth, { AccessToken } from 'scenes/Auth'
 import Root from 'scenes/Root'
@@ -19,13 +15,21 @@ import PrivateRoute from 'components/PrivateRoute'
 import Navbar from './components/Navbar'
 
 class App extends Component {
+  constructor (props) {
+    super(props)
+
+    this.state = {
+      user: null
+    }
+  }
+
   checkUserLoaded () {
-    const { user, userLoaded } = this.props
+    const user = this.state.user
 
     if (auth.isAuthenticated() && !user) {
       auth.getProfile((err, profile) => {
         if (err) alert(err)
-        userLoaded(profile)
+        this.setState({ user: profile })
       })
     }
   }
@@ -47,7 +51,7 @@ class App extends Component {
             <Switch>
               <Route path="/auth" component={Auth} />
               <Route path="/access_token=:rest" component={AccessToken} />
-              <PrivateRoute component={Root} />
+              <PrivateRoute component={Root} user={this.state.user} />
             </Switch>
           </div>
         </div>
@@ -56,7 +60,7 @@ class App extends Component {
   }
 }
 
-App.propTypes = {
+/* App.propTypes = {
   user: PropTypes.object,
   userLoaded: PropTypes.func.isRequired
 }
@@ -69,4 +73,6 @@ const mapDispatchToProps = dispatch => ({
   userLoaded: bindActionCreators(userLoaded, dispatch)
 })
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App))
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App)) */
+
+export default App

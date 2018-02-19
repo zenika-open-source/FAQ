@@ -31,7 +31,16 @@ type File @model {
 }
 
 type User @model {
-  createdAt: DateTime!
   id: ID! @isUnique
+
+  createdAt: DateTime!
   updatedAt: DateTime!
+
+  auth0UserId: String @isUnique
+  email: String
+  name: String
+  givenName: String
+  familyName: String
+  picture: String
+  locale: String
 }

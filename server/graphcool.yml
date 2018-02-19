@@ -19,25 +19,31 @@ types: ./types.graphql
 
 
 functions:
-  hello:
+
+# added by auth0 template: (please uncomment)
+
+  authenticate:
     handler:
-      code: src/hello.js
+      code:
+        src: auth0Authentication.js
+        environment:
+          AUTH0_DOMAIN: ${env:AUTH0_DOMAIN}
+          AUTH0_API_IDENTIFIER: ${env:AUTH0_API_IDENTIFIER}
     type: resolver
-    schema: src/hello.graphql
+    schema: auth0Authentication.graphql
 
 
 # Model/Relation permissions are used to limit the API access
-# To take the burden of thinking about those while development, we 
+# To take the burden of thinking about those while development, we
 # preconfigured the wildcard ("*") permission that allows everything
 # Read more here:
 # https://docs-next.graph.cool/reference/auth/authorization/overview-iegoo0heez
 permissions:
 - operation: "*"
 
-  
+
 # Your root tokens used for functions to get full access to the API
 # Read more here:
 # https://docs-next.graph.cool/reference/auth/authentication/authentication-tokens-eip7ahqu5o
 # rootTokens:
 # - mytoken
-

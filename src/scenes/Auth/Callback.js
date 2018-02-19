@@ -1,21 +1,33 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
 
-import { loginError } from './actions'
+import { gql } from 'apollo-boost'
+import { graphql } from 'react-apollo'
 
 import auth from 'auth'
 
+const authUser = gql`
+  mutation authUser($accessToken: String!, $idToken: String!) {
+    authenticateUser(accessToken: $accessToken, idToken: $idToken) {
+      id
+      token
+    }
+  }
+`
+
 class Callback extends Component {
   componentDidMount () {
-    const { history, loginError } = this.props
+    const { history, authQL } = this.props
     auth.handleAuthentication(
-      () => {
-        history.push('/')
+      authResult => {
+        authQL(authResult.accessToken, authResult.idToken).then(() => {
+          auth.setSession(authResult)
+          history.push('/')
+        })
+        // history.push('/')
       },
       err => {
-        loginError(err)
+        // loginError(err)
         history.push('/auth/login')
       }
     )
@@ -26,13 +38,21 @@ class Callback extends Component {
   }
 }
 
-Callback.propTypes = {
+/* Callback.propTypes = {
   history: PropTypes.object.isRequired,
   loginError: PropTypes.func.isRequired
 }
 
-const mapDispatchToProps = dispatch => ({
+/* const mapDispatchToProps = dispatch => ({
   loginError: bindActionCreators(loginError, dispatch)
 })
 
-export default connect(null, mapDispatchToProps)(Callback)
+export default connect(null, mapDispatchToProps)(Callback) */
+
+export default graphql(authUser, {
+  props: ({ mutate }) => ({
+    authQL: (accessToken, idToken) => {
+      return mutate({ variables: { accessToken, idToken } })
+    }
+  })
+})(Callback)

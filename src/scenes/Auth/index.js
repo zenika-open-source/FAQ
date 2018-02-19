@@ -12,7 +12,8 @@ import Authenticated from 'components/Authenticated'
 
 class Auth extends Component {
   render () {
-    const { match, error } = this.props
+    const { match } = this.props
+    const error = null
     return (
       <Switch>
         <Route
@@ -44,7 +45,7 @@ class Auth extends Component {
   }
 }
 
-Auth.propTypes = {
+/* Auth.propTypes = {
   match: PropTypes.object.isRequired,
   error: PropTypes.object
 }
@@ -53,6 +54,8 @@ const mapStateToProps = state => ({
   error: state.scenes.auth.error
 })
 
-export default connect(mapStateToProps)(Auth)
+export default connect(mapStateToProps)(Auth) */
+
+export default Auth
 
 export { AccessToken }

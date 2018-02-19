@@ -35,7 +35,7 @@ class Root extends Component {
   }
 }
 
-Root.propTypes = {
+/* Root.propTypes = {
   user: PropTypes.object
 }
 
@@ -43,4 +43,6 @@ const mapStateToProps = state => ({
   user: state.data.user
 })
 
-export default connect(mapStateToProps)(Root)
+export default connect(mapStateToProps)(Root) */
+
+export default Root

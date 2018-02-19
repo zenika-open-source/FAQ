@@ -6,7 +6,6 @@ import ApolloClient from 'apollo-boost'
 import { ApolloProvider } from 'react-apollo'
 
 import App from './scenes/App'
-import store from './store'
 
 import './index.css'
 
@@ -15,12 +14,10 @@ const client = new ApolloClient({
 })
 
 ReactDOM.render(
-  <Provider store={store}>
-    <ApolloProvider client={client}>
-      <Router>
-        <App />
-      </Router>
-    </ApolloProvider>
-  </Provider>,
+  <ApolloProvider client={client}>
+    <Router>
+      <App />
+    </Router>
+  </ApolloProvider>,
   document.getElementById('root')
 )
