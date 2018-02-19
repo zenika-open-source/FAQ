@@ -12,8 +12,6 @@ import Tooltip from 'react-toolbox/lib/tooltip/Tooltip'
 import Searchbar from './components/Searchbar'
 import NodeCard from './components/NodeCard'
 
-import { search } from './actions'
-
 import './style.css'
 
 const TooltipButton = Tooltip()(Button)
@@ -35,8 +33,20 @@ const getAllNodes = gql`
 `
 
 class Home extends Component {
+  constructor (props) {
+    super(props)
+
+    this.state = {
+      searchText: ''
+    }
+  }
+
+  handleSearchChange (value) {
+    this.setState({ searchText: value })
+  }
+
   render () {
-    const { searchText, searchAction } = this.props
+    const { searchText } = this.state
     const { loading, error, allZNodes } = this.props.data
 
     if (loading) {
@@ -84,7 +94,7 @@ class Home extends Component {
         <h1 style={{ textAlign: 'center' }}>FAQ Zenika</h1>
         <Searchbar
           text={searchText}
-          search={searchAction}
+          search={this.handleSearchChange.bind(this)}
           style={{ marginTop: '3rem', marginBottom: '2rem' }}
         />
         <div>{Results}</div>
@@ -107,14 +117,4 @@ class Home extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  searchText: state.scenes.home.text
-})
-
-const mapDispatchToProps = dispatch => ({
-  searchAction: bindActionCreators(search, dispatch)
-})
-
-export default graphql(getAllNodes)(
-  connect(mapStateToProps, mapDispatchToProps)(Home)
-)
+export default graphql(getAllNodes)(Home)
