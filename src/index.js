@@ -11,7 +11,7 @@ import store from './store'
 import './index.css'
 
 const client = new ApolloClient({
-  uri: 'https://api.graph.cool/simple/v1/cjdpzliff12pj01431oz29kwn'
+  uri: process.env.REACT_APP_GRAPHQL_URI
 })
 
 ReactDOM.render(

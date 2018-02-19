@@ -15,13 +15,22 @@ class Root extends Component {
     if (!user) return <div>Loading user...</div>
 
     return (
-      <Switch>
-        <Route exact path="/" component={Home} />
-        <Route path="/new" component={New} />
-        <Route exact path="/q/:id" component={Question} />
-        <Route path="/q/:id/answer" component={Answer} />
-        <Route render={() => 404} />
-      </Switch>
+      <div
+        style={{
+          width: '70%',
+          minWidth: '800px',
+          marginLeft: 'auto',
+          marginRight: 'auto'
+        }}
+      >
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route path="/new" component={New} />
+          <Route exact path="/q/:id" component={Question} />
+          <Route path="/q/:id/answer" component={Answer} />
+          <Route render={() => 404} />
+        </Switch>
+      </div>
     )
   }
 }

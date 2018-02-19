@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import ReactMarkdown from 'react-markdown'
+import { Link } from 'react-router-dom'
 
 import MarkdownEmoji from './markdown-emoji'
 
@@ -16,25 +17,32 @@ class NodeCard extends Component {
 
     return (
       <Card className="NodeCard" {...this.props}>
-        <CardTitle
-          avatar={node.avatar || 'https://placeimg.com/80/80/animals'}
-          title={MarkdownEmoji(node.question.title)}
-        />
-        <CardText>
-          <ReactMarkdown
-            source={node.answer.content}
-            renderers={{
-              link: props => (
-                <a href={props.href} target="_blank">
-                  {props.children}
-                </a>
-              ),
-              table: props => (
-                <table className="zui-table">{props.children}</table>
-              ),
-              text: MarkdownEmoji
-            }}
+        <Link
+          to={`/q/${node.id}`}
+          style={{ color: 'initial', textDecoration: 'none' }}
+        >
+          <CardTitle
+            avatar={node.avatar || 'https://placeimg.com/80/80/animals'}
+            title={MarkdownEmoji(node.question.title)}
           />
+        </Link>
+        <CardText>
+          {node.answer && (
+            <ReactMarkdown
+              source={node.answer.content}
+              renderers={{
+                link: props => (
+                  <a href={props.href} target="_blank">
+                    {props.children}
+                  </a>
+                ),
+                table: props => (
+                  <table className="zui-table">{props.children}</table>
+                ),
+                text: MarkdownEmoji
+              }}
+            />
+          )}
         </CardText>
       </Card>
     )

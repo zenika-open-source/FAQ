@@ -1,4 +1,4 @@
-type Node @model {
+type ZNode @model {
   id: ID! @isUnique
   question: Question @relation(name: "NodeQuestion")
   answer: Answer @relation(name: "NodeAnswer")
@@ -8,13 +8,13 @@ type Question @model {
   id: ID! @isUnique
   title: String!
   description: String
-  node: Node! @relation(name: "NodeQuestion")
+  node: ZNode! @relation(name: "NodeQuestion")
 }
 
 type Answer @model {
   id: ID! @isUnique
   content: String!
-  node: Node! @relation(name: "NodeAnswer")
+  node: ZNode! @relation(name: "NodeAnswer")
 }
 
 # System types

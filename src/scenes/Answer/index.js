@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import ReactMde, { ReactMdeCommands } from 'react-mde'
+
+import { gql } from 'apollo-boost'
+import { graphql } from 'react-apollo'
 
 import Button from 'react-toolbox/lib/button/Button'
 import { Card, CardText, CardActions } from 'react-toolbox/lib/card'
@@ -8,20 +11,60 @@ import { Card, CardText, CardActions } from 'react-toolbox/lib/card'
 import 'react-mde/lib/styles/css/react-mde-all.css'
 import 'font-awesome/css/font-awesome.css'
 
-class New extends Component {
+const submitAnswer = gql`
+  mutation submitAnswer($id: ID!, $answer: ZNodeanswerAnswer!) {
+    updateZNode(id: $id, answer: $answer) {
+      id
+    }
+  }
+`
+
+class Answer extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      reactMdeValue: { text: '', selection: null }
+      answer: { text: '', selection: null },
+      loading: false,
+      redirect: false
     }
   }
 
-  handleValueChange (value) {
-    this.setState({ reactMdeValue: value })
+  handleChange (value) {
+    this.setState({ answer: value })
+  }
+
+  submitAnswer () {
+    const { submit } = this.props
+    const id = this.props.match.params.id
+
+    this.setState({ loading: true })
+
+    const answer = {
+      content: this.state.answer.text
+    }
+
+    submit(id, answer)
+      .then(({ data }) => {
+        this.setState({ redirect: true })
+      })
+      .catch(error => {
+        alert(error)
+        console.log(error)
+      })
   }
 
   render () {
     const { match } = this.props
+    const { loading, redirect } = this.state
+
+    if (redirect) {
+      return <Redirect to={`/q/${match.params.id}`} />
+    }
+
+    if (loading) {
+      return <div>Loading...</div>
+    }
+
     return (
       <div style={{ width: '70%', marginLeft: 'auto', marginRight: 'auto' }}>
         <Link to={`/q/${match.params.id}`}>
@@ -33,8 +76,8 @@ class New extends Component {
           <CardText>
             <div className="container">
               <ReactMde
-                value={this.state.reactMdeValue}
-                onChange={this.handleValueChange.bind(this)}
+                value={this.state.answer}
+                onChange={this.handleChange.bind(this)}
                 commands={ReactMdeCommands.getDefaultCommands()}
               />
             </div>
@@ -46,8 +89,13 @@ class New extends Component {
               justifyContent: 'flex-end'
             }}
           >
-            {/* <Button label="Preview" accent /> */}
-            <Button label="Submit" raised primary />
+            <Button
+              label="Submit"
+              raised
+              primary
+              disabled={this.state.answer.text.length === 0}
+              onClick={this.submitAnswer.bind(this)}
+            />
           </CardActions>
         </Card>
       </div>
@@ -55,4 +103,10 @@ class New extends Component {
   }
 }
 
-export default New
+export default graphql(submitAnswer, {
+  props: ({ mutate }) => ({
+    submit: (id, answer) => {
+      return mutate({ variables: { id, answer } })
+    }
+  })
+})(Answer)

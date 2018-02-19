@@ -1,15 +1,21 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
 import { Link, Redirect } from 'react-router-dom'
-import { set } from 'immutadot'
+
+import { gql } from 'apollo-boost'
+import { graphql } from 'react-apollo'
 
 import Button from 'react-toolbox/lib/button/Button'
 import { Card, CardText, CardActions } from 'react-toolbox/lib/card'
 import Input from 'react-toolbox/lib/input/Input'
 
-import { newQuestion } from './actions'
+const submitQuestion = gql`
+  mutation submitQuestion($title: String!) {
+    createZNode(question: { title: $title }) {
+      id
+    }
+  }
+`
 
 class New extends Component {
   constructor (props) {
@@ -17,28 +23,39 @@ class New extends Component {
 
     this.state = {
       question: '',
-      submitted: false
+      loading: false,
+      id: null
     }
   }
 
   handleChange (value) {
-    this.setState(state => set(state, 'question', value))
+    this.setState({ question: value })
   }
 
   submitQuestion () {
-    const { newQuestion } = this.props
-    newQuestion(this.state.question)
+    const { submit } = this.props
+
+    this.setState({ loading: true })
+
+    submit(this.state.question)
+      .then(({ data }) => {
+        this.setState({ id: data.createZNode.id })
+      })
+      .catch(error => {
+        alert(error)
+        console.log(error)
+      })
   }
 
   render () {
-    const { loading, newQuestionId } = this.props
+    const { id, loading } = this.state
+
+    if (id) {
+      return <Redirect to={`/q/${id}`} />
+    }
 
     if (loading) {
       return <div>Loading...</div>
-    }
-
-    if (newQuestionId) {
-      return <Redirect to={`q/${newQuestionId}`} />
     }
 
     return (
@@ -69,6 +86,7 @@ class New extends Component {
               label="Submit"
               raised
               primary
+              disabled={this.state.question.length === 0}
               onClick={this.submitQuestion.bind(this)}
             />
           </CardActions>
@@ -78,19 +96,10 @@ class New extends Component {
   }
 }
 
-New.propTypes = {
-  loading: PropTypes.bool.isRequired,
-  newQuestionId: PropTypes.number,
-  newQuestion: PropTypes.func.isRequired
-}
-
-const mapStateToProps = state => ({
-  loading: state.scenes.new.loading,
-  newQuestionId: state.scenes.new.newQuestionId
-})
-
-const mapDispatchToProps = dispatch => ({
-  newQuestion: bindActionCreators(newQuestion, dispatch)
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(New)
+export default graphql(submitQuestion, {
+  props: ({ mutate }) => ({
+    submit: title => {
+      return mutate({ variables: { title } })
+    }
+  })
+})(New)

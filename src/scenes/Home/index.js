@@ -20,12 +20,14 @@ const TooltipButton = Tooltip()(Button)
 
 const getAllNodes = gql`
   query {
-    allNodes {
+    allZNodes {
       id
       question {
+        id
         title
       }
       answer {
+        id
         content
       }
     }
@@ -35,7 +37,7 @@ const getAllNodes = gql`
 class Home extends Component {
   render () {
     const { searchText, searchAction } = this.props
-    const { loading, error, allNodes } = this.props.data
+    const { loading, error, allZNodes } = this.props.data
 
     if (loading) {
       return <div>Loading...</div>
@@ -45,7 +47,9 @@ class Home extends Component {
       return <div>Error :(</div>
     }
 
-    const NodeCards = allNodes.map(node => {
+    const nodes = allZNodes
+
+    const NodeCards = nodes.map(node => {
       return <NodeCard node={node} key={node.id} />
     })
 
@@ -58,7 +62,7 @@ class Home extends Component {
           {NodeCards}
         </div>
       )
-    } else if (allNodes.length === 0) {
+    } else if (nodes.length === 0) {
       Results = (
         <p className="indication" style={{ textAlign: 'center' }}>
           Nothing found &nbsp;<i className="material-icons">sms_failed</i>
@@ -68,7 +72,7 @@ class Home extends Component {
       Results = (
         <div>
           <p className="indication">
-            {allNodes.length} result{allNodes.length > 1 ? 's' : ''} found
+            {nodes.length} result{nodes.length > 1 ? 's' : ''} found
           </p>
           {NodeCards}
         </div>
@@ -83,7 +87,7 @@ class Home extends Component {
           search={searchAction}
           style={{ marginTop: '3rem', marginBottom: '2rem' }}
         />
-        <div className="results">{Results}</div>
+        <div>{Results}</div>
         <Link to="/new">
           <TooltipButton
             icon="add"
