@@ -9,12 +9,14 @@ type Question @model {
   title: String!
   description: String
   node: ZNode! @relation(name: "NodeQuestion")
+  user: User @relation(name: "UserQuestions")
 }
 
 type Answer @model {
   id: ID! @isUnique
   content: String!
   node: ZNode! @relation(name: "NodeAnswer")
+  user: User @relation(name: "UserAnswers")
 }
 
 # System types
@@ -43,4 +45,7 @@ type User @model {
   familyName: String
   picture: String
   locale: String
+
+  questions: [Question!]! @relation(name: "UserQuestions")
+  answers: [Answer!]! @relation(name: "UserAnswers")
 }

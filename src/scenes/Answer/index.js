@@ -5,6 +5,8 @@ import ReactMde, { ReactMdeCommands } from 'react-mde'
 import { gql } from 'apollo-boost'
 import { graphql } from 'react-apollo'
 
+import auth from 'auth'
+
 import Button from 'react-toolbox/lib/button/Button'
 import { Card, CardText, CardActions } from 'react-toolbox/lib/card'
 
@@ -40,7 +42,8 @@ class Answer extends Component {
     this.setState({ loading: true })
 
     const answer = {
-      content: this.state.answer.text
+      content: this.state.answer.text,
+      userId: auth.getUserNodeId()
     }
 
     submit(id, answer)

@@ -5,13 +5,15 @@ import { Link, Redirect } from 'react-router-dom'
 import { gql } from 'apollo-boost'
 import { graphql } from 'react-apollo'
 
+import auth from 'auth'
+
 import Button from 'react-toolbox/lib/button/Button'
 import { Card, CardText, CardActions } from 'react-toolbox/lib/card'
 import Input from 'react-toolbox/lib/input/Input'
 
 const submitQuestion = gql`
-  mutation submitQuestion($title: String!) {
-    createZNode(question: { title: $title }) {
+  mutation submitQuestion($title: String!, $id_user: ID!) {
+    createZNode(question: { title: $title, userId: $id_user }) {
       id
     }
   }
@@ -37,7 +39,7 @@ class New extends Component {
 
     this.setState({ loading: true })
 
-    submit(this.state.question)
+    submit(this.state.question, auth.getUserNodeId())
       .then(({ data }) => {
         this.setState({ id: data.createZNode.id })
       })
@@ -98,8 +100,8 @@ class New extends Component {
 
 export default graphql(submitQuestion, {
   props: ({ mutate }) => ({
-    submit: title => {
-      return mutate({ variables: { title } })
+    submit: (title, id_user) => {
+      return mutate({ variables: { title, id_user } })
     }
   })
 })(New)

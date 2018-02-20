@@ -20,11 +20,10 @@ class Callback extends Component {
     const { history, authQL } = this.props
     auth.handleAuthentication(
       authResult => {
-        authQL(authResult.accessToken, authResult.idToken).then(() => {
-          auth.setSession(authResult)
+        authQL(authResult.accessToken, authResult.idToken).then(({ data }) => {
+          auth.setSession(authResult, data.authenticateUser.id)
           history.push('/')
         })
-        // history.push('/')
       },
       err => {
         // loginError(err)
