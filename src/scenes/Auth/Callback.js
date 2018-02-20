@@ -1,19 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import { gql } from 'apollo-boost'
 import { graphql } from 'react-apollo'
+import { authUser } from './queries'
 
 import auth from 'auth'
-
-const authUser = gql`
-  mutation authUser($accessToken: String!, $idToken: String!) {
-    authenticateUser(accessToken: $accessToken, idToken: $idToken) {
-      id
-      token
-    }
-  }
-`
 
 class Callback extends Component {
   componentDidMount () {

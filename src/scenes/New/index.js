@@ -2,22 +2,14 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link, Redirect } from 'react-router-dom'
 
-import { gql } from 'apollo-boost'
 import { graphql } from 'react-apollo'
+import { submitQuestion } from './queries'
 
 import auth from 'auth'
 
 import Button from 'react-toolbox/lib/button/Button'
 import { Card, CardText, CardActions } from 'react-toolbox/lib/card'
 import Input from 'react-toolbox/lib/input/Input'
-
-const submitQuestion = gql`
-  mutation submitQuestion($title: String!, $id_user: ID!) {
-    createZNode(question: { title: $title, userId: $id_user }) {
-      id
-    }
-  }
-`
 
 class New extends Component {
   constructor (props) {
