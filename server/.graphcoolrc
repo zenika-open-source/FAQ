@@ -1,3 +1,4 @@
 targets:
-  dev: shared-eu-west-1/cjdpzliff12pj01431oz29kwn
   default: dev
+  dev: shared-eu-west-1/cjdpzliff12pj01431oz29kwn
+  prod: shared-eu-west-1/cjdop7oh32ywh0122r6t651j0

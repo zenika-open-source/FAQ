@@ -8,16 +8,31 @@ jobs:
 
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "package.json" }}
+          - root-{{ checksum "package.json" }}
           # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
+          - root-
 
       - run: npm install
 
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: root-{{ checksum "package.json" }}
 
-      - run: npm run build
-      - run: npm run deploy_ci
+      - restore_cache:
+          keys:
+          - server-{{ checksum "package.json" }}
+          - server-
+
+      - run: cd server && npm install
+
+      - save_cache:
+          paths:
+            - server/node_modules
+          key: server-{{ checksum "package.json" }}
+
+deployment:
+  production:
+    branch: master
+    commands:
+      - run: npm run deploy

@@ -22,13 +22,17 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build_without_map": "react-scripts build && rm build/static/js/*.map",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "lint": "eslint src --fix",
-    "deploy": "rm build/static/js/*.map && now build --name faq-zenika --public && now alias faq-zenika",
-    "deploy_ci": "rm build/static/js/*.map && now build --name faq-zenika --public --token $NOW_TOKEN && now alias faq-zenika --token $NOW_TOKEN"
+    "deploy_now": "now build --name faq-zenika --public --token $NOW_TOKEN && now alias faq-zenika --token $NOW_TOKEN && now rm faq-zenika --safe --yes --token $NOW_TOKEN",
+    "deploy_graphcool": "cd server && npm run login && npm run deploy_prod",
+    "deploy": "npm run build_without_map && npm run deploy_now && npm run deploy_graphcool"
   },
   "devDependencies": {
+    "dotenv": "^5.0.0",
+    "dotenv-cli": "^1.4.0",
     "eslint": "^4.18.0",
     "eslint-config-react-app": "^2.1.0",
     "eslint-config-standard": "^11.0.0",
