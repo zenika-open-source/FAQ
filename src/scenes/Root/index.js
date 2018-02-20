@@ -33,7 +33,7 @@ class Root extends Component {
 }
 
 Root.propTypes = {
-  user: PropTypes.object.isRequired
+  user: PropTypes.object
 }
 
 export default Root
