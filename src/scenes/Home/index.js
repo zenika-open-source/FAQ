@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
-import { gql } from 'apollo-boost'
 import { graphql } from 'react-apollo'
+import { getAllNodes } from './queries'
 
 import Button from 'react-toolbox/lib/button/Button'
 import Tooltip from 'react-toolbox/lib/tooltip/Tooltip'
@@ -15,22 +14,6 @@ import NodeCard from './components/NodeCard'
 import './style.css'
 
 const TooltipButton = Tooltip()(Button)
-
-const getAllNodes = gql`
-  query {
-    allZNodes {
-      id
-      question {
-        id
-        title
-      }
-      answer {
-        id
-        content
-      }
-    }
-  }
-`
 
 class Home extends Component {
   constructor (props) {
@@ -115,6 +98,10 @@ class Home extends Component {
       </div>
     )
   }
+}
+
+Home.propTypes = {
+  data: PropTypes.object.isRequired
 }
 
 export default graphql(getAllNodes)(Home)

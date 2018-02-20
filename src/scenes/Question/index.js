@@ -1,8 +1,12 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Link, Redirect } from 'react-router-dom'
 
 import { graphql } from 'react-apollo'
 import { getNode } from './queries'
+
+import New from './scenes/New'
+import Answer from './scenes/Answer'
 
 class Question extends Component {
   render () {
@@ -36,6 +40,13 @@ class Question extends Component {
   }
 }
 
+Question.propTypes = {
+  match: PropTypes.object.isRequired,
+  data: PropTypes.object.isRequired
+}
+
 export default graphql(getNode, {
   options: ({ match }) => ({ variables: { id: match.params.id } })
 })(Question)
+
+export { New, Answer }

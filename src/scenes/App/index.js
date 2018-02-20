@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { Route, Switch, withRouter } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 
 import theme from 'toolbox/theme'
 import ThemeProvider from 'react-toolbox/lib/ThemeProvider'
@@ -59,20 +58,5 @@ class App extends Component {
     )
   }
 }
-
-/* App.propTypes = {
-  user: PropTypes.object,
-  userLoaded: PropTypes.func.isRequired
-}
-
-const mapStateToProps = state => ({
-  user: state.data.user
-})
-
-const mapDispatchToProps = dispatch => ({
-  userLoaded: bindActionCreators(userLoaded, dispatch)
-})
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App)) */
 
 export default App

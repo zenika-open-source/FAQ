@@ -1,12 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
 
 import Home from 'scenes/Home'
-import New from 'scenes/New'
-import Question from 'scenes/Question'
-import Answer from 'scenes/Answer'
+import Question, { New, Answer } from 'scenes/Question'
 
 class Root extends Component {
   render () {
@@ -35,14 +32,8 @@ class Root extends Component {
   }
 }
 
-/* Root.propTypes = {
-  user: PropTypes.object
+Root.propTypes = {
+  user: PropTypes.object.isRequired
 }
-
-const mapStateToProps = state => ({
-  user: state.data.user
-})
-
-export default connect(mapStateToProps)(Root) */
 
 export default Root

@@ -37,6 +37,7 @@ class New extends Component {
       })
       .catch(error => {
         alert(error)
+        // eslint-disable-next-line
         console.log(error)
       })
   }
@@ -90,10 +91,14 @@ class New extends Component {
   }
 }
 
+New.propTypes = {
+  submit: PropTypes.func.isRequired
+}
+
 export default graphql(submitQuestion, {
   props: ({ mutate }) => ({
-    submit: (title, id_user) => {
-      return mutate({ variables: { title, id_user } })
+    submit: (title, idUser) => {
+      return mutate({ variables: { title, idUser } })
     }
   })
 })(New)

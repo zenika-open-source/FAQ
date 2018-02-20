@@ -17,8 +17,7 @@ class Callback extends Component {
         })
       },
       err => {
-        // loginError(err)
-        history.push('/auth/login')
+        history.push({ pathname: '/auth/login', state: { error: err } })
       }
     )
   }
@@ -28,16 +27,10 @@ class Callback extends Component {
   }
 }
 
-/* Callback.propTypes = {
+Callback.propTypes = {
   history: PropTypes.object.isRequired,
-  loginError: PropTypes.func.isRequired
+  authQL: PropTypes.func.isRequired
 }
-
-/* const mapDispatchToProps = dispatch => ({
-  loginError: bindActionCreators(loginError, dispatch)
-})
-
-export default connect(null, mapDispatchToProps)(Callback) */
 
 export default graphql(authUser, {
   props: ({ mutate }) => ({

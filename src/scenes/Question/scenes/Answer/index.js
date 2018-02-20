@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Link, Redirect } from 'react-router-dom'
-import ReactMde, { ReactMdeCommands } from 'react-mde'
 
 import { graphql } from 'react-apollo'
 import { submitAnswer } from './queries'
@@ -11,6 +11,7 @@ import auth from 'auth'
 import Button from 'react-toolbox/lib/button/Button'
 import { Card, CardText, CardActions } from 'react-toolbox/lib/card'
 
+import ReactMde, { ReactMdeCommands } from 'react-mde'
 import 'react-mde/lib/styles/css/react-mde-all.css'
 import 'font-awesome/css/font-awesome.css'
 
@@ -45,6 +46,7 @@ class Answer extends Component {
       })
       .catch(error => {
         alert(error)
+        // eslint-disable-next-line
         console.log(error)
       })
   }
@@ -97,6 +99,11 @@ class Answer extends Component {
       </div>
     )
   }
+}
+
+Answer.propTypes = {
+  match: PropTypes.object.isRequired,
+  submit: PropTypes.func.isRequired
 }
 
 export default graphql(submitAnswer, {

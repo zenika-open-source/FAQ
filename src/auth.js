@@ -31,7 +31,6 @@ class Auth {
       },
       (err, authResult) => {
         if (authResult && authResult.accessToken && authResult.idToken) {
-          // this.setSession(authResult)
           successCallback(authResult)
           // errorCallback({ error: 'Not an error' })
         } else if (err) {

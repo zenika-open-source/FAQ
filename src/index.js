@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { HashRouter as Router } from 'react-router-dom'
-import { Provider } from 'react-redux'
+import { HashRouter } from 'react-router-dom'
 import ApolloClient from 'apollo-boost'
 import { ApolloProvider } from 'react-apollo'
 
@@ -15,9 +14,9 @@ const client = new ApolloClient({
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <Router>
+    <HashRouter>
       <App />
-    </Router>
+    </HashRouter>
   </ApolloProvider>,
   document.getElementById('root')
 )
