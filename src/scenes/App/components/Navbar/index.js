@@ -17,10 +17,19 @@ class Navbar extends Component {
     return (
       <AppBar
         title={
-          <RouterLink to="/" className="title">
-            <span role="img" aria-label=":thinking:">
-              🤔
-            </span>
+          <RouterLink
+            to="/"
+            className="title"
+            style={{
+              display: 'flex',
+              alignItems: 'center'
+            }}
+          >
+            <img
+              alt=""
+              src="/img/favicon/favicon-64.png"
+              style={{ height: '23px', marginRight: '6px' }}
+            />
             FAQ Zenika
           </RouterLink>
         }

@@ -76,7 +76,20 @@ class Home extends Component {
 
     return (
       <div className="Home">
-        <h1 style={{ textAlign: 'center' }}>FAQ Zenika</h1>
+        <h1
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          <img
+            alt=""
+            src="/img/favicon/favicon-64.png"
+            style={{ height: '30px', marginRight: '10px' }}
+          />
+          FAQ Zenika
+        </h1>
         {flags.search && (
           <Searchbar
             text={searchText}
