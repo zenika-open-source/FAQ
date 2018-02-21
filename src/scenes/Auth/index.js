@@ -16,28 +16,21 @@ class Auth extends Component {
       <Switch>
         <Route
           path={`${match.url}/login`}
-          render={props => {
-            return (
-              <Authenticated reverse redirect="/">
-                <Login />
-              </Authenticated>
-            )
-          }}
+          render={() => (
+            <Authenticated reverse redirect="/">
+              <Login />
+            </Authenticated>
+          )}
         />
         <Route path={`${match.url}/callback`} component={Callback} />
         <Route
           path={`${match.url}/logout`}
-          render={props => {
+          render={() => {
             auth.logout()
             return <Redirect to="/" />
           }}
         />
-        <Route
-          path={`${match.url}`}
-          render={props => {
-            return <Redirect to="/" />
-          }}
-        />
+        <Route render={() => <Redirect to="/" />} />
       </Switch>
     )
   }

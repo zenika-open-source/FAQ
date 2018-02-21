@@ -4,7 +4,7 @@ import { Link, Redirect } from 'react-router-dom'
 
 import { graphql } from 'react-apollo'
 import { submitAnswer } from './queries'
-import { getNode } from 'scenes/Question/queries'
+import { getNode } from '../Read/queries'
 
 import { auth } from 'services'
 

@@ -8,7 +8,8 @@ import 'toolbox/theme.css'
 import { auth } from 'services'
 
 import Auth, { AccessToken } from 'scenes/Auth'
-import Root from 'scenes/Root'
+import Home from 'scenes/Home'
+import Question from 'scenes/Question'
 
 import PrivateRoute from 'components/PrivateRoute'
 import Navbar from './components/Navbar'
@@ -47,10 +48,17 @@ class App extends Component {
         <div>
           <Navbar />
           <div style={{ flex: 1, overflowY: 'auto', padding: '1.8rem' }}>
+            {/* ROUTES */}
             <Switch>
+              {/* HOME */}
+              <PrivateRoute exact path="/" component={Home} />
+              {/* AUTH */}
               <Route path="/auth" component={Auth} />
               <Route path="/access_token=:rest" component={AccessToken} />
-              <PrivateRoute component={Root} user={this.state.user} />
+              {/* QUESTIONS */}
+              <PrivateRoute path="/q" component={Question} />
+              {/* 404 */}
+              <PrivateRoute render={() => 404} />
             </Switch>
           </div>
         </div>

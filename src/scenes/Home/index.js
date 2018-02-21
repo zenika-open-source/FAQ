@@ -86,7 +86,7 @@ class Home extends Component {
         )}
         <div>{Results}</div>
         {flags.question.new && (
-          <Link to="/new">
+          <Link to="/q/new">
             <TooltipButton
               icon="add"
               tooltip="Ask a new question"
