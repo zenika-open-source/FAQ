@@ -22,7 +22,9 @@ class NodeCard extends Component {
           style={{ color: 'initial', textDecoration: 'none' }}
         >
           <CardTitle
-            avatar={node.avatar || 'https://placeimg.com/80/80/animals'}
+            avatar={
+              node.question.user.picture || 'https://placeimg.com/80/80/animals'
+            }
             title={MarkdownEmoji(node.question.title)}
           />
         </Link>

@@ -7,6 +7,10 @@ export const getAllNodes = gql`
       question {
         id
         title
+        user {
+          id
+          picture
+        }
       }
       answer {
         id
