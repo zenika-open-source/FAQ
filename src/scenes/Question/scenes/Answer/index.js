@@ -6,7 +6,7 @@ import { graphql } from 'react-apollo'
 import { submitAnswer } from './queries'
 import { getNode } from 'scenes/Question/queries'
 
-import auth from 'auth'
+import { auth } from 'services'
 
 import Button from 'react-toolbox/lib/button/Button'
 import { Card, CardText, CardActions } from 'react-toolbox/lib/card'

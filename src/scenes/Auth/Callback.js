@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { graphql } from 'react-apollo'
 import { authUser } from './queries'
 
-import auth from 'auth'
+import { auth } from 'services'
 
 class Callback extends Component {
   componentDidMount () {

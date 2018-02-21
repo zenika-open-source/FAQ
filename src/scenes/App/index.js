@@ -5,7 +5,7 @@ import theme from 'toolbox/theme'
 import ThemeProvider from 'react-toolbox/lib/ThemeProvider'
 import 'toolbox/theme.css'
 
-import auth from 'auth'
+import { auth } from 'services'
 
 import Auth, { AccessToken } from 'scenes/Auth'
 import Root from 'scenes/Root'

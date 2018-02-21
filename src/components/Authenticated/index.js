@@ -1,7 +1,7 @@
 import React from 'react'
 import { Redirect } from 'react-router-dom'
 
-import auth from 'auth'
+import { auth } from 'services'
 
 const Authenticated = props => {
   const isAuth = auth.isAuthenticated()

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Route, Switch, Redirect } from 'react-router-dom'
 
-import auth from 'auth'
+import { auth } from 'services'
 
 import Login from './Login'
 import Callback from './Callback'

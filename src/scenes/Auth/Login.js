@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
-import auth from 'auth'
+
+import { auth } from 'services'
 
 import Button from 'react-toolbox/lib/button/Button'
 
