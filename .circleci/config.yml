@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  build-job:
     docker:
       - image: circleci/node:9-browsers
     steps:
@@ -31,8 +31,45 @@ jobs:
             - server/node_modules
           key: server-{{ checksum "package.json" }}
 
-deployment:
-  production:
-    branch: master
-    commands:
+  deploy-job:
+    docker:
+      - image: circleci/node:9-browsers
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+          - root-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - root-
+
+      - run: npm install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: root-{{ checksum "package.json" }}
+
+      - restore_cache:
+          keys:
+          - server-{{ checksum "package.json" }}
+          - server-
+
+      - run: cd server && npm install
+
+      - save_cache:
+          paths:
+            - server/node_modules
+          key: server-{{ checksum "package.json" }}
+
       - run: npm run deploy
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build-job
+      - deploy-job:
+          filters:
+            branches:
+              only: master
