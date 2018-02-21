@@ -4,6 +4,7 @@ import { Link, Redirect } from 'react-router-dom'
 
 import { graphql } from 'react-apollo'
 import { submitQuestion } from './queries'
+import { getAllNodes } from 'scenes/Home/queries'
 
 import auth from 'auth'
 
@@ -100,5 +101,12 @@ export default graphql(submitQuestion, {
     submit: (title, idUser) => {
       return mutate({ variables: { title, idUser } })
     }
+  }),
+  options: props => ({
+    refetchQueries: [
+      {
+        query: getAllNodes
+      }
+    ]
   })
 })(New)
