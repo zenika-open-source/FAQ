@@ -5,6 +5,8 @@ import { Link, Redirect } from 'react-router-dom'
 import { graphql } from 'react-apollo'
 import { getNode } from './queries'
 
+import { flags } from 'services'
+
 import New from './scenes/New'
 import Answer from './scenes/Answer'
 
@@ -32,8 +34,10 @@ class Question extends Component {
         <br />
         {ZNode.answer ? (
           ZNode.answer.content
-        ) : (
+        ) : flags.question.answer ? (
           <Link to={`/q/${match.params.id}/answer`}>Answer the question</Link>
+        ) : (
+          <i>No answer yet...</i>
         )}
       </div>
     )

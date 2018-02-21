@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom'
 import { graphql } from 'react-apollo'
 import { getAllNodes } from './queries'
 
+import { flags } from 'services'
+
 import Button from 'react-toolbox/lib/button/Button'
 import Tooltip from 'react-toolbox/lib/tooltip/Tooltip'
 
@@ -75,26 +77,30 @@ class Home extends Component {
     return (
       <div className="Home">
         <h1 style={{ textAlign: 'center' }}>FAQ Zenika</h1>
-        <Searchbar
-          text={searchText}
-          search={this.handleSearchChange.bind(this)}
-          style={{ marginTop: '3rem', marginBottom: '2rem' }}
-        />
-        <div>{Results}</div>
-        <Link to="/new">
-          <TooltipButton
-            icon="add"
-            tooltip="Ask a new question"
-            floating
-            accent
-            mini
-            style={{
-              position: 'fixed',
-              bottom: '1rem',
-              right: '1rem'
-            }}
+        {flags.search && (
+          <Searchbar
+            text={searchText}
+            search={this.handleSearchChange.bind(this)}
+            style={{ marginTop: '3rem', marginBottom: '2rem' }}
           />
-        </Link>
+        )}
+        <div>{Results}</div>
+        {flags.question.new && (
+          <Link to="/new">
+            <TooltipButton
+              icon="add"
+              tooltip="Ask a new question"
+              floating
+              accent
+              mini
+              style={{
+                position: 'fixed',
+                bottom: '1rem',
+                right: '1rem'
+              }}
+            />
+          </Link>
+        )}
       </div>
     )
   }
