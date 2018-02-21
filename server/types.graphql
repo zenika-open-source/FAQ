@@ -1,0 +1,51 @@
+type ZNode @model {
+  id: ID! @isUnique
+  question: Question @relation(name: "NodeQuestion")
+  answer: Answer @relation(name: "NodeAnswer")
+}
+
+type Question @model {
+  id: ID! @isUnique
+  title: String!
+  description: String
+  node: ZNode! @relation(name: "NodeQuestion")
+  user: User @relation(name: "UserQuestions")
+}
+
+type Answer @model {
+  id: ID! @isUnique
+  content: String!
+  node: ZNode! @relation(name: "NodeAnswer")
+  user: User @relation(name: "UserAnswers")
+}
+
+# System types
+
+type File @model {
+  contentType: String!
+  createdAt: DateTime!
+  id: ID! @isUnique
+  name: String!
+  secret: String! @isUnique
+  size: Int!
+  updatedAt: DateTime!
+  url: String! @isUnique
+}
+
+type User @model {
+  id: ID! @isUnique
+
+  createdAt: DateTime!
+  updatedAt: DateTime!
+
+  auth0UserId: String @isUnique
+  email: String
+  name: String
+  givenName: String
+  familyName: String
+  picture: String
+  locale: String
+
+  questions: [Question!]! @relation(name: "UserQuestions")
+  answers: [Answer!]! @relation(name: "UserAnswers")
+}

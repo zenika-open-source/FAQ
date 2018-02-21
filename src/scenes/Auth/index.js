@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Route, Switch, Redirect } from 'react-router-dom'
-import { connect } from 'react-redux'
 
 import auth from 'auth'
 
@@ -12,7 +11,7 @@ import Authenticated from 'components/Authenticated'
 
 class Auth extends Component {
   render () {
-    const { match, error } = this.props
+    const { match } = this.props
     return (
       <Switch>
         <Route
@@ -20,7 +19,7 @@ class Auth extends Component {
           render={props => {
             return (
               <Authenticated reverse redirect="/">
-                <Login error={error} />
+                <Login />
               </Authenticated>
             )
           }}
@@ -45,14 +44,9 @@ class Auth extends Component {
 }
 
 Auth.propTypes = {
-  match: PropTypes.object.isRequired,
-  error: PropTypes.object
+  match: PropTypes.object.isRequired
 }
 
-const mapStateToProps = state => ({
-  error: state.scenes.auth.error
-})
-
-export default connect(mapStateToProps)(Auth)
+export default Auth
 
 export { AccessToken }

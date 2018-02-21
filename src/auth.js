@@ -16,6 +16,7 @@ class Auth {
     this.handleAuthentication = this.handleAuthentication.bind(this)
     this.isAuthenticated = this.isAuthenticated.bind(this)
     this.getAccessToken = this.getAccessToken.bind(this)
+    this.getUserNodeId = this.getUserNodeId.bind(this)
     this.getProfile = this.getProfile.bind(this)
   }
 
@@ -30,8 +31,7 @@ class Auth {
       },
       (err, authResult) => {
         if (authResult && authResult.accessToken && authResult.idToken) {
-          this.setSession(authResult)
-          successCallback()
+          successCallback(authResult)
           // errorCallback({ error: 'Not an error' })
         } else if (err) {
           alert(`Error: ${err.error}. Check the console for further details.`)
@@ -43,13 +43,14 @@ class Auth {
     )
   }
 
-  setSession (authResult) {
+  setSession (authResult, userNodeId) {
     let expiresAt = JSON.stringify(
       authResult.expiresIn * 1000 + new Date().getTime()
     )
     localStorage.setItem('access_token', authResult.accessToken)
     localStorage.setItem('id_token', authResult.idToken)
     localStorage.setItem('expires_at', expiresAt)
+    localStorage.setItem('user_node_id', userNodeId)
   }
 
   logout () {
@@ -70,6 +71,14 @@ class Auth {
       throw new Error('No access token found')
     }
     return accessToken
+  }
+
+  getUserNodeId () {
+    const userNodeId = localStorage.getItem('user_node_id')
+    if (!userNodeId) {
+      throw new Error('No user node id found')
+    }
+    return userNodeId
   }
 
   getProfile (cb) {

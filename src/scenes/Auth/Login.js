@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { withRouter } from 'react-router-dom'
 import auth from 'auth'
 
 import Button from 'react-toolbox/lib/button/Button'
 
 class Login extends Component {
   render () {
-    const { error } = this.props
+    const { location } = this.props
     return (
       <div style={{ textAlign: 'center' }}>
         <h3>Welcome</h3>
@@ -18,9 +19,9 @@ class Login extends Component {
           primary
           onClick={() => auth.login()}
         />
-        {error ? (
+        {location.state ? (
           <div style={{ color: 'red', marginTop: '1rem' }}>
-            {JSON.stringify(error)}
+            {JSON.stringify(location.state.error)}
           </div>
         ) : (
           ''
@@ -31,7 +32,7 @@ class Login extends Component {
 }
 
 Login.propTypes = {
-  error: PropTypes.object
+  location: PropTypes.object.isRequired
 }
 
-export default Login
+export default withRouter(Login)
