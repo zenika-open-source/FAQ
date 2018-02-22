@@ -8,20 +8,22 @@ jobs:
 
       - restore_cache:
           keys:
-          - root-{{ checksum "package.json" }}
+          - root-{{ checksum "package-lock.json" }}
           # fallback to using the latest cache if no exact match is found
           - root-
 
       - run: npm install
 
+      - run: npm run lint
+
       - save_cache:
           paths:
             - node_modules
-          key: root-{{ checksum "package.json" }}
+          key: root-{{ checksum "package-lock.json" }}
 
       - restore_cache:
           keys:
-          - server-{{ checksum "package.json" }}
+          - server-{{ checksum "package-lock.json" }}
           - server-
 
       - run: cd server && npm install
@@ -29,7 +31,7 @@ jobs:
       - save_cache:
           paths:
             - server/node_modules
-          key: server-{{ checksum "package.json" }}
+          key: server-{{ checksum "package-lock.json" }}
 
   deploy-job:
     docker:
@@ -39,20 +41,22 @@ jobs:
 
       - restore_cache:
           keys:
-          - root-{{ checksum "package.json" }}
+          - root-{{ checksum "package-lock.json" }}
           # fallback to using the latest cache if no exact match is found
           - root-
 
       - run: npm install
 
+      - run: npm run lint
+
       - save_cache:
           paths:
             - node_modules
-          key: root-{{ checksum "package.json" }}
+          key: root-{{ checksum "package-lock.json" }}
 
       - restore_cache:
           keys:
-          - server-{{ checksum "package.json" }}
+          - server-{{ checksum "package-lock.json" }}
           - server-
 
       - run: cd server && npm install
@@ -60,7 +64,7 @@ jobs:
       - save_cache:
           paths:
             - server/node_modules
-          key: server-{{ checksum "package.json" }}
+          key: server-{{ checksum "package-lock.json" }}
 
       - run: npm run deploy
 
