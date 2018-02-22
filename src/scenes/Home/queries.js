@@ -2,7 +2,7 @@ import { gql } from 'apollo-boost'
 
 export const getAllNodes = gql`
   query {
-    allZNodes {
+    allZNodes(orderBy: createdAt_DESC) {
       id
       question {
         id

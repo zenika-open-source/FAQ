@@ -7,10 +7,22 @@ export const getNode = gql`
       question {
         id
         title
+        user {
+          id
+          name
+          picture
+        }
+        createdAt
       }
       answer {
         id
         content
+        user {
+          id
+          name
+          picture
+        }
+        createdAt
       }
     }
   }

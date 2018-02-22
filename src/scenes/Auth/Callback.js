@@ -6,6 +6,8 @@ import { authUser } from './queries'
 
 import { auth } from 'services'
 
+import Loading from 'components/Loading'
+
 class Callback extends Component {
   componentDidMount () {
     const { history, authQL } = this.props
@@ -23,7 +25,7 @@ class Callback extends Component {
   }
 
   render () {
-    return <div>Authenticating...</div>
+    return <Loading text="Authenticating..." />
   }
 }
 

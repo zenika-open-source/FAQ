@@ -10,9 +10,13 @@ import { auth } from 'services'
 import Auth, { AccessToken } from 'scenes/Auth'
 import Home from 'scenes/Home'
 import Question from 'scenes/Question'
+import NotFound from 'scenes/NotFound'
 
 import PrivateRoute from 'components/PrivateRoute'
+
 import Navbar from './components/Navbar'
+
+import './style.css'
 
 class App extends Component {
   constructor (props) {
@@ -46,8 +50,8 @@ class App extends Component {
     return (
       <ThemeProvider theme={theme}>
         <div>
-          <Navbar />
-          <div style={{ flex: 1, overflowY: 'auto', padding: '1.8rem' }}>
+          <Navbar user={this.state.user} />
+          <div className="Main">
             {/* ROUTES */}
             <Switch>
               {/* HOME */}
@@ -58,7 +62,7 @@ class App extends Component {
               {/* QUESTIONS */}
               <PrivateRoute path="/q" component={Question} />
               {/* 404 */}
-              <PrivateRoute render={() => 404} />
+              <PrivateRoute component={NotFound} />
             </Switch>
           </div>
         </div>

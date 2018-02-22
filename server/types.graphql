@@ -2,6 +2,9 @@ type ZNode @model {
   id: ID! @isUnique
   question: Question @relation(name: "NodeQuestion")
   answer: Answer @relation(name: "NodeAnswer")
+
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type Question @model {
@@ -10,6 +13,9 @@ type Question @model {
   description: String
   node: ZNode! @relation(name: "NodeQuestion")
   user: User @relation(name: "UserQuestions")
+
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type Answer @model {
@@ -17,6 +23,9 @@ type Answer @model {
   content: String!
   node: ZNode! @relation(name: "NodeAnswer")
   user: User @relation(name: "UserAnswers")
+
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 # System types

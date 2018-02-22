@@ -10,14 +10,6 @@ class Auth {
       responseType: 'token id_token',
       scope: 'openid profile email'
     })
-
-    this.login = this.login.bind(this)
-    this.logout = this.logout.bind(this)
-    this.handleAuthentication = this.handleAuthentication.bind(this)
-    this.isAuthenticated = this.isAuthenticated.bind(this)
-    this.getAccessToken = this.getAccessToken.bind(this)
-    this.getUserNodeId = this.getUserNodeId.bind(this)
-    this.getProfile = this.getProfile.bind(this)
   }
 
   login () {

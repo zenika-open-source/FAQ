@@ -10,6 +10,8 @@ import { flags } from 'services'
 import Button from 'react-toolbox/lib/button/Button'
 import Tooltip from 'react-toolbox/lib/tooltip/Tooltip'
 
+import Loading from 'components/Loading'
+
 import Searchbar from './components/Searchbar'
 import NodeCard from './components/NodeCard'
 
@@ -35,7 +37,7 @@ class Home extends Component {
     const { loading, error, allZNodes } = this.props.data
 
     if (loading) {
-      return <div>Loading...</div>
+      return <Loading />
     }
 
     if (error) {
@@ -45,7 +47,9 @@ class Home extends Component {
     const nodes = allZNodes
 
     const NodeCards = nodes.map(node => {
-      return <NodeCard node={node} key={node.id} />
+      return (
+        <NodeCard node={node} key={node.id} style={{ marginBottom: '1rem' }} />
+      )
     })
 
     let Results

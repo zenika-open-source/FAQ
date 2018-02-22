@@ -8,6 +8,8 @@ import { getAllNodes } from 'scenes/Home/queries'
 
 import { auth } from 'services'
 
+import Loading from 'components/Loading'
+
 import Button from 'react-toolbox/lib/button/Button'
 import { Card, CardText, CardActions } from 'react-toolbox/lib/card'
 import Input from 'react-toolbox/lib/input/Input'
@@ -51,11 +53,11 @@ class New extends Component {
     }
 
     if (loading) {
-      return <div>Loading...</div>
+      return <Loading />
     }
 
     return (
-      <div style={{ width: '70%', marginLeft: 'auto', marginRight: 'auto' }}>
+      <div>
         <Link to="/">
           <Button icon="chevron_left" label="Home" flat primary />
         </Link>

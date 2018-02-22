@@ -6,7 +6,11 @@ import { graphql } from 'react-apollo'
 import { submitAnswer } from './queries'
 import { getNode } from '../Read/queries'
 
-import { auth } from 'services'
+import { auth, markdown } from 'services'
+
+import NotFound from 'scenes/NotFound'
+
+import Loading from 'components/Loading'
 
 import Button from 'react-toolbox/lib/button/Button'
 import { Card, CardText, CardActions } from 'react-toolbox/lib/card'
@@ -33,7 +37,7 @@ class Answer extends Component {
     const { submit } = this.props
     const id = this.props.match.params.id
 
-    this.setState({ loading: true })
+    this.setState({ loadingSubmit: true })
 
     const answer = {
       content: this.state.answer.text,
@@ -53,28 +57,44 @@ class Answer extends Component {
 
   render () {
     const { match } = this.props
-    const { loading, redirect } = this.state
+    const { loadingSubmit, redirect } = this.state
+    const { loading, error, ZNode } = this.props.data
 
     if (redirect) {
       return <Redirect to={`/q/${match.params.id}`} />
     }
 
-    if (loading) {
-      return <div>Loading...</div>
+    if (loadingSubmit || loading) {
+      return <Loading />
+    }
+
+    if (error) {
+      return <div>Error :(</div>
+    }
+
+    if (ZNode === null) {
+      return <NotFound {...this.props} />
+    }
+
+    if (ZNode.answer !== null) {
+      return <Redirect to={`/q/${match.params.id}`} />
     }
 
     return (
-      <div style={{ width: '70%', marginLeft: 'auto', marginRight: 'auto' }}>
+      <div>
         <Link to={`/q/${match.params.id}`}>
           <Button icon="chevron_left" label="Back" flat primary />
         </Link>
         <br />
-        <h3 style={{ textAlign: 'center' }}>Answer the question</h3>
+        <h3 style={{ textAlign: 'center' }}>
+          {markdown.title(ZNode.question.title)}
+        </h3>
         <Card>
           <CardText>
             <div className="container">
               <ReactMde
                 value={this.state.answer}
+                showdownFlavor="github"
                 onChange={this.handleChange.bind(this)}
                 commands={ReactMdeCommands.getDefaultCommands()}
               />
@@ -103,7 +123,8 @@ class Answer extends Component {
 
 Answer.propTypes = {
   match: PropTypes.object.isRequired,
-  submit: PropTypes.func.isRequired
+  submit: PropTypes.func.isRequired,
+  data: PropTypes.object.isRequired
 }
 
 export default graphql(submitAnswer, {
@@ -122,4 +143,8 @@ export default graphql(submitAnswer, {
       }
     ]
   })
-})(Answer)
+})(
+  graphql(getNode, {
+    options: ({ match }) => ({ variables: { id: match.params.id } })
+  })(Answer)
+)
