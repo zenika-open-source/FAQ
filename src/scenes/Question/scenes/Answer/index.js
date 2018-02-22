@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link, Redirect } from 'react-router-dom'
 
-import { graphql } from 'react-apollo'
-import { submitAnswer } from './queries'
+import { compose, graphql } from 'react-apollo'
+import { submitAnswer, editAnswer } from './queries'
 import { getNode } from '../Read/queries'
 
 import { auth, markdown } from 'services'
@@ -22,10 +22,26 @@ import 'font-awesome/css/font-awesome.css'
 class Answer extends Component {
   constructor (props) {
     super(props)
+
     this.state = {
       answer: { text: '', selection: null },
       loading: false,
       redirect: false
+    }
+  }
+
+  componentDidMount () {
+    const { ZNode } = this.props.data
+    if (ZNode && ZNode.answer) {
+      this.setState({ answer: { text: ZNode.answer.content } })
+    }
+  }
+
+  componentWillReceiveProps (nextProps) {
+    const ZNode = this.props.data.ZNode
+    const nextZNode = nextProps.data.ZNode
+    if (!ZNode && nextZNode && nextZNode.answer) {
+      this.setState({ answer: { text: nextZNode.answer.content } })
     }
   }
 
@@ -34,7 +50,7 @@ class Answer extends Component {
   }
 
   submitAnswer () {
-    const { submit } = this.props
+    const { submitAnswer } = this.props
     const id = this.props.match.params.id
 
     this.setState({ loadingSubmit: true })
@@ -44,8 +60,25 @@ class Answer extends Component {
       userId: auth.getUserNodeId()
     }
 
-    submit(id, answer)
-      .then(({ data }) => {
+    submitAnswer(id, answer)
+      .then(() => {
+        this.setState({ redirect: true })
+      })
+      .catch(error => {
+        alert(error)
+        // eslint-disable-next-line
+        console.log(error)
+      })
+  }
+
+  editAnswer () {
+    const { editAnswer } = this.props
+    const { ZNode } = this.props.data
+
+    this.setState({ loadingSubmit: true })
+
+    editAnswer(ZNode.answer.id, this.state.answer.text, auth.getUserNodeId())
+      .then(() => {
         this.setState({ redirect: true })
       })
       .catch(error => {
@@ -76,10 +109,6 @@ class Answer extends Component {
       return <NotFound {...this.props} />
     }
 
-    if (ZNode.answer !== null) {
-      return <Redirect to={`/q/${match.params.id}`} />
-    }
-
     return (
       <div>
         <Link to={`/q/${match.params.id}`}>
@@ -108,11 +137,15 @@ class Answer extends Component {
             }}
           >
             <Button
-              label="Submit"
+              label={ZNode.answer ? 'Edit' : 'Submit'}
               raised
               primary
               disabled={this.state.answer.text.length === 0}
-              onClick={this.submitAnswer.bind(this)}
+              onClick={
+                ZNode.answer
+                  ? this.editAnswer.bind(this)
+                  : this.submitAnswer.bind(this)
+              }
             />
           </CardActions>
         </Card>
@@ -123,28 +156,49 @@ class Answer extends Component {
 
 Answer.propTypes = {
   match: PropTypes.object.isRequired,
-  submit: PropTypes.func.isRequired,
+  submitAnswer: PropTypes.func.isRequired,
+  editAnswer: PropTypes.func.isRequired,
   data: PropTypes.object.isRequired
 }
 
-export default graphql(submitAnswer, {
-  props: ({ mutate }) => ({
-    submit: (id, answer) => {
-      return mutate({ variables: { id, answer } })
-    }
-  }),
-  options: props => ({
-    refetchQueries: [
-      {
-        query: getNode,
-        variables: {
-          id: props.match.params.id
-        }
+export default compose(
+  graphql(submitAnswer, {
+    name: 'submitAnswer',
+    props: ({ submitAnswer }) => ({
+      submitAnswer: (id, answer) => {
+        return submitAnswer({ variables: { id, answer } })
       }
-    ]
-  })
-})(
+    }),
+    options: props => ({
+      refetchQueries: [
+        {
+          query: getNode,
+          variables: {
+            id: props.match.params.id
+          }
+        }
+      ]
+    })
+  }),
+  graphql(editAnswer, {
+    name: 'editAnswer',
+    props: ({ editAnswer }) => ({
+      editAnswer: (idAnswer, content, idUser) => {
+        return editAnswer({ variables: { idAnswer, content, idUser } })
+      }
+    }),
+    options: props => ({
+      refetchQueries: [
+        {
+          query: getNode,
+          variables: {
+            id: props.match.params.id
+          }
+        }
+      ]
+    })
+  }),
   graphql(getNode, {
-    options: ({ match }) => ({ variables: { id: match.params.id } })
-  })(Answer)
-)
+    options: props => ({ variables: { id: props.match.params.id } })
+  })
+)(Answer)

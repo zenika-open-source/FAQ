@@ -7,3 +7,11 @@ export const submitQuestion = gql`
     }
   }
 `
+
+export const editQuestion = gql`
+  mutation editQuestion($idQuestion: ID!, $title: String!, $idUser: ID!) {
+    updateQuestion(id: $idQuestion, title: $title, userId: $idUser) {
+      id
+    }
+  }
+`

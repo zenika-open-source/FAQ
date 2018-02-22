@@ -1,7 +1,7 @@
 const stringConversion = function (value) {
-  if (value === 'TRUE') {
+  if (value.toUpperCase() === 'TRUE') {
     return true
-  } else if (value === 'FALSE') {
+  } else if (value.toUpperCase() === 'FALSE') {
     return false
   } else if (Number.isNaN(Number.parseInt(value, 10))) {
     return Number.parseInt(value, 10)

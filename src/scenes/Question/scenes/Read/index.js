@@ -18,13 +18,14 @@ import CardText from 'react-toolbox/lib/card/CardText'
 import Avatar from 'react-toolbox/lib/avatar/Avatar'
 import Tooltip from 'react-toolbox/lib/tooltip/Tooltip'
 import Button from 'react-toolbox/lib/button/Button'
-import 'react-mde/lib/styles/css/react-mde-all.css'
+import IconMenu from 'react-toolbox/lib/menu/IconMenu'
+import MenuItem from 'react-toolbox/lib/menu/MenuItem'
 
 const TooltipAvatar = Tooltip()(Avatar)
 
 class Read extends Component {
   render () {
-    const { match } = this.props
+    const { match, history } = this.props
     const { loading, error, ZNode } = this.props.data
 
     if (loading) {
@@ -54,8 +55,34 @@ class Read extends Component {
               />
             }
             title={markdown.title(ZNode.question.title)}
-            style={{ backgroundColor: '#f0f0f0' }}
-          />
+            style={{ backgroundColor: '#f0f0f0', position: 'relative' }}
+          >
+            <IconMenu
+              style={{
+                float: 'right',
+                position: 'absolute',
+                right: '5px',
+                top: '15px'
+              }}
+            >
+              <MenuItem
+                icon="edit"
+                caption="Edit question"
+                onClick={() => history.push(`/q/${match.params.id}/edit`)}
+                disabled={!flags.question.edit}
+              />
+              <MenuItem
+                icon="question_answer"
+                caption="Edit answer"
+                onClick={() => history.push(`/q/${match.params.id}/answer`)}
+                disabled={
+                  !ZNode.answer ||
+                  !flags.question.answer ||
+                  !flags.question.edit
+                }
+              />
+            </IconMenu>
+          </CardTitle>
           <CardText style={{ paddingTop: '10px' }}>
             {ZNode.answer ? (
               <div>
@@ -69,7 +96,13 @@ class Read extends Component {
                 {markdown.html(ZNode.answer.content)}
               </div>
             ) : flags.question.answer ? (
-              <div style={{ textAlign: 'center', marginTop: '3rem' }}>
+              <div
+                style={{
+                  textAlign: 'center',
+                  marginTop: '2rem',
+                  marginBottom: '2rem'
+                }}
+              >
                 <b>No answer yet...</b>
                 <br />
                 <br />
@@ -91,6 +124,7 @@ class Read extends Component {
 
 Read.propTypes = {
   match: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
   data: PropTypes.object.isRequired
 }
 
