@@ -33,7 +33,7 @@ class Markdown {
     let emoticons = {
       ':)': ':slightly_smiling_face:',
       ':(': ':slightly_frowning_face:',
-      ':/': ':confused:',
+      // ':/': ':confused:', // This emoticon produces a bug when parsing an url (http://...)
       ':p': ':stuck_out_tongue:',
       ':P': ':stuck_out_tongue:',
       ':D': ':smiley:',
