@@ -29,18 +29,22 @@ class Edit extends Component {
   }
 
   componentDidMount () {
-    const { ZNode } = this.props.data
-    if (this.isEditing && ZNode) {
-      this.setState({ question: ZNode.question.title })
+    if (this.isEditing) {
+      const { ZNode } = this.props.data
+      if (ZNode) {
+        this.setState({ question: ZNode.question.title })
+      }
     }
   }
 
   componentWillReceiveProps (nextProps) {
-    const ZNode = this.props.data.ZNode
-    const nextZNode = nextProps.data.ZNode
+    if (this.isEditing) {
+      const ZNode = this.props.data.ZNode
+      const nextZNode = nextProps.data.ZNode
 
-    if (this.isEditing && !ZNode && nextZNode) {
-      this.setState({ question: nextZNode.question.title })
+      if (!ZNode && nextZNode) {
+        this.setState({ question: nextZNode.question.title })
+      }
     }
   }
 
@@ -163,7 +167,7 @@ Edit.propTypes = {
   match: PropTypes.object.isRequired,
   submitQuestion: PropTypes.func.isRequired,
   editQuestion: PropTypes.func.isRequired,
-  data: PropTypes.object.isRequired
+  data: PropTypes.object
 }
 
 export default compose(
