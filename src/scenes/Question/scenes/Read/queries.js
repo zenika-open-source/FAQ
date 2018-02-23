@@ -12,7 +12,7 @@ export const getNode = gql`
           name
           picture
         }
-        createdAt
+        updatedAt
       }
       answer {
         id
@@ -22,7 +22,7 @@ export const getNode = gql`
           name
           picture
         }
-        createdAt
+        updatedAt
       }
     }
   }

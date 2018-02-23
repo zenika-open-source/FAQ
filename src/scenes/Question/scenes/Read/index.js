@@ -88,7 +88,7 @@ class Read extends Component {
               <div>
                 <b>
                   Answered by {ZNode.answer.user.name} on{' '}
-                  {DateTime.fromISO(ZNode.answer.createdAt).toFormat(
+                  {DateTime.fromISO(ZNode.answer.updatedAt).toFormat(
                     'dd LLL yyyy'
                   )}:
                 </b>
