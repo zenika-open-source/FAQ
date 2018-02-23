@@ -14,6 +14,7 @@ For this project, you will need the following keys:
 
 * Auth0 domain
 * Auth0 client id (also called: api identifier)
+* Now application name
 * Now authorization token
 * Graphcool endpoint url
 
@@ -86,8 +87,6 @@ The deployment to Now and Graphcool can be executed using the following command
 ```bash
 npm run deploy
 ```
-
-> /!\ The now alias is currently hardcoded to faq-zenika.now.sh. You need to change to your own alias to make it work
 
 ## License
 

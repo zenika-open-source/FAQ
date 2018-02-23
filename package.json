@@ -26,7 +26,7 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "lint": "eslint src --fix",
-    "deploy_now": "now build --name faq-zenika --public --token $NOW_TOKEN && now alias faq-zenika --token $NOW_TOKEN && now rm faq-zenika --safe --yes --token $NOW_TOKEN",
+    "deploy_now": "now build --name $NOW_NAME --public --token $NOW_TOKEN && now alias $NOW_NAME --token $NOW_TOKEN && now rm $NOW_NAME --safe --yes --token $NOW_TOKEN",
     "deploy_graphcool": "cd server && npm run login && npm run deploy_prod",
     "deploy": "npm run build_without_map && npm run deploy_now && npm run deploy_graphcool"
   },
