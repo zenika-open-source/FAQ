@@ -3,6 +3,7 @@
   "version": "0.3.0",
   "private": true,
   "dependencies": {
+    "algoliasearch": "^3.24.11",
     "apollo-boost": "^0.1.1",
     "auth0-js": "^9.2.3",
     "emoji-dictionary": "^1.0.9",

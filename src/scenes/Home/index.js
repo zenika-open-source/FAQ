@@ -2,10 +2,10 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
-import { graphql } from 'react-apollo'
-import { getAllNodes } from './queries'
+import { graphql, withApollo } from 'react-apollo'
+import { getAllNodes, getListNodes } from './queries'
 
-import { flags } from 'services'
+import { flags, search } from 'services'
 
 import Button from 'react-toolbox/lib/button/Button'
 import Tooltip from 'react-toolbox/lib/tooltip/Tooltip'
@@ -24,16 +24,46 @@ class Home extends Component {
     super(props)
 
     this.state = {
-      searchText: ''
+      searchText: '',
+      nodes: null
     }
   }
 
   handleSearchChange (value) {
-    this.setState({ searchText: value })
+    const apollo = this.props.client
+    const self = this
+
+    self.setState({ searchText: value })
+
+    if (value !== '') {
+      /* First you query Algolia, then you get the date from graphcool
+				Graphcool resolvers are limited to scalar types, so we can't
+				write a resolver which does both
+				https://github.com/graphcool/graphcool-framework/issues/256 */
+      search.simpleSearch(value, function searchDone (err, content) {
+        if (err) {
+          console.error(err)
+          return
+        }
+
+        const ids = content.hits.map(h => h.objectID)
+
+        apollo
+          .query({
+            query: getListNodes,
+            variables: { ids }
+          })
+          .then(result => {
+            self.setState({ nodes: result.data.allQuestions.map(q => q.node) })
+          })
+      })
+    } else {
+      self.setState({ nodes: null })
+    }
   }
 
   render () {
-    const { searchText } = this.state
+    const { searchText, nodes } = this.state
     const { loading, error, allZNodes } = this.props.data
 
     if (loading) {
@@ -44,9 +74,9 @@ class Home extends Component {
       return <div>Error :(</div>
     }
 
-    const nodes = allZNodes
+    const list = nodes || allZNodes
 
-    const NodeCards = nodes.map(node => {
+    const NodeCards = list.map(node => {
       return (
         <NodeCard node={node} key={node.id} style={{ marginBottom: '1rem' }} />
       )
@@ -61,7 +91,7 @@ class Home extends Component {
           {NodeCards}
         </div>
       )
-    } else if (nodes.length === 0) {
+    } else if (list.length === 0) {
       Results = (
         <p className="indication" style={{ textAlign: 'center' }}>
           Nothing found &nbsp;<i className="material-icons">sms_failed</i>
@@ -71,7 +101,7 @@ class Home extends Component {
       Results = (
         <div>
           <p className="indication">
-            {nodes.length} result{nodes.length > 1 ? 's' : ''} found
+            {list.length} result{list.length > 1 ? 's' : ''} found
           </p>
           {NodeCards}
         </div>
@@ -127,4 +157,4 @@ Home.propTypes = {
   data: PropTypes.object.isRequired
 }
 
-export default graphql(getAllNodes)(Home)
+export default graphql(getAllNodes)(withApollo(Home))
