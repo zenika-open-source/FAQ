@@ -31,16 +31,16 @@ class Home extends Component {
   }
 
   handleSearchChange (value) {
-    const self = this
-
-    self.setState({ searchText: value })
+    this.setState({ searchText: value })
 
     if (value !== '') {
-      search.simpleQuery(value, nodes => {
-        self.setState({ nodes })
-      })
+      const onSearchSuccess = nodes => {
+        this.setState({ nodes })
+      }
+
+      search.simpleQuery(value, onSearchSuccess.bind(this))
     } else {
-      self.setState({ nodes: null })
+      this.setState({ nodes: null })
     }
   }
 
