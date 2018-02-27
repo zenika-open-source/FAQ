@@ -1,0 +1,8 @@
+subscription {
+  ZNode(filter: { mutation_in: [DELETED] }) {
+    mutation
+    previousValues {
+      id
+    }
+  }
+}

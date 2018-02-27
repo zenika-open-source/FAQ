@@ -1,12 +1,17 @@
 subscription {
-  Answer(filter: { mutation_in: [CREATED, UPDATED, DELETED] }) {
+  Answer(filter: { mutation_in: [CREATED, UPDATED] }) {
     mutation
-    previousValues {
-      objectID: id
-    }
     node {
-      objectID: id
-      content
+      id
+      node {
+        objectID: id
+        question {
+          title
+        }
+        answer {
+          content
+        }
+      }
     }
   }
 }

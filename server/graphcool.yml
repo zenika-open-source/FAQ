@@ -13,6 +13,16 @@ functions:
     type: resolver
     schema: ./src/auth0/auth0Authentication.graphql
 
+  algoliaZNode:
+    handler:
+      code:
+        src: ./src/algolia/sync.js
+        environment:
+          ALGOLIA_APP_ID: ${env:REACT_APP_ALGOLIA_APP_ID}
+          ALGOLIA_API_KEY: ${env:REACT_APP_ALGOLIA_API_KEY_ALL}
+    type: subscription
+    query: ./src/algolia/znode.graphql
+
   algoliaQuestion:
     handler:
       code:

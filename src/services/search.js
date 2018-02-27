@@ -5,22 +5,19 @@ import { apollo } from 'services'
 
 const getListNodes = gql`
   query getListNodes($ids: [ID!]!) {
-    allQuestions(filter: { id_in: $ids }) {
+    allZNodes(filter: { id_in: $ids }) {
       id
-      node {
+      question {
         id
-        question {
+        title
+        user {
           id
-          title
-          user {
-            id
-            picture
-          }
+          picture
         }
-        answer {
-          id
-          content
-        }
+      }
+      answer {
+        id
+        content
       }
     }
   }
@@ -32,7 +29,7 @@ class Search {
       process.env.REACT_APP_ALGOLIA_APP_ID,
       process.env.REACT_APP_ALGOLIA_API_KEY_SEARCH
     )
-    this.index = this.algolia.initIndex('Question')
+    this.index = this.algolia.initIndex('Nodes')
   }
 
   simpleQuery (text) {
@@ -56,7 +53,7 @@ class Search {
               variables: { ids }
             })
             .then(results => {
-              resolve(results.data.allQuestions.map(q => q.node))
+              resolve(results.data.allZNodes)
             })
             .catch(reject)
         })
