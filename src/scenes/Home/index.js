@@ -35,11 +35,13 @@ class Home extends Component {
     this.setState({ searchText: value })
 
     if (value !== '') {
-      const onSearchSuccess = nodes => {
-        this.setState({ nodes })
-      }
-
-      search.simpleQuery(value, onSearchSuccess.bind(this))
+      search
+        .simpleQuery(value)
+        .then(nodes => this.setState({ nodes }))
+        .catch(err => {
+          // eslint-disable-next-line
+          console.log(err)
+        })
     } else {
       this.setState({ nodes: null })
     }

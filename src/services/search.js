@@ -32,35 +32,35 @@ class Search {
       process.env.REACT_APP_ALGOLIA_APP_ID,
       process.env.REACT_APP_ALGOLIA_API_KEY_SEARCH
     )
-    this.index = this.algolia.initIndex('Questions')
+    this.index = this.algolia.initIndex('Question')
   }
 
-  simpleQuery (text, cb) {
-    this.query({ query: text }, cb)
+  simpleQuery (text) {
+    return this.query({ query: text })
   }
 
-  query (params, cb) {
+  query (params) {
     /* First we query Algolia, then we get the nodes from graphcool.
       Graphcool resolvers are limited to scalar types, so we can't
       write a resolver which does both
       https://github.com/graphcool/graphcool-framework/issues/256 */
-    this.index.search(params, function (err, content) {
-      if (err) {
-        // eslint-disable-next-line
-        console.error(err)
-        return
-      }
+    return new Promise((resolve, reject) => {
+      this.index
+        .search(params)
+        .then(content => {
+          const ids = content.hits.map(h => h.objectID)
 
-      const ids = content.hits.map(h => h.objectID)
-
-      apollo
-        .query({
-          query: getListNodes,
-          variables: { ids }
+          apollo
+            .query({
+              query: getListNodes,
+              variables: { ids }
+            })
+            .then(results => {
+              resolve(results.data.allQuestions.map(q => q.node))
+            })
+            .catch(reject)
         })
-        .then(result => {
-          cb(result.data.allQuestions.map(q => q.node))
-        })
+        .catch(reject)
     })
   }
 }

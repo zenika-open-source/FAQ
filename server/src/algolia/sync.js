@@ -7,7 +7,7 @@ export default async event => {
     process.env.ALGOLIA_APP_ID,
     process.env.ALGOLIA_API_KEY
   )
-  const index = client.initIndex(modelName + 's')
+  const index = client.initIndex(modelName)
 
   const { mutation, node, previousValues } = event.data[modelName]
 
