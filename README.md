@@ -8,7 +8,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-You will need an [Auth0](https://auth0.com/) account, a [Now](https://zeit.co/now) account and a [Graphcool](https://www.graph.cool/) account to use this project
+You will need an [Auth0](https://auth0.com/) account, a [Now](https://zeit.co/now) account, a [Graphcool](https://www.graph.cool/) account and an [Algolia](https://www.algolia.com/) account to use this project
 
 For this project, you will need the following keys:
 
@@ -17,6 +17,9 @@ For this project, you will need the following keys:
 * Now application name
 * Now authorization token
 * Graphcool endpoint url
+* Algolia app id
+* Algolia api key (all operations)
+* Algolia api key (search only)
 
 ### Installing
 

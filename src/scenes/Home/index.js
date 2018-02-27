@@ -3,12 +3,14 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
 import { graphql } from 'react-apollo'
+
 import { getAllNodes } from './queries'
 
-import { flags } from 'services'
+import { flags, search } from 'services'
 
 import Button from 'react-toolbox/lib/button/Button'
 import Tooltip from 'react-toolbox/lib/tooltip/Tooltip'
+import Pluralize from 'react-pluralize'
 
 import Loading from 'components/Loading'
 
@@ -24,16 +26,29 @@ class Home extends Component {
     super(props)
 
     this.state = {
-      searchText: ''
+      searchText: '',
+      nodes: null
     }
   }
 
   handleSearchChange (value) {
     this.setState({ searchText: value })
+
+    if (value !== '') {
+      search
+        .simpleQuery(value)
+        .then(nodes => this.setState({ nodes }))
+        .catch(err => {
+          // eslint-disable-next-line
+          console.log(err)
+        })
+    } else {
+      this.setState({ nodes: null })
+    }
   }
 
   render () {
-    const { searchText } = this.state
+    const { searchText, nodes } = this.state
     const { loading, error, allZNodes } = this.props.data
 
     if (loading) {
@@ -44,9 +59,9 @@ class Home extends Component {
       return <div>Error :(</div>
     }
 
-    const nodes = allZNodes
+    const list = nodes || allZNodes
 
-    const NodeCards = nodes.map(node => {
+    const NodeCards = list.map(node => {
       return (
         <NodeCard node={node} key={node.id} style={{ marginBottom: '1rem' }} />
       )
@@ -61,7 +76,7 @@ class Home extends Component {
           {NodeCards}
         </div>
       )
-    } else if (nodes.length === 0) {
+    } else if (list.length === 0) {
       Results = (
         <p className="indication" style={{ textAlign: 'center' }}>
           Nothing found &nbsp;<i className="material-icons">sms_failed</i>
@@ -71,7 +86,7 @@ class Home extends Component {
       Results = (
         <div>
           <p className="indication">
-            {nodes.length} result{nodes.length > 1 ? 's' : ''} found
+            <Pluralize singular="result" count={list.length} /> found
           </p>
           {NodeCards}
         </div>

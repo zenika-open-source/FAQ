@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "My Graphcool Service",
   "dependencies": {
+    "algoliasearch": "^3.24.11",
     "dotenv-cli": "^1.4.0",
     "graphcool-framework": "^0.11.5",
     "graphcool-lib": "^0.1.0",
