@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
-import { graphql, withApollo } from 'react-apollo'
-import { getAllNodes, getListNodes } from './queries'
+import { graphql } from 'react-apollo'
+
+import { getAllNodes } from './queries'
 
 import { flags, search } from 'services'
 
@@ -30,32 +31,13 @@ class Home extends Component {
   }
 
   handleSearchChange (value) {
-    const apollo = this.props.client
     const self = this
 
     self.setState({ searchText: value })
 
     if (value !== '') {
-      /* First you query Algolia, then you get the date from graphcool
-				Graphcool resolvers are limited to scalar types, so we can't
-				write a resolver which does both
-				https://github.com/graphcool/graphcool-framework/issues/256 */
-      search.simpleSearch(value, function searchDone (err, content) {
-        if (err) {
-          console.error(err)
-          return
-        }
-
-        const ids = content.hits.map(h => h.objectID)
-
-        apollo
-          .query({
-            query: getListNodes,
-            variables: { ids }
-          })
-          .then(result => {
-            self.setState({ nodes: result.data.allQuestions.map(q => q.node) })
-          })
+      search.simpleQuery(value, nodes => {
+        self.setState({ nodes })
       })
     } else {
       self.setState({ nodes: null })
@@ -157,4 +139,4 @@ Home.propTypes = {
   data: PropTypes.object.isRequired
 }
 
-export default graphql(getAllNodes)(withApollo(Home))
+export default graphql(getAllNodes)(Home)
