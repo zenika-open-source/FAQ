@@ -10,6 +10,7 @@ import { flags, search } from 'services'
 
 import Button from 'react-toolbox/lib/button/Button'
 import Tooltip from 'react-toolbox/lib/tooltip/Tooltip'
+import Pluralize from 'react-pluralize'
 
 import Loading from 'components/Loading'
 
@@ -83,7 +84,7 @@ class Home extends Component {
       Results = (
         <div>
           <p className="indication">
-            {list.length} result{list.length > 1 ? 's' : ''} found
+            <Pluralize singular="result" count={list.length} /> found
           </p>
           {NodeCards}
         </div>
