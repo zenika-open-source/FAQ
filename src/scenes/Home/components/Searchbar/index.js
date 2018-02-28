@@ -5,9 +5,9 @@ import './style.css'
 
 class Searchbar extends Component {
   render () {
-    const { text, search } = this.props
+    const { text, search, loading, style } = this.props
     return (
-      <div className="Searchbar" style={this.props.style}>
+      <div className="Searchbar" style={style}>
         <div className="search">
           <input
             type="text"
@@ -17,7 +17,12 @@ class Searchbar extends Component {
             onChange={e => search(e.target.value)}
           />
           <button type="submit" className="searchButton">
-            <i className="material-icons">search</i>
+            <span style={{ display: loading ? 'initial' : 'none' }}>
+              <i className="fas fa-spinner fa-pulse" />
+            </span>
+            <span style={{ display: loading ? 'none' : 'initial' }}>
+              <i className="material-icons">search</i>
+            </span>
           </button>
         </div>
       </div>
@@ -28,6 +33,7 @@ class Searchbar extends Component {
 Searchbar.propTypes = {
   text: PropTypes.string.isRequired,
   search: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired,
   style: PropTypes.object
 }
 

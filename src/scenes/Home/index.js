@@ -27,6 +27,7 @@ class Home extends Component {
 
     this.state = {
       searchText: '',
+      searchLoading: false,
       nodes: null
     }
   }
@@ -35,9 +36,10 @@ class Home extends Component {
     this.setState({ searchText: value })
 
     if (value !== '') {
+      this.setState({ searchLoading: true })
       search
         .simpleQuery(value)
-        .then(nodes => this.setState({ nodes }))
+        .then(nodes => this.setState({ nodes, searchLoading: false }))
         .catch(err => {
           // eslint-disable-next-line
           console.log(err)
@@ -48,7 +50,7 @@ class Home extends Component {
   }
 
   render () {
-    const { searchText, nodes } = this.state
+    const { searchLoading, searchText, nodes } = this.state
     const { loading, error, allZNodes } = this.props.data
 
     if (loading) {
@@ -114,6 +116,7 @@ class Home extends Component {
             text={searchText}
             search={this.handleSearchChange.bind(this)}
             style={{ marginTop: '3rem', marginBottom: '2rem' }}
+            loading={searchLoading}
           />
         )}
         <div>{Results}</div>
