@@ -1,6 +1,15 @@
+references:
+  workspace_root: &workspace_root
+    /home/circleci/my-workspace
+
+  attach_workspace: &attach_workspace
+    attach_workspace:
+      at: *workspace_root
+
 version: 2
 jobs:
-  build-job:
+  build:
+    working_directory: *workspace_root
     docker:
       - image: circleci/node:9-browsers
     steps:
@@ -26,60 +35,58 @@ jobs:
           - server-{{ checksum "package-lock.json" }}
           - server-
 
-      - run: cd server && npm install
+      - run: cd server && npm install && cd ..
 
       - save_cache:
           paths:
             - server/node_modules
           key: server-{{ checksum "package-lock.json" }}
 
-  deploy-job:
+      - run: npm run build
+
+      - persist_to_workspace:
+          root: *workspace_root
+          paths:
+            - .
+
+  deploy:
+    working_directory: *workspace_root
     docker:
       - image: circleci/node:9-browsers
     steps:
-      - checkout
+      - *attach_workspace
 
-      - restore_cache:
-          keys:
-          - root-{{ checksum "package-lock.json" }}
-          # fallback to using the latest cache if no exact match is found
-          - root-
+      - run: npm run deploy
 
-      - run: npm install
-
-      - run: npm run lint
-
-      - save_cache:
-          paths:
-            - node_modules
-          key: root-{{ checksum "package-lock.json" }}
-
-      - restore_cache:
-          keys:
-          - server-{{ checksum "package-lock.json" }}
-          - server-
-
-      - run: cd server && npm install
-
-      - save_cache:
-          paths:
-            - server/node_modules
-          key: server-{{ checksum "package-lock.json" }}
+  gcloud:
+    working_directory: *workspace_root
+    docker:
+      - image: google/cloud-sdk
+    steps:
+      - *attach_workspace
 
       # Authenticate GCloud
       - run: echo $GCLOUD_SERVICE_KEY | base64 --decode --ignore-garbage > ${HOME}/gcloud-service-key.json
-      - run: sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update
-      - run: sudo /opt/google-cloud-sdk/bin/gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
-      - run: sudo /opt/google-cloud-sdk/bin/gcloud config set project $GCLOUD_APP_ID
+      - run: gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
+      - run: gcloud config set project $GCLOUD_APP_ID
 
-      - run: npm run deploy
+      # Deploy
+      - run: gcloud app deploy build/ --quiet
 
 workflows:
   version: 2
   build-deploy:
     jobs:
-      - build-job
-      - deploy-job:
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+      - gcloud:
+          requires:
+            - build
           filters:
             branches:
               only: master

@@ -28,7 +28,7 @@
     "lint": "eslint src --fix",
     "deploy_appengine": "cd build && gcloud app deploy --quiet --project $APPENGINE_PROJECT_ID",
     "deploy_graphcool": "cd server && npm run login && npm run deploy_prod",
-    "deploy": "npm run build && npm run deploy_appengine && npm run deploy_graphcool"
+    "deploy": "npm run deploy_graphcool"
   },
   "devDependencies": {
     "dotenv": "^5.0.0",
