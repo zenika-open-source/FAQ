@@ -46,6 +46,10 @@ class Search {
         .search(params)
         .then(content => {
           const ids = content.hits.map(h => h.objectID)
+          const highlights = content.hits.reduce((acc, hit) => {
+            acc[hit.objectID] = hit._highlightResult
+            return acc
+          }, {})
 
           apollo
             .query({
@@ -53,7 +57,13 @@ class Search {
               variables: { ids }
             })
             .then(results => {
-              resolve(results.data.allZNodes)
+              const nodes = results.data.allZNodes.map(node => {
+                const clone = Object.assign({}, node)
+                clone['highlight'] = highlights[node.id]
+                return clone
+              })
+
+              resolve(nodes)
             })
             .catch(reject)
         })
