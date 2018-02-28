@@ -23,13 +23,12 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "build_without_map": "react-scripts build && rm build/static/js/*.map",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "lint": "eslint src --fix",
-    "deploy_now": "now build --name $NOW_NAME --public --token $NOW_TOKEN && now alias $NOW_NAME --token $NOW_TOKEN && now rm $NOW_NAME --safe --yes --token $NOW_TOKEN",
+    "deploy_appengine": "cd build && gcloud app deploy --quiet --project $APPENGINE_PROJECT_ID",
     "deploy_graphcool": "cd server && npm run login && npm run deploy_prod",
-    "deploy": "npm run build_without_map && npm run deploy_now && npm run deploy_graphcool"
+    "deploy": "npm run build && npm run deploy_appengine && npm run deploy_graphcool"
   },
   "devDependencies": {
     "dotenv": "^5.0.0",
@@ -41,17 +40,12 @@
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-react": "^7.7.0",
     "eslint-plugin-standard": "^3.0.1",
-    "graphcool": "^0.11.5",
-    "now": "^9.3.3"
+    "graphcool": "^0.11.5"
   },
   "eslintConfig": {
     "extends": "react-app"
   },
   "eslintIgnore": [
     "src/toolbox"
-  ],
-  "now": {
-    "name": "faq-zenika",
-    "alias": "faq-zenika"
-  }
+  ]
 }

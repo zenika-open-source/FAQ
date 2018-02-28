@@ -66,6 +66,12 @@ jobs:
             - server/node_modules
           key: server-{{ checksum "package-lock.json" }}
 
+      # Authenticate GCloud
+      - run: echo $GCLOUD_SERVICE_KEY | base64 --decode --ignore-garbage > ${HOME}/gcloud-service-key.json
+      - run: sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update
+      - run: sudo /opt/google-cloud-sdk/bin/gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
+      - run: sudo /opt/google-cloud-sdk/bin/gcloud config set project $GCLOUD_APP_ID
+
       - run: npm run deploy
 
 workflows:
