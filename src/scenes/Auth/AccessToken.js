@@ -12,14 +12,16 @@ const AccessToken = props => {
     <Redirect
       to={{
         pathname: '/auth/callback',
-        search: '?access_token=' + props.match.params.rest
+        search:
+          (props.error ? '?access_token=' : '?error=') + props.match.params.rest
       }}
     />
   )
 }
 
 AccessToken.propTypes = {
-  match: PropTypes.object.isRequired
+  match: PropTypes.object.isRequired,
+  error: PropTypes.bool
 }
 
 export default AccessToken

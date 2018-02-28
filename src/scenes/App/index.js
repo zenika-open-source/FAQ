@@ -59,6 +59,7 @@ class App extends Component {
               {/* AUTH */}
               <Route path="/auth" component={Auth} />
               <Route path="/access_token=:rest" component={AccessToken} />
+              <Route path="/error=:rest" component={AccessToken} error={true} />
               {/* QUESTIONS */}
               <PrivateRoute path="/q" component={Question} />
               {/* 404 */}
