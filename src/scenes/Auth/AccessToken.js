@@ -13,7 +13,7 @@ const AccessToken = props => {
       to={{
         pathname: '/auth/callback',
         search:
-          (props.error ? '?access_token=' : '?error=') + props.match.params.rest
+          (props.error ? '?error=' : '?access_token=') + props.match.params.rest
       }}
     />
   )

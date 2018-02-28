@@ -5,7 +5,8 @@ import emoji from 'emoji-dictionary'
 class Markdown {
   constructor () {
     this.showdown = new Converter({
-      openLinksInNewWindow: true
+      openLinksInNewWindow: true,
+      backslashEscapesHTMLTags: true
     })
 
     this.showdown.setFlavor('github')
@@ -17,6 +18,8 @@ class Markdown {
 
   html (text) {
     text = this.emoji(text)
+    text = this.removeEmTagInLink(text)
+
     return (
       <div className="mde-preview">
         <div
@@ -47,6 +50,15 @@ class Markdown {
 
     // :emoji: to unicode emojis
     return text.replace(/:\w+:/gi, name => emoji.getUnicode(name))
+  }
+
+  removeEmTagInLink (text) {
+    text = text.replace(/\[(.*)\]\((.*)\)/g, (link, name, url) => {
+      url = url.replace('<em>', '').replace('</em>', '')
+      return `[${name}](${url})`
+    })
+
+    return text
   }
 }
 
