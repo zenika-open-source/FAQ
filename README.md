@@ -1,6 +1,6 @@
 # FAQ Zenika
 
-Internal Knowledge Database for Zenika members - https://faq-zenika.now.sh
+Internal Knowledge Database for Zenika members - https://faq-zenika.appspot.com
 
 ## Getting Started
 
@@ -8,14 +8,13 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-You will need an [Auth0](https://auth0.com/) account, a [Now](https://zeit.co/now) account, a [Graphcool](https://www.graph.cool/) account and an [Algolia](https://www.algolia.com/) account to use this project
+You will need an [Auth0](https://auth0.com/) account, a [Google Cloud](https://cloud.google.com) account, a [Graphcool](https://www.graph.cool/) account and an [Algolia](https://www.algolia.com/) account to use this project
 
 For this project, you will need the following keys:
 
 * Auth0 domain
 * Auth0 client id (also called: api identifier)
-* Now application name
-* Now authorization token
+* Google Cloud application id
 * Graphcool endpoint url
 * Algolia app id
 * Algolia api key (all operations)
@@ -85,11 +84,19 @@ npm run lint
 
 ## Deployment
 
-The deployment to Now and Graphcool can be executed using the following command
+The deployment to Google Cloud and Graphcool can be executed using the following command
 
 ```bash
 npm run deploy
 ```
+
+## CircleCI
+
+This project comes with a CircleCI configuration folder.
+The configuration will build and deploy the application following the environment variables.
+
+> Note: To allow CircleCI to deploy to google cloud, you first need to authenticate
+> with the Google Cloud Platform: https://circleci.com/docs/2.0/google-auth/#authenticate-the-gcloud-tool
 
 ## License
 
