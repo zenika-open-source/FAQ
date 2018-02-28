@@ -17,7 +17,6 @@ import { Card, CardText, CardActions } from 'react-toolbox/lib/card'
 
 import ReactMde, { ReactMdeCommands } from 'react-mde'
 import 'react-mde/lib/styles/css/react-mde-all.css'
-import 'font-awesome/css/font-awesome.css'
 
 class Answer extends Component {
   constructor (props) {
