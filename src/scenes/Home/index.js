@@ -28,6 +28,7 @@ class Home extends Component {
     this.state = {
       searchText: '',
       searchLoading: false,
+      answeredOnly: false,
       nodes: null
     }
   }
@@ -50,7 +51,7 @@ class Home extends Component {
   }
 
   render () {
-    const { searchLoading, searchText, nodes } = this.state
+    const { searchLoading, searchText, nodes, answeredOnly } = this.state
     const { loading, error, allZNodes } = this.props.data
 
     if (loading) {
@@ -61,7 +62,11 @@ class Home extends Component {
       return <div>Error :(</div>
     }
 
-    const list = nodes || allZNodes
+    let list = nodes || allZNodes
+
+    if (answeredOnly) {
+      list = list.filter(node => !!node.answer)
+    }
 
     const NodeCards = list.map(node => {
       return (
@@ -117,6 +122,8 @@ class Home extends Component {
             search={this.handleSearchChange.bind(this)}
             style={{ marginTop: '3rem', marginBottom: '2rem' }}
             loading={searchLoading}
+            checked={answeredOnly}
+            onToggleCheck={() => this.setState({ answeredOnly: !answeredOnly })}
           />
         )}
         <div>{Results}</div>
