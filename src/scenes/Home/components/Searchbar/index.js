@@ -6,6 +6,13 @@ import Checkbox from 'react-toolbox/lib/checkbox/Checkbox'
 import './style.css'
 
 class Searchbar extends Component {
+  componentDidMount () {
+    const input = this.input
+    const length = input.value.length
+    input.focus()
+    input.setSelectionRange(length, length)
+  }
+
   render () {
     const { text, search, loading, checked, onToggleCheck, style } = this.props
     return (
@@ -13,6 +20,7 @@ class Searchbar extends Component {
         <div className="search">
           <input
             type="text"
+            ref={ref => (this.input = ref)}
             className="searchTerm"
             placeholder="Ex: Comment remplir une note de frais ?"
             value={text}

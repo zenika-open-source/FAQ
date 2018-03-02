@@ -25,11 +25,34 @@ class Home extends Component {
   constructor (props) {
     super(props)
 
+    const searchText = this.getSearchFromURL(props)
+
     this.state = {
-      searchText: '',
+      searchText: searchText || '',
       searchLoading: false,
       answeredOnly: false,
       nodes: null
+    }
+  }
+
+  getSearchFromURL (props) {
+    const { location } = props
+    const queryParams = new URLSearchParams(location.search)
+    return queryParams.get('q')
+  }
+
+  componentDidMount () {
+    const { searchText } = this.state
+    if (searchText) {
+      this.handleSearchChange(searchText)
+    }
+  }
+
+  componentWillReceiveProps (nextProps) {
+    const currentSearchParam = this.getSearchFromURL(this.props)
+    const nextSearchParam = this.getSearchFromURL(nextProps)
+    if (currentSearchParam !== nextSearchParam) {
+      this.handleSearchChange(nextSearchParam)
     }
   }
 
