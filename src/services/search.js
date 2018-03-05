@@ -62,8 +62,7 @@ class Search {
                 clone['highlight'] = highlights[node.id]
                 return clone
               })
-
-              resolve(nodes)
+              resolve({ nodes, params })
             })
             .catch(reject)
         })

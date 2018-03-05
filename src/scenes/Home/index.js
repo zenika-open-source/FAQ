@@ -51,7 +51,12 @@ class Home extends Component {
   componentWillReceiveProps (nextProps) {
     const currentSearchParam = this.getSearchFromURL(this.props)
     const nextSearchParam = this.getSearchFromURL(nextProps)
-    if (nextSearchParam && currentSearchParam !== nextSearchParam) {
+    const nextLocationState = nextProps.location.state
+
+    if (
+      currentSearchParam !== nextSearchParam &&
+      (!nextLocationState || !nextLocationState.searching)
+    ) {
       this.handleSearchChange(nextSearchParam)
     }
   }
@@ -59,14 +64,20 @@ class Home extends Component {
   handleSearchChange (value) {
     const { history } = this.props
 
+    value = value || ''
+
     this.setState({ searchText: value })
 
     if (value !== '') {
       this.setState({ searchLoading: true })
-      history.replace({ search: '?q=' + value })
+      history.replace({ search: '?q=' + value, state: { searching: true } })
       search
         .simpleQuery(value)
-        .then(nodes => this.setState({ nodes, searchLoading: false }))
+        .then(({ nodes, params }) => {
+          if (this.state.searchText === params.query) {
+            this.setState({ nodes, searchLoading: false })
+          }
+        })
         .catch(err => {
           // eslint-disable-next-line
           console.log(err)
@@ -188,7 +199,8 @@ class Home extends Component {
 
 Home.propTypes = {
   data: PropTypes.object.isRequired,
-  history: PropTypes.object.isRequired
+  history: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired
 }
 
 export default graphql(getAllNodes)(Home)
