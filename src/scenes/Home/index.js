@@ -112,9 +112,21 @@ class Home extends Component {
       )
     } else if (list.length === 0) {
       Results = (
-        <p className="indication" style={{ textAlign: 'center' }}>
-          Nothing found &nbsp;<i className="material-icons">sms_failed</i>
-        </p>
+        <div style={{ textAlign: 'center' }}>
+          <p className="indication">
+            Nothing found &nbsp;<i className="material-icons">sms_failed</i>
+          </p>
+          <br />
+          <br />
+          <Link to={{ pathname: '/q/new', state: { question: searchText } }}>
+            <Button
+              icon="record_voice_over"
+              label="Ask the question !"
+              accent
+              raised
+            />
+          </Link>
+        </div>
       )
     } else {
       Results = (
@@ -157,11 +169,10 @@ class Home extends Component {
         {flags.question.new && (
           <Link to="/q/new">
             <TooltipButton
-              icon="add"
+              icon="record_voice_over"
               tooltip="Ask a new question"
               floating
               accent
-              mini
               style={{
                 position: 'fixed',
                 bottom: '1rem',

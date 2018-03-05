@@ -41,12 +41,17 @@ class NodeCard extends Component {
           )}
         </Link>
         <CardText>
-          {node.answer &&
+          {node.answer ? (
             markdown.html(
               node.highlight
                 ? node.highlight.answer.content.value
                 : node.answer.content
-            )}
+            )
+          ) : (
+            <p style={{ textAlign: 'center' }}>
+              <i>No answer yet...</i>
+            </p>
+          )}
         </CardText>
       </Card>
     )

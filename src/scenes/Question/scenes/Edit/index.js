@@ -19,8 +19,10 @@ class Edit extends Component {
   constructor (props) {
     super(props)
 
+    const { location } = this.props
+
     this.state = {
-      question: '',
+      question: location.state ? location.state.question : '',
       loadingSubmit: false,
       id: null
     }
@@ -167,6 +169,7 @@ Edit.propTypes = {
   match: PropTypes.object.isRequired,
   submitQuestion: PropTypes.func.isRequired,
   editQuestion: PropTypes.func.isRequired,
+  location: PropTypes.object.isRequired,
   data: PropTypes.object
 }
 
