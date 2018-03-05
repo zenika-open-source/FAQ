@@ -54,7 +54,7 @@ class Markdown {
 
   removeEmTagInLink (text) {
     text = text.replace(/\[(.*)\]\((.*)\)/g, (link, name, url) => {
-      url = url.replace('<em>', '').replace('</em>', '')
+      url = url.replace(/<em>/g, '').replace(/<\/em>/g, '')
       return `[${name}](${url})`
     })
 

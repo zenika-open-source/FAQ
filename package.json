@@ -8,6 +8,7 @@
     "auth0-js": "^9.2.3",
     "emoji-dictionary": "^1.0.9",
     "graphql": "^0.13.1",
+    "lodash": "^4.17.5",
     "luxon": "^0.5.3",
     "react": "^16.2.0",
     "react-apollo": "^2.1.0-beta.2",

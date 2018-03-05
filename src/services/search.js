@@ -27,13 +27,18 @@ class Search {
   constructor () {
     this.algolia = algoliasearch(
       process.env.REACT_APP_ALGOLIA_APP_ID,
-      process.env.REACT_APP_ALGOLIA_API_KEY_SEARCH
+      process.env.REACT_APP_ALGOLIA_API_KEY_SEARCH,
+      { protocol: 'https:' }
     )
     this.index = this.algolia.initIndex('Nodes')
   }
 
   simpleQuery (text) {
-    return this.query({ query: text })
+    return this.query({
+      query: text,
+      advancedSyntax: true,
+      removeWordsIfNoResults: 'allOptional'
+    })
   }
 
   query (params) {
@@ -57,11 +62,18 @@ class Search {
               variables: { ids }
             })
             .then(results => {
-              const nodes = results.data.allZNodes.map(node => {
-                const clone = Object.assign({}, node)
-                clone['highlight'] = highlights[node.id]
-                return clone
-              })
+              const nodes = results.data.allZNodes
+                .map(node => {
+                  const clone = Object.assign({}, node)
+                  clone['highlight'] = highlights[node.id]
+                  return clone
+                })
+                .sort((a, b) => {
+                  // Re-sort by algolia results
+                  const ai = ids.indexOf(a.id)
+                  const bi = ids.indexOf(b.id)
+                  return ai > bi ? 1 : ai < bi ? -1 : 0
+                })
               resolve({ nodes, params })
             })
             .catch(reject)
