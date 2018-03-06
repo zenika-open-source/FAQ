@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 import Button from 'react-toolbox/lib/button/Button'
 
@@ -40,6 +41,12 @@ class Pagination extends Component {
       </div>
     )
   }
+}
+
+Pagination.propTypes = {
+  pages: PropTypes.number.isRequired,
+  current: PropTypes.number.isRequired,
+  onPageSelected: PropTypes.func.isRequired
 }
 
 export default Pagination

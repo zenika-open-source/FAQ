@@ -59,7 +59,9 @@ class ResultList extends Component {
 
 ResultList.propTypes = {
   nodes: PropTypes.array.isRequired,
-  indication: PropTypes.string
+  indication: PropTypes.string,
+  history: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired
 }
 
 export default withRouter(ResultList)
