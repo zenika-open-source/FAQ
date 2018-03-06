@@ -4,44 +4,58 @@ types: ./types.graphql
 functions:
 
   authenticate:
+    type: resolver
+    schema: ./src/auth0/auth0Authentication.graphql
     handler:
       code:
         src: ./src/auth0/auth0Authentication.js
         environment:
           AUTH0_DOMAIN: ${env:REACT_APP_AUTH0_DOMAIN}
           AUTH0_API_IDENTIFIER: ${env:REACT_APP_AUTH0_CLIENTID}
-    type: resolver
-    schema: ./src/auth0/auth0Authentication.graphql
 
   algoliaZNode:
-    handler:
-      code:
-        src: ./src/algolia/sync.js
-        environment:
-          ALGOLIA_APP_ID: ${env:REACT_APP_ALGOLIA_APP_ID}
-          ALGOLIA_API_KEY: ${env:REACT_APP_ALGOLIA_API_KEY_ALL}
     type: subscription
     query: ./src/algolia/znode.graphql
+    handler:
+      code:
+        src: ./src/algolia/sync.js
+        environment:
+          ALGOLIA_APP_ID: ${env:REACT_APP_ALGOLIA_APP_ID}
+          ALGOLIA_API_KEY: ${env:REACT_APP_ALGOLIA_API_KEY_ALL}
 
   algoliaQuestion:
-    handler:
-      code:
-        src: ./src/algolia/sync.js
-        environment:
-          ALGOLIA_APP_ID: ${env:REACT_APP_ALGOLIA_APP_ID}
-          ALGOLIA_API_KEY: ${env:REACT_APP_ALGOLIA_API_KEY_ALL}
     type: subscription
     query: ./src/algolia/question.graphql
-
-  algoliaAnswer:
     handler:
       code:
         src: ./src/algolia/sync.js
         environment:
           ALGOLIA_APP_ID: ${env:REACT_APP_ALGOLIA_APP_ID}
           ALGOLIA_API_KEY: ${env:REACT_APP_ALGOLIA_API_KEY_ALL}
+
+  algoliaAnswer:
     type: subscription
     query: ./src/algolia/answer.graphql
+    handler:
+      code:
+        src: ./src/algolia/sync.js
+        environment:
+          ALGOLIA_APP_ID: ${env:REACT_APP_ALGOLIA_APP_ID}
+          ALGOLIA_API_KEY: ${env:REACT_APP_ALGOLIA_API_KEY_ALL}
+
+  slugCreate:
+    type: operationBefore
+    operation: Question.create
+    handler:
+      code:
+        src: ./src/slug/slug.js
+
+  slugUpdate:
+    type: operationBefore
+    operation: Question.update
+    handler:
+      code:
+        src: ./src/slug/slug.js
 
 permissions:
   - operation: "*"
