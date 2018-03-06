@@ -1,29 +1,46 @@
 import { gql } from 'apollo-boost'
+import { graphql } from 'react-apollo'
 
-export const getNode = gql`
-  query getNode($id: ID!) {
-    ZNode(id: $id) {
-      id
-      question {
+export const getNodeQuery = gql`
+  query getNode($slug: String!) {
+    allQuestions(filter: { slug_in: [$slug] }) {
+      node {
         id
-        title
-        user {
+        question {
           id
-          name
-          picture
+          title
+          slug
+          user {
+            id
+            name
+            picture
+          }
+          updatedAt
         }
-        updatedAt
-      }
-      answer {
-        id
-        content
-        user {
+        answer {
           id
-          name
-          picture
+          content
+          user {
+            id
+            name
+            picture
+          }
+          updatedAt
         }
-        updatedAt
       }
     }
   }
 `
+
+export const getNode = graphql(getNodeQuery, {
+  props: ({ data: { allQuestions, ...rest } }) => ({
+    data: {
+      ZNode: allQuestions
+        ? allQuestions.length >= 1 ? allQuestions[0].node : null
+        : undefined,
+      ...rest
+    }
+  }),
+  skip: props => !props.match.params.slug,
+  options: props => ({ variables: { slug: props.match.params.slug } })
+})

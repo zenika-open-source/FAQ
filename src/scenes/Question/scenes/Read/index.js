@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { DateTime } from 'luxon'
 
-import { graphql } from 'react-apollo'
 import { getNode } from './queries'
 
 import { flags, markdown } from 'services'
@@ -68,13 +67,13 @@ class Read extends Component {
               <MenuItem
                 icon="edit"
                 caption="Edit question"
-                onClick={() => history.push(`/q/${match.params.id}/edit`)}
+                onClick={() => history.push(`/q/${match.params.slug}/edit`)}
                 disabled={!flags.question.edit}
               />
               <MenuItem
                 icon="question_answer"
                 caption="Edit answer"
-                onClick={() => history.push(`/q/${match.params.id}/answer`)}
+                onClick={() => history.push(`/q/${match.params.slug}/answer`)}
                 disabled={
                   !ZNode.answer ||
                   !flags.question.answer ||
@@ -106,7 +105,7 @@ class Read extends Component {
                 <b>No answer yet...</b>
                 <br />
                 <br />
-                <Link to={`/q/${match.params.id}/answer`}>
+                <Link to={`/q/${match.params.slug}/answer`}>
                   <Button icon="question_answer" accent raised>
                     Answer the question
                   </Button>
@@ -128,6 +127,4 @@ Read.propTypes = {
   data: PropTypes.object.isRequired
 }
 
-export default graphql(getNode, {
-  options: ({ match }) => ({ variables: { id: match.params.id } })
-})(Read)
+export default getNode(Read)

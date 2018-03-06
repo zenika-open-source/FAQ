@@ -12,9 +12,9 @@ class Question extends Component {
     return (
       <Switch>
         <Route path={`${prefix}/new`} component={Edit} />
-        <Route path={`${prefix}/:id`} exact component={Read} />
-        <Route path={`${prefix}/:id/edit`} component={Edit} />
-        <Route path={`${prefix}/:id/answer`} component={Answer} />
+        <Route path={`${prefix}/:slug`} exact component={Read} />
+        <Route path={`${prefix}/:slug/edit`} component={Edit} />
+        <Route path={`${prefix}/:slug/answer`} component={Answer} />
         <Route render={() => <Redirect to="/" />} />
       </Switch>
     )

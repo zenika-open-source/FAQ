@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link, Redirect } from 'react-router-dom'
 
-import { compose, graphql } from 'react-apollo'
+import { compose } from 'react-apollo'
 import { submitAnswer, editAnswer } from './queries'
 import { getNode } from '../Read/queries'
 
@@ -31,6 +31,7 @@ class Answer extends Component {
 
   componentDidMount () {
     const { ZNode } = this.props.data
+
     if (ZNode && ZNode.answer) {
       this.setState({ answer: { text: ZNode.answer.content } })
     }
@@ -39,6 +40,7 @@ class Answer extends Component {
   componentWillReceiveProps (nextProps) {
     const ZNode = this.props.data.ZNode
     const nextZNode = nextProps.data.ZNode
+
     if (!ZNode && nextZNode && nextZNode.answer) {
       this.setState({ answer: { text: nextZNode.answer.content } })
     }
@@ -50,7 +52,7 @@ class Answer extends Component {
 
   submitAnswer () {
     const { submitAnswer } = this.props
-    const id = this.props.match.params.id
+    const id = this.props.data.ZNode.id
 
     this.setState({ loadingSubmit: true })
 
@@ -88,12 +90,11 @@ class Answer extends Component {
   }
 
   render () {
-    const { match } = this.props
     const { loadingSubmit, redirect } = this.state
     const { loading, error, ZNode } = this.props.data
 
     if (redirect) {
-      return <Redirect to={`/q/${match.params.id}`} />
+      return <Redirect to={`/q/${ZNode.question.slug}`} />
     }
 
     if (loadingSubmit || loading) {
@@ -110,7 +111,7 @@ class Answer extends Component {
 
     return (
       <div>
-        <Link to={`/q/${match.params.id}`}>
+        <Link to={`/q/${ZNode.question.slug}`}>
           <Button icon="chevron_left" label="Back" flat primary />
         </Link>
         <br />
@@ -160,44 +161,4 @@ Answer.propTypes = {
   data: PropTypes.object.isRequired
 }
 
-export default compose(
-  graphql(submitAnswer, {
-    name: 'submitAnswer',
-    props: ({ submitAnswer }) => ({
-      submitAnswer: (id, answer) => {
-        return submitAnswer({ variables: { id, answer } })
-      }
-    }),
-    options: props => ({
-      refetchQueries: [
-        {
-          query: getNode,
-          variables: {
-            id: props.match.params.id
-          }
-        }
-      ]
-    })
-  }),
-  graphql(editAnswer, {
-    name: 'editAnswer',
-    props: ({ editAnswer }) => ({
-      editAnswer: (idAnswer, content, idUser) => {
-        return editAnswer({ variables: { idAnswer, content, idUser } })
-      }
-    }),
-    options: props => ({
-      refetchQueries: [
-        {
-          query: getNode,
-          variables: {
-            id: props.match.params.id
-          }
-        }
-      ]
-    })
-  }),
-  graphql(getNode, {
-    options: props => ({ variables: { id: props.match.params.id } })
-  })
-)(Answer)
+export default compose(submitAnswer, editAnswer, getNode)(Answer)
