@@ -5,8 +5,8 @@ import { getNodeQuery } from '../Read/queries'
 import { getAllNodesQuery } from 'scenes/Home/queries'
 
 export const submitQuestionQuery = gql`
-  mutation submitQuestion($title: String!, $slug: String!, $idUser: ID!) {
-    createZNode(question: { title: $title, slug: $slug, userId: $idUser }) {
+  mutation submitQuestion($title: String!, $idUser: ID!) {
+    createZNode(question: { title: $title, slug: "", userId: $idUser }) {
       id
       question {
         slug
@@ -16,18 +16,8 @@ export const submitQuestionQuery = gql`
 `
 
 export const editQuestionQuery = gql`
-  mutation editQuestion(
-    $idQuestion: ID!
-    $title: String!
-    $slug: String!
-    $idUser: ID!
-  ) {
-    updateQuestion(
-      id: $idQuestion
-      title: $title
-      slug: $slug
-      userId: $idUser
-    ) {
+  mutation editQuestion($idQuestion: ID!, $title: String!, $idUser: ID!) {
+    updateQuestion(id: $idQuestion, title: $title, slug: "", userId: $idUser) {
       id
       slug
     }
@@ -39,7 +29,7 @@ export const submitQuestion = graphql(submitQuestionQuery, {
   props: ({ submitQuestion }) => ({
     submitQuestion: (title, idUser) => {
       return submitQuestion({
-        variables: { title, slug: '', idUser }
+        variables: { title, idUser }
       })
     }
   }),
@@ -57,7 +47,7 @@ export const editQuestion = graphql(editQuestionQuery, {
   props: ({ editQuestion }) => ({
     editQuestion: (idQuestion, title, idUser) => {
       return editQuestion({
-        variables: { idQuestion, title, slug: '', idUser }
+        variables: { idQuestion, title, idUser }
       })
     }
   }),
