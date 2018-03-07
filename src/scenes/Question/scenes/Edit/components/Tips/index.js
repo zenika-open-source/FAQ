@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 
 import { Card, CardText } from 'react-toolbox/lib/card'
-import { List, ListItem, ListDivider } from 'react-toolbox/lib/list'
-import FontIcon from 'react-toolbox/lib/font_icon'
+import { List, ListDivider } from 'react-toolbox/lib/list'
+
+import Tip from './Tip'
 
 import tips from './tips.json'
 
@@ -14,38 +15,13 @@ class Tips extends Component {
           <h3 style={{ textAlign: 'center' }}>
             Tips to write great questions on the FAQ
           </h3>
-          <List selectable>
+          <List>
             {tips.good.map((tip, i) => (
-              <ListItem
-                key={i}
-                caption={tip.text}
-                leftIcon={
-                  <FontIcon
-                    value="check"
-                    style={{ color: 'green', marginTop: '2px' }}
-                  />
-                }
-                onClick={() =>
-                  tip.url ? window.open(tip.url, '_blank') : null
-                }
-              />
+              <Tip key={i} tip={{ type: 'good', ...tip }} />
             ))}
             <ListDivider />
             {tips.bad.map((tip, i) => (
-              <ListItem
-                key={i}
-                caption={tip.text}
-                legend={tip.hint}
-                leftIcon={
-                  <FontIcon
-                    value="close"
-                    style={{ color: 'red', marginTop: '2px' }}
-                  />
-                }
-                onClick={() =>
-                  tip.url ? window.open(tip.url, '_blank') : null
-                }
-              />
+              <Tip key={i} tip={{ type: 'bad', ...tip }} />
             ))}
           </List>
         </CardText>
