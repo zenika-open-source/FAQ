@@ -12,27 +12,30 @@ class Auth {
     })
   }
 
-  login () {
+  login (redirectURL) {
+    this.saveRedirectURL(redirectURL)
     this.auth0.authorize()
   }
 
   handleAuthentication (successCallback, errorCallback) {
-    this.auth0.parseHash(
-      {
-        hash: window.location.hash.split('?')[1]
-      },
-      (err, authResult) => {
-        if (authResult && authResult.accessToken && authResult.idToken) {
-          successCallback(authResult)
-          // errorCallback({ error: 'Not an error' })
-        } else if (err) {
-          alert(`Error: ${err.error}. Check the console for further details.`)
-          errorCallback(err)
-        } else {
-          errorCallback({ error: 'Authentication did not work' })
+    return new Promise((resolve, reject) => {
+      this.auth0.parseHash(
+        {
+          hash: window.location.hash.split('?')[1]
+        },
+        (err, authResult) => {
+          if (authResult && authResult.accessToken && authResult.idToken) {
+            resolve(authResult)
+            // reject({ error: 'Not an error' })
+          } else if (err) {
+            alert(`Error: ${err.error}. Check the console for further details.`)
+            reject(err)
+          } else {
+            reject({ error: 'Authentication did not work' })
+          }
         }
-      }
-    )
+      )
+    })
   }
 
   setSession (authResult, userNodeId) {
@@ -74,17 +77,30 @@ class Auth {
   }
 
   getProfile (cb) {
-    let accessToken = this.getAccessToken()
-    if (this.userProfile) {
-      cb(null, this.userProfile)
-    } else {
-      this.auth0.client.userInfo(accessToken, (err, profile, ...rest) => {
-        if (profile) {
-          this.userProfile = profile
-        }
-        cb(err, profile)
-      })
-    }
+    return new Promise((resolve, reject) => {
+      let accessToken = this.getAccessToken()
+      if (this.userProfile) {
+        resolve(this.userProfile)
+      } else {
+        this.auth0.client.userInfo(accessToken, (err, profile, ...rest) => {
+          if (profile) {
+            this.userProfile = profile
+            resolve(this.userProfile)
+          }
+          reject(err)
+        })
+      }
+    })
+  }
+
+  saveRedirectURL (url) {
+    sessionStorage.setItem('after_login_redirect_url', url)
+  }
+
+  retrieveRedirectURL () {
+    const url = sessionStorage.getItem('after_login_redirect_url')
+    sessionStorage.removeItem('after_login_redirect_url')
+    return url
   }
 }
 

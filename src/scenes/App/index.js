@@ -31,10 +31,12 @@ class App extends Component {
     const user = this.state.user
 
     if (auth.isAuthenticated() && !user) {
-      auth.getProfile((err, profile) => {
-        if (err) alert(err)
-        this.setState({ user: profile })
-      })
+      auth
+        .getProfile()
+        .then(profile => {
+          this.setState({ user: profile })
+        })
+        .catch(err => alert(err))
     }
   }
 

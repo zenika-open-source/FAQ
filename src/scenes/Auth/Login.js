@@ -9,6 +9,7 @@ import Button from 'react-toolbox/lib/button/Button'
 class Login extends Component {
   render () {
     const { location } = this.props
+
     return (
       <div style={{ textAlign: 'center' }}>
         <h3>Welcome</h3>
@@ -18,7 +19,7 @@ class Login extends Component {
           label="Sign in"
           raised
           primary
-          onClick={() => auth.login()}
+          onClick={() => auth.login(location.state ? location.state.from : '/')}
         />
         {location.state ? (
           <div style={{ color: 'red', marginTop: '1rem' }}>

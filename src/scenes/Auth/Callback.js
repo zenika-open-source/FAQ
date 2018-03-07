@@ -11,17 +11,17 @@ import Loading from 'components/Loading'
 class Callback extends Component {
   componentDidMount () {
     const { history, authQL } = this.props
-    auth.handleAuthentication(
-      authResult => {
+    auth
+      .handleAuthentication()
+      .then(authResult => {
         authQL(authResult.accessToken, authResult.idToken).then(({ data }) => {
           auth.setSession(authResult, data.authenticateUser.id)
-          history.push('/')
+          history.push(auth.retrieveRedirectURL())
         })
-      },
-      err => {
+      })
+      .catch(err => {
         history.push({ pathname: '/auth/login', state: { error: err } })
-      }
-    )
+      })
   }
 
   render () {
