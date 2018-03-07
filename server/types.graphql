@@ -1,5 +1,6 @@
 type ZNode @model {
   id: ID! @isUnique
+
   question: Question @relation(name: "NodeQuestion")
   answer: Answer @relation(name: "NodeAnswer")
 
@@ -9,8 +10,12 @@ type ZNode @model {
 
 type Question @model {
   id: ID! @isUnique
+
   title: String!
+  slug: String! @migrationValue(value: "-")
+
   description: String
+
   node: ZNode! @relation(name: "NodeQuestion")
   user: User @relation(name: "UserQuestions")
 
@@ -20,7 +25,9 @@ type Question @model {
 
 type Answer @model {
   id: ID! @isUnique
+
   content: String!
+
   node: ZNode! @relation(name: "NodeAnswer")
   user: User @relation(name: "UserAnswers")
 

@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
-import { graphql } from 'react-apollo'
 import { getAllNodes } from './queries'
 
 import { flags, routing, search } from 'services'
@@ -170,4 +169,4 @@ Home.propTypes = {
   location: PropTypes.object.isRequired
 }
 
-export default graphql(getAllNodes)(Home)
+export default getAllNodes(Home)

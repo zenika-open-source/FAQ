@@ -2,10 +2,9 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link, Redirect } from 'react-router-dom'
 
-import { compose, graphql } from 'react-apollo'
+import { compose } from 'react-apollo'
 import { submitQuestion, editQuestion } from './queries'
 import { getNode } from '../Read/queries'
-import { getAllNodes } from 'scenes/Home/queries'
 
 import { auth } from 'services'
 
@@ -24,10 +23,10 @@ class Edit extends Component {
     this.state = {
       question: location.state ? location.state.question : '',
       loadingSubmit: false,
-      id: null
+      slug: null
     }
 
-    this.isEditing = !!this.props.match.params.id
+    this.isEditing = !!this.props.match.params.slug
   }
 
   componentDidMount () {
@@ -61,7 +60,7 @@ class Edit extends Component {
 
     submitQuestion(this.state.question, auth.getUserNodeId())
       .then(({ data }) => {
-        this.setState({ id: data.createZNode.id })
+        this.setState({ slug: data.createZNode.question.slug })
       })
       .catch(error => {
         alert(error)
@@ -77,8 +76,8 @@ class Edit extends Component {
     this.setState({ loadingSubmit: true })
 
     editQuestion(ZNode.question.id, this.state.question, auth.getUserNodeId())
-      .then(() => {
-        this.setState({ id: ZNode.id })
+      .then(({ data }) => {
+        this.setState({ slug: data.updateQuestion.slug })
       })
       .catch(error => {
         alert(error)
@@ -89,10 +88,10 @@ class Edit extends Component {
 
   render () {
     const { match } = this.props
-    const { loadingSubmit, id } = this.state
+    const { loadingSubmit, slug } = this.state
 
-    if (id) {
-      return <Redirect to={`/q/${id}`} />
+    if (slug) {
+      return <Redirect to={`/q/${slug}`} />
     }
 
     if (loadingSubmit) {
@@ -111,14 +110,14 @@ class Edit extends Component {
       }
 
       if (ZNode === null) {
-        return <Redirect to={`/q/${id}`} />
+        return <Redirect to={`/q/${slug}`} />
       }
     }
 
     return (
       <div>
         {this.isEditing ? (
-          <Link to={`/q/${match.params.id}`}>
+          <Link to={`/q/${match.params.slug}`}>
             <Button icon="chevron_left" label="Back" flat primary />
           </Link>
         ) : (
@@ -173,42 +172,4 @@ Edit.propTypes = {
   data: PropTypes.object
 }
 
-export default compose(
-  graphql(submitQuestion, {
-    name: 'submitQuestion',
-    props: ({ submitQuestion }) => ({
-      submitQuestion: (title, idUser) => {
-        return submitQuestion({ variables: { title, idUser } })
-      }
-    }),
-    options: props => ({
-      refetchQueries: [
-        {
-          query: getAllNodes
-        }
-      ]
-    })
-  }),
-  graphql(editQuestion, {
-    name: 'editQuestion',
-    props: ({ editQuestion }) => ({
-      editQuestion: (idQuestion, title, idUser) => {
-        return editQuestion({ variables: { idQuestion, title, idUser } })
-      }
-    }),
-    options: props => ({
-      refetchQueries: [
-        {
-          query: getNode,
-          variables: {
-            id: props.match.params.id
-          }
-        }
-      ]
-    })
-  }),
-  graphql(getNode, {
-    skip: props => !props.match.params.id,
-    options: props => ({ variables: { id: props.match.params.id } })
-  })
-)(Edit)
+export default compose(submitQuestion, editQuestion, getNode)(Edit)

@@ -17,7 +17,7 @@ class NodeCard extends Component {
     return (
       <Card className="NodeCard" {...this.props}>
         <Link
-          to={`/q/${node.id}`}
+          to={`/q/${node.question.slug}`}
           style={{ color: 'initial', textDecoration: 'none' }}
         >
           {node.highlight ? (
