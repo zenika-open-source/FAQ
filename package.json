@@ -27,7 +27,7 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "lint": "eslint src --fix",
-    "deploy_appengine": "cd build && gcloud app deploy --quiet --project $APPENGINE_PROJECT_ID",
+    "deploy_appengine": "cd build && gcloud app deploy --quiet --project $APPENGINE_PROJECT_ID --version=prod",
     "deploy_graphcool": "cd server && npm run login && npm run deploy_prod",
     "deploy": "npm run deploy_graphcool"
   },
