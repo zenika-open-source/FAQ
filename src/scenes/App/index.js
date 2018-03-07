@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { Route, Switch } from 'react-router-dom'
 
 import theme from 'toolbox/theme'
@@ -51,7 +51,7 @@ class App extends Component {
   render () {
     return (
       <ThemeProvider theme={theme}>
-        <div>
+        <Fragment>
           <Navbar user={this.state.user} />
           <div className="Main">
             {/* ROUTES */}
@@ -68,7 +68,7 @@ class App extends Component {
               <PrivateRoute component={NotFound} />
             </Switch>
           </div>
-        </div>
+        </Fragment>
       </ThemeProvider>
     )
   }

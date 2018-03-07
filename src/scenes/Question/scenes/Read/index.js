@@ -1,7 +1,8 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { DateTime } from 'luxon'
+import Helmet from 'react-helmet'
 
 import { getNode } from './queries'
 
@@ -40,83 +41,88 @@ class Read extends Component {
     }
 
     return (
-      <div>
-        <Link to="/">
-          <Button icon="chevron_left" label="Home" flat primary />
-        </Link>
-        <Card style={{ marginTop: '1rem' }} raised>
-          <CardTitle
-            avatar={
-              <TooltipAvatar
-                tooltip={ZNode.question.user.name + ''}
-                tooltipPosition="top"
-                image={ZNode.question.user.picture + ''}
-              />
-            }
-            title={markdown.title(ZNode.question.title)}
-            style={{ backgroundColor: '#f0f0f0', position: 'relative' }}
-          >
-            <IconMenu
-              style={{
-                float: 'right',
-                position: 'absolute',
-                right: '5px',
-                top: '15px'
-              }}
+      <Fragment>
+        <Helmet>
+          <title>FAQ - {ZNode.question.title}</title>
+        </Helmet>
+        <div>
+          <Link to="/">
+            <Button icon="chevron_left" label="Home" flat primary />
+          </Link>
+          <Card style={{ marginTop: '1rem' }} raised>
+            <CardTitle
+              avatar={
+                <TooltipAvatar
+                  tooltip={ZNode.question.user.name + ''}
+                  tooltipPosition="top"
+                  image={ZNode.question.user.picture + ''}
+                />
+              }
+              title={markdown.title(ZNode.question.title)}
+              style={{ backgroundColor: '#f0f0f0', position: 'relative' }}
             >
-              <MenuItem
-                icon="edit"
-                caption="Edit question"
-                onClick={() => history.push(`/q/${match.params.slug}/edit`)}
-                disabled={!flags.question.edit}
-              />
-              <MenuItem
-                icon="question_answer"
-                caption="Edit answer"
-                onClick={() => history.push(`/q/${match.params.slug}/answer`)}
-                disabled={
-                  !ZNode.answer ||
-                  !flags.question.answer ||
-                  !flags.question.edit
-                }
-              />
-            </IconMenu>
-          </CardTitle>
-          <CardText style={{ paddingTop: '10px' }}>
-            {ZNode.answer ? (
-              <div>
-                <b>
-                  Answered by {ZNode.answer.user.name} on{' '}
-                  {DateTime.fromISO(ZNode.answer.updatedAt).toFormat(
-                    'dd LLL yyyy'
-                  )}:
-                </b>
-                <br />
-                {markdown.html(ZNode.answer.content)}
-              </div>
-            ) : flags.question.answer ? (
-              <div
+              <IconMenu
                 style={{
-                  textAlign: 'center',
-                  marginTop: '2rem',
-                  marginBottom: '2rem'
+                  float: 'right',
+                  position: 'absolute',
+                  right: '5px',
+                  top: '15px'
                 }}
               >
-                <b>No answer yet...</b>
-                <br />
-                <br />
-                <Link to={`/q/${match.params.slug}/answer`}>
-                  <Button icon="question_answer" accent raised>
-                    Answer the question
-                  </Button>
-                </Link>
-              </div>
-            ) : (
-              <i>No answer yet...</i>
-            )}
-          </CardText>
-        </Card>
-      </div>
+                <MenuItem
+                  icon="edit"
+                  caption="Edit question"
+                  onClick={() => history.push(`/q/${match.params.slug}/edit`)}
+                  disabled={!flags.question.edit}
+                />
+                <MenuItem
+                  icon="question_answer"
+                  caption="Edit answer"
+                  onClick={() => history.push(`/q/${match.params.slug}/answer`)}
+                  disabled={
+                    !ZNode.answer ||
+                    !flags.question.answer ||
+                    !flags.question.edit
+                  }
+                />
+              </IconMenu>
+            </CardTitle>
+            <CardText style={{ paddingTop: '10px' }}>
+              {ZNode.answer ? (
+                <div>
+                  <b>
+                    Answered by {ZNode.answer.user.name} on{' '}
+                    {DateTime.fromISO(ZNode.answer.updatedAt).toFormat(
+                      'dd LLL yyyy'
+                    )}:
+                  </b>
+                  <br />
+                  {markdown.html(ZNode.answer.content)}
+                </div>
+              ) : flags.question.answer ? (
+                <div
+                  style={{
+                    textAlign: 'center',
+                    marginTop: '2rem',
+                    marginBottom: '2rem'
+                  }}
+                >
+                  <b>No answer yet...</b>
+                  <br />
+                  <br />
+                  <Link to={`/q/${match.params.slug}/answer`}>
+                    <Button icon="question_answer" accent raised>
+                      Answer the question
+                    </Button>
+                  </Link>
+                </div>
+              ) : (
+                <i>No answer yet...</i>
+              )}
+            </CardText>
+          </Card>
+        </div>
+      </Fragment>
     )
   }
 }
