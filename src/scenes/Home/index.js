@@ -34,7 +34,8 @@ class Home extends Component {
   }
 
   getSearchFromURL (props) {
-    return routing.getQueryParam(props.location, 'q')
+    const q = routing.getQueryParam(props.location, 'q')
+    return q ? q.replace(/\+/g, ' ') : null
   }
 
   componentDidMount () {
@@ -66,7 +67,10 @@ class Home extends Component {
 
     if (value !== '') {
       this.setState({ searchLoading: true })
-      history.replace({ search: '?q=' + value, state: { searching: true } })
+      history.replace({
+        search: '?q=' + value.replace(/\s/g, '+'),
+        state: { searching: true }
+      })
       search
         .simpleQuery(value)
         .then(({ nodes, params }) => {
