@@ -12,7 +12,7 @@ type Question @model {
   id: ID! @isUnique
 
   title: String!
-  slug: String! @migrationValue(value: "-")
+  slug: String!
 
   description: String
 

@@ -10,6 +10,7 @@ const getListNodes = gql`
       question {
         id
         title
+        slug
         user {
           id
           picture
