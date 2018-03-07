@@ -14,6 +14,8 @@ import Button from 'react-toolbox/lib/button/Button'
 import { Card, CardText, CardActions } from 'react-toolbox/lib/card'
 import Input from 'react-toolbox/lib/input/Input'
 
+import Tips from './components/Tips'
+
 class Edit extends Component {
   constructor (props) {
     super(props)
@@ -135,6 +137,7 @@ class Edit extends Component {
               type="text"
               label="Type your question here..."
               maxLength={100}
+              autoFocus
               value={this.state.question}
               onChange={this.handleChange.bind(this)}
             />
@@ -159,6 +162,7 @@ class Edit extends Component {
             />
           </CardActions>
         </Card>
+        <Tips style={{ marginTop: '2rem' }} />
       </div>
     )
   }
