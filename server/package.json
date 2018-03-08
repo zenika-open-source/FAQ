@@ -14,7 +14,6 @@
   },
   "scripts": {
     "login": "graphcool login",
-    "deploy_prod": "dotenv -e .env.local graphcool deploy -- --target prod",
     "deploy": "dotenv -e .env.local graphcool deploy"
   }
 }

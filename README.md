@@ -15,7 +15,7 @@ For this project, you will need the following keys:
 * Auth0 domain
 * Auth0 client id (also called: api identifier)
 * Google Cloud application id
-* Graphcool endpoint url
+* Graphcool endpoint url (also called: target)
 * Algolia app id
 * Algolia api key (all operations)
 * Algolia api key (search only)
@@ -58,8 +58,7 @@ Install and configure the graphcool instance for your project
 ```bash
 cd server
 npm install
-vim .graphcoolrc
-graphcool deploy --target=dev
+graphcool deploy
 ```
 
 ### Start
