@@ -1,16 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import { DateTime } from 'luxon'
 import Helmet from 'react-helmet'
-
-import { getNode } from './queries'
-
-import { flags, markdown } from 'services'
-
-import NotFound from 'scenes/NotFound'
-
-import Loading from 'components/Loading'
 
 import Card from 'react-toolbox/lib/card/Card'
 import CardTitle from 'react-toolbox/lib/card/CardTitle'
@@ -18,14 +9,31 @@ import CardText from 'react-toolbox/lib/card/CardText'
 import Avatar from 'react-toolbox/lib/avatar/Avatar'
 import Tooltip from 'react-toolbox/lib/tooltip/Tooltip'
 import Button from 'react-toolbox/lib/button/Button'
-import IconMenu from 'react-toolbox/lib/menu/IconMenu'
-import MenuItem from 'react-toolbox/lib/menu/MenuItem'
+
+import { compose } from 'react-apollo'
+import { getNode, createFlag } from './queries'
+
+import { flags, markdown } from 'services'
+
+import NotFound from 'scenes/NotFound'
+
+import Loading from 'components/Loading'
+
+import Meta from './components/Meta'
+import OptionsMenu from './components/OptionsMenu'
 
 const TooltipAvatar = Tooltip()(Avatar)
 
 class Read extends Component {
+  flag (type) {
+    const { createFlag } = this.props
+    const { ZNode } = this.props.data
+
+    createFlag(type, ZNode.id)
+  }
+
   render () {
-    const { match, history } = this.props
+    const { match } = this.props
     const { loading, error, ZNode } = this.props.data
 
     if (loading) {
@@ -61,45 +69,15 @@ class Read extends Component {
               title={markdown.title(ZNode.question.title)}
               style={{ backgroundColor: '#f0f0f0', position: 'relative' }}
             >
-              <IconMenu
-                style={{
-                  float: 'right',
-                  position: 'absolute',
-                  right: '5px',
-                  top: '15px'
-                }}
-              >
-                <MenuItem
-                  icon="edit"
-                  caption="Edit question"
-                  onClick={() => history.push(`/q/${match.params.slug}/edit`)}
-                  disabled={!flags.question.edit}
-                />
-                <MenuItem
-                  icon="question_answer"
-                  caption="Edit answer"
-                  onClick={() => history.push(`/q/${match.params.slug}/answer`)}
-                  disabled={
-                    !ZNode.answer ||
-                    !flags.question.answer ||
-                    !flags.question.edit
-                  }
-                />
-              </IconMenu>
+              <OptionsMenu node={ZNode} />
             </CardTitle>
             <CardText style={{ paddingTop: '10px' }}>
               {ZNode.answer ? (
                 <div>
-                  <b>
-                    Answered by {ZNode.answer.user.name} on{' '}
-                    {DateTime.fromISO(ZNode.answer.updatedAt).toFormat(
-                      'dd LLL yyyy'
-                    )}:
-                  </b>
-                  <br />
+                  <Meta node={ZNode} createFlag={this.flag.bind(this)} />
                   {markdown.html(ZNode.answer.content)}
                 </div>
-              ) : flags.question.answer ? (
+              ) : (
                 <div
                   style={{
                     textAlign: 'center',
@@ -108,16 +86,18 @@ class Read extends Component {
                   }}
                 >
                   <b>No answer yet...</b>
-                  <br />
-                  <br />
-                  <Link to={`/q/${match.params.slug}/answer`}>
-                    <Button icon="question_answer" accent raised>
-                      Answer the question
-                    </Button>
-                  </Link>
+                  {flags.question.answer && (
+                    <Fragment>
+                      <br />
+                      <br />
+                      <Link to={`/q/${match.params.slug}/answer`}>
+                        <Button icon="question_answer" accent raised>
+                          Answer the question
+                        </Button>
+                      </Link>
+                    </Fragment>
+                  )}
                 </div>
-              ) : (
-                <i>No answer yet...</i>
               )}
             </CardText>
           </Card>
@@ -129,8 +109,8 @@ class Read extends Component {
 
 Read.propTypes = {
   match: PropTypes.object.isRequired,
-  history: PropTypes.object.isRequired,
-  data: PropTypes.object.isRequired
+  data: PropTypes.object.isRequired,
+  createFlag: PropTypes.func.isRequired
 }
 
-export default getNode(Read)
+export default compose(getNode, createFlag)(Read)

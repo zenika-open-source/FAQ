@@ -6,8 +6,6 @@ import { compose } from 'react-apollo'
 import { submitQuestion, editQuestion } from './queries'
 import { getNode } from '../Read/queries'
 
-import { auth } from 'services'
-
 import Loading from 'components/Loading'
 
 import Button from 'react-toolbox/lib/button/Button'
@@ -60,7 +58,7 @@ class Edit extends Component {
 
     this.setState({ loadingSubmit: true })
 
-    submitQuestion(this.state.question, auth.getUserNodeId())
+    submitQuestion(this.state.question)
       .then(({ data }) => {
         this.setState({ slug: data.createZNode.question.slug })
       })
@@ -77,7 +75,7 @@ class Edit extends Component {
 
     this.setState({ loadingSubmit: true })
 
-    editQuestion(ZNode.question.id, this.state.question, auth.getUserNodeId())
+    editQuestion(ZNode.question.id, this.state.question)
       .then(({ data }) => {
         this.setState({ slug: data.updateQuestion.slug })
       })
