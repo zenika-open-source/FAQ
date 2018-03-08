@@ -31,7 +31,7 @@ class Auth {
             alert(`Error: ${err.error}. Check the console for further details.`)
             reject(err)
           } else {
-            reject({ error: 'Authentication did not work' })
+            reject(new Error('Authentication did not work'))
           }
         }
       )
