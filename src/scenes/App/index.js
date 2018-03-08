@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import { Route, Switch } from 'react-router-dom'
+import Helmet from 'react-helmet'
 
 import theme from 'toolbox/theme'
 import ThemeProvider from 'react-toolbox/lib/ThemeProvider'
@@ -52,6 +53,9 @@ class App extends Component {
     return (
       <ThemeProvider theme={theme}>
         <Fragment>
+          <Helmet>
+            <title>FAQ</title>
+          </Helmet>
           <Navbar user={this.state.user} />
           <div className="Main">
             {/* ROUTES */}
