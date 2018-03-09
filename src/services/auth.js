@@ -10,6 +10,7 @@ class Auth {
       responseType: 'token id_token',
       scope: 'openid profile email'
     })
+    this.session = JSON.parse(localStorage.getItem('auth'))
   }
 
   login (redirectURL) {
@@ -26,7 +27,6 @@ class Auth {
         (err, authResult) => {
           if (authResult && authResult.accessToken && authResult.idToken) {
             resolve(authResult)
-            // reject({ error: 'Not an error' })
           } else if (err) {
             alert(`Error: ${err.error}. Check the console for further details.`)
             reject(err)
@@ -39,29 +39,32 @@ class Auth {
   }
 
   setSession (authResult, userNodeId) {
-    let expiresAt = JSON.stringify(
-      authResult.expiresIn * 1000 + new Date().getTime()
-    )
-    localStorage.setItem('access_token', authResult.accessToken)
-    localStorage.setItem('id_token', authResult.idToken)
-    localStorage.setItem('expires_at', expiresAt)
-    localStorage.setItem('user_node_id', userNodeId)
+    // const expiresAt = new Date().getTime() + 7 * 24 * 60 * 60 * 1000 // A week
+    const expiresAt = authResult.expiresIn * 1000 + new Date().getTime()
+    // authResult.expiresIn * 1000 + new Date().getTime()
+
+    const auth = {
+      accessToken: authResult.accessToken,
+      idToken: authResult.idToken,
+      expiresAt,
+      userNodeId
+    }
+    localStorage.setItem('auth', JSON.stringify(auth))
+    this.session = auth
   }
 
   logout () {
-    localStorage.removeItem('access_token')
-    localStorage.removeItem('id_token')
-    localStorage.removeItem('expires_at')
+    localStorage.removeItem('auth')
     this.userProfile = null
   }
 
   isAuthenticated () {
-    let expiresAt = JSON.parse(localStorage.getItem('expires_at'))
+    let expiresAt = this.session ? this.session.expiresAt : 0
     return new Date().getTime() < expiresAt
   }
 
   getAccessToken () {
-    const accessToken = localStorage.getItem('access_token')
+    const accessToken = this.session ? this.session.accessToken : null
     if (!accessToken) {
       throw new Error('No access token found')
     }
@@ -69,7 +72,7 @@ class Auth {
   }
 
   getUserNodeId () {
-    const userNodeId = localStorage.getItem('user_node_id')
+    const userNodeId = this.session ? this.session.userNodeId : null
     if (!userNodeId) {
       throw new Error('No user node id found')
     }
