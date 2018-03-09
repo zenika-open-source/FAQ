@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { map } from 'lodash'
 import { DateTime } from 'luxon'
 
 import IconMenu from 'react-toolbox/lib/menu/IconMenu'
@@ -16,10 +17,10 @@ class Meta extends Component {
       incomplete: 'report'
     }
 
-    const flags = node.flags.map((flag, i) => {
+    const flags = node.flags.map(flag => {
       return (
         <Flag
-          key={i}
+          key={flag.id}
           caption={flag.type}
           icon={flagIcons[flag.type]}
           tooltip={
@@ -52,11 +53,10 @@ class Meta extends Component {
         >
           {flags}
           <IconMenu icon="flag">
-            {Object.keys(flagIcons).map((type, i) => {
-              const icon = flagIcons[type]
+            {map(flagIcons, (icon, type) => {
               return (
                 <MenuItem
-                  key={i}
+                  key={type}
                   icon={icon}
                   caption={'Flag as ' + type}
                   disabled={node.flags.filter(f => f.type === type).length > 0}

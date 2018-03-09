@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { capitalize } from 'lodash'
 
@@ -8,22 +8,20 @@ import Tooltip from 'react-toolbox/lib/tooltip/Tooltip'
 
 const TooltipChip = Tooltip()(Chip)
 
-class Flag extends Component {
-  render () {
-    const { caption, icon, color, tooltip } = this.props
+const Flag = props => {
+  const { caption, icon, color, tooltip } = props
 
-    return (
-      <TooltipChip tooltip={tooltip} tooltipPosition="top">
-        <Avatar
-          style={{
-            backgroundColor: color || 'Crimson'
-          }}
-          icon={icon || 'report'}
-        />
-        {capitalize(caption)}
-      </TooltipChip>
-    )
-  }
+  return (
+    <TooltipChip tooltip={tooltip} tooltipPosition="top">
+      <Avatar
+        style={{
+          backgroundColor: color || 'Crimson'
+        }}
+        icon={icon || 'report'}
+      />
+      {capitalize(caption)}
+    </TooltipChip>
+  )
 }
 
 Flag.propTypes = {
