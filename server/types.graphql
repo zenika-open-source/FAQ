@@ -27,9 +27,22 @@ type Answer @model {
   id: ID! @isUnique
 
   content: String!
+  sources: [Source!]! @relation(name: "AnswerSources")
 
   node: ZNode! @relation(name: "NodeAnswer")
   user: User @relation(name: "UserAnswers")
+
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Source @model {
+  id: ID! @isUnique
+
+  answer: Answer! @relation(name: "AnswerSources")
+
+  label: String!
+  url: String!
 
   createdAt: DateTime!
   updatedAt: DateTime!

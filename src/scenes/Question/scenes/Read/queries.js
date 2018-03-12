@@ -22,6 +22,11 @@ export const getNodeQuery = gql`
         answer {
           id
           content
+          sources {
+            id
+            label
+            url
+          }
           user {
             id
             name

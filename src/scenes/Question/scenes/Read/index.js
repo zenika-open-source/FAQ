@@ -19,8 +19,9 @@ import NotFound from 'scenes/NotFound'
 
 import Loading from 'components/Loading'
 
-import Meta from './components/Meta'
 import OptionsMenu from './components/OptionsMenu'
+import Meta from './components/Meta'
+import Sources from './components/Sources'
 
 const TooltipAvatar = Tooltip()(Avatar)
 
@@ -76,6 +77,7 @@ class Read extends Component {
                 <div>
                   <Meta node={ZNode} createFlag={this.flag.bind(this)} />
                   {markdown.html(ZNode.answer.content)}
+                  <Sources node={ZNode} />
                 </div>
               ) : (
                 <div
