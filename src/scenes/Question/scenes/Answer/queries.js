@@ -1,6 +1,8 @@
 import { gql } from 'apollo-boost'
 import { graphql } from 'react-apollo'
 
+import { auth } from 'services'
+
 import { getNodeQuery } from '../Read/queries'
 
 export const submitAnswerQuery = gql`
@@ -12,8 +14,8 @@ export const submitAnswerQuery = gql`
 `
 
 export const editAnswerQuery = gql`
-  mutation editAnswer($idAnswer: ID!, $content: String!, $idUser: ID!) {
-    updateAnswer(id: $idAnswer, content: $content, userId: $idUser) {
+  mutation editAnswer($answerId: ID!, $content: String!, $userId: ID!) {
+    updateAnswer(id: $answerId, content: $content, userId: $userId) {
       id
     }
   }
@@ -41,8 +43,10 @@ export const submitAnswer = graphql(submitAnswerQuery, {
 export const editAnswer = graphql(editAnswerQuery, {
   name: 'editAnswer',
   props: ({ editAnswer }) => ({
-    editAnswer: (idAnswer, content, idUser) => {
-      return editAnswer({ variables: { idAnswer, content, idUser } })
+    editAnswer: (answerId, content) => {
+      return editAnswer({
+        variables: { answerId, content, userId: auth.getUserNodeId() }
+      })
     }
   }),
   options: props => ({

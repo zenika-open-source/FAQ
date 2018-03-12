@@ -78,7 +78,7 @@ class Answer extends Component {
 
     this.setState({ loadingSubmit: true })
 
-    editAnswer(ZNode.answer.id, this.state.answer.text, auth.getUserNodeId())
+    editAnswer(ZNode.answer.id, this.state.answer.text)
       .then(() => {
         this.setState({ redirect: true })
       })

@@ -1,12 +1,14 @@
 import { gql } from 'apollo-boost'
 import { graphql } from 'react-apollo'
 
+import { auth } from 'services'
+
 import { getNodeQuery } from '../Read/queries'
 import { getAllNodesQuery } from 'scenes/Home/queries'
 
 export const submitQuestionQuery = gql`
-  mutation submitQuestion($title: String!, $idUser: ID!) {
-    createZNode(question: { title: $title, slug: "", userId: $idUser }) {
+  mutation submitQuestion($title: String!, $userId: ID!) {
+    createZNode(question: { title: $title, slug: "", userId: $userId }) {
       id
       question {
         slug
@@ -16,8 +18,8 @@ export const submitQuestionQuery = gql`
 `
 
 export const editQuestionQuery = gql`
-  mutation editQuestion($idQuestion: ID!, $title: String!, $idUser: ID!) {
-    updateQuestion(id: $idQuestion, title: $title, slug: "", userId: $idUser) {
+  mutation editQuestion($questionId: ID!, $title: String!, $userId: ID!) {
+    updateQuestion(id: $questionId, title: $title, slug: "", userId: $userId) {
       id
       slug
     }
@@ -27,9 +29,9 @@ export const editQuestionQuery = gql`
 export const submitQuestion = graphql(submitQuestionQuery, {
   name: 'submitQuestion',
   props: ({ submitQuestion }) => ({
-    submitQuestion: (title, idUser) => {
+    submitQuestion: title => {
       return submitQuestion({
-        variables: { title, idUser }
+        variables: { title, userId: auth.getUserNodeId() }
       })
     }
   }),
@@ -45,9 +47,9 @@ export const submitQuestion = graphql(submitQuestionQuery, {
 export const editQuestion = graphql(editQuestionQuery, {
   name: 'editQuestion',
   props: ({ editQuestion }) => ({
-    editQuestion: (idQuestion, title, idUser) => {
+    editQuestion: (questionId, title) => {
       return editQuestion({
-        variables: { idQuestion, title, idUser }
+        variables: { questionId, title, userId: auth.getUserNodeId() }
       })
     }
   }),

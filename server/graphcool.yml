@@ -57,5 +57,12 @@ functions:
       code:
         src: ./src/slug/slug.js
 
+  flagsClear:
+    type: operationAfter
+    operation: Answer.update
+    handler:
+      code:
+        src: ./src/flags/clearOnAnswerUpdate.js
+
 permissions:
   - operation: "*"
