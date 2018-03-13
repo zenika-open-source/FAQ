@@ -41,7 +41,7 @@ const Source = props => {
           }
           style={{ minWidth: 'initial', alignItems: 'center' }}
           accent
-          onClick={() => props.delete()}
+          onClick={props.delete}
         />
       </div>
     </div>

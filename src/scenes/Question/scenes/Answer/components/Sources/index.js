@@ -12,24 +12,22 @@ class Sources extends Component {
     handleChange(sources.concat([{ id: uuid(), label: '', url: '' }]))
   }
 
-  changeLabel (id, label) {
+  changeAttribute (id, attributes) {
     const { sources, handleChange } = this.props
     handleChange(
       sources.map(s => {
         if (s.id !== id) return s
-        return { ...s, label: label }
+        return { ...s, ...attributes }
       })
     )
   }
 
+  changeLabel (id, label) {
+    this.changeAttribute(id, { label })
+  }
+
   changeUrl (id, url) {
-    const { sources, handleChange } = this.props
-    handleChange(
-      sources.map(s => {
-        if (s.id !== id) return s
-        return { ...s, url: url }
-      })
-    )
+    this.changeAttribute(id, { url })
   }
 
   removeSource (id) {
