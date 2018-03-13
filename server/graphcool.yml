@@ -57,12 +57,12 @@ functions:
       code:
         src: ./src/slug/slug.js
 
-  flagsClear:
-    type: operationAfter
-    operation: Answer.update
+  fullUpdateAnswer:
+    type: resolver
+    schema: ./src/answer/update.graphql
     handler:
       code:
-        src: ./src/flags/clearOnAnswerUpdate.js
+        src: ./src/answer/update.js
 
 permissions:
   - operation: "*"
