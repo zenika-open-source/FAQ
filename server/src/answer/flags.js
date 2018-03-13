@@ -11,14 +11,14 @@ const getFlagsQuery = `
 `
 
 const deleteFlagQuery = `
-	mutation deleteFlag($flagId: ID!) {
-		deleteFlag(id: $flagId) {
+	mutation deleteFlag($id: ID!) {
+		deleteFlag(id: $id) {
 			id
 		}
 	}
 `
 
-const getFlags = (graphcool, answer) => {
+const getFlags = async (graphcool, answer) => {
   return new Promise((resolve, reject) => {
     graphcool
       .request(getFlagsQuery, { answerId: answer.answerId })
@@ -28,18 +28,14 @@ const getFlags = (graphcool, answer) => {
   })
 }
 
-const deleteFlags = (graphcool, answer) => {
-  return new Promise(resolve => {
-    getFlags(graphcool, answer).then(flags => {
-      const ids = flags.map(f => f.id)
+const deleteFlags = async (graphcool, answer) => {
+  const flags = await getFlags(graphcool, answer)
 
-      const mutations = ids.map(id => {
-        return graphcool.request(deleteFlagQuery, { flagId: id })
-      })
-
-      Promise.all(mutations).then(resolve)
+  return Promise.all(
+    flags.map(({ id }) => {
+      return graphcool.request(deleteFlagQuery, { id })
     })
-  })
+  )
 }
 
 export { deleteFlags }

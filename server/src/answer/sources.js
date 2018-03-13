@@ -44,40 +44,37 @@ const getSources = (graphcool, answer) => {
   })
 }
 
-const updateSources = (graphcool, answer) => {
-  return new Promise(resolve => {
-    const newSources = JSON.parse(answer.sources)
+const updateSources = async (graphcool, answer) => {
+  const newSources = JSON.parse(answer.sources)
+  const oldSources = await getSources(graphcool, answer)
 
-    getSources(graphcool, answer).then(oldSources => {
-      const sourcesToAdd = _.differenceBy(newSources, oldSources, 'id')
-      const sourcesToUpdate = _.differenceBy(newSources, sourcesToAdd)
-      const sourcesToDelete = _.differenceBy(oldSources, newSources, 'id')
+  const sourcesToAdd = _.differenceBy(newSources, oldSources, 'id')
+  const sourcesToUpdate = _.differenceBy(newSources, sourcesToAdd)
+  const sourcesToDelete = _.differenceBy(oldSources, newSources, 'id')
 
-      const mutationsToAdd = sourcesToAdd.map(source => {
-        return graphcool.request(addSourceQuery, {
-          answerId: answer.answerId,
-          label: source.label,
-          url: source.url
-        })
-      })
-
-      const mutationsToUpdate = sourcesToUpdate.map(source => {
-        return graphcool.request(updateSourceQuery, {
-          sourceId: source.id,
-          label: source.label,
-          url: source.url
-        })
-      })
-
-      const mutationsToDelete = sourcesToDelete.map(source => {
-        return graphcool.request(deleteSourceQuery, { sourceId: source.id })
-      })
-
-      Promise.all(
-        _.concat(mutationsToAdd, mutationsToUpdate, mutationsToDelete)
-      ).then(resolve)
+  const mutationsToAdd = sourcesToAdd.map(source => {
+    return graphcool.request(addSourceQuery, {
+      answerId: answer.answerId,
+      label: source.label,
+      url: source.url
     })
   })
+
+  const mutationsToUpdate = sourcesToUpdate.map(source => {
+    return graphcool.request(updateSourceQuery, {
+      sourceId: source.id,
+      label: source.label,
+      url: source.url
+    })
+  })
+
+  const mutationsToDelete = sourcesToDelete.map(source => {
+    return graphcool.request(deleteSourceQuery, { sourceId: source.id })
+  })
+
+  return Promise.all(
+    _.concat(mutationsToAdd, mutationsToUpdate, mutationsToDelete)
+  )
 }
 
 export { updateSources }
