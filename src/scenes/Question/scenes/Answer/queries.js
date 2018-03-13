@@ -12,8 +12,16 @@ export const submitAnswerQuery = gql`
 `
 
 export const editAnswerQuery = gql`
-  mutation editAnswer($answerId: ID!, $content: String!) {
-    updateAnswer(id: $answerId, content: $content) {
+  mutation editAnswer(
+    $answerId: ID!
+    $content: String!
+    $sources: String!
+  ) {
+    fullUpdateAnswer(
+      answerId: $answerId
+      content: $content
+      sources: $sources
+    ) {
       id
     }
   }
@@ -41,9 +49,13 @@ export const submitAnswer = graphql(submitAnswerQuery, {
 export const editAnswer = graphql(editAnswerQuery, {
   name: 'editAnswer',
   props: ({ editAnswer }) => ({
-    editAnswer: (answerId, content) => {
+    editAnswer: (answerId, content, sources) => {
       return editAnswer({
-        variables: { answerId, content }
+        variables: {
+          answerId,
+          content,
+          sources: JSON.stringify(sources)
+        }
       })
     }
   }),

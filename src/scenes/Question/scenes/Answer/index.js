@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link, Redirect } from 'react-router-dom'
+import omit from 'lodash/omit'
 
 import { compose } from 'react-apollo'
 import { submitAnswer, editAnswer } from './queries'
@@ -12,8 +13,10 @@ import NotFound from 'scenes/NotFound'
 
 import Loading from 'components/Loading'
 
+import Sources from './components/Sources'
+
 import Button from 'react-toolbox/lib/button/Button'
-import { Card, CardText, CardActions } from 'react-toolbox/lib/card'
+import { Card, CardText, CardTitle, CardActions } from 'react-toolbox/lib/card'
 
 import ReactMde, { ReactMdeCommands } from 'react-mde'
 import 'react-mde/lib/styles/css/react-mde-all.css'
@@ -25,7 +28,8 @@ class Answer extends Component {
     this.state = {
       answer: { text: '', selection: null },
       loading: false,
-      redirect: false
+      redirect: false,
+      sources: []
     }
   }
 
@@ -33,7 +37,10 @@ class Answer extends Component {
     const { ZNode } = this.props.data
 
     if (ZNode && ZNode.answer) {
-      this.setState({ answer: { text: ZNode.answer.content } })
+      this.setState({
+        answer: { text: ZNode.answer.content },
+        sources: ZNode.answer.sources
+      })
     }
   }
 
@@ -42,7 +49,10 @@ class Answer extends Component {
     const nextZNode = nextProps.data.ZNode
 
     if (!ZNode && nextZNode && nextZNode.answer) {
-      this.setState({ answer: { text: nextZNode.answer.content } })
+      this.setState({
+        answer: { text: nextZNode.answer.content },
+        sources: nextZNode.answer.sources
+      })
     }
   }
 
@@ -50,15 +60,21 @@ class Answer extends Component {
     this.setState({ answer: value })
   }
 
+  handleSourceChange (sources) {
+    this.setState({ sources: sources })
+  }
+
   submitAnswer () {
     const { submitAnswer } = this.props
+    const { sources } = this.state
     const id = this.props.data.ZNode.id
 
     this.setState({ loadingSubmit: true })
 
     const answer = {
       content: this.state.answer.text,
-      userId: auth.getUserNodeId()
+      userId: auth.getUserNodeId(),
+      sources: sources.map(s => omit(s, 'uid'))
     }
 
     submitAnswer(id, answer)
@@ -75,10 +91,11 @@ class Answer extends Component {
   editAnswer () {
     const { editAnswer } = this.props
     const { ZNode } = this.props.data
+    const { sources } = this.state
 
     this.setState({ loadingSubmit: true })
 
-    editAnswer(ZNode.answer.id, this.state.answer.text)
+    editAnswer(ZNode.answer.id, this.state.answer.text, sources)
       .then(() => {
         this.setState({ redirect: true })
       })
@@ -118,16 +135,21 @@ class Answer extends Component {
         <h3 style={{ textAlign: 'center' }}>
           {markdown.title(ZNode.question.title)}
         </h3>
-        <Card>
+        <Card style={{ overflow: 'initial' }}>
           <CardText>
-            <div className="container">
-              <ReactMde
-                value={this.state.answer}
-                showdownFlavor="github"
-                onChange={this.handleChange.bind(this)}
-                commands={ReactMdeCommands.getDefaultCommands()}
-              />
-            </div>
+            <ReactMde
+              value={this.state.answer}
+              showdownFlavor="github"
+              onChange={this.handleChange.bind(this)}
+              commands={ReactMdeCommands.getDefaultCommands()}
+            />
+          </CardText>
+          <CardTitle title="Sources:" />
+          <CardText>
+            <Sources
+              sources={this.state.sources}
+              handleChange={this.handleSourceChange.bind(this)}
+            />
           </CardText>
           <CardActions
             style={{
