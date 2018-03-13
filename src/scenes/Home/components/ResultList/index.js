@@ -50,6 +50,7 @@ class ResultList extends Component {
           current={currentPage}
           onPageSelected={index => {
             routing.setQueryParam(location, history, 'page', index)
+            window.scrollTo(0, 0)
           }}
         />
       </div>
