@@ -18,8 +18,8 @@ export const submitQuestionQuery = gql`
 `
 
 export const editQuestionQuery = gql`
-  mutation editQuestion($questionId: ID!, $title: String!, $userId: ID!) {
-    updateQuestion(id: $questionId, title: $title, slug: "", userId: $userId) {
+  mutation editQuestion($questionId: ID!, $title: String!) {
+    updateQuestion(id: $questionId, title: $title, slug: "") {
       id
       slug
     }
@@ -49,7 +49,7 @@ export const editQuestion = graphql(editQuestionQuery, {
   props: ({ editQuestion }) => ({
     editQuestion: (questionId, title) => {
       return editQuestion({
-        variables: { questionId, title, userId: auth.getUserNodeId() }
+        variables: { questionId, title }
       })
     }
   }),
