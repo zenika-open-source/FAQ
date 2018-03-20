@@ -6,7 +6,6 @@ extend type Mutation {
   fullUpdateAnswer(
     answerId: ID!
     content: String!
-    userId: ID!
     sources: String!
   ): FullUpdateAnswerPayload
 }
