@@ -1,0 +1,46 @@
+.result .card-title {
+  padding-right: 4rem;
+}
+
+.result em {
+  font-weight: bold;
+  font-style: normal;
+  text-decoration: underline;
+}
+
+.result .meta {
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.result .meta .avatar {
+  width: 16px;
+}
+
+.result .meta .user {
+  margin-left: 0.2rem;
+  font-size: var(--small-font-size);
+}
+
+.result .open-card {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 3rem;
+  border-left: 1px solid var(--secondary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 2px 2px 0;
+}
+
+.result .open-card:hover {
+  background-color: var(--primary-color);
+  color: var(--primary-color-font);
+}
+
+.result .open-card i {
+  font-size: 2rem;
+}

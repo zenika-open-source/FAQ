@@ -1,0 +1,11 @@
+.Edit .input {
+  margin: 1rem;
+  flex: 1;
+}
+
+@media screen and (max-width: 480px) {
+  /* --mobile-breakpoint */
+  .Edit .input {
+    margin: 0.2rem;
+  }
+}

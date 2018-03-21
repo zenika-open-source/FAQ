@@ -1,0 +1,14 @@
+.answer-source {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.answer-source:focus-within > .material-icons {
+  color: var(--primary-color);
+}
+
+.answer-source .input input {
+  height: 27px;
+  line-height: 27px;
+}

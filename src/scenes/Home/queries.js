@@ -12,11 +12,44 @@ export const getAllNodesQuery = gql`
         user {
           id
           picture
+          name
         }
+        createdAt
       }
       answer {
         id
         content
+      }
+      flags {
+        id
+        type
+      }
+    }
+  }
+`
+
+export const getListNodesQuery = gql`
+  query getListNodes($ids: [ID!]!) {
+    allZNodes(filter: { id_in: $ids }) {
+      id
+      question {
+        id
+        title
+        slug
+        user {
+          id
+          picture
+          name
+        }
+        createdAt
+      }
+      answer {
+        id
+        content
+      }
+      flags {
+        id
+        type
       }
     }
   }

@@ -24,6 +24,11 @@ class Markdown {
       <div className="mde-preview">
         <div
           className="mde-preview-content"
+          style={{
+            marginTop: '0',
+            padding: '0',
+            border: '0'
+          }}
           dangerouslySetInnerHTML={{
             __html: this.showdown.makeHtml(text)
           }}

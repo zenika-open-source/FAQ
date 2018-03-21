@@ -1,30 +1,25 @@
 import { gql } from 'apollo-boost'
 import { graphql } from 'react-apollo'
 
-import { auth } from 'services'
-
 import { getNodeQuery } from '../Read/queries'
 
 export const submitAnswerQuery = gql`
   mutation submitAnswer($id: ID!, $answer: ZNodeanswerAnswer!) {
     updateZNode(id: $id, answer: $answer) {
       id
+      answer {
+        id
+      }
     }
   }
 `
 
 export const editAnswerQuery = gql`
-  mutation editAnswer(
-    $answerId: ID!
-    $content: String!
-    $sources: String!
-    $userId: ID!
-  ) {
+  mutation editAnswer($answerId: ID!, $content: String!, $sources: String!) {
     fullUpdateAnswer(
       answerId: $answerId
       content: $content
       sources: $sources
-      userId: $userId
     ) {
       id
     }
@@ -58,8 +53,7 @@ export const editAnswer = graphql(editAnswerQuery, {
         variables: {
           answerId,
           content,
-          sources: JSON.stringify(sources),
-          userId: auth.getUserNodeId()
+          sources: JSON.stringify(sources)
         }
       })
     }

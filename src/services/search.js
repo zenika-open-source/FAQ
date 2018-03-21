@@ -1,28 +1,8 @@
 import algoliasearch from 'algoliasearch'
-import { gql } from 'apollo-boost'
 
 import { apollo } from 'services'
 
-const getListNodes = gql`
-  query getListNodes($ids: [ID!]!) {
-    allZNodes(filter: { id_in: $ids }) {
-      id
-      question {
-        id
-        title
-        slug
-        user {
-          id
-          picture
-        }
-      }
-      answer {
-        id
-        content
-      }
-    }
-  }
-`
+import { getListNodesQuery } from 'scenes/Home/queries'
 
 class Search {
   constructor () {
@@ -59,7 +39,7 @@ class Search {
 
           apollo
             .query({
-              query: getListNodes,
+              query: getListNodesQuery,
               variables: { ids }
             })
             .then(results => {
