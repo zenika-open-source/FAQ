@@ -3,8 +3,8 @@ const { updateSources } = require('./sources')
 const { deleteFlags } = require('./flags')
 
 const updateAnswerQuery = `
-	mutation updateAnswer($answerId: ID!, $content: String!, $userId: ID!) {
-		updateAnswer(id: $answerId, content: $content, userId: $userId) {
+	mutation updateAnswer($answerId: ID!, $content: String!) {
+		updateAnswer(id: $answerId, content: $content) {
 			id
 		}
 	}
@@ -13,8 +13,7 @@ const updateAnswerQuery = `
 const updateAnswer = (graphcool, answer) => {
   return graphcool.request(updateAnswerQuery, {
     answerId: answer.answerId,
-    content: answer.content,
-    userId: answer.userId
+    content: answer.content
   })
 }
 
