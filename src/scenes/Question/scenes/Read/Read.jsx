@@ -38,7 +38,7 @@ const Read = ({ history, match, data, createFlag }) => {
   return (
     <div>
       <Helmet>
-        <title>FAQ - {ZNode.question.title}</title>
+        <title>FAQ - {markdown.title(ZNode.question.title)}</title>
       </Helmet>
       <ActionMenu backLink="/" backLabel="Home">
         <Dropdown button={<Button icon="flag" label="Flag as ..." link />}>

@@ -41,7 +41,7 @@ class Markdown {
     let emoticons = {
       ':)': ':slightly_smiling_face:',
       ':(': ':slightly_frowning_face:',
-      // ':/': ':confused:', // This emoticon produces a bug when parsing an url (http://...)
+      ':/': ':confused:',
       ':p': ':stuck_out_tongue:',
       ':P': ':stuck_out_tongue:',
       ':D': ':smiley:',
@@ -50,7 +50,7 @@ class Markdown {
 
     // Ascii emoticons to :emoji:
     text = Object.keys(emoticons).reduce((text, emoticon) => {
-      return text.replace(emoticon, emoticons[emoticon])
+      return text.split(emoticon + ' ').join(emoticons[emoticon] + ' ')
     }, text)
 
     // :emoji: to unicode emojis

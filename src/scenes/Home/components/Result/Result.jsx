@@ -35,7 +35,7 @@ class Result extends Component {
         <CardTitle onClick={() => this.setState({ collapsed: !collapsed })}>
           <div className="grow">
             {!node.highlight ? (
-              <h1>{node.question.title}</h1>
+              <h1>{markdown.title(node.question.title)}</h1>
             ) : (
               <h1
                 dangerouslySetInnerHTML={{
