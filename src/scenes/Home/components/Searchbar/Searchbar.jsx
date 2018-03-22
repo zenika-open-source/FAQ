@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
-import _ from 'lodash'
+import map from 'lodash/map'
+import capitalize from 'lodash/capitalize'
 
 import Input from 'components/Input'
 import Checkbox from 'components/Checkbox'
@@ -28,10 +29,10 @@ const Searchbar = ({ text, search, loading, filters, onToggleCheck }) => (
       onChange={e => search(e.target.value)}
     />
     <div className="filters">
-      {_.map(filters, (checked, filter) => (
+      {map(filters, (checked, filter) => (
         <Checkbox
           key={filter}
-          label={_.capitalize(filter)}
+          label={capitalize(filter)}
           checked={checked}
           onChange={() => {
             filters[filter] = !filters[filter]

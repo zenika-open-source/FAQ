@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
 import Pluralize from 'react-pluralize'
-import _ from 'lodash'
+import chunk from 'lodash/chunk'
 
 import { routing } from 'services'
 
@@ -20,7 +20,7 @@ const ResultList = ({ nodes, indication, history, location, collapsed }) => {
 
   currentPage = Math.max(1, Math.min(currentPage, pagesCount))
 
-  const Results = _.chunk(nodes, maxNodesPerPage)[currentPage - 1].map(node => {
+  const Results = chunk(nodes, maxNodesPerPage)[currentPage - 1].map(node => {
     return (
       <Result
         collapsed={collapsed}

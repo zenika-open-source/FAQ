@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import uuid from 'uuid/v4'
-import _ from 'lodash'
+import clone from 'lodash/clone'
 import moment from 'moment'
 
 import Flag from './Flag'
@@ -9,7 +9,7 @@ import Flag from './Flag'
 import './Flags.css'
 
 const Flags = ({ node, withLabels }) => {
-  let flags = _.clone(node.flags)
+  let flags = clone(node.flags)
 
   if (!node.answer) {
     flags.push({ id: uuid(), type: 'unanswered' })
