@@ -1,46 +1,55 @@
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
 
 import './Button.css'
 
-const Button = ({
-  className,
-  icon,
-  label,
-  children,
-  onClick,
-  style,
-  ...modifiers
-}) => {
-  const b2s = b => (b ? 'true' : 'false')
+class Button extends Component {
+  render () {
+    const {
+      className,
+      icon,
+      label,
+      children,
+      primary,
+      secondary,
+      link,
+      round,
+      active,
+      raised,
+      disabled,
+      fixed,
+      ...otherProps
+    } = this.props
 
-  const buttonModifiers = [
-    'primary',
-    'secondary',
-    'link',
-    'round',
-    'active',
-    'raised',
-    'disabled',
-    'fixed'
-  ].reduce((acc, m) => {
-    modifiers[m] && (acc[m] = b2s(modifiers[m]))
-    return acc
-  }, {})
+    const b2s = b => (b ? 'true' : 'false')
 
-  return (
-    <button
-      className={cn('btn', className)}
-      {...buttonModifiers}
-      onClick={onClick}
-      style={style}
-    >
-      {icon && <i className="material-icons">{icon}</i>}
-      {label && <span>{label}</span>}
-      {children && <span>{children}</span>}
-    </button>
-  )
+    const buttonModifiers = [
+      'primary',
+      'secondary',
+      'link',
+      'round',
+      'active',
+      'raised',
+      'disabled',
+      'fixed'
+    ].reduce((acc, m) => {
+      this.props[m] && (acc[m] = b2s(this.props[m]))
+      return acc
+    }, {})
+
+    return (
+      <button
+        className={cn('btn', className)}
+        {...buttonModifiers}
+        {...otherProps}
+      >
+        {icon && <i className="material-icons">{icon}</i>}
+        {label && <span>{label}</span>}
+        {children && <span>{children}</span>}
+      </button>
+    )
+  }
 }
 
 Button.propTypes = {
@@ -48,8 +57,14 @@ Button.propTypes = {
   icon: PropTypes.string,
   label: PropTypes.node,
   children: PropTypes.node,
-  onClick: PropTypes.func,
-  style: PropTypes.object
+  primary: PropTypes.bool,
+  secondary: PropTypes.bool,
+  link: PropTypes.bool,
+  round: PropTypes.bool,
+  active: PropTypes.bool,
+  raised: PropTypes.bool,
+  disabled: PropTypes.bool,
+  fixed: PropTypes.bool
 }
 
 export default Button
