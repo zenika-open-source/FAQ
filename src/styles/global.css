@@ -58,3 +58,12 @@ hr {
   border: 0;
   border-top: 1px dotted #8c8b8b;
 }
+
+/* Fix iOS to remove autozooming on input */
+@media screen and (-webkit-min-device-pixel-ratio: 0) and (max-device-width: 1024px) {
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+  }
+}

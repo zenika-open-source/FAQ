@@ -10,19 +10,22 @@ const Source = props => {
   return (
     <div className="answer-source">
       <i className="material-icons">info_outline</i>
-      <Input
-        style={{ marginLeft: '0.5rem', marginRight: '0.5rem', width: '40%' }}
-        placeholder="Label"
-        value={props.source.label}
-        onChange={e => props.changeLabel(e.target.value)}
-      />
-      <Input
-        style={{ flex: '1' }}
-        icon="link"
-        placeholder="URL"
-        value={props.source.url}
-        onChange={e => props.changeUrl(e.target.value)}
-      />
+      <div className="inputs">
+        <Input
+          className="source-label"
+          icon="label_outline"
+          placeholder="Label"
+          value={props.source.label}
+          onChange={e => props.changeLabel(e.target.value)}
+        />
+        <Input
+          className="source-link"
+          icon="link"
+          placeholder="URL"
+          value={props.source.url}
+          onChange={e => props.changeUrl(e.target.value)}
+        />
+      </div>
       <Button
         style={{ padding: '0.3rem', marginLeft: '0.5rem' }}
         icon="close"

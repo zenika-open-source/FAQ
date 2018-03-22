@@ -11,7 +11,6 @@ import './Searchbar.css'
 const Searchbar = ({ text, search, loading, filters, onToggleCheck }) => (
   <div className="searchbar">
     <Input
-      autoFocus
       icon={
         <Fragment>
           <span

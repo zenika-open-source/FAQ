@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import cn from 'classnames'
 
 import './Input.css'
 
@@ -14,9 +15,13 @@ class Input extends Component {
   }
 
   render () {
-    const { value, limit, icon, style, ...otherProps } = this.props
+    const { className, value, limit, icon, style, ...otherProps } = this.props
     return (
-      <div className="input" style={style} onClick={() => this.input.focus()}>
+      <div
+        className={cn('input', className)}
+        style={style}
+        onClick={() => this.input.focus()}
+      >
         {icon && (
           <span className="input-icon">
             {typeof icon === 'string' ? (
@@ -44,6 +49,7 @@ class Input extends Component {
 }
 
 Input.propTypes = {
+  className: PropTypes.string,
   value: PropTypes.string.isRequired,
   limit: PropTypes.number,
   icon: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
