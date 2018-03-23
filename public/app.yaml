@@ -8,7 +8,12 @@ handlers:
   upload: index.html
   secure: always
 
-- url: /(.*)
-  static_files: \1
+
+- url: /(.*)\.([a-z]{1,4})$
+  static_files: \1.\2
   upload: (.*)
+  secure: always
+
+- url: /(.*)
+  static_files: index.html
   secure: always
