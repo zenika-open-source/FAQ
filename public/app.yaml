@@ -16,4 +16,5 @@ handlers:
 
 - url: /(.*)
   static_files: index.html
+  upload: (.*)
   secure: always
