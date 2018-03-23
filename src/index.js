@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { HashRouter } from 'react-router-dom'
+import { BrowserRouter } from 'react-router-dom'
 import { ApolloProvider } from 'react-apollo'
 
 import { apollo } from 'services'
@@ -11,9 +11,9 @@ import App from './scenes/App'
 
 ReactDOM.render(
   <ApolloProvider client={apollo}>
-    <HashRouter>
+    <BrowserRouter>
       <App />
-    </HashRouter>
+    </BrowserRouter>
   </ApolloProvider>,
   document.getElementById('root')
 )

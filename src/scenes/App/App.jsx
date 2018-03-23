@@ -4,7 +4,7 @@ import Helmet from 'react-helmet'
 
 import { auth } from 'services'
 
-import Auth, { AccessToken } from 'scenes/Auth'
+import Auth from 'scenes/Auth'
 import Home from 'scenes/Home'
 import Question from 'scenes/Question'
 import NotFound from 'scenes/NotFound'
@@ -48,15 +48,9 @@ class App extends Component {
         <Navbar user={this.state.user} />
         <div className="main">
           <Switch>
-            {/* HOME */}
             <PrivateRoute exact path="/" component={Home} />
-            {/* AUTH */}
             <Route path="/auth" component={Auth} />
-            <Route path="/access_token=:rest" component={AccessToken} />
-            <Route path="/error=:rest" component={AccessToken} error={true} />
-            {/* QUESTIONS */}
             <PrivateRoute path="/q" component={Question} />
-            {/* 404 */}
             <PrivateRoute component={NotFound} />
           </Switch>
         </div>
