@@ -5,9 +5,9 @@ import { ApolloProvider } from 'react-apollo'
 
 import { apollo } from 'services'
 
-import App from './scenes/App'
+import 'normalize.css'
 
-import './index.css'
+import App from './scenes/App'
 
 ReactDOM.render(
   <ApolloProvider client={apollo}>

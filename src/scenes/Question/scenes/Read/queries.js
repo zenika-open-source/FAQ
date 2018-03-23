@@ -17,7 +17,7 @@ export const getNodeQuery = gql`
             name
             picture
           }
-          updatedAt
+          createdAt
         }
         answer {
           id
@@ -32,7 +32,7 @@ export const getNodeQuery = gql`
             name
             picture
           }
-          updatedAt
+          createdAt
         }
         flags {
           id

@@ -56,6 +56,7 @@ class Auth {
   logout () {
     localStorage.removeItem('auth')
     this.userProfile = null
+    this.session = null
   }
 
   isAuthenticated () {

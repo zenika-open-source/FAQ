@@ -1,0 +1,47 @@
+.answer-source {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.answer-source .inputs {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  margin-left: 0.5rem;
+}
+
+.answer-source .source-label {
+  width: 40%;
+  margin-right: 0.5rem;
+}
+
+.answer-source .source-link {
+  flex: 1;
+}
+
+.answer-source:focus-within > .material-icons {
+  color: var(--primary-color);
+}
+
+.answer-source .input input {
+  height: 27px;
+  line-height: 27px;
+  min-width: 0;
+}
+
+@media screen and (max-width: 480px) {
+  /* --mobile-breakpoint */
+  .answer-source .inputs {
+    flex-direction: column;
+  }
+
+  .answer-source .inputs .input {
+    width: 100%;
+  }
+
+  .answer-source .source-label {
+    margin-right: 0;
+    margin-bottom: 0.5rem;
+  }
+}

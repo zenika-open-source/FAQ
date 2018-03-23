@@ -6,10 +6,12 @@
     "algoliasearch": "^3.24.11",
     "apollo-boost": "^0.1.1",
     "auth0-js": "^9.3.2",
+    "classnames": "^2.2.5",
     "emoji-dictionary": "^1.0.9",
     "graphql": "^0.13.1",
     "lodash": "^4.17.5",
-    "luxon": "^0.5.3",
+    "moment": "^2.21.0",
+    "normalize.css": "^8.0.0",
     "react": "^16.2.0",
     "react-apollo": "^2.1.0-beta.2",
     "react-dom": "^16.2.0",
@@ -19,7 +21,6 @@
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.1.0",
-    "react-toolbox": "^2.0.0-beta.12",
     "showdown": "^1.8.6",
     "uuid": "^3.2.1"
   },
@@ -28,7 +29,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "lint": "eslint src --fix",
+    "lint": "eslint src --fix --ext js,jsx",
     "deploy_appengine": "cd build && gcloud app deploy --quiet --project $APPENGINE_PROJECT_ID --version=prod",
     "deploy_graphcool": "cd server && npm run login && npm run deploy",
     "deploy": "npm run deploy_graphcool"
@@ -44,11 +45,5 @@
     "eslint-plugin-react": "^7.7.0",
     "eslint-plugin-standard": "^3.0.1",
     "graphcool": "^0.11.5"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "eslintIgnore": [
-    "src/toolbox"
-  ]
+  }
 }

@@ -1,0 +1,30 @@
+.flags {
+  display: inline-flex;
+}
+
+.flags .flag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem;
+  border-radius: 12px;
+  font-size: var(--small-font-size);
+}
+
+.flags .flag.with-label {
+  padding-left: 0.3rem;
+  padding-right: 0.3rem;
+}
+
+.flags .flag + .flag {
+  margin-left: 0.2rem;
+}
+
+.flags .flag i {
+  font-size: var(--font-size);
+}
+
+.flags .flag .label {
+  margin-left: 0.3rem;
+  text-transform: uppercase;
+  padding-right: 0.2rem;
+}

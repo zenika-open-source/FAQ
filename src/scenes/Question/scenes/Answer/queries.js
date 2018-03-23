@@ -7,16 +7,15 @@ export const submitAnswerQuery = gql`
   mutation submitAnswer($id: ID!, $answer: ZNodeanswerAnswer!) {
     updateZNode(id: $id, answer: $answer) {
       id
+      answer {
+        id
+      }
     }
   }
 `
 
 export const editAnswerQuery = gql`
-  mutation editAnswer(
-    $answerId: ID!
-    $content: String!
-    $sources: String!
-  ) {
+  mutation editAnswer($answerId: ID!, $content: String!, $sources: String!) {
     fullUpdateAnswer(
       answerId: $answerId
       content: $content

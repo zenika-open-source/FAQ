@@ -1,0 +1,47 @@
+.navbar {
+  padding-left: 1.5em;
+  padding-right: 1.5em;
+  justify-content: space-between;
+}
+
+.navbar .brand {
+  display: flex;
+  align-items: center;
+  font-size: var(--h1-font-size);
+  color: var(--primary-color-font);
+}
+
+.navbar .brand img {
+  height: 23px;
+  margin-right: 6px;
+}
+
+/* Source: https://flatuicolors.com/palette/fr */
+
+/*.Navbar {
+  background-color: #fa983a;
+}
+
+.Navbar .title {
+  -webkit-box-flex: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+}
+
+.Navbar a {
+  text-decoration: none;
+}
+
+.Navbar .title a {
+  font-size: 1.2rem;
+  font-weight: 700;
+  width: 130px;
+  display: flex;
+  align-items: center;
+}
+
+.Navbar .title a img {
+  height: 23px;
+  margin-right: 6px;
+}
+*/
