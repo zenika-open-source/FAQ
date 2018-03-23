@@ -27,7 +27,7 @@ const Meta = ({ node }) => (
           {moment(node.answer.createdAt).format('D MMM YYYY')}
         </div>
         <Avatar
-          image={node.question.user.picture}
+          image={node.answer.user.picture}
           style={{ width: '30px', height: '30px', marginLeft: '0.5rem' }}
         />
       </div>
