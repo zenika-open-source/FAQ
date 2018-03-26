@@ -14,6 +14,9 @@ const routing = {
     } else {
       history.push(arg)
     }
+  },
+  getUIDFromSlug (match) {
+    return match.params.slug.split('-').pop()
   }
 }
 

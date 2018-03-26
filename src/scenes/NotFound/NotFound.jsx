@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { withRouter } from 'react-router'
 
 import Button from 'components/Button'
 
@@ -27,4 +28,4 @@ NotFound.propTypes = {
   history: PropTypes.object.isRequired
 }
 
-export default NotFound
+export default withRouter(NotFound)

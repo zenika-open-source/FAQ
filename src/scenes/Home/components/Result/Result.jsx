@@ -52,7 +52,10 @@ class Result extends Component {
             </div>
           </div>
           <Flags node={node} withLabels={false} />
-          <Link to={`/q/${node.question.slug}`} className="open-card">
+          <Link
+            to={`/q/${node.question.slug}-${node.id}`}
+            className="open-card"
+          >
             <i className="material-icons">keyboard_arrow_right</i>
           </Link>
         </CardTitle>

@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom'
 
 import { compose } from 'react-apollo'
 import { submitQuestion, editQuestion } from './queries'
-import { getNode } from '../Read/queries'
+import { getNode } from 'scenes/Question/queries'
 
 import Loading from 'components/Loading'
 import Card, { CardText, CardActions } from 'components/Card'
@@ -66,7 +66,9 @@ class Edit extends Component {
 
     submitQuestion(this.state.question)
       .then(({ data }) => {
-        this.setState({ slug: data.createZNode.question.slug })
+        this.setState({
+          slug: data.createZNode.question.slug + '-' + data.createZNode.id
+        })
       })
       .catch(error => {
         alert(error)
@@ -83,7 +85,9 @@ class Edit extends Component {
 
     editQuestion(ZNode.question.id, this.state.question)
       .then(({ data }) => {
-        this.setState({ slug: data.updateQuestion.slug })
+        this.setState({
+          slug: data.updateQuestion.slug + '-' + ZNode.id
+        })
       })
       .catch(error => {
         alert(error)
@@ -116,7 +120,7 @@ class Edit extends Component {
       }
 
       if (ZNode === null) {
-        return <Redirect to={`/q/${slug}`} />
+        return <Redirect to={'/'} />
       }
     }
 

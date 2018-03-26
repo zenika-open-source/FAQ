@@ -5,7 +5,7 @@ import omit from 'lodash/omit'
 
 import { compose } from 'react-apollo'
 import { submitAnswer, editAnswer } from './queries'
-import { getNode } from '../Read/queries'
+import { getNode } from 'scenes/Question/queries'
 
 import { auth, markdown } from 'services'
 
@@ -118,7 +118,7 @@ class Answer extends Component {
     const { loading, error, ZNode } = this.props.data
 
     if (redirect) {
-      return <Redirect to={`/q/${ZNode.question.slug}`} />
+      return <Redirect to={`/q/${ZNode.question.slug}-${ZNode.id}`} />
     }
 
     if (loadingSubmit || loading) {
@@ -135,7 +135,7 @@ class Answer extends Component {
 
     return (
       <div>
-        <ActionMenu backLink={`/q/${ZNode.question.slug}`} />
+        <ActionMenu backLink={`/q/${ZNode.question.slug}-${ZNode.id}`} />
         <Card style={{ marginTop: '0.3rem' }}>
           <CardTitle style={{ padding: '1.2rem' }}>
             <div className="grow">

@@ -6,12 +6,14 @@ import Edit from './scenes/Edit'
 import Read from './scenes/Read'
 import Answer from './scenes/Answer'
 
+import { getNode } from './queries'
+
 const Question = ({ match }) => (
   <Switch>
     <Route path={`${match.path}/new`} component={Edit} />
-    <Route path={`${match.path}/:slug`} exact component={Read} />
-    <Route path={`${match.path}/:slug/edit`} component={Edit} />
-    <Route path={`${match.path}/:slug/answer`} component={Answer} />
+    <Route path={`${match.path}/:slug`} exact component={getNode(Read)} />
+    <Route path={`${match.path}/:slug/edit`} component={getNode(Edit)} />
+    <Route path={`${match.path}/:slug/answer`} component={getNode(Answer)} />
     <Route render={() => <Redirect to="/" />} />
   </Switch>
 )
