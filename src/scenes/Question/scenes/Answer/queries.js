@@ -1,7 +1,9 @@
 import { gql } from 'apollo-boost'
 import { graphql } from 'react-apollo'
 
-import { getNodeQuery } from '../Read/queries'
+import { routing } from 'services'
+
+import { getNodeQuery } from 'scenes/Question/queries'
 
 export const submitAnswerQuery = gql`
   mutation submitAnswer($id: ID!, $answer: ZNodeanswerAnswer!) {
@@ -38,7 +40,7 @@ export const submitAnswer = graphql(submitAnswerQuery, {
       {
         query: getNodeQuery,
         variables: {
-          slug: props.match.params.slug
+          id: routing.getUIDFromSlug(props.match)
         }
       }
     ]
@@ -63,7 +65,7 @@ export const editAnswer = graphql(editAnswerQuery, {
       {
         query: getNodeQuery,
         variables: {
-          slug: props.match.params.slug
+          id: routing.getUIDFromSlug(props.match)
         }
       }
     ]

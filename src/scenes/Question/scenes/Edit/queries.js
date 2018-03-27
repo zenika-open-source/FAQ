@@ -1,9 +1,9 @@
 import { gql } from 'apollo-boost'
 import { graphql } from 'react-apollo'
 
-import { auth } from 'services'
+import { auth, routing } from 'services'
 
-import { getNodeQuery } from '../Read/queries'
+import { getNodeQuery } from 'scenes/Question/queries'
 import { getAllNodesQuery } from 'scenes/Home/queries'
 
 export const submitQuestionQuery = gql`
@@ -58,7 +58,7 @@ export const editQuestion = graphql(editQuestionQuery, {
       {
         query: getNodeQuery,
         variables: {
-          slug: props.match.params.slug
+          id: routing.getUIDFromSlug(props.match)
         }
       }
     ]

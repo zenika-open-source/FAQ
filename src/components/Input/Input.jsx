@@ -9,8 +9,10 @@ class Input extends Component {
     if (this.props.autoFocus) {
       const input = this.input
       const length = input.value.length
-      input.focus()
-      input.setSelectionRange(length, length)
+      setTimeout(() => {
+        input.focus()
+        input.setSelectionRange(length, length)
+      }, 1)
     }
   }
 

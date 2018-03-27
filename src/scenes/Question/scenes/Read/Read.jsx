@@ -1,10 +1,9 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import Helmet from 'react-helmet'
 
-import { compose } from 'react-apollo'
-import { getNode, createFlag } from './queries'
+import { createFlag } from './queries'
 
 import { markdown } from 'services'
 
@@ -33,6 +32,12 @@ const Read = ({ history, match, data, createFlag }) => {
 
   if (ZNode === null) {
     return <NotFound {...this.props} />
+  } else {
+    /* Redirect to correct URL if old slug used */
+    const correctSlug = ZNode.question.slug + '-' + ZNode.id
+    if (match.params.slug !== correctSlug) {
+      return <Redirect to={'/q/' + correctSlug} />
+    }
   }
 
   return (
@@ -119,4 +124,4 @@ Read.propTypes = {
   createFlag: PropTypes.func.isRequired
 }
 
-export default compose(getNode, createFlag)(Read)
+export default createFlag(Read)
