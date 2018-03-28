@@ -12,6 +12,7 @@ import NotFound from 'scenes/NotFound'
 import PrivateRoute from 'components/PrivateRoute'
 
 import Navbar from './components/Navbar'
+import Footer from './components/Footer'
 
 import 'styles'
 
@@ -54,6 +55,7 @@ class App extends Component {
             <PrivateRoute component={NotFound} />
           </Switch>
         </div>
+        <Footer />
       </div>
     )
   }
