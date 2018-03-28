@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
+import debounce from 'lodash/debounce'
 
 import { getAllNodes } from './queries'
 
@@ -59,26 +60,32 @@ class Home extends Component {
 
     if (value !== '') {
       this.setState({ searchLoading: true })
-      history.replace({
-        search: '?q=' + value.replace(/\s/g, '+'),
-        state: { searching: true }
-      })
-      search
-        .simpleQuery(value)
-        .then(({ nodes, params }) => {
-          if (this.state.searchText === params.query) {
-            this.setState({ nodes, searchLoading: false })
-          }
-        })
-        .catch(err => {
-          // eslint-disable-next-line
-          console.log(err)
-        })
+      this.retrieveResults(value)
     } else {
       this.setState({ nodes: null })
       history.replace({ search: null })
     }
   }
+
+  retrieveResults = debounce(value => {
+    const { history } = this.props
+
+    history.replace({
+      search: '?q=' + value.replace(/\s/g, '+'),
+      state: { searching: true }
+    })
+    search
+      .simpleQuery(value)
+      .then(({ nodes, params }) => {
+        if (this.state.searchText === params.query) {
+          this.setState({ nodes, searchLoading: false })
+        }
+      })
+      .catch(err => {
+        // eslint-disable-next-line
+        console.log(err)
+      })
+  }, 200)
 
   render () {
     const { searchLoading, searchText, nodes, filters } = this.state
