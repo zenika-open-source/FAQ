@@ -64,5 +64,22 @@ functions:
       code:
         src: ./src/answer/update.js
 
+  email:
+    type: resolver
+    schema: ./src/email/email.graphql
+    handler:
+      code:
+        src: ./src/email/email.js
+        environment:
+          MAILGUN_DOMAIN: ${env:MAILGUN_DOMAIN}
+          MAILGUN_API_KEY: ${env:MAILGUN_API_KEY}
+
+  emailOnAnswerCreated:
+    type: subscription
+    query: ./src/email/onAnswerCreated.graphql
+    handler:
+      code:
+        src: ./src/email/onAnswerCreated.js
+
 permissions:
   - operation: "*"
