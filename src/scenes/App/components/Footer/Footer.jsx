@@ -3,7 +3,7 @@ import React from 'react'
 const Footer = () => (
   <div className="footer">
     <a
-      href="https://graph.coom"
+      href="https://graph.cool"
       target="_blank"
       rel="noopener noreferrer"
       style={{ display: 'flex' }}
