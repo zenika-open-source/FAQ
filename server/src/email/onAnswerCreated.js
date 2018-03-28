@@ -20,7 +20,7 @@ const createMail = node => {
   const text = `
 Hi ${node.question.user.givenName}!
 
-${node.answer.user.name} answered your question title "${node.question.title}":
+${node.answer.user.name} answered your question titled "${node.question.title}":
 
 #####
 
