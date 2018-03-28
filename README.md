@@ -58,7 +58,7 @@ Install and configure the graphcool instance for your project
 ```bash
 cd server
 npm install
-graphcool deploy
+npm run deploy
 ```
 
 ### Start
@@ -80,6 +80,14 @@ Run the linter using the following command
 ```bash
 npm run lint
 ```
+
+## Contributing
+
+### Algolia Synonyms
+
+To add a synonym for Algolia's full-text search, modify the [synonyms.json](server/algolia/synonyms.json) file.
+
+Documentation: https://www.algolia.com/doc/guides/textual-relevance/synonyms/
 
 ## Deployment
 
