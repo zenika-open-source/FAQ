@@ -2,6 +2,7 @@ import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import map from 'lodash/map'
 import capitalize from 'lodash/capitalize'
+import debounce from 'lodash/debounce'
 
 import Input from 'components/Input'
 import Checkbox from 'components/Checkbox'
@@ -25,7 +26,7 @@ const Searchbar = ({ text, search, loading, filters, onToggleCheck }) => (
         </Fragment>
       }
       value={text}
-      onChange={e => search(e.target.value)}
+      onChange={debounce(e => search(e.target.value), 200)}
     />
     <div className="filters">
       {map(filters, (checked, filter) => (
