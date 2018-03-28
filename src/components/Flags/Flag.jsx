@@ -15,6 +15,10 @@ const flagMeta = {
   unanswered: {
     icon: 'help_outline',
     className: 'meta-warning-bg'
+  },
+  duplicate: {
+    icon: 'filter_2',
+    className: 'meta-error-bg'
   }
 }
 
