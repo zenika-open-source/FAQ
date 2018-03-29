@@ -40,6 +40,8 @@ class Answer extends Component {
         sources: ZNode.answer.sources
       })
     }
+
+    document.addEventListener('keydown', this.keydownHandler)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -52,6 +54,17 @@ class Answer extends Component {
         sources: nextZNode.answer.sources
       })
     }
+  }
+
+  keydownHandler = e => {
+    const ZNode = this.props.data.ZNode
+    if (e.keyCode === 13 && e.ctrlKey) {
+      ZNode.answer ? this.editAnswer() : this.submitAnswer()
+    }
+  }
+
+  componentWillUnmount () {
+    document.removeEventListener('keydown', this.keydownHandler)
   }
 
   handleChange (value) {

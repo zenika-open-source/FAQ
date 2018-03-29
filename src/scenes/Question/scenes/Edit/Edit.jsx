@@ -41,6 +41,8 @@ class Edit extends Component {
         this.setState({ question: ZNode.question.title })
       }
     }
+
+    document.addEventListener('keydown', this.keydownHandler)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -53,6 +55,16 @@ class Edit extends Component {
         this.setState({ question: nextZNode.question.title })
       }
     }
+  }
+
+  keydownHandler = e => {
+    if (e.keyCode === 13 && e.ctrlKey) {
+      this.isEditing ? this.editQuestion() : this.submitQuestion()
+    }
+  }
+
+  componentWillUnmount () {
+    document.removeEventListener('keydown', this.keydownHandler)
   }
 
   handleChange = e => {
