@@ -47,7 +47,7 @@ const Read = ({ history, match, data, createFlag }) => {
       </Helmet>
       <ActionMenu backLink="/" backLabel="Home">
         <Dropdown button={<Button icon="flag" label="Flag as ..." link />}>
-          {['incomplete', 'outdated'].map(type => (
+          {['incomplete', 'outdated', 'duplicate'].map(type => (
             <DropdownItem
               key={type}
               icon={flagMeta[type].icon}
