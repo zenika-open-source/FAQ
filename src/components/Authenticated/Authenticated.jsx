@@ -9,13 +9,15 @@ const Authenticated = ({ location, reverse, redirect, children }) => {
   const isAuth = auth.isAuthenticated()
   const currentURL = location.pathname
 
-  return (isAuth && !reverse) || (!isAuth && reverse) ? (
-    children
-  ) : redirect ? (
-    <Redirect to={{ pathname: redirect, state: { from: currentURL } }} />
-  ) : (
-    ''
-  )
+  if ((isAuth && !reverse) || (!isAuth && reverse)) {
+    return children
+  }
+
+  if (redirect) {
+    return <Redirect to={{ pathname: redirect, state: { from: currentURL } }} />
+  }
+
+  return ''
 }
 
 Authenticated.propTypes = {
