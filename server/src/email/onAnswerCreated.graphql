@@ -1,0 +1,24 @@
+subscription {
+  Answer(filter: { mutation_in: [CREATED] }) {
+    node {
+      node {
+        id
+        question {
+          title
+          slug
+          user {
+            givenName
+            email
+          }
+        }
+        answer {
+          content
+          user {
+            name
+            email
+          }
+        }
+      }
+    }
+  }
+}

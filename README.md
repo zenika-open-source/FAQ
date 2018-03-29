@@ -1,6 +1,6 @@
 # FAQ Zenika
 
-Internal Knowledge Database for Zenika members - https://faq-zenika.appspot.com
+Internal Knowledge Database for Zenika members - https://faq.zenika.com
 
 ## Getting Started
 
@@ -8,17 +8,13 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-You will need an [Auth0](https://auth0.com/) account, a [Google Cloud](https://cloud.google.com) account, a [Graphcool](https://www.graph.cool/) account and an [Algolia](https://www.algolia.com/) account to use this project
+This project requires the following accounts and keys:
 
-For this project, you will need the following keys:
-
-* Auth0 domain
-* Auth0 client id (also called: api identifier)
-* Google Cloud application id
-* Graphcool endpoint url (also called: target)
-* Algolia app id
-* Algolia api key (all operations)
-* Algolia api key (search only)
+* [Algolia](https://www.algolia.com) - App ID; API key (all operations); API key (search only)
+* [Auth0](https://auth0.com) - Domain; Client ID
+* [Google Cloud](https://cloud.google.com) - Application ID
+* [Graphcool](https://www.graph.cool) - Endpoint URL
+* [Mailgun](https://www.mailgun.com) - Domain; API key
 
 ### Installing
 
@@ -94,7 +90,9 @@ Documentation: https://www.algolia.com/doc/guides/textual-relevance/synonyms/
 The deployment to Google Cloud and Graphcool can be executed using the following command
 
 ```bash
-npm run deploy
+npm run build
+npm run deploy_graphcool
+npm run deploy_appengine
 ```
 
 ## CircleCI

@@ -1,0 +1,14 @@
+type EmailPayload {
+  response: String!
+  success: Boolean!
+}
+
+extend type Mutation {
+  sendEmail(
+    to: [String!]!
+    subject: String!
+    text: String!
+    html: String
+    recipientVariables: Json
+  ): EmailPayload
+}
