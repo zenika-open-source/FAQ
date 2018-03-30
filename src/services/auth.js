@@ -10,85 +10,103 @@ class Auth {
       responseType: 'token id_token',
       scope: 'openid profile email'
     })
-    this.session = JSON.parse(localStorage.getItem('auth'))
-  }
 
-  login (redirectURL) {
-    this.saveRedirectURL(redirectURL)
-    this.auth0.authorize()
-  }
-
-  handleAuthentication (successCallback, errorCallback) {
-    return new Promise((resolve, reject) => {
-      this.auth0.parseHash(
-        {
-          hash: window.location.hash.split('?')[1]
-        },
-        (err, authResult) => {
-          if (authResult && authResult.accessToken && authResult.idToken) {
-            resolve(authResult)
-          } else if (err) {
-            alert(`Error: ${err.error}. Check the console for further details.`)
-            reject(err)
-          } else {
-            reject(new Error('Authentication did not work'))
-          }
-        }
-      )
-    })
-  }
-
-  setSession (authResult, userNodeId) {
-    // const expiresAt = new Date().getTime() + 7 * 24 * 60 * 60 * 1000 // A week
-    const expiresAt = authResult.expiresIn * 1000 + new Date().getTime()
-    // authResult.expiresIn * 1000 + new Date().getTime()
-
-    const auth = {
-      accessToken: authResult.accessToken,
-      idToken: authResult.idToken,
-      expiresAt,
-      userNodeId
+    if (
+      !this.session &&
+      localStorage.auth &&
+      localStorage.userId &&
+      localStorage.userProfile
+    ) {
+      this.session = JSON.parse(localStorage.auth)
+      this.userProfile = JSON.parse(localStorage.userProfile)
     }
-    localStorage.setItem('auth', JSON.stringify(auth))
-    this.session = auth
+  }
+
+  /* Action methods */
+  login (redirectTo) {
+    sessionStorage.after_login_redirect_url = redirectTo
+    this.auth0.authorize()
   }
 
   logout () {
     localStorage.removeItem('auth')
-    this.userProfile = null
+    localStorage.removeItem('userId')
+    localStorage.removeItem('userProfile')
     this.session = null
-  }
-
-  isAuthenticated () {
-    let expiresAt = this.session ? this.session.expiresAt : 0
-    return new Date().getTime() < expiresAt
-  }
-
-  getAccessToken () {
-    const accessToken = this.session ? this.session.accessToken : null
-    if (!accessToken) {
-      throw new Error('No access token found')
+    this.userId = null
+    this.userProfile = null
+    if (this.scheduledTimeout) {
+      clearTimeout(this.scheduledTimeout)
     }
-    return accessToken
   }
 
-  getUserNodeId () {
-    const userNodeId = this.session ? this.session.userNodeId : null
-    if (!userNodeId) {
-      throw new Error('No user node id found')
-    }
-    return userNodeId
-  }
-
-  getProfile (cb) {
+  parseHash (hash) {
     return new Promise((resolve, reject) => {
-      let accessToken = this.getAccessToken()
+      this.auth0.parseHash({ hash }, (err, authResult) => {
+        if (authResult && authResult.accessToken && authResult.idToken) {
+          resolve(authResult)
+        } else if (err) {
+          reject(err)
+        } else {
+          reject(new Error('Authentication did not work'))
+        }
+      })
+    })
+  }
+
+  setSession (authResult) {
+    const expiresAt = authResult.expiresIn * 1000 + new Date().getTime()
+
+    this.session = {
+      accessToken: authResult.accessToken,
+      idToken: authResult.idToken,
+      expiresAt
+    }
+
+    localStorage.auth = JSON.stringify(this.session)
+
+    this.scheduleRenew()
+  }
+
+  /* Internal actions methods */
+
+  renewAuth = () => {
+    return new Promise((resolve, reject) => {
+      this.auth0.checkSession({}, (err, authResult) => {
+        if (err) {
+          // eslint-disable-next-line
+          console.log(`Error while renewing session: ${err.error}`)
+          reject(err)
+          return
+        }
+
+        this.setSession(authResult)
+
+        this.getProfile().then(resolve)
+      })
+    })
+  }
+
+  scheduleRenew () {
+    // Renew session 5min before expiresAt
+    const expiresAt = this.session.expiresAt
+    const fiveMinBefore = expiresAt - new Date().getTime() - 5 * 60 * 1000
+    if (this.scheduledTimeout) {
+      clearTimeout(this.scheduledTimeout)
+    }
+    this.scheduledTimeout = setTimeout(this.renewAuth, fiveMinBefore)
+  }
+
+  getProfile () {
+    return new Promise((resolve, reject) => {
+      let accessToken = this.session.accessToken
       if (this.userProfile) {
         resolve(this.userProfile)
       } else {
         this.auth0.client.userInfo(accessToken, (err, profile, ...rest) => {
           if (profile) {
             this.userProfile = profile
+            localStorage.userProfile = JSON.stringify(profile)
             resolve(this.userProfile)
           }
           reject(err)
@@ -97,14 +115,39 @@ class Auth {
     })
   }
 
-  saveRedirectURL (url) {
-    sessionStorage.setItem('after_login_redirect_url', url)
+  /* State getters and setters */
+  isAuthenticated () {
+    return (
+      this.session &&
+      this.session.expiresAt > new Date().getTime() &&
+      localStorage.userId
+    )
   }
 
-  retrieveRedirectURL () {
-    const url = sessionStorage.getItem('after_login_redirect_url')
+  wasAuthenticated () {
+    return (
+      this.session &&
+      this.session.expiresAt < new Date().getTime() &&
+      localStorage.userId
+    )
+  }
+
+  popAfterLoginRedirectUrl () {
+    const url = sessionStorage.after_login_redirect_url
     sessionStorage.removeItem('after_login_redirect_url')
     return url
+  }
+
+  setUserId (id) {
+    localStorage.userId = id
+  }
+
+  getUserNodeId () {
+    return localStorage.userId
+  }
+
+  getUserProfile () {
+    return this.isAuthenticated() ? this.userProfile : null
   }
 }
 
