@@ -3,10 +3,10 @@ const jwt = require('jsonwebtoken')
 const jwkRsa = require('jwks-rsa')
 const fromEvent = require('graphcool-lib').fromEvent
 
-//Validates the request JWT token
+// Validates the request JWT token
 const verifyToken = token =>
   new Promise(resolve => {
-    //Decode the JWT Token
+    // Decode the JWT Token
     const decoded = jwt.decode(token, { complete: true })
     if (!decoded || !decoded.header || !decoded.header.kid) {
       throw new Error('Unable to retrieve key identifier from token')
@@ -20,11 +20,11 @@ const verifyToken = token =>
       cache: true,
       jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`
     })
-    //Retrieve the JKWS's signing key using the decode token's key identifier (kid)
+    // Retrieve the JKWS's signing key using the decode token's key identifier (kid)
     jkwsClient.getSigningKey(decoded.header.kid, (err, key) => {
       if (err) throw new Error(err)
       const signingKey = key.publicKey || key.rsaPublicKey
-      //If the JWT Token was valid, verify its validity against the JKWS's signing key
+      // If the JWT Token was valid, verify its validity against the JKWS's signing key
       jwt.verify(
         token,
         signingKey,
@@ -42,7 +42,7 @@ const verifyToken = token =>
     })
   })
 
-//Retrieves the Graphcool user record using the Auth0 user id
+// Retrieves the Graphcool user record using the Auth0 user id
 const getGraphcoolUser = (auth0UserId, api) =>
   api
     .request(
@@ -57,34 +57,40 @@ const getGraphcoolUser = (auth0UserId, api) =>
     )
     .then(queryResult => queryResult.User)
 
-//Creates a new User record.
-const createGraphCoolUser = (auth0UserId, profile, api) =>
-  api
+// Creates a new User record.
+const createGraphCoolUser = (auth0UserId, profile, consent, api) => {
+  const profileThatFaqIsAllowedToSave = {
+    name: consent.name ? profile.name : null,
+    picture: consent.picture ? profile.picture : null,
+    email: consent.email ? profile.email : null
+  }
+  return api
     .request(
       `
-        mutation createUser($auth0UserId: String!,
-						$email: String,
-						$name: String,
-						$given_name: String,
-						$family_name: String,
-						$picture: String,
-						$locale: String) {
+        mutation createUser(
+          $auth0UserId: String!,
+          $email: String,
+          $name: String,
+          $picture: String,
+          $locale: String,
+          $consent: Consent
+        ){
           createUser(
             auth0UserId: $auth0UserId
             email: $email
-						name: $name
-						givenName: $given_name
-						familyName: $family_name
-						picture: $picture
-						locale: $locale
+            name: $name
+            picture: $picture
+            locale: $locale,
+            consent: $consent
           ){
             id
           }
         }
       `,
-      { auth0UserId, ...profile }
+      { auth0UserId, ...profileThatFaqIsAllowedToSave, consent }
     )
     .then(queryResult => queryResult.createUser)
+}
 
 const fetchAuth0Profile = accessToken =>
   fetch(
@@ -100,19 +106,19 @@ export default async event => {
         'Missing AUTH0_DOMAIN or AUTH0_API_IDENTIFIER environment variable'
       )
     }
-    const { accessToken, idToken } = event.data
+    const { accessToken, idToken, consent } = event.data
 
     const decodedToken = await verifyToken(idToken)
     const graphcool = fromEvent(event)
     const api = graphcool.api('simple/v1')
 
     let graphCoolUser = await getGraphcoolUser(decodedToken.sub, api)
-    //If the user doesn't exist, a new record is created.
+    // If the user doesn't exist, a new record is created.
     if (graphCoolUser === null) {
       // fetch email if scope includes it
       let profile = null
       profile = await fetchAuth0Profile(accessToken)
-      graphCoolUser = await createGraphCoolUser(decodedToken.sub, profile, api)
+      graphCoolUser = await createGraphCoolUser(decodedToken.sub, profile, consent, api)
     }
 
     // custom exp does not work yet, see https://github.com/graphcool/graphcool-lib/issues/19

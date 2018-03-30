@@ -1,11 +1,13 @@
 type AuthenticateUserPayload {
   id: String!
   token: String!
+  consent: Consent!
 }
 
 extend type Mutation {
   authenticateUser(
     accessToken: String!
     idToken: String!
+    consent: Consent!
   ): AuthenticateUserPayload!
 }
