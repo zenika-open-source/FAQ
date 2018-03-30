@@ -59,6 +59,11 @@ const getGraphcoolUser = (auth0UserId, api) =>
 
 // Creates a new User record.
 const createGraphCoolUser = (auth0UserId, profile, consent, api) => {
+  const savedConsent = {
+    ...consent,
+    method: 'form at profile creation',
+    givenAt: new Date().toISOString()
+  }
   const profileThatFaqIsAllowedToSave = {
     name: consent.name ? profile.name : null,
     picture: consent.picture ? profile.picture : null,
@@ -87,7 +92,7 @@ const createGraphCoolUser = (auth0UserId, profile, consent, api) => {
           }
         }
       `,
-      { auth0UserId, ...profileThatFaqIsAllowedToSave, consent }
+      { auth0UserId, ...profileThatFaqIsAllowedToSave, consent: savedConsent }
     )
     .then(queryResult => queryResult.createUser)
 }
