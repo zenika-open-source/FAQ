@@ -17,7 +17,15 @@ class Input extends Component {
   }
 
   render () {
-    const { className, value, limit, icon, style, ...otherProps } = this.props
+    const {
+      className,
+      value,
+      limit,
+      icon,
+      style,
+      setRef,
+      ...otherProps
+    } = this.props
     return (
       <div
         className={cn('input', className)}
@@ -38,7 +46,12 @@ class Input extends Component {
           value={value}
           maxLength={limit}
           {...otherProps}
-          ref={ref => (this.input = ref)}
+          ref={ref => {
+            this.input = ref
+            if (setRef) {
+              setRef(ref)
+            }
+          }}
         />
         {limit && (
           <i className="limit">
@@ -56,7 +69,8 @@ Input.propTypes = {
   limit: PropTypes.number,
   icon: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   style: PropTypes.object,
-  autoFocus: PropTypes.bool
+  autoFocus: PropTypes.bool,
+  setRef: PropTypes.func
 }
 
 export default Input

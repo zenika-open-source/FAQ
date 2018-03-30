@@ -10,12 +10,15 @@ import Loading from 'components/Loading'
 import Card, { CardText, CardActions } from 'components/Card'
 import Button from 'components/Button'
 import Input from 'components/Input'
+import onCtrlEnter from 'components/onCtrlEnter'
 
 import ActionMenu from '../../components/ActionMenu'
 
 import Tips from './components/Tips'
 
 import './Edit.css'
+
+const CtrlEnterInput = onCtrlEnter(Input)
 
 class Edit extends Component {
   constructor (props) {
@@ -41,8 +44,6 @@ class Edit extends Component {
         this.setState({ question: ZNode.question.title })
       }
     }
-
-    document.addEventListener('keydown', this.keydownHandler)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -57,18 +58,12 @@ class Edit extends Component {
     }
   }
 
-  keydownHandler = e => {
-    if (e.keyCode === 13 && e.ctrlKey) {
-      this.isEditing ? this.editQuestion() : this.submitQuestion()
-    }
-  }
-
-  componentWillUnmount () {
-    document.removeEventListener('keydown', this.keydownHandler)
-  }
-
   handleChange = e => {
     this.setState({ question: e.target.value })
+  }
+
+  submitForm = () => {
+    this.isEditing ? this.editQuestion() : this.submitQuestion()
   }
 
   submitQuestion = () => {
@@ -145,7 +140,8 @@ class Edit extends Component {
         />
         <Card>
           <CardText style={{ display: 'flex', paddingBottom: 0 }}>
-            <Input
+            <CtrlEnterInput
+              onCtrlEnterCallback={this.submitForm}
               autoFocus
               icon="help"
               placeholder="Ex: Comment remplir une note de frais ?"
@@ -162,7 +158,7 @@ class Edit extends Component {
               }
               primary
               raised
-              onClick={this.isEditing ? this.editQuestion : this.submitQuestion}
+              onClick={this.submitForm}
             />
           </CardActions>
         </Card>
