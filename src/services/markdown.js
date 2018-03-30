@@ -1,12 +1,14 @@
 import React from 'react'
 import { Converter } from 'showdown'
+import XSSFilter from 'showdown-xss-filter'
 import emoji from 'emoji-dictionary'
 
 class Markdown {
   constructor () {
     this.showdown = new Converter({
       openLinksInNewWindow: true,
-      backslashEscapesHTMLTags: true
+      backslashEscapesHTMLTags: true,
+      extensions: [XSSFilter]
     })
 
     this.showdown.setFlavor('github')
