@@ -15,6 +15,7 @@ import Loading from 'components/Loading'
 import Card, { CardTitle, CardText, CardActions } from 'components/Card'
 import Flags from 'components/Flags'
 import Button from 'components/Button'
+import onCtrlEnter from 'components/onCtrlEnter'
 
 import ActionMenu from '../../components/ActionMenu'
 
@@ -22,6 +23,8 @@ import Sources from './components/Sources'
 
 import ReactMde, { ReactMdeCommands } from 'react-mde'
 import 'react-mde/lib/styles/css/react-mde-all.css'
+
+const CtrlEnterCardText = onCtrlEnter(CardText)
 
 class Answer extends Component {
   state = {
@@ -60,6 +63,11 @@ class Answer extends Component {
 
   handleSourceChange = sources => {
     this.setState({ sources: sources })
+  }
+
+  submitForm = () => {
+    const { ZNode } = this.props.data
+    ZNode.answer ? this.editAnswer() : this.submitAnswer()
   }
 
   submitAnswer = () => {
@@ -143,14 +151,14 @@ class Answer extends Component {
             </div>
             <Flags node={ZNode} withLabels={true} />
           </CardTitle>
-          <CardText>
+          <CtrlEnterCardText onCtrlEnterCallback={this.submitForm}>
             <ReactMde
               value={this.state.answer}
               showdownFlavor="github"
               onChange={this.handleChange.bind(this)}
               commands={ReactMdeCommands.getDefaultCommands()}
             />
-          </CardText>
+          </CtrlEnterCardText>
           <CardText>
             <Sources
               sources={this.state.sources}
@@ -163,7 +171,7 @@ class Answer extends Component {
               primary
               raised
               disabled={answer.text.length === 0}
-              onClick={ZNode.answer ? this.editAnswer : this.submitAnswer}
+              onClick={this.submitForm}
             />
           </CardActions>
         </Card>
