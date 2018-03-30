@@ -46,7 +46,6 @@ class Auth {
         if (authResult && authResult.accessToken && authResult.idToken) {
           resolve(authResult)
         } else if (err) {
-          alert(`Error: ${err.error}. Check the console for further details.`)
           reject(err)
         } else {
           reject(new Error('Authentication did not work'))
@@ -133,7 +132,7 @@ class Auth {
     )
   }
 
-  getAfterLoginRedirectUrl () {
+  popAfterLoginRedirectUrl () {
     const url = sessionStorage.after_login_redirect_url
     sessionStorage.removeItem('after_login_redirect_url')
     return url
@@ -143,10 +142,8 @@ class Auth {
     localStorage.userId = id
   }
 
-  getUserId () {
-    const id = localStorage.userId
-    localStorage.removeItem('userId')
-    return id
+  getUserNodeId () {
+    return localStorage.userId
   }
 
   getUserProfile () {
