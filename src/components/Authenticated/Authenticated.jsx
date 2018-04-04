@@ -7,7 +7,7 @@ import { auth } from 'services'
 
 const Authenticated = ({ location, reverse, redirect, children }) => {
   const isAuth = auth.isAuthenticated()
-  const currentURL = location.pathname
+  const currentURL = location.pathname + location.search
 
   if ((isAuth && !reverse) || (!isAuth && reverse)) {
     return children
