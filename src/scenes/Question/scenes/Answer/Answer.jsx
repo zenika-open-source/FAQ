@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Redirect } from 'react-router-dom'
+import { Redirect, Prompt } from 'react-router-dom'
 import omit from 'lodash/omit'
 
 import { compose } from 'react-apollo'
@@ -143,6 +143,7 @@ class Answer extends Component {
 
     return (
       <div>
+        <Prompt message="Are you sure you want to leave this page with an unsaved answer?" />
         <ActionMenu backLink={`/q/${ZNode.question.slug}-${ZNode.id}`} />
         <Card style={{ marginTop: '0.3rem' }}>
           <CardTitle style={{ padding: '1.2rem' }}>

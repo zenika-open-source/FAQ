@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Redirect } from 'react-router-dom'
+import { Redirect, Prompt } from 'react-router-dom'
 
 import { compose } from 'react-apollo'
 import { submitQuestion, editQuestion } from './queries'
@@ -133,6 +133,7 @@ class Edit extends Component {
 
     return (
       <div className="Edit">
+        <Prompt message="Are you sure you want to leave this page with an unsaved question?" />
         <ActionMenu
           backLabel={this.isEditing ? 'Back' : 'Home'}
           backLink={this.isEditing ? `/q/${match.params.slug}` : '/'}
