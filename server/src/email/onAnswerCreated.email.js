@@ -333,7 +333,7 @@ a[x-apple-data-detectors=true] {
 
 
                     <div class="" style="font-size: 16px;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; text-align: center;"><p>
-	You can read the answer and it's sources on
+	You can read the answer and its sources on
   	<a href="https://faq.zenika.com/q/${node.question.slug}-${node.id}">
 		the FAQ
 	</a>
