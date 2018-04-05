@@ -9,7 +9,7 @@ This project requires the following accounts and keys:
 * [Algolia](https://www.algolia.com) - App ID; API key (all operations); API key (search only)
 * [Auth0](https://auth0.com) - Domain; Client ID
 * [Google Cloud](https://cloud.google.com) - Application ID
-* [Graphcool](https://www.graph.cool) - Endpoint URL
+* [Graphcool](https://www.graph.cool) - Target; Endpoint URL [local instance available]
 * [Mailgun](https://www.mailgun.com) - Domain; API key
 
 ## Installing
@@ -43,15 +43,15 @@ vim server/.env.local
 
 ## Graphcool
 
-> /!\ This project currently relies on Graphcool cloud even for development
->
-> In the future, we will use the graphcool local deployment feature
-
-Install and configure the graphcool instance for your project
+Install and configure a graphcool instance for your project
 
 ```bash
 # Path: ./FAQ/server
 npm install
+
+# Optional: if you want a local instance of graphcool (requires Docker)
+graphcool local up
+
 npm run graphcool
 ```
 
