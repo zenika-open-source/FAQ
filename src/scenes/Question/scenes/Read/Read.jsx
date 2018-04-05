@@ -18,6 +18,7 @@ import Flags, { flagMeta } from 'components/Flags'
 import ActionMenu from '../../components/ActionMenu'
 import Sources from './components/Sources'
 import Meta from './components/Meta'
+import Share from './components/Share'
 
 const Read = ({ history, match, data, createFlag }) => {
   const { loading, error, ZNode } = data
@@ -79,6 +80,7 @@ const Read = ({ history, match, data, createFlag }) => {
             <h1>{markdown.title(ZNode.question.title)}</h1>
           </div>
           <Flags node={ZNode} withLabels={true} />
+          <Share node={ZNode} />
         </CardTitle>
         <CardText>
           {ZNode.answer ? (

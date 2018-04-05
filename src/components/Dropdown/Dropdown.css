@@ -35,6 +35,11 @@
   margin-right: 0.4rem;
 }
 
+.dropdown-content a svg {
+  font-size: 24px;
+  margin-right: 0.2rem;
+}
+
 .dropdown-content a:not([disabled]):hover {
   background-color: var(--secondary-color);
 }
