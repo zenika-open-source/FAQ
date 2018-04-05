@@ -6,11 +6,13 @@ These instructions will get you a copy of the project up and running on your loc
 
 This project requires the following accounts and keys:
 
-* [Algolia](https://www.algolia.com) - App ID; API key (all operations); API key (search only)
+* [Algolia](https://www.algolia.com)\* - App ID; API key (all operations); API key (search only)
 * [Auth0](https://auth0.com) - Domain; Client ID
-* [Google Cloud](https://cloud.google.com) - Application ID
+* [Google Cloud](https://cloud.google.com)\* - Application ID
 * [Graphcool](https://www.graph.cool) - Target; Endpoint URL [local instance available]
-* [Mailgun](https://www.mailgun.com) - Domain; API key
+* [Mailgun](https://www.mailgun.com)\* - Domain; API key
+
+\* _optional, but recommended_
 
 ## Installing
 
@@ -57,16 +59,17 @@ npm run graphcool
 
 ## Algolia
 
-> /!\ Algolia is a cloud service and there is no local alternative
->
-> In the future, we will provide a Stub class in order to use this application without Algolia when developing
-
 Deploy the algolia synonyms with the following command
 
 ```bash
 # Path: ./FAQ/server
 npm run algolia
 ```
+
+> Note: Algolia is optional for the development.
+>
+> If you do not indicate an API key for Algolia, the application will simply
+> return an empty result when searching
 
 ## Start
 
