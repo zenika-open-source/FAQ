@@ -106,9 +106,3 @@ The configuration will build and deploy the application following the environmen
 ## License
 
 This project is under the MIT License - See the [LICENSE.md](LICENSE.md) file for details
-
-## Security
-
-**Be careful!** Markdown is inherently unsafe to XSS attacks. There is currently **no** defense in place to mitigate it.
-
-This will need to be fixed **before** launching the project.
