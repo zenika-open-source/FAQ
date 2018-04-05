@@ -71,6 +71,13 @@ npm run algolia
 > If you do not indicate an API key for Algolia, the application will simply
 > return an empty result when searching
 
+## Mailgun
+
+> Note: Mailgun is optional for the development.
+>
+> If you do not indicate an API key for Mailgun, the application will silently
+> throw an error in graphcool logs
+
 ## Start
 
 Finally, start the application
