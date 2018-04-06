@@ -4,11 +4,15 @@
   "private": true,
   "dependencies": {
     "algoliasearch": "^3.24.11",
-    "apollo-boost": "^0.1.1",
+    "apollo-cache-inmemory": "^1.1.12",
+    "apollo-client": "^2.2.8",
+    "apollo-link-http": "^1.5.3",
+    "apollo-link-ws": "^1.0.7",
     "auth0-js": "^9.3.2",
     "classnames": "^2.2.5",
     "emoji-dictionary": "^1.0.9",
     "graphql": "^0.13.1",
+    "graphql-tag": "^2.8.0",
     "lodash": "^4.17.5",
     "moment": "^2.21.0",
     "normalize.css": "^8.0.0",
@@ -23,6 +27,7 @@
     "react-scripts": "1.1.0",
     "showdown": "^1.8.6",
     "showdown-xss-filter": "^0.2.0",
+    "subscriptions-transport-ws": "^0.9.7",
     "uuid": "^3.2.1"
   },
   "scripts": {
