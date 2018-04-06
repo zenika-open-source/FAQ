@@ -8,7 +8,7 @@ const countZNodesQuery = `
 
 const countUnansweredZNodesQuery = `
 	query {
-		_allZNodesMeta(filter:{answer:{id:null}}) {
+		_allZNodesMeta(filter:{answer:null}) {
 	    count
 	  }
 	}
@@ -32,7 +32,7 @@ const getZNodeQuery = `
 
 const getUnansweredZNodeQuery = `
 	query ($index: Int!){
-		allZNodes(skip:$index,first:1,filter:{answer:{id:null}}) {
+		allZNodes(skip:$index,first:1,filter:{answer:null}) {
 			id
 		}
 	}
