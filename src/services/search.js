@@ -64,6 +64,15 @@ class Search {
   }
 }
 
-const search = new Search()
+const stubSearch = {
+  simpleQuery () {
+    return this.query()
+  },
+  query () {
+    return Promise.resolve([])
+  }
+}
+
+const search = process.env.REACT_APP_ALGOLIA_APP_ID ? new Search() : stubSearch
 
 export default search

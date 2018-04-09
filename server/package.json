@@ -17,7 +17,10 @@
   "scripts": {
     "login": "graphcool login",
     "deploy": "npm run graphcool && npm run algolia",
-		"graphcool": "dotenv -e .env.local graphcool deploy",
-		"algolia": "cd algolia && dotenv -e ../.env.local node ./synonyms.js"
+    "graphcool": "dotenv -e .env.local graphcool deploy",
+    "algolia": "cd algolia && dotenv -e ../.env.local node ./synonyms.js"
+  },
+  "devDependencies": {
+    "graphcool": "^0.11.6"
   }
 }

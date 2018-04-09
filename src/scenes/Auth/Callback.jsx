@@ -6,19 +6,36 @@ import { authUser } from './queries'
 import { auth } from 'services'
 
 import Loading from 'components/Loading'
+import Consent from './Consent'
 
 class Callback extends Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      authResult: null
+    }
+  }
+
   componentDidMount () {
-    const { location, history, authQL } = this.props
+    const { location, history } = this.props
 
     auth
       .parseHash(location.hash)
-      .then(authResult =>
-        authQL(authResult.accessToken, authResult.idToken).then(({ data }) => {
-          auth.setSession(authResult)
-          auth.setUserId(data.authenticateUser.id)
-        })
-      )
+      .then(authResult => this.setState({ authResult }))
+      .catch(err => {
+        // eslint-disable-next-line
+        console.log(err)
+        history.push({ pathname: '/auth/login', state: { error: err } })
+      })
+  }
+
+  onSubmitConsent (consent) {
+    const { history, authQL } = this.props
+    const { authResult } = this.state
+    authQL(authResult.accessToken, authResult.idToken, consent).then(({ data }) => {
+      auth.setSession(authResult)
+      auth.setUserId(data.authenticateUser.id)
+    })
       .then(() => auth.getProfile())
       .then(() => history.push(auth.popAfterLoginRedirectUrl()))
       .catch(err => {
@@ -29,7 +46,9 @@ class Callback extends Component {
   }
 
   render () {
-    return <Loading text="Authenticating..." />
+    return this.state.authResult
+      ? <Consent submit={consent => this.onSubmitConsent(consent)} />
+      : <Loading text="Authenticating..." />
   }
 }
 

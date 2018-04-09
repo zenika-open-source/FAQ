@@ -2,8 +2,8 @@ import { gql } from 'apollo-boost'
 import { graphql } from 'react-apollo'
 
 export const authUserQuery = gql`
-  mutation authUser($accessToken: String!, $idToken: String!) {
-    authenticateUser(accessToken: $accessToken, idToken: $idToken) {
+  mutation authUser($accessToken: String!, $idToken: String!, $consent: Consent!) {
+    authenticateUser(accessToken: $accessToken, idToken: $idToken, consent: $consent) {
       id
       token
     }
@@ -12,8 +12,8 @@ export const authUserQuery = gql`
 
 export const authUser = graphql(authUserQuery, {
   props: ({ mutate }) => ({
-    authQL: (accessToken, idToken) => {
-      return mutate({ variables: { accessToken, idToken } })
+    authQL: (accessToken, idToken, consent) => {
+      return mutate({ variables: { accessToken, idToken, consent } })
     }
   })
 })
