@@ -49,3 +49,31 @@
 .card .card-actions * + * {
   margin-left: 0.3rem;
 }
+
+.card .card-form {
+  margin: 1em 0;
+}
+
+.card .card-form .card-input {
+  display: block;
+  width: 100%;
+  margin-top: 0.3em;
+  margin-bottom: 1em;
+  padding: 5px;
+}
+
+.card .card-table {
+  width: 100%;
+  margin: 1em 0;
+  border-collapse: collapse;
+  border-spacing: 0;
+  empty-cells: show;
+}
+
+.card .card-table tr {
+  border-bottom: 1px solid var(--primary-color-font-dark);
+}
+
+.card .card-table td {
+  padding: 0.5em;
+}

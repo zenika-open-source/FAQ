@@ -47,5 +47,6 @@
     "eslint-plugin-react": "^7.7.0",
     "eslint-plugin-standard": "^3.0.1",
     "graphcool": "^0.11.5"
-  }
+  },
+  "proxy": "http://192.168.99.100:60000"
 }
