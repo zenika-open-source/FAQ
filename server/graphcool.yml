@@ -81,5 +81,12 @@ functions:
       code:
         src: ./src/email/onAnswerCreated.js
 
+  random:
+    type: resolver
+    schema: ./src/random/random.graphql
+    handler:
+      code:
+        src: ./src/random/random.js
+
 permissions:
   - operation: "*"
