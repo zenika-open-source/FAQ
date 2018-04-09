@@ -96,15 +96,14 @@ type User @model {
   createdAt: DateTime!
   updatedAt: DateTime!
 
-  consentForPersonalData: Consent @relation(name: "UserConsent")
+  consentForPersonalData: [Consent!] @relation(name: "UserConsent")
 }
 
 type Consent @model {
   id: ID! @isUnique
-  user: [User!]! @relation(name: "UserConsent")
+  user: User! @relation(name: "UserConsent")
+  subject: String!
   method: String!
   givenAt: DateTime!
-  name: Boolean!
-  picture: Boolean!
-  email: Boolean!
+  value: Boolean!
 }
