@@ -21,17 +21,15 @@
   align-items: center;
 }
 
-.navbar .navigation a {
+.navbar .navigation > a {
   display: flex;
   align-items: center;
   margin-right: 1.5rem;
   color: var(--primary-color-font);
 }
 
-.navbar .navigation a svg {
+.navbar .navigation > a svg {
   margin-right: 0rem;
   fill: var(--primary-color-font);
   height: 0.8rem !important;
 }
-
-/* Source: https://flatuicolors.com/palette/fr */
