@@ -2,6 +2,7 @@
   width: 100%;
   border: 1px solid var(--secondary-color);
   border-radius: 2px;
+  position: relative;
 }
 
 .card + .card {
