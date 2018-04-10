@@ -4,7 +4,7 @@ Internal Knowledge Database for Zenika members - https://faq.zenika.com
 
 ## What is FAQ?
 
-**FAQ** is an **internal knowledge database** for Zenika members. It aims to be the **"single source of truth"** for most of Zenika-oriented information: "How does the variable part of the salary works?", "Can the client ask me to stay late at work?", ..
+**FAQ** is an **internal knowledge database** for Zenika members. It aims to be the **"single source of truth"** for most of Zenika-oriented information: "How does the variable part of the salary works?", "Can the client ask me to stay late at work?", ...
 
 ## Philosophy
 

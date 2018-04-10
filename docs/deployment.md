@@ -1,6 +1,6 @@
 # Deployment
 
-Here are some useful informations about the deployment of this application:
+Here are some useful information about the deployment of this application:
 
 ## Prerequisites
 
