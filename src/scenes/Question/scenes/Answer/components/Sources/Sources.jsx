@@ -7,10 +7,6 @@ import Button from 'components/Button'
 import Source from '../Source'
 
 class Sources extends Component {
-  componentDidUpdate () {
-    const { sources } = this.props
-  }
-
   addSource = () => {
     const { sources, handleChange } = this.props
     handleChange(
