@@ -58,7 +58,7 @@ jobs:
 
       - run: npm run deploy
 
-  gcloud:
+  gcloud_prod:
     working_directory: *workspace_root
     docker:
       - image: google/cloud-sdk
@@ -71,22 +71,49 @@ jobs:
       - run: gcloud config set project $GCLOUD_APP_ID
 
       # Deploy
+      - run: gcloud app deploy build/dispatch.yaml
       - run: gcloud app deploy build/ --quiet --version=prod
+
+  gcloud_next:
+    working_directory: *workspace_root
+    docker:
+      - image: google/cloud-sdk
+    steps:
+      - *attach_workspace
+
+      # Authenticate GCloud
+      - run: echo $GCLOUD_SERVICE_KEY | base64 --decode --ignore-garbage > ${HOME}/gcloud-service-key.json
+      - run: gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
+      - run: gcloud config set project $GCLOUD_APP_ID
+
+      # Deploy
+      - run: gcloud app deploy build/next.yaml --quiet --stop-previous-version
 
 workflows:
   version: 2
   build-deploy:
     jobs:
-      - build
+      - build:
+          filters:
+            branches:
+              only:
+                - master
+                - next
       - deploy:
           requires:
             - build
           filters:
             branches:
               only: master
-      - gcloud:
+      - gcloud_prod:
           requires:
             - build
           filters:
             branches:
               only: master
+      - gcloud_next:
+          requires:
+            - build
+          filters:
+            branches:
+              only: next
