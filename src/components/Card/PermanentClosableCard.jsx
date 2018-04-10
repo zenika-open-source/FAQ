@@ -39,7 +39,7 @@ class PermanentClosableCard extends Component {
             </a>
             {children}
             <CardActions>
-              <Button secondary raised label="Understood !" onClick={close} />
+              <Button secondary raised label="Understood!" onClick={close} />
             </CardActions>
           </Card>
         )}

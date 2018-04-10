@@ -9,18 +9,19 @@ const Tips = props => (
       <ul style={{ textAlign: 'left' }}>
         <li>A partial answer is better than no answer.</li>
         <li>Be precise and factual.</li>
-        <li>
-          A satisfactory answer must also be pleasant to read, formate it!
-        </li>
+        <li>The best answers are pleasant to read and well formatted.</li>
         <li>
           Stay impersonal, an answer is neither a discussion nor a report.
         </li>
-        <li>The polite formulas are superfluous.</li>
+        <li>
+          FAQ is meant to feel like an encyclopedia more than more a forum. You
+          may leave out politeness formulas.
+        </li>
         <li>
           Specify the sources of your information (Zentranet, Workplace or
           other)
         </li>
-        <li>Remember to mention similar questions to complete your answer.</li>
+        <li>Mention similar questions to complete your answer.</li>
       </ul>
     </div>
   </TipsComponent>

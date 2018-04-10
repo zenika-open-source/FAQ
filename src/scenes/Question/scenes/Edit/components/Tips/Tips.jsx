@@ -8,10 +8,13 @@ const Tips = props => (
     <div style={{ textAlign: 'center' }}>
       <ul style={{ textAlign: 'left' }}>
         <li>
-          Do some searches before you can be sure your question has not already
-          been asked.
+          Search the FAQ before you add your question to make sure it
+          doesn&#39;t already exist.
         </li>
-        <li>Be concise and precise in your wording.</li>
+        <li>
+          You don&#39;t have to strike for the perfect wording. Others can
+          improve it.
+        </li>
         <li>
           <span>
             Privilege questions responding to the <b>how</b> rather than the{' '}
@@ -31,7 +34,7 @@ const Tips = props => (
           Great questions
         </h3>
         <ul>
-          <li>Where can I get the ElasticSearch training documents?</li>
+          <li>Where can I get the ElasticSearch training material?</li>
           <li>How can I use Alibeez API?</li>
           <li>How to reach the Nantes office from the train station?</li>
           <li>
@@ -53,7 +56,7 @@ const Tips = props => (
               <td>
                 <b>Technical:</b>
               </td>
-              <td>What are the differences between mock and stub?</td>
+              <td>What are the differences between mocks and stubs?</td>
             </tr>
             <tr>
               <td>▸</td>
