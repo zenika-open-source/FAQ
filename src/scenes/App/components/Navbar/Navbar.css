@@ -16,32 +16,22 @@
   margin-right: 6px;
 }
 
-/* Source: https://flatuicolors.com/palette/fr */
-
-/*.Navbar {
-  background-color: #fa983a;
-}
-
-.Navbar .title {
-  -webkit-box-flex: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-}
-
-.Navbar a {
-  text-decoration: none;
-}
-
-.Navbar .title a {
-  font-size: 1.2rem;
-  font-weight: 700;
-  width: 130px;
+.navbar .navigation {
   display: flex;
   align-items: center;
 }
 
-.Navbar .title a img {
-  height: 23px;
-  margin-right: 6px;
+.navbar .navigation a {
+  display: flex;
+  align-items: center;
+  margin-right: 1.5rem;
+  color: var(--primary-color-font);
 }
-*/
+
+.navbar .navigation a svg {
+  margin-right: 0rem;
+  fill: var(--primary-color-font);
+  height: 0.8rem !important;
+}
+
+/* Source: https://flatuicolors.com/palette/fr */

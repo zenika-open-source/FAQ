@@ -24,6 +24,10 @@ const Navbar = ({ history }) => {
           </div>
         </Link>
         <div className="navigation">
+          <a href="https://github.com/Zenika/FAQ" target="_blank">
+            <GithubIcon />
+            <span>report a bug</span>
+          </a>
           {user && (
             <Dropdown
               button={
