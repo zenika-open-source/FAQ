@@ -49,6 +49,5 @@ export const getAllPersonalDataQuery = gql`
 `
 
 export const getAllPersonalData = graphql(getAllPersonalDataQuery, {
-  skip: props => !auth.getUserProfile(),
   options: props => ({variables: {auth0UserId: auth.getUserProfile().sub}})
 })
