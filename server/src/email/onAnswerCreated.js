@@ -18,7 +18,7 @@ const sendEmailQuery = `
 
 const createMail = node => {
   const text = `
-Hi ${node.question.user.givenName}!
+Hi ${node.question.user.name}!
 
 ${node.answer.user.name} answered your question titled "${node.question.title}":
 

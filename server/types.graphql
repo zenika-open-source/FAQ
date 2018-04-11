@@ -82,8 +82,8 @@ type User @model {
   name: String
   email: String
 
-  givenName: String
-  familyName: String
+  givenName: String @deprecated
+  familyName: String @deprecated
 
   picture: String
   locale: String

@@ -64,16 +64,12 @@ const createGraphCoolUser = (auth0UserId, profile, api) =>
         mutation createUser($auth0UserId: String!,
             $email: String,
             $name: String,
-            $given_name: String,
-            $family_name: String,
             $picture: String,
             $locale: String) {
           createUser(
             auth0UserId: $auth0UserId
             email: $email
             name: $name
-            givenName: $given_name
-            familyName: $family_name
             picture: $picture
             locale: $locale
           ){

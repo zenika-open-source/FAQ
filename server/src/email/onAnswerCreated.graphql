@@ -7,7 +7,7 @@ subscription {
           title
           slug
           user {
-            givenName
+            name
             email
           }
         }
