@@ -4,8 +4,8 @@ import { graphql } from 'react-apollo'
 import auth from '../../services/auth'
 
 export const getAllPersonalDataQuery = gql`
-  query getAllPersonalData($auth0UserId: String!) {
-    User(auth0UserId: $auth0UserId) {
+  query getAllPersonalData($userId: ID!) {
+    User(id: $userId) {
       createdAt
       email
       familyName
@@ -49,5 +49,5 @@ export const getAllPersonalDataQuery = gql`
 `
 
 export const getAllPersonalData = graphql(getAllPersonalDataQuery, {
-  options: props => ({variables: {auth0UserId: auth.getUserProfile().sub}})
+  options: props => ({variables: {userId: auth.getUserNodeId()}})
 })
