@@ -168,7 +168,7 @@ class Answer extends Component {
           </CardText>
           <CardActions>
             <Button
-              label={ZNode.answer ? 'Edit' : 'Submit'}
+              label={ZNode.answer ? 'Save answer' : 'Submit answer'}
               primary
               raised
               disabled={answer.text.length === 0}

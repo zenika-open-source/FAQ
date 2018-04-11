@@ -42,3 +42,8 @@
   font-size: var(--small-font-size);
   color: var(--secondary-color-dark);
 }
+
+.input .close {
+  color: var(--primary-color-light);
+  cursor: pointer;
+}

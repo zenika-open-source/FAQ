@@ -24,6 +24,7 @@ class Input extends Component {
       icon,
       style,
       setRef,
+      onClear,
       ...otherProps
     } = this.props
     return (
@@ -58,6 +59,12 @@ class Input extends Component {
             {value ? value.length : 0}/{limit}
           </i>
         )}
+        {onClear &&
+          value.length > 0 && (
+            <i className="close material-icons" onClick={onClear}>
+              close
+            </i>
+          )}
       </div>
     )
   }
@@ -70,7 +77,8 @@ Input.propTypes = {
   icon: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   style: PropTypes.object,
   autoFocus: PropTypes.bool,
-  setRef: PropTypes.func
+  setRef: PropTypes.func,
+  onClear: PropTypes.func
 }
 
 export default Input
