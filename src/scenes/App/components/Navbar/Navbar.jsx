@@ -41,7 +41,9 @@ const Navbar = ({ history }) => {
                 </div>
               }
             >
-              <DropdownItem icon="account_box" disabled>
+              <DropdownItem
+                icon="account_box"
+                onClick={() => history.push('/user-profile')}>
                 Profile
               </DropdownItem>
               <DropdownDivider />

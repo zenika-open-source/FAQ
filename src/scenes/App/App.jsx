@@ -5,6 +5,7 @@ import Helmet from 'react-helmet'
 import Auth from 'scenes/Auth'
 import Home from 'scenes/Home'
 import Question from 'scenes/Question'
+import UserProfile from 'scenes/UserProfile'
 import NotFound from 'scenes/NotFound'
 
 import PrivateRoute from 'components/PrivateRoute'
@@ -25,6 +26,7 @@ const App = () => (
         <PrivateRoute exact path="/" component={Home} />
         <Route path="/auth" component={Auth} />
         <PrivateRoute path="/q" component={Question} />
+        <PrivateRoute path="/user-profile" component={UserProfile} />
         <PrivateRoute component={NotFound} />
       </Switch>
     </div>
