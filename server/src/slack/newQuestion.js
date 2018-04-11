@@ -18,9 +18,9 @@ const emojify = text => {
 }
 
 export default async event => {
-  const channel_hook = process.env['SLACK_CHANNEL_HOOK']
+  const channelHook = process.env['SLACK_CHANNEL_HOOK']
 
-  if (!channel_hook) {
+  if (!channelHook) {
     console.log('Please provide a valid slack channel hook!')
     return { error: 'Module not configured correctly.' }
   }
@@ -33,7 +33,7 @@ export default async event => {
     text: `<${url}|${emojify(question.title)}>`
   }
 
-  const response = await fetch(channel_hook, {
+  const slackRequest = await fetch(channelHook, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -41,5 +41,7 @@ export default async event => {
     body: JSON.stringify(message)
   })
 
-  return { data: { response: response.text() } }
+  const response = await slackRequest.text()
+
+  return { data: { status: slackRequest.status, response } }
 }
