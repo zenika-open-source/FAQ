@@ -7,7 +7,11 @@ import { submitQuestion, editQuestion } from './queries'
 import { getNode } from 'scenes/Question/queries'
 
 import Loading from 'components/Loading'
-import Card, { CardText, CardActions } from 'components/Card'
+import Card, {
+  CardText,
+  CardActions,
+  PermanentClosableCard
+} from 'components/Card'
 import Button from 'components/Button'
 import Input from 'components/Input'
 import onCtrlEnter from 'components/onCtrlEnter'
@@ -32,7 +36,8 @@ class Edit extends Component {
     this.state = {
       question: this.initialQuestion,
       loadingSubmit: false,
-      slug: null
+      slug: null,
+      showTips: PermanentClosableCard.isOpen('tips_question')
     }
   }
 
@@ -103,9 +108,19 @@ class Edit extends Component {
       })
   }
 
+  openTips = () => {
+    this.setState({ showTips: true })
+    PermanentClosableCard.setValue('tips_question', true)
+  }
+
+  closeTips = () => {
+    this.setState({ showTips: false })
+    PermanentClosableCard.setValue('tips_question', false)
+  }
+
   render () {
     const { match } = this.props
-    const { loadingSubmit, slug, question } = this.state
+    const { loadingSubmit, slug, question, showTips } = this.state
 
     if (slug) {
       return <Redirect to={`/q/${slug}`} />
@@ -138,7 +153,17 @@ class Edit extends Component {
           backLabel={this.isEditing ? 'Back' : 'Home'}
           backLink={this.isEditing ? `/q/${match.params.slug}` : '/'}
           title={this.isEditing ? 'Edit question' : 'Ask a new question'}
-        />
+        >
+          {!showTips && (
+            <Button
+              link
+              icon="lightbulb_outline"
+              label="Show tips"
+              onClick={this.openTips}
+            />
+          )}
+        </ActionMenu>
+        <Tips close={this.closeTips} open={showTips} />
         <Card>
           <CardText style={{ display: 'flex', paddingBottom: 0 }}>
             <CtrlEnterInput
@@ -163,7 +188,6 @@ class Edit extends Component {
             />
           </CardActions>
         </Card>
-        <Tips style={{ marginTop: '1rem' }} />
       </div>
     )
   }
