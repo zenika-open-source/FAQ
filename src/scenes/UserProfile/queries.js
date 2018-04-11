@@ -17,7 +17,9 @@ export const getAllPersonalDataQuery = gql`
         createdAt
         type
         node {
+          id
           question {
+            id
             title
           }
         }
@@ -28,6 +30,7 @@ export const getAllPersonalDataQuery = gql`
         node {
           id
           question {
+            id
             title
             slug
           }
@@ -39,6 +42,7 @@ export const getAllPersonalDataQuery = gql`
         node {
           id
           question {
+            id
             title
             slug
           }
