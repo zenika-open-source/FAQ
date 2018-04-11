@@ -8,10 +8,6 @@ import Card, { CardText } from 'components/Card'
 import { getAllPersonalData } from './queries'
 
 const UserProfile = props => {
-  if (!props.data) {
-    props.history.push('/auth/login')
-  }
-
   const { loading, error, User } = props.data
 
   if (loading) {
@@ -89,7 +85,7 @@ const UserProfile = props => {
 
 UserProfile.propTypes = {
   history: PropTypes.object.isRequired,
-  data: PropTypes.object
+  data: PropTypes.object.isRequired
 }
 
 export default getAllPersonalData(UserProfile)
