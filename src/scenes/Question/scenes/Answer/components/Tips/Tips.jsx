@@ -14,8 +14,8 @@ const Tips = props => (
           Stay impersonal, an answer is neither a discussion nor a report.
         </li>
         <li>
-          FAQ is meant to feel like an encyclopedia more than more a forum. You
-          may leave out politeness formulas.
+          FAQ is meant to feel like an encyclopedia more than a forum. You may
+          leave out politeness formulas.
         </li>
         <li>
           Specify the sources of your information (Zentranet, Workplace or
