@@ -192,28 +192,28 @@ a[x-apple-data-detectors=true] {
       img.fullwidth {
         max-width: 100%!important;
       }
-			img.fullwidthOnMobile {
+      img.fullwidthOnMobile {
         max-width: 100%!important;
       }
       .no-stack .col {
-				min-width: 0!important;
-				display: table-cell!important;
-			}
-			.no-stack.two-up .col {
-				width: 50%!important;
-			}
-			.no-stack.mixed-two-up .col.num4 {
-				width: 33%!important;
-			}
-			.no-stack.mixed-two-up .col.num8 {
-				width: 66%!important;
-			}
-			.no-stack.three-up .col.num4 {
-				width: 33%!important;
-			}
-			.no-stack.four-up .col.num3 {
-				width: 25%!important;
-			}
+        min-width: 0!important;
+        display: table-cell!important;
+      }
+      .no-stack.two-up .col {
+        width: 50%!important;
+      }
+      .no-stack.mixed-two-up .col.num4 {
+        width: 33%!important;
+      }
+      .no-stack.mixed-two-up .col.num8 {
+        width: 66%!important;
+      }
+      .no-stack.three-up .col.num4 {
+        width: 33%!important;
+      }
+      .no-stack.four-up .col.num3 {
+        width: 25%!important;
+      }
       .mobile_hide {
         min-height: 0px!important;
         max-height: 0px!important;
@@ -227,9 +227,9 @@ a[x-apple-data-detectors=true] {
   <!--[if IE]><div class="ie-browser"><![endif]-->
   <!--[if mso]><div class="mso-container"><![endif]-->
   <table class="nl-container" style="border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;min-width: 320px;Margin: 0 auto;background-color: #FFFFFF;width: 100%" cellpadding="0" cellspacing="0">
-	<tbody>
-	<tr style="vertical-align: top">
-		<td style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
+  <tbody>
+  <tr style="vertical-align: top">
+    <td style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
     <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td align="center" style="background-color: #FFFFFF;"><![endif]-->
 
     <div style="background-color:transparent;">
@@ -268,15 +268,15 @@ a[x-apple-data-detectors=true] {
 
 
                     <div class="">
-	<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;"><![endif]-->
-	<div style="color:#555555;line-height:120%;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;">
-		<div style="font-size:12px;line-height:14px;color:#555555;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;"><p style="margin: 0;font-size: 14px;line-height: 17px">Hi ${
+  <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;"><![endif]-->
+  <div style="color:#555555;line-height:120%;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;">
+    <div style="font-size:12px;line-height:14px;color:#555555;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;"><p style="margin: 0;font-size: 14px;line-height: 17px">Hi ${
   node.question.user.givenName
 }!</p><p style="margin: 0;font-size: 14px;line-height: 17px">&#160;<br></p><p style="margin: 0;font-size: 14px;line-height: 17px"><b>${
   node.answer.user.name
 } just answered your question:</p></div>
-	</div>
-	<!--[if mso]></td></tr></table><![endif]-->
+  </div>
+  <!--[if mso]></td></tr></table><![endif]-->
 </div>
 
 <div class="">
@@ -333,10 +333,10 @@ a[x-apple-data-detectors=true] {
 
 
                     <div class="" style="font-size: 16px;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; text-align: center;"><p>
-	You can read the answer and its sources on
-  	<a href="https://faq.zenika.com/q/${node.question.slug}-${node.id}">
-		the FAQ
-	</a>
+  You can read the answer and its sources on
+    <a href="https://faq.zenika.com/q/${node.question.slug}-${node.id}">
+    the FAQ
+  </a>
 </p></div>
 
 
@@ -347,7 +347,7 @@ a[x-apple-data-detectors=true] {
         </div>
       </div>
     </div>   <!--[if (mso)|(IE)]></td></tr></table><![endif]-->
-		</td>
+    </td>
   </tr>
   </tbody>
   </table>
