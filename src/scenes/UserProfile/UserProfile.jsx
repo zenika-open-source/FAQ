@@ -42,6 +42,7 @@ const UserProfile = props => {
       }
     })))
     .reduce((all, entities) => all.concat(entities))
+    // sort by date
     .sort((a, b) => a.at < b.at ? 1 : a.at > b.at ? -1 : 0)
 
   return (
