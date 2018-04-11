@@ -56,15 +56,15 @@ const UserProfile = props => {
           <h1>Identity</h1>
           <div className="card-form">
             <label htmlFor="name">Name</label>
-            <input name="name" className="card-input" value={User.name} onChange={() => {}} readOnly />
+            <input name="name" className="card-input" value={User.name} readOnly />
             <label htmlFor="givenName">Given name</label>
-            <input name="givenName" className="card-input" value={User.givenName} onChange={() => {}} readOnly />
+            <input name="givenName" className="card-input" value={User.givenName} readOnly />
             <label htmlFor="familyName">Family name</label>
-            <input name="familyName" className="card-input" value={User.familyName} onChange={() => {}} readOnly />
+            <input name="familyName" className="card-input" value={User.familyName} readOnly />
             <label htmlFor="email">Email address</label>
-            <input name="email" className="card-input" value={User.email} onChange={() => {}} readOnly />
+            <input name="email" className="card-input" value={User.email} readOnly />
             <label htmlFor="picture">Picture link</label>
-            <input name="picture" className="card-input" value={User.picture} onChange={() => {}} readOnly />
+            <input name="picture" className="card-input" value={User.picture} readOnly />
           </div>
           <h1>Log</h1>
           <table className="card-table">
