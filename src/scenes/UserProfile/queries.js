@@ -1,7 +1,7 @@
 import { gql } from 'apollo-boost'
 import { graphql } from 'react-apollo'
 
-import auth from '../../services/auth'
+import { auth } from 'services'
 
 export const getAllPersonalDataQuery = gql`
   query getAllPersonalData($userId: ID!) {
