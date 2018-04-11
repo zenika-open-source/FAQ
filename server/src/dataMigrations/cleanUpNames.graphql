@@ -1,0 +1,8 @@
+type CleanUpNamesReport {
+  succeeded: Int
+  failed: Int
+}
+
+extend type Mutation {
+  cleanUpNames: CleanUpNamesReport
+}
