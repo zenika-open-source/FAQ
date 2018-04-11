@@ -2,7 +2,7 @@
 
 So you want to contribute to this project? Awesome!
 
-Below are some useful information in order to get you started contributing.
+Below are some useful information in order to get you started.
 
 You will need to follow the [installation process](/docs/installation.md) first.
 

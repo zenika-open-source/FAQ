@@ -36,6 +36,8 @@ npm install
 
 Before running the project, you will need to configure your environment variables from the [dependencies](#dependencies)
 
+Keep reading to know what values to write in this file.
+
 ```bash
 # Path: ./FAQ/
 cp .env.local.example .env.local
@@ -49,19 +51,23 @@ vim server/.env.local
 
 ### Algolia
 
-[Algolia](https://www.algolia.com/) is used for the full-text search.
-
-Deploy the algolia synonyms with the following command
-
-```bash
-# Path: ./FAQ/server
-npm run algolia
-```
+[Algolia](https://www.algolia.com/) is used for full-text search.
 
 > Note: Algolia is optional for the development.
 >
 > If you do not indicate an API key for Algolia, the application will simply
 > return an empty result when searching
+
+In Algolia, you can use synonyms to improve full-text search (eg: "travel <=> trip").
+
+You can define these synonyms in the [synonyms.json](/server/algolia/synonyms.json) file.
+
+Deploy these synonyms with the following command:
+
+```bash
+# Path: ./FAQ/server
+npm run algolia
+```
 
 #### Keys
 
@@ -74,12 +80,12 @@ npm run algolia
 
 #### Keys
 
-* Domain: _Found in your client's settings_
-* Client ID: _Found in your client's settings_
+* Domain: _Found in your Auth0 client settings on your [Auth0 dashboard](https://manage.auth0.com)_
+* Client ID: _Found in your Auth0 client settings on your [Auth0 dashboard](https://manage.auth0.com)_
 
 ### Google Cloud
 
-[Google Cloud](https://cloud.google.com/) is used to host the client on App Engine.
+[Google Cloud](https://cloud.google.com/) is used to host the front-end on App Engine.
 
 > Note: Google Cloud is an optional dependency
 
