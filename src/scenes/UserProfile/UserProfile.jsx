@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
-import NotFound from 'scenes/NotFound'
 import Loading from 'components/Loading'
 import Card, { CardText } from 'components/Card'
 
@@ -19,12 +18,8 @@ const UserProfile = props => {
     return <Loading />
   }
 
-  if (error) {
+  if (error || User === null) {
     return <div>Error :(</div>
-  }
-
-  if (User === null) {
-    return <NotFound {...props} />
   }
 
   const userLog = ['questions', 'answers', 'flags']
