@@ -1,0 +1,12 @@
+subscription {
+  Question(filter: { mutation_in: [CREATED] }) {
+    node {
+      id
+      title
+      slug
+      node {
+        id
+      }
+    }
+  }
+}

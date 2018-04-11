@@ -88,5 +88,14 @@ functions:
       code:
         src: ./src/random/random.js
 
+  slackNewQuestion:
+    type: subscription
+    query: ./src/slack/newQuestion.graphql
+    handler:
+      code:
+        src: ./src/slack/newQuestion.js
+        environment:
+          SLACK_CHANNEL_HOOK: ${env:SLACK_CHANNEL_HOOK}
+
 permissions:
   - operation: "*"
