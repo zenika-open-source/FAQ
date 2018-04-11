@@ -39,6 +39,10 @@
   text-decoration: underline;
 }
 
+.card .card-text img {
+  max-width: 100%;
+}
+
 .card .card-actions {
   display: flex;
   align-items: center;
