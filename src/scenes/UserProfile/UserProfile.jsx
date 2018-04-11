@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
+import { markdown } from 'services'
+
 import Loading from 'components/Loading'
 import Card, { CardText } from 'components/Card'
 
@@ -72,7 +74,7 @@ const UserProfile = props => {
                 <tr key={id}>
                   <td>{type}</td>
                   <td style={{whiteSpace: 'nowrap'}}>{at}</td>
-                  <td style={{wordBreak: 'break-word'}}><Link to={question.link}>{question.title}</Link></td>
+                  <td style={{wordBreak: 'break-word'}}><Link to={question.link}>{markdown.title(question.title)}</Link></td>
                 </tr>
               ))}
             </tbody>
