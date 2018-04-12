@@ -1,10 +1,7 @@
-import { gql } from 'apollo-boost'
+import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 
-import { auth, routing } from 'services'
-
-import { getNodeQuery } from 'scenes/Question/queries'
-import { getAllNodesQuery } from 'scenes/Home/queries'
+import { auth } from 'services'
 
 export const submitQuestionQuery = gql`
   mutation submitQuestion($title: String!, $userId: ID!) {
@@ -34,13 +31,6 @@ export const submitQuestion = graphql(submitQuestionQuery, {
         variables: { title, userId: auth.getUserNodeId() }
       })
     }
-  }),
-  options: props => ({
-    refetchQueries: [
-      {
-        query: getAllNodesQuery
-      }
-    ]
   })
 })
 
@@ -52,15 +42,5 @@ export const editQuestion = graphql(editQuestionQuery, {
         variables: { questionId, title }
       })
     }
-  }),
-  options: props => ({
-    refetchQueries: [
-      {
-        query: getNodeQuery,
-        variables: {
-          id: routing.getUIDFromSlug(props.match)
-        }
-      }
-    ]
   })
 })

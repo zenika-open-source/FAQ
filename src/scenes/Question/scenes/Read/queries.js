@@ -1,9 +1,7 @@
-import { gql } from 'apollo-boost'
+import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 
-import { auth, routing } from 'services'
-
-import { getNodeQuery } from 'scenes/Question/queries'
+import { auth } from 'services'
 
 export const createFlagQuery = gql`
   mutation createFlag($type: String!, $nodeId: ID!, $userId: ID!) {
@@ -17,23 +15,25 @@ export const createFlag = graphql(createFlagQuery, {
   name: 'createFlag',
   props: ({ createFlag }) => ({
     createFlag: (type, nodeId) => {
+      const userId = auth.getUserNodeId()
       return createFlag({
         variables: {
           type,
           nodeId,
-          userId: auth.getUserNodeId()
+          userId
+        },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          createFlag: {
+            id: '',
+            __typename: 'Flag',
+            type,
+            nodeId,
+            userId,
+            createdAt: new Date()
+          }
         }
       })
     }
-  }),
-  options: props => ({
-    refetchQueries: [
-      {
-        query: getNodeQuery,
-        variables: {
-          id: routing.getUIDFromSlug(props.match)
-        }
-      }
-    ]
   })
 })
