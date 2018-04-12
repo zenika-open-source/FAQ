@@ -52,7 +52,7 @@ _Used by: Front-end_
 
 This variable is an API Key with the following operation access rights: `search`. You can create an API key on your [Algolia dashboard](https://www.algolia.com/dashboard): Go to "API Keys > All API keys"
 
-> Note: Because this key is available in the front-end, you should only give him the `search` access right for security reasons.
+> Note: Because this key is available in the front-end, you should only give it the `search` access right for security reasons.
 
 ## Auth0
 
@@ -74,7 +74,7 @@ _Used by: Front-end & back-end_
 
 Its value should be the id of your Auth0 client against which the app should authenticate. It looks like a long string of random chars and can be found on the [Auth0 dashboard](https://manage.auth0.com): Go to "Clients > [Your client] > Settings"
 
-> If you want to use the FAQ Auth0 client, you may use `wq8LU1f5iXQ4HWL0F6Z07QDcSMgWPd1p`
+> If you have a zenika.com email address, you may use `wq8LU1f5iXQ4HWL0F6Z07QDcSMgWPd1p`
 
 ## Google Cloud
 
@@ -88,23 +88,23 @@ Its value should be the id of your Auth0 client against which the app should aut
 
 _Used by: Front-end_
 
-Its value should be the id of your Google Cloud application ID. It looks like a slug (eg: "my-project") and can be found on the [Google Cloud dashboard](https://console.cloud.google.com/home/dashboard).
+Its value should be the id of your Google Cloud project ID. It looks like a slug (eg: "my-project") and can be found on the [Google Cloud console](https://console.cloud.google.com).
 
 ## Graphcool
 
 [Graphcool](https://www.graph.cool/) is a Graphql-as-a-Service which holds the data. This is a required backing service, but you can deploy locally during development.
 
-When deploying for the first time, you will need to choose a target region (us, eu or asia). It will then print the endpoints.
+### Configuration
 
-Your target key is: `[region]/[app_id]`
+> Optional: If you want a local graphcool instance, run `npm run graphcool local up` from the `server` folder
 
-> Note: Don't forget your target key as it's especially difficult to retrieve it later.
+* Deploy the server: `npm run graphcool deploy` from the `server` folder
+* Choose the cluster of your server (_local, us, eu or asia_)
+* Choose the local name for your target key (_eg: "dev"_)
+* Choose the service name for your server (_eg: "faq"_)
+* After deployment the CLI will show the endpoints URIs to use to configure the front-end (see Environment variables below)
 
-If you want to configure a local graphcool instance, run the following command:
-
-```bash
-graphcool local up
-```
+After this configuration, you won't be asked all these information again when deploying.
 
 ### Environment variables
 
@@ -112,7 +112,11 @@ graphcool local up
 
 _Used by: Back-end_
 
-Its value represents the target of your Graphcool application. It has the following format `[region]/[app_id]` where `region` is what you chose when deploying for the first time.
+> Note: If you don't intend to deploy with a CI, you don't need this variable
+
+Its value represents the target of your Graphcool application. It has the following format `[cluster]/[app_id]` where `cluster` is what you chose when deploying for the first time.
+
+> Note: You can also find the target in the ./server/.graphcoolrc file after deploying at least once
 
 #### `REACT_APP_GRAPHCOOL_URI`
 
