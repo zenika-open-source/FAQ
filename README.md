@@ -33,8 +33,8 @@ Internal Knowledge Database for Zenika members - https://faq.zenika.com
 More documentation available here:
 
 * [Installation](/docs/installation.md)
-* [Deployment](docs/deployment.md)
-* [Contributing](docs/contributing.md)
+* [Deployment](/docs/deployment.md)
+* [Contributing](/docs/contributing.md)
 
 ## License
 
