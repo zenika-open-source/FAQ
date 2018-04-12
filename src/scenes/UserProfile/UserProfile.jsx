@@ -51,10 +51,6 @@ const UserProfile = props => {
           <div className="card-form">
             <label htmlFor="name">Name</label>
             <input name="name" className="card-input" value={User.name} readOnly />
-            <label htmlFor="givenName">Given name</label>
-            <input name="givenName" className="card-input" value={User.givenName} readOnly />
-            <label htmlFor="familyName">Family name</label>
-            <input name="familyName" className="card-input" value={User.familyName} readOnly />
             <label htmlFor="email">Email address</label>
             <input name="email" className="card-input" value={User.email} readOnly />
             <label htmlFor="picture">Picture link</label>
