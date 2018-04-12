@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Redirect } from 'react-router-dom'
+import { Redirect, Prompt } from 'react-router-dom'
 import omit from 'lodash/omit'
 
 import { compose } from 'react-apollo'
@@ -12,7 +12,12 @@ import { auth, markdown } from 'services'
 import NotFound from 'scenes/NotFound'
 
 import Loading from 'components/Loading'
-import Card, { CardTitle, CardText, CardActions } from 'components/Card'
+import Card, {
+  CardTitle,
+  CardText,
+  CardActions,
+  PermanentClosableCard
+} from 'components/Card'
 import Flags from 'components/Flags'
 import Button from 'components/Button'
 import onCtrlEnter from 'components/onCtrlEnter'
@@ -20,6 +25,7 @@ import onCtrlEnter from 'components/onCtrlEnter'
 import ActionMenu from '../../components/ActionMenu'
 
 import Sources from './components/Sources'
+import Tips from './components/Tips'
 
 import ReactMde, { ReactMdeCommands } from 'react-mde'
 import 'react-mde/lib/styles/css/react-mde-all.css'
@@ -31,7 +37,8 @@ class Answer extends Component {
     answer: { text: '', selection: null },
     loading: false,
     redirect: false,
-    sources: []
+    sources: [],
+    showTips: PermanentClosableCard.isOpen('tips_answer')
   }
 
   componentDidMount () {
@@ -121,8 +128,18 @@ class Answer extends Component {
       })
   }
 
+  openTips = () => {
+    this.setState({ showTips: true })
+    PermanentClosableCard.setValue('tips_answer', true)
+  }
+
+  closeTips = () => {
+    this.setState({ showTips: false })
+    PermanentClosableCard.setValue('tips_answer', false)
+  }
+
   render () {
-    const { loadingSubmit, redirect, answer } = this.state
+    const { loadingSubmit, redirect, answer, showTips } = this.state
     const { loading, error, ZNode } = this.props.data
 
     if (redirect) {
@@ -143,7 +160,18 @@ class Answer extends Component {
 
     return (
       <div>
-        <ActionMenu backLink={`/q/${ZNode.question.slug}-${ZNode.id}`} />
+        <Prompt message="Are you sure you want to leave this page with an unsaved answer?" />
+        <ActionMenu backLink={`/q/${ZNode.question.slug}-${ZNode.id}`}>
+          {!showTips && (
+            <Button
+              link
+              icon="lightbulb_outline"
+              label="Show tips"
+              onClick={this.openTips}
+            />
+          )}
+        </ActionMenu>
+        <Tips close={this.closeTips} open={showTips} />
         <Card style={{ marginTop: '0.3rem' }}>
           <CardTitle style={{ padding: '1.2rem' }}>
             <div className="grow">
@@ -167,7 +195,7 @@ class Answer extends Component {
           </CardText>
           <CardActions>
             <Button
-              label={ZNode.answer ? 'Edit' : 'Submit'}
+              label={ZNode.answer ? 'Save answer' : 'Submit answer'}
               primary
               raised
               disabled={answer.text.length === 0}

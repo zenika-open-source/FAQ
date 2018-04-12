@@ -26,6 +26,7 @@ const Searchbar = ({ text, search, loading, filters, onToggleCheck }) => (
       }
       value={text}
       onChange={e => search(e.target.value)}
+      onClear={() => search('')}
     />
     <div className="filters">
       {map(filters, (checked, filter) => (

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import uuid from 'uuid/v4'
 
@@ -7,13 +7,6 @@ import Button from 'components/Button'
 import Source from '../Source'
 
 class Sources extends Component {
-  componentDidUpdate () {
-    const { sources } = this.props
-    if (sources.length === 0) {
-      this.addSource()
-    }
-  }
-
   addSource = () => {
     const { sources, handleChange } = this.props
     handleChange(
@@ -48,31 +41,43 @@ class Sources extends Component {
     const { sources } = this.props
     return (
       <div style={{ borderTop: '1px dashed var(--secondary-color)' }}>
-        <h3 style={{ color: 'var(--primary-color)', margin: '0.7rem' }}>
-          Sources:
-        </h3>
-        {sources.map(source => (
-          <Source
-            key={source.id}
-            source={source}
-            changeLabel={label => this.changeLabel(source.id, label)}
-            changeUrl={url => this.changeUrl(source.id, url)}
-            delete={() => this.removeSource(source.id)}
-          />
-        ))}
-        <div
-          style={{
-            textAlign: 'center'
-          }}
-        >
+        {sources.length > 0 ? (
+          <Fragment>
+            <h3 style={{ color: 'var(--primary-color)', margin: '0.7rem' }}>
+              Sources:
+            </h3>
+            {sources.map(source => (
+              <Source
+                key={source.id}
+                source={source}
+                changeLabel={label => this.changeLabel(source.id, label)}
+                changeUrl={url => this.changeUrl(source.id, url)}
+                delete={() => this.removeSource(source.id)}
+              />
+            ))}
+            <div
+              style={{
+                textAlign: 'center'
+              }}
+            >
+              <Button
+                icon="add"
+                label="More sources"
+                link
+                raised
+                onClick={this.addSource}
+              />
+            </div>
+          </Fragment>
+        ) : (
           <Button
             icon="add"
-            label="More sources"
+            label="Add a source link"
             link
-            raised
+            style={{ marginTop: '0.3rem' }}
             onClick={this.addSource}
           />
-        </div>
+        )}
       </div>
     )
   }

@@ -1,0 +1,7 @@
+type RandomPayload {
+  id: String
+}
+
+extend type Query {
+  randomNode(flag: String): RandomPayload
+}
