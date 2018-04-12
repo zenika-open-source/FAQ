@@ -88,12 +88,5 @@ functions:
       code:
         src: ./src/random/random.js
 
-  cleanUpNames:
-    type: resolver
-    schema: ./src/dataMigrations/cleanUpNames.graphql
-    handler:
-      code:
-        src: ./src/dataMigrations/cleanUpNames.js
-
 permissions:
   - operation: "*"
