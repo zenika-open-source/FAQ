@@ -64,6 +64,15 @@ class Search {
   }
 }
 
-const search = new Search()
+const searchStub = {
+  simpleQuery (text) {
+    return this.query({ query: text })
+  },
+  query (params) {
+    return Promise.resolve({ nodes: [], params })
+  }
+}
+
+const search = process.env.REACT_APP_ALGOLIA_APP_ID ? new Search() : searchStub
 
 export default search

@@ -1,13 +1,17 @@
 const algoliasearch = require('algoliasearch')
 
-const client = algoliasearch(
-  process.env.ALGOLIA_APP_ID,
-  process.env.ALGOLIA_API_KEY
-)
-
-const index = client.initIndex('Nodes')
-
 export default async event => {
+  if (!process.env.ALGOLIA_APP_ID || !process.env.ALGOLIA_API_KEY_ALL) {
+    return { error: 'Algolia is absent from the environment variables' }
+  }
+
+  const client = algoliasearch(
+    process.env.ALGOLIA_APP_ID,
+    process.env.ALGOLIA_API_KEY_ALL
+  )
+
+  const index = client.initIndex('Nodes')
+
   const modelName = Object.keys(event.data)[0]
 
   const { mutation, node, previousValues } = event.data[modelName]
