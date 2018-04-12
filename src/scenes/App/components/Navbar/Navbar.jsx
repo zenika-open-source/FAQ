@@ -24,6 +24,14 @@ const Navbar = ({ history }) => {
           </div>
         </Link>
         <div className="navigation">
+          <a
+            href="https://github.com/Zenika/FAQ"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <GithubIcon />
+            <span>report a bug</span>
+          </a>
           {user && (
             <Dropdown
               button={
@@ -33,7 +41,9 @@ const Navbar = ({ history }) => {
                 </div>
               }
             >
-              <DropdownItem icon="account_box" disabled>
+              <DropdownItem
+                icon="account_box"
+                onClick={() => history.push('/user-profile')}>
                 Profile
               </DropdownItem>
               <DropdownDivider />

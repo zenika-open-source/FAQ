@@ -23,3 +23,14 @@
   color: white;
   background-color: var(--warning-color);
 }
+
+.row-on-mobile {
+  display: flex;
+}
+
+@media screen and (max-width: 480px) {
+  /* --mobile-breakpoint */
+  .row-on-mobile {
+    flex-direction: column;
+  }
+}
