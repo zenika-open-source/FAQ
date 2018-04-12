@@ -53,7 +53,7 @@ vim server/.env.local
 
 [Algolia](https://www.algolia.com/) is used for full-text search.
 
-> Note: Algolia is optional for the development.
+> Note: Algolia is optional for development.
 >
 > If you do not indicate an API key for Algolia, the application will simply
 > return an empty result when searching
