@@ -1,4 +1,4 @@
-import { gql } from 'apollo-boost'
+import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 
 export const getRandomNodeQuery = gql`
