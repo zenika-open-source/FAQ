@@ -20,7 +20,7 @@ export default async event => {
       process.env['MAILGUN_DOMAIN']
     }/messages`
 
-    const from = 'FAQ Zenika <no-reply@faq.zenika.com>'
+    const from = `FAQ Zenika <no-reply@${process.env['FAQ_URL']}>`
     const { to, subject, text, html } = event.data
     const recipientVariables = event.data.recipientVariables || {}
 

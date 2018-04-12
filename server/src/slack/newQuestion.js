@@ -27,7 +27,7 @@ export default async event => {
 
   const question = event.data.Question.node
 
-  const url = `https://faq.zenika.com/q/${question.slug}-${question.id}`
+  const url = `${process.env['FAQ_URL']}/q/${question.slug}-${question.id}`
 
   const message = {
     text: `<${url}|${emojify(question.title)}>`
