@@ -15,7 +15,7 @@ FAQ has the following integration with slack:
 
 ### Configuration
 
-In order to integrate with Slack, you will need to create an application. It can easily be done using the [Slack "Build" dashboard](https://api.slack.com/). Follow the instructions from Slack to create your app. See below for configuration for your environment variables.
+In order to integrate with Slack, you will need to create an application. It can be done using the [Slack "Build" dashboard](https://api.slack.com/). Follow the instructions from Slack to create your app. See below for configuration for your environment variables.
 
 ### Environment variables
 
@@ -23,7 +23,7 @@ In order to integrate with Slack, you will need to create an application. It can
 
 _Used by: Back-end_
 
-This variable is a hook which is called by the backend in order to send the message to the channel. You can configure a hook on the [Slack "Build" dashboard](https://api.slack.com/). Choose your app, then go to "Features > Incoming Webhooks". Active the feature and create a hook for the dedicated channel you wish to send questions to. The generated url is what you need for this variable.
+This variable is a hook URI which is called by the backend in order to send the message to the channel. You can configure a hook on the [Slack "Build" dashboard](https://api.slack.com/). Choose your app, then go to "Features > Incoming Webhooks". Active the feature and create a hook for the dedicated channel you wish to send questions to. The generated url is what you need for this variable.
 
 ## Workplace
 
@@ -35,4 +35,4 @@ FAQ has the following integration with Workplace:
 
 ### Configuration
 
-There is no configuration needed for workplace to work.
+There is no configuration needed for workplace to work. Indeed, to share something with the Worplace API, we only need to open a popup with this url: `https://work.facebook.com/sharer.php?display=popup&u=[the_url_to_share]`
