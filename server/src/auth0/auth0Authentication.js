@@ -70,8 +70,6 @@ const createGraphCoolUser = (auth0UserId, profile, api) =>
             auth0UserId: $auth0UserId
             email: $email
             name: $name
-            givenName: null
-            familyName: null
             picture: $picture
             locale: $locale
           ){
