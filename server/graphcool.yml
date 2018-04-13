@@ -73,6 +73,7 @@ functions:
         environment:
           MAILGUN_DOMAIN: ${env:MAILGUN_DOMAIN}
           MAILGUN_API_KEY: ${env:MAILGUN_API_KEY}
+          FAQ_URL: ${env:FAQ_URL}
 
   emailOnAnswerCreated:
     type: subscription
@@ -87,6 +88,16 @@ functions:
     handler:
       code:
         src: ./src/random/random.js
+
+  slackNewQuestion:
+    type: subscription
+    query: ./src/slack/newQuestion.graphql
+    handler:
+      code:
+        src: ./src/slack/newQuestion.js
+        environment:
+          SLACK_CHANNEL_HOOK: ${env:SLACK_CHANNEL_HOOK}
+          FAQ_URL: ${env:FAQ_URL}
 
 permissions:
   - operation: "*"

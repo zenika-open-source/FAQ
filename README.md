@@ -15,18 +15,23 @@ Internal Knowledge Database for Zenika members - https://faq.zenika.com
 
 ## Architecture
 
-#### Frontend:
+#### Frontend
 
 * **JS:** React (react-router, apollo)
 * **CSS:** Custom-made
 
-#### Backend:
+#### Backend
 
 * **Graphcool:** GraphQL-as-a-Service, Function-as-a-Service and hosting the data
 * **Algolia:** FullTextSearch-as-a-Service
 * **Mailgun:** Mail-as-a-Service
 * **Google App Engine:** Hosting-as-a-Service (static)
 * **Auth0:** Auth-as-a-Service
+
+#### Integrations
+
+* **Slack:** Sending new questions into a dedicated channel
+* **Workplace:** Button to share questions
 
 ## Documentation
 
