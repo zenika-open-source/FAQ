@@ -3,22 +3,22 @@ const fromEvent = require('graphcool-lib').fromEvent
 const htmlEmail = require('./onAnswerCreated.email.js').htmlCreate
 
 const sendEmailQuery = `
-	mutation sendEmail($to: [String!]!, $subject: String!, $text: String!, $html: String!){
-		sendEmail(
-			to: $to
-			subject: $subject
-			text: $text,
-			html: $html
-		) {
-			success
-			response
-		}
-	}
+  mutation sendEmail($to: [String!]!, $subject: String!, $text: String!, $html: String!){
+    sendEmail(
+      to: $to
+      subject: $subject
+      text: $text,
+      html: $html
+    ) {
+      success
+      response
+    }
+  }
 `
 
 const createMail = node => {
   const text = `
-Hi ${node.question.user.givenName}!
+Hi ${node.question.user.name}!
 
 ${node.answer.user.name} answered your question titled "${node.question.title}":
 

@@ -82,9 +82,6 @@ type User @model {
   name: String
   email: String
 
-  givenName: String
-  familyName: String
-
   picture: String
   locale: String
 
