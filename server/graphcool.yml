@@ -21,7 +21,7 @@ functions:
         src: ./src/algolia/sync.js
         environment:
           ALGOLIA_APP_ID: ${env:REACT_APP_ALGOLIA_APP_ID}
-          ALGOLIA_API_KEY: ${env:REACT_APP_ALGOLIA_API_KEY_ALL}
+          ALGOLIA_API_KEY_ALL: ${env:REACT_APP_ALGOLIA_API_KEY_ALL}
 
   algoliaQuestion:
     type: subscription
@@ -31,7 +31,7 @@ functions:
         src: ./src/algolia/sync.js
         environment:
           ALGOLIA_APP_ID: ${env:REACT_APP_ALGOLIA_APP_ID}
-          ALGOLIA_API_KEY: ${env:REACT_APP_ALGOLIA_API_KEY_ALL}
+          ALGOLIA_API_KEY_ALL: ${env:REACT_APP_ALGOLIA_API_KEY_ALL}
 
   algoliaAnswer:
     type: subscription
@@ -41,7 +41,7 @@ functions:
         src: ./src/algolia/sync.js
         environment:
           ALGOLIA_APP_ID: ${env:REACT_APP_ALGOLIA_APP_ID}
-          ALGOLIA_API_KEY: ${env:REACT_APP_ALGOLIA_API_KEY_ALL}
+          ALGOLIA_API_KEY_ALL: ${env:REACT_APP_ALGOLIA_API_KEY_ALL}
 
   slugCreate:
     type: operationBefore
