@@ -8,8 +8,6 @@ export const getAllPersonalDataQuery = gql`
     User(id: $userId) {
       createdAt
       email
-      familyName
-      givenName
       name
       picture
       flags {
