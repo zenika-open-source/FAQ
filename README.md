@@ -28,6 +28,11 @@ Internal Knowledge Database for Zenika members - https://faq.zenika.com
 * **Google App Engine:** Hosting-as-a-Service (static)
 * **Auth0:** Auth-as-a-Service
 
+#### Integrations:
+
+* **Slack:** Sending new questions into a dedicated channel
+* **Workplace:** Button to share questions
+
 ## Documentation
 
 More documentation available here:

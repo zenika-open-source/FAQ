@@ -23,7 +23,7 @@ npm install
 
 ## Configuration
 
-The app requires some environment variables to properly wire up to its backing services. See the [backing services documentation](/docs/backing_services.md) for more information on which environment variables you need.
+The app requires some environment variables to properly wire up to its backing services. See the [backing services documentation](/docs/backing_services.md) and the [integrations documentation](/docs/integrations.md) for more information on which environment variables you need.
 
 You may define environment variables manually or you may use an `.env.local` file. This file is picked up by npm scripts. You can read an introduction to `.env` files [here](https://www.npmjs.com/package/dotenv). An `.env.local.example` file is provided with the project to initialize your own copy of `.env.local`.
 

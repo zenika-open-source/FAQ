@@ -1,6 +1,6 @@
 # Backing services
 
-The project has the following [backing services](#backing-services):
+The project has the following backing services:
 
 * [Algolia](#algolia)\*
 * [Auth0](#Auth0)
