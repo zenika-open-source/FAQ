@@ -35,6 +35,10 @@ Internal Knowledge Database for Zenika members - https://faq.zenika.com
 
 ## Documentation
 
+New to this project ?
+
+* [Step-by-step installation](/docs/step_by_step.md) with only the required backing services
+
 More documentation available here:
 
 * [Installation](/docs/installation.md)

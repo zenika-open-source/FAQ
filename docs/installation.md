@@ -2,6 +2,17 @@
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
+## Global dependencies
+
+Before you install this project, you will need the following dependencies:
+
+* Docker >= 16 and docker-compose >= 1.18 (See https://www.docker.com)
+* Node >= 8 and npm >= 5 (See https://nodejs.org)
+* Webpack >= 4 (`npm install -g webpack`)
+* Graphcool >= 0.11.5 (`npm install -g graphcool-framework`)
+
+> These are the currently known minimum version required. An earlier version may still work.
+
 ## Installation
 
 First, clone the repository
