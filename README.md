@@ -40,6 +40,8 @@ More documentation available here:
 * [Installation](/docs/installation.md)
 * [Deployment](/docs/deployment.md)
 * [Contributing](/docs/contributing.md)
+* [Backing services](/docs/backing_services.md)
+* [Integrations](/docs/integrations.md)
 
 ## License
 
