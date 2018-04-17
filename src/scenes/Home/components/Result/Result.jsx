@@ -20,9 +20,9 @@ class Result extends Component {
     }
   }
 
-  componentWillReceiveProps (nextProps) {
-    if (nextProps.collapsed !== this.state.collapsed) {
-      this.setState({ collapsed: nextProps.collapsed })
+  static getDerivedStateFromProps (nextProps, prevState) {
+    return {
+      collapsed: nextProps.collapsed
     }
   }
 

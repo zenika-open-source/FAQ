@@ -34,6 +34,7 @@ const CtrlEnterCardText = onCtrlEnter(CardText)
 
 class Answer extends Component {
   state = {
+    nodeLoaded: false,
     answer: { text: '', selection: null },
     loading: false,
     redirect: false,
@@ -41,27 +42,19 @@ class Answer extends Component {
     showTips: PermanentClosableCard.isOpen('tips_answer')
   }
 
-  componentDidMount () {
-    const { ZNode } = this.props.data
+  static getDerivedStateFromProps (nextProps, prevState) {
+    const { data: { ZNode } } = nextProps
+    const { nodeLoaded } = prevState
 
-    if (ZNode && ZNode.answer) {
-      this.setState({
+    if (!nodeLoaded && ZNode && ZNode.answer) {
+      return {
+        nodeLoaded: true,
         answer: { text: ZNode.answer.content },
         sources: ZNode.answer.sources
-      })
+      }
     }
-  }
 
-  componentWillReceiveProps (nextProps) {
-    const ZNode = this.props.data.ZNode
-    const nextZNode = nextProps.data.ZNode
-
-    if (!ZNode && nextZNode && nextZNode.answer) {
-      this.setState({
-        answer: { text: nextZNode.answer.content },
-        sources: nextZNode.answer.sources
-      })
-    }
+    return null
   }
 
   handleChange (value) {

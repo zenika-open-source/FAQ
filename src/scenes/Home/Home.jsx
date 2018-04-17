@@ -19,35 +19,37 @@ class Home extends Component {
     super(props)
 
     this.state = {
-      searchText: this.getSearchFromURL(props) || '',
+      searchText: '',
+      nextSearchText: '',
       searchLoading: false,
       filters: { answered: true, unanswered: true },
       nodes: null
     }
   }
 
-  getSearchFromURL (props) {
+  static getSearchFromURL (props) {
     const q = routing.getQueryParam(props.location, 'q')
     return q ? q.replace(/\+/g, ' ') : null
   }
 
-  componentDidMount () {
-    const { searchText } = this.state
-    if (searchText) {
-      this.handleSearchChange(searchText)
+  static getDerivedStateFromProps (nextProps, prevState) {
+    const { searchText } = prevState
+    const nextSearchText = Home.getSearchFromURL(nextProps)
+
+    if (searchText !== nextSearchText) {
+      return {
+        nextSearchText
+      }
     }
+
+    return null
   }
 
-  componentWillReceiveProps (nextProps) {
-    const currentSearchParam = this.getSearchFromURL(this.props)
-    const nextSearchParam = this.getSearchFromURL(nextProps)
-    const nextLocationState = nextProps.location.state
+  componentDidUpdate () {
+    const { nextSearchText } = this.state
 
-    if (
-      currentSearchParam !== nextSearchParam &&
-      (!nextLocationState || !nextLocationState.searching)
-    ) {
-      this.handleSearchChange(nextSearchParam)
+    if (nextSearchText) {
+      this.handleSearchChange(nextSearchText)
     }
   }
 
@@ -56,35 +58,33 @@ class Home extends Component {
 
     value = value || ''
 
-    this.setState({ searchText: value })
+    this.setState({ searchText: value, nextSearchText: null })
 
     if (value !== '') {
-      this.setState({ searchLoading: true })
-      this.retrieveResults(value)
+      history.replace({ search: '?q=' + value.replace(/\s/g, '+') })
     } else {
       this.setState({ nodes: null })
       history.replace({ search: null })
     }
+
+    this.retrieveResults(value)
   }
 
   retrieveResults = debounce(value => {
-    const { history } = this.props
-
-    history.replace({
-      search: '?q=' + value.replace(/\s/g, '+'),
-      state: { searching: true }
-    })
-    search
-      .simpleQuery(value)
-      .then(({ nodes, params }) => {
-        if (this.state.searchText === params.query) {
-          this.setState({ nodes, searchLoading: false })
-        }
-      })
-      .catch(err => {
-        // eslint-disable-next-line
-        console.log(err)
-      })
+    if (value !== '') {
+      this.setState({ searchLoading: true })
+      search
+        .simpleQuery(value)
+        .then(({ nodes, params }) => {
+          if (this.state.searchText === params.query) {
+            this.setState({ nodes, searchLoading: false })
+          }
+        })
+        .catch(err => {
+          // eslint-disable-next-line
+          console.log(err)
+        })
+    }
   }, 200)
 
   render () {
