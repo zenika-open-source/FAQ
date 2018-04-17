@@ -3,5 +3,15 @@
     "objectID": "note-de-frais",
     "type": "synonym",
     "synonyms": ["NDF", "note de frais"]
+  },
+  {
+    "objectID": "compte-rendu-activite",
+    "type": "synonym",
+    "synonyms": ["CRA", "compte-rendu d'activité"]
+  },
+  {
+    "objectID": "voyage",
+    "type": "synonym",
+    "synonyms": ["voyage", "déplacement"]
   }
 ]
