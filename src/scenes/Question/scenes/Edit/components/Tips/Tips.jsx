@@ -21,7 +21,6 @@ const Tips = props => (
             <b>why</b>.
           </span>
         </li>
-        <li>If the wording is not perfect, someone else can improve it.</li>
         <li>Stay objective and factual.</li>
       </ul>
     </div>

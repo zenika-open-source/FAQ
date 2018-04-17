@@ -8,9 +8,9 @@ const NotFound = ({ history }) => (
   <div>
     <Button
       icon="chevron_left"
-      label="Go back"
+      label="Home"
       link
-      onClick={() => history.goBack()}
+      onClick={() => history.push('/')}
     />
     <div style={{ textAlign: 'center' }}>
       <h1>Ooops! 404</h1>
