@@ -30,37 +30,32 @@ class Edit extends Component {
 
     const { location } = this.props
 
-    this.initialQuestion = location.state ? location.state.question : ''
-    this.isEditing = !!this.props.match.params.slug
+    const initialQuestion = location.state ? location.state.question : ''
 
     this.state = {
-      question: this.initialQuestion,
+      nodeLoaded: false,
+      initialQuestion: initialQuestion,
+      isEditing: !!this.props.match.params.slug,
+      question: initialQuestion,
       loadingSubmit: false,
       slug: null,
       showTips: PermanentClosableCard.isOpen('tips_question')
     }
   }
 
-  componentDidMount () {
-    if (this.isEditing) {
-      const { ZNode } = this.props.data
-      if (ZNode) {
-        this.initialQuestion = ZNode.question.title
-        this.setState({ question: ZNode.question.title })
+  static getDerivedStateFromProps (nextProps, prevState) {
+    const { nodeLoaded, isEditing } = prevState
+    const { data: { ZNode } } = nextProps
+
+    if (!nodeLoaded && isEditing && ZNode) {
+      return {
+        nodeLoaded: true,
+        initialQuestion: ZNode.question.title,
+        question: ZNode.question.title
       }
     }
-  }
 
-  componentWillReceiveProps (nextProps) {
-    if (this.isEditing) {
-      const ZNode = this.props.data.ZNode
-      const nextZNode = nextProps.data.ZNode
-
-      if (!ZNode && nextZNode) {
-        this.initialQuestion = nextZNode.question.title
-        this.setState({ question: nextZNode.question.title })
-      }
-    }
+    return null
   }
 
   handleChange = e => {
@@ -68,7 +63,8 @@ class Edit extends Component {
   }
 
   submitForm = () => {
-    this.isEditing ? this.editQuestion() : this.submitQuestion()
+    const { isEditing } = this.state
+    isEditing ? this.editQuestion() : this.submitQuestion()
   }
 
   submitQuestion = () => {
@@ -120,7 +116,14 @@ class Edit extends Component {
 
   render () {
     const { match } = this.props
-    const { loadingSubmit, slug, question, showTips } = this.state
+    const {
+      isEditing,
+      initialQuestion,
+      loadingSubmit,
+      slug,
+      question,
+      showTips
+    } = this.state
 
     if (slug) {
       return <Redirect to={`/q/${slug}`} />
@@ -130,7 +133,7 @@ class Edit extends Component {
       return <Loading />
     }
 
-    if (this.isEditing) {
+    if (isEditing) {
       const { loading, error, ZNode } = this.props.data
 
       if (loading) {
@@ -150,9 +153,9 @@ class Edit extends Component {
       <div className="Edit">
         <Prompt message="Are you sure you want to leave this page with an unsaved question?" />
         <ActionMenu
-          backLabel={this.isEditing ? 'Back' : 'Home'}
-          backLink={this.isEditing ? `/q/${match.params.slug}` : '/'}
-          title={this.isEditing ? 'Edit question' : 'Ask a new question'}
+          backLabel={isEditing ? 'Back' : 'Home'}
+          backLink={isEditing ? `/q/${match.params.slug}` : '/'}
+          title={isEditing ? 'Edit question' : 'Ask a new question'}
         >
           {!showTips && (
             <Button
@@ -178,10 +181,8 @@ class Edit extends Component {
           </CardText>
           <CardActions>
             <Button
-              label={this.isEditing ? 'Edit' : 'Submit'}
-              disabled={
-                question.length === 0 || question === this.initialQuestion
-              }
+              label={isEditing ? 'Edit' : 'Submit'}
+              disabled={question.length === 0 || question === initialQuestion}
               primary
               raised
               onClick={this.submitForm}
