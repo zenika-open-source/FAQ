@@ -58,6 +58,8 @@ This variable is an API Key with the following operation access rights: `search`
 
 [Auth0](https://auth0.com/) is used for authentication. This is required dependency.
 
+> Note: Auth0 is required
+
 ### Environment variables
 
 #### `REACT_APP_AUTH0_DOMAIN`
@@ -93,6 +95,8 @@ Its value should be the id of your Google Cloud project ID. It looks like a slug
 ## Graphcool
 
 [Graphcool](https://www.graph.cool/) is a Graphql-as-a-Service which holds the data. This is a required backing service, but you can deploy locally during development.
+
+> Note: Graphcool is required but you can use a local instance
 
 ### Configuration
 
