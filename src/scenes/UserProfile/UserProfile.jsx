@@ -57,22 +57,24 @@ class UserProfile extends Component {
     }
 
     const userLog = ['questions', 'answers', 'flags']
-      .map(entityType => User[entityType].map(({id, createdAt, node}) => ({
-        type: {
-          questions: 'Ask',
-          answers: 'Answer',
-          flags: 'Flag'
-        }[entityType],
-        id,
-        at: createdAt,
-        question: {
-          link: `/q/${node.question.slug}-${node.id}`,
-          title: node.question.title
-        }
-      })))
+      .map(entityType =>
+        User[entityType].map(({ id, createdAt, node }) => ({
+          type: {
+            questions: 'Ask',
+            answers: 'Answer',
+            flags: 'Flag'
+          }[entityType],
+          id,
+          at: createdAt,
+          question: {
+            link: `/q/${node.question.slug}-${node.id}`,
+            title: node.question.title
+          }
+        }))
+      )
       .reduce((all, entities) => all.concat(entities))
       // sort by date
-      .sort((a, b) => a.at < b.at ? 1 : a.at > b.at ? -1 : 0)
+      .sort((a, b) => (a.at < b.at ? 1 : a.at > b.at ? -1 : 0))
 
     const { savingIdentity, identity: { name, email, picture } } = this.state
 
@@ -82,7 +84,8 @@ class UserProfile extends Component {
           <CardText>
             <h1>Profile</h1>
             <p>
-              This page displays all your personal data (as defined by the GDPR) processed by FAQ.
+              This page displays all your personal data (as defined by the GDPR)
+              processed by FAQ.
             </p>
           </CardText>
         </Card>
@@ -91,12 +94,23 @@ class UserProfile extends Component {
             <h1>Identity</h1>
             <form className="card-form">
               <label htmlFor="name">Name</label>
-              <input name="name" className="card-input" value={name} onChange={e => this.onIdentityChange(e)} autoComplete="off" />
+              <input
+                name="name"
+                className="card-input"
+                value={name}
+                onChange={e => this.onIdentityChange(e)}
+                autoComplete="off"
+              />
               <label htmlFor="email">Email address</label>
-              <input name="email" className="card-input" value={email} onChange={e => this.onIdentityChange(e)} />
+              <input
+                name="email"
+                className="card-input"
+                value={email}
+                onChange={e => this.onIdentityChange(e)}
+              />
               <label htmlFor="picture">Picture link</label>
-							<div style={{display: 'flex', alignItems: 'center'}}>
-								<Avatar
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Avatar
                   image={User.picture}
                   style={{
                     width: '60px',
@@ -104,16 +118,24 @@ class UserProfile extends Component {
                     marginRight: '20px'
                   }}
                 />
-              	<input name="picture" className="card-input" value={picture} onChange={e => this.onIdentityChange(e)} />
-							</div>
-						</form>
+                <input
+                  name="picture"
+                  className="card-input"
+                  value={picture}
+                  onChange={e => this.onIdentityChange(e)}
+                />
+              </div>
+            </form>
             <CardActions>
               <Button
                 primary
                 type="button"
                 disabled={savingIdentity}
-                onClick={() => this.updateIdentity(User.id, this.state.identity)}>
-                {savingIdentity?'Saving...':'Save'}
+                onClick={() =>
+                  this.updateIdentity(User.id, this.state.identity)
+                }
+              >
+                {savingIdentity ? 'Saving...' : 'Save'}
               </Button>
             </CardActions>
           </CardText>
@@ -130,11 +152,15 @@ class UserProfile extends Component {
                 </tr>
               </thead>
               <tbody>
-                {userLog.map(({type, id, at, question}) => (
+                {userLog.map(({ type, id, at, question }) => (
                   <tr key={id}>
                     <td>{type}</td>
-                    <td style={{whiteSpace: 'nowrap'}}>{at}</td>
-                    <td style={{wordBreak: 'break-word'}}><Link to={question.link}>{markdown.title(question.title)}</Link></td>
+                    <td style={{ whiteSpace: 'nowrap' }}>{at}</td>
+                    <td style={{ wordBreak: 'break-word' }}>
+                      <Link to={question.link}>
+                        {markdown.title(question.title)}
+                      </Link>
+                    </td>
                   </tr>
                 ))}
               </tbody>
