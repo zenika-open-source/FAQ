@@ -7,6 +7,7 @@ import { markdown } from 'services'
 import Loading from 'components/Loading'
 import Button from 'components/Button'
 import Card, { CardText, CardActions } from 'components/Card'
+import Avatar from 'components/Avatar'
 
 import { compose } from 'react-apollo'
 import { getAllPersonalData, updateIdentity } from './queries'
@@ -90,19 +91,29 @@ class UserProfile extends Component {
             <h1>Identity</h1>
             <form className="card-form">
               <label htmlFor="name">Name</label>
-              <input name="name" className="card-input" value={name} onChange={e => this.onIdentityChange(e)} />
+              <input name="name" className="card-input" value={name} onChange={e => this.onIdentityChange(e)} autoComplete="off" />
               <label htmlFor="email">Email address</label>
               <input name="email" className="card-input" value={email} onChange={e => this.onIdentityChange(e)} />
               <label htmlFor="picture">Picture link</label>
-              <input name="picture" className="card-input" value={picture} onChange={e => this.onIdentityChange(e)} />
-            </form>
+							<div style={{display: 'flex', alignItems: 'center'}}>
+								<Avatar
+                  image={User.picture}
+                  style={{
+                    width: '60px',
+                    height: '60px',
+                    marginRight: '20px'
+                  }}
+                />
+              	<input name="picture" className="card-input" value={picture} onChange={e => this.onIdentityChange(e)} />
+							</div>
+						</form>
             <CardActions>
               <Button
                 primary
                 type="button"
                 disabled={savingIdentity}
                 onClick={() => this.updateIdentity(User.id, this.state.identity)}>
-                Save
+                {savingIdentity?'Saving...':'Save'}
               </Button>
             </CardActions>
           </CardText>
