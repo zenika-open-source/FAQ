@@ -45,13 +45,13 @@ class Edit extends Component {
 
   static getDerivedStateFromProps (nextProps, prevState) {
     const { nodeLoaded, isEditing } = prevState
-    const { data: { ZNode } } = nextProps
+    const { data } = nextProps
 
-    if (!nodeLoaded && isEditing && ZNode) {
+    if (!nodeLoaded && isEditing && data && data.ZNode) {
       return {
         nodeLoaded: true,
-        initialQuestion: ZNode.question.title,
-        question: ZNode.question.title
+        initialQuestion: data.ZNode.question.title,
+        question: data.ZNode.question.title
       }
     }
 
