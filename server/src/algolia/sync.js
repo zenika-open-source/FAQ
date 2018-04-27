@@ -14,14 +14,68 @@ export default async event => {
 
   const modelName = Object.keys(event.data)[0]
 
-  const { mutation, node, previousValues } = event.data[modelName]
+  const { mutation, previousValues } = event.data[modelName]
+  const node = event.data[modelName].node.node
 
-  if (mutation === 'CREATED' && modelName === 'Question') {
-    return index.addObject(node.node)
-  } else if (mutation === 'DELETED' && modelName === 'ZNode') {
-    return index.deleteObject(previousValues.id)
-  } else {
-    return index.saveObject(node.node)
+  const functions = {
+    ZNode: {
+      DELETED: () => index.deleteObject(previousValues.id)
+    },
+    Question: {
+      CREATED: () =>
+        index.addObject({
+          objectID: node.id,
+          question: node.question,
+          tag: node.tags.map(tag => tag.label)
+        }),
+      UPDATED: () =>
+        index.partialUpdateObject({
+          objectID: node.id,
+          question: node.question
+        })
+    },
+    Answer: {
+      CREATED: () =>
+        index.partialUpdateObject({ objectID: node.id, answer: node.answer }),
+      UPDATED: () =>
+        index.partialUpdateObject({ objectID: node.id, answer: node.answer })
+    },
+    Flag: {
+      CREATED: () =>
+        index.partialUpdateObject({
+          objectID: node.id,
+          flag: node.flags
+            .map(flag => flag.type)
+            .concat(node.answer ? [] : ['unanswered'])
+        }),
+      DELETED: () =>
+        index.partialUpdateObject({
+          objectID: node.id,
+          flag: node.flags
+            .map(flag => flag.type)
+            .concat(node.answer ? [] : ['unanswered'])
+        })
+    },
+    Tag: {
+      CREATED: () =>
+        index.partialUpdateObject({
+          objectID: node.id,
+          tag: node.tags.map(tag => tag.label)
+        }),
+      DELETED: () =>
+        index.partialUpdateObject({
+          objectID: node.id,
+          tag: node.tags.map(tag => tag.label)
+        })
+    }
+  }
+
+  if (functions[modelName] && functions[modelName][mutation]) {
+    return functions[modelName][mutation]()
+  }
+
+  return {
+    error: `${modelName} ${mutation} did not trigger an indexing operation`
   }
 
   // Current limitation:

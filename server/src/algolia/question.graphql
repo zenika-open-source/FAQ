@@ -4,13 +4,19 @@ subscription {
     node {
       id
       node {
-        objectID: id
+        id
         question {
           title
           slug
         }
         answer {
           content
+        }
+        flags {
+          type
+        }
+        tags {
+          label
         }
       }
     }

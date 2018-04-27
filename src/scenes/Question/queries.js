@@ -42,6 +42,10 @@ export const getNodeQuery = gql`
         }
         createdAt
       }
+      tags {
+        id
+        label
+      }
     }
   }
 `

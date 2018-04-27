@@ -29,3 +29,7 @@ index.batchSynonyms(
     console.log(content)
   }
 )
+
+index.setSettings({
+  attributesForFaceting: ['tag', 'flag']
+})

@@ -43,6 +43,26 @@ functions:
           ALGOLIA_APP_ID: ${env:REACT_APP_ALGOLIA_APP_ID}
           ALGOLIA_API_KEY_ALL: ${env:REACT_APP_ALGOLIA_API_KEY_ALL}
 
+  algoliaFlag:
+    type: subscription
+    query: ./src/algolia/flag.graphql
+    handler:
+      code:
+        src: ./src/algolia/sync.js
+        environment:
+          ALGOLIA_APP_ID: ${env:REACT_APP_ALGOLIA_APP_ID}
+          ALGOLIA_API_KEY_ALL: ${env:REACT_APP_ALGOLIA_API_KEY_ALL}
+
+  algoliaTag:
+    type: subscription
+    query: ./src/algolia/tag.graphql
+    handler:
+      code:
+        src: ./src/algolia/sync.js
+        environment:
+          ALGOLIA_APP_ID: ${env:REACT_APP_ALGOLIA_APP_ID}
+          ALGOLIA_API_KEY_ALL: ${env:REACT_APP_ALGOLIA_API_KEY_ALL}
+
   slugCreate:
     type: operationBefore
     operation: Question.create
@@ -56,6 +76,13 @@ functions:
     handler:
       code:
         src: ./src/slug/slug.js
+
+  fullUpdateQuestion:
+    type: resolver
+    schema: ./src/question/update.graphql
+    handler:
+      code:
+        src: ./src/question/update.js
 
   fullUpdateAnswer:
     type: resolver

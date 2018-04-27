@@ -75,8 +75,8 @@ class Home extends Component {
       this.setState({ searchLoading: true })
       search
         .simpleQuery(value)
-        .then(({ nodes, params }) => {
-          if (this.state.searchText === params.query) {
+        .then(({ nodes, rawSearchText }) => {
+          if (this.state.searchText === rawSearchText) {
             this.setState({ nodes, searchLoading: false })
           }
         })

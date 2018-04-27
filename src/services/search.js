@@ -15,14 +15,25 @@ class Search {
   }
 
   simpleQuery (text) {
+    const query = text
+      .split(' ')
+      .filter(x => !x.match(/.+:.+/))
+      .join(' ')
+    const filters = text
+      .split(' ')
+      .filter(x => x.match(/.+:.+/))
+      .join(' AND ')
+
     return this.query({
-      query: text,
+      raw: text,
+      query,
+      filters,
       advancedSyntax: true,
       removeWordsIfNoResults: 'allOptional'
     })
   }
 
-  query (params) {
+  query ({ raw, ...params }) {
     /* First we query Algolia, then we get the nodes from graphcool.
       Graphcool resolvers are limited to scalar types, so we can't
       write a resolver which does both
@@ -55,7 +66,8 @@ class Search {
                   const bi = ids.indexOf(b.id)
                   return ai > bi ? 1 : ai < bi ? -1 : 0
                 })
-              resolve({ nodes, params })
+
+              resolve({ nodes, rawSearchText: raw })
             })
             .catch(reject)
         })

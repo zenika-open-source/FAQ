@@ -4,8 +4,15 @@ import { graphql } from 'react-apollo'
 import { auth } from 'services'
 
 export const submitQuestionQuery = gql`
-  mutation submitQuestion($title: String!, $userId: ID!) {
-    createZNode(question: { title: $title, slug: "", userId: $userId }) {
+  mutation submitQuestion(
+    $title: String!
+    $userId: ID!
+    $tags: [ZNodetagsTag!]!
+  ) {
+    createZNode(
+      question: { title: $title, slug: "", userId: $userId }
+      tags: $tags
+    ) {
       id
       question {
         slug
@@ -15,8 +22,18 @@ export const submitQuestionQuery = gql`
 `
 
 export const editQuestionQuery = gql`
-  mutation editQuestion($questionId: ID!, $title: String!) {
-    updateQuestion(id: $questionId, title: $title, slug: "") {
+  mutation editQuestion(
+    $questionId: ID!
+    $title: String!
+    $tags: [String!]!
+    $userId: ID!
+  ) {
+    fullUpdateQuestion(
+      id: $questionId
+      title: $title
+      tags: $tags
+      userId: $userId
+    ) {
       id
       slug
     }
@@ -26,9 +43,18 @@ export const editQuestionQuery = gql`
 export const submitQuestion = graphql(submitQuestionQuery, {
   name: 'submitQuestion',
   props: ({ submitQuestion }) => ({
-    submitQuestion: title => {
+    submitQuestion: (title, tags) => {
+      const userId = auth.getUserNodeId()
+      tags = tags.map(tag => ({
+        label: tag,
+        userId
+      }))
       return submitQuestion({
-        variables: { title, userId: auth.getUserNodeId() }
+        variables: {
+          title,
+          userId,
+          tags
+        }
       })
     }
   })
@@ -37,9 +63,14 @@ export const submitQuestion = graphql(submitQuestionQuery, {
 export const editQuestion = graphql(editQuestionQuery, {
   name: 'editQuestion',
   props: ({ editQuestion }) => ({
-    editQuestion: (questionId, title) => {
+    editQuestion: (questionId, title, tags) => {
       return editQuestion({
-        variables: { questionId, title }
+        variables: {
+          questionId,
+          title,
+          tags,
+          userId: auth.getUserNodeId()
+        }
       })
     }
   })
