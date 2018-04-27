@@ -7,6 +7,13 @@ export const createFlagQuery = gql`
   mutation createFlag($type: String!, $nodeId: ID!, $userId: ID!) {
     createFlag(type: $type, nodeId: $nodeId, userId: $userId) {
       id
+      node {
+        id
+      }
+      type
+      user {
+        id
+      }
     }
   }
 `
@@ -21,17 +28,6 @@ export const createFlag = graphql(createFlagQuery, {
           type,
           nodeId,
           userId
-        },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          createFlag: {
-            id: '',
-            __typename: 'Flag',
-            type,
-            nodeId,
-            userId,
-            createdAt: new Date()
-          }
         }
       })
     }
