@@ -15,7 +15,6 @@
     "slug": "^0.9.1"
   },
   "scripts": {
-    "login": "graphcool login",
     "deploy": "npm run graphcool deploy && npm run algolia",
 		"graphcool": "dotenv -e .env.local graphcool",
 		"algolia": "cd algolia && dotenv -e ../.env.local node ./synonyms.js"
