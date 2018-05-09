@@ -99,5 +99,12 @@ functions:
           SLACK_CHANNEL_HOOK: ${env:SLACK_CHANNEL_HOOK}
           FAQ_URL: ${env:FAQ_URL}
 
+  uniqueFlag:
+    type: operationBefore
+    operation: Flag.create
+    handler:
+      code:
+        src: ./src/flag/uniqueFlag.js
+
 permissions:
   - operation: "*"
