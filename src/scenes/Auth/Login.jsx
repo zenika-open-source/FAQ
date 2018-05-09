@@ -18,7 +18,10 @@ const Login = ({ history, location }) => {
         // eslint-disable-next-line
         console.log(err)
         auth.logout() // Remove session for clean login
-        history.push({ pathname: '/auth/login', state: { error: err } })
+        history.push({
+          pathname: '/auth/login',
+          state: err.error === 'login_required' ? null : { error: err }
+        })
       })
     return <Loading text="Authenticating..." />
   }
