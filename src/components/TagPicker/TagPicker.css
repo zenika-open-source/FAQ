@@ -1,9 +1,6 @@
 .tagpicker {
-  border-top: 1px dashed var(--secondary-color);
   display: flex;
   align-items: center;
-  padding-left: 1rem;
-  padding-top: 0.5rem;
 }
 
 .tagpicker h3 {
@@ -50,7 +47,6 @@
 
 .tagpicker .picker-wrapper {
   position: relative;
-  margin-right: 170px;
 }
 
 .tagpicker .picker {

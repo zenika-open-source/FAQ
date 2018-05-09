@@ -16,11 +16,11 @@ import Card, {
 import Button from 'components/Button'
 import Input from 'components/Input'
 import onCtrlEnter from 'components/onCtrlEnter'
+import TagPicker from 'components/TagPicker'
 
 import ActionMenu from '../../components/ActionMenu'
 
 import Tips from './components/Tips'
-import TagPicker from './components/TagPicker'
 
 import './Edit.css'
 

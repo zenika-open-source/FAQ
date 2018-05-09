@@ -3,6 +3,16 @@
   flex: 1;
 }
 
+.Edit .tagpicker {
+  border-top: 1px dashed var(--secondary-color);
+  padding-left: 1rem;
+  padding-top: 0.5rem;
+}
+
+.Edit .tagpicker .picker-wrapper {
+  margin-right: 170px;
+}
+
 @media screen and (max-width: 480px) {
   /* --mobile-breakpoint */
   .Edit .input {

@@ -14,7 +14,7 @@ class Search {
     this.index = this.algolia.initIndex('Nodes')
   }
 
-  simpleQuery (text) {
+  simpleQuery (text, tags) {
     const query = text
       .split(' ')
       .filter(x => !x.match(/.+:.+/))
@@ -22,6 +22,7 @@ class Search {
     const filters = text
       .split(' ')
       .filter(x => x.match(/.+:.+/))
+      .concat(tags.map(x => 'tag:' + x))
       .join(' AND ')
 
     return this.query({

@@ -31,5 +31,5 @@ index.batchSynonyms(
 )
 
 index.setSettings({
-  attributesForFaceting: ['tag', 'flag']
+  attributesForFaceting: ['filterOnly(tag)', 'filterOnly(flag)']
 })

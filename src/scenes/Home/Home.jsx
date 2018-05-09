@@ -23,58 +23,88 @@ class Home extends Component {
       nextSearchText: '',
       searchLoading: false,
       filters: { answered: true, unanswered: true },
+      searchTags: [],
+      nextSearchTags: [],
       nodes: null
     }
   }
 
   static getSearchFromURL (props) {
     const q = routing.getQueryParam(props.location, 'q')
-    return q ? q.replace(/\+/g, ' ') : null
+    const tags = routing.getQueryParam(props.location, 'tags')
+    return {
+      q: q ? q.replace(/\+/g, ' ') : '',
+      tags: tags
+        ? tags
+          .replace(/\+/g, ' ')
+          .replace(/tag:/g, '')
+          .split(' ')
+        : []
+    }
   }
 
   static getDerivedStateFromProps (nextProps, prevState) {
-    const { searchText } = prevState
-    const nextSearchText = Home.getSearchFromURL(nextProps)
+    const { searchText, searchTags } = prevState
+    const nextSearch = Home.getSearchFromURL(nextProps)
 
-    if (searchText !== nextSearchText) {
-      return {
-        nextSearchText
-      }
+    const nextState = {}
+
+    if (searchText !== nextSearch.q) {
+      nextState.nextSearchText = nextSearch.q
     }
 
-    return null
+    if (searchTags.length !== nextSearch.tags.length) {
+      nextState.nextSearchTags = nextSearch.tags
+    }
+
+    return nextState || null
   }
 
   componentDidUpdate () {
-    const { nextSearchText } = this.state
+    const { nextSearchText, nextSearchTags } = this.state
 
-    if (nextSearchText) {
-      this.handleSearchChange(nextSearchText)
+    if (nextSearchText || nextSearchTags) {
+      this.handleSearchChange(nextSearchText, nextSearchTags)
     }
   }
 
-  handleSearchChange = value => {
+  handleSearchChange = (value, tags) => {
     const { history } = this.props
+    const { searchTags } = this.state
 
     value = value || ''
+    tags = tags || searchTags
 
-    this.setState({ searchText: value, nextSearchText: null })
+    this.setState({
+      searchText: value,
+      searchTags: tags,
+      nextSearchText: null,
+      nextSearchTags: null
+    })
 
-    if (value !== '') {
-      history.replace({ search: '?q=' + value.replace(/\s/g, '+') })
+    let urlSearch = []
+
+    if (value !== '' || tags.length > 0) {
+      if (value !== '') {
+        urlSearch.push('q=' + value.replace(/\s/g, '+'))
+      }
+      if (tags.length > 0) {
+        urlSearch.push('tags=' + tags.join(','))
+      }
+      history.replace({ search: '?' + urlSearch.join('&') })
     } else {
       this.setState({ nodes: null })
       history.replace({ search: null })
     }
 
-    this.retrieveResults(value)
+    this.retrieveResults(value, tags)
   }
 
-  retrieveResults = debounce(value => {
-    if (value !== '') {
+  retrieveResults = debounce((value, tags) => {
+    if (value !== '' || tags.length > 0) {
       this.setState({ searchLoading: true })
       search
-        .simpleQuery(value)
+        .simpleQuery(value, tags)
         .then(({ nodes, rawSearchText }) => {
           if (this.state.searchText === rawSearchText) {
             this.setState({ nodes, searchLoading: false })
@@ -87,8 +117,31 @@ class Home extends Component {
     }
   }, 200)
 
+  changeTagList = (action, tag) => {
+    const { searchText, searchTags } = this.state
+    const index = searchTags.indexOf(tag)
+    switch (action) {
+    case 'add':
+      if (index < 0) {
+        searchTags.push(tag)
+        this.setState({ searchTags })
+        this.handleSearchChange(searchText, searchTags)
+      }
+      break
+    case 'remove':
+      if (index > -1) {
+        searchTags.splice(index, 1)
+        this.setState({ searchTags })
+        this.handleSearchChange(searchText, searchTags)
+      }
+      break
+    default:
+      break
+    }
+  }
+
   render () {
-    const { searchLoading, searchText, nodes, filters } = this.state
+    const { searchLoading, searchText, nodes, filters, searchTags } = this.state
     const { loading, error, allZNodes } = this.props.data
 
     if (loading) {
@@ -109,7 +162,13 @@ class Home extends Component {
 
     let Results
 
-    if (searchText === '' && list.length > 0) {
+    if (list.length === 0) {
+      Results = <NoResults prefill={searchText} />
+    } else if (
+      searchText === '' &&
+      searchTags.length === 0 &&
+      list.length > 0
+    ) {
       Results = (
         <ResultList
           nodes={list}
@@ -117,8 +176,6 @@ class Home extends Component {
           collapsed={true}
         />
       )
-    } else if (list.length === 0) {
-      Results = <NoResults prefill={searchText} />
     } else {
       Results = <ResultList nodes={list} collapsed={false} />
     }
@@ -130,11 +187,13 @@ class Home extends Component {
           search={this.handleSearchChange}
           loading={searchLoading}
           filters={filters}
+          tags={searchTags}
           onToggleCheck={filters =>
             this.setState({
               filters: filters
             })
           }
+          changeTagList={this.changeTagList}
         />
         <div>{Results}</div>
         <Link to="/q/new">

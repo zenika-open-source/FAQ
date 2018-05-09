@@ -19,12 +19,12 @@ class TagPicker extends Component {
   }
 
   render () {
-    const { tags, changeTagList } = this.props
+    const { label, icon, tags, changeTagList } = this.props
     const { opened } = this.state
 
     return (
       <div className="tagpicker">
-        <h3>Tags:</h3>
+        <h3>{label || 'Tags:'}</h3>
         <div className="tags-list">
           {tags.map(tag => (
             <div key={tag} className="tag">
@@ -40,7 +40,7 @@ class TagPicker extends Component {
         </div>
         <div className="picker-wrapper">
           <Button
-            icon="add"
+            icon={icon || 'add'}
             link
             style={{ padding: 0, zIndex: 2 }}
             onClick={() => this.setState({ opened: !opened })}
@@ -75,6 +75,8 @@ class TagPicker extends Component {
 }
 
 TagPicker.propTypes = {
+  label: PropTypes.string,
+  icon: PropTypes.string,
   tags: PropTypes.array.isRequired,
   changeTagList: PropTypes.func.isRequired
 }
