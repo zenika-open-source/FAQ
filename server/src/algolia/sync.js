@@ -15,10 +15,23 @@ export default async event => {
   const modelName = Object.keys(event.data)[0]
 
   const { mutation, previousValues } = event.data[modelName]
-  const node = event.data[modelName].node.node
+  const node =
+    modelName == 'ZNode'
+      ? event.data.ZNode.node
+      : event.data[modelName].node.node
 
   const functions = {
     ZNode: {
+      UPDATED: () =>
+        index.partialUpdateObject({
+          objectID: node.id,
+          question: node.question,
+          answer: node.answer,
+          tag: node.tags.map(tag => tag.label),
+          flag: node.flags
+            .map(flag => flag.type)
+            .concat(node.answer ? [] : ['unanswered'])
+        }),
       DELETED: () => index.deleteObject(previousValues.id)
     },
     Question: {
@@ -26,19 +39,19 @@ export default async event => {
         index.addObject({
           objectID: node.id,
           question: node.question,
-          tag: node.tags.map(tag => tag.label)
-        }),
-      UPDATED: () =>
-        index.partialUpdateObject({
-          objectID: node.id,
-          question: node.question
+          tag: node.tags.map(tag => tag.label),
+          flag: ['unanswered']
         })
     },
     Answer: {
       CREATED: () =>
-        index.partialUpdateObject({ objectID: node.id, answer: node.answer }),
-      UPDATED: () =>
-        index.partialUpdateObject({ objectID: node.id, answer: node.answer })
+        index.partialUpdateObject({
+          objectID: node.id,
+          answer: node.answer,
+          flag: node.flags
+            .map(flag => flag.type)
+            .concat(node.answer ? [] : ['unanswered'])
+        })
     },
     Flag: {
       CREATED: () =>
@@ -47,25 +60,6 @@ export default async event => {
           flag: node.flags
             .map(flag => flag.type)
             .concat(node.answer ? [] : ['unanswered'])
-        }),
-      DELETED: () =>
-        index.partialUpdateObject({
-          objectID: node.id,
-          flag: node.flags
-            .map(flag => flag.type)
-            .concat(node.answer ? [] : ['unanswered'])
-        })
-    },
-    Tag: {
-      CREATED: () =>
-        index.partialUpdateObject({
-          objectID: node.id,
-          tag: node.tags.map(tag => tag.label)
-        }),
-      DELETED: () =>
-        index.partialUpdateObject({
-          objectID: node.id,
-          tag: node.tags.map(tag => tag.label)
         })
     }
   }
@@ -83,8 +77,13 @@ export default async event => {
   // to retrieve the associated ZNode. So we can't update it on algolia.
   // We currently don't offer the possibility to delete a Question or Answer
   // in the UI, so this is a problem for another day.
+  //
   // Solutions:
   // - Graphcool will probably update its api to allow subscriptions on relations
   // - When deleting Questions and Answers, change a dummy attribute on ZNode
   //   to trigger UPDATED
+  //
+  // Currently implemented solution:
+  // - Changing dummy when deleting Tags and Flags (Questions and Answers
+  //   NOT implemented yet)
 }

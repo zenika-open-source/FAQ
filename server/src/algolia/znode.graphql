@@ -1,6 +1,22 @@
 subscription {
-  ZNode(filter: { mutation_in: [DELETED] }) {
+  ZNode(filter: { mutation_in: [UPDATED, DELETED] }) {
     mutation
+    node {
+      id
+      question {
+        title
+        slug
+      }
+      answer {
+        content
+      }
+      flags {
+        type
+      }
+      tags {
+        label
+      }
+    }
     previousValues {
       id
     }

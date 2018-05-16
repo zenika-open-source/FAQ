@@ -8,6 +8,7 @@ extend type Mutation {
     id: ID!
     title: String!
     tags: [String!]!
+    nodeId: ID!
     userId: ID!
   ): FullUpdateQuestionPayload
 }

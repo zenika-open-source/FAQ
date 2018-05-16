@@ -53,16 +53,6 @@ functions:
           ALGOLIA_APP_ID: ${env:REACT_APP_ALGOLIA_APP_ID}
           ALGOLIA_API_KEY_ALL: ${env:REACT_APP_ALGOLIA_API_KEY_ALL}
 
-  algoliaTag:
-    type: subscription
-    query: ./src/algolia/tag.graphql
-    handler:
-      code:
-        src: ./src/algolia/sync.js
-        environment:
-          ALGOLIA_APP_ID: ${env:REACT_APP_ALGOLIA_APP_ID}
-          ALGOLIA_API_KEY_ALL: ${env:REACT_APP_ALGOLIA_API_KEY_ALL}
-
   slugCreate:
     type: operationBefore
     operation: Question.create

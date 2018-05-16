@@ -26,12 +26,14 @@ export const editQuestionQuery = gql`
     $questionId: ID!
     $title: String!
     $tags: [String!]!
+    $nodeId: ID!
     $userId: ID!
   ) {
     fullUpdateQuestion(
       id: $questionId
       title: $title
       tags: $tags
+      nodeId: $nodeId
       userId: $userId
     ) {
       id
@@ -63,12 +65,13 @@ export const submitQuestion = graphql(submitQuestionQuery, {
 export const editQuestion = graphql(editQuestionQuery, {
   name: 'editQuestion',
   props: ({ editQuestion }) => ({
-    editQuestion: (questionId, title, tags) => {
+    editQuestion: (questionId, title, tags, nodeId) => {
       return editQuestion({
         variables: {
           questionId,
           title,
           tags,
+          nodeId,
           userId: auth.getUserNodeId()
         }
       })

@@ -1,5 +1,5 @@
 subscription {
-  Flag(filter: { mutation_in: [CREATED, DELETED] }) {
+  Flag(filter: { mutation_in: [CREATED] }) {
     mutation
     node {
       id

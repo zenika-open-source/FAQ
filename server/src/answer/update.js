@@ -17,6 +17,18 @@ const updateAnswer = (graphcool, answer) => {
   })
 }
 
+const updateNodeDummyQuery = `
+	mutation updateNodeDummy($id: ID!) {
+		updateZNode(id: $id, dummy: "dummy") {
+			id
+		}
+	}
+`
+
+const updateNodeDummy = (graphcool, answer) => {
+  return graphcool.request(updateNodeDummyQuery, { id: answer.nodeId })
+}
+
 export default async event => {
   const graphcool = fromEvent(event).api('simple/v1')
 
@@ -29,6 +41,8 @@ export default async event => {
   const deletedFlags = deleteFlags(graphcool, answer)
 
   const wait = await Promise.all([updatedAnswer, sources, deletedFlags])
+
+  const dummy = await updateNodeDummy(graphcool, answer)
 
   return { data: { id: answer.answerId } }
 }

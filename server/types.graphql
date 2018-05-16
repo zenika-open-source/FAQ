@@ -7,6 +7,8 @@ type ZNode @model {
   flags: [Flag!]! @relation(name: "NodeFlags")
   tags: [Tag!]! @relation(name: "NodeTags")
 
+  dummy: String
+
   createdAt: DateTime!
   updatedAt: DateTime!
 }

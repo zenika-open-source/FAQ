@@ -1,5 +1,5 @@
 subscription {
-  Question(filter: { mutation_in: [CREATED, UPDATED] }) {
+  Question(filter: { mutation_in: [CREATED] }) {
     mutation
     node {
       id
