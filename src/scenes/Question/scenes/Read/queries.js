@@ -29,23 +29,6 @@ export const createFlag = graphql(createFlagQuery, {
           type,
           nodeId,
           userId
-        },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          createFlag: {
-            id: -1,
-            __typename: 'Flag',
-            type,
-            node: {
-              __typename: 'ZNode',
-              id: nodeId
-            },
-            user: {
-              __typename: 'User',
-              id: userId
-            },
-            createdAt: new Date()
-          }
         }
       })
     }
