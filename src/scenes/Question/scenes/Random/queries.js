@@ -10,5 +10,5 @@ export const getRandomNodeQuery = gql`
 `
 
 export const getRandomNode = graphql(getRandomNodeQuery, {
-  options: props => ({ variables: { flag: props.match.params.tag } })
+  options: props => ({ variables: { tag: props.match.params.tag } })
 })
