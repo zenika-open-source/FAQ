@@ -19,10 +19,11 @@ class Search {
       .split(' ')
       .filter(x => !x.match(/.+:.+/))
       .join(' ')
+
     const filters = text
       .split(' ')
       .filter(x => x.match(/.+:.+/))
-      .concat(tags.map(x => 'tag:' + x))
+      .concat(tags.map(x => `tag:"${x}"`))
       .join(' AND ')
 
     return this.query({

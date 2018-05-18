@@ -36,9 +36,9 @@ class Home extends Component {
       q: q ? q.replace(/\+/g, ' ') : '',
       tags: tags
         ? tags
-          .replace(/\+/g, ' ')
           .replace(/tag:/g, '')
           .split(' ')
+          .map(t => t.replace(/-/g, ' '))
         : []
     }
   }
@@ -89,7 +89,7 @@ class Home extends Component {
         urlSearch.push('q=' + value.replace(/\s/g, '+'))
       }
       if (tags.length > 0) {
-        urlSearch.push('tags=' + tags.join(','))
+        urlSearch.push('tags=' + tags.join('+').replace(/\s/g, '-'))
       }
       history.replace({ search: '?' + urlSearch.join('&') })
     } else {
