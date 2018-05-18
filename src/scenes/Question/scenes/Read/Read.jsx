@@ -20,6 +20,7 @@ import ActionMenu from '../../components/ActionMenu'
 import Sources from './components/Sources'
 import Meta from './components/Meta'
 import Share from './components/Share'
+import History from './components/History'
 
 const Read = ({ history, match, data, createFlag }) => {
   const { loading, error, ZNode } = data
@@ -115,6 +116,7 @@ const Read = ({ history, match, data, createFlag }) => {
           )}
           <hr />
           <Meta node={ZNode} />
+          <History node={ZNode} />
         </CardText>
       </Card>
     </div>

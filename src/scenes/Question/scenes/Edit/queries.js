@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 
-import { auth } from 'services'
+import { auth, history } from 'services'
 
 export const submitQuestionQuery = gql`
   mutation submitQuestion(
@@ -15,7 +15,12 @@ export const submitQuestionQuery = gql`
     ) {
       id
       question {
+        id
+        title
         slug
+      }
+      tags {
+        label
       }
     }
   }
@@ -37,7 +42,10 @@ export const editQuestionQuery = gql`
       userId: $userId
     ) {
       id
+      title
       slug
+      nodeId
+      tagsChanges
     }
   }
 `
@@ -59,7 +67,19 @@ export const submitQuestion = graphql(submitQuestionQuery, {
         }
       })
     }
-  })
+  }),
+  options: {
+    onCompleted: ({ createZNode }) =>
+      history.addAction(
+        'CREATED',
+        'Question',
+        {
+          title: createZNode.question.title,
+          tags: createZNode.tags.map(t => t.label)
+        },
+        createZNode.id
+      )
+  }
 })
 
 export const editQuestion = graphql(editQuestionQuery, {
@@ -76,5 +96,18 @@ export const editQuestion = graphql(editQuestionQuery, {
         }
       })
     }
-  })
+  }),
+  options: {
+    onCompleted: ({ fullUpdateQuestion }) => {
+      history.addAction(
+        'UPDATED',
+        'Question',
+        {
+          title: fullUpdateQuestion.title,
+          tagsChanges: fullUpdateQuestion.tagsChanges
+        },
+        fullUpdateQuestion.nodeId
+      )
+    }
+  }
 })

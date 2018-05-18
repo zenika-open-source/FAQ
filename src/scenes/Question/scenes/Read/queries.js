@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 
-import { auth } from 'services'
+import { auth, history } from 'services'
 
 export const createFlagQuery = gql`
   mutation createFlag($type: String!, $nodeId: ID!, $userId: ID!) {
@@ -32,5 +32,15 @@ export const createFlag = graphql(createFlagQuery, {
         }
       })
     }
-  })
+  }),
+  options: {
+    onCompleted: ({ createFlag }) => {
+      history.addAction(
+        'CREATED',
+        'Flag',
+        { type: createFlag.type },
+        createFlag.node.id
+      )
+    }
+  }
 })

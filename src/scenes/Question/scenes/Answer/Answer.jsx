@@ -37,8 +37,8 @@ class Answer extends Component {
     nodeLoaded: false,
     answer: { text: '', selection: null },
     loading: false,
-    redirect: false,
     sources: [],
+    slug: null,
     showTips: PermanentClosableCard.isOpen('tips_answer')
   }
 
@@ -55,6 +55,16 @@ class Answer extends Component {
     }
 
     return null
+  }
+
+  cleanSources () {
+    const { sources } = this.state
+    return sources
+      .map(s => {
+        if (s.new) return omit(s, ['id', 'new'])
+        return s
+      })
+      .filter(s => s.label !== '' && s.url !== '')
   }
 
   handleChange (value) {
@@ -79,16 +89,13 @@ class Answer extends Component {
 
     const answerObject = {
       content: answer.text,
-      userId: auth.getUserNodeId()
+      userId: auth.getUserNodeId(),
+      sources: this.cleanSources()
     }
 
     submitAnswer(ZNode.id, answerObject)
-      .then(result => {
-        // To save sources
-        this.editAnswer(
-          result.data.updateZNode.id,
-          result.data.updateZNode.answer.id
-        )
+      .then(() => {
+        this.setState({ slug: ZNode.question.slug + '-' + ZNode.id })
       })
       .catch(error => {
         alert(error)
@@ -100,7 +107,7 @@ class Answer extends Component {
   editAnswer = (nodeId, answerId) => {
     const { editAnswer } = this.props
     const { ZNode } = this.props.data
-    const { sources, answer } = this.state
+    const { answer } = this.state
 
     this.setState({ loadingSubmit: true })
 
@@ -108,15 +115,10 @@ class Answer extends Component {
       typeof nodeId === 'string' ? nodeId : ZNode.id,
       typeof answerId === 'string' ? answerId : ZNode.answer.id,
       answer.text,
-      sources
-        .map(s => {
-          if (s.new) return omit(s, ['id', 'new'])
-          return s
-        })
-        .filter(s => s.label !== '' && s.url !== '')
+      this.cleanSources()
     )
       .then(() => {
-        this.setState({ redirect: true })
+        this.setState({ slug: ZNode.question.slug + '-' + ZNode.id })
       })
       .catch(error => {
         alert(error)
@@ -136,11 +138,11 @@ class Answer extends Component {
   }
 
   render () {
-    const { loadingSubmit, redirect, answer, showTips } = this.state
+    const { loadingSubmit, slug, answer, showTips } = this.state
     const { loading, error, ZNode } = this.props.data
 
-    if (redirect) {
-      return <Redirect to={`/q/${ZNode.question.slug}-${ZNode.id}`} />
+    if (slug) {
+      return <Redirect to={`/q/${slug}`} />
     }
 
     if (loadingSubmit || loading) {

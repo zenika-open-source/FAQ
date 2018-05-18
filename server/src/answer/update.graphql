@@ -1,5 +1,8 @@
 type FullUpdateAnswerPayload {
   id: ID!
+  content: String
+  sourcesChanges: Json!
+  nodeId: ID!
 }
 
 extend type Mutation {

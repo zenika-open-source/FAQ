@@ -1,9 +1,8 @@
 import apollo from './apollo'
 import auth from './auth'
-// import flags from './flags'
+import history from './history'
 import markdown from './markdown'
 import routing from './routing'
 import search from './search'
 
-// TO DO: Remove flags
-export { apollo, auth, markdown, routing, search }
+export { apollo, auth, history, markdown, routing, search }

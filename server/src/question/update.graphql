@@ -1,6 +1,9 @@
 type FullUpdateQuestionPayload {
   id: ID!
+  title: String
   slug: String!
+  nodeId: ID!
+  tagsChanges: Json!
 }
 
 extend type Mutation {

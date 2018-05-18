@@ -7,6 +7,8 @@ type ZNode @model {
   flags: [Flag!]! @relation(name: "NodeFlags")
   tags: [Tag!]! @relation(name: "NodeTags")
 
+  history: [HistoryAction!]! @relation(name: "NodeHistoryActions")
+
   dummy: String
 
   createdAt: DateTime!
@@ -75,6 +77,20 @@ type Tag @model {
   updatedAt: DateTime!
 }
 
+type HistoryAction @model {
+  id: ID! @isUnique
+
+  action: String!
+  model: String!
+  meta: Json
+
+  user: User! @relation(name: "UserHistoryActions")
+  node: ZNode! @relation(name: "NodeHistoryActions")
+
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 # System types
 
 type File @model {
@@ -105,6 +121,8 @@ type User @model {
 
   flags: [Flag!]! @relation(name: "UserFlags")
   tags: [Tag!]! @relation(name: "UserTags")
+
+  history: [HistoryAction!]! @relation(name: "UserHistoryActions")
 
   createdAt: DateTime!
   updatedAt: DateTime!

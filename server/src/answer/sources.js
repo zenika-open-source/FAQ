@@ -5,6 +5,8 @@ const getSourcesQuery = `
 		Answer(id: $answerId) {
 			sources {
 				id
+				label
+				url
 			}
 		}
 	}
@@ -72,9 +74,17 @@ const updateSources = async (graphcool, answer) => {
     return graphcool.request(deleteSourceQuery, { sourceId: source.id })
   })
 
-  return Promise.all(
+  await Promise.all(
     _.concat(mutationsToAdd, mutationsToUpdate, mutationsToDelete)
   )
+
+  const clean = sources => sources.map(s => ({ label: s.label, url: s.url }))
+
+  return {
+    added: clean(sourcesToAdd),
+    updated: clean(sourcesToUpdate),
+    deleted: clean(sourcesToDelete)
+  }
 }
 
 export { updateSources }
