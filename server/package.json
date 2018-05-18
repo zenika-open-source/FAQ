@@ -16,7 +16,7 @@
   },
   "scripts": {
     "deploy": "npm run graphcool deploy && npm run algolia",
-		"graphcool": "dotenv -e .env.local graphcool",
-		"algolia": "cd algolia && dotenv -e ../.env.local node ./settings.js"
+    "graphcool": "dotenv -e .env.local graphcool",
+    "algolia": "cd algolia && dotenv -e ../.env.local node ./settings.js"
   }
 }
