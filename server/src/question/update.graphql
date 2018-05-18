@@ -1,0 +1,14 @@
+type FullUpdateQuestionPayload {
+  id: ID!
+  slug: String!
+}
+
+extend type Mutation {
+  fullUpdateQuestion(
+    id: ID!
+    title: String!
+    tags: [String!]!
+    nodeId: ID!
+    userId: ID!
+  ): FullUpdateQuestionPayload
+}

@@ -7,13 +7,14 @@ export const createFlagQuery = gql`
   mutation createFlag($type: String!, $nodeId: ID!, $userId: ID!) {
     createFlag(type: $type, nodeId: $nodeId, userId: $userId) {
       id
+      type
       node {
         id
       }
-      type
       user {
         id
       }
+      createdAt
     }
   }
 `

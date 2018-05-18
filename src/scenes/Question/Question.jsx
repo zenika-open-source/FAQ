@@ -12,7 +12,7 @@ import { getNode } from './queries'
 const Question = ({ match }) => (
   <Switch>
     <Route path={`${match.path}/new`} component={Edit} />
-    <Route path={`${match.path}/random/:flag?`} component={Random} />
+    <Route path={`${match.path}/random/:tag?`} component={Random} />
     <Route path={`${match.path}/:slug`} exact component={getNode(Read)} />
     <Route path={`${match.path}/:slug/edit`} component={getNode(Edit)} />
     <Route path={`${match.path}/:slug/answer`} component={getNode(Answer)} />

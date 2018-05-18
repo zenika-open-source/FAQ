@@ -14,6 +14,7 @@ import Button from 'components/Button'
 import Card, { CardTitle, CardText } from 'components/Card'
 import Dropdown, { DropdownItem } from 'components/Dropdown'
 import Flags, { flagMeta } from 'components/Flags'
+import Tags from 'components/Tags'
 
 import ActionMenu from '../../components/ActionMenu'
 import Sources from './components/Sources'
@@ -78,6 +79,7 @@ const Read = ({ history, match, data, createFlag }) => {
         <CardTitle style={{ padding: '1.2rem' }}>
           <div className="grow">
             <h1>{markdown.title(ZNode.question.title)}</h1>
+            {ZNode.tags.length > 0 && <Tags tags={ZNode.tags} />}
           </div>
           <Flags node={ZNode} withLabels={true} />
           <Share node={ZNode} />

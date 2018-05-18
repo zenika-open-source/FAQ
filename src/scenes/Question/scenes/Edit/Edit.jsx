@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Redirect, Prompt } from 'react-router-dom'
+import difference from 'lodash/difference'
 
 import { compose } from 'react-apollo'
 import { submitQuestion, editQuestion } from './queries'
@@ -15,6 +16,7 @@ import Card, {
 import Button from 'components/Button'
 import Input from 'components/Input'
 import onCtrlEnter from 'components/onCtrlEnter'
+import TagPicker from 'components/TagPicker'
 
 import ActionMenu from '../../components/ActionMenu'
 
@@ -39,6 +41,8 @@ class Edit extends Component {
       question: initialQuestion,
       loadingSubmit: false,
       slug: null,
+      initialTags: [],
+      tags: [],
       showTips: PermanentClosableCard.isOpen('tips_question')
     }
   }
@@ -48,10 +52,13 @@ class Edit extends Component {
     const { data } = nextProps
 
     if (!nodeLoaded && isEditing && data && data.ZNode) {
+      const { ZNode } = data
       return {
         nodeLoaded: true,
-        initialQuestion: data.ZNode.question.title,
-        question: data.ZNode.question.title
+        initialQuestion: ZNode.question.title,
+        question: ZNode.question.title,
+        initialTags: ZNode.tags.map(x => x.label),
+        tags: ZNode.tags.map(x => x.label)
       }
     }
 
@@ -72,7 +79,7 @@ class Edit extends Component {
 
     this.setState({ loadingSubmit: true })
 
-    submitQuestion(this.state.question)
+    submitQuestion(this.state.question, this.state.tags)
       .then(({ data }) => {
         this.setState({
           slug: data.createZNode.question.slug + '-' + data.createZNode.id
@@ -91,10 +98,15 @@ class Edit extends Component {
 
     this.setState({ loadingSubmit: true })
 
-    editQuestion(ZNode.question.id, this.state.question)
+    editQuestion(
+      ZNode.question.id,
+      this.state.question,
+      this.state.tags,
+      ZNode.id
+    )
       .then(({ data }) => {
         this.setState({
-          slug: data.updateQuestion.slug + '-' + ZNode.id
+          slug: data.fullUpdateQuestion.slug + '-' + ZNode.id
         })
       })
       .catch(error => {
@@ -114,14 +126,46 @@ class Edit extends Component {
     PermanentClosableCard.setValue('tips_question', false)
   }
 
+  changeTagList = (action, tag) => {
+    const { tags } = this.state
+    const index = tags.indexOf(tag)
+    switch (action) {
+    case 'add':
+      if (index < 0) {
+        tags.push(tag)
+        this.setState({ tags })
+      }
+      break
+    case 'remove':
+      if (index > -1) {
+        tags.splice(index, 1)
+        this.setState({ tags })
+      }
+      break
+    default:
+      break
+    }
+  }
+
+  canSubmit () {
+    const { question, initialQuestion, tags, initialTags } = this.state
+
+    return (
+      question.length === 0 ||
+      (question === initialQuestion &&
+        difference(tags, initialTags).length === 0 &&
+        difference(initialTags, tags).length === 0)
+    )
+  }
+
   render () {
     const { match } = this.props
     const {
       isEditing,
-      initialQuestion,
       loadingSubmit,
       slug,
       question,
+      tags,
       showTips
     } = this.state
 
@@ -179,10 +223,13 @@ class Edit extends Component {
               onChange={this.handleChange}
             />
           </CardText>
+          <CardText style={{ paddingBottom: '0.5rem' }}>
+            <TagPicker tags={tags} changeTagList={this.changeTagList} />
+          </CardText>
           <CardActions>
             <Button
               label={isEditing ? 'Edit' : 'Submit'}
-              disabled={question.length === 0 || question === initialQuestion}
+              disabled={this.canSubmit()}
               primary
               raised
               onClick={this.submitForm}

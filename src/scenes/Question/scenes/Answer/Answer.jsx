@@ -85,7 +85,10 @@ class Answer extends Component {
     submitAnswer(ZNode.id, answerObject)
       .then(result => {
         // To save sources
-        this.editAnswer(result.data.updateZNode.answer.id)
+        this.editAnswer(
+          result.data.updateZNode.id,
+          result.data.updateZNode.answer.id
+        )
       })
       .catch(error => {
         alert(error)
@@ -94,7 +97,7 @@ class Answer extends Component {
       })
   }
 
-  editAnswer = answerId => {
+  editAnswer = (nodeId, answerId) => {
     const { editAnswer } = this.props
     const { ZNode } = this.props.data
     const { sources, answer } = this.state
@@ -102,6 +105,7 @@ class Answer extends Component {
     this.setState({ loadingSubmit: true })
 
     editAnswer(
+      typeof nodeId === 'string' ? nodeId : ZNode.id,
       typeof answerId === 'string' ? answerId : ZNode.answer.id,
       answer.text,
       sources

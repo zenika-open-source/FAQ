@@ -5,6 +5,9 @@ type ZNode @model {
   answer: Answer @relation(name: "NodeAnswer")
 
   flags: [Flag!]! @relation(name: "NodeFlags")
+  tags: [Tag!]! @relation(name: "NodeTags")
+
+  dummy: String
 
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -52,9 +55,21 @@ type Flag @model {
   id: ID! @isUnique
 
   type: String!
-  user: User! @relation(name: "UserFlags")
 
+  user: User! @relation(name: "UserFlags")
   node: ZNode! @relation(name: "NodeFlags")
+
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Tag @model {
+  id: ID! @isUnique
+
+  label: String!
+
+  user: User! @relation(name: "UserTags")
+  node: ZNode! @relation(name: "NodeTags")
 
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -89,6 +104,7 @@ type User @model {
   answers: [Answer!]! @relation(name: "UserAnswers")
 
   flags: [Flag!]! @relation(name: "UserFlags")
+  tags: [Tag!]! @relation(name: "UserTags")
 
   createdAt: DateTime!
   updatedAt: DateTime!

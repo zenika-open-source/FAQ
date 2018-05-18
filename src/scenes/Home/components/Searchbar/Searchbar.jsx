@@ -5,10 +5,19 @@ import capitalize from 'lodash/capitalize'
 
 import Input from 'components/Input'
 import Checkbox from 'components/Checkbox'
+import TagPicker from 'components/TagPicker'
 
 import './Searchbar.css'
 
-const Searchbar = ({ text, search, loading, filters, onToggleCheck }) => (
+const Searchbar = ({
+  text,
+  search,
+  loading,
+  filters,
+  tags,
+  onToggleCheck,
+  changeTagList
+}) => (
   <div className="searchbar">
     <Input
       icon={
@@ -29,17 +38,25 @@ const Searchbar = ({ text, search, loading, filters, onToggleCheck }) => (
       onClear={() => search('')}
     />
     <div className="filters">
-      {map(filters, (checked, filter) => (
-        <Checkbox
-          key={filter}
-          label={capitalize(filter)}
-          checked={checked}
-          onChange={() => {
-            filters[filter] = !filters[filter]
-            onToggleCheck(filters)
-          }}
-        />
-      ))}
+      <TagPicker
+        label="Filter by tags:"
+        icon="local_offer"
+        tags={tags}
+        changeTagList={changeTagList}
+      />
+      <div style={{ display: 'flex', marginTop: '0.5rem' }}>
+        {map(filters, (checked, filter) => (
+          <Checkbox
+            key={filter}
+            label={capitalize(filter)}
+            checked={checked}
+            onChange={() => {
+              filters[filter] = !filters[filter]
+              onToggleCheck(filters)
+            }}
+          />
+        ))}
+      </div>
     </div>
   </div>
 )
@@ -49,7 +66,9 @@ Searchbar.propTypes = {
   search: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
   filters: PropTypes.object.isRequired,
-  onToggleCheck: PropTypes.func.isRequired
+  tags: PropTypes.array.isRequired,
+  onToggleCheck: PropTypes.func.isRequired,
+  changeTagList: PropTypes.func.isRequired
 }
 
 export default Searchbar

@@ -1,0 +1,18 @@
+.tags {
+  display: flex;
+  align-items: center;
+  margin-top: 0.4rem;
+}
+
+.tags .material-icons {
+  font-size: 0.8rem;
+  margin-right: 0.3rem;
+  color: var(--primary-color);
+  margin-bottom: -0.2rem;
+}
+
+.tags .tags-list {
+  font-variant: small-caps;
+  display: flex;
+  align-items: center;
+}

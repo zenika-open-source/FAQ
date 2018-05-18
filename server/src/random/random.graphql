@@ -3,5 +3,5 @@ type RandomPayload {
 }
 
 extend type Query {
-  randomNode(flag: String): RandomPayload
+  randomNode(tag: String): RandomPayload
 }

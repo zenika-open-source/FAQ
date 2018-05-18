@@ -80,6 +80,19 @@ const subscribeToFlags = gql`
   }
 `
 
+const subscribeToTags = gql`
+  subscription {
+    Tag {
+      mutation
+      node {
+        node {
+          id
+        }
+      }
+    }
+  }
+`
+
 class ApolloWatcher {
   hooks = []
 
@@ -88,7 +101,8 @@ class ApolloWatcher {
       subscribeToNodes,
       subscribeToQuestions,
       subscribeToAnswers,
-      subscribeToFlags
+      subscribeToFlags,
+      subscribeToTags
     ]
 
     subscriptions.forEach(query => {

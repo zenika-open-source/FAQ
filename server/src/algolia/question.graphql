@@ -1,16 +1,22 @@
 subscription {
-  Question(filter: { mutation_in: [CREATED, UPDATED] }) {
+  Question(filter: { mutation_in: [CREATED] }) {
     mutation
     node {
       id
       node {
-        objectID: id
+        id
         question {
           title
           slug
         }
         answer {
           content
+        }
+        flags {
+          type
+        }
+        tags {
+          label
         }
       }
     }

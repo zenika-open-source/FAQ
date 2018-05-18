@@ -8,10 +8,10 @@ const random = count => Math.floor(Math.random() * count)
 export default async event => {
   const graphcool = fromEvent(event).api('simple/v1')
 
-  const flag = event.data.flag
-  const count = await countZNodes(graphcool, flag)
+  const tag = event.data.tag
+  const count = await countZNodes(graphcool, tag)
   const index = random(count)
-  const id = await getZNodeId(graphcool, flag, index)
+  const id = await getZNodeId(graphcool, tag, index)
 
   return { data: { id } }
 }

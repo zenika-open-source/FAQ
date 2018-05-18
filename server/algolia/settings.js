@@ -29,3 +29,7 @@ index.batchSynonyms(
     console.log(content)
   }
 )
+
+index.setSettings({
+  attributesForFaceting: ['filterOnly(tag)', 'filterOnly(flag)']
+})

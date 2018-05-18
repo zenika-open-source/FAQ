@@ -24,6 +24,10 @@ export const getAllNodesQuery = gql`
         id
         type
       }
+      tags {
+        id
+        label
+      }
     }
   }
 `
@@ -50,6 +54,10 @@ export const getListNodesQuery = gql`
       flags {
         id
         type
+      }
+      tags {
+        id
+        label
       }
     }
   }

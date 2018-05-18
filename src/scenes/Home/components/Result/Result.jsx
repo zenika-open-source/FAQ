@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import moment from 'moment'
+// import moment from 'moment'
 
 import { markdown } from 'services'
 
-import Avatar from 'components/Avatar'
+// import Avatar from 'components/Avatar'
 import Card, { CardTitle, CardText } from 'components/Card'
 import Flags from 'components/Flags'
+import Tags from 'components/Tags'
 
 import './Result.css'
 
@@ -43,13 +44,14 @@ class Result extends Component {
                 }}
               />
             )}
-            <div className="meta">
+            {node.tags.length > 0 && <Tags tags={node.tags} />}
+            {/* <div className="meta">
               <Avatar image={node.question.user.picture} />
               <i className="user">
                 Asked by {node.question.user.name},&nbsp;
                 {moment(node.question.createdAt).fromNow()}
               </i>
-            </div>
+            </div> */}
           </div>
           <Flags node={node} withLabels={false} />
           <Link

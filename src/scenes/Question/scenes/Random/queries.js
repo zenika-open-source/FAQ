@@ -2,13 +2,13 @@ import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 
 export const getRandomNodeQuery = gql`
-  query($flag: String) {
-    randomNode(flag: $flag) {
+  query($tag: String) {
+    randomNode(tag: $tag) {
       id
     }
   }
 `
 
 export const getRandomNode = graphql(getRandomNodeQuery, {
-  options: props => ({ variables: { flag: props.match.params.flag } })
+  options: props => ({ variables: { tag: props.match.params.tag } })
 })

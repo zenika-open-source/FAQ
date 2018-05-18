@@ -19,13 +19,9 @@ const deleteFlagQuery = `
 `
 
 const getFlags = async (graphcool, answer) => {
-  return new Promise((resolve, reject) => {
-    graphcool
-      .request(getFlagsQuery, { answerId: answer.answerId })
-      .then(data => {
-        resolve(data.Answer.node.flags)
-      })
-  })
+  return graphcool
+    .request(getFlagsQuery, { answerId: answer.answerId })
+    .then(data => data.Answer.node.flags)
 }
 
 const deleteFlags = async (graphcool, answer) => {
