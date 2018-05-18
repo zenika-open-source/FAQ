@@ -1,13 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
+import compact from 'lodash/compact'
 
 import Avatar from 'components/Avatar'
 
 import './History.css'
 
 const join = array => {
-  array = array.filter(s => s)
+  array = compact(array)
   if (array.length <= 1) {
     return array.join('')
   }
@@ -37,16 +38,16 @@ const format = historyAction => {
 
   const sentences = {
     CREATED: {
-      Question: () => {
-        let s = ['asked this question']
-        s.push(sentencer(meta.tags, 'added', 'tag', true))
-        return join(s)
-      },
-      Answer: () => {
-        let s = ['answered this question']
-        s.push(sentencer(meta.sources, 'added', 'source'))
-        return join(s)
-      },
+      Question: () =>
+        join([
+          'asked this question',
+          sentencer(meta.tags, 'added', 'tag', true)
+        ]),
+      Answer: () =>
+        join([
+          'answered this question',
+          sentencer(meta.sources, 'added', 'source')
+        ]),
       Flag: () => `flagged this question with "${meta.type}"`
     },
     UPDATED: {

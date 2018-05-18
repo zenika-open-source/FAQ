@@ -14,7 +14,10 @@ class History extends Component {
     open: false
   }
 
-  toggleState = () => this.setState({ open: !this.state.open })
+  toggleState = () =>
+    this.setState(state => ({
+      open: !state.open
+    }))
 
   render () {
     const { node } = this.props
