@@ -56,25 +56,7 @@ class UserProfile extends Component {
       return <div>Error :(</div>
     }
 
-    const userLog = ['questions', 'answers', 'flags']
-      .map(entityType =>
-        User[entityType].map(({ id, createdAt, node }) => ({
-          type: {
-            questions: 'Ask',
-            answers: 'Answer',
-            flags: 'Flag'
-          }[entityType],
-          id,
-          at: createdAt,
-          question: {
-            link: `/q/${node.question.slug}-${node.id}`,
-            title: node.question.title
-          }
-        }))
-      )
-      .reduce((all, entities) => all.concat(entities))
-      // sort by date
-      .sort((a, b) => (a.at < b.at ? 1 : a.at > b.at ? -1 : 0))
+    const userLog = User.history
 
     const { savingIdentity, identity: { name, email, picture } } = this.state
 
@@ -148,17 +130,21 @@ class UserProfile extends Component {
                 <tr>
                   <td>Action</td>
                   <td>When</td>
+                  <td>Meta</td>
                   <td>Question</td>
                 </tr>
               </thead>
               <tbody>
-                {userLog.map(({ type, id, at, question }) => (
+                {userLog.map(({ id, action, model, meta, createdAt, node }) => (
                   <tr key={id}>
-                    <td>{type}</td>
-                    <td style={{ whiteSpace: 'nowrap' }}>{at}</td>
+                    <td>
+                      {action} {model}
+                    </td>
+                    <td style={{ whiteSpace: 'nowrap' }}>{createdAt}</td>
+                    <td>{JSON.stringify(meta)}</td>
                     <td style={{ wordBreak: 'break-word' }}>
-                      <Link to={question.link}>
-                        {markdown.title(question.title)}
+                      <Link to={`/q/${node.question.slug}-${node.id}`}>
+                        {markdown.title(node.question.title)}
                       </Link>
                     </td>
                   </tr>

@@ -56,6 +56,7 @@
 .history .actions {
   display: flex;
   flex-flow: column-reverse;
+  width: 100%;
 }
 
 .history .history-action {

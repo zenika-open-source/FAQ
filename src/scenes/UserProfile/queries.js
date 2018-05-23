@@ -11,39 +11,17 @@ export const getAllPersonalDataQuery = gql`
       email
       name
       picture
-      flags {
+      history(orderBy: createdAt_DESC) {
         id
-        createdAt
-        type
-        node {
-          id
-          question {
-            id
-            title
-          }
-        }
-      }
-      answers {
-        id
+        action
+        model
+        meta
         createdAt
         node {
           id
           question {
             id
             title
-            slug
-          }
-        }
-      }
-      questions {
-        id
-        createdAt
-        node {
-          id
-          question {
-            id
-            title
-            slug
           }
         }
       }
@@ -57,17 +35,12 @@ export const getAllPersonalData = graphql(getAllPersonalDataQuery, {
 
 export const updateIdentityMutation = gql`
   mutation updateIdentity(
-    $id: ID!,
-    $name: String!,
-    $email: String!,
+    $id: ID!
+    $name: String!
+    $email: String!
     $picture: String!
   ) {
-    updateUser(
-      id: $id,
-      name: $name,
-      email: $email,
-      picture: $picture
-    ) {
+    updateUser(id: $id, name: $name, email: $email, picture: $picture) {
       id
     }
   }
