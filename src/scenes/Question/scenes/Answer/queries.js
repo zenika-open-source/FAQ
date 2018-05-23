@@ -1,12 +1,24 @@
 import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 
+import { history } from 'services'
+
 export const submitAnswerQuery = gql`
   mutation submitAnswer($id: ID!, $answer: ZNodeanswerAnswer!) {
     updateZNode(id: $id, answer: $answer) {
       id
+      question {
+        id
+        title
+        slug
+      }
       answer {
         id
+        content
+        sources {
+          label
+          url
+        }
       }
     }
   }
@@ -26,6 +38,9 @@ export const editAnswerQuery = gql`
       sources: $sources
     ) {
       id
+      content
+      sourcesChanges
+      nodeId
     }
   }
 `
@@ -36,7 +51,22 @@ export const submitAnswer = graphql(submitAnswerQuery, {
     submitAnswer: (id, answer) => {
       return submitAnswer({ variables: { id, answer } })
     }
-  })
+  }),
+  options: {
+    onCompleted: ({ updateZNode }) =>
+      history.addAction(
+        'CREATED',
+        'Answer',
+        {
+          content: updateZNode.answer.content,
+          sources: updateZNode.answer.sources.map(s => ({
+            label: s.label,
+            url: s.url
+          }))
+        },
+        updateZNode.id
+      )
+  }
 })
 
 export const editAnswer = graphql(editAnswerQuery, {
@@ -52,5 +82,18 @@ export const editAnswer = graphql(editAnswerQuery, {
         }
       })
     }
-  })
+  }),
+  options: {
+    onCompleted: ({ fullUpdateAnswer }) => {
+      history.addAction(
+        'UPDATED',
+        'Answer',
+        {
+          content: fullUpdateAnswer.content,
+          sourcesChanges: fullUpdateAnswer.sourcesChanges
+        },
+        fullUpdateAnswer.nodeId
+      )
+    }
+  }
 })

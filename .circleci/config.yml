@@ -56,7 +56,7 @@ jobs:
     steps:
       - *attach_workspace
 
-      - run: npm run deploy
+      - run: npm run deploy_graphcool
 
   gcloud_prod:
     working_directory: *workspace_root

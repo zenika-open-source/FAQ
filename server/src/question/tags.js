@@ -61,7 +61,9 @@ const updateTags = async (graphcool, question) => {
     })
   })
 
-  return Promise.all(_.concat(mutationsToAdd, mutationsToDelete))
+  await Promise.all(_.concat(mutationsToAdd, mutationsToDelete))
+
+  return { added: tagsToAdd, removed: tagsToRemove }
 }
 
 export { updateTags }
