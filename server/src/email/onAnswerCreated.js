@@ -28,9 +28,9 @@ ${node.answer.content}
 
 #####
 
-You can read the answer and it's sources on ${process.env['FAQ_URL']}/q/${
-  node.question.slug
-}-${node.id}
+You can read the answer and it's sources on https://${
+  process.env['FAQ_URL']
+}/q/${node.question.slug}-${node.id}
 `
 
   const html = htmlEmail(node)

@@ -336,7 +336,9 @@ a[x-apple-data-detectors=true] {
 
                     <div class="" style="font-size: 16px;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; text-align: center;"><p>
 	You can read the answer and its sources on
-  	<a href="${process.env['FAQ_URL']}/q/${node.question.slug}-${node.id}">
+  	<a href="https://${process.env['FAQ_URL']}/q/${node.question.slug}-${
+  node.id
+}">
 		the FAQ
 	</a>
 </p></div>

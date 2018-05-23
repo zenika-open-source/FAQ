@@ -27,7 +27,9 @@ export default async event => {
 
   const question = event.data.Question.node
 
-  const url = `${process.env['FAQ_URL']}/q/${question.slug}-${question.node.id}`
+  const url = `https://${process.env['FAQ_URL']}/q/${question.slug}-${
+    question.node.id
+  }`
 
   const message = {
     text: `<${url}|${emojify(question.title)}>`
