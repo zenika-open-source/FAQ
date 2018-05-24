@@ -2,9 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import uuid from 'uuid/v4'
 import clone from 'lodash/clone'
+import find from 'lodash/find'
+import map from 'lodash/map'
 import moment from 'moment'
 
-import Flag from './Flag'
+import Flag, { flagMeta } from './Flag'
 
 import './Flags.css'
 
@@ -19,7 +21,11 @@ const Flags = ({ node, withLabels }) => {
 
   return (
     <div className="flags">
-      {flags.map(flag => {
+      {map(flagMeta, (meta, type) => {
+        let flag = find(flags, { type })
+
+        if (!flag) return null
+
         let tooltip
 
         if (withLabels && flag.user) {

@@ -4,29 +4,30 @@ import capitalize from 'lodash/capitalize'
 import cn from 'classnames'
 
 const flagMeta = {
+  duplicate: {
+    icon: 'filter_2',
+    color: '#c73228'
+  },
   outdated: {
     icon: 'history',
-    className: 'meta-warning-bg'
+    color: '#ff9900'
   },
   incomplete: {
     icon: 'report',
-    className: 'meta-error-bg'
+    color: '#c73228'
   },
   unanswered: {
     icon: 'help_outline',
-    className: 'meta-warning-bg'
-  },
-  duplicate: {
-    icon: 'filter_2',
-    className: 'meta-error-bg'
+    color: '#ff9900'
   }
 }
 
-const Flag = ({ flag, withlabel, ...otherProps }) => (
+const Flag = ({ flag, withlabel, style, ...otherProps }) => (
   <div
-    className={cn('flag', flagMeta[flag.type].className, {
+    className={cn('flag', {
       'with-label': withlabel
     })}
+    style={{ backgroundColor: flagMeta[flag.type].color, ...style }}
     {...otherProps}
   >
     <i className="material-icons">{flagMeta[flag.type].icon}</i>
@@ -36,7 +37,8 @@ const Flag = ({ flag, withlabel, ...otherProps }) => (
 
 Flag.propTypes = {
   flag: PropTypes.object.isRequired,
-  withlabel: PropTypes.bool
+  withlabel: PropTypes.bool,
+  style: PropTypes.object
 }
 
 export default Flag
