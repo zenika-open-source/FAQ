@@ -51,8 +51,14 @@ const updateSources = async (graphcool, answer) => {
   const oldSources = await getSources(graphcool, answer)
 
   const sourcesToAdd = _.differenceBy(newSources, oldSources, 'id')
-  const sourcesToUpdate = _.differenceBy(newSources, sourcesToAdd)
+  let sourcesToUpdate = _.differenceBy(newSources, sourcesToAdd)
   const sourcesToDelete = _.differenceBy(oldSources, newSources, 'id')
+
+  // Only update sources that were edited
+  sourcesToUpdate = sourcesToUpdate.filter(source => {
+    const oldSource = _.find(oldSources, { id: source.id })
+    return source.label !== oldSource.label || source.url !== oldSource.url
+  })
 
   const mutationsToAdd = sourcesToAdd.map(source => {
     return graphcool.request(addSourceQuery, {
