@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import cn from 'classnames'
 import { Query } from 'react-apollo'
 
-import { loadHistoryQuery } from './queries'
+import { loadHistoryQuery } from 'services/history'
 
 import HistoryActions from './HistoryActions'
 
