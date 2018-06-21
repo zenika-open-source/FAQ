@@ -123,5 +123,12 @@ functions:
       code:
         src: ./src/flag/uniqueFlag.js
 
+  removeFlag:
+    type: resolver
+    schema: ./src/flag/remove.graphql
+    handler:
+      code:
+        src: ./src/flag/remove.js
+
 permissions:
   - operation: "*"

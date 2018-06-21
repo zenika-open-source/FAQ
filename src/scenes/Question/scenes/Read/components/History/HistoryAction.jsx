@@ -72,6 +72,9 @@ const format = historyAction => {
 
         return join(s)
       }
+    },
+    DELETED: {
+      Flag: () => `removed the flag "${meta.type}"`
     }
   }
 
@@ -84,6 +87,9 @@ const format = historyAction => {
     UPDATED: {
       Question: meta.title ? 'edit' : 'local_offer',
       Answer: meta.content ? 'question_answer' : 'library_books'
+    },
+    DELETED: {
+      Flag: 'outlined_flag'
     }
   }
 

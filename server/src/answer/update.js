@@ -1,6 +1,5 @@
 const fromEvent = require('graphcool-lib').fromEvent
 const { updateSources } = require('./sources')
-const { deleteFlags } = require('./flags')
 
 const getPreviousAnswerQuery = `
 	query ($id: ID!) {
@@ -56,9 +55,7 @@ export default async event => {
 
   const sources = updateSources(graphcool, answer)
 
-  const deletedFlags = deleteFlags(graphcool, answer)
-
-  const wait = await Promise.all([updatedAnswer, sources, deletedFlags])
+  const wait = await Promise.all([updatedAnswer, sources])
 
   const dummy = await updateNodeDummy(graphcool, answer)
 
