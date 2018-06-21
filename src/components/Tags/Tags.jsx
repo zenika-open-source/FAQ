@@ -19,8 +19,10 @@ Tags.list = {
     'paie',
     'ops',
     'recrutement',
+    'marketing',
     'rh',
     'dsi',
+    'dt',
     'compta',
     'formation',
     'ce'
