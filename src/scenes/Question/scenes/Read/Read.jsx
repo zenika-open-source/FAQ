@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import { Link, Redirect } from 'react-router-dom'
 import Helmet from 'react-helmet'
 
-import { createFlag } from './queries'
+import { compose } from 'react-apollo'
+import { createFlag, removeFlag } from './queries'
 
 import { markdown } from 'services'
 
@@ -13,16 +14,17 @@ import Loading from 'components/Loading'
 import Button from 'components/Button'
 import Card, { CardTitle, CardText } from 'components/Card'
 import Dropdown, { DropdownItem } from 'components/Dropdown'
-import Flags, { flagMeta } from 'components/Flags'
+import Flags from 'components/Flags'
 import Tags from 'components/Tags'
 
 import ActionMenu from '../../components/ActionMenu'
+import FlagsDropdown from './components/FlagsDropdown'
 import Sources from './components/Sources'
 import Meta from './components/Meta'
 import Share from './components/Share'
 import History from './components/History'
 
-const Read = ({ history, match, data, createFlag }) => {
+const Read = ({ history, match, data, createFlag, removeFlag }) => {
   const { loading, error, ZNode } = data
 
   if (loading) {
@@ -49,18 +51,11 @@ const Read = ({ history, match, data, createFlag }) => {
         <title>FAQ - {markdown.title(ZNode.question.title)}</title>
       </Helmet>
       <ActionMenu backLink="/" backLabel="Home">
-        <Dropdown button={<Button icon="flag" label="Flag as ..." link />}>
-          {['incomplete', 'outdated', 'duplicate'].map(type => (
-            <DropdownItem
-              key={type}
-              icon={flagMeta[type].icon}
-              disabled={ZNode.flags.filter(f => f.type === type).length > 0}
-              onClick={() => createFlag(type, ZNode.id)}
-            >
-              {type}
-            </DropdownItem>
-          ))}
-        </Dropdown>
+        <FlagsDropdown
+          flags={ZNode.flags}
+          onSelect={type => createFlag(type, ZNode.id)}
+          onRemove={type => removeFlag(type, ZNode.id)}
+        />
         <Dropdown button={<Button icon="edit" label="Edit ..." link />}>
           <DropdownItem
             icon="edit"
@@ -127,7 +122,8 @@ Read.propTypes = {
   history: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
   data: PropTypes.object.isRequired,
-  createFlag: PropTypes.func.isRequired
+  createFlag: PropTypes.func.isRequired,
+  removeFlag: PropTypes.func.isRequired
 }
 
-export default createFlag(Read)
+export default compose(createFlag, removeFlag)(Read)

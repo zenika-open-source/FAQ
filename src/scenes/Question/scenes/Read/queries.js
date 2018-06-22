@@ -1,7 +1,9 @@
 import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 
-import { auth, history } from 'services'
+import { apollo, auth, history } from 'services'
+
+import { getNodeQuery } from '../../queries'
 
 export const createFlagQuery = gql`
   mutation createFlag($type: String!, $nodeId: ID!, $userId: ID!) {
@@ -15,6 +17,16 @@ export const createFlagQuery = gql`
         id
       }
       createdAt
+    }
+  }
+`
+
+export const removeFlagQuery = gql`
+  mutation removeFlag($type: String!, $nodeId: ID!) {
+    removeFlag(type: $type, nodeId: $nodeId) {
+      id
+      type
+      nodeId
     }
   }
 `
@@ -41,6 +53,36 @@ export const createFlag = graphql(createFlagQuery, {
         { type: createFlag.type },
         createFlag.node.id
       )
+    }
+  }
+})
+
+export const removeFlag = graphql(removeFlagQuery, {
+  name: 'removeFlag',
+  props: ({ removeFlag }) => ({
+    removeFlag: (type, nodeId) => {
+      return removeFlag({
+        variables: {
+          type,
+          nodeId
+        }
+      })
+    }
+  }),
+  options: {
+    onCompleted: ({ removeFlag }) => {
+      history.addAction(
+        'DELETED',
+        'Flag',
+        { type: removeFlag.type },
+        removeFlag.nodeId
+      )
+      // Update cache
+      apollo.query({
+        query: getNodeQuery,
+        variables: { id: removeFlag.nodeId },
+        fetchPolicy: 'network-only'
+      })
     }
   }
 })
