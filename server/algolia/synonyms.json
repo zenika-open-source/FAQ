@@ -13,5 +13,10 @@
     "objectID": "voyage",
     "type": "synonym",
     "synonyms": ["voyage", "déplacement"]
+  },
+  {
+    "objectID": "ordinateur",
+    "type": "synonym",
+    "synonyms": ["PC", "ordinateur"]
   }
 ]
