@@ -18,5 +18,10 @@
     "objectID": "ordinateur",
     "type": "synonym",
     "synonyms": ["PC", "ordinateur"]
+  },
+  {
+    "objectID": "compte-personnel-formation",
+    "type": "synonym",
+    "synonyms": ["CPF", "Compte Personnel Formation"]
   }
 ]
