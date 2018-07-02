@@ -93,9 +93,17 @@ const format = historyAction => {
     }
   }
 
+  const createdDate = moment(createdAt)
+  const monthOld = moment().subtract(1, 'month')
+
+  const date =
+    createdDate.diff(monthOld) > 0
+      ? createdDate.fromNow()
+      : createdDate.format('D MMM YYYY, HH:mm')
+
   return {
-    date: moment(createdAt).fromNow(),
-    user: user,
+    date,
+    user,
     sentence: sentences[action][model](),
     icon: icons[action][model]
   }
@@ -122,7 +130,7 @@ const HistoryAction = ({ action }) => {
           {action.user.name} {action.sentence}.
         </div>
       </div>
-      <div style={{ minWidth: '100px', textAlign: 'right' }}>
+      <div style={{ minWidth: '150px', textAlign: 'right' }}>
         <i>{action.date}</i>
       </div>
     </div>
