@@ -31,5 +31,6 @@ index.batchSynonyms(
 )
 
 index.setSettings({
-  attributesForFaceting: ['filterOnly(tag)', 'filterOnly(flag)']
+  attributesForFaceting: ['filterOnly(tag)', 'filterOnly(flag)'],
+  removeStopWords: ['en', 'fr']
 })
