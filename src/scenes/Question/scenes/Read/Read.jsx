@@ -72,7 +72,7 @@ const Read = ({ history, match, data, createFlag, removeFlag }) => {
         </Dropdown>
       </ActionMenu>
       <Card>
-        <CardTitle style={{ padding: '1.2rem' }}>
+        <CardTitle style={{ padding: '0.9rem' }}>
           <div className="grow">
             <h1>{markdown.title(ZNode.question.title)}</h1>
             {ZNode.tags.length > 0 && <Tags tags={ZNode.tags} />}
@@ -96,9 +96,6 @@ const Read = ({ history, match, data, createFlag, removeFlag }) => {
                 marginBottom: '2rem'
               }}
             >
-              <b>No answer yet...</b>
-              <br />
-              <br />
               <Link
                 to={`/q/${match.params.slug}/answer`}
                 className="btn-container"
