@@ -23,15 +23,18 @@ export const submitQuestionQuery = gql`
 `
 
 export const editQuestionQuery = gql`
-  mutation($questionId: ID!, $title: String!, $tags: [String!]!, $userId: ID!) {
+  mutation($questionId: ID!, $title: String!, $tags: [String!]!) {
     updateQuestionAndTags(
       where: { id: $questionId }
-      data: { title: $title, user: { connect: { id: $userId } } }
+      data: { title: $title }
       tags: $tags
     ) {
       id
       title
       slug
+      user {
+        id
+      }
       node {
         id
         tags {
@@ -78,29 +81,14 @@ export const submitQuestion = graphql(submitQuestionQuery, {
 export const editQuestion = graphql(editQuestionQuery, {
   name: 'editQuestion',
   props: ({ editQuestion }) => ({
-    editQuestion: (questionId, title, tags /*, nodeId */) => {
+    editQuestion: (questionId, title, tags) => {
       return editQuestion({
         variables: {
           questionId,
           title,
-          tags,
-          // nodeId,
-          userId: auth.getUserNodeId()
+          tags
         }
       })
     }
   })
-  /* options: {
-    onCompleted: ({ fullUpdateQuestion }) => {
-      history.addAction(
-        'UPDATED',
-        'Question',
-        {
-          title: fullUpdateQuestion.title,
-          tagsChanges: fullUpdateQuestion.tagsChanges
-        },
-        fullUpdateQuestion.nodeId
-      )
-    }
-  } */
 })

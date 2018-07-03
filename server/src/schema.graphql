@@ -2,10 +2,16 @@
 
 # import Query.*, Mutation.* from './generated/prisma.graphql'
 
+type Query {
+  me: User
+}
+
 type Mutation {
   updateQuestionAndTags(
     data: QuestionUpdateInput!
     where: QuestionWhereUniqueInput!
     tags: [String!]!
   ): Question
+
+  authenticate(idToken: String!): User
 }

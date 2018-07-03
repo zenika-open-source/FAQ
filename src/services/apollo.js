@@ -1,10 +1,13 @@
 import ApolloClient from 'apollo-client'
 import { split } from 'apollo-link'
 import { HttpLink } from 'apollo-link-http'
+import { setContext } from 'apollo-link-context'
 import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import gql from 'graphql-tag'
+
+import auth from './auth'
 
 const httpLink = new HttpLink({
   uri: process.env.REACT_APP_GRAPHCOOL_URI
@@ -15,6 +18,16 @@ const httpLink = new HttpLink({
   options: { reconnect: true }
 }) */
 
+const authLink = setContext((_, { headers }) => {
+  const token = auth.session ? auth.session.idToken : null
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : ''
+    }
+  }
+})
+
 const link = split(
   ({ query }) => {
     const { kind, operation } = getMainDefinition(query)
@@ -22,7 +35,7 @@ const link = split(
     // return kind === 'OperationDefinition' && operation === 'subscription'
   },
   // wsLink,
-  httpLink
+  authLink.concat(httpLink)
 )
 
 const cache = new InMemoryCache()

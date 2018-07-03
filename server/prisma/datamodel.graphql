@@ -84,7 +84,7 @@ type HistoryAction {
 
 type User {
   id: ID! @unique
-  auth0UserId: String @unique
+  auth0Id: String @unique
 
   name: String
   email: String

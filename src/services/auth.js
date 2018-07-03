@@ -11,14 +11,8 @@ class Auth {
       scope: 'openid profile email'
     })
 
-    if (
-      !this.session &&
-      localStorage.auth &&
-      localStorage.userId &&
-      localStorage.userProfile
-    ) {
+    if (!this.session && localStorage.auth && localStorage.userId) {
       this.session = JSON.parse(localStorage.auth)
-      this.userProfile = JSON.parse(localStorage.userProfile)
     }
   }
 
@@ -34,7 +28,6 @@ class Auth {
     localStorage.removeItem('userProfile')
     this.session = null
     this.userId = null
-    this.userProfile = null
     if (this.scheduledTimeout) {
       clearTimeout(this.scheduledTimeout)
     }
@@ -82,7 +75,7 @@ class Auth {
 
         this.setSession(authResult)
 
-        this.getProfile().then(resolve)
+        resolve()
       })
     })
   }
@@ -95,24 +88,6 @@ class Auth {
       clearTimeout(this.scheduledTimeout)
     }
     this.scheduledTimeout = setTimeout(this.renewAuth, fiveMinBefore)
-  }
-
-  getProfile () {
-    return new Promise((resolve, reject) => {
-      let accessToken = this.session.accessToken
-      if (this.userProfile) {
-        resolve(this.userProfile)
-      } else {
-        this.auth0.client.userInfo(accessToken, (err, profile, ...rest) => {
-          if (profile) {
-            this.userProfile = profile
-            localStorage.userProfile = JSON.stringify(profile)
-            resolve(this.userProfile)
-          }
-          reject(err)
-        })
-      }
-    })
   }
 
   /* State getters and setters */
@@ -144,10 +119,6 @@ class Auth {
 
   getUserNodeId () {
     return localStorage.userId
-  }
-
-  getUserProfile () {
-    return this.isAuthenticated() ? this.userProfile : null
   }
 }
 

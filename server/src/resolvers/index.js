@@ -1,5 +1,6 @@
 const { forwardTo } = require('prisma-binding')
 
+const authResolvers = require('./auth')
 const questionResolvers = require('./question')
 
 const mergeResolvers = (...resolvers) =>
@@ -14,4 +15,4 @@ const mergeResolvers = (...resolvers) =>
     }
   )
 
-module.exports = mergeResolvers(questionResolvers)
+module.exports = mergeResolvers(authResolvers, questionResolvers)

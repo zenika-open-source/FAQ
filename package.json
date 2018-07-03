@@ -6,6 +6,7 @@
     "algoliasearch": "^3.24.11",
     "apollo-cache-inmemory": "^1.1.12",
     "apollo-client": "^2.2.8",
+    "apollo-link-context": "^1.0.8",
     "apollo-link-http": "^1.5.3",
     "apollo-link-ws": "^1.0.7",
     "auth0-js": "^9.3.2",

@@ -14,12 +14,12 @@ class Callback extends Component {
     auth
       .parseHash(location.hash)
       .then(authResult =>
-        authQL(authResult.accessToken, authResult.idToken).then(({ data }) => {
+        authQL(authResult.idToken).then(({ data }) => {
           auth.setSession(authResult)
-          auth.setUserId(data.authenticateUser.id)
+          auth.setUserId(data.authenticate.id)
         })
       )
-      .then(() => auth.getProfile())
+      // .then(() => auth.getProfile())
       .then(() => history.push(auth.popAfterLoginRedirectUrl()))
       .catch(err => {
         // eslint-disable-next-line

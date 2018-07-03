@@ -2,33 +2,42 @@ const { GraphQLServer } = require('graphql-yoga')
 const { Prisma, forwardTo } = require('prisma-binding')
 
 const resolvers = require('./resolvers')
+const middlewares = require('./middlewares')
 
-// If no resolver is defined, forward to Prisma
-const defaultMiddleware = async (resolve, parent, args, ctx, info) => {
-  let res = await resolve()
+const auth = require('./middlewares/auth')
 
-  if (res === undefined) {
-    res = forwardTo('prisma')(parent, args, ctx, info)
-  }
+/* Create server */
 
-  return res
-}
+const prisma = new Prisma({
+  typeDefs: 'src/generated/prisma.graphql',
+  endpoint: 'http://localhost:4466'
+})
 
 const server = new GraphQLServer({
   typeDefs: 'src/schema.graphql',
   resolvers,
+  middlewares,
   resolverValidationOptions: {
     requireResolversForResolveType: false
   },
-  middlewares: [defaultMiddleware],
-  context: req => ({
-    ...req,
-    prisma: new Prisma({
-      typeDefs: 'src/generated/prisma.graphql',
-      endpoint: 'http://localhost:4466'
-    })
-  })
+  context: req => ({ ...req, prisma })
 })
+
+/* Register authentication middlewares */
+
+server.express.post(
+  server.options.endpoint,
+  auth.checkJwt,
+  (err, req, res, next) => {
+    if (err) return res.status(401).send(err.message)
+    next()
+  }
+)
+server.express.post(server.options.endpoint, (req, res, next) =>
+  auth.getUser(req, res, next, prisma)
+)
+
+/* Start server */
 
 server.start(() =>
   console.log('GraphQL server is running on http://localhost:4000')

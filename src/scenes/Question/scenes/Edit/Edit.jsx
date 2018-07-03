@@ -106,7 +106,7 @@ class Edit extends Component {
     )
       .then(({ data }) => {
         this.setState({
-          slug: data.fullUpdateQuestion.slug + '-' + zNode.id
+          slug: data.updateQuestionAndTags.slug + '-' + zNode.id
         })
       })
       .catch(error => {

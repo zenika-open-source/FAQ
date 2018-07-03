@@ -4,6 +4,8 @@ import { Link, withRouter } from 'react-router-dom'
 
 import { auth } from 'services'
 
+import { me } from './queries'
+
 import Avatar from 'components/Avatar'
 import Dropdown, { DropdownItem, DropdownDivider } from 'components/Dropdown'
 
@@ -11,9 +13,8 @@ import GithubIcon from './components/GithubIcon'
 
 import './Navbar.css'
 
-const Navbar = ({ history }) => {
-  const user = auth.getUserProfile()
-
+const Navbar = ({ history, data }) => {
+  const user = data.me
   return (
     <Fragment>
       <div className="navbar">
@@ -43,7 +44,8 @@ const Navbar = ({ history }) => {
             >
               <DropdownItem
                 icon="account_box"
-                onClick={() => history.push('/user-profile')}>
+                onClick={() => history.push('/user-profile')}
+              >
                 Profile
               </DropdownItem>
               <DropdownDivider />
@@ -80,4 +82,4 @@ Navbar.propTypes = {
   history: PropTypes.object.isRequired
 }
 
-export default withRouter(Navbar)
+export default withRouter(me(Navbar))

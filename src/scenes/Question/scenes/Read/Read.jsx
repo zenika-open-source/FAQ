@@ -35,8 +35,6 @@ const Read = ({ history, match, data, createFlag, removeFlag }) => {
     return <div>Error :(</div>
   }
 
-  console.log(zNode)
-
   if (zNode === null) {
     return <NotFound {...this.props} />
   } else {
