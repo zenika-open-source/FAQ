@@ -4,11 +4,7 @@ import { graphql } from 'react-apollo'
 import { auth, history } from 'services'
 
 export const submitQuestionQuery = gql`
-  mutation submitQuestion(
-    $title: String!
-    $userId: ID!
-    $tags: [ZNodetagsTag!]!
-  ) {
+  mutation($title: String!, $userId: ID!, $tags: [ZNodetagsTag!]!) {
     createZNode(
       question: { title: $title, slug: "", userId: $userId }
       tags: $tags
@@ -27,25 +23,22 @@ export const submitQuestionQuery = gql`
 `
 
 export const editQuestionQuery = gql`
-  mutation editQuestion(
-    $questionId: ID!
-    $title: String!
-    $tags: [String!]!
-    $nodeId: ID!
-    $userId: ID!
-  ) {
-    fullUpdateQuestion(
-      id: $questionId
-      title: $title
+  mutation($questionId: ID!, $title: String!, $tags: [String!]!, $userId: ID!) {
+    updateQuestionAndTags(
+      where: { id: $questionId }
+      data: { title: $title, user: { connect: { id: $userId } } }
       tags: $tags
-      nodeId: $nodeId
-      userId: $userId
     ) {
       id
       title
       slug
-      nodeId
-      tagsChanges
+      node {
+        id
+        tags {
+          id
+          label
+        }
+      }
     }
   }
 `
@@ -85,19 +78,19 @@ export const submitQuestion = graphql(submitQuestionQuery, {
 export const editQuestion = graphql(editQuestionQuery, {
   name: 'editQuestion',
   props: ({ editQuestion }) => ({
-    editQuestion: (questionId, title, tags, nodeId) => {
+    editQuestion: (questionId, title, tags /*, nodeId */) => {
       return editQuestion({
         variables: {
           questionId,
           title,
           tags,
-          nodeId,
+          // nodeId,
           userId: auth.getUserNodeId()
         }
       })
     }
-  }),
-  options: {
+  })
+  /* options: {
     onCompleted: ({ fullUpdateQuestion }) => {
       history.addAction(
         'UPDATED',
@@ -109,5 +102,5 @@ export const editQuestion = graphql(editQuestionQuery, {
         fullUpdateQuestion.nodeId
       )
     }
-  }
+  } */
 })

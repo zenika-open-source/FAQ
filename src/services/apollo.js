@@ -10,23 +10,25 @@ const httpLink = new HttpLink({
   uri: process.env.REACT_APP_GRAPHCOOL_URI
 })
 
-const wsLink = new WebSocketLink({
+/* const wsLink = new WebSocketLink({
   uri: process.env.REACT_APP_GRAPHCOOL_URI_WS,
   options: { reconnect: true }
-})
+}) */
 
 const link = split(
   ({ query }) => {
     const { kind, operation } = getMainDefinition(query)
-    return kind === 'OperationDefinition' && operation === 'subscription'
+    return true
+    // return kind === 'OperationDefinition' && operation === 'subscription'
   },
-  wsLink,
+  // wsLink,
   httpLink
 )
 
 const cache = new InMemoryCache()
 
 const apollo = new ApolloClient({ link, cache })
+// const apollo = new ApolloClient({ httpLink, cache })
 
 const subscribeToNodes = gql`
   subscription {
@@ -97,6 +99,7 @@ class ApolloWatcher {
   hooks = []
 
   start () {
+    return
     const subscriptions = [
       subscribeToNodes,
       subscribeToQuestions,
@@ -113,6 +116,7 @@ class ApolloWatcher {
   }
 
   onMutation (data) {
+    return
     const model = Object.keys(data)[0]
     const mutation = data[model].mutation
     const node = data[model].node

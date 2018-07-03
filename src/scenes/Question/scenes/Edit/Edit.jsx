@@ -51,14 +51,14 @@ class Edit extends Component {
     const { nodeLoaded, isEditing } = prevState
     const { data } = nextProps
 
-    if (!nodeLoaded && isEditing && data && data.ZNode) {
-      const { ZNode } = data
+    if (!nodeLoaded && isEditing && data && data.zNode) {
+      const { zNode } = data
       return {
         nodeLoaded: true,
-        initialQuestion: ZNode.question.title,
-        question: ZNode.question.title,
-        initialTags: ZNode.tags.map(x => x.label),
-        tags: ZNode.tags.map(x => x.label)
+        initialQuestion: zNode.question.title,
+        question: zNode.question.title,
+        initialTags: zNode.tags.map(x => x.label),
+        tags: zNode.tags.map(x => x.label)
       }
     }
 
@@ -82,7 +82,7 @@ class Edit extends Component {
     submitQuestion(this.state.question, this.state.tags)
       .then(({ data }) => {
         this.setState({
-          slug: data.createZNode.question.slug + '-' + data.createZNode.id
+          slug: data.createzNode.question.slug + '-' + data.createzNode.id
         })
       })
       .catch(error => {
@@ -94,19 +94,19 @@ class Edit extends Component {
 
   editQuestion = () => {
     const { editQuestion } = this.props
-    const { ZNode } = this.props.data
+    const { zNode } = this.props.data
 
     this.setState({ loadingSubmit: true })
 
     editQuestion(
-      ZNode.question.id,
+      zNode.question.id,
       this.state.question,
       this.state.tags,
-      ZNode.id
+      zNode.id
     )
       .then(({ data }) => {
         this.setState({
-          slug: data.fullUpdateQuestion.slug + '-' + ZNode.id
+          slug: data.fullUpdateQuestion.slug + '-' + zNode.id
         })
       })
       .catch(error => {
@@ -178,7 +178,7 @@ class Edit extends Component {
     }
 
     if (isEditing) {
-      const { loading, error, ZNode } = this.props.data
+      const { loading, error, zNode } = this.props.data
 
       if (loading) {
         return <Loading />
@@ -188,7 +188,7 @@ class Edit extends Component {
         return <div>Error :(</div>
       }
 
-      if (ZNode === null) {
+      if (zNode === null) {
         return <Redirect to={'/'} />
       }
     }

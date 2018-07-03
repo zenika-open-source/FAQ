@@ -43,14 +43,14 @@ class Answer extends Component {
   }
 
   static getDerivedStateFromProps (nextProps, prevState) {
-    const { data: { ZNode } } = nextProps
+    const { data: { zNode } } = nextProps
     const { nodeLoaded } = prevState
 
-    if (!nodeLoaded && ZNode && ZNode.answer) {
+    if (!nodeLoaded && zNode && zNode.answer) {
       return {
         nodeLoaded: true,
-        answer: { text: ZNode.answer.content },
-        sources: ZNode.answer.sources
+        answer: { text: zNode.answer.content },
+        sources: zNode.answer.sources
       }
     }
 
@@ -76,13 +76,13 @@ class Answer extends Component {
   }
 
   submitForm = () => {
-    const { ZNode } = this.props.data
-    ZNode.answer ? this.editAnswer() : this.submitAnswer()
+    const { zNode } = this.props.data
+    zNode.answer ? this.editAnswer() : this.submitAnswer()
   }
 
   submitAnswer = () => {
     const { submitAnswer } = this.props
-    const { ZNode } = this.props.data
+    const { zNode } = this.props.data
     const { answer } = this.state
 
     this.setState({ loadingSubmit: true })
@@ -93,9 +93,9 @@ class Answer extends Component {
       sources: this.cleanSources()
     }
 
-    submitAnswer(ZNode.id, answerObject)
+    submitAnswer(zNode.id, answerObject)
       .then(() => {
-        this.setState({ slug: ZNode.question.slug + '-' + ZNode.id })
+        this.setState({ slug: zNode.question.slug + '-' + zNode.id })
       })
       .catch(error => {
         alert(error)
@@ -106,19 +106,19 @@ class Answer extends Component {
 
   editAnswer = (nodeId, answerId) => {
     const { editAnswer } = this.props
-    const { ZNode } = this.props.data
+    const { zNode } = this.props.data
     const { answer } = this.state
 
     this.setState({ loadingSubmit: true })
 
     editAnswer(
-      typeof nodeId === 'string' ? nodeId : ZNode.id,
-      typeof answerId === 'string' ? answerId : ZNode.answer.id,
+      typeof nodeId === 'string' ? nodeId : zNode.id,
+      typeof answerId === 'string' ? answerId : zNode.answer.id,
       answer.text,
       this.cleanSources()
     )
       .then(() => {
-        this.setState({ slug: ZNode.question.slug + '-' + ZNode.id })
+        this.setState({ slug: zNode.question.slug + '-' + zNode.id })
       })
       .catch(error => {
         alert(error)
@@ -139,7 +139,7 @@ class Answer extends Component {
 
   render () {
     const { loadingSubmit, slug, answer, showTips } = this.state
-    const { loading, error, ZNode } = this.props.data
+    const { loading, error, zNode } = this.props.data
 
     if (slug) {
       return <Redirect to={`/q/${slug}`} />
@@ -153,14 +153,14 @@ class Answer extends Component {
       return <div>Error :(</div>
     }
 
-    if (ZNode === null) {
+    if (zNode === null) {
       return <NotFound {...this.props} />
     }
 
     return (
       <div>
         <Prompt message="Are you sure you want to leave this page with an unsaved answer?" />
-        <ActionMenu backLink={`/q/${ZNode.question.slug}-${ZNode.id}`}>
+        <ActionMenu backLink={`/q/${zNode.question.slug}-${zNode.id}`}>
           {!showTips && (
             <Button
               link
@@ -174,9 +174,9 @@ class Answer extends Component {
         <Card style={{ marginTop: '0.3rem' }}>
           <CardTitle style={{ padding: '1.2rem' }}>
             <div className="grow">
-              <h1>{markdown.title(ZNode.question.title)}</h1>
+              <h1>{markdown.title(zNode.question.title)}</h1>
             </div>
-            <Flags node={ZNode} withLabels={true} />
+            <Flags node={zNode} withLabels={true} />
           </CardTitle>
           <CtrlEnterCardText onCtrlEnterCallback={this.submitForm}>
             <ReactMde
@@ -194,7 +194,7 @@ class Answer extends Component {
           </CardText>
           <CardActions>
             <Button
-              label={ZNode.answer ? 'Save answer' : 'Submit answer'}
+              label={zNode.answer ? 'Save answer' : 'Submit answer'}
               primary
               raised
               disabled={answer.text.length === 0}

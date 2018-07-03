@@ -25,7 +25,7 @@ import Share from './components/Share'
 import History from './components/History'
 
 const Read = ({ history, match, data, createFlag, removeFlag }) => {
-  const { loading, error, ZNode } = data
+  const { loading, error, zNode } = data
 
   if (loading) {
     return <Loading />
@@ -35,11 +35,13 @@ const Read = ({ history, match, data, createFlag, removeFlag }) => {
     return <div>Error :(</div>
   }
 
-  if (ZNode === null) {
+  console.log(zNode)
+
+  if (zNode === null) {
     return <NotFound {...this.props} />
   } else {
     /* Redirect to correct URL if old slug used */
-    const correctSlug = ZNode.question.slug + '-' + ZNode.id
+    const correctSlug = zNode.question.slug + '-' + zNode.id
     if (match.params.slug !== correctSlug) {
       return <Redirect to={'/q/' + correctSlug} />
     }
@@ -48,13 +50,13 @@ const Read = ({ history, match, data, createFlag, removeFlag }) => {
   return (
     <div>
       <Helmet>
-        <title>FAQ - {markdown.title(ZNode.question.title)}</title>
+        <title>FAQ - {markdown.title(zNode.question.title)}</title>
       </Helmet>
       <ActionMenu backLink="/" backLabel="Home">
         <FlagsDropdown
-          flags={ZNode.flags}
-          onSelect={type => createFlag(type, ZNode.id)}
-          onRemove={type => removeFlag(type, ZNode.id)}
+          flags={zNode.flags}
+          onSelect={type => createFlag(type, zNode.id)}
+          onRemove={type => removeFlag(type, zNode.id)}
         />
         <Dropdown button={<Button icon="edit" label="Edit ..." link />}>
           <DropdownItem
@@ -74,19 +76,19 @@ const Read = ({ history, match, data, createFlag, removeFlag }) => {
       <Card>
         <CardTitle style={{ padding: '1.2rem' }}>
           <div className="grow">
-            <h1>{markdown.title(ZNode.question.title)}</h1>
-            {ZNode.tags.length > 0 && <Tags tags={ZNode.tags} />}
+            <h1>{markdown.title(zNode.question.title)}</h1>
+            {zNode.tags.length > 0 && <Tags tags={zNode.tags} />}
           </div>
-          <Flags node={ZNode} withLabels={true} />
-          <Share node={ZNode} />
+          <Flags node={zNode} withLabels={true} />
+          <Share node={zNode} />
         </CardTitle>
         <CardText>
-          {ZNode.answer ? (
+          {zNode.answer ? (
             <Fragment>
               <div style={{ padding: '0.5rem', marginBottom: '0.5rem' }}>
-                {markdown.html(ZNode.answer.content)}
+                {markdown.html(zNode.answer.content)}
               </div>
-              <Sources sources={ZNode.answer.sources} />
+              <Sources sources={zNode.answer.sources} />
             </Fragment>
           ) : (
             <div
@@ -110,8 +112,8 @@ const Read = ({ history, match, data, createFlag, removeFlag }) => {
             </div>
           )}
           <hr />
-          <Meta node={ZNode} />
-          <History node={ZNode} />
+          <Meta node={zNode} />
+          <History node={zNode} />
         </CardText>
       </Card>
     </div>

@@ -1,0 +1,11 @@
+# import ZNode, Question, Answer, Source, Flag, Tag, HistoryAction, User from './generated/prisma.graphql'
+
+# import Query.*, Mutation.* from './generated/prisma.graphql'
+
+type Mutation {
+  updateQuestionAndTags(
+    data: QuestionUpdateInput!
+    where: QuestionWhereUniqueInput!
+    tags: [String!]!
+  ): Question
+}

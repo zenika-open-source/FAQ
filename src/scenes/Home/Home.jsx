@@ -142,7 +142,7 @@ class Home extends Component {
 
   render () {
     const { searchLoading, searchText, nodes, filters, searchTags } = this.state
-    const { loading, error, allZNodes } = this.props.data
+    const { loading, error, zNodes } = this.props.data
 
     if (loading) {
       return <Loading />
@@ -152,7 +152,7 @@ class Home extends Component {
       return <div>Error :(</div>
     }
 
-    let list = nodes || allZNodes
+    let list = nodes || zNodes
 
     // Filters
     list = list.filter(node => {

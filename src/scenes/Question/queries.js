@@ -4,8 +4,8 @@ import { graphql } from 'react-apollo'
 import { routing } from 'services'
 
 export const getNodeQuery = gql`
-  query getNode($id: ID!) {
-    ZNode(id: $id) {
+  query($id: ID!) {
+    zNode(where: { id: $id }) {
       id
       question {
         id
