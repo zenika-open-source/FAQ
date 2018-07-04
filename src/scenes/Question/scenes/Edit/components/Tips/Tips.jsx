@@ -76,14 +76,14 @@ const Tips = props => (
               <td>
                 <b>Temporal:</b>
               </td>
-              <td>What are the 2018 results for the Nantes offices?</td>
+              <td>What are the 2018 results for the Nantes' office?</td>
             </tr>
             <tr>
               <td>▸</td>
               <td>
                 <b>Vague:</b>
               </td>
-              <td>How does recruitment works?</td>
+              <td>How does recruitment work?</td>
             </tr>
           </tbody>
         </table>
