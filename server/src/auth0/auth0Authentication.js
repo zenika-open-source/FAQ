@@ -81,6 +81,32 @@ const createGraphCoolUser = (auth0UserId, profile, api) =>
     )
     .then(queryResult => queryResult.createUser)
 
+// Creates a new User record.
+const updateGraphCoolUser = (id, profile, api) =>
+  api
+    .request(
+      `
+            mutation updateUser(
+                $id: ID!,
+                $email: String,
+                $name: String,
+                $picture: String,
+                $locale: String) {
+              updateUser(
+                id: $id
+                email: $email
+                name: $name
+                picture: $picture
+                locale: $locale
+              ){
+                id
+              }
+            }
+          `,
+      { id, ...profile }
+    )
+    .then(queryResult => queryResult.updateUser)
+
 const fetchAuth0Profile = accessToken =>
   fetch(
     `https://${process.env.AUTH0_DOMAIN}/userinfo?access_token=${accessToken}`
@@ -108,6 +134,10 @@ export default async event => {
       let profile = null
       profile = await fetchAuth0Profile(accessToken)
       graphCoolUser = await createGraphCoolUser(decodedToken.sub, profile, api)
+    } else {
+      // update record !
+      profile = await fetchAuth0Profile(accessToken)
+      graphCoolUser = await updateGraphCoolUser(graphCoolUser.id, profile, api)
     }
 
     // custom exp does not work yet, see https://github.com/graphcool/graphcool-lib/issues/19
