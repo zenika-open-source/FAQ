@@ -2,21 +2,17 @@ const { forwardTo } = require('prisma-binding')
 
 const { validateAndParseIdToken, ctxUser } = require('./helpers')
 
-const createPrismaUser = (ctx, idToken) =>
-  ctx.prisma.mutation.createUser({
-    data: {
-      auth0Id: idToken.sub.split('|')[1],
-      name: idToken.name,
-      email: idToken.email,
-      picture: idToken.picture,
-      locale: idToken.locale
-    }
-  })
-
 module.exports = {
   Query: {
     me: (_, args, ctx, info) =>
-      ctx.prisma.query.user({ where: { id: ctxUser(ctx).id } })
+      ctx.prisma.query.user(
+        {
+          where: {
+            id: ctxUser(ctx) ? ctxUser(ctx).id : ''
+          }
+        },
+        info
+      )
   },
   Mutation: {
     authenticate: async (_, { idToken }, ctx, info) => {
@@ -27,12 +23,7 @@ module.exports = {
         throw new Error(err.message)
       }
       const auth0Id = userToken.sub.split('|')[1]
-      /* let user = await ctx.prisma.query.user({ where: { auth0Id } }, info)
-      if (!user) {
-        user = createPrismaUser(ctx, userToken)
-      } else {
-        await updatePrismaUser(ctx, userToken)
-      } */
+
       return ctx.prisma.mutation.upsertUser(
         {
           where: { auth0Id },
@@ -47,9 +38,16 @@ module.exports = {
             picture: userToken.picture
           }
         },
-        ctx,
         info
       )
-    }
+    },
+    updateMe: (_, { name, email, picture }, ctx, info) =>
+      ctx.prisma.mutation.updateUser(
+        {
+          where: { id: ctxUser(ctx).id },
+          data: { name, email, picture }
+        },
+        info
+      )
   }
 }

@@ -19,10 +19,10 @@ class UserProfile extends Component {
   }
 
   static getDerivedStateFromProps (nextProps, prevState) {
-    if (!nextProps.data || !nextProps.data.User) {
+    if (!nextProps.data || !nextProps.data.me) {
       return null
     }
-    const { name, email, picture } = nextProps.data.User
+    const { name, email, picture } = nextProps.data.me
     return { identity: { name, email, picture }, ...prevState }
   }
 
@@ -35,28 +35,28 @@ class UserProfile extends Component {
     })
   }
 
-  async updateIdentity (id, identity) {
+  async updateIdentity (identity) {
     const { updateIdentity } = this.props
     this.setState({ savingIdentity: true })
     try {
-      await updateIdentity(id, identity)
+      await updateIdentity(identity)
     } finally {
       this.setState({ savingIdentity: false })
     }
   }
 
   render () {
-    const { loading, error, User } = this.props.data
+    const { loading, error, me } = this.props.data
 
     if (loading) {
       return <Loading />
     }
 
-    if (error || User === null) {
+    if (error) {
       return <div>Error :(</div>
     }
 
-    const userLog = User.history
+    const history = [...me.history].reverse()
 
     const { savingIdentity, identity: { name, email, picture } } = this.state
 
@@ -93,7 +93,7 @@ class UserProfile extends Component {
               <label htmlFor="picture">Picture link</label>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Avatar
-                  image={User.picture}
+                  image={picture}
                   style={{
                     width: '60px',
                     height: '60px',
@@ -113,9 +113,7 @@ class UserProfile extends Component {
                 primary
                 type="button"
                 disabled={savingIdentity}
-                onClick={() =>
-                  this.updateIdentity(User.id, this.state.identity)
-                }
+                onClick={() => this.updateIdentity(this.state.identity)}
               >
                 {savingIdentity ? 'Saving...' : 'Save'}
               </Button>
@@ -135,7 +133,7 @@ class UserProfile extends Component {
                 </tr>
               </thead>
               <tbody>
-                {userLog.map(({ id, action, model, meta, createdAt, node }) => (
+                {history.map(({ id, action, model, meta, createdAt, node }) => (
                   <tr key={id}>
                     <td>
                       {action} {model}

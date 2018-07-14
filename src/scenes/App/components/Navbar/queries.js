@@ -1,8 +1,6 @@
 import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 
-import { routing } from 'services'
-
 export const meQuery = gql`
   query {
     me {

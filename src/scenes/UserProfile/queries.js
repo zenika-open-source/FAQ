@@ -1,17 +1,15 @@
 import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 
-import { auth } from 'services'
-
 export const getAllPersonalDataQuery = gql`
-  query getAllPersonalData($userId: ID!) {
-    User(id: $userId) {
+  query {
+    me {
       id
       createdAt
       email
       name
       picture
-      history(orderBy: createdAt_DESC) {
+      history {
         id
         action
         model
@@ -29,18 +27,11 @@ export const getAllPersonalDataQuery = gql`
   }
 `
 
-export const getAllPersonalData = graphql(getAllPersonalDataQuery, {
-  options: props => ({ variables: { userId: auth.getUserNodeId() } })
-})
+export const getAllPersonalData = graphql(getAllPersonalDataQuery)
 
 export const updateIdentityMutation = gql`
-  mutation updateIdentity(
-    $id: ID!
-    $name: String!
-    $email: String!
-    $picture: String!
-  ) {
-    updateUser(id: $id, name: $name, email: $email, picture: $picture) {
+  mutation updateIdentity($name: String!, $email: String!, $picture: String!) {
+    updateMe(name: $name, email: $email, picture: $picture) {
       id
     }
   }
@@ -49,8 +40,8 @@ export const updateIdentityMutation = gql`
 export const updateIdentity = graphql(updateIdentityMutation, {
   name: 'updateIdentity',
   props: ({ updateIdentity }) => ({
-    updateIdentity: (id, identity) => {
-      return updateIdentity({ variables: { id, ...identity } })
+    updateIdentity: identity => {
+      return updateIdentity({ variables: identity })
     }
   })
 })

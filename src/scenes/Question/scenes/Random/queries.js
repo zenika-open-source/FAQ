@@ -5,6 +5,9 @@ export const getRandomNodeQuery = gql`
   query($tag: String) {
     randomNode(tag: $tag) {
       id
+      question {
+        slug
+      }
     }
   }
 `

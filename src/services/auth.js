@@ -1,5 +1,8 @@
 import auth0 from 'auth0-js'
 
+import apollo from './apollo'
+import { meQuery } from '../scenes/App/components/Navbar/queries'
+
 class Auth {
   constructor () {
     this.auth0 = new auth0.WebAuth({
@@ -31,6 +34,7 @@ class Auth {
     if (this.scheduledTimeout) {
       clearTimeout(this.scheduledTimeout)
     }
+    this.getProfile()
   }
 
   parseHash (hash) {
@@ -59,6 +63,13 @@ class Auth {
     localStorage.auth = JSON.stringify(this.session)
 
     this.scheduleRenew()
+  }
+
+  getProfile () {
+    apollo.query({
+      query: meQuery,
+      fetchPolicy: 'network-only'
+    })
   }
 
   /* Internal actions methods */

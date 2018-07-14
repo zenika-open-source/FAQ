@@ -68,7 +68,7 @@ const format = historyAction => {
         }
         s.push(sentencer(meta.sourcesChanges.added, 'added', 'source'))
         s.push(sentencer(meta.sourcesChanges.updated, 'updated', 'source'))
-        s.push(sentencer(meta.sourcesChanges.deleted, 'deleted', 'source'))
+        s.push(sentencer(meta.sourcesChanges.removed, 'removed', 'source'))
 
         return join(s)
       }

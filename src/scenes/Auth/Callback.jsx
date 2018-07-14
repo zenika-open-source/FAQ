@@ -19,7 +19,7 @@ class Callback extends Component {
           auth.setUserId(data.authenticate.id)
         })
       )
-      // .then(() => auth.getProfile())
+      .then(() => auth.getProfile())
       .then(() => history.push(auth.popAfterLoginRedirectUrl()))
       .catch(err => {
         // eslint-disable-next-line

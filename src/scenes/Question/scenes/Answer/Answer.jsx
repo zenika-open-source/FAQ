@@ -7,7 +7,7 @@ import { compose } from 'react-apollo'
 import { submitAnswer, editAnswer } from './queries'
 import { getNode } from 'scenes/Question/queries'
 
-import { auth, markdown } from 'services'
+import { markdown } from 'services'
 
 import NotFound from 'scenes/NotFound'
 
@@ -87,13 +87,10 @@ class Answer extends Component {
 
     this.setState({ loadingSubmit: true })
 
-    const answerObject = {
-      content: answer.text,
-      userId: auth.getUserNodeId(),
-      sources: this.cleanSources()
-    }
+    const content = answer.text
+    const sources = this.cleanSources()
 
-    submitAnswer(zNode.id, answerObject)
+    submitAnswer(content, sources, zNode.id)
       .then(() => {
         this.setState({ slug: zNode.question.slug + '-' + zNode.id })
       })
@@ -112,7 +109,6 @@ class Answer extends Component {
     this.setState({ loadingSubmit: true })
 
     editAnswer(
-      typeof nodeId === 'string' ? nodeId : zNode.id,
       typeof answerId === 'string' ? answerId : zNode.answer.id,
       answer.text,
       this.cleanSources()

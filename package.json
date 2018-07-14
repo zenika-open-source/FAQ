@@ -30,6 +30,7 @@
     "react-scripts": "1.1.0",
     "showdown": "^1.8.6",
     "showdown-xss-filter": "^0.2.0",
+    "slug": "^0.9.1",
     "subscriptions-transport-ws": "^0.9.7",
     "uuid": "^3.2.1"
   },

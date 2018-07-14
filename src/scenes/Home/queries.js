@@ -9,11 +9,6 @@ export const getAllNodesQuery = gql`
         id
         title
         slug
-        user {
-          id
-          picture
-          name
-        }
         createdAt
       }
       answer {
@@ -33,18 +28,13 @@ export const getAllNodesQuery = gql`
 `
 
 export const getListNodesQuery = gql`
-  query getListNodes($ids: [ID!]!) {
-    zNodes(filter: { id_in: $ids }) {
+  query($ids: [ID!]!) {
+    zNodes(where: { id_in: $ids }) {
       id
       question {
         id
         title
         slug
-        user {
-          id
-          picture
-          name
-        }
         createdAt
       }
       answer {

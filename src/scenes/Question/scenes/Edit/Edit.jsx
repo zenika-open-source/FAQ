@@ -82,7 +82,10 @@ class Edit extends Component {
     submitQuestion(this.state.question, this.state.tags)
       .then(({ data }) => {
         this.setState({
-          slug: data.createzNode.question.slug + '-' + data.createzNode.id
+          slug:
+            data.createQuestionAndTags.slug +
+            '-' +
+            data.createQuestionAndTags.node.id
         })
       })
       .catch(error => {

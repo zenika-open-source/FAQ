@@ -1,17 +1,23 @@
 # import ZNode, Question, Answer, Source, Flag, Tag, HistoryAction, User from './generated/prisma.graphql'
 
-# import Query.*, Mutation.* from './generated/prisma.graphql'
+# import Query.* from './generated/prisma.graphql'
 
 type Query {
   me: User
+
+  randomNode(tag: String): ZNode
 }
 
 type Mutation {
-  updateQuestionAndTags(
-    data: QuestionUpdateInput!
-    where: QuestionWhereUniqueInput!
-    tags: [String!]!
-  ): Question
-
+  updateMe(name: String!, email: String!, picture: String!): User
   authenticate(idToken: String!): User
+
+  createQuestionAndTags(title: String!, tags: [String!]!): Question
+  updateQuestionAndTags(id: ID!, title: String!, tags: [String!]!): Question
+
+  createAnswerAndSources(content: String, sources: String!, nodeId: ID!): Answer
+  updateAnswerAndSources(id: ID!, content: String, sources: String!): Answer
+
+  addFlag(type: String!, nodeId: ID!): ZNode
+  removeFlag(type: String!, nodeId: ID!): ZNode
 }

@@ -9,7 +9,7 @@ import Loading from 'components/Loading'
 const Random = ({ data: { randomNode } }) => {
   if (randomNode) {
     if (randomNode.id) {
-      return <Redirect to={`/q/${randomNode.id}`} />
+      return <Redirect to={`/q/${randomNode.question.slug}-${randomNode.id}`} />
     } else {
       return (
         <div style={{ textAlign: 'center', marginTop: '3rem' }}>

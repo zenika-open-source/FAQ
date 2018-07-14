@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import cn from 'classnames'
 import { Query } from 'react-apollo'
 
-import { loadHistoryQuery } from 'services/history'
+import { loadHistoryQuery } from './queries'
 
 import HistoryActions from './HistoryActions'
 
@@ -39,7 +39,7 @@ class History extends Component {
                 if (loading) return 'Loading...'
                 if (error) return `Error! ${error.message}`
 
-                return <HistoryActions actions={data.allHistoryActions} />
+                return <HistoryActions actions={data.historyActions} />
               }}
             </Query>
           </div>

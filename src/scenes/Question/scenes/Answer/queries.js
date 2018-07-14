@@ -1,99 +1,63 @@
 import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 
-import { history } from 'services'
+import { zNodeFragment } from '../../queries'
 
-export const submitAnswerQuery = gql`
-  mutation submitAnswer($id: ID!, $answer: ZNodeanswerAnswer!) {
-    updateZNode(id: $id, answer: $answer) {
-      id
-      question {
-        id
-        title
-        slug
-      }
-      answer {
-        id
-        content
-        sources {
-          label
-          url
-        }
-      }
-    }
-  }
-`
-
-export const editAnswerQuery = gql`
-  mutation editAnswer(
-    $nodeId: ID!
-    $answerId: ID!
-    $content: String!
-    $sources: String!
-  ) {
-    fullUpdateAnswer(
-      nodeId: $nodeId
-      answerId: $answerId
+export const submitAnswerMutation = gql`
+  mutation($content: String!, $sources: String!, $nodeId: ID!) {
+    createAnswerAndSources(
       content: $content
       sources: $sources
+      nodeId: $nodeId
     ) {
       id
       content
-      sourcesChanges
-      nodeId
+      sources {
+        label
+        url
+      }
+      node {
+        ${zNodeFragment}
+      }
+      user {
+        id
+      }
+      createdAt
     }
   }
 `
 
-export const submitAnswer = graphql(submitAnswerQuery, {
+export const editAnswerMutation = gql`
+  mutation($id: ID!, $content: String!, $sources: String!) {
+    updateAnswerAndSources(id: $id, content: $content, sources: $sources) {
+      id
+      content
+      sources {
+        label
+        url
+      }
+    }
+  }
+`
+
+export const submitAnswer = graphql(submitAnswerMutation, {
   name: 'submitAnswer',
   props: ({ submitAnswer }) => ({
-    submitAnswer: (id, answer) => {
-      return submitAnswer({ variables: { id, answer } })
-    }
-  }),
-  options: {
-    onCompleted: ({ updateZNode }) =>
-      history.addAction(
-        'CREATED',
-        'Answer',
-        {
-          content: updateZNode.answer.content,
-          sources: updateZNode.answer.sources.map(s => ({
-            label: s.label,
-            url: s.url
-          }))
-        },
-        updateZNode.id
-      )
-  }
-})
-
-export const editAnswer = graphql(editAnswerQuery, {
-  name: 'editAnswer',
-  props: ({ editAnswer }) => ({
-    editAnswer: (nodeId, answerId, content, sources) => {
-      return editAnswer({
-        variables: {
-          nodeId,
-          answerId,
-          content,
-          sources: JSON.stringify(sources)
-        }
+    submitAnswer: (content, sources, nodeId) => {
+      return submitAnswer({
+        variables: { content, sources: JSON.stringify(sources), nodeId }
       })
     }
-  }),
-  options: {
-    onCompleted: ({ fullUpdateAnswer }) => {
-      history.addAction(
-        'UPDATED',
-        'Answer',
-        {
-          content: fullUpdateAnswer.content,
-          sourcesChanges: fullUpdateAnswer.sourcesChanges
-        },
-        fullUpdateAnswer.nodeId
-      )
+  })
+})
+
+export const editAnswer = graphql(editAnswerMutation, {
+  name: 'editAnswer',
+  props: ({ editAnswer }) => ({
+    editAnswer: (id, content, sources) => {
+      return editAnswer({
+        variables: { id, content, sources: JSON.stringify(sources) }
+      })
     }
-  }
+  })
 })

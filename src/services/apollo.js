@@ -2,10 +2,10 @@ import ApolloClient from 'apollo-client'
 import { split } from 'apollo-link'
 import { HttpLink } from 'apollo-link-http'
 import { setContext } from 'apollo-link-context'
-import { WebSocketLink } from 'apollo-link-ws'
-import { getMainDefinition } from 'apollo-utilities'
+// import { WebSocketLink } from 'apollo-link-ws'
+// import { getMainDefinition } from 'apollo-utilities'
 import { InMemoryCache } from 'apollo-cache-inmemory'
-import gql from 'graphql-tag'
+// import gql from 'graphql-tag'
 
 import auth from './auth'
 
@@ -30,7 +30,7 @@ const authLink = setContext((_, { headers }) => {
 
 const link = split(
   ({ query }) => {
-    const { kind, operation } = getMainDefinition(query)
+    //    const { kind, operation } = getMainDefinition(query)
     return true
     // return kind === 'OperationDefinition' && operation === 'subscription'
   },
@@ -43,7 +43,7 @@ const cache = new InMemoryCache()
 const apollo = new ApolloClient({ link, cache })
 // const apollo = new ApolloClient({ httpLink, cache })
 
-const subscribeToNodes = gql`
+/* const subscribeToNodes = gql`
   subscription {
     ZNode {
       mutation
@@ -106,14 +106,13 @@ const subscribeToTags = gql`
       }
     }
   }
-`
+` */
 
 class ApolloWatcher {
   hooks = []
 
   start () {
-    return
-    const subscriptions = [
+    /* const subscriptions = [
       subscribeToNodes,
       subscribeToQuestions,
       subscribeToAnswers,
@@ -125,12 +124,11 @@ class ApolloWatcher {
       apollo.subscribe({ query }).subscribe({
         next: ({ data }) => this.onMutation(data)
       })
-    })
+    }) */
   }
 
   onMutation (data) {
-    return
-    const model = Object.keys(data)[0]
+    /* const model = Object.keys(data)[0]
     const mutation = data[model].mutation
     const node = data[model].node
     const id = node ? (node.node ? node.node.id : node.id) : null
@@ -143,7 +141,7 @@ class ApolloWatcher {
       const variables = hook.variablesFunc ? hook.variablesFunc(node) : { id }
 
       apollo.query({ query, variables, fetchPolicy: 'network-only' })
-    })
+    }) */
   }
 
   watch (model, mutation, query, variablesFunc) {

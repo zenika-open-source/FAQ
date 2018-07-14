@@ -2,8 +2,6 @@ import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { Link, withRouter } from 'react-router-dom'
 
-import { auth } from 'services'
-
 import { me } from './queries'
 
 import Avatar from 'components/Avatar'

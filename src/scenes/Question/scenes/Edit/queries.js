@@ -1,34 +1,29 @@
 import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 
-import { auth, history } from 'services'
+import { zNodeFragment } from '../../queries'
+import { getAllNodesQuery } from '../../../Home/queries'
 
-export const submitQuestionQuery = gql`
-  mutation($title: String!, $userId: ID!, $tags: [ZNodetagsTag!]!) {
-    createZNode(
-      question: { title: $title, slug: "", userId: $userId }
-      tags: $tags
-    ) {
+export const submitQuestionMutation = gql`
+  mutation($title: String!, $tags: [String!]!) {
+    createQuestionAndTags(title: $title, tags: $tags) {
       id
-      question {
+      title
+      slug
+      user {
         id
-        title
-        slug
       }
-      tags {
-        label
+      node {
+        ${zNodeFragment}
       }
+      createdAt
     }
   }
 `
 
-export const editQuestionQuery = gql`
+export const editQuestionMutation = gql`
   mutation($questionId: ID!, $title: String!, $tags: [String!]!) {
-    updateQuestionAndTags(
-      where: { id: $questionId }
-      data: { title: $title }
-      tags: $tags
-    ) {
+    updateQuestionAndTags(id: $questionId, title: $title, tags: $tags) {
       id
       title
       slug
@@ -46,39 +41,28 @@ export const editQuestionQuery = gql`
   }
 `
 
-export const submitQuestion = graphql(submitQuestionQuery, {
+export const submitQuestion = graphql(submitQuestionMutation, {
   name: 'submitQuestion',
   props: ({ submitQuestion }) => ({
     submitQuestion: (title, tags) => {
-      const userId = auth.getUserNodeId()
-      tags = tags.map(tag => ({
-        label: tag,
-        userId
-      }))
       return submitQuestion({
         variables: {
           title,
-          userId,
           tags
         }
       })
     }
   }),
   options: {
-    onCompleted: ({ createZNode }) =>
-      history.addAction(
-        'CREATED',
-        'Question',
-        {
-          title: createZNode.question.title,
-          tags: createZNode.tags.map(t => t.label)
-        },
-        createZNode.id
-      )
+    update: (proxy, { data: { createQuestionAndTags } }) => {
+      const data = proxy.readQuery({ query: getAllNodesQuery })
+      data.zNodes.unshift(createQuestionAndTags.node)
+      proxy.writeQuery({ query: getAllNodesQuery, data })
+    }
   }
 })
 
-export const editQuestion = graphql(editQuestionQuery, {
+export const editQuestion = graphql(editQuestionMutation, {
   name: 'editQuestion',
   props: ({ editQuestion }) => ({
     editQuestion: (questionId, title, tags) => {
