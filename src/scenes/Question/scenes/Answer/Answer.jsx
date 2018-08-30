@@ -5,7 +5,6 @@ import omit from 'lodash/omit'
 
 import { compose } from 'react-apollo'
 import { submitAnswer, editAnswer } from './queries'
-import { getNode } from 'scenes/Question/queries'
 
 import { markdown } from 'services'
 
@@ -43,7 +42,7 @@ class Answer extends Component {
   }
 
   static getDerivedStateFromProps (nextProps, prevState) {
-    const { data: { zNode } } = nextProps
+    const { zNode } = nextProps
     const { nodeLoaded } = prevState
 
     if (!nodeLoaded && zNode && zNode.answer) {
@@ -76,13 +75,13 @@ class Answer extends Component {
   }
 
   submitForm = () => {
-    const { zNode } = this.props.data
+    const { zNode } = this.props
     zNode.answer ? this.editAnswer() : this.submitAnswer()
   }
 
   submitAnswer = () => {
     const { submitAnswer } = this.props
-    const { zNode } = this.props.data
+    const { zNode } = this.props
     const { answer } = this.state
 
     this.setState({ loadingSubmit: true })
@@ -102,8 +101,7 @@ class Answer extends Component {
   }
 
   editAnswer = (nodeId, answerId) => {
-    const { editAnswer } = this.props
-    const { zNode } = this.props.data
+    const { editAnswer, zNode } = this.props
     const { answer } = this.state
 
     this.setState({ loadingSubmit: true })
@@ -135,22 +133,18 @@ class Answer extends Component {
 
   render () {
     const { loadingSubmit, slug, answer, showTips } = this.state
-    const { loading, error, zNode } = this.props.data
+    const { zNode } = this.props
 
     if (slug) {
       return <Redirect to={`/q/${slug}`} />
     }
 
-    if (loadingSubmit || loading) {
+    if (loadingSubmit) {
       return <Loading />
     }
 
-    if (error) {
-      return <div>Error :(</div>
-    }
-
     if (zNode === null) {
-      return <NotFound {...this.props} />
+      return <NotFound />
     }
 
     return (
@@ -207,7 +201,10 @@ Answer.propTypes = {
   match: PropTypes.object.isRequired,
   submitAnswer: PropTypes.func.isRequired,
   editAnswer: PropTypes.func.isRequired,
-  data: PropTypes.object.isRequired
+  zNode: PropTypes.object.isRequired
 }
 
-export default compose(submitAnswer, editAnswer, getNode)(Answer)
+export default compose(
+  submitAnswer,
+  editAnswer
+)(Answer)

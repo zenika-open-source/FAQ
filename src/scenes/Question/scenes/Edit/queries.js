@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 
 import { zNodeFragment } from '../../queries'
-import { getAllNodesQuery } from '../../../Home/queries'
+import { getAllNodes } from '../../../Home/queries'
 
 export const submitQuestionMutation = gql`
   mutation($title: String!, $tags: [String!]!) {
@@ -55,9 +55,9 @@ export const submitQuestion = graphql(submitQuestionMutation, {
   }),
   options: {
     update: (proxy, { data: { createQuestionAndTags } }) => {
-      const data = proxy.readQuery({ query: getAllNodesQuery })
+      const data = proxy.readQuery({ query: getAllNodes })
       data.zNodes.unshift(createQuestionAndTags.node)
-      proxy.writeQuery({ query: getAllNodesQuery, data })
+      proxy.writeQuery({ query: getAllNodes, data })
     }
   }
 })

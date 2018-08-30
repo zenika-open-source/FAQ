@@ -4,7 +4,7 @@ const jwks = jwksClient({
   cache: true,
   rateLimit: true,
   jwksRequestsPerMinute: 1,
-  jwksUri: `https://${process.env.REACT_APP_AUTH0_DOMAIN}/.well-known/jwks.json`
+  jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`
 })
 
 const validateAndParseIdToken = idToken =>

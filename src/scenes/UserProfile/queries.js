@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 
-export const getAllPersonalDataQuery = gql`
+export const getAllPersonalData = gql`
   query {
     me {
       id
@@ -26,8 +26,6 @@ export const getAllPersonalDataQuery = gql`
     }
   }
 `
-
-export const getAllPersonalData = graphql(getAllPersonalDataQuery)
 
 export const updateIdentityMutation = gql`
   mutation updateIdentity($name: String!, $email: String!, $picture: String!) {

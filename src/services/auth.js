@@ -1,7 +1,7 @@
 import auth0 from 'auth0-js'
 
 import apollo from './apollo'
-import { meQuery } from '../scenes/App/components/Navbar/queries'
+import { me } from 'scenes/App/components/Navbar/queries'
 
 class Auth {
   constructor () {
@@ -67,7 +67,7 @@ class Auth {
 
   getProfile () {
     apollo.query({
-      query: meQuery,
+      query: me,
       fetchPolicy: 'network-only'
     })
   }

@@ -1,1 +1,1 @@
-export { default } from './Random'
+export { default } from './Random.container'

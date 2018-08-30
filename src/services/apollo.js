@@ -1,156 +1,75 @@
-import ApolloClient from 'apollo-client'
-import { split } from 'apollo-link'
-import { HttpLink } from 'apollo-link-http'
-import { setContext } from 'apollo-link-context'
-// import { WebSocketLink } from 'apollo-link-ws'
-// import { getMainDefinition } from 'apollo-utilities'
+/* eslint-disable react/display-name */
+import React from 'react'
+import { Query } from 'react-apollo'
+
+import { ApolloClient } from 'apollo-client'
 import { InMemoryCache } from 'apollo-cache-inmemory'
-// import gql from 'graphql-tag'
+import { HttpLink } from 'apollo-link-http'
+import { onError } from 'apollo-link-error'
+import { ApolloLink } from 'apollo-link'
+import { setContext } from 'apollo-link-context'
 
 import auth from './auth'
+import { Loading } from 'components'
 
-const httpLink = new HttpLink({
-  uri: process.env.REACT_APP_GRAPHCOOL_URI
+const apollo = new ApolloClient({
+  link: ApolloLink.from([
+    onError(({ graphQLErrors, networkError }) => {
+      if (graphQLErrors) {
+        graphQLErrors.map(({ message, locations, path }) =>
+          // eslint-disable-next-line no-console
+          console.log(
+            `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+          )
+        )
+      }
+      // eslint-disable-next-line no-console
+      if (networkError) console.log(`[Network error]: ${networkError}`)
+    }),
+    setContext((_, { headers }) => {
+      const token = auth.session ? auth.session.idToken : null
+      return {
+        headers: {
+          ...headers,
+          authorization: token ? `Bearer ${token}` : ''
+        }
+      }
+    }),
+    new HttpLink({
+      uri: process.env.REACT_APP_GRAPHQL_ENDPOINT
+    })
+  ]),
+  cache: new InMemoryCache(),
+  defaultOptions: {
+    watchQuery: {
+      fetchPolicy: 'cache-and-network'
+    }
+  }
 })
 
-/* const wsLink = new WebSocketLink({
-  uri: process.env.REACT_APP_GRAPHCOOL_URI_WS,
-  options: { reconnect: true }
-}) */
-
-const authLink = setContext((_, { headers }) => {
-  const token = auth.session ? auth.session.idToken : null
-  return {
-    headers: {
-      ...headers,
-      authorization: token ? `Bearer ${token}` : ''
-    }
-  }
-})
-
-const link = split(
-  ({ query }) => {
-    //    const { kind, operation } = getMainDefinition(query)
-    return true
-    // return kind === 'OperationDefinition' && operation === 'subscription'
-  },
-  // wsLink,
-  authLink.concat(httpLink)
-)
-
-const cache = new InMemoryCache()
-
-const apollo = new ApolloClient({ link, cache })
-// const apollo = new ApolloClient({ httpLink, cache })
-
-/* const subscribeToNodes = gql`
-  subscription {
-    ZNode {
-      mutation
-      node {
-        id
-      }
-    }
-  }
-`
-
-const subscribeToQuestions = gql`
-  subscription {
-    Question {
-      mutation
-      node {
-        id
-        node {
-          id
+const query = (
+  query,
+  { variables, skip, loadingText } = {}
+) => Component => props => {
+  const queryName = query.definitions[0].selectionSet.selections[0].name.value
+  return (
+    <Query
+      query={query}
+      skip={skip ? skip(props) : false}
+      variables={variables ? variables(props) : {}}
+    >
+      {({ loading, error, data }) => {
+        if (loading && !data[queryName]) {
+          return <Loading text={loadingText || null} />
         }
-      }
-    }
-  }
-`
+        if (error) return <div>Error :(</div>
 
-const subscribeToAnswers = gql`
-  subscription {
-    Answer {
-      mutation
-      node {
-        id
-        node {
-          id
-        }
-      }
-    }
-  }
-`
-
-const subscribeToFlags = gql`
-  subscription {
-    Flag {
-      mutation
-      node {
-        node {
-          id
-        }
-      }
-    }
-  }
-`
-
-const subscribeToTags = gql`
-  subscription {
-    Tag {
-      mutation
-      node {
-        node {
-          id
-        }
-      }
-    }
-  }
-` */
-
-class ApolloWatcher {
-  hooks = []
-
-  start () {
-    /* const subscriptions = [
-      subscribeToNodes,
-      subscribeToQuestions,
-      subscribeToAnswers,
-      subscribeToFlags,
-      subscribeToTags
-    ]
-
-    subscriptions.forEach(query => {
-      apollo.subscribe({ query }).subscribe({
-        next: ({ data }) => this.onMutation(data)
-      })
-    }) */
-  }
-
-  onMutation (data) {
-    /* const model = Object.keys(data)[0]
-    const mutation = data[model].mutation
-    const node = data[model].node
-    const id = node ? (node.node ? node.node.id : node.id) : null
-
-    this.hooks.forEach(hook => {
-      if (hook.model !== model) return
-      if (hook.mutation !== mutation && hook.mutation !== '*') return
-
-      const query = hook.query
-      const variables = hook.variablesFunc ? hook.variablesFunc(node) : { id }
-
-      apollo.query({ query, variables, fetchPolicy: 'network-only' })
-    }) */
-  }
-
-  watch (model, mutation, query, variablesFunc) {
-    this.hooks.push({ model, mutation, query, variablesFunc })
-  }
+        return <Component {...props} {...data} />
+      }}
+    </Query>
+  )
 }
-
-const apolloWatcher = new ApolloWatcher()
 
 export default apollo
 
-export { apolloWatcher }
+export { query }

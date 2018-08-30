@@ -3,11 +3,8 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import debounce from 'lodash/debounce'
 
-import { getAllNodes } from './queries'
-
 import { routing, search } from 'services'
 
-import Loading from 'components/Loading'
 import Button from 'components/Button'
 
 import Searchbar from './components/Searchbar'
@@ -142,15 +139,7 @@ class Home extends Component {
 
   render () {
     const { searchLoading, searchText, nodes, filters, searchTags } = this.state
-    const { loading, error, zNodes } = this.props.data
-
-    if (loading) {
-      return <Loading />
-    }
-
-    if (error) {
-      return <div>Error :(</div>
-    }
+    const { zNodes } = this.props
 
     let list = nodes || zNodes
 
@@ -213,9 +202,9 @@ class Home extends Component {
 }
 
 Home.propTypes = {
-  data: PropTypes.object.isRequired,
+  zNodes: PropTypes.array.isRequired,
   history: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired
 }
 
-export default getAllNodes(Home)
+export default Home

@@ -1,5 +1,3 @@
-const ctxUser = require('./ctxUser')
-
 const history = {
   push: (ctx, { action, model, meta, nodeId, userId }) =>
     ctx.prisma.mutation.createHistoryAction({
@@ -8,7 +6,7 @@ const history = {
         model,
         meta,
         node: { connect: { id: nodeId } },
-        user: { connect: { id: ctxUser(ctx).id } }
+        user: { connect: { id: ctx.request.user.id } }
       }
     })
 }

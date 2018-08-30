@@ -4,13 +4,11 @@ import { Link } from 'react-router-dom'
 
 import { markdown } from 'services'
 
-import Loading from 'components/Loading'
 import Button from 'components/Button'
 import Card, { CardText, CardActions } from 'components/Card'
 import Avatar from 'components/Avatar'
 
-import { compose } from 'react-apollo'
-import { getAllPersonalData, updateIdentity } from './queries'
+import { updateIdentity } from './queries'
 
 class UserProfile extends Component {
   constructor (props) {
@@ -19,10 +17,10 @@ class UserProfile extends Component {
   }
 
   static getDerivedStateFromProps (nextProps, prevState) {
-    if (!nextProps.data || !nextProps.data.me) {
+    if (!nextProps.me) {
       return null
     }
-    const { name, email, picture } = nextProps.data.me
+    const { name, email, picture } = nextProps.me
     return { identity: { name, email, picture }, ...prevState }
   }
 
@@ -46,19 +44,14 @@ class UserProfile extends Component {
   }
 
   render () {
-    const { loading, error, me } = this.props.data
-
-    if (loading) {
-      return <Loading />
-    }
-
-    if (error) {
-      return <div>Error :(</div>
-    }
+    const { me } = this.props
 
     const history = [...me.history].reverse()
 
-    const { savingIdentity, identity: { name, email, picture } } = this.state
+    const {
+      savingIdentity,
+      identity: { name, email, picture }
+    } = this.state
 
     return (
       <div>
@@ -158,8 +151,8 @@ class UserProfile extends Component {
 
 UserProfile.propTypes = {
   history: PropTypes.object.isRequired,
-  data: PropTypes.object.isRequired,
+  me: PropTypes.object.isRequired,
   updateIdentity: PropTypes.func.isRequired
 }
 
-export default compose(getAllPersonalData, updateIdentity)(UserProfile)
+export default updateIdentity(UserProfile)

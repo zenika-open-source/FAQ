@@ -7,21 +7,20 @@ import Read from './scenes/Read'
 import Answer from './scenes/Answer'
 import Random from './scenes/Random'
 
-import { getNode } from './queries'
-
-const Question = ({ match }) => (
+const Question = ({ match, withNode }) => (
   <Switch>
     <Route path={`${match.path}/new`} component={Edit} />
     <Route path={`${match.path}/random/:tag?`} component={Random} />
-    <Route path={`${match.path}/:slug`} exact component={getNode(Read)} />
-    <Route path={`${match.path}/:slug/edit`} component={getNode(Edit)} />
-    <Route path={`${match.path}/:slug/answer`} component={getNode(Answer)} />
+    <Route path={`${match.path}/:slug`} exact component={withNode(Read)} />
+    <Route path={`${match.path}/:slug/edit`} component={withNode(Edit)} />
+    <Route path={`${match.path}/:slug/answer`} component={withNode(Answer)} />
     <Route render={() => <Redirect to="/" />} />
   </Switch>
 )
 
 Question.propTypes = {
-  match: PropTypes.object.isRequired
+  match: PropTypes.object.isRequired,
+  withNode: PropTypes.func.isRequired
 }
 
 export default Question

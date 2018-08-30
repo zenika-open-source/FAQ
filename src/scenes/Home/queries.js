@@ -1,7 +1,6 @@
 import gql from 'graphql-tag'
-import { graphql } from 'react-apollo'
 
-export const getAllNodesQuery = gql`
+export const getAllNodes = gql`
   query {
     zNodes(orderBy: createdAt_DESC, first: 30) {
       id
@@ -52,5 +51,3 @@ export const getListNodesQuery = gql`
     }
   }
 `
-
-export const getAllNodes = graphql(getAllNodesQuery)

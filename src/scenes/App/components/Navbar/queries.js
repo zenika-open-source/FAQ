@@ -1,7 +1,6 @@
 import gql from 'graphql-tag'
-import { graphql } from 'react-apollo'
 
-export const meQuery = gql`
+export const me = gql`
   query {
     me {
       id
@@ -13,5 +12,3 @@ export const meQuery = gql`
     }
   }
 `
-
-export const me = graphql(meQuery)

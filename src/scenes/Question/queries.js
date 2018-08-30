@@ -1,7 +1,4 @@
 import gql from 'graphql-tag'
-import { graphql } from 'react-apollo'
-
-import { routing } from 'services'
 
 export const zNodeFragment = `
   id
@@ -46,15 +43,10 @@ export const zNodeFragment = `
   }
 `
 
-export const getNodeQuery = gql`
+export const getNode = gql`
   query($id: ID!) {
     zNode(where: { id: $id }) {
       ${zNodeFragment}
     }
   }
 `
-
-export const getNode = graphql(getNodeQuery, {
-  skip: props => !props.match.params.slug,
-  options: props => ({ variables: { id: routing.getUIDFromSlug(props.match) } })
-})

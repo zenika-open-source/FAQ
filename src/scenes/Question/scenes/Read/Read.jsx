@@ -10,7 +10,6 @@ import { markdown } from 'services'
 
 import NotFound from 'scenes/NotFound'
 
-import Loading from 'components/Loading'
 import Button from 'components/Button'
 import Card, { CardTitle, CardText } from 'components/Card'
 import Dropdown, { DropdownItem } from 'components/Dropdown'
@@ -24,25 +23,15 @@ import Meta from './components/Meta'
 import Share from './components/Share'
 import History from './components/History'
 
-const Read = ({ history, match, data, createFlag, removeFlag }) => {
-  const { loading, error, zNode } = data
-
-  if (loading) {
-    return <Loading />
-  }
-
-  if (error) {
-    return <div>Error :(</div>
-  }
-
+const Read = ({ history, match, zNode, createFlag, removeFlag }) => {
   if (zNode === null) {
-    return <NotFound {...this.props} />
-  } else {
-    /* Redirect to correct URL if old slug used */
-    const correctSlug = zNode.question.slug + '-' + zNode.id
-    if (match.params.slug !== correctSlug) {
-      return <Redirect to={'/q/' + correctSlug} />
-    }
+    return <NotFound />
+  }
+
+  /* Redirect to correct URL if old slug used */
+  const correctSlug = zNode.question.slug + '-' + zNode.id
+  if (match.params.slug !== correctSlug) {
+    return <Redirect to={'/q/' + correctSlug} />
   }
 
   return (
@@ -121,9 +110,12 @@ const Read = ({ history, match, data, createFlag, removeFlag }) => {
 Read.propTypes = {
   history: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
-  data: PropTypes.object.isRequired,
+  zNode: PropTypes.object.isRequired,
   createFlag: PropTypes.func.isRequired,
   removeFlag: PropTypes.func.isRequired
 }
 
-export default compose(createFlag, removeFlag)(Read)
+export default compose(
+  createFlag,
+  removeFlag
+)(Read)

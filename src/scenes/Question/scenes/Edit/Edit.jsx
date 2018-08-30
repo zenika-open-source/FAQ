@@ -5,7 +5,6 @@ import difference from 'lodash/difference'
 
 import { compose } from 'react-apollo'
 import { submitQuestion, editQuestion } from './queries'
-import { getNode } from 'scenes/Question/queries'
 
 import Loading from 'components/Loading'
 import Card, {
@@ -49,10 +48,9 @@ class Edit extends Component {
 
   static getDerivedStateFromProps (nextProps, prevState) {
     const { nodeLoaded, isEditing } = prevState
-    const { data } = nextProps
+    const { zNode } = nextProps
 
-    if (!nodeLoaded && isEditing && data && data.zNode) {
-      const { zNode } = data
+    if (!nodeLoaded && isEditing && zNode) {
       return {
         nodeLoaded: true,
         initialQuestion: zNode.question.title,
@@ -96,8 +94,7 @@ class Edit extends Component {
   }
 
   editQuestion = () => {
-    const { editQuestion } = this.props
-    const { zNode } = this.props.data
+    const { editQuestion, zNode } = this.props
 
     this.setState({ loadingSubmit: true })
 
@@ -162,7 +159,7 @@ class Edit extends Component {
   }
 
   render () {
-    const { match } = this.props
+    const { match, zNode } = this.props
     const {
       isEditing,
       loadingSubmit,
@@ -180,20 +177,8 @@ class Edit extends Component {
       return <Loading />
     }
 
-    if (isEditing) {
-      const { loading, error, zNode } = this.props.data
-
-      if (loading) {
-        return <Loading />
-      }
-
-      if (error) {
-        return <div>Error :(</div>
-      }
-
-      if (zNode === null) {
-        return <Redirect to={'/'} />
-      }
+    if (isEditing && zNode === null) {
+      return <Redirect to={'/'} />
     }
 
     return (
@@ -249,7 +234,10 @@ Edit.propTypes = {
   submitQuestion: PropTypes.func.isRequired,
   editQuestion: PropTypes.func.isRequired,
   location: PropTypes.object.isRequired,
-  data: PropTypes.object
+  zNode: PropTypes.object
 }
 
-export default compose(submitQuestion, editQuestion, getNode)(Edit)
+export default compose(
+  submitQuestion,
+  editQuestion
+)(Edit)
