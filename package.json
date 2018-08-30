@@ -3,7 +3,7 @@
   "version": "0.3.0",
   "private": true,
   "dependencies": {
-    "algoliasearch": "^3.24.11",
+    "algoliasearch": "^3.30.0",
     "apollo-cache-inmemory": "^1.1.12",
     "apollo-client": "^2.2.8",
     "apollo-link-context": "^1.0.8",

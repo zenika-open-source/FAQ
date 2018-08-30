@@ -1,4 +1,5 @@
 const { history, ctxUser, slugify } = require('./helpers')
+const { algolia, slack } = require('./integrations')
 
 module.exports = {
   Mutation: {
@@ -18,6 +19,12 @@ module.exports = {
                 label,
                 user: { connect: { id: ctxUser(ctx).id } }
               }))
+            },
+            flags: {
+              create: {
+                type: 'unanswered',
+                user: { connect: { id: ctxUser(ctx).id } }
+              }
             }
           }
         },
@@ -37,6 +44,9 @@ module.exports = {
         meta: { title, tags },
         nodeId: node.id
       })
+
+      algolia.addNode(ctx, node.id)
+      slack.sendToChannel(ctx, node.id)
 
       return ctx.prisma.query.question(
         { where: { id: node.question.id } },
@@ -99,6 +109,14 @@ module.exports = {
         meta.title = title
       }
 
+      await ctx.prisma.mutation.updateQuestion({
+        where: { id },
+        data: {
+          title,
+          slug: slugify(title)
+        }
+      })
+
       await history.push(ctx, {
         action: 'UPDATED',
         model: 'Question',
@@ -106,13 +124,11 @@ module.exports = {
         nodeId: node.id
       })
 
-      return ctx.prisma.mutation.updateQuestion(
+      algolia.updateNode(ctx, node.id)
+
+      return ctx.prisma.query.question(
         {
-          where: { id },
-          data: {
-            title,
-            slug: slugify(title)
-          }
+          where: { id }
         },
         info
       )

@@ -4,7 +4,7 @@ const userResolvers = require('./user')
 const questionResolvers = require('./question')
 const answerResolvers = require('./answer')
 const flagResolvers = require('./flag')
-const easterEggResolvers = require('./easterEgg')
+const randomResolvers = require('./random')
 
 const mergeResolvers = resolvers =>
   resolvers.reduce(
@@ -20,5 +20,5 @@ module.exports = mergeResolvers([
   questionResolvers,
   answerResolvers,
   flagResolvers,
-  easterEggResolvers
+  randomResolvers
 ])

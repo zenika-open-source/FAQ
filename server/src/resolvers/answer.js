@@ -1,4 +1,5 @@
 const { history, ctxUser } = require('./helpers')
+const { algolia, mailgun } = require('./integrations')
 
 module.exports = {
   Mutation: {
@@ -10,17 +11,7 @@ module.exports = {
     ) => {
       sources = JSON.parse(sources)
 
-      await history.push(ctx, {
-        action: 'CREATED',
-        model: 'Answer',
-        meta: {
-          content,
-          sources
-        },
-        nodeId
-      })
-
-      return ctx.prisma.mutation.createAnswer(
+      const answer = await ctx.prisma.mutation.createAnswer(
         {
           data: {
             content,
@@ -38,6 +29,39 @@ module.exports = {
               create: sources
             }
           }
+        },
+        `
+        {
+          id
+          node {
+            flags(where:{type:"unanswered"}) {
+              id
+            }
+          }
+        }
+        `
+      )
+
+      await ctx.prisma.mutation.deleteFlag({
+        where: { id: answer.node.flags[0].id }
+      })
+
+      await history.push(ctx, {
+        action: 'CREATED',
+        model: 'Answer',
+        meta: {
+          content,
+          sources
+        },
+        nodeId
+      })
+
+      algolia.updateNode(ctx, nodeId)
+      mailgun.sendNewAnswer(ctx, nodeId)
+
+      return ctx.prisma.query.answer(
+        {
+          where: { id: answer.id }
         },
         info
       )
@@ -126,6 +150,13 @@ module.exports = {
         meta.content = content
       }
 
+      await ctx.prisma.mutation.updateAnswer({
+        where: { id },
+        data: {
+          content
+        }
+      })
+
       await history.push(ctx, {
         action: 'UPDATED',
         model: 'Answer',
@@ -133,12 +164,11 @@ module.exports = {
         nodeId: answer.node.id
       })
 
-      return ctx.prisma.mutation.updateAnswer(
+      algolia.updateNode(ctx, answer.node.id)
+
+      return ctx.prisma.query.answer(
         {
-          where: { id },
-          data: {
-            content
-          }
+          where: { id }
         },
         info
       )

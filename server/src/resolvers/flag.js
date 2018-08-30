@@ -1,4 +1,5 @@
 const { history, ctxUser, slugify } = require('./helpers')
+const { algolia } = require('./integrations')
 
 module.exports = {
   Mutation: {
@@ -22,6 +23,8 @@ module.exports = {
           },
           nodeId
         })
+
+        algolia.updateNode(ctx, nodeId)
       }
 
       return ctx.prisma.query.zNode({ where: { id: nodeId } }, info)
@@ -47,6 +50,8 @@ module.exports = {
           },
           nodeId
         })
+
+        algolia.updateNode(ctx, nodeId)
       }
 
       return ctx.prisma.query.zNode({ where: { id: nodeId } }, info)
