@@ -1,7 +1,0 @@
-type RandomPayload {
-  id: String
-}
-
-extend type Query {
-  randomNode(tag: String): RandomPayload
-}
