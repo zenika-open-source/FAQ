@@ -18,7 +18,7 @@ const validateAndParseIdToken = idToken =>
         key.publicKey,
         { algorithms: ['RS256'] },
         (err, decoded) => {
-          if (err) reject('jwt verify error: ' + err.message)
+          if (err) reject(new Error('jwt verify error: ' + err.message))
           resolve(decoded)
         }
       )

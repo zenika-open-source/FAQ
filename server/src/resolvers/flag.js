@@ -1,4 +1,4 @@
-const { history, ctxUser, slugify } = require('./helpers')
+const { history, ctxUser } = require('./helpers')
 const { algolia } = require('./integrations')
 
 module.exports = {

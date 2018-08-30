@@ -1,5 +1,3 @@
-const { forwardTo } = require('prisma-binding')
-
 const userResolvers = require('./user')
 const questionResolvers = require('./question')
 const answerResolvers = require('./answer')

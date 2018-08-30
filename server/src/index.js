@@ -1,5 +1,5 @@
 const { GraphQLServer } = require('graphql-yoga')
-const { Prisma, forwardTo } = require('prisma-binding')
+const { Prisma } = require('prisma-binding')
 
 const resolvers = require('./resolvers')
 const middlewares = require('./middlewares')
@@ -40,5 +40,6 @@ server.express.post(server.options.endpoint, (req, res, next) =>
 /* Start server */
 
 server.start(() =>
+  // eslint-disable-next-line no-console
   console.log('GraphQL server is running on http://localhost:4000')
 )

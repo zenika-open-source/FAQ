@@ -246,8 +246,8 @@ a[x-apple-data-detectors=true] {
                     <div align="center" class="img-container center  autowidth  fullwidth " style="padding-right: 0px;  padding-left: 0px;">
 <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr style="line-height:0px;line-height:0px;"><td style="padding-right: 0px; padding-left: 0px;" align="center"><![endif]-->
   <img class="center  autowidth  fullwidth" align="center" border="0" src="https://${
-    process.env.FAQ_URL
-  }/img/email_header.png" alt="FAQ Zenika - Image" title="FAQ Zenika - Image" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: 0;height: auto;float: none;width: 100%;max-width: 700px" width="700">
+  process.env.FAQ_URL
+}/img/email_header.png" alt="FAQ Zenika - Image" title="FAQ Zenika - Image" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: 0;height: auto;float: none;width: 100%;max-width: 700px" width="700">
 <!--[if mso]></td></tr></table><![endif]-->
 </div>
 
@@ -273,10 +273,10 @@ a[x-apple-data-detectors=true] {
   <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;"><![endif]-->
   <div style="color:#555555;line-height:120%;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;">
     <div style="font-size:12px;line-height:14px;color:#555555;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;"><p style="margin: 0;font-size: 14px;line-height: 17px">Hi ${
-      node.question.user.name
-    }!</p><p style="margin: 0;font-size: 14px;line-height: 17px">&#160;<br></p><p style="margin: 0;font-size: 14px;line-height: 17px"><b>${
-    node.answer.user.name
-  } just answered your question:</p></div>
+  node.question.user.name
+}!</p><p style="margin: 0;font-size: 14px;line-height: 17px">&#160;<br></p><p style="margin: 0;font-size: 14px;line-height: 17px"><b>${
+  node.answer.user.name
+} just answered your question:</p></div>
   </div>
   <!--[if mso]></td></tr></table><![endif]-->
 </div>
@@ -285,8 +285,8 @@ a[x-apple-data-detectors=true] {
 <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;"><![endif]-->
 <div style="color:#555555;line-height:120%;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px;">
 <div style="font-size:12px;line-height:14px;color:#555555;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;"><p style="margin: 0;font-size: 12px;line-height: 14px"><span style="font-size: 18px; line-height: 21px;">${
-    node.question.title
-  }</span></p></div>
+  node.question.title
+}</span></p></div>
 </div>
 <!--[if mso]></td></tr></table><![endif]-->
 </div>
@@ -335,10 +335,10 @@ a[x-apple-data-detectors=true] {
 
 
                     <div class="" style="font-size: 16px;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; text-align: center;"><p>
-	You can read the answer and its sources on
-  	<a href="https://${process.env.FAQ_URL}/q/${node.question.slug}-${node.id}">
-		the FAQ
-	</a>
+  You can read the answer and its sources on
+    <a href="https://${process.env.FAQ_URL}/q/${node.question.slug}-${node.id}">
+    the FAQ
+  </a>
 </p></div>
 
 

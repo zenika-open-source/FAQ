@@ -6,17 +6,18 @@ const answerHtml = require('./answer.html')
 
 class Mailgun {
   constructor() {
-    this.faq_url = process.env['FAQ_URL']
-    this.api_key = process.env['MAILGUN_API_KEY']
-    this.domain = process.env['MAILGUN_DOMAIN']
+    this.faq_url = process.env.FAQ_URL
+    this.api_key = process.env.MAILGUN_API_KEY
+    this.domain = process.env.MAILGUN_DOMAIN
 
     if (!this.faq_url || !this.api_key || !this.domain) {
+      // eslint-disable-next-line no-console
       console.log(
         'Please provide the FAQ_URL, MAILGUN_API_KEY and MAILGUN env variables'
       )
     }
 
-    this.token = new Buffer(`api:${this.api_key}`).toString('base64')
+    this.token = Buffer.from(`api:${this.api_key}`).toString('base64')
     this.endpoint = `https://api.mailgun.net/v3/${this.domain}/messages`
   }
 

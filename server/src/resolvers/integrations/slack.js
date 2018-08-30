@@ -4,9 +4,10 @@ const { emojify } = require('../helpers')
 
 class Slack {
   constructor() {
-    this.channelHook = process.env['SLACK_CHANNEL_HOOK']
+    this.channelHook = process.env.SLACK_CHANNEL_HOOK
 
     if (!this.channelHook) {
+      // eslint-disable-next-line no-console
       console.log('Please provide a valid slack channel hook!')
     }
   }

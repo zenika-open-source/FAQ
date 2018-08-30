@@ -21,6 +21,11 @@ const nodeQuery = `
 
 class Algolia {
   constructor() {
+    if (!process.env.ALGOLIA_APP_ID || !process.env.ALGOLIA_API_KEY_ALL) {
+      // eslint-disable-next-line no-console
+      console.log('Please provide the algolia app id and api key')
+    }
+
     this.client = algoliasearch(
       process.env.ALGOLIA_APP_ID,
       process.env.ALGOLIA_API_KEY_ALL

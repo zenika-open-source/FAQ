@@ -93,10 +93,11 @@ module.exports = {
       )
       const sourcesToUpdate = newSources.filter(newSource => {
         if (oldSources.map(s => s.id).includes(newSource.id)) {
-          const oldSource = oldSources.filter(s => s.id == newSource.id)[0]
+          const oldSource = oldSources.filter(s => s.id === newSource.id)[0]
 
           return (
-            oldSource.label != newSource.label || oldSource.url != newSource.url
+            oldSource.label !== newSource.label ||
+            oldSource.url !== newSource.url
           )
         }
         return false
@@ -146,7 +147,7 @@ module.exports = {
         }
       }
 
-      if (content != answer.content) {
+      if (content !== answer.content) {
         meta.content = content
       }
 

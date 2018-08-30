@@ -1,5 +1,3 @@
-const { forwardTo } = require('prisma-binding')
-
 const { validateAndParseIdToken, ctxUser } = require('./helpers')
 
 module.exports = {

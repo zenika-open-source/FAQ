@@ -16,6 +16,12 @@
     "start": "dotenv -e .env.local node src/index.js",
     "deploy": "prisma deploy",
     "playground": "prisma playground -p 3001",
-    "launch_containers": "cd prisma/ && docker-compose up -d"
+    "launch_containers": "cd prisma/ && docker-compose up -d",
+    "lint": "eslint src --fix --ext js"
+  },
+  "devDependencies": {
+    "eslint": "^5.4.0",
+    "eslint-plugin-node": "^6.0.0",
+    "eslint-plugin-standard": "^3.0.1"
   }
 }

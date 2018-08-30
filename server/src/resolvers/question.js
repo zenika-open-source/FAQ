@@ -105,7 +105,7 @@ module.exports = {
         }
       }
 
-      if (title != node.question.title) {
+      if (title !== node.question.title) {
         meta.title = title
       }
 
