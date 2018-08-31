@@ -14,7 +14,7 @@ import { Loading } from 'components'
 
 const apollo = new ApolloClient({
   link: ApolloLink.from([
-    onError(({ graphQLErrors, networkError }) => {
+    onError(({ graphQLErrors, networkError, operation }) => {
       if (graphQLErrors) {
         graphQLErrors.map(({ message, locations, path }) =>
           // eslint-disable-next-line no-console
@@ -49,7 +49,7 @@ const apollo = new ApolloClient({
 
 const query = (
   query,
-  { variables, skip, loadingText } = {}
+  { variables, skip, silent, loadingText } = {}
 ) => Component => props => {
   const queryName = query.definitions[0].selectionSet.selections[0].name.value
   return (
@@ -60,9 +60,9 @@ const query = (
     >
       {({ loading, error, data }) => {
         if (loading && !data[queryName]) {
-          return <Loading text={loadingText || null} />
+          return silent ? null : <Loading text={loadingText || null} />
         }
-        if (error) return <div>Error :(</div>
+        if (error) return silent ? null : <div>Error :(</div>
 
         return <Component {...props} {...data} />
       }}

@@ -29,7 +29,7 @@ server.express.post(
   server.options.endpoint,
   auth.checkJwt,
   (err, req, res, next) => {
-    if (err) return res.status(401).send(err.message)
+    if (err) return res.status(401).json(err)
     next()
   }
 )

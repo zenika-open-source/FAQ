@@ -1,15 +1,14 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { Link, withRouter } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
-import Avatar from 'components/Avatar'
-import Dropdown, { DropdownItem, DropdownDivider } from 'components/Dropdown'
+import { auth } from 'services'
 
 import GithubIcon from './components/GithubIcon'
+import UserMenu from './components/UserMenu'
 
 import './Navbar.css'
 
-const Navbar = ({ history, me }) => (
+const Navbar = () => (
   <div className="navbar">
     <Link to="/">
       <div className="brand">
@@ -26,52 +25,9 @@ const Navbar = ({ history, me }) => (
         <GithubIcon />
         <span>report a bug</span>
       </a>
-      {me && (
-        <Dropdown
-          button={
-            <div>
-              <Avatar image={me.picture} style={{ width: '25px' }} />
-              <i className="material-icons">arrow_drop_down</i>
-            </div>
-          }
-        >
-          <DropdownItem
-            icon="account_box"
-            onClick={() => history.push('/user-profile')}
-          >
-            Profile
-          </DropdownItem>
-          <DropdownDivider />
-          <DropdownItem
-            icon={<GithubIcon />}
-            href="https://github.com/Zenika/FAQ"
-            target="_blank"
-          >
-            Github
-          </DropdownItem>
-          <DropdownItem
-            icon="bug_report"
-            href="https://github.com/Zenika/FAQ/issues"
-            target="_blank"
-          >
-            Bug report
-          </DropdownItem>
-          <DropdownDivider />
-          <DropdownItem
-            icon="exit_to_app"
-            onClick={() => history.push('/auth/logout')}
-          >
-            Sign out
-          </DropdownItem>
-        </Dropdown>
-      )}
+      {auth.isAuthenticated() && <UserMenu />}
     </div>
   </div>
 )
 
-Navbar.propTypes = {
-  me: PropTypes.object,
-  history: PropTypes.object.isRequired
-}
-
-export default withRouter(Navbar)
+export default Navbar
