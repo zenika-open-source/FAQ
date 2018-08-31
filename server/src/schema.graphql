@@ -1,9 +1,15 @@
 # import ZNode, Question, Answer, Source, Flag, Tag, HistoryAction, User from './generated/prisma.graphql'
 
-# import Query.* from './generated/prisma.graphql'
+# import ZNodeOrderByInput, ZNodeWhereUniqueInput from './generated/prisma.graphql'
+# import HistoryActionWhereInput from './generated/prisma.graphql'
 
 type Query {
   me: User
+
+  zNodes(orderBy: ZNodeOrderByInput, first: Int): [ZNode!]!
+  zNode(where: ZNodeWhereUniqueInput): ZNode
+
+  historyActions(where: HistoryActionWhereInput): [HistoryAction!]!
 
   randomNode(tag: String): ZNode
 }

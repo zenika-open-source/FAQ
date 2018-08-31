@@ -2,7 +2,6 @@ const { GraphQLServer } = require('graphql-yoga')
 const { Prisma } = require('prisma-binding')
 
 const resolvers = require('./resolvers')
-const middlewares = require('./middlewares')
 
 const auth = require('./middlewares/auth')
 
@@ -16,7 +15,6 @@ const prisma = new Prisma({
 const server = new GraphQLServer({
   typeDefs: 'src/schema.graphql',
   resolvers,
-  middlewares,
   resolverValidationOptions: {
     requireResolversForResolveType: false
   },

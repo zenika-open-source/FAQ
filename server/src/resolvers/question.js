@@ -2,6 +2,10 @@ const { history, ctxUser, slugify } = require('./helpers')
 const { algolia, slack } = require('./integrations')
 
 module.exports = {
+  Query: {
+    zNodes: (_, args, ctx, info) => ctx.prisma.query.zNodes(args, info),
+    zNode: (_, args, ctx, info) => ctx.prisma.query.zNode(args, info)
+  },
   Mutation: {
     createQuestionAndTags: async (_, { title, tags }, ctx, info) => {
       const node = await ctx.prisma.mutation.createZNode(

@@ -4,7 +4,7 @@ import apollo from './apollo'
 import { me } from 'scenes/App/components/Navbar/components/UserMenu/queries'
 
 class Auth {
-  constructor() {
+  constructor () {
     this.auth0 = new auth0.WebAuth({
       domain: process.env.REACT_APP_AUTH0_DOMAIN,
       clientID: process.env.REACT_APP_AUTH0_CLIENTID,
@@ -20,12 +20,12 @@ class Auth {
   }
 
   /* Action methods */
-  login(redirectTo) {
+  login (redirectTo) {
     sessionStorage.after_login_redirect_url = redirectTo
     this.auth0.authorize()
   }
 
-  logout() {
+  logout () {
     localStorage.removeItem('auth')
     localStorage.removeItem('userId')
     localStorage.removeItem('userProfile')
@@ -37,7 +37,7 @@ class Auth {
     this.getProfile()
   }
 
-  parseHash(hash) {
+  parseHash (hash) {
     return new Promise((resolve, reject) => {
       this.auth0.parseHash({ hash }, (err, authResult) => {
         if (authResult && authResult.accessToken && authResult.idToken) {
@@ -51,7 +51,7 @@ class Auth {
     })
   }
 
-  setSession(authResult) {
+  setSession (authResult) {
     const expiresAt = authResult.expiresIn * 1000 + new Date().getTime()
 
     this.session = {
@@ -65,7 +65,7 @@ class Auth {
     this.scheduleRenew()
   }
 
-  getProfile() {
+  getProfile () {
     apollo.query({
       query: me,
       fetchPolicy: 'network-only'
@@ -74,7 +74,7 @@ class Auth {
 
   /* Internal actions methods */
 
-  renewAuth = () => {
+  renewAuth () {
     return new Promise((resolve, reject) => {
       this.auth0.checkSession({}, (err, authResult) => {
         if (err) {
@@ -91,7 +91,7 @@ class Auth {
     })
   }
 
-  scheduleRenew() {
+  scheduleRenew () {
     // Renew session 5min before expiresAt
     const expiresAt = this.session.expiresAt
     const fiveMinBefore = expiresAt - new Date().getTime() - 5 * 60 * 1000
@@ -102,7 +102,7 @@ class Auth {
   }
 
   /* State getters and setters */
-  isAuthenticated() {
+  isAuthenticated () {
     return (
       this.session &&
       this.session.expiresAt > new Date().getTime() &&
@@ -110,7 +110,7 @@ class Auth {
     )
   }
 
-  wasAuthenticated() {
+  wasAuthenticated () {
     return (
       this.session &&
       this.session.expiresAt < new Date().getTime() &&
@@ -118,17 +118,17 @@ class Auth {
     )
   }
 
-  popAfterLoginRedirectUrl() {
+  popAfterLoginRedirectUrl () {
     const url = sessionStorage.after_login_redirect_url
     sessionStorage.removeItem('after_login_redirect_url')
     return url
   }
 
-  setUserId(id) {
+  setUserId (id) {
     localStorage.userId = id
   }
 
-  getUserNodeId() {
+  getUserNodeId () {
     return localStorage.userId
   }
 }
