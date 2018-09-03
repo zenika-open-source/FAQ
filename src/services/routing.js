@@ -1,9 +1,9 @@
 const routing = {
-  getQueryParam (location, name) {
+  getQueryParam(location, name) {
     const queryParams = new URLSearchParams(location.search)
     return queryParams.get(name)
   },
-  setQueryParam (location, history, name, value, replace) {
+  setQueryParam(location, history, name, value, replace) {
     const queryParams = new URLSearchParams(location.search)
     queryParams.set(name, value)
     const arg = {
@@ -15,7 +15,7 @@ const routing = {
       history.push(arg)
     }
   },
-  getUIDFromSlug (match) {
+  getUIDFromSlug(match) {
     return match.params.slug.split('-').pop()
   }
 }

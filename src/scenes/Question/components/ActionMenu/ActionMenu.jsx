@@ -1,17 +1,35 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { withRouter } from 'react-router'
 import { Link } from 'react-router-dom'
 
 import Button from 'components/Button'
 
 import './ActionMenu.css'
 
-const ActionMenu = ({ backLabel, backLink, title, children }) => (
+const ActionMenu = ({
+  backLabel,
+  backLink,
+  goBack,
+  title,
+  children,
+  history
+}) => (
   <div className="action-menu">
     <div className="back-btn">
-      <Link to={backLink}>
-        <Button icon="chevron_left" label={backLabel || 'Back'} link raised />
-      </Link>
+      {goBack && history.action === 'PUSH' ? (
+        <Button
+          icon="chevron_left"
+          label={'Back'}
+          link
+          raised
+          onClick={() => history.goBack()}
+        />
+      ) : (
+        <Link to={backLink}>
+          <Button icon="chevron_left" label={backLabel || 'Back'} link raised />
+        </Link>
+      )}
     </div>
     <div className="title">
       <h2>{title}</h2>
@@ -27,4 +45,4 @@ ActionMenu.propTypes = {
   children: PropTypes.node
 }
 
-export default ActionMenu
+export default withRouter(ActionMenu)

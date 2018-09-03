@@ -3,7 +3,6 @@ const { algolia, slack } = require('./integrations')
 
 module.exports = {
   Query: {
-    zNodes: (_, args, ctx, info) => ctx.prisma.query.zNodes(args, info),
     zNode: (_, args, ctx, info) => ctx.prisma.query.zNode(args, info)
   },
   Mutation: {

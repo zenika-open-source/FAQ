@@ -8,7 +8,7 @@ import { auth } from 'services'
 import Loading from 'components/Loading'
 
 class Callback extends Component {
-  componentDidMount () {
+  componentDidMount() {
     const { location, history, authQL } = this.props
 
     auth
@@ -28,7 +28,7 @@ class Callback extends Component {
       })
   }
 
-  render () {
+  render() {
     return <Loading text="Authenticating..." />
   }
 }

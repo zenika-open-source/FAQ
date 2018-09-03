@@ -10,11 +10,9 @@ import { markdown } from 'services'
 
 import NotFound from 'scenes/NotFound'
 
-import Button from 'components/Button'
+import { Button, Flags, Tags } from 'components'
 import Card, { CardTitle, CardText } from 'components/Card'
 import Dropdown, { DropdownItem } from 'components/Dropdown'
-import Flags from 'components/Flags'
-import Tags from 'components/Tags'
 
 import ActionMenu from '../../components/ActionMenu'
 import FlagsDropdown from './components/FlagsDropdown'
@@ -39,7 +37,7 @@ const Read = ({ history, match, zNode, createFlag, removeFlag }) => {
       <Helmet>
         <title>FAQ - {markdown.title(zNode.question.title)}</title>
       </Helmet>
-      <ActionMenu backLink="/" backLabel="Home">
+      <ActionMenu backLink="/" backLabel="Home" goBack>
         <FlagsDropdown
           flags={zNode.flags}
           onSelect={type => createFlag(type, zNode.id)}
@@ -100,7 +98,7 @@ const Read = ({ history, match, zNode, createFlag, removeFlag }) => {
           )}
           <hr />
           <Meta node={zNode} />
-          <History node={zNode} />
+          <History />
         </CardText>
       </Card>
     </div>

@@ -1,67 +1,113 @@
-import React from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import { withRouter } from 'react-router'
 import Pluralize from 'react-pluralize'
-import chunk from 'lodash/chunk'
 
 import { routing } from 'services'
+import { unserialize, addToQueryString } from 'helpers'
 
-import Pagination from 'components/Pagination'
+import { Loading, Pagination } from 'components'
 
+import NoResults from '../NoResults'
 import Result from '../Result'
 
-const ResultList = ({ nodes, indication, history, location, collapsed }) => {
-  const maxNodesPerPage = 10
+class ResultList extends PureComponent {
+  componentDidMount() {
+    this.onMountOrUpdate()
+  }
+  componentDidUpdate() {
+    this.onMountOrUpdate()
+  }
 
-  const pagesCount = Math.ceil(nodes.length / maxNodesPerPage)
+  onMountOrUpdate = () => {
+    const {
+      history,
+      location,
+      loading,
+      search: { meta }
+    } = this.props
 
-  let currentPage =
-    Number.parseInt(routing.getQueryParam(location, 'page'), 10) || 1
+    const pagesCount = Math.ceil(meta.count / meta.resultsPerPage)
+    const currentPage = unserialize(location.search).page
 
-  currentPage = Math.max(1, Math.min(currentPage, pagesCount))
+    this.props.setSearchLoading(loading)
 
-  const Results = chunk(nodes, maxNodesPerPage)[currentPage - 1].map(node => {
+    // If currentPage > pagesCount, redirect to last page
+    if (!loading && pagesCount !== 0 && currentPage > pagesCount) {
+      addToQueryString(history, location, { page: pagesCount })
+    }
+  }
+
+  render() {
+    const { searchText, search, location, history, loading } = this.props
+
+    const { nodes, meta } = search
+
+    if (!loading && nodes.length === 0) {
+      return <NoResults prefill={searchText} />
+    }
+
+    const pagesCount = Math.ceil(meta.count / meta.resultsPerPage)
+    const { page: currentPage } = unserialize(location.search)
+
+    const Results = nodes.map(node => {
+      return (
+        <Result
+          key={node.id}
+          collapsed={!searchText}
+          node={node}
+          style={{ marginBottom: '1rem' }}
+        />
+      )
+    })
+
     return (
-      <Result
-        collapsed={collapsed}
-        node={node}
-        key={node.id}
-        style={{ marginBottom: '1rem' }}
-      />
+      <div style={{ marginTop: '1rem' }}>
+        {!loading && (
+          <p
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              padding: '0 1rem'
+            }}
+          >
+            <i>
+              {searchText ? (
+                <span>
+                  <Pluralize singular="result" count={meta.count} /> found
+                </span>
+              ) : (
+                'Latest questions'
+              )}
+            </i>
+            <i>Page {currentPage}</i>
+          </p>
+        )}
+        {!loading ? Results : <Loading />}
+        <br />
+        <Pagination
+          pages={pagesCount}
+          current={currentPage}
+          onPageSelected={index => {
+            routing.setQueryParam(location, history, 'page', index)
+            window.scrollTo(0, 0)
+          }}
+        />
+      </div>
     )
-  })
-
-  return (
-    <div style={{ marginTop: '1rem' }}>
-      <p>
-        <i>
-          {indication || (
-            <span>
-              <Pluralize singular="result" count={nodes.length} /> found
-            </span>
-          )}
-        </i>
-      </p>
-      {Results}
-      <br />
-      <Pagination
-        pages={pagesCount}
-        current={currentPage}
-        onPageSelected={index => {
-          routing.setQueryParam(location, history, 'page', index)
-          window.scrollTo(0, 0)
-        }}
-      />
-    </div>
-  )
+  }
 }
 
 ResultList.propTypes = {
-  nodes: PropTypes.array.isRequired,
-  indication: PropTypes.string,
+  search: PropTypes.object,
   history: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
-  collapsed: PropTypes.bool
+  loading: PropTypes.bool.isRequired,
+  setSearchLoading: PropTypes.func.isRequired,
+  searchText: PropTypes.string
 }
 
-export default withRouter(ResultList)
+ResultList.defaultProps = {
+  search: { nodes: [], meta: { count: 0, resultsPerPage: 1 } }
+}
+
+export default ResultList

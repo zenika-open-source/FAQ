@@ -1,15 +1,23 @@
 # import ZNode, Question, Answer, Source, Flag, Tag, HistoryAction, User from './generated/prisma.graphql'
 
-# import ZNodeOrderByInput, ZNodeWhereUniqueInput from './generated/prisma.graphql'
+# import ZNodeOrderByInput, ZNodeConnection, ZNodeWhereUniqueInput from './generated/prisma.graphql'
 # import HistoryActionWhereInput from './generated/prisma.graphql'
 
 type Query {
   me: User
 
-  zNodes(orderBy: ZNodeOrderByInput, first: Int): [ZNode!]!
   zNode(where: ZNodeWhereUniqueInput): ZNode
 
   historyActions(where: HistoryActionWhereInput): [HistoryAction!]!
+
+  search(
+    text: String
+    tags: [String!]
+    flags: [String!]
+    orderBy: ZNodeOrderByInput
+    first: Int
+    skip: Int
+  ): SearchResult!
 
   randomNode(tag: String): ZNode
 }
@@ -26,4 +34,9 @@ type Mutation {
 
   addFlag(type: String!, nodeId: ID!): ZNode
   removeFlag(type: String!, nodeId: ID!): ZNode
+}
+
+type SearchResult {
+  nodes: [ZNode!]!
+  meta: Json!
 }

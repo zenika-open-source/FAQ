@@ -18,6 +18,10 @@
     "indent": ["error", 2],
     "quotes": ["error", "single"],
     "semi": ["error", "never"],
-    "linebreak-style": ["error", "unix"]
+    "linebreak-style": ["error", "unix"],
+    "space-before-function-paren": [
+      "error",
+      { "anonymous": "never", "named": "never", "asyncArrow": "always" }
+    ]
   }
 }

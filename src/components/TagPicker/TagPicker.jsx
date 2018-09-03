@@ -14,12 +14,12 @@ class TagPicker extends Component {
     opened: false
   }
 
-  handleClickOutside () {
+  handleClickOutside() {
     this.setState({ opened: false })
   }
 
-  render () {
-    const { label, icon, tags, changeTagList } = this.props
+  render() {
+    const { label, icon, tags, onChange } = this.props
     const { opened } = this.state
 
     return (
@@ -28,10 +28,12 @@ class TagPicker extends Component {
         <div className="tags-list">
           {tags.map(tag => (
             <div key={tag} className="tag">
-              <span style={{ fontVariant: 'small-caps' }}>{tag}</span>
+              <span style={{ fontVariant: 'small-caps', paddingBottom: '1px' }}>
+                {tag}
+              </span>
               <i
                 className="material-icons"
-                onClick={() => changeTagList('remove', tag)}
+                onClick={() => onChange(tags.filter(t => t !== tag))}
               >
                 close
               </i>
@@ -43,21 +45,20 @@ class TagPicker extends Component {
             icon={icon || 'add'}
             link
             style={{ padding: 0, zIndex: 2 }}
-            onClick={() => this.setState({ opened: !opened })}
+            onClick={() => this.setState(state => ({ opened: !state.opened }))}
           />
           <div className="picker" style={{ display: opened ? 'flex' : 'none' }}>
             <div className="picker-body">
               {map(Tags.list, (category, name) => {
                 return (
                   <div key={name} className="category">
-                    {/* <span className="category-name">{name}</span> */}
                     {category.map(tag => {
                       return (
                         <div
                           key={tag}
                           className="category-item"
-                          onClick={() => changeTagList('add', tag)}
-                          disabled={tags.indexOf(tag) > -1}
+                          onClick={() => onChange([...tags, tag])}
+                          disabled={tags.includes(tag)}
                         >
                           {tag}
                         </div>
@@ -78,7 +79,7 @@ TagPicker.propTypes = {
   label: PropTypes.string,
   icon: PropTypes.string,
   tags: PropTypes.array.isRequired,
-  changeTagList: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired
 }
 
 export default onClickOutside(TagPicker)

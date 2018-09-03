@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Tue Jul 03 2018 16:26:13 GMT+0200 (Paris, Madrid (heure d’été))
+# timestamp: Sun Sep 02 2018 12:34:46 GMT+0200 (Central European Summer Time)
 
 type AggregateAnswer {
   count: Int!
@@ -2682,6 +2682,7 @@ type ZNode implements Node {
   flags(where: FlagWhereInput, orderBy: FlagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Flag!]
   tags(where: TagWhereInput, orderBy: TagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Tag!]
   history(where: HistoryActionWhereInput, orderBy: HistoryActionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [HistoryAction!]
+  highlights: Json
 }
 
 """A connection to a list of items."""
@@ -2695,6 +2696,7 @@ type ZNodeConnection {
 }
 
 input ZNodeCreateInput {
+  highlights: Json
   question: QuestionCreateOneWithoutNodeInput
   answer: AnswerCreateOneWithoutNodeInput
   flags: FlagCreateManyWithoutNodeInput
@@ -2728,6 +2730,7 @@ input ZNodeCreateOneWithoutTagsInput {
 }
 
 input ZNodeCreateWithoutAnswerInput {
+  highlights: Json
   question: QuestionCreateOneWithoutNodeInput
   flags: FlagCreateManyWithoutNodeInput
   tags: TagCreateManyWithoutNodeInput
@@ -2735,6 +2738,7 @@ input ZNodeCreateWithoutAnswerInput {
 }
 
 input ZNodeCreateWithoutFlagsInput {
+  highlights: Json
   question: QuestionCreateOneWithoutNodeInput
   answer: AnswerCreateOneWithoutNodeInput
   tags: TagCreateManyWithoutNodeInput
@@ -2742,6 +2746,7 @@ input ZNodeCreateWithoutFlagsInput {
 }
 
 input ZNodeCreateWithoutHistoryInput {
+  highlights: Json
   question: QuestionCreateOneWithoutNodeInput
   answer: AnswerCreateOneWithoutNodeInput
   flags: FlagCreateManyWithoutNodeInput
@@ -2749,6 +2754,7 @@ input ZNodeCreateWithoutHistoryInput {
 }
 
 input ZNodeCreateWithoutQuestionInput {
+  highlights: Json
   answer: AnswerCreateOneWithoutNodeInput
   flags: FlagCreateManyWithoutNodeInput
   tags: TagCreateManyWithoutNodeInput
@@ -2756,6 +2762,7 @@ input ZNodeCreateWithoutQuestionInput {
 }
 
 input ZNodeCreateWithoutTagsInput {
+  highlights: Json
   question: QuestionCreateOneWithoutNodeInput
   answer: AnswerCreateOneWithoutNodeInput
   flags: FlagCreateManyWithoutNodeInput
@@ -2774,6 +2781,8 @@ type ZNodeEdge {
 enum ZNodeOrderByInput {
   id_ASC
   id_DESC
+  highlights_ASC
+  highlights_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -2782,6 +2791,7 @@ enum ZNodeOrderByInput {
 
 type ZNodePreviousValues {
   id: ID!
+  highlights: Json
 }
 
 type ZNodeSubscriptionPayload {
@@ -2824,6 +2834,7 @@ input ZNodeSubscriptionWhereInput {
 }
 
 input ZNodeUpdateInput {
+  highlights: Json
   question: QuestionUpdateOneWithoutNodeInput
   answer: AnswerUpdateOneWithoutNodeInput
   flags: FlagUpdateManyWithoutNodeInput
@@ -2872,6 +2883,7 @@ input ZNodeUpdateOneWithoutTagsInput {
 }
 
 input ZNodeUpdateWithoutAnswerDataInput {
+  highlights: Json
   question: QuestionUpdateOneWithoutNodeInput
   flags: FlagUpdateManyWithoutNodeInput
   tags: TagUpdateManyWithoutNodeInput
@@ -2879,6 +2891,7 @@ input ZNodeUpdateWithoutAnswerDataInput {
 }
 
 input ZNodeUpdateWithoutFlagsDataInput {
+  highlights: Json
   question: QuestionUpdateOneWithoutNodeInput
   answer: AnswerUpdateOneWithoutNodeInput
   tags: TagUpdateManyWithoutNodeInput
@@ -2886,6 +2899,7 @@ input ZNodeUpdateWithoutFlagsDataInput {
 }
 
 input ZNodeUpdateWithoutHistoryDataInput {
+  highlights: Json
   question: QuestionUpdateOneWithoutNodeInput
   answer: AnswerUpdateOneWithoutNodeInput
   flags: FlagUpdateManyWithoutNodeInput
@@ -2893,6 +2907,7 @@ input ZNodeUpdateWithoutHistoryDataInput {
 }
 
 input ZNodeUpdateWithoutQuestionDataInput {
+  highlights: Json
   answer: AnswerUpdateOneWithoutNodeInput
   flags: FlagUpdateManyWithoutNodeInput
   tags: TagUpdateManyWithoutNodeInput
@@ -2900,6 +2915,7 @@ input ZNodeUpdateWithoutQuestionDataInput {
 }
 
 input ZNodeUpdateWithoutTagsDataInput {
+  highlights: Json
   question: QuestionUpdateOneWithoutNodeInput
   answer: AnswerUpdateOneWithoutNodeInput
   flags: FlagUpdateManyWithoutNodeInput

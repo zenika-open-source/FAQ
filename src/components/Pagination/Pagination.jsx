@@ -6,6 +6,7 @@ import Button from '../Button'
 import './Pagination.css'
 
 const Pagination = ({ pages, current, onPageSelected }) => {
+  pages = Math.max(pages, 1)
   const buttons = [...Array(pages)].map((x, i) => {
     const isCurrent = i + 1 === current
     return (

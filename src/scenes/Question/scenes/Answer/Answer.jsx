@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Redirect, Prompt } from 'react-router-dom'
 import omit from 'lodash/omit'
+import differenceWith from 'lodash/differenceWith'
+import isEqual from 'lodash/isEqual'
 
 import { compose } from 'react-apollo'
 import { submitAnswer, editAnswer } from './queries'
@@ -32,31 +34,27 @@ import 'react-mde/lib/styles/css/react-mde-all.css'
 const CtrlEnterCardText = onCtrlEnter(CardText)
 
 class Answer extends Component {
-  state = {
-    nodeLoaded: false,
-    answer: { text: '', selection: null },
-    loading: false,
-    sources: [],
-    slug: null,
-    showTips: PermanentClosableCard.isOpen('tips_answer')
-  }
+  constructor(props) {
+    super(props)
 
-  static getDerivedStateFromProps (nextProps, prevState) {
-    const { zNode } = nextProps
-    const { nodeLoaded } = prevState
+    const answer = props.zNode && props.zNode.answer
 
-    if (!nodeLoaded && zNode && zNode.answer) {
-      return {
-        nodeLoaded: true,
-        answer: { text: zNode.answer.content },
-        sources: zNode.answer.sources
-      }
+    const initialText = answer ? answer.content : ''
+    const initialSources = answer ? answer.sources : []
+
+    this.state = {
+      nodeLoaded: false,
+      initialAnswer: initialText,
+      answer: { text: initialText, selection: null },
+      loading: false,
+      sources: initialSources,
+      initialSources: initialSources,
+      slug: null,
+      showTips: PermanentClosableCard.isOpen('tips_answer')
     }
-
-    return null
   }
 
-  cleanSources () {
+  cleanSources() {
     const { sources } = this.state
     return sources
       .map(s => {
@@ -66,11 +64,11 @@ class Answer extends Component {
       .filter(s => s.label !== '' && s.url !== '')
   }
 
-  handleChange (value) {
+  onTextChange(value) {
     this.setState({ answer: value })
   }
 
-  handleSourceChange = sources => {
+  onSourceChange = sources => {
     this.setState({ sources: sources })
   }
 
@@ -131,8 +129,18 @@ class Answer extends Component {
     PermanentClosableCard.setValue('tips_answer', false)
   }
 
-  render () {
-    const { loadingSubmit, slug, answer, showTips } = this.state
+  canSubmit() {
+    const { answer, initialAnswer, sources, initialSources } = this.state
+    return !(
+      answer.text.length === 0 ||
+      (answer.text === initialAnswer &&
+        differenceWith(sources, initialSources, isEqual).length === 0 &&
+        differenceWith(initialSources, sources, isEqual).length === 0)
+    )
+  }
+
+  render() {
+    const { loadingSubmit, slug, showTips } = this.state
     const { zNode } = this.props
 
     if (slug) {
@@ -149,7 +157,9 @@ class Answer extends Component {
 
     return (
       <div>
-        <Prompt message="Are you sure you want to leave this page with an unsaved answer?" />
+        {this.canSubmit() && (
+          <Prompt message="Are you sure you want to leave this page with an unsaved answer?" />
+        )}
         <ActionMenu backLink={`/q/${zNode.question.slug}-${zNode.id}`}>
           {!showTips && (
             <Button
@@ -172,14 +182,14 @@ class Answer extends Component {
             <ReactMde
               value={this.state.answer}
               showdownFlavor="github"
-              onChange={this.handleChange.bind(this)}
+              onChange={this.onTextChange.bind(this)}
               commands={ReactMdeCommands.getDefaultCommands()}
             />
           </CtrlEnterCardText>
           <CardText>
             <Sources
               sources={this.state.sources}
-              handleChange={this.handleSourceChange}
+              onChange={this.onSourceChange}
             />
           </CardText>
           <CardActions>
@@ -187,7 +197,7 @@ class Answer extends Component {
               label={zNode.answer ? 'Save answer' : 'Submit answer'}
               primary
               raised
-              disabled={answer.text.length === 0}
+              disabled={!this.canSubmit()}
               onClick={this.submitForm}
             />
           </CardActions>
@@ -201,7 +211,7 @@ Answer.propTypes = {
   match: PropTypes.object.isRequired,
   submitAnswer: PropTypes.func.isRequired,
   editAnswer: PropTypes.func.isRequired,
-  zNode: PropTypes.object.isRequired
+  zNode: PropTypes.object
 }
 
 export default compose(

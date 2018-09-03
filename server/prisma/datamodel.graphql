@@ -9,6 +9,8 @@ type ZNode {
 
   history: [HistoryAction!]!
     @relation(name: "NodeHistoryActions", onDelete: CASCADE)
+
+  highlights: Json
 }
 
 type Question {

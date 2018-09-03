@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import React from 'react'
+import React, { PureComponent } from 'react'
 import { Query } from 'react-apollo'
 
 import { ApolloClient } from 'apollo-client'
@@ -10,7 +10,6 @@ import { ApolloLink } from 'apollo-link'
 import { setContext } from 'apollo-link-context'
 
 import auth from './auth'
-import { Loading } from 'components'
 
 const apollo = new ApolloClient({
   link: ApolloLink.from([
@@ -47,27 +46,24 @@ const apollo = new ApolloClient({
   }
 })
 
-const query = (
-  query,
-  { variables, skip, silent, loadingText } = {}
-) => Component => props => {
-  const queryName = query.definitions[0].selectionSet.selections[0].name.value
-  return (
-    <Query
-      query={query}
-      skip={skip ? skip(props) : false}
-      variables={variables ? variables(props) : {}}
-    >
-      {({ loading, error, data }) => {
-        if (loading && !data[queryName]) {
-          return silent ? null : <Loading text={loadingText || null} />
-        }
-        if (error) return silent ? null : <div>Error :(</div>
-
-        return <Component {...props} {...data} />
-      }}
-    </Query>
-  )
+const query = (query, { variables, skip, ...queryProps } = {}) => Wrapped => {
+  return class extends PureComponent {
+    render() {
+      const props = this.props
+      return (
+        <Query
+          query={query}
+          skip={skip ? skip(props) : false}
+          variables={variables ? variables(props) : {}}
+          {...queryProps}
+        >
+          {({ loading, error, data }) => (
+            <Wrapped {...props} {...{ loading, error, ...data }} />
+          )}
+        </Query>
+      )
+    }
+  }
 }
 
 export default apollo

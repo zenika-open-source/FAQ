@@ -3,16 +3,19 @@ const questionResolvers = require('./question')
 const answerResolvers = require('./answer')
 const flagResolvers = require('./flag')
 const historyResolvers = require('./history')
+const searchResolvers = require('./search')
 const randomResolvers = require('./random')
 
 const mergeResolvers = resolvers =>
-  resolvers.reduce(
-    (acc, res) => ({
-      Query: { ...acc.Query, ...res.Query },
-      Mutation: { ...acc.Mutation, ...res.Mutation }
-    }),
-    { Query: {}, Mutation: {} }
-  )
+  resolvers.reduce((acc, res) => {
+    Object.keys(res).map(type => {
+      if (!acc[type]) acc[type] = {}
+
+      acc[type] = { ...acc[type], ...res[type] }
+    })
+
+    return acc
+  }, {})
 
 module.exports = mergeResolvers([
   userResolvers,
@@ -20,5 +23,6 @@ module.exports = mergeResolvers([
   answerResolvers,
   flagResolvers,
   historyResolvers,
+  searchResolvers,
   randomResolvers
 ])

@@ -3,13 +3,13 @@ import PropTypes from 'prop-types'
 
 const onCtrlEnter = WrappedComponent => {
   class onCtrlEnter extends Component {
-    componentDidMount () {
+    componentDidMount() {
       if (this.ref) {
         this.ref.addEventListener('keydown', this.keydownHandler)
       }
     }
 
-    componentWillUnmount () {
+    componentWillUnmount() {
       if (this.ref) {
         this.ref.removeEventListener('keydown', this.keydownHandler)
       }
@@ -21,7 +21,7 @@ const onCtrlEnter = WrappedComponent => {
       }
     }
 
-    render () {
+    render() {
       const { children, onCtrlEnterCallback, ...otherProps } = this.props
       return (
         <WrappedComponent {...otherProps} setRef={ref => (this.ref = ref)}>

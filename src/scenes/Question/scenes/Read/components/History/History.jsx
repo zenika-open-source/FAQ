@@ -1,11 +1,7 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import cn from 'classnames'
-import { Query } from 'react-apollo'
 
-import { loadHistoryQuery } from './queries'
-
-import HistoryActions from './HistoryActions'
+import HistoryActions from './HistoryActions.container'
 
 import './History.css'
 
@@ -19,8 +15,7 @@ class History extends Component {
       open: !state.open
     }))
 
-  render () {
-    const { node } = this.props
+  render() {
     const { open } = this.state
 
     return (
@@ -34,23 +29,12 @@ class History extends Component {
         </div>
         {open && (
           <div className="actions">
-            <Query query={loadHistoryQuery} variables={{ nodeId: node.id }}>
-              {({ loading, error, data }) => {
-                if (loading) return 'Loading...'
-                if (error) return `Error! ${error.message}`
-
-                return <HistoryActions actions={data.historyActions} />
-              }}
-            </Query>
+            <HistoryActions />
           </div>
         )}
       </div>
     )
   }
-}
-
-History.propTypes = {
-  node: PropTypes.object.isRequired
 }
 
 export default History

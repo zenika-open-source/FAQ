@@ -6,16 +6,12 @@ import difference from 'lodash/difference'
 import { compose } from 'react-apollo'
 import { submitQuestion, editQuestion } from './queries'
 
-import Loading from 'components/Loading'
 import Card, {
   CardText,
   CardActions,
   PermanentClosableCard
 } from 'components/Card'
-import Button from 'components/Button'
-import Input from 'components/Input'
-import onCtrlEnter from 'components/onCtrlEnter'
-import TagPicker from 'components/TagPicker'
+import { Loading, Button, Input, onCtrlEnter, TagPicker } from 'components'
 
 import ActionMenu from '../../components/ActionMenu'
 
@@ -26,12 +22,14 @@ import './Edit.css'
 const CtrlEnterInput = onCtrlEnter(Input)
 
 class Edit extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
-    const { location } = this.props
+    const { location, zNode } = this.props
 
-    const initialQuestion = location.state ? location.state.question : ''
+    const passedQuestionText = location.state ? location.state.question : ''
+    const initialQuestion = zNode ? zNode.question.title : passedQuestionText
+    const initialTags = zNode ? zNode.tags.map(x => x.label) : []
 
     this.state = {
       nodeLoaded: false,
@@ -40,30 +38,13 @@ class Edit extends Component {
       question: initialQuestion,
       loadingSubmit: false,
       slug: null,
-      initialTags: [],
-      tags: [],
+      initialTags: initialTags,
+      tags: initialTags,
       showTips: PermanentClosableCard.isOpen('tips_question')
     }
   }
 
-  static getDerivedStateFromProps (nextProps, prevState) {
-    const { nodeLoaded, isEditing } = prevState
-    const { zNode } = nextProps
-
-    if (!nodeLoaded && isEditing && zNode) {
-      return {
-        nodeLoaded: true,
-        initialQuestion: zNode.question.title,
-        question: zNode.question.title,
-        initialTags: zNode.tags.map(x => x.label),
-        tags: zNode.tags.map(x => x.label)
-      }
-    }
-
-    return null
-  }
-
-  handleChange = e => {
+  onTextChange = e => {
     this.setState({ question: e.target.value })
   }
 
@@ -116,41 +97,17 @@ class Edit extends Component {
       })
   }
 
-  openTips = () => {
-    this.setState({ showTips: true })
-    PermanentClosableCard.setValue('tips_question', true)
+  toggleTips = value => () => {
+    this.setState({ showTips: value })
+    PermanentClosableCard.setValue('tips_question', value)
   }
 
-  closeTips = () => {
-    this.setState({ showTips: false })
-    PermanentClosableCard.setValue('tips_question', false)
-  }
+  onTagsChange = tags => this.setState({ tags })
 
-  changeTagList = (action, tag) => {
-    const { tags } = this.state
-    const index = tags.indexOf(tag)
-    switch (action) {
-    case 'add':
-      if (index < 0) {
-        tags.push(tag)
-        this.setState({ tags })
-      }
-      break
-    case 'remove':
-      if (index > -1) {
-        tags.splice(index, 1)
-        this.setState({ tags })
-      }
-      break
-    default:
-      break
-    }
-  }
-
-  canSubmit () {
+  canSubmit() {
     const { question, initialQuestion, tags, initialTags } = this.state
 
-    return (
+    return !(
       question.length === 0 ||
       (question === initialQuestion &&
         difference(tags, initialTags).length === 0 &&
@@ -158,7 +115,7 @@ class Edit extends Component {
     )
   }
 
-  render () {
+  render() {
     const { match, zNode } = this.props
     const {
       isEditing,
@@ -183,7 +140,7 @@ class Edit extends Component {
 
     return (
       <div className="Edit">
-        <Prompt message="Are you sure you want to leave this page with an unsaved question?" />
+        {this.canSubmit() && <Prompt message="Are you sure you want to leave this page with an unsaved question?" />}
         <ActionMenu
           backLabel={isEditing ? 'Back' : 'Home'}
           backLink={isEditing ? `/q/${match.params.slug}` : '/'}
@@ -194,11 +151,11 @@ class Edit extends Component {
               link
               icon="lightbulb_outline"
               label="Show tips"
-              onClick={this.openTips}
+              onClick={this.toggleTips(true)}
             />
           )}
         </ActionMenu>
-        <Tips close={this.closeTips} open={showTips} />
+        <Tips close={this.toggleTips(false)} open={showTips} />
         <Card>
           <CardText style={{ display: 'flex', paddingBottom: 0 }}>
             <CtrlEnterInput
@@ -208,16 +165,16 @@ class Edit extends Component {
               placeholder="Ex: Comment remplir une note de frais ?"
               limit={100}
               value={question}
-              onChange={this.handleChange}
+              onChange={this.onTextChange}
             />
           </CardText>
           <CardText style={{ paddingBottom: '0.5rem' }}>
-            <TagPicker tags={tags} changeTagList={this.changeTagList} />
+            <TagPicker tags={tags} onChange={this.onTagsChange} />
           </CardText>
           <CardActions>
             <Button
               label={isEditing ? 'Edit' : 'Submit'}
-              disabled={this.canSubmit()}
+              disabled={!this.canSubmit()}
               primary
               raised
               onClick={this.submitForm}

@@ -5,7 +5,7 @@ import cn from 'classnames'
 import './Input.css'
 
 class Input extends Component {
-  componentDidMount () {
+  componentDidMount() {
     if (this.props.autoFocus) {
       const input = this.input
       const length = input.value.length
@@ -16,7 +16,7 @@ class Input extends Component {
     }
   }
 
-  render () {
+  render() {
     const {
       className,
       value,

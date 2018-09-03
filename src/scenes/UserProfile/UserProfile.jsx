@@ -11,20 +11,15 @@ import Avatar from 'components/Avatar'
 import { updateIdentity } from './queries'
 
 class UserProfile extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
-    this.state = { savingIdentity: false }
-  }
-
-  static getDerivedStateFromProps (nextProps, prevState) {
-    if (!nextProps.me) {
-      return null
+    this.state = {
+      identity: props.me,
+      savingIdentity: false
     }
-    const { name, email, picture } = nextProps.me
-    return { identity: { name, email, picture }, ...prevState }
   }
 
-  onIdentityChange (event) {
+  onIdentityChange(event) {
     this.setState({
       identity: {
         ...this.state.identity,
@@ -33,7 +28,7 @@ class UserProfile extends Component {
     })
   }
 
-  async updateIdentity (identity) {
+  async updateIdentity(identity) {
     const { updateIdentity } = this.props
     this.setState({ savingIdentity: true })
     try {
@@ -43,7 +38,7 @@ class UserProfile extends Component {
     }
   }
 
-  render () {
+  render() {
     const { me } = this.props
 
     const history = [...me.history].reverse()

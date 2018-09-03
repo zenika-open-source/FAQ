@@ -1,4 +1,4 @@
-const slug = require('slug')
+const slug = require('slugify')
 
 const validateAndParseIdToken = require('./validateAndParseIdToken')
 const history = require('./history')

@@ -3,188 +3,67 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import debounce from 'lodash/debounce'
 
-import { routing, search } from 'services'
-
 import Button from 'components/Button'
 
-import Searchbar from './components/Searchbar'
-import NoResults from './components/NoResults'
-import ResultList from './components/ResultList'
+import { unserialize, addToQueryString } from 'helpers'
+
+import { Searchbar, ResultList } from './components'
 
 class Home extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
+    const params = unserialize(props.location.search)
+
     this.state = {
-      searchText: '',
-      nextSearchText: '',
+      searchText: params.q,
+      debouncedSearchText: params.q,
       searchLoading: false,
-      filters: { answered: true, unanswered: true },
-      searchTags: [],
-      nextSearchTags: [],
-      nodes: null
+      tags: params.tags
     }
   }
 
-  static getSearchFromURL (props) {
-    const q = routing.getQueryParam(props.location, 'q')
-    const tags = routing.getQueryParam(props.location, 'tags')
-    return {
-      q: q ? q.replace(/\+/g, ' ') : '',
-      tags: tags
-        ? tags
-          .replace(/tag:/g, '')
-          .split(' ')
-          .map(t => t.replace(/-/g, ' '))
-        : []
-    }
-  }
+  onSearchChange = text => {
+    const { history, location } = this.props
 
-  static getDerivedStateFromProps (nextProps, prevState) {
-    const { searchText, searchTags } = prevState
-    const nextSearch = Home.getSearchFromURL(nextProps)
+    this.setState({ searchText: text })
 
-    const nextState = {}
-
-    if (searchText !== nextSearch.q) {
-      nextState.nextSearchText = nextSearch.q
-    }
-
-    if (searchTags.length !== nextSearch.tags.length) {
-      nextState.nextSearchTags = nextSearch.tags
-    }
-
-    return nextState || null
-  }
-
-  componentDidUpdate () {
-    const { nextSearchText, nextSearchTags } = this.state
-
-    if (nextSearchText || nextSearchTags) {
-      this.handleSearchChange(nextSearchText, nextSearchTags)
-    }
-  }
-
-  handleSearchChange = (value, tags) => {
-    const { history } = this.props
-    const { searchTags } = this.state
-
-    value = value || ''
-    tags = tags || searchTags
-
-    this.setState({
-      searchText: value,
-      searchTags: tags,
-      nextSearchText: null,
-      nextSearchTags: null
+    addToQueryString(history, location, {
+      q: text
     })
 
-    let urlSearch = []
-
-    if (value !== '' || tags.length > 0) {
-      if (value !== '') {
-        urlSearch.push('q=' + value.replace(/\s/g, '+'))
-      }
-      if (tags.length > 0) {
-        urlSearch.push('tags=' + tags.join('+').replace(/\s/g, '-'))
-      }
-      history.replace({ search: '?' + urlSearch.join('&') })
-    } else {
-      this.setState({ nodes: null })
-      history.replace({ search: null })
-    }
-
-    this.retrieveResults(value, tags)
+    this.querySearchProvider()
   }
 
-  retrieveResults = debounce((value, tags) => {
-    if (value !== '' || tags.length > 0) {
-      this.setState({ searchLoading: true })
-      search
-        .simpleQuery(value, tags)
-        .then(({ nodes, rawSearchText }) => {
-          if (this.state.searchText === rawSearchText) {
-            this.setState({ nodes, searchLoading: false })
-          }
-        })
-        .catch(err => {
-          // eslint-disable-next-line
-          console.log(err)
-        })
-    }
-  }, 200)
+  querySearchProvider = debounce(
+    () => this.setState(state => ({ debouncedSearchText: state.searchText })),
+    200
+  )
 
-  changeTagList = (action, tag) => {
-    const { searchText, searchTags } = this.state
-    const index = searchTags.indexOf(tag)
-    switch (action) {
-    case 'add':
-      if (index < 0) {
-        searchTags.push(tag)
-        this.setState({ searchTags })
-        this.handleSearchChange(searchText, searchTags)
-      }
-      break
-    case 'remove':
-      if (index > -1) {
-        searchTags.splice(index, 1)
-        this.setState({ searchTags })
-        this.handleSearchChange(searchText, searchTags)
-      }
-      break
-    default:
-      break
-    }
+  setSearchLoading = loading => this.setState({ searchLoading: loading })
+
+  onTagsChange = tags => {
+    const { history, location } = this.props
+
+    this.setState({ tags })
+
+    addToQueryString(history, location, { tags })
   }
 
-  render () {
-    const { searchLoading, searchText, nodes, filters, searchTags } = this.state
-    const { zNodes } = this.props
-
-    let list = nodes || zNodes
-
-    // Filters
-    list = list.filter(node => {
-      const isAnswered = !!node.answer
-      return isAnswered ? filters.answered : filters.unanswered
-    })
-
-    let Results
-
-    if (list.length === 0) {
-      Results = <NoResults prefill={searchText} />
-    } else if (
-      searchText === '' &&
-      searchTags.length === 0 &&
-      list.length > 0
-    ) {
-      Results = (
-        <ResultList
-          nodes={list}
-          indication="Latest questions"
-          collapsed={true}
-        />
-      )
-    } else {
-      Results = <ResultList nodes={list} collapsed={false} />
-    }
-
+  render() {
     return (
       <div>
         <Searchbar
-          text={searchText}
-          search={this.handleSearchChange}
-          loading={searchLoading}
-          filters={filters}
-          tags={searchTags}
-          onToggleCheck={filters =>
-            this.setState({
-              filters: filters
-            })
-          }
-          changeTagList={this.changeTagList}
+          text={this.state.searchText}
+          tags={this.state.tags}
+          loading={this.state.searchLoading}
+          onTextChange={this.onSearchChange}
+          onTagsChange={this.onTagsChange}
         />
-        <div>{Results}</div>
+        <ResultList
+          searchText={this.state.debouncedSearchText}
+          setSearchLoading={this.setSearchLoading}
+        />
         <Link to="/q/new">
           <Button
             icon="record_voice_over"
@@ -202,9 +81,8 @@ class Home extends Component {
 }
 
 Home.propTypes = {
-  zNodes: PropTypes.array.isRequired,
-  history: PropTypes.object.isRequired,
-  location: PropTypes.object.isRequired
+  location: PropTypes.object,
+  history: PropTypes.object
 }
 
 export default Home

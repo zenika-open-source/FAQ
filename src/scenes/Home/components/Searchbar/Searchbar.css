@@ -21,6 +21,10 @@
   line-height: 40px;
 }
 
+.searchbar .input-icon .icon.hidden {
+  display: none;
+}
+
 .searchbar .input-icon svg {
   width: 18px;
   height: 18px;
