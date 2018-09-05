@@ -2,16 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
 
-const CardText = ({
-  children,
-  collapsed,
-  setRef,
-  className,
-  ...otherProps
-}) => (
+const CardText = ({ children, collapsed, className, ...otherProps }) => (
   <div
     className={cn('card-item card-text', { collapsed }, className)}
-    ref={ref => setRef && setRef(ref)}
     {...otherProps}
   >
     {children}
@@ -21,7 +14,6 @@ const CardText = ({
 CardText.propTypes = {
   children: PropTypes.node.isRequired,
   collapsed: PropTypes.bool,
-  setRef: PropTypes.func,
   className: PropTypes.string
 }
 

@@ -47,3 +47,7 @@
   color: var(--primary-color-light);
   cursor: pointer;
 }
+
+.markdown-editor {
+  width: 100%;
+}

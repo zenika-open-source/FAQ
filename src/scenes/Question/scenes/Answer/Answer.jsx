@@ -12,26 +12,18 @@ import { markdown } from 'services'
 
 import NotFound from 'scenes/NotFound'
 
-import Loading from 'components/Loading'
+import { Loading, Flags, Button, MarkdownEditor, CtrlEnter } from 'components'
 import Card, {
   CardTitle,
   CardText,
   CardActions,
   PermanentClosableCard
 } from 'components/Card'
-import Flags from 'components/Flags'
-import Button from 'components/Button'
-import onCtrlEnter from 'components/onCtrlEnter'
 
 import ActionMenu from '../../components/ActionMenu'
 
 import Sources from './components/Sources'
 import Tips from './components/Tips'
-
-import ReactMde, { ReactMdeCommands } from 'react-mde'
-import 'react-mde/lib/styles/css/react-mde-all.css'
-
-const CtrlEnterCardText = onCtrlEnter(CardText)
 
 class Answer extends Component {
   constructor(props) {
@@ -64,17 +56,15 @@ class Answer extends Component {
       .filter(s => s.label !== '' && s.url !== '')
   }
 
-  onTextChange(value) {
-    this.setState({ answer: value })
-  }
+  onTextChange = value => this.setState({ answer: value })
 
-  onSourceChange = sources => {
-    this.setState({ sources: sources })
-  }
+  onSourceChange = sources => this.setState({ sources: sources })
 
   submitForm = () => {
-    const { zNode } = this.props
-    zNode.answer ? this.editAnswer() : this.submitAnswer()
+    if (this.canSubmit()) {
+      const { zNode } = this.props
+      zNode.answer ? this.editAnswer() : this.submitAnswer()
+    }
   }
 
   submitAnswer = () => {
@@ -178,14 +168,14 @@ class Answer extends Component {
             </div>
             <Flags node={zNode} withLabels={true} />
           </CardTitle>
-          <CtrlEnterCardText onCtrlEnterCallback={this.submitForm}>
-            <ReactMde
-              value={this.state.answer}
-              showdownFlavor="github"
-              onChange={this.onTextChange.bind(this)}
-              commands={ReactMdeCommands.getDefaultCommands()}
-            />
-          </CtrlEnterCardText>
+          <CardText>
+            <CtrlEnter onCtrlEnterCallback={this.submitForm}>
+              <MarkdownEditor
+                content={this.state.answer}
+                onChange={this.onTextChange}
+              />
+            </CtrlEnter>
+          </CardText>
           <CardText>
             <Sources
               sources={this.state.sources}

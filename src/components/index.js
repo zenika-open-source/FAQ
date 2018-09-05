@@ -5,10 +5,10 @@ export { default as Card } from './Card'
 export { default as Checkbox } from './Checkbox'
 export { default as Dropdown } from './Dropdown'
 export { default as Flags } from './Flags'
-export { default as Input } from './Input'
+export { default as Input, CtrlEnterInput, MarkdownEditor } from './Input'
 export { default as List } from './List'
 export { default as Loading, withLoading, withError } from './Loading'
-export { default as onCtrlEnter } from './onCtrlEnter'
+export { default as CtrlEnter } from './CtrlEnter'
 export {
   default as Pagination,
   DefaultPagination,

@@ -11,15 +11,13 @@ import Card, {
   CardActions,
   PermanentClosableCard
 } from 'components/Card'
-import { Loading, Button, Input, onCtrlEnter, TagPicker } from 'components'
+import { Loading, Button, Input, CtrlEnter, TagPicker } from 'components'
 
 import ActionMenu from '../../components/ActionMenu'
 
 import Tips from './components/Tips'
 
 import './Edit.css'
-
-const CtrlEnterInput = onCtrlEnter(Input)
 
 class Edit extends Component {
   constructor(props) {
@@ -49,8 +47,10 @@ class Edit extends Component {
   }
 
   submitForm = () => {
-    const { isEditing } = this.state
-    isEditing ? this.editQuestion() : this.submitQuestion()
+    if (this.canSubmit()) {
+      const { isEditing } = this.state
+      isEditing ? this.editQuestion() : this.submitQuestion()
+    }
   }
 
   submitQuestion = () => {
@@ -140,7 +140,9 @@ class Edit extends Component {
 
     return (
       <div className="Edit">
-        {this.canSubmit() && <Prompt message="Are you sure you want to leave this page with an unsaved question?" />}
+        {this.canSubmit() && (
+          <Prompt message="Are you sure you want to leave this page with an unsaved question?" />
+        )}
         <ActionMenu
           backLabel={isEditing ? 'Back' : 'Home'}
           backLink={isEditing ? `/q/${match.params.slug}` : '/'}
@@ -158,15 +160,19 @@ class Edit extends Component {
         <Tips close={this.toggleTips(false)} open={showTips} />
         <Card>
           <CardText style={{ display: 'flex', paddingBottom: 0 }}>
-            <CtrlEnterInput
+            <CtrlEnter
               onCtrlEnterCallback={this.submitForm}
-              autoFocus
-              icon="help"
-              placeholder="Ex: Comment remplir une note de frais ?"
-              limit={100}
-              value={question}
-              onChange={this.onTextChange}
-            />
+              style={{ width: '100%' }}
+            >
+              <Input
+                autoFocus
+                icon="help"
+                placeholder="Ex: Comment remplir une note de frais ?"
+                limit={100}
+                value={question}
+                onChange={this.onTextChange}
+              />
+            </CtrlEnter>
           </CardText>
           <CardText style={{ paddingBottom: '0.5rem' }}>
             <TagPicker tags={tags} onChange={this.onTagsChange} />

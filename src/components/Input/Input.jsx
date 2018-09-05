@@ -5,15 +5,10 @@ import cn from 'classnames'
 import './Input.css'
 
 class Input extends Component {
-  componentDidMount() {
-    if (this.props.autoFocus) {
-      const input = this.input
-      const length = input.value.length
-      setTimeout(() => {
-        input.focus()
-        input.setSelectionRange(length, length)
-      }, 1)
-    }
+  constructor(props) {
+    super(props)
+
+    this.input = React.createRef()
   }
 
   render() {
@@ -23,7 +18,6 @@ class Input extends Component {
       limit,
       icon,
       style,
-      setRef,
       onClear,
       ...otherProps
     } = this.props
@@ -31,7 +25,7 @@ class Input extends Component {
       <div
         className={cn('input', className)}
         style={style}
-        onClick={() => this.input.focus()}
+        onClick={() => this.input.current && this.input.current.focus()}
       >
         {icon && (
           <span className="input-icon">
@@ -46,13 +40,8 @@ class Input extends Component {
           type="text"
           value={value}
           maxLength={limit}
+          ref={this.input}
           {...otherProps}
-          ref={ref => {
-            this.input = ref
-            if (setRef) {
-              setRef(ref)
-            }
-          }}
         />
         {limit && (
           <i className="limit">
@@ -77,7 +66,6 @@ Input.propTypes = {
   icon: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   style: PropTypes.object,
   autoFocus: PropTypes.bool,
-  setRef: PropTypes.func,
   onClear: PropTypes.func
 }
 
