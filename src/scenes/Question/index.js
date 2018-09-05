@@ -1,1 +1,1 @@
-export { default } from './Question.container'
+export { default } from './Question'

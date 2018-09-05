@@ -3,27 +3,47 @@ const { algolia } = require('./integrations')
 module.exports = {
   Query: {
     search: async (_, args, ctx, info) => {
-      const { text, tags = [], flags = [], ...params } = args
+      const { text, tags = [], flags = [], skip, first, ...params } = args
 
-      const meta = {
-        count: null,
-        resultsPerPage: params.first
+      let results = {
+        meta: {
+          pageCurrent: skip / first + 1
+        },
+        skip,
+        first,
+        ...params
       }
 
       if (!text && tags.length === 0 && flags.length === 0) {
-        meta.count = (await ctx.prisma.query.zNodesConnection(
+        const count = (await ctx.prisma.query.zNodesConnection(
           args,
           `{ aggregate { count } }`
         )).aggregate.count
 
-        return { meta, ids: null, ...params }
+        results = {
+          ...results,
+          ids: null,
+          count
+        }
+      } else {
+        const { ids, highlights, nbHits } = await algolia.search(args)
+
+        results = {
+          ...results,
+          ids,
+          highlights,
+          count: nbHits
+        }
       }
 
-      const { ids, highlights, nbHits } = await algolia.search(args)
-
-      meta.count = nbHits
-
-      return { meta, ids, highlights }
+      return {
+        ...results,
+        meta: {
+          ...results.meta,
+          entriesCount: results.count,
+          pagesCount: Math.ceil(results.count / first)
+        }
+      }
     }
   },
   SearchResult: {

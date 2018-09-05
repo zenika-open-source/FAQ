@@ -17,7 +17,7 @@ const ActionMenu = ({
 }) => (
   <div className="action-menu">
     <div className="back-btn">
-      {goBack && history.action === 'PUSH' ? (
+      {goBack && (history.action === 'PUSH' || history.action === 'REPLACE') ? (
         <Button
           icon="chevron_left"
           label={'Back'}
@@ -41,8 +41,10 @@ const ActionMenu = ({
 ActionMenu.propTypes = {
   backLink: PropTypes.string.isRequired,
   backLabel: PropTypes.string,
+  goBack: PropTypes.bool,
   title: PropTypes.string,
-  children: PropTypes.node
+  children: PropTypes.node,
+  history: PropTypes.object
 }
 
 export default withRouter(ActionMenu)

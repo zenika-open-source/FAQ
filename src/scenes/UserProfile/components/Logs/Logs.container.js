@@ -1,28 +1,34 @@
 import { withRouter } from 'react-router'
+
 import { compose, unserialize } from 'helpers'
-import { routing } from 'services'
 import { query } from 'services/apollo'
 import { withError, withPagination } from 'components'
 
-import { loadHistoryQuery } from './queries'
+import { auth } from 'services'
 
-import HistoryActions from './HistoryActions'
+import { meHistory } from './queries'
 
-const ENTRIES_PER_PAGE = 10
+import Logs from './Logs'
+
+const ENTRIES_PER_PAGE = 15
 
 export default compose(
   withRouter,
-  query(loadHistoryQuery, {
+  query(meHistory, {
     variables: props => {
       const { page } = unserialize(props.location.search)
+
       return {
-        nodeId: routing.getUIDFromSlug(props.match),
+        id: auth.getUserNodeId(),
         first: ENTRIES_PER_PAGE,
         skip: ENTRIES_PER_PAGE * (page - 1)
       }
     },
-    parse: ({ history = {} }) => ({ ...history })
+    parse: ({ history = {} }) => ({
+      logs: history.historyActions,
+      meta: history.meta
+    })
   }),
   withPagination({ push: false }),
   withError()
-)(HistoryActions)
+)(Logs)

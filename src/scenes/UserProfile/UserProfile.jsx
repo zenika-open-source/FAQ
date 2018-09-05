@@ -1,12 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
 
-import { markdown } from 'services'
-
-import Button from 'components/Button'
+import { Avatar, Button } from 'components'
 import Card, { CardText, CardActions } from 'components/Card'
-import Avatar from 'components/Avatar'
+
+import Logs from './components/Logs'
 
 import { updateIdentity } from './queries'
 
@@ -39,10 +37,6 @@ class UserProfile extends Component {
   }
 
   render() {
-    const { me } = this.props
-
-    const history = [...me.history].reverse()
-
     const {
       savingIdentity,
       identity: { name, email, picture }
@@ -108,37 +102,7 @@ class UserProfile extends Component {
             </CardActions>
           </CardText>
         </Card>
-        <Card>
-          <CardText>
-            <h1>Log</h1>
-            <table className="card-table">
-              <thead>
-                <tr>
-                  <td>Action</td>
-                  <td>When</td>
-                  <td>Meta</td>
-                  <td>Question</td>
-                </tr>
-              </thead>
-              <tbody>
-                {history.map(({ id, action, model, meta, createdAt, node }) => (
-                  <tr key={id}>
-                    <td>
-                      {action} {model}
-                    </td>
-                    <td style={{ whiteSpace: 'nowrap' }}>{createdAt}</td>
-                    <td>{JSON.stringify(meta)}</td>
-                    <td style={{ wordBreak: 'break-word' }}>
-                      <Link to={`/q/${node.question.slug}-${node.id}`}>
-                        {markdown.title(node.question.title)}
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </CardText>
-        </Card>
+        <Logs />
       </div>
     )
   }

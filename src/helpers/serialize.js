@@ -17,7 +17,9 @@ export const serialize = ({ q, tags, flags, page }) => {
 
   if (q) params.q = q.trim().replace(/\s/g, '+')
   if (tags && tags.length > 0) params.tags = tags.join('+').replace(/\s/g, '-')
-  if (flags && flags.length > 0) { params.flags = tags.join('+').replace(/\s/g, '-') }
+  if (flags && flags.length > 0) {
+    params.flags = tags.join('+').replace(/\s/g, '-')
+  }
   if (page && page > 1) params.page = page
 
   return stringifyQueryString(params)
@@ -33,7 +35,12 @@ export const unserialize = queryString => {
   }
 }
 
-export const addToQueryString = (history, location, addedParams) => {
+export const addToQueryString = (
+  history,
+  location,
+  addedParams,
+  options = { push: true }
+) => {
   const params = unserialize(location.search)
 
   const qs = serialize({
@@ -41,7 +48,7 @@ export const addToQueryString = (history, location, addedParams) => {
     ...addedParams
   })
 
-  history.replace({
+  history[options.push ? 'push' : 'replace']({
     search: qs
   })
 }

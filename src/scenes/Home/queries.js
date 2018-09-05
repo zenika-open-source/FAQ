@@ -5,8 +5,8 @@ export const searchNodes = gql`
     $text: String
     $tags: [String!]
     $flags: [String!]
-    $first: Int
-    $skip: Int
+    $first: Int!
+    $skip: Int!
   ) {
     search(
       text: $text
@@ -38,7 +38,11 @@ export const searchNodes = gql`
         }
         highlights
       }
-      meta
+      meta {
+        entriesCount
+        pagesCount
+        pageCurrent
+      }
     }
   }
 `

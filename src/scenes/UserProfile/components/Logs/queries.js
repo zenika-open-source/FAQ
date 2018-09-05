@@ -1,27 +1,31 @@
 import gql from 'graphql-tag'
 
-export const loadHistoryQuery = gql`
-  query($nodeId: ID!, $first: Int!, $skip: Int!) {
+export const meHistory = gql`
+  query($id: ID!, $first: Int!, $skip: Int!) {
     history(
-      where: { node: { id: $nodeId } }
+      where: { user: { id: $id } }
+      orderBy: createdAt_DESC
       first: $first
       skip: $skip
-      orderBy: createdAt_DESC
     ) {
       historyActions {
         id
-        node {
-          id
-        }
         action
         model
         meta
+        createdAt
         user {
           id
           name
-          picture
         }
-        createdAt
+        node {
+          id
+          question {
+            id
+            title
+            slug
+          }
+        }
       }
       meta {
         pagesCount

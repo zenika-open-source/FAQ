@@ -2,7 +2,7 @@ import { withRouter } from 'react-router'
 
 import { compose, unserialize } from 'helpers'
 import { query } from 'services/apollo'
-import { withError } from 'components'
+import { withError, withPagination } from 'components'
 
 import { searchNodes } from '../../queries'
 import ResultList from './ResultList'
@@ -22,7 +22,9 @@ export default compose(
         first: RESULTS_PER_PAGE,
         skip: RESULTS_PER_PAGE * (page - 1)
       }
-    }
+    },
+    parse: ({ search = {} }) => ({ ...search })
   }),
+  withPagination(),
   withError()
 )(ResultList)

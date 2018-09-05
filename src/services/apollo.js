@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import React, { PureComponent } from 'react'
+import React from 'react'
 import { Query } from 'react-apollo'
 
 import { ApolloClient } from 'apollo-client'
@@ -46,24 +46,24 @@ const apollo = new ApolloClient({
   }
 })
 
-const query = (query, { variables, skip, ...queryProps } = {}) => Wrapped => {
-  return class extends PureComponent {
-    render() {
-      const props = this.props
-      return (
-        <Query
-          query={query}
-          skip={skip ? skip(props) : false}
-          variables={variables ? variables(props) : {}}
-          {...queryProps}
-        >
-          {({ loading, error, data }) => (
-            <Wrapped {...props} {...{ loading, error, ...data }} />
-          )}
-        </Query>
-      )
-    }
-  }
+const query = (
+  query,
+  { variables, skip, parse, ...queryProps } = {}
+) => Wrapped => {
+  const ApolloQueryWrapper = props => (
+    <Query
+      query={query}
+      skip={skip ? skip(props) : false}
+      variables={variables ? variables(props) : {}}
+      {...queryProps}
+    >
+      {({ loading, error, data }) => {
+        data = parse && data ? parse(data) : data
+        return <Wrapped {...props} {...{ loading, error, ...data }} />
+      }}
+    </Query>
+  )
+  return ApolloQueryWrapper
 }
 
 export default apollo

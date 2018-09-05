@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 
-export const getAllPersonalData = gql`
+export const me = gql`
   query {
     me {
       id
@@ -9,20 +9,6 @@ export const getAllPersonalData = gql`
       email
       name
       picture
-      history {
-        id
-        action
-        model
-        meta
-        createdAt
-        node {
-          id
-          question {
-            id
-            title
-          }
-        }
-      }
     }
   }
 `

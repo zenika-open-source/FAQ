@@ -9,7 +9,11 @@ export { default as Input } from './Input'
 export { default as List } from './List'
 export { default as Loading, withLoading, withError } from './Loading'
 export { default as onCtrlEnter } from './onCtrlEnter'
-export { default as Pagination } from './Pagination'
+export {
+  default as Pagination,
+  DefaultPagination,
+  withPagination
+} from './Pagination'
 export { default as PrivateRoute } from './PrivateRoute'
 export { default as TagPicker } from './TagPicker'
 export { default as Tags } from './Tags'

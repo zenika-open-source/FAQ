@@ -8,15 +8,20 @@ type Query {
 
   zNode(where: ZNodeWhereUniqueInput): ZNode
 
-  historyActions(where: HistoryActionWhereInput): [HistoryAction!]!
+  history(
+    where: HistoryActionWhereInput
+    orderBy: HistoryActionOrderByInput
+    first: Int!
+    skip: Int!
+  ): History
 
   search(
     text: String
     tags: [String!]
     flags: [String!]
     orderBy: ZNodeOrderByInput
-    first: Int
-    skip: Int
+    first: Int!
+    skip: Int!
   ): SearchResult!
 
   randomNode(tag: String): ZNode
@@ -38,5 +43,16 @@ type Mutation {
 
 type SearchResult {
   nodes: [ZNode!]!
-  meta: Json!
+  meta: PaginationMeta!
+}
+
+type History {
+  historyActions: [HistoryAction!]!
+  meta: PaginationMeta!
+}
+
+type PaginationMeta {
+  entriesCount: Int!
+  pageCurrent: Int!
+  pagesCount: Int!
 }
