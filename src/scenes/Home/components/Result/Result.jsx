@@ -42,7 +42,10 @@ class Result extends Component {
           </div>
           <Flags node={node} withLabels={false} />
           <Link
-            to={`/q/${node.question.slug}-${node.id}`}
+            to={{
+              pathname: `/q/${node.question.slug}-${node.id}`,
+              state: { from: 'home' }
+            }}
             className="open-card"
           >
             <i className="material-icons">keyboard_arrow_right</i>

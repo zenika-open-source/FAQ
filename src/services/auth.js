@@ -1,8 +1,5 @@
 import auth0 from 'auth0-js'
 
-import apollo from './apollo'
-import { me } from 'scenes/App/components/Navbar/components/UserMenu/queries'
-
 class Auth {
   constructor() {
     this.auth0 = new auth0.WebAuth({
@@ -34,7 +31,6 @@ class Auth {
     if (this.scheduledTimeout) {
       clearTimeout(this.scheduledTimeout)
     }
-    this.getProfile()
   }
 
   parseHash(hash) {
@@ -52,6 +48,8 @@ class Auth {
   }
 
   setSession(authResult) {
+    if (!authResult) this.logout()
+
     const expiresAt = authResult.expiresIn * 1000 + new Date().getTime()
 
     this.session = {
@@ -62,14 +60,9 @@ class Auth {
 
     localStorage.auth = JSON.stringify(this.session)
 
-    this.scheduleRenew()
-  }
+    // this.scheduleRenew()
 
-  getProfile() {
-    apollo.query({
-      query: me,
-      fetchPolicy: 'network-only'
-    })
+    return authResult
   }
 
   /* Internal actions methods */

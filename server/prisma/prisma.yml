@@ -1,5 +1,7 @@
-endpoint: http://localhost:4466
+endpoint: ${env:PRISMA_URL}
 datamodel: datamodel.graphql
+
+secret: ${env:PRISMA_SECRET}
 
 hooks:
   post-deploy:

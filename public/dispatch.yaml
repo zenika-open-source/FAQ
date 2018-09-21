@@ -1,3 +1,0 @@
-dispatch:
-  - url: "next.faq.zenika.com/*"
-    service: next

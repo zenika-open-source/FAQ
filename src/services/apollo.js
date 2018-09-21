@@ -16,21 +16,22 @@ const apollo = new ApolloClient({
     onError(({ graphQLErrors, networkError, operation }) => {
       if (graphQLErrors) {
         graphQLErrors.map(({ message, locations, path }) =>
-          // eslint-disable-next-line no-console
-          console.log(
-            `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+          // eslint-disable-next-line no-alert
+          alert(
+            `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}. Please refresh the page.`
           )
         )
       }
-      // eslint-disable-next-line no-console
-      if (networkError) console.log(`[Network error]: ${networkError}`)
+      // eslint-disable-next-line no-alert
+      if (networkError) { alert(`[Network error]: ${networkError}. Please refresh the page.`) }
     }),
     setContext((_, { headers }) => {
       const token = auth.session ? auth.session.idToken : null
       return {
         headers: {
           ...headers,
-          authorization: token ? `Bearer ${token}` : ''
+          authorization: token ? `Bearer ${token}` : '',
+          'prisma-service': process.env.REACT_APP_PRISMA_SERVICE
         }
       }
     }),

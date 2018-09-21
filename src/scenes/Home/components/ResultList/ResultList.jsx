@@ -26,10 +26,11 @@ const ResultList = ({
   }
 
   const Results = nodes.map(node => {
+    const opened = !searchText
     return (
       <Result
-        key={node.id}
-        collapsed={!searchText}
+        key={node.id + (opened ? '-opened' : '')}
+        collapsed={opened}
         node={node}
         style={{ marginBottom: '1rem' }}
       />

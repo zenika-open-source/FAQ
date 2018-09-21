@@ -1,6 +1,12 @@
 const jwt = require('express-jwt')
 const jwksRsa = require('jwks-rsa')
 
+if (!process.env.AUTH0_DOMAIN) {
+  throw Error(
+    "Missing env var: AUTH0_DOMAIN. You won't be able to authenticate into the app"
+  )
+}
+
 const checkJwt = jwt({
   secret: jwksRsa.expressJwtSecret({
     cache: true,
@@ -12,7 +18,14 @@ const checkJwt = jwt({
   credentialsRequired: false,
   audience: process.env.AUTH0_CLIENTID,
   issuer: `https://${process.env.AUTH0_DOMAIN}/`,
-  algorithms: ['RS256']
+  algorithms: ['RS256'],
+  getToken: req => {
+    const header = req.headers['authorization']
+    if (!header) return 'bad_token'
+    const parts = header.split(' ')
+    if (parts.length !== 2) return 'bad_token'
+    return parts[1]
+  }
 })
 
 const getUser = async (req, res, next, prisma) => {
