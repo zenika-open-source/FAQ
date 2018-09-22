@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "dependencies": {
     "algoliasearch": "^3.30.0",
-    "body-parser": "^1.18.3",
     "express": "^4.16.3",
+    "express-force-https": "^1.0.0",
     "express-jwt": "^5.3.1",
     "form-data": "^2.3.2",
     "graphql-cli": "^2.16.7",
@@ -31,6 +31,6 @@
     "eslint": "^5.4.0",
     "eslint-plugin-node": "^6.0.0",
     "eslint-plugin-standard": "^3.0.1",
-    "prisma": "^1.16.2"
+    "prisma": "^1.16.5"
   }
 }

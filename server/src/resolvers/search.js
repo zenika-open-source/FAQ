@@ -16,7 +16,7 @@ module.exports = {
 
       if (!text && tags.length === 0 && flags.length === 0) {
         const count = (await ctx.prisma.query.zNodesConnection(
-          args,
+          params,
           `{ aggregate { count } }`
         )).aggregate.count
 

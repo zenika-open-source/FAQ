@@ -13,7 +13,7 @@ const join = array => {
 }
 
 const sentencer = (array, action, label, details) => {
-  if (array.length > 0) {
+  if (array && array.length > 0) {
     if (array.length === 1) {
       return (
         `${action} ${details ? 'the' : 'one'} ${label}` +

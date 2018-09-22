@@ -13,7 +13,7 @@ class Mailgun {
     if (!this.faq_url || !this.api_key || !this.domain) {
       // eslint-disable-next-line no-console
       console.log(
-        'Please provide the FAQ_URL, MAILGUN_API_KEY and MAILGUN env variables'
+        'Please provide the FAQ_URL, MAILGUN_API_KEY and MAILGUN_DOMAIN env variables'
       )
     }
 

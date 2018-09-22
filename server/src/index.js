@@ -1,6 +1,6 @@
 const { GraphQLServer } = require('graphql-yoga')
 const express = require('express')
-const bodyParser = require('body-parser')
+const secure = require('express-force-https')
 const path = require('path')
 
 const Instanciator = require('./instanciator.js')
@@ -40,23 +40,21 @@ server.express.post(yogaEndpoint, (req, res, next) =>
 const port = process.env.PORT || 4000
 const playgroundEndpoint = yogaEndpoint + '/playground'
 
-server.start(
-  { port, endpoint: yogaEndpoint, playground: playgroundEndpoint },
-  () => {
-    // eslint-disable-next-line no-console
-    console.log('Server is successfuly running at http://localhost:' + port)
-  }
-)
+server.start({ port, endpoint: yogaEndpoint, playground: playgroundEndpoint })
 
 /* Serve frontend */
 
 const front_path = path.join(__dirname, '../front_build')
 
+if (process.env.NODE_ENV === 'production') {
+  server.express.use(secure)
+}
 server.express.use('/static', express.static(front_path + '/static'))
 server.express.use('/img', express.static(front_path + '/img'))
-//server.express.use(bodyParser.urlencoded({ extended: false }))
-//server.express.use(bodyParser.json())
 
 server.express.get('*', (req, res, next) => {
   res.sendFile(front_path + '/index.html')
 })
+
+// eslint-disable-next-line no-console
+console.log('Server is successfuly running at http://localhost:' + port)
