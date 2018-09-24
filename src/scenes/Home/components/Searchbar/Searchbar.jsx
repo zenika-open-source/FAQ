@@ -1,74 +1,48 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
-import map from 'lodash/map'
-import capitalize from 'lodash/capitalize'
+import cn from 'classnames'
 
-import Input from 'components/Input'
-import Checkbox from 'components/Checkbox'
-import TagPicker from 'components/TagPicker'
+import { Input, TagPicker } from 'components'
 
 import './Searchbar.css'
 
-const Searchbar = ({
-  text,
-  search,
-  loading,
-  filters,
-  tags,
-  onToggleCheck,
-  changeTagList
-}) => (
+const Searchbar = ({ text, tags, loading, onTextChange, onTagsChange }) => (
   <div className="searchbar">
     <Input
       icon={
         <Fragment>
           <span
-            style={{ display: loading && text !== '' ? 'none' : 'flex' }}
+            className={cn('icon', { hidden: loading && text !== '' })}
             onClick={() => this.input.focus()}
           >
             <i className="material-icons">search</i>
           </span>
-          <span style={{ display: loading && text !== '' ? 'flex' : 'none' }}>
+          <span className={cn('icon', { hidden: !(loading && text !== '') })}>
             <i className="fas fa-spinner fa-pulse" />
           </span>
         </Fragment>
       }
       value={text}
-      onChange={e => search(e.target.value)}
-      onClear={() => search('')}
+      onChange={e => onTextChange(e.target.value)}
+      onClear={() => onTextChange('')}
     />
     <div className="filters">
       <TagPicker
         label="Filter by tags:"
         icon="local_offer"
         tags={tags}
-        changeTagList={changeTagList}
+        onChange={onTagsChange}
       />
-      <div style={{ display: 'flex', marginTop: '0.5rem' }}>
-        {map(filters, (checked, filter) => (
-          <Checkbox
-            key={filter}
-            label={capitalize(filter)}
-            checked={checked}
-            onChange={() => {
-              filters[filter] = !filters[filter]
-              onToggleCheck(filters)
-            }}
-          />
-        ))}
-      </div>
     </div>
   </div>
 )
 
 Searchbar.propTypes = {
-  text: PropTypes.string.isRequired,
-  search: PropTypes.func.isRequired,
-  loading: PropTypes.bool.isRequired,
-  filters: PropTypes.object.isRequired,
-  tags: PropTypes.array.isRequired,
-  onToggleCheck: PropTypes.func.isRequired,
-  changeTagList: PropTypes.func.isRequired
+  text: PropTypes.string,
+  tags: PropTypes.array,
+  loading: PropTypes.bool,
+  onTextChange: PropTypes.func,
+  onTagsChange: PropTypes.func
 }
 
 export default Searchbar

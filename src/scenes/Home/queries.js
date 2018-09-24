@@ -1,66 +1,48 @@
 import gql from 'graphql-tag'
-import { graphql } from 'react-apollo'
 
-export const getAllNodesQuery = gql`
-  query {
-    allZNodes(orderBy: createdAt_DESC, first: 30) {
-      id
-      question {
+export const searchNodes = gql`
+  query(
+    $text: String
+    $tags: [String!]
+    $flags: [String!]
+    $first: Int!
+    $skip: Int!
+  ) {
+    search(
+      text: $text
+      tags: $tags
+      flags: $flags
+      first: $first
+      skip: $skip
+      orderBy: createdAt_DESC
+    ) {
+      nodes {
         id
-        title
-        slug
-        user {
+        question {
           id
-          picture
-          name
+          title
+          slug
+          createdAt
         }
-        createdAt
+        answer {
+          id
+          content
+        }
+        flags {
+          id
+          type
+        }
+        tags {
+          id
+          label
+        }
+        highlights
       }
-      answer {
-        id
-        content
-      }
-      flags {
-        id
-        type
-      }
-      tags {
-        id
-        label
+      meta {
+        entriesCount
+        pagesCount
+        pageCurrent
       }
     }
   }
 `
-
-export const getListNodesQuery = gql`
-  query getListNodes($ids: [ID!]!) {
-    allZNodes(filter: { id_in: $ids }) {
-      id
-      question {
-        id
-        title
-        slug
-        user {
-          id
-          picture
-          name
-        }
-        createdAt
-      }
-      answer {
-        id
-        content
-      }
-      flags {
-        id
-        type
-      }
-      tags {
-        id
-        label
-      }
-    }
-  }
-`
-
-export const getAllNodes = graphql(getAllNodesQuery)

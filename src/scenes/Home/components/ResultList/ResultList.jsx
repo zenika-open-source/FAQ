@@ -1,31 +1,37 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { withRouter } from 'react-router'
 import Pluralize from 'react-pluralize'
-import chunk from 'lodash/chunk'
 
-import { routing } from 'services'
+import { Loading } from 'components'
+import { DefaultPagination } from 'components/Pagination'
 
-import Pagination from 'components/Pagination'
-
+import NoResults from '../NoResults'
 import Result from '../Result'
 
-const ResultList = ({ nodes, indication, history, location, collapsed }) => {
-  const maxNodesPerPage = 10
+const ResultList = ({
+  searchText,
+  nodes = [],
+  loading,
+  entriesCount,
+  pagesCount,
+  pageCurrent,
+  onPageSelected,
+  meta
+}) => {
+  const shouldShowLoading =
+    loading && (meta ? meta.pageCurrent !== pageCurrent : true)
 
-  const pagesCount = Math.ceil(nodes.length / maxNodesPerPage)
+  if (!loading && nodes.length === 0) {
+    return <NoResults prefill={searchText} />
+  }
 
-  let currentPage =
-    Number.parseInt(routing.getQueryParam(location, 'page'), 10) || 1
-
-  currentPage = Math.max(1, Math.min(currentPage, pagesCount))
-
-  const Results = chunk(nodes, maxNodesPerPage)[currentPage - 1].map(node => {
+  const Results = nodes.map(node => {
+    const opened = !searchText
     return (
       <Result
-        collapsed={collapsed}
+        key={node.id + (opened ? '-opened' : '')}
+        collapsed={opened}
         node={node}
-        key={node.id}
         style={{ marginBottom: '1rem' }}
       />
     )
@@ -33,22 +39,33 @@ const ResultList = ({ nodes, indication, history, location, collapsed }) => {
 
   return (
     <div style={{ marginTop: '1rem' }}>
-      <p>
-        <i>
-          {indication || (
-            <span>
-              <Pluralize singular="result" count={nodes.length} /> found
-            </span>
-          )}
-        </i>
-      </p>
-      {Results}
+      {!shouldShowLoading && (
+        <p
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            padding: '0 1rem'
+          }}
+        >
+          <i>
+            {searchText ? (
+              <span>
+                <Pluralize singular="result" count={entriesCount} /> found
+              </span>
+            ) : (
+              'Latest questions'
+            )}
+          </i>
+          <i>Page {pageCurrent}</i>
+        </p>
+      )}
+      {!shouldShowLoading ? Results : <Loading />}
       <br />
-      <Pagination
-        pages={pagesCount}
-        current={currentPage}
+      <DefaultPagination
+        nbPages={pagesCount}
+        current={pageCurrent}
         onPageSelected={index => {
-          routing.setQueryParam(location, history, 'page', index)
+          onPageSelected(index)
           window.scrollTo(0, 0)
         }}
       />
@@ -57,11 +74,14 @@ const ResultList = ({ nodes, indication, history, location, collapsed }) => {
 }
 
 ResultList.propTypes = {
-  nodes: PropTypes.array.isRequired,
-  indication: PropTypes.string,
-  history: PropTypes.object.isRequired,
-  location: PropTypes.object.isRequired,
-  collapsed: PropTypes.bool
+  searchText: PropTypes.string,
+  nodes: PropTypes.array,
+  loading: PropTypes.bool,
+  entriesCount: PropTypes.number,
+  pagesCount: PropTypes.number,
+  pageCurrent: PropTypes.number,
+  onPageSelected: PropTypes.func,
+  meta: PropTypes.object
 }
 
-export default withRouter(ResultList)
+export default ResultList

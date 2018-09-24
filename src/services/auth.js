@@ -1,7 +1,7 @@
 import auth0 from 'auth0-js'
 
 class Auth {
-  constructor () {
+  constructor() {
     this.auth0 = new auth0.WebAuth({
       domain: process.env.REACT_APP_AUTH0_DOMAIN,
       clientID: process.env.REACT_APP_AUTH0_CLIENTID,
@@ -11,36 +11,29 @@ class Auth {
       scope: 'openid profile email'
     })
 
-    if (
-      !this.session &&
-      localStorage.auth &&
-      localStorage.userId &&
-      localStorage.userProfile
-    ) {
+    if (!this.session && localStorage.auth && localStorage.userId) {
       this.session = JSON.parse(localStorage.auth)
-      this.userProfile = JSON.parse(localStorage.userProfile)
     }
   }
 
   /* Action methods */
-  login (redirectTo) {
+  login(redirectTo) {
     sessionStorage.after_login_redirect_url = redirectTo
     this.auth0.authorize()
   }
 
-  logout () {
+  logout() {
     localStorage.removeItem('auth')
     localStorage.removeItem('userId')
     localStorage.removeItem('userProfile')
     this.session = null
     this.userId = null
-    this.userProfile = null
     if (this.scheduledTimeout) {
       clearTimeout(this.scheduledTimeout)
     }
   }
 
-  parseHash (hash) {
+  parseHash(hash) {
     return new Promise((resolve, reject) => {
       this.auth0.parseHash({ hash }, (err, authResult) => {
         if (authResult && authResult.accessToken && authResult.idToken) {
@@ -54,7 +47,9 @@ class Auth {
     })
   }
 
-  setSession (authResult) {
+  setSession(authResult) {
+    if (!authResult) this.logout()
+
     const expiresAt = authResult.expiresIn * 1000 + new Date().getTime()
 
     this.session = {
@@ -65,12 +60,14 @@ class Auth {
 
     localStorage.auth = JSON.stringify(this.session)
 
-    this.scheduleRenew()
+    // this.scheduleRenew()
+
+    return authResult
   }
 
   /* Internal actions methods */
 
-  renewAuth = () => {
+  renewAuth() {
     return new Promise((resolve, reject) => {
       this.auth0.checkSession({}, (err, authResult) => {
         if (err) {
@@ -82,12 +79,12 @@ class Auth {
 
         this.setSession(authResult)
 
-        this.getProfile().then(resolve)
+        resolve()
       })
     })
   }
 
-  scheduleRenew () {
+  scheduleRenew() {
     // Renew session 5min before expiresAt
     const expiresAt = this.session.expiresAt
     const fiveMinBefore = expiresAt - new Date().getTime() - 5 * 60 * 1000
@@ -97,26 +94,8 @@ class Auth {
     this.scheduledTimeout = setTimeout(this.renewAuth, fiveMinBefore)
   }
 
-  getProfile () {
-    return new Promise((resolve, reject) => {
-      let accessToken = this.session.accessToken
-      if (this.userProfile) {
-        resolve(this.userProfile)
-      } else {
-        this.auth0.client.userInfo(accessToken, (err, profile, ...rest) => {
-          if (profile) {
-            this.userProfile = profile
-            localStorage.userProfile = JSON.stringify(profile)
-            resolve(this.userProfile)
-          }
-          reject(err)
-        })
-      }
-    })
-  }
-
   /* State getters and setters */
-  isAuthenticated () {
+  isAuthenticated() {
     return (
       this.session &&
       this.session.expiresAt > new Date().getTime() &&
@@ -124,7 +103,7 @@ class Auth {
     )
   }
 
-  wasAuthenticated () {
+  wasAuthenticated() {
     return (
       this.session &&
       this.session.expiresAt < new Date().getTime() &&
@@ -132,22 +111,18 @@ class Auth {
     )
   }
 
-  popAfterLoginRedirectUrl () {
+  popAfterLoginRedirectUrl() {
     const url = sessionStorage.after_login_redirect_url
     sessionStorage.removeItem('after_login_redirect_url')
     return url
   }
 
-  setUserId (id) {
+  setUserId(id) {
     localStorage.userId = id
   }
 
-  getUserNodeId () {
+  getUserNodeId() {
     return localStorage.userId
-  }
-
-  getUserProfile () {
-    return this.isAuthenticated() ? this.userProfile : null
   }
 }
 

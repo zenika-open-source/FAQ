@@ -13,7 +13,7 @@ import Tags from 'components/Tags'
 import './Result.css'
 
 class Result extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -21,13 +21,7 @@ class Result extends Component {
     }
   }
 
-  static getDerivedStateFromProps (nextProps, prevState) {
-    return {
-      collapsed: nextProps.collapsed
-    }
-  }
-
-  render () {
+  render() {
     const { node } = this.props
     const { collapsed } = this.state
 
@@ -35,27 +29,23 @@ class Result extends Component {
       <Card className="result">
         <CardTitle onClick={() => this.setState({ collapsed: !collapsed })}>
           <div className="grow">
-            {!node.highlight ? (
+            {!node.highlights ? (
               <h1>{markdown.title(node.question.title)}</h1>
             ) : (
               <h1
                 dangerouslySetInnerHTML={{
-                  __html: markdown.title(node.highlight.question.title.value)
+                  __html: markdown.title(node.highlights.question)
                 }}
               />
             )}
             {node.tags.length > 0 && <Tags tags={node.tags} />}
-            {/* <div className="meta">
-              <Avatar image={node.question.user.picture} />
-              <i className="user">
-                Asked by {node.question.user.name},&nbsp;
-                {moment(node.question.createdAt).fromNow()}
-              </i>
-            </div> */}
           </div>
           <Flags node={node} withLabels={false} />
           <Link
-            to={`/q/${node.question.slug}-${node.id}`}
+            to={{
+              pathname: `/q/${node.question.slug}-${node.id}`,
+              state: { from: 'home' }
+            }}
             className="open-card"
           >
             <i className="material-icons">keyboard_arrow_right</i>
@@ -64,9 +54,7 @@ class Result extends Component {
         <CardText collapsed={collapsed}>
           {node.answer ? (
             markdown.html(
-              node.highlight
-                ? node.highlight.answer.content.value
-                : node.answer.content
+              node.highlights ? node.highlights.answer : node.answer.content
             )
           ) : (
             <p style={{ textAlign: 'center' }}>

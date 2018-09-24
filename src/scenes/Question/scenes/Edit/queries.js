@@ -1,113 +1,70 @@
 import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 
-import { auth, history } from 'services'
+import { zNodeFragment } from '../../queries'
 
-export const submitQuestionQuery = gql`
-  mutation submitQuestion(
-    $title: String!
-    $userId: ID!
-    $tags: [ZNodetagsTag!]!
-  ) {
-    createZNode(
-      question: { title: $title, slug: "", userId: $userId }
-      tags: $tags
-    ) {
-      id
-      question {
-        id
-        title
-        slug
-      }
-      tags {
-        label
-      }
-    }
-  }
-`
-
-export const editQuestionQuery = gql`
-  mutation editQuestion(
-    $questionId: ID!
-    $title: String!
-    $tags: [String!]!
-    $nodeId: ID!
-    $userId: ID!
-  ) {
-    fullUpdateQuestion(
-      id: $questionId
-      title: $title
-      tags: $tags
-      nodeId: $nodeId
-      userId: $userId
-    ) {
+export const submitQuestionMutation = gql`
+  mutation($title: String!, $tags: [String!]!) {
+    createQuestionAndTags(title: $title, tags: $tags) {
       id
       title
       slug
-      nodeId
-      tagsChanges
+      user {
+        id
+      }
+      node {
+        ${zNodeFragment}
+      }
+      createdAt
     }
   }
 `
 
-export const submitQuestion = graphql(submitQuestionQuery, {
+export const editQuestionMutation = gql`
+  mutation($questionId: ID!, $title: String!, $tags: [String!]!) {
+    updateQuestionAndTags(id: $questionId, title: $title, tags: $tags) {
+      id
+      title
+      slug
+      user {
+        id
+      }
+      node {
+        id
+        tags {
+          id
+          label
+        }
+      }
+    }
+  }
+`
+
+export const submitQuestion = graphql(submitQuestionMutation, {
   name: 'submitQuestion',
   props: ({ submitQuestion }) => ({
     submitQuestion: (title, tags) => {
-      const userId = auth.getUserNodeId()
-      tags = tags.map(tag => ({
-        label: tag,
-        userId
-      }))
       return submitQuestion({
         variables: {
           title,
-          userId,
           tags
         }
       })
     }
-  }),
-  options: {
-    onCompleted: ({ createZNode }) =>
-      history.addAction(
-        'CREATED',
-        'Question',
-        {
-          title: createZNode.question.title,
-          tags: createZNode.tags.map(t => t.label)
-        },
-        createZNode.id
-      )
-  }
+  })
 })
 
-export const editQuestion = graphql(editQuestionQuery, {
+export const editQuestion = graphql(editQuestionMutation, {
   name: 'editQuestion',
   props: ({ editQuestion }) => ({
-    editQuestion: (questionId, title, tags, nodeId) => {
+    editQuestion: (questionId, title, tags) => {
       return editQuestion({
         variables: {
           questionId,
           title,
-          tags,
-          nodeId,
-          userId: auth.getUserNodeId()
+          tags
         }
       })
     }
-  }),
-  options: {
-    onCompleted: ({ fullUpdateQuestion }) => {
-      history.addAction(
-        'UPDATED',
-        'Question',
-        {
-          title: fullUpdateQuestion.title,
-          tagsChanges: fullUpdateQuestion.tagsChanges
-        },
-        fullUpdateQuestion.nodeId
-      )
-    }
-  }
+  })
 })

@@ -2,62 +2,51 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Redirect, Prompt } from 'react-router-dom'
 import omit from 'lodash/omit'
+import differenceWith from 'lodash/differenceWith'
+import isEqual from 'lodash/isEqual'
 
 import { compose } from 'react-apollo'
 import { submitAnswer, editAnswer } from './queries'
-import { getNode } from 'scenes/Question/queries'
 
-import { auth, markdown } from 'services'
+import { markdown } from 'services'
 
 import NotFound from 'scenes/NotFound'
 
-import Loading from 'components/Loading'
+import { Loading, Flags, Button, MarkdownEditor, CtrlEnter } from 'components'
 import Card, {
   CardTitle,
   CardText,
   CardActions,
   PermanentClosableCard
 } from 'components/Card'
-import Flags from 'components/Flags'
-import Button from 'components/Button'
-import onCtrlEnter from 'components/onCtrlEnter'
 
 import ActionMenu from '../../components/ActionMenu'
 
 import Sources from './components/Sources'
 import Tips from './components/Tips'
 
-import ReactMde, { ReactMdeCommands } from 'react-mde'
-import 'react-mde/lib/styles/css/react-mde-all.css'
-
-const CtrlEnterCardText = onCtrlEnter(CardText)
-
 class Answer extends Component {
-  state = {
-    nodeLoaded: false,
-    answer: { text: '', selection: null },
-    loading: false,
-    sources: [],
-    slug: null,
-    showTips: PermanentClosableCard.isOpen('tips_answer')
-  }
+  constructor(props) {
+    super(props)
 
-  static getDerivedStateFromProps (nextProps, prevState) {
-    const { data: { ZNode } } = nextProps
-    const { nodeLoaded } = prevState
+    const answer = props.zNode && props.zNode.answer
 
-    if (!nodeLoaded && ZNode && ZNode.answer) {
-      return {
-        nodeLoaded: true,
-        answer: { text: ZNode.answer.content },
-        sources: ZNode.answer.sources
-      }
+    const initialText = answer ? answer.content : ''
+    const initialSources = answer ? answer.sources : []
+
+    this.state = {
+      nodeLoaded: false,
+      initialAnswer: initialText,
+      answer: { text: initialText, selection: null },
+      loading: false,
+      sources: initialSources,
+      initialSources: initialSources,
+      slug: null,
+      showTips: PermanentClosableCard.isOpen('tips_answer')
     }
-
-    return null
   }
 
-  cleanSources () {
+  cleanSources() {
     const { sources } = this.state
     return sources
       .map(s => {
@@ -67,35 +56,30 @@ class Answer extends Component {
       .filter(s => s.label !== '' && s.url !== '')
   }
 
-  handleChange (value) {
-    this.setState({ answer: value })
-  }
+  onTextChange = value => this.setState({ answer: value })
 
-  handleSourceChange = sources => {
-    this.setState({ sources: sources })
-  }
+  onSourceChange = sources => this.setState({ sources: sources })
 
   submitForm = () => {
-    const { ZNode } = this.props.data
-    ZNode.answer ? this.editAnswer() : this.submitAnswer()
+    if (this.canSubmit()) {
+      const { zNode } = this.props
+      zNode.answer ? this.editAnswer() : this.submitAnswer()
+    }
   }
 
   submitAnswer = () => {
     const { submitAnswer } = this.props
-    const { ZNode } = this.props.data
+    const { zNode } = this.props
     const { answer } = this.state
 
     this.setState({ loadingSubmit: true })
 
-    const answerObject = {
-      content: answer.text,
-      userId: auth.getUserNodeId(),
-      sources: this.cleanSources()
-    }
+    const content = answer.text
+    const sources = this.cleanSources()
 
-    submitAnswer(ZNode.id, answerObject)
+    submitAnswer(content, sources, zNode.id)
       .then(() => {
-        this.setState({ slug: ZNode.question.slug + '-' + ZNode.id })
+        this.setState({ slug: zNode.question.slug + '-' + zNode.id })
       })
       .catch(error => {
         alert(error)
@@ -105,20 +89,18 @@ class Answer extends Component {
   }
 
   editAnswer = (nodeId, answerId) => {
-    const { editAnswer } = this.props
-    const { ZNode } = this.props.data
+    const { editAnswer, zNode } = this.props
     const { answer } = this.state
 
     this.setState({ loadingSubmit: true })
 
     editAnswer(
-      typeof nodeId === 'string' ? nodeId : ZNode.id,
-      typeof answerId === 'string' ? answerId : ZNode.answer.id,
+      typeof answerId === 'string' ? answerId : zNode.answer.id,
       answer.text,
       this.cleanSources()
     )
       .then(() => {
-        this.setState({ slug: ZNode.question.slug + '-' + ZNode.id })
+        this.setState({ slug: zNode.question.slug + '-' + zNode.id })
       })
       .catch(error => {
         alert(error)
@@ -137,30 +119,38 @@ class Answer extends Component {
     PermanentClosableCard.setValue('tips_answer', false)
   }
 
-  render () {
-    const { loadingSubmit, slug, answer, showTips } = this.state
-    const { loading, error, ZNode } = this.props.data
+  canSubmit() {
+    const { answer, initialAnswer, sources, initialSources } = this.state
+    return !(
+      answer.text.length === 0 ||
+      (answer.text === initialAnswer &&
+        differenceWith(sources, initialSources, isEqual).length === 0 &&
+        differenceWith(initialSources, sources, isEqual).length === 0)
+    )
+  }
+
+  render() {
+    const { loadingSubmit, slug, showTips } = this.state
+    const { zNode } = this.props
 
     if (slug) {
       return <Redirect to={`/q/${slug}`} />
     }
 
-    if (loadingSubmit || loading) {
+    if (loadingSubmit) {
       return <Loading />
     }
 
-    if (error) {
-      return <div>Error :(</div>
-    }
-
-    if (ZNode === null) {
-      return <NotFound {...this.props} />
+    if (zNode === null) {
+      return <NotFound />
     }
 
     return (
       <div>
-        <Prompt message="Are you sure you want to leave this page with an unsaved answer?" />
-        <ActionMenu backLink={`/q/${ZNode.question.slug}-${ZNode.id}`}>
+        {this.canSubmit() && (
+          <Prompt message="Are you sure you want to leave this page with an unsaved answer?" />
+        )}
+        <ActionMenu backLink={`/q/${zNode.question.slug}-${zNode.id}`}>
           {!showTips && (
             <Button
               link
@@ -174,30 +164,30 @@ class Answer extends Component {
         <Card style={{ marginTop: '0.3rem' }}>
           <CardTitle style={{ padding: '1.2rem' }}>
             <div className="grow">
-              <h1>{markdown.title(ZNode.question.title)}</h1>
+              <h1>{markdown.title(zNode.question.title)}</h1>
             </div>
-            <Flags node={ZNode} withLabels={true} />
+            <Flags node={zNode} withLabels={true} />
           </CardTitle>
-          <CtrlEnterCardText onCtrlEnterCallback={this.submitForm}>
-            <ReactMde
-              value={this.state.answer}
-              showdownFlavor="github"
-              onChange={this.handleChange.bind(this)}
-              commands={ReactMdeCommands.getDefaultCommands()}
-            />
-          </CtrlEnterCardText>
+          <CardText>
+            <CtrlEnter onCtrlEnterCallback={this.submitForm}>
+              <MarkdownEditor
+                content={this.state.answer}
+                onChange={this.onTextChange}
+              />
+            </CtrlEnter>
+          </CardText>
           <CardText>
             <Sources
               sources={this.state.sources}
-              handleChange={this.handleSourceChange}
+              onChange={this.onSourceChange}
             />
           </CardText>
           <CardActions>
             <Button
-              label={ZNode.answer ? 'Save answer' : 'Submit answer'}
+              label={zNode.answer ? 'Save answer' : 'Submit answer'}
               primary
               raised
-              disabled={answer.text.length === 0}
+              disabled={!this.canSubmit()}
               onClick={this.submitForm}
             />
           </CardActions>
@@ -211,7 +201,10 @@ Answer.propTypes = {
   match: PropTypes.object.isRequired,
   submitAnswer: PropTypes.func.isRequired,
   editAnswer: PropTypes.func.isRequired,
-  data: PropTypes.object.isRequired
+  zNode: PropTypes.object
 }
 
-export default compose(submitAnswer, editAnswer, getNode)(Answer)
+export default compose(
+  submitAnswer,
+  editAnswer
+)(Answer)

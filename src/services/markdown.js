@@ -4,7 +4,7 @@ import XSSFilter from 'showdown-xss-filter'
 import emoji from 'emoji-dictionary'
 
 class Markdown {
-  constructor () {
+  constructor() {
     this.showdown = new Converter({
       openLinksInNewWindow: true,
       backslashEscapesHTMLTags: true,
@@ -14,11 +14,11 @@ class Markdown {
     this.showdown.setFlavor('github')
   }
 
-  title (title) {
+  title(title) {
     return this.emoji(title)
   }
 
-  html (text) {
+  html(text) {
     text = this.emoji(text)
     text = this.removeEmTagInLink(text)
 
@@ -39,7 +39,7 @@ class Markdown {
     )
   }
 
-  emoji (text) {
+  emoji(text) {
     let emoticons = {
       ':)': ':slightly_smiling_face:',
       ':(': ':slightly_frowning_face:',
@@ -59,7 +59,7 @@ class Markdown {
     return text.replace(/:\w+:/gi, name => emoji.getUnicode(name))
   }
 
-  removeEmTagInLink (text) {
+  removeEmTagInLink(text) {
     text = text.replace(/\[(.*)\]\((.*)\)/g, (link, name, url) => {
       url = url.replace(/<em>/g, '').replace(/<\/em>/g, '')
       return `[${name}](${url})`

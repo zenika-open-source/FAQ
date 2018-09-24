@@ -1,0 +1,58 @@
+# import ZNode, Question, Answer, Source, Flag, Tag, HistoryAction, User from './generated/prisma.graphql'
+
+# import ZNodeOrderByInput, ZNodeConnection, ZNodeWhereUniqueInput from './generated/prisma.graphql'
+# import HistoryActionWhereInput from './generated/prisma.graphql'
+
+type Query {
+  me: User
+
+  zNode(where: ZNodeWhereUniqueInput): ZNode
+
+  history(
+    where: HistoryActionWhereInput
+    orderBy: HistoryActionOrderByInput
+    first: Int!
+    skip: Int!
+  ): History
+
+  search(
+    text: String
+    tags: [String!]
+    flags: [String!]
+    orderBy: ZNodeOrderByInput
+    first: Int!
+    skip: Int!
+  ): SearchResult!
+
+  randomNode(tag: String): ZNode
+}
+
+type Mutation {
+  updateMe(name: String!, email: String!, picture: String!): User
+  authenticate(idToken: String!): User
+
+  createQuestionAndTags(title: String!, tags: [String!]!): Question
+  updateQuestionAndTags(id: ID!, title: String!, tags: [String!]!): Question
+
+  createAnswerAndSources(content: String, sources: String!, nodeId: ID!): Answer
+  updateAnswerAndSources(id: ID!, content: String, sources: String!): Answer
+
+  addFlag(type: String!, nodeId: ID!): ZNode
+  removeFlag(type: String!, nodeId: ID!): ZNode
+}
+
+type SearchResult {
+  nodes: [ZNode!]!
+  meta: PaginationMeta!
+}
+
+type History {
+  historyActions: [HistoryAction!]!
+  meta: PaginationMeta!
+}
+
+type PaginationMeta {
+  entriesCount: Int!
+  pageCurrent: Int!
+  pagesCount: Int!
+}

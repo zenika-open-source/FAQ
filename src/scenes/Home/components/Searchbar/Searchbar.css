@@ -1,5 +1,5 @@
 .searchbar {
-  margin-top: 3rem;
+  margin-top: 4rem;
 }
 
 @media screen and (max-width: 480px) {
@@ -19,6 +19,10 @@
 .searchbar .input input {
   height: 40px;
   line-height: 40px;
+}
+
+.searchbar .input-icon .icon.hidden {
+  display: none;
 }
 
 .searchbar .input-icon svg {

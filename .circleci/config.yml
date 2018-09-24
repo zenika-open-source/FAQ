@@ -1,6 +1,5 @@
 references:
-  workspace_root: &workspace_root
-    /home/circleci/my-workspace
+  workspace_root: &workspace_root /home/circleci/my-workspace
 
   attach_workspace: &attach_workspace
     attach_workspace:
@@ -17,9 +16,9 @@ jobs:
 
       - restore_cache:
           keys:
-          - root-{{ checksum "package-lock.json" }}
-          # fallback to using the latest cache if no exact match is found
-          - root-
+            - root-{{ checksum "package-lock.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - root-
 
       - run: npm install
 
@@ -32,10 +31,10 @@ jobs:
 
       - restore_cache:
           keys:
-          - server-{{ checksum "package-lock.json" }}
-          - server-
+            - server-{{ checksum "package-lock.json" }}
+            - server-
 
-      - run: cd server && npm install && cd ..
+      - run: cd server && npm install && npm run lint && cd ..
 
       - save_cache:
           paths:
@@ -49,71 +48,61 @@ jobs:
           paths:
             - .
 
-  deploy:
+  prisma_deploy:
+    environment:
+      DEPLOY_DIR: ~/prisma_deploy
     working_directory: *workspace_root
     docker:
       - image: circleci/node:9-browsers
     steps:
       - *attach_workspace
 
-      - run: npm run deploy_graphcool
+      - run: |
+          mkdir -p ${DEPLOY_DIR}
+          cp server/prisma/Dockerfile.clever-cloud ${DEPLOY_DIR}/Dockerfile
+          cd ${DEPLOY_DIR}
+          git init
+          git add .
+          git commit -m "Deploy"
+          git remote add clever $CLEVER_CLOUD_PRISMA_GIT_URL
+          git push --force clever master
 
-  gcloud_prod:
+  deploy:
+    environment:
+      DEPLOY_DIR: ~/deploy
     working_directory: *workspace_root
     docker:
-      - image: google/cloud-sdk
+      - image: circleci/node:9-browsers
     steps:
       - *attach_workspace
 
-      # Authenticate GCloud
-      - run: echo $GCLOUD_SERVICE_KEY | base64 --decode --ignore-garbage > ${HOME}/gcloud-service-key.json
-      - run: gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
-      - run: gcloud config set project $GCLOUD_APP_ID
-
-      # Deploy
-      - run: gcloud app deploy build/dispatch.yaml
-      - run: gcloud app deploy build/ --quiet --version=prod
-
-  gcloud_next:
-    working_directory: *workspace_root
-    docker:
-      - image: google/cloud-sdk
-    steps:
-      - *attach_workspace
-
-      # Authenticate GCloud
-      - run: echo $GCLOUD_SERVICE_KEY | base64 --decode --ignore-garbage > ${HOME}/gcloud-service-key.json
-      - run: gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
-      - run: gcloud config set project $GCLOUD_APP_ID
-
-      # Deploy
-      - run: gcloud app deploy build/next.yaml --quiet --stop-previous-version
+      - run: |
+          mkdir -p ${DEPLOY_DIR}
+          cp -R server/ ${DEPLOY_DIR}
+          cp -R build/ ${DEPLOY_DIR}/front_build
+          cd ${DEPLOY_DIR}
+          git init
+          git add .
+          git commit -m "Deploy"
+          git remote add clever $CLEVER_CLOUD_BACKEND_GIT_URL
+          git push --force clever master
+          npm run deploy
+          npm run algolia
 
 workflows:
   version: 2
   build-deploy:
     jobs:
-      - build:
-          filters:
-            branches:
-              only:
-                - master
-                - next
+      - build
+#      - prisma_deploy:
+#          requires:
+#            - build
+#          filters:
+#            branches:
+#              only: master
       - deploy:
           requires:
             - build
           filters:
             branches:
               only: master
-      - gcloud_prod:
-          requires:
-            - build
-          filters:
-            branches:
-              only: master
-      - gcloud_next:
-          requires:
-            - build
-          filters:
-            branches:
-              only: next

@@ -10,12 +10,9 @@ import { markdown } from 'services'
 
 import NotFound from 'scenes/NotFound'
 
-import Loading from 'components/Loading'
-import Button from 'components/Button'
+import { Button, Flags, Tags } from 'components'
 import Card, { CardTitle, CardText } from 'components/Card'
 import Dropdown, { DropdownItem } from 'components/Dropdown'
-import Flags from 'components/Flags'
-import Tags from 'components/Tags'
 
 import ActionMenu from '../../components/ActionMenu'
 import FlagsDropdown from './components/FlagsDropdown'
@@ -24,37 +21,27 @@ import Meta from './components/Meta'
 import Share from './components/Share'
 import History from './components/History'
 
-const Read = ({ history, match, data, createFlag, removeFlag }) => {
-  const { loading, error, ZNode } = data
-
-  if (loading) {
-    return <Loading />
+const Read = ({ history, match, zNode, createFlag, removeFlag }) => {
+  if (zNode === null) {
+    return <NotFound />
   }
 
-  if (error) {
-    return <div>Error :(</div>
-  }
-
-  if (ZNode === null) {
-    return <NotFound {...this.props} />
-  } else {
-    /* Redirect to correct URL if old slug used */
-    const correctSlug = ZNode.question.slug + '-' + ZNode.id
-    if (match.params.slug !== correctSlug) {
-      return <Redirect to={'/q/' + correctSlug} />
-    }
+  /* Redirect to correct URL if old slug used */
+  const correctSlug = zNode.question.slug + '-' + zNode.id
+  if (match.params.slug !== correctSlug) {
+    return <Redirect to={'/q/' + correctSlug} />
   }
 
   return (
     <div>
       <Helmet>
-        <title>FAQ - {markdown.title(ZNode.question.title)}</title>
+        <title>FAQ - {markdown.title(zNode.question.title)}</title>
       </Helmet>
-      <ActionMenu backLink="/" backLabel="Home">
+      <ActionMenu backLink="/" backLabel="Home" goBack>
         <FlagsDropdown
-          flags={ZNode.flags}
-          onSelect={type => createFlag(type, ZNode.id)}
-          onRemove={type => removeFlag(type, ZNode.id)}
+          flags={zNode.flags}
+          onSelect={type => createFlag(type, zNode.id)}
+          onRemove={type => removeFlag(type, zNode.id)}
         />
         <Dropdown button={<Button icon="edit" label="Edit ..." link />}>
           <DropdownItem
@@ -72,21 +59,21 @@ const Read = ({ history, match, data, createFlag, removeFlag }) => {
         </Dropdown>
       </ActionMenu>
       <Card>
-        <CardTitle style={{ padding: '0.9rem' }}>
+        <CardTitle style={{ padding: '1.2rem' }}>
           <div className="grow">
-            <h1>{markdown.title(ZNode.question.title)}</h1>
-            {ZNode.tags.length > 0 && <Tags tags={ZNode.tags} />}
+            <h1>{markdown.title(zNode.question.title)}</h1>
+            {zNode.tags.length > 0 && <Tags tags={zNode.tags} />}
           </div>
-          <Flags node={ZNode} withLabels={true} />
-          <Share node={ZNode} />
+          <Flags node={zNode} withLabels={true} />
+          <Share node={zNode} />
         </CardTitle>
         <CardText>
-          {ZNode.answer ? (
+          {zNode.answer ? (
             <Fragment>
               <div style={{ padding: '0.5rem', marginBottom: '0.5rem' }}>
-                {markdown.html(ZNode.answer.content)}
+                {markdown.html(zNode.answer.content)}
               </div>
-              <Sources sources={ZNode.answer.sources} />
+              <Sources sources={zNode.answer.sources} />
             </Fragment>
           ) : (
             <div
@@ -96,6 +83,9 @@ const Read = ({ history, match, data, createFlag, removeFlag }) => {
                 marginBottom: '2rem'
               }}
             >
+              <b>No answer yet...</b>
+              <br />
+              <br />
               <Link
                 to={`/q/${match.params.slug}/answer`}
                 className="btn-container"
@@ -107,8 +97,8 @@ const Read = ({ history, match, data, createFlag, removeFlag }) => {
             </div>
           )}
           <hr />
-          <Meta node={ZNode} />
-          <History node={ZNode} />
+          <Meta node={zNode} />
+          <History />
         </CardText>
       </Card>
     </div>
@@ -118,9 +108,12 @@ const Read = ({ history, match, data, createFlag, removeFlag }) => {
 Read.propTypes = {
   history: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
-  data: PropTypes.object.isRequired,
+  zNode: PropTypes.object.isRequired,
   createFlag: PropTypes.func.isRequired,
   removeFlag: PropTypes.func.isRequired
 }
 
-export default compose(createFlag, removeFlag)(Read)
+export default compose(
+  createFlag,
+  removeFlag
+)(Read)

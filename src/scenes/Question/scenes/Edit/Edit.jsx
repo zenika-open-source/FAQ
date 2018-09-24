@@ -5,18 +5,13 @@ import difference from 'lodash/difference'
 
 import { compose } from 'react-apollo'
 import { submitQuestion, editQuestion } from './queries'
-import { getNode } from 'scenes/Question/queries'
 
-import Loading from 'components/Loading'
 import Card, {
   CardText,
   CardActions,
   PermanentClosableCard
 } from 'components/Card'
-import Button from 'components/Button'
-import Input from 'components/Input'
-import onCtrlEnter from 'components/onCtrlEnter'
-import TagPicker from 'components/TagPicker'
+import { Loading, Button, Input, CtrlEnter, TagPicker } from 'components'
 
 import ActionMenu from '../../components/ActionMenu'
 
@@ -24,15 +19,15 @@ import Tips from './components/Tips'
 
 import './Edit.css'
 
-const CtrlEnterInput = onCtrlEnter(Input)
-
 class Edit extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
-    const { location } = this.props
+    const { location, zNode } = this.props
 
-    const initialQuestion = location.state ? location.state.question : ''
+    const passedQuestionText = location.state ? location.state.question : ''
+    const initialQuestion = zNode ? zNode.question.title : passedQuestionText
+    const initialTags = zNode ? zNode.tags.map(x => x.label) : []
 
     this.state = {
       nodeLoaded: false,
@@ -41,37 +36,21 @@ class Edit extends Component {
       question: initialQuestion,
       loadingSubmit: false,
       slug: null,
-      initialTags: [],
-      tags: [],
+      initialTags: initialTags,
+      tags: initialTags,
       showTips: PermanentClosableCard.isOpen('tips_question')
     }
   }
 
-  static getDerivedStateFromProps (nextProps, prevState) {
-    const { nodeLoaded, isEditing } = prevState
-    const { data } = nextProps
-
-    if (!nodeLoaded && isEditing && data && data.ZNode) {
-      const { ZNode } = data
-      return {
-        nodeLoaded: true,
-        initialQuestion: ZNode.question.title,
-        question: ZNode.question.title,
-        initialTags: ZNode.tags.map(x => x.label),
-        tags: ZNode.tags.map(x => x.label)
-      }
-    }
-
-    return null
-  }
-
-  handleChange = e => {
+  onTextChange = e => {
     this.setState({ question: e.target.value })
   }
 
   submitForm = () => {
-    const { isEditing } = this.state
-    isEditing ? this.editQuestion() : this.submitQuestion()
+    if (this.canSubmit()) {
+      const { isEditing } = this.state
+      isEditing ? this.editQuestion() : this.submitQuestion()
+    }
   }
 
   submitQuestion = () => {
@@ -82,7 +61,10 @@ class Edit extends Component {
     submitQuestion(this.state.question, this.state.tags)
       .then(({ data }) => {
         this.setState({
-          slug: data.createZNode.question.slug + '-' + data.createZNode.id
+          slug:
+            data.createQuestionAndTags.slug +
+            '-' +
+            data.createQuestionAndTags.node.id
         })
       })
       .catch(error => {
@@ -93,20 +75,19 @@ class Edit extends Component {
   }
 
   editQuestion = () => {
-    const { editQuestion } = this.props
-    const { ZNode } = this.props.data
+    const { editQuestion, zNode } = this.props
 
     this.setState({ loadingSubmit: true })
 
     editQuestion(
-      ZNode.question.id,
+      zNode.question.id,
       this.state.question,
       this.state.tags,
-      ZNode.id
+      zNode.id
     )
       .then(({ data }) => {
         this.setState({
-          slug: data.fullUpdateQuestion.slug + '-' + ZNode.id
+          slug: data.updateQuestionAndTags.slug + '-' + zNode.id
         })
       })
       .catch(error => {
@@ -116,41 +97,17 @@ class Edit extends Component {
       })
   }
 
-  openTips = () => {
-    this.setState({ showTips: true })
-    PermanentClosableCard.setValue('tips_question', true)
+  toggleTips = value => () => {
+    this.setState({ showTips: value })
+    PermanentClosableCard.setValue('tips_question', value)
   }
 
-  closeTips = () => {
-    this.setState({ showTips: false })
-    PermanentClosableCard.setValue('tips_question', false)
-  }
+  onTagsChange = tags => this.setState({ tags })
 
-  changeTagList = (action, tag) => {
-    const { tags } = this.state
-    const index = tags.indexOf(tag)
-    switch (action) {
-    case 'add':
-      if (index < 0) {
-        tags.push(tag)
-        this.setState({ tags })
-      }
-      break
-    case 'remove':
-      if (index > -1) {
-        tags.splice(index, 1)
-        this.setState({ tags })
-      }
-      break
-    default:
-      break
-    }
-  }
-
-  canSubmit () {
+  canSubmit() {
     const { question, initialQuestion, tags, initialTags } = this.state
 
-    return (
+    return !(
       question.length === 0 ||
       (question === initialQuestion &&
         difference(tags, initialTags).length === 0 &&
@@ -158,8 +115,8 @@ class Edit extends Component {
     )
   }
 
-  render () {
-    const { match } = this.props
+  render() {
+    const { match, zNode } = this.props
     const {
       isEditing,
       loadingSubmit,
@@ -177,25 +134,15 @@ class Edit extends Component {
       return <Loading />
     }
 
-    if (isEditing) {
-      const { loading, error, ZNode } = this.props.data
-
-      if (loading) {
-        return <Loading />
-      }
-
-      if (error) {
-        return <div>Error :(</div>
-      }
-
-      if (ZNode === null) {
-        return <Redirect to={'/'} />
-      }
+    if (isEditing && zNode === null) {
+      return <Redirect to={'/'} />
     }
 
     return (
       <div className="Edit">
-        <Prompt message="Are you sure you want to leave this page with an unsaved question?" />
+        {this.canSubmit() && (
+          <Prompt message="Are you sure you want to leave this page with an unsaved question?" />
+        )}
         <ActionMenu
           backLabel={isEditing ? 'Back' : 'Home'}
           backLink={isEditing ? `/q/${match.params.slug}` : '/'}
@@ -206,30 +153,34 @@ class Edit extends Component {
               link
               icon="lightbulb_outline"
               label="Show tips"
-              onClick={this.openTips}
+              onClick={this.toggleTips(true)}
             />
           )}
         </ActionMenu>
-        <Tips close={this.closeTips} open={showTips} />
+        <Tips close={this.toggleTips(false)} open={showTips} />
         <Card>
           <CardText style={{ display: 'flex', paddingBottom: 0 }}>
-            <CtrlEnterInput
+            <CtrlEnter
               onCtrlEnterCallback={this.submitForm}
-              autoFocus
-              icon="help"
-              placeholder="Ex: Comment remplir une note de frais ?"
-              limit={100}
-              value={question}
-              onChange={this.handleChange}
-            />
+              style={{ width: '100%' }}
+            >
+              <Input
+                autoFocus
+                icon="help"
+                placeholder="Ex: Comment remplir une note de frais ?"
+                limit={100}
+                value={question}
+                onChange={this.onTextChange}
+              />
+            </CtrlEnter>
           </CardText>
           <CardText style={{ paddingBottom: '0.5rem' }}>
-            <TagPicker tags={tags} changeTagList={this.changeTagList} />
+            <TagPicker tags={tags} onChange={this.onTagsChange} />
           </CardText>
           <CardActions>
             <Button
               label={isEditing ? 'Edit' : 'Submit'}
-              disabled={this.canSubmit()}
+              disabled={!this.canSubmit()}
               primary
               raised
               onClick={this.submitForm}
@@ -246,7 +197,10 @@ Edit.propTypes = {
   submitQuestion: PropTypes.func.isRequired,
   editQuestion: PropTypes.func.isRequired,
   location: PropTypes.object.isRequired,
-  data: PropTypes.object
+  zNode: PropTypes.object
 }
 
-export default compose(submitQuestion, editQuestion, getNode)(Edit)
+export default compose(
+  submitQuestion,
+  editQuestion
+)(Edit)

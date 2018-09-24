@@ -1,9 +1,0 @@
-type RemoveFlagPayload {
-  id: ID!
-  type: String!
-  nodeId: ID!
-}
-
-extend type Mutation {
-  removeFlag(type: String!, nodeId: ID!): RemoveFlagPayload
-}

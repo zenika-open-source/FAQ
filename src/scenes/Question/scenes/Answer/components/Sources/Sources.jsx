@@ -8,15 +8,13 @@ import Source from '../Source'
 
 class Sources extends Component {
   addSource = () => {
-    const { sources, handleChange } = this.props
-    handleChange(
-      sources.concat([{ id: uuid(), label: '', url: '', new: true }])
-    )
+    const { sources, onChange } = this.props
+    onChange(sources.concat([{ id: uuid(), label: '', url: '', new: true }]))
   }
 
-  changeAttribute (id, attributes) {
-    const { sources, handleChange } = this.props
-    handleChange(
+  changeAttribute(id, attributes) {
+    const { sources, onChange } = this.props
+    onChange(
       sources.map(s => {
         if (s.id !== id) return s
         return { ...s, ...attributes }
@@ -24,20 +22,20 @@ class Sources extends Component {
     )
   }
 
-  changeLabel (id, label) {
+  changeLabel(id, label) {
     this.changeAttribute(id, { label })
   }
 
-  changeUrl (id, url) {
+  changeUrl(id, url) {
     this.changeAttribute(id, { url })
   }
 
-  removeSource (id) {
-    const { sources, handleChange } = this.props
-    handleChange(sources.filter(s => s.id !== id))
+  removeSource(id) {
+    const { sources, onChange } = this.props
+    onChange(sources.filter(s => s.id !== id))
   }
 
-  render () {
+  render() {
     const { sources } = this.props
     return (
       <div style={{ borderTop: '1px dashed var(--secondary-color)' }}>
@@ -85,7 +83,7 @@ class Sources extends Component {
 
 Sources.propTypes = {
   sources: PropTypes.array.isRequired,
-  handleChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired
 }
 
 export default Sources

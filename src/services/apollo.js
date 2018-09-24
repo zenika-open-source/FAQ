@@ -1,141 +1,72 @@
-import ApolloClient from 'apollo-client'
-import { split } from 'apollo-link'
-import { HttpLink } from 'apollo-link-http'
-import { WebSocketLink } from 'apollo-link-ws'
-import { getMainDefinition } from 'apollo-utilities'
+/* eslint-disable react/display-name */
+import React from 'react'
+import { Query } from 'react-apollo'
+
+import { ApolloClient } from 'apollo-client'
 import { InMemoryCache } from 'apollo-cache-inmemory'
-import gql from 'graphql-tag'
+import { HttpLink } from 'apollo-link-http'
+import { onError } from 'apollo-link-error'
+import { ApolloLink } from 'apollo-link'
+import { setContext } from 'apollo-link-context'
 
-const httpLink = new HttpLink({
-  uri: process.env.REACT_APP_GRAPHCOOL_URI
+import auth from './auth'
+
+const apollo = new ApolloClient({
+  link: ApolloLink.from([
+    onError(({ graphQLErrors, networkError, operation }) => {
+      if (graphQLErrors) {
+        graphQLErrors.map(({ message, locations, path }) =>
+          // eslint-disable-next-line no-alert
+          alert(
+            `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}. Please refresh the page.`
+          )
+        )
+      }
+      // eslint-disable-next-line no-alert
+      if (networkError) { alert(`[Network error]: ${networkError}. Please refresh the page.`) }
+    }),
+    setContext((_, { headers }) => {
+      const token = auth.session ? auth.session.idToken : null
+      return {
+        headers: {
+          ...headers,
+          authorization: token ? `Bearer ${token}` : '',
+          'prisma-service': process.env.REACT_APP_PRISMA_SERVICE
+        }
+      }
+    }),
+    new HttpLink({
+      uri: process.env.REACT_APP_GRAPHQL_ENDPOINT
+    })
+  ]),
+  cache: new InMemoryCache(),
+  defaultOptions: {
+    watchQuery: {
+      fetchPolicy: 'cache-and-network'
+    }
+  }
 })
 
-const wsLink = new WebSocketLink({
-  uri: process.env.REACT_APP_GRAPHCOOL_URI_WS,
-  options: { reconnect: true }
-})
-
-const link = split(
-  ({ query }) => {
-    const { kind, operation } = getMainDefinition(query)
-    return kind === 'OperationDefinition' && operation === 'subscription'
-  },
-  wsLink,
-  httpLink
-)
-
-const cache = new InMemoryCache()
-
-const apollo = new ApolloClient({ link, cache })
-
-const subscribeToNodes = gql`
-  subscription {
-    ZNode {
-      mutation
-      node {
-        id
-      }
-    }
-  }
-`
-
-const subscribeToQuestions = gql`
-  subscription {
-    Question {
-      mutation
-      node {
-        id
-        node {
-          id
-        }
-      }
-    }
-  }
-`
-
-const subscribeToAnswers = gql`
-  subscription {
-    Answer {
-      mutation
-      node {
-        id
-        node {
-          id
-        }
-      }
-    }
-  }
-`
-
-const subscribeToFlags = gql`
-  subscription {
-    Flag {
-      mutation
-      node {
-        node {
-          id
-        }
-      }
-    }
-  }
-`
-
-const subscribeToTags = gql`
-  subscription {
-    Tag {
-      mutation
-      node {
-        node {
-          id
-        }
-      }
-    }
-  }
-`
-
-class ApolloWatcher {
-  hooks = []
-
-  start () {
-    const subscriptions = [
-      subscribeToNodes,
-      subscribeToQuestions,
-      subscribeToAnswers,
-      subscribeToFlags,
-      subscribeToTags
-    ]
-
-    subscriptions.forEach(query => {
-      apollo.subscribe({ query }).subscribe({
-        next: ({ data }) => this.onMutation(data)
-      })
-    })
-  }
-
-  onMutation (data) {
-    const model = Object.keys(data)[0]
-    const mutation = data[model].mutation
-    const node = data[model].node
-    const id = node ? (node.node ? node.node.id : node.id) : null
-
-    this.hooks.forEach(hook => {
-      if (hook.model !== model) return
-      if (hook.mutation !== mutation && hook.mutation !== '*') return
-
-      const query = hook.query
-      const variables = hook.variablesFunc ? hook.variablesFunc(node) : { id }
-
-      apollo.query({ query, variables, fetchPolicy: 'network-only' })
-    })
-  }
-
-  watch (model, mutation, query, variablesFunc) {
-    this.hooks.push({ model, mutation, query, variablesFunc })
-  }
+const query = (
+  query,
+  { variables, skip, parse, ...queryProps } = {}
+) => Wrapped => {
+  const ApolloQueryWrapper = props => (
+    <Query
+      query={query}
+      skip={skip ? skip(props) : false}
+      variables={variables ? variables(props) : {}}
+      {...queryProps}
+    >
+      {({ loading, error, data }) => {
+        data = parse && data ? parse(data) : data
+        return <Wrapped {...props} {...{ loading, error, ...data }} />
+      }}
+    </Query>
+  )
+  return ApolloQueryWrapper
 }
-
-const apolloWatcher = new ApolloWatcher()
 
 export default apollo
 
-export { apolloWatcher }
+export { query }

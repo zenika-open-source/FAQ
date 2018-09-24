@@ -7,19 +7,19 @@ import Card from './Card'
 import CardActions from './CardActions'
 
 class PermanentClosableCard extends Component {
-  static setValue (name, value) {
+  static setValue(name, value) {
     const json =
       JSON.parse(localStorage.getItem('permanent_closable_cards')) || {}
     json[name] = value
     localStorage.setItem('permanent_closable_cards', JSON.stringify(json))
   }
 
-  static isOpen (name) {
+  static isOpen(name) {
     const json = JSON.parse(localStorage.getItem('permanent_closable_cards'))
     return json ? (json[name] !== undefined ? json[name] : true) : true
   }
 
-  render () {
+  render() {
     const { open, close, children, ...otherProps } = this.props
 
     return (

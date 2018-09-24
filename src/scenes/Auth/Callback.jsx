@@ -8,27 +8,24 @@ import { auth } from 'services'
 import Loading from 'components/Loading'
 
 class Callback extends Component {
-  componentDidMount () {
+  componentDidMount() {
     const { location, history, authQL } = this.props
 
     auth
-      .parseHash(location.hash)
-      .then(authResult =>
-        authQL(authResult.accessToken, authResult.idToken).then(({ data }) => {
-          auth.setSession(authResult)
-          auth.setUserId(data.authenticateUser.id)
-        })
-      )
-      .then(() => auth.getProfile())
-      .then(() => history.push(auth.popAfterLoginRedirectUrl()))
+      .parseHash(location.hash) // Get auth0 data
+      .then(authResult => auth.setSession(authResult)) // Set auth0 data into session
+      .then(authResult => authQL(authResult.idToken)) // Authenticate user to backend
+      .then(({ data }) => auth.setUserId(data.authenticate.id)) // Set user's id
+      .then(() => history.push(auth.popAfterLoginRedirectUrl())) // Redirect user
       .catch(err => {
         // eslint-disable-next-line
         console.log(err)
+        auth.setSession(null)
         history.push({ pathname: '/auth/login', state: { error: err } })
       })
   }
 
-  render () {
+  render() {
     return <Loading text="Authenticating..." />
   }
 }

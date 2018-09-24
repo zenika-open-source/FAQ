@@ -7,7 +7,7 @@
 .navbar .brand {
   display: flex;
   align-items: center;
-  font-size: 1.3rem;
+  font-size: var(--h1-font-size);
   color: var(--primary-color-font);
 }
 

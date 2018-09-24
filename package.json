@@ -1,13 +1,15 @@
 {
   "name": "faq",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "algoliasearch": "^3.24.11",
+    "algoliasearch": "^3.30.0",
     "apollo-cache-inmemory": "^1.1.12",
     "apollo-client": "^2.2.8",
+    "apollo-link": "^1.2.2",
+    "apollo-link-context": "^1.0.8",
+    "apollo-link-error": "^1.1.0",
     "apollo-link-http": "^1.5.3",
-    "apollo-link-ws": "^1.0.7",
     "auth0-js": "^9.3.2",
     "classnames": "^2.2.5",
     "copy-to-clipboard": "^3.0.8",
@@ -17,16 +19,16 @@
     "lodash": "^4.17.5",
     "moment": "^2.21.0",
     "normalize.css": "^8.0.0",
-    "react": "^16.3.2",
+    "react": "^16.4.2",
     "react-apollo": "^2.1.3",
-    "react-dom": "^16.3.2",
+    "react-dom": "^16.4.2",
     "react-helmet": "^5.2.0",
     "react-mde": "^3.1.0",
     "react-onclickoutside": "^6.7.1",
     "react-pluralize": "^1.2.0",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
-    "react-scripts": "1.1.0",
+    "react-scripts": "^1.1.5",
     "showdown": "^1.8.6",
     "showdown-xss-filter": "^0.2.0",
     "subscriptions-transport-ws": "^0.9.7",
@@ -39,7 +41,7 @@
     "eject": "react-scripts eject",
     "lint": "eslint src --fix --ext js,jsx",
     "deploy_appengine": "cd build && gcloud app deploy --quiet --project $APPENGINE_PROJECT_ID --version=prod",
-    "deploy_graphcool": "cd server && npm run graphcool login && npm run deploy",
+    "deploy_backend": "cd server && npm run deploy",
     "deploy": "npm run deploy_graphcool"
   },
   "devDependencies": {
@@ -51,7 +53,6 @@
     "eslint-plugin-node": "^6.0.0",
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-react": "^7.7.0",
-    "eslint-plugin-standard": "^3.0.1",
-    "graphcool": "^0.11.5"
+    "eslint-plugin-standard": "^3.0.1"
   }
 }

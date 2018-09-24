@@ -1,19 +1,23 @@
 import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 
-export const authUserQuery = gql`
-  mutation authUser($accessToken: String!, $idToken: String!) {
-    authenticateUser(accessToken: $accessToken, idToken: $idToken) {
+export const authUserMutation = gql`
+  mutation($idToken: String!) {
+    authenticate(idToken: $idToken) {
       id
-      token
+      auth0Id
+      name
+      email
+      picture
+      locale
     }
   }
 `
 
-export const authUser = graphql(authUserQuery, {
+export const authUser = graphql(authUserMutation, {
   props: ({ mutate }) => ({
-    authQL: (accessToken, idToken) => {
-      return mutate({ variables: { accessToken, idToken } })
+    authQL: idToken => {
+      return mutate({ variables: { idToken } })
     }
   })
 })

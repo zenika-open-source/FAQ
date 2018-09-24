@@ -57,8 +57,6 @@
   display: flex;
   flex-flow: column-reverse;
   width: 100%;
-  color: var(--secondary-color-font-light);
-  font-size: var(--small-font-size);
 }
 
 .history .history-action {
@@ -69,5 +67,5 @@
 }
 
 .history .history-action div {
-  padding: 0.1rem 0.3rem;
+  padding: 0.3rem;
 }

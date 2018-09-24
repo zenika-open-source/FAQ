@@ -5,7 +5,7 @@ import cn from 'classnames'
 import './Button.css'
 
 class Button extends Component {
-  render () {
+  render() {
     const {
       className,
       icon,
