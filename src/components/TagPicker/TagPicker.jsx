@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import cn from 'classnames'
 import PropTypes from 'prop-types'
 import onClickOutside from 'react-onclickoutside'
 import map from 'lodash/map'
@@ -49,24 +50,30 @@ class TagPicker extends Component {
           />
           <div className="picker" style={{ display: opened ? 'flex' : 'none' }}>
             <div className="picker-body">
-              {map(Tags.list, (category, name) => {
-                return (
-                  <div key={name} className="category">
-                    {category.map(tag => {
-                      return (
-                        <div
-                          key={tag}
-                          className="category-item"
-                          onClick={() => onChange([...tags, tag])}
-                          disabled={tags.includes(tag)}
-                        >
-                          {tag}
-                        </div>
-                      )
-                    })}
-                  </div>
-                )
-              })}
+              {map(Tags.list, (category, name) => (
+                <div key={name} className="category">
+                  {category.map(tag => {
+                    const isSelected = tags.includes(tag)
+                    return (
+                      <div
+                        key={tag}
+                        className={cn('category-item', {
+                          selected: isSelected
+                        })}
+                        onClick={() =>
+                          onChange(
+                            isSelected
+                              ? tags.filter(t => t !== tag)
+                              : [...tags, tag]
+                          )
+                        }
+                      >
+                        {tag}
+                      </div>
+                    )
+                  })}
+                </div>
+              ))}
             </div>
           </div>
         </div>
