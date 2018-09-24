@@ -3,7 +3,7 @@ module.exports = {
     history: async (_, args, ctx, info) => {
       const entriesCount = (await ctx.prisma.query.historyActionsConnection(
         args,
-        `{ aggregate { count } }`
+        '{ aggregate { count } }'
       )).aggregate.count
 
       const meta = {

@@ -34,7 +34,7 @@ jobs:
             - server-{{ checksum "package-lock.json" }}
             - server-
 
-      - run: cd server && npm install && cd ..
+      - run: cd server && npm install && npm run lint && cd ..
 
       - save_cache:
           paths:
@@ -87,18 +87,19 @@ jobs:
           git remote add clever $CLEVER_CLOUD_BACKEND_GIT_URL
           git push --force clever master
           npm run deploy
+          npm run algolia
 
 workflows:
   version: 2
   build-deploy:
     jobs:
       - build
-      - prisma_deploy:
-          requires:
-            - build
-          filters:
-            branches:
-              only: master
+#      - prisma_deploy:
+#          requires:
+#            - build
+#          filters:
+#            branches:
+#              only: master
       - deploy:
           requires:
             - build

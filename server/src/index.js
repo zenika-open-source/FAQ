@@ -44,16 +44,16 @@ server.start({ port, endpoint: yogaEndpoint, playground: playgroundEndpoint })
 
 /* Serve frontend */
 
-const front_path = path.join(__dirname, '../front_build')
+const frontPath = path.join(__dirname, '../front_build')
 
 if (process.env.NODE_ENV === 'production') {
   server.express.use(secure)
 }
-server.express.use('/static', express.static(front_path + '/static'))
-server.express.use('/img', express.static(front_path + '/img'))
+server.express.use('/static', express.static(frontPath + '/static'))
+server.express.use('/img', express.static(frontPath + '/img'))
 
 server.express.get('*', (req, res, next) => {
-  res.sendFile(front_path + '/index.html')
+  res.sendFile(frontPath + '/index.html')
 })
 
 // eslint-disable-next-line no-console
