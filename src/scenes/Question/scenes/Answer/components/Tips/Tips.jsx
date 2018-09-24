@@ -19,7 +19,7 @@ const Tips = props => (
         </li>
         <li>
           Specify the sources of your information (Zentranet, Workplace or
-          other)
+          others)
         </li>
         <li>Mention similar questions to complete your answer.</li>
       </ul>

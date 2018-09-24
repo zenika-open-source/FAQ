@@ -9,7 +9,7 @@ node_modules
 # production
 /build
 .build
-/server/front_build
+server/front_build
 
 # misc
 .DS_Store
