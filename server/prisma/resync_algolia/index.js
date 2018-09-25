@@ -2,14 +2,14 @@ const fs = require('fs')
 
 const algoliasearch = require('algoliasearch')
 
-const { ALGOLIA_APP_ID, ALGOLIA_API_KEY_ALL, ALGOLIA_INDEX } = process.env
+const { ALGOLIA_APP_ID, ALGOLIA_API_KEY_ADMIN, ALGOLIA_INDEX } = process.env
 
-if (!ALGOLIA_APP_ID || !ALGOLIA_API_KEY_ALL || !ALGOLIA_INDEX) {
+if (!ALGOLIA_APP_ID || !ALGOLIA_API_KEY_ADMIN || !ALGOLIA_INDEX) {
   console.error('Algolia is absent from the environment variables')
   return
 }
 
-const client = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_API_KEY_ALL)
+const client = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_API_KEY_ADMIN)
 
 const index = client.initIndex(ALGOLIA_INDEX)
 
@@ -31,9 +31,9 @@ const writeJson = path => data =>
 
 const readAllFiles = () => {
   const files = [
-    readJson('./backup/lists/000001.json'),
-    readJson('./backup/nodes/000001.json'),
-    readJson('./backup/relations/000001.json')
+    readJson('./data/lists/000001.json'),
+    readJson('./data/nodes/000001.json'),
+    readJson('./data/relations/000001.json')
   ]
 
   return Promise.all(files)
