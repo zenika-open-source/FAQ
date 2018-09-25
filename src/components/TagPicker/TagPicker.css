@@ -112,16 +112,17 @@
   font-variant: small-caps;
 }
 
-.tagpicker .picker .category-item:not([disabled]):hover {
+.tagpicker .picker .category-item:hover {
   background-color: var(--secondary-color);
-  color: var(--secondary-color-font);
+  color: var(--secondary-color-font-dark);
 }
 
-.tagpicker .picker .category-item[disabled] {
-  cursor: initial;
-}
-
-.tagpicker .picker .category-item[disabled]::before {
+.tagpicker .picker .category-item.selected::before {
   content: '✓';
+  margin-right: 0.2rem;
+}
+
+.tagpicker .picker .category-item.selected:hover::before {
+  content: '✕';
   margin-right: 0.2rem;
 }
