@@ -42,14 +42,9 @@ module.exports = {
         `
       )
 
-      if (answer.node.flags.length > 0) {
-        // For questions before the migration,
-        // the "unanswered" flag wasn't present in the db.
-        // So we need to test its presence before deleting it
-        await ctx.prisma.mutation.deleteFlag({
-          where: { id: answer.node.flags[0].id }
-        })
-      }
+      await ctx.prisma.mutation.deleteFlag({
+        where: { id: answer.node.flags[0].id }
+      })
 
       await history.push(ctx, {
         action: 'CREATED',
