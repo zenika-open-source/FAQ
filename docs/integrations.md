@@ -19,11 +19,9 @@ In order to integrate with Slack, you will need to create an application. It can
 
 ### Environment variables
 
-#### `SLACK_CHANNEL_HOOK`
-
-_Used by: Back-end_
-
-This variable is a hook URI which is called by the backend in order to send the message to the channel. You can configure a hook on the [Slack "Build" dashboard](https://api.slack.com/). Choose your app, then go to "Features > Incoming Webhooks". Active the feature and create a hook for the dedicated channel you wish to send questions to. The generated url is what you need for this variable.
+| Name | Used by | Notes |
+| -- | -- | -- |
+| `SLACK_CHANNEL_HOOK` | Backend | This variable is a hook URI which is called by the backend in order to send the message to the channel. You can configure a hook on the [Slack "Build" dashboard](https://api.slack.com/). Choose your app, then go to "Features > Incoming Webhooks". Active the feature and create a hook for the dedicated channel you wish to send questions to. The generated url is what you need for this variable. |
 
 ## Workplace
 

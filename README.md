@@ -1,3 +1,5 @@
+![FAQ Zenika](docs/banner_img.png)
+
 # FAQ Zenika
 
 Internal Knowledge Database for Zenika members - https://faq.zenika.com
@@ -8,44 +10,48 @@ Internal Knowledge Database for Zenika members - https://faq.zenika.com
 
 ## Philosophy
 
-* **Single source of truth:** Regrouping useful information
-* **Intuitive:** Not only developer-oriented
-* **Integrated:** Works well with the Zenika tool suite
-* **Internationalized:** Open to the world
+- **Single source of truth:** Regrouping useful information
+- **Intuitive:** Not only developer-oriented
+- **Integrated:** Works well with the Zenika tool suite
+- **Internationalized:** Open to the world
 
 ## Architecture
 
-#### Frontend
+#### Frontend :
 
-* **JS:** React (react-router, apollo)
-* **CSS:** Custom-made
+- JS _(React, Apollo)_
+- CSS _(Custom-made)_
 
-#### Backend
+#### Backend :
 
-* **Graphcool:** GraphQL-as-a-Service, Function-as-a-Service and hosting the data
-* **Algolia:** FullTextSearch-as-a-Service
-* **Mailgun:** Mail-as-a-Service
-* **Google App Engine:** Hosting-as-a-Service (static)
-* **Auth0:** Auth-as-a-Service
+- Node JS
+- Prisma
+- PostgreSQL
+
+#### Backing services :
+
+- Algolia _(FullTextSearch-as-a-Service)_
+- Mailgun _(Mail-as-a-Service)_
+- Auth0 _(Auth-as-a-Service)_
 
 #### Integrations
 
-* **Slack:** Sending new questions into a dedicated channel
-* **Workplace:** Button to share questions
+- Slack: Sending new questions into a dedicated channel
+- Workplace: Button to share questions
 
 ## Documentation
 
 New to this project ?
 
-* [Step-by-step installation](/docs/step_by_step.md) with only the required backing services
+- [Step-by-step installation](/docs/step_by_step.md) with only the required backing services
 
 More documentation available here:
 
-* [Installation](/docs/installation.md)
-* [Deployment](/docs/deployment.md)
-* [Contributing](/docs/contributing.md)
-* [Backing services](/docs/backing_services.md)
-* [Integrations](/docs/integrations.md)
+- [Installation](/docs/installation.md)
+- [Deployment](/docs/deployment.md)
+- [Contributing](/docs/contributing.md)
+- [Backing services](/docs/backing_services.md)
+- [Integrations](/docs/integrations.md)
 
 ## License
 
