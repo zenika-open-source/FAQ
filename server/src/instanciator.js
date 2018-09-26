@@ -10,7 +10,7 @@ class Instanciator {
     const service = req.headers['prisma-service']
 
     if (!service) {
-      throw Error('No \'prisma-service\' header found, please provide one')
+      throw Error("No 'prisma-service' header found, please provide one")
     }
 
     const [name, stage] = service.match(/([^/]+)\/([^/]+)/).splice(1, 2)
@@ -36,7 +36,8 @@ class Instanciator {
 
     const instance = new Prisma({
       typeDefs: typeDefs,
-      endpoint: process.env.PRISMA_URL + '/' + name + '/' + stage
+      endpoint: process.env.PRISMA_URL + '/' + name + '/' + stage,
+      secret: process.env.PRISMA_API_SECRET
     })
 
     if (!this.instances[name]) this.instances[name] = {}

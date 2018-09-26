@@ -21,7 +21,7 @@
   },
   "scripts": {
     "start": "dotenv -e .env.local node src/index.js",
-    "deploy": "cd prisma && prisma deploy",
+    "deploy": "cd prisma && dotenv -e ../.env.local prisma deploy",
     "playground": "prisma playground -p 3001",
     "docker_local_up": "cd prisma/ && docker-compose up -d",
     "lint": "eslint src --fix --ext js",
