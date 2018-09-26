@@ -6,8 +6,8 @@ This is the quickest process to install and run this project with the minimum [b
 
 First, you will need the following dependencies:
 
-* Docker >= 16 and docker-compose >= 1.18 (See https://www.docker.com)
-* Node >= 8 and npm >= 5 (See https://nodejs.org)
+- Docker >= 16 and docker-compose >= 1.18 (See https://www.docker.com)
+- Node >= 8 and npm >= 5 (See https://nodejs.org)
 
 > These are the currently known minimum version required. An earlier version may still work.
 
@@ -29,47 +29,47 @@ npm install
 npm install
 ```
 
-## 4/ Create local graphcool instance
+## 4/ Initialize local Prisma instance
 
-Run the following commands in order to create a local graphcool instance
+Run the following commands in order to create a local prisma instance
 
 ```bash
 # Path: ./FAQ/server
-npm run graphcool local up
-npm run graphcool deploy
+npm run docker_local_up
+npm run deploy
 ```
-
-When asked for information, answer with the following:
-
-* Cluster: **local**
-* Target name: **dev**
-* Service name: **faq**
 
 ## 5/ Create your environment files
 
-This project uses 2 `.env` file to configure its environment variables.
+This project uses 2 `.env.local` file to configure its environment variables.
 
-* The first `.env` file needs to be created at the root of the project.
-
-* The second `.env` file needs to be created in the `server` folder.
-
-Both files should have the following content:
+- The first `.env.local` file (for the frontend) needs to be created at the root of the project.
 
 ```
 REACT_APP_AUTH0_DOMAIN=zenika.eu.auth0.com
 REACT_APP_AUTH0_CLIENTID=wq8LU1f5iXQ4HWL0F6Z07QDcSMgWPd1p
 
-REACT_APP_GRAPHCOOL_URI=http://localhost:60000/simple/v1/{graphcool_id}
-REACT_APP_GRAPHCOOL_URI_WS=http://localhost:60050/v1/{graphcool_id}
+REACT_APP_GRAPHQL_ENDPOINT=http://localhost:4000/gql
+REACT_APP_PRISMA_SERVICE=default/default
 ```
 
-Where `{graphcool_id}` should be replaced with your own graphcool id found in the `./server/.graphcoolrc` file. (_It should look something like `cjdpzliff42pj01421oz29kwn`_)
+- The second `.env.local` file (for the backend) needs to be created in the `server` folder.
 
-## 6/ Re-deploy Graphcool
+```
+FAQ_URL=faq.zenika.com
+
+PRISMA_URL=http://localhost:4466
+PRISMA_MANAGEMENT_API_SECRET=my-secret-42
+
+AUTH0_DOMAIN=zenika.eu.auth0.com
+AUTH0_CLIENTID=wq8LU1f5iXQ4HWL0F6Z07QDcSMgWPd1p
+```
+
+## 6/ Run the backend
 
 ```bash
 # Path: ./FAQ/server
-npm run graphcool deploy
+npm start
 ```
 
 ## 7/ Run the frontend

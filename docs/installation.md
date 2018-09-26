@@ -6,8 +6,8 @@ These instructions will get you a copy of the project up and running on your loc
 
 Before you install this project, you will need the following dependencies:
 
-* Docker >= 16 and docker-compose >= 1.18 (See https://www.docker.com)
-* Node >= 8 and npm >= 5 (See https://nodejs.org)
+- Docker >= 16 and docker-compose >= 1.18 (See https://www.docker.com)
+- Node >= 8 and npm >= 5 (See https://nodejs.org)
 
 > These are the currently known minimum version required. An earlier version may still work.
 
@@ -32,19 +32,31 @@ npm install
 
 ## Configuration
 
-The app requires some environment variables to properly wire up to its backing services. See the [backing services documentation](/docs/backing_services.md) and the [integrations documentation](/docs/integrations.md) for more information on which environment variables you need.
+The app requires some environment variables to properly wire up to its backing services and integrations. See the [backing services documentation](/docs/backing_services.md) and the [integrations documentation](/docs/integrations.md) for more information on which environment variables you need.
 
 You may define environment variables manually or you may use an `.env.local` file. This file is picked up by npm scripts. You can read an introduction to `.env` files [here](https://www.npmjs.com/package/dotenv). An `.env.local.example` file is provided with the project to initialize your own copy of `.env.local`.
 
 **There is one file for the front-end at the root of the project and one for the back-end in `./server`.**
 
+## Initializing Prisma
+
+The backend requires Prisma and a postgresql database to run.
+
+You can use dockerized containers for both:
+
+```bash
+# Path: ./FAQ/server
+npm run docker_local_up
+```
+
 ## Start
 
-When your configuration is ready, deploy your back-end
+When your configuration is ready, deploy and start your back-end
 
 ```bash
 # Path: ./FAQ/server
 npm run deploy
+npm run start
 ```
 
 Finally, start the application
