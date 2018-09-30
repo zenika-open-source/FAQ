@@ -1,5 +1,5 @@
-import moment from 'moment'
 import compact from 'lodash/compact'
+import {subMonths, differenceInMilliseconds, distanceInWordsToNow, format} from 'date-fns'
 
 import { markdown } from 'services'
 
@@ -92,13 +92,13 @@ export const formatHistoryAction = (
     }
   }
 
-  const createdDate = moment(createdAt)
-  const monthOld = moment().subtract(1, 'month')
+  const monthOld = subMonths(new Date(), 1)
 
-  const date =
-    createdDate.diff(monthOld) > 0
-      ? createdDate.fromNow()
-      : createdDate.format('D MMM YYYY, HH:mm')
+  const date = differenceInMilliseconds(createdAt, monthOld) > 0
+    ? distanceInWordsToNow(createdAt, {
+      addSuffix: true
+    })
+    : format(createdAt, 'D MMM YYYY, HH:mm')
 
   return {
     date,

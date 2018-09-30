@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import clone from 'lodash/clone'
 import find from 'lodash/find'
 import map from 'lodash/map'
-import moment from 'moment'
+import format from 'date-fns/format'
 
 import Flag, { flagMeta } from './Flag'
 
@@ -28,7 +28,7 @@ const Flags = ({ node, withLabels }) => {
             'By ' +
             flag.user.name +
             ' on ' +
-            moment(flag.createdAt).format('D MMM YYYY')
+            format(flag.createdAt, 'D MMM YYYY')
         } else {
           tooltip = flag.type.toUpperCase()
         }
