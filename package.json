@@ -40,9 +40,7 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "lint": "eslint src --fix --ext js,jsx",
-    "deploy_appengine": "cd build && gcloud app deploy --quiet --project $APPENGINE_PROJECT_ID --version=prod",
-    "deploy_backend": "cd server && npm run deploy",
-    "deploy": "npm run deploy_graphcool"
+    "stats": "NODE_ENV=production webpack --config node_modules/react-scripts/config/webpack.config.prod.js --profile --json > stats.json"
   },
   "devDependencies": {
     "dotenv": "^5.0.0",
@@ -53,6 +51,7 @@
     "eslint-plugin-node": "^6.0.0",
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-react": "^7.7.0",
-    "eslint-plugin-standard": "^3.0.1"
+    "eslint-plugin-standard": "^3.0.1",
+    "webpack": "^3.12.0"
   }
 }

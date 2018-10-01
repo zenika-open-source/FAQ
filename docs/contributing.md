@@ -8,8 +8,8 @@ You will need to follow the [installation process](/docs/installation.md) first.
 
 ## Contributing process
 
-* You found a bug? You have a suggestion? Great! [Open an issue](https://github.com/Zenika/FAQ/issues) so we can discuss it
-* You want to implement changes to the code? Awesome! [Open a pull request](https://github.com/Zenika/FAQ/pulls) so we can review it
+- You found a bug? You have a suggestion? Great! [Open an issue](https://github.com/Zenika/FAQ/issues) so we can discuss it
+- You want to implement changes to the code? Awesome! [Open a pull request](https://github.com/Zenika/FAQ/pulls) so we can review it
 
 ## Tests
 
@@ -22,6 +22,16 @@ Run the linter using the following command
 ```bash
 npm run lint
 ```
+
+## Bundle size
+
+We try to minimize the size of the js bundle. You can use the webpack analyzer to check if new dependencies are lightweight or not.
+
+```bash
+npm run stats
+```
+
+This commands generate a `stats.json` file which you can vizualize on this [website](https://chrisbateman.github.io/webpack-visualizer/)
 
 ## Algolia Synonyms
 
