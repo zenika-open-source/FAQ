@@ -19,6 +19,7 @@ server/front_build
 .env.production.local
 .graphcoolrc
 .vscode
+stats.json
 
 npm-debug.log*
 yarn-debug.log*
