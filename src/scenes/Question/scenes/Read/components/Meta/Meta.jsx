@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import moment from 'moment'
+import format from 'date-fns/format'
 
 import Avatar from 'components/Avatar'
 
@@ -16,7 +16,7 @@ const Meta = ({ node }) => (
       <div>
         Asked by {node.question.user.name}
         <br />
-        {moment(node.question.createdAt).format('D MMM YYYY')}
+        {format(node.question.createdAt, 'D MMM YYYY')}
       </div>
     </div>
     {node.answer && (
@@ -24,7 +24,7 @@ const Meta = ({ node }) => (
         <div>
           Answered by {node.answer.user.name}
           <br />
-          {moment(node.answer.createdAt).format('D MMM YYYY')}
+          {format(node.answer.createdAt, 'D MMM YYYY')}
         </div>
         <Avatar
           image={node.answer.user.picture}
