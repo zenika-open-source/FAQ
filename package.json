@@ -14,7 +14,7 @@
     "classnames": "^2.2.5",
     "copy-to-clipboard": "^3.0.8",
     "date-fns": "^1.29.0",
-    "emoji-dictionary": "^1.0.9",
+    "emojilib": "^2.3.0",
     "graphql": "^0.13.1",
     "graphql-tag": "^2.8.0",
     "lodash": "^4.17.5",
