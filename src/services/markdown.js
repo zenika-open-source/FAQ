@@ -1,7 +1,7 @@
 import React from 'react'
 import { Converter } from 'showdown'
 import XSSFilter from 'showdown-xss-filter'
-import emoji from 'emoji-dictionary'
+import emojis from 'emojilib/simplemap.json'
 
 class Markdown {
   constructor() {
@@ -56,7 +56,7 @@ class Markdown {
     }, text)
 
     // :emoji: to unicode emojis
-    return text.replace(/:\w+:/gi, name => emoji.getUnicode(name))
+    return text.replace(/:(\w+):/gi, (str, name) => emojis[name] || str)
   }
 
   removeEmTagInLink(text) {

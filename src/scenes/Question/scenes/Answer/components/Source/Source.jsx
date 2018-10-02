@@ -35,46 +35,6 @@ const Source = props => {
       />
     </div>
   )
-  /* return (
-    <div
-      style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
-    >
-      <div>
-        <FontIcon value="library_books" style={{ marginRight: '1rem' }} />
-      </div>
-      <div >
-        <Input
-          type="text"
-          label="Label"
-          value={props.source.label}
-          onChange={props.changeLabel}
-        />
-      </div>
-      <div >
-        <Input
-          type="text"
-          label="URL"
-          value={props.source.url}
-          onChange={props.changeUrl}
-        />
-      </div>
-      <div style={{ marginLeft: '1rem' }}>
-        <Button
-          icon={
-            <i
-              className="material-icons"
-              style={{ marginLeft: '6px', paddingTop: '6px' }}
-            >
-              close
-            </i>
-          }
-          style={{ minWidth: 'initial', alignItems: 'center' }}
-          accent
-          onClick={props.delete}
-        />
-      </div>
-    </div>
-  ) */
 }
 
 Source.propTypes = {
