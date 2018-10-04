@@ -13,15 +13,17 @@
     "isomorphic-fetch": "^2.2.1",
     "jsonwebtoken": "^8.3.0",
     "jwks-rsa": "^1.3.0",
+    "node-fetch": "^2.2.0",
     "path": "^0.12.7",
+    "prisma": "^1.16.5",
     "prisma-binding": "^2.1.5",
     "showdown": "^1.8.6",
-    "slugify": "^1.3.1",
-    "prisma": "^1.16.5"
+    "slugify": "^1.3.1"
   },
   "scripts": {
     "start": "dotenv -e .env.local node src/index.js",
-    "deploy": "cd prisma && dotenv -e ../.env.local prisma deploy",
+    "deploy": "cd prisma && prisma deploy -e ../.env.local",
+    "deploy_all": "cd prisma/scripts && node index.js",
     "playground": "prisma playground -p 3001",
     "docker_local_up": "cd prisma/ && docker-compose up -d",
     "lint": "eslint src --fix --ext js",
