@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
 import Button from 'components/Button'
@@ -23,10 +23,10 @@ class PermanentClosableCard extends Component {
     const { open, close, children, ...otherProps } = this.props
 
     return (
-      <Fragment>
+      <>
         {open && (
           <Card {...otherProps}>
-            <a
+            <span
               style={{
                 position: 'absolute',
                 top: '0.3rem',
@@ -36,14 +36,14 @@ class PermanentClosableCard extends Component {
               onClick={close}
             >
               <i className="material-icons">close</i>
-            </a>
+            </span>
             {children}
             <CardActions>
               <Button secondary raised label="Understood!" onClick={close} />
             </CardActions>
           </Card>
         )}
-      </Fragment>
+      </>
     )
   }
 }

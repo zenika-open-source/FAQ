@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
 
@@ -10,7 +10,7 @@ const Searchbar = ({ text, tags, loading, onTextChange, onTagsChange }) => (
   <div className="searchbar">
     <Input
       icon={
-        <Fragment>
+        <>
           <span
             className={cn('icon', { hidden: loading && text !== '' })}
             onClick={() => this.input.focus()}
@@ -20,7 +20,7 @@ const Searchbar = ({ text, tags, loading, onTextChange, onTagsChange }) => (
           <span className={cn('icon', { hidden: !(loading && text !== '') })}>
             <i className="fas fa-spinner fa-pulse" />
           </span>
-        </Fragment>
+        </>
       }
       value={text}
       onChange={e => onTextChange(e.target.value)}

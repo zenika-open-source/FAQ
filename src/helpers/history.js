@@ -100,8 +100,8 @@ export const formatHistoryAction = (
   const date =
     differenceInMilliseconds(createdAt, monthOld) > 0
       ? distanceInWordsToNow(createdAt, {
-          addSuffix: true
-        })
+        addSuffix: true
+      })
       : format(createdAt, 'D MMM YYYY, HH:mm')
 
   return {
