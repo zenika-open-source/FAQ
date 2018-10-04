@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { default as TipsComponent } from 'components/Tips'
+import TipsComponent from 'components/Tips'
 
 const Tips = props => (
   <TipsComponent {...props} uid="tips_question">

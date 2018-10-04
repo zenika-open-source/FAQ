@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import uuid from 'uuid/v4'
 
@@ -40,7 +40,7 @@ class Sources extends Component {
     return (
       <div style={{ borderTop: '1px dashed var(--secondary-color)' }}>
         {sources.length > 0 ? (
-          <Fragment>
+          <>
             <h3 style={{ color: 'var(--primary-color)', margin: '0.7rem' }}>
               Sources:
             </h3>
@@ -66,7 +66,7 @@ class Sources extends Component {
                 onClick={this.addSource}
               />
             </div>
-          </Fragment>
+          </>
         ) : (
           <Button
             icon="add"

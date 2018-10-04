@@ -50,10 +50,10 @@ class Input extends Component {
         )}
         {onClear &&
           value.length > 0 && (
-            <i className="close material-icons" onClick={onClear}>
+          <i className="close material-icons" onClick={onClear}>
               close
-            </i>
-          )}
+          </i>
+        )}
       </div>
     )
   }

@@ -1,6 +1,6 @@
 module.exports = {
   Query: {
-    history: async (_, args, ctx, info) => {
+    history: async (_, { first, skip, ...args }, ctx, info) => {
       const entriesCount = (await ctx.prisma.query.historyActionsConnection(
         args,
         '{ aggregate { count } }'
@@ -8,11 +8,11 @@ module.exports = {
 
       const meta = {
         entriesCount,
-        pageCurrent: args.skip / args.first + 1,
-        pagesCount: Math.ceil(entriesCount / args.first)
+        pageCurrent: skip / first + 1,
+        pagesCount: Math.ceil(entriesCount / first)
       }
 
-      return { meta, ...args }
+      return { meta, first, skip, ...args }
     }
   },
   History: {

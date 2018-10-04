@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { Link, Redirect } from 'react-router-dom'
 import Helmet from 'react-helmet'
@@ -69,12 +69,12 @@ const Read = ({ history, match, zNode, createFlag, removeFlag }) => {
         </CardTitle>
         <CardText>
           {zNode.answer ? (
-            <Fragment>
+            <>
               <div style={{ padding: '0.5rem', marginBottom: '0.5rem' }}>
                 {markdown.html(zNode.answer.content)}
               </div>
               <Sources sources={zNode.answer.sources} />
-            </Fragment>
+            </>
           ) : (
             <div
               style={{

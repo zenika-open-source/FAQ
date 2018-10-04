@@ -14,7 +14,12 @@ const ListItem = ({ caption, icon, href }) => {
   )
 
   return href ? (
-    <a className="discret" href={href} target="_blank">
+    <a
+      className="discret"
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
       {ret}
     </a>
   ) : (
