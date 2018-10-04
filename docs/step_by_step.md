@@ -29,17 +29,7 @@ npm install
 npm install
 ```
 
-## 4/ Initialize local Prisma instance
-
-Run the following commands in order to create a local prisma instance
-
-```bash
-# Path: ./FAQ/server
-npm run docker_local_up
-npm run deploy
-```
-
-## 5/ Create your environment files
+## 4/ Create your environment files
 
 This project uses 2 `.env.local` file to configure its environment variables.
 
@@ -63,6 +53,16 @@ PRISMA_MANAGEMENT_API_SECRET=my-secret-42
 
 AUTH0_DOMAIN=zenika.eu.auth0.com
 AUTH0_CLIENTID=wq8LU1f5iXQ4HWL0F6Z07QDcSMgWPd1p
+```
+
+## 5/ Initialize local Prisma instance
+
+Run the following commands in order to create a local prisma instance
+
+```bash
+# Path: ./FAQ/server
+npm run docker_local_up
+npm run deploy
 ```
 
 ## 6/ Run the backend
