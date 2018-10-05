@@ -35,8 +35,8 @@ const routing = {
         const match = url
           .replace(REACT_APP_FAQ_URL, '')
           .match(/(?:(?:([^.]*)\.)?([^.]*)\.)?/)
-        const name = match[1] || 'default'
-        const stage = match[2] || 'prod'
+        const name = match[2] || 'default'
+        const stage = match[1] || 'prod'
         return name + '/' + stage
       }
     }
