@@ -40,6 +40,13 @@ class Instanciator {
       secret: process.env.PRISMA_API_SECRET
     })
 
+    instance._meta = {
+      service: {
+        name,
+        stage
+      }
+    }
+
     if (!this.instances[name]) this.instances[name] = {}
 
     this.instances[name][stage] = instance

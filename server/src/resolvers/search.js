@@ -26,7 +26,7 @@ module.exports = {
           count
         }
       } else {
-        const { ids, highlights, nbHits } = await algolia.search(args)
+        const { ids, highlights, nbHits } = await algolia.search(ctx, args)
 
         results = {
           ...results,

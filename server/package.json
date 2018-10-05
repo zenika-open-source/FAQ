@@ -22,12 +22,9 @@
   },
   "scripts": {
     "start": "dotenv -e .env.local node src/index.js",
-    "deploy": "cd prisma && prisma deploy -e ../.env.local",
-    "deploy_all": "cd prisma/scripts && node index.js",
-    "playground": "prisma playground -p 3001",
+    "deploy": "cd scripts/deploy_all && dotenv -e ../../.env.local node index.js",
     "docker_local_up": "cd prisma/ && docker-compose up -d",
-    "lint": "eslint src --fix --ext js",
-    "algolia": "cd algolia && dotenv -e ../.env.local node ./settings.js"
+    "lint": "eslint src --fix --ext js"
   },
   "devDependencies": {
     "dotenv-cli": "^1.4.0",

@@ -1,17 +1,22 @@
 const fetch = require('node-fetch')
 const jwt = require('jsonwebtoken')
-const util = require('util')
 const { execFileSync } = require('child_process')
 
 const {
   PRISMA_URL,
-  PRISMA_API_SECRET,
-  PRISMA_MANAGEMENT_API_SECRET
+  PRISMA_MANAGEMENT_API_SECRET,
+  ALGOLIA_APP_ID,
+  ALGOLIA_API_KEY_ALL
 } = process.env
 
-if (!PRISMA_URL || !PRISMA_API_SECRET || !PRISMA_MANAGEMENT_API_SECRET) {
+if (
+  !PRISMA_URL ||
+  !PRISMA_MANAGEMENT_API_SECRET ||
+  !ALGOLIA_APP_ID ||
+  !ALGOLIA_API_KEY_ALL
+) {
   console.error(
-    'PRISMA_URL, PRISMA_API_SECRET and PRISMA_MANAGEMENT_API_SECRET are required'
+    'PRISMA_URL, PRISMA_MANAGEMENT_API_SECRET, ALGOLIA_APP_ID and ALGOLIA_API_KEY_ALL are required'
   )
   return
 }
@@ -50,7 +55,7 @@ const getServices = async () => {
   return data.data.listProjects
 }
 
-const deployService = async (name, stage) =>
+const deployPrismaService = (name, stage) =>
   execFileSync('prisma', ['deploy'], {
     env: {
       ...process.env,
@@ -58,9 +63,20 @@ const deployService = async (name, stage) =>
     }
   })
 
+const deployAlgoliaIndex = (name, stage) =>
+  execFileSync('node', ['../../algolia/settings.js'], {
+    env: {
+      ...process.env,
+      ALGOLIA_INDEX: name + '_' + stage
+    }
+  })
+
 const main = async () => {
   const services = await getServices()
-  services.map(({ name, stage }) => deployService(name, stage))
+  services.map(({ name, stage }) => {
+    deployPrismaService(name, stage)
+    deployAlgoliaIndex(name, stage)
+  })
 }
 
 main()

@@ -10,6 +10,7 @@ import { ApolloLink } from 'apollo-link'
 import { setContext } from 'apollo-link-context'
 
 import auth from './auth'
+import routing from './routing'
 
 const apollo = new ApolloClient({
   link: ApolloLink.from([
@@ -23,15 +24,17 @@ const apollo = new ApolloClient({
         )
       }
       // eslint-disable-next-line no-alert
-      if (networkError) { alert(`[Network error]: ${networkError}. Please refresh the page.`) }
+      if (networkError) {
+        alert(`[Network error]: ${networkError}. Please refresh the page.`)
+      }
     }),
     setContext((_, { headers }) => {
       const token = auth.session ? auth.session.idToken : null
       return {
         headers: {
           ...headers,
-          authorization: token ? `Bearer ${token}` : '',
-          'prisma-service': process.env.REACT_APP_PRISMA_SERVICE
+          Authorization: token ? `Bearer ${token}` : '',
+          'prisma-service': routing.getPrismaService()
         }
       }
     }),
