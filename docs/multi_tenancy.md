@@ -38,3 +38,27 @@ You now have:
 
 - A new service in Prisma
 - A new index in Algolia
+
+## Service routing in production
+
+While in production, the service accessed will depend on the url you are at:
+
+```
+https://[service_stage?].[service_name?].[FAQ_URL]/
+```
+
+| name          | value                                       |
+| ------------- | ------------------------------------------- |
+| FAQ_URL       | Provided from environment variables         |
+| service_name  | The name of the service. Default: `default` |
+| service_stage | The stage of the service. Default: `prod`   |
+
+Examples with FAQ_URL=faq.zenika.com (`name / stage`):
+
+- faq.zenika.com => `default / prod`
+- demo.faq.zenika.com => `demo / prod`
+- dev.demo.faq.zenika.com => `demo / dev`
+
+> Note: If NODE_ENV==dev or if no FAQ_URL is found in your environment variables, the default routing will return `default/default`
+
+> Note: The routing can be overrided using REACT_APP_PRISMA_SERVICE=name/stage
