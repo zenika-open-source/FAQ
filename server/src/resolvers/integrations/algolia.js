@@ -1,6 +1,6 @@
 const algoliasearch = require('algoliasearch')
 
-const { ALGOLIA_APP_ID, ALGOLIA_API_KEY_ALL, ALGOLIA_INDEX } = process.env
+const { ALGOLIA_APP_ID, ALGOLIA_API_KEY_ALL } = process.env
 
 const nodeQuery = `
 {
@@ -30,7 +30,19 @@ class Algolia {
 
     this.client = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_API_KEY_ALL)
 
-    this.index = this.client.initIndex(ALGOLIA_INDEX)
+    this.indices = []
+  }
+  getIndex(ctx) {
+    const { name, stage } = ctx.prisma._meta.service
+
+    if (this.indices[name] && this.indices[name][stage])
+      return this.indices[name][stage]
+
+    if (!this.indices[name]) this.indices[name] = []
+
+    this.indices[name][stage] = this.client.initIndex(name + '_' + stage)
+
+    return this.indices[name][stage]
   }
   async getNode(ctx, id) {
     const { tags, flags, ...node } = await ctx.prisma.query.zNode(
@@ -46,22 +58,22 @@ class Algolia {
   }
   async addNode(ctx, nodeId) {
     const node = await this.getNode(ctx, nodeId)
-    this.index.addObject(node)
+    this.getIndex(ctx).addObject(node)
   }
   async updateNode(ctx, nodeId) {
     const node = await this.getNode(ctx, nodeId)
-    this.index.saveObject(node)
+    this.getIndex(ctx).saveObject(node)
   }
   removeNode(ctx, nodeId) {
-    this.index.deleteObject(nodeId)
+    this.getIndex(ctx).deleteObject(nodeId)
   }
-  search({ text, tags = [], flags = [], first, skip }) {
+  search(ctx, { text, tags = [], flags = [], first, skip }) {
     tags = tags.map(t => `tag:"${t}"`)
     flags = flags.map(f => `flag:"${f}"`)
 
     const filters = tags.concat(flags).join(' AND ')
 
-    return this.query({
+    return this.query(ctx, {
       query: text,
       filters,
       offset: skip,
@@ -70,8 +82,8 @@ class Algolia {
       removeWordsIfNoResults: 'allOptional'
     })
   }
-  async query(params) {
-    const content = await this.index.search(params)
+  async query(ctx, params) {
+    const content = await this.getIndex(ctx).search(params)
 
     const ids = content.hits.map(h => h.objectID)
 

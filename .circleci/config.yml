@@ -93,6 +93,8 @@ jobs:
           cp -R server/* ${DEPLOY_DIR}/
           cp -R build/ ${DEPLOY_DIR}/front_build
           cd ${DEPLOY_DIR}
+          cp prisma/prisma.yml scripts/deploy_all/
+          cp prisma/datamodel.graphql scripts/deploy_all/
           git init
           git config user.email "dsi-ext@zenika.com"
           git config user.name "DSI Ext"
@@ -103,7 +105,6 @@ jobs:
           git remote add clever git+ssh://git@${CLEVER_CLOUD_REMOTE_HOST}/${CLEVER_CLOUD_REMOTE_APP_ID}.git
           git push --force clever master
           npm run deploy
-          npm run algolia
 
 workflows:
   version: 2

@@ -3,7 +3,7 @@ const jwksRsa = require('jwks-rsa')
 
 if (!process.env.AUTH0_DOMAIN) {
   throw Error(
-    'Missing env var: AUTH0_DOMAIN. You won\'t be able to authenticate into the app'
+    "Missing env var: AUTH0_DOMAIN. You won't be able to authenticate into the app"
   )
 }
 

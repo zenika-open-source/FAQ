@@ -52,6 +52,7 @@ More documentation available here:
 - [Contributing](/docs/contributing.md)
 - [Backing services](/docs/backing_services.md)
 - [Integrations](/docs/integrations.md)
+- [Multi-tenancy](/docs/multi-tenancy.md)
 
 ## License
 
