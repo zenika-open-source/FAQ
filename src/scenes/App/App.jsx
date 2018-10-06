@@ -2,6 +2,8 @@ import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 import Helmet from 'react-helmet'
 
+import { ConfigurationProvider } from 'services/configuration'
+
 import Auth from 'scenes/Auth'
 import Home from 'scenes/Home'
 import Question from 'scenes/Question'
@@ -22,13 +24,15 @@ const App = () => (
     </Helmet>
     <Navbar />
     <div className="main">
-      <Switch>
-        <PrivateRoute exact path="/" component={Home} />
-        <Route path="/auth" component={Auth} />
-        <PrivateRoute path="/q" component={Question} />
-        <PrivateRoute path="/user-profile" component={UserProfile} />
-        <PrivateRoute component={NotFound} />
-      </Switch>
+      <ConfigurationProvider>
+        <Switch>
+          <PrivateRoute exact path="/" component={Home} />
+          <Route path="/auth" component={Auth} />
+          <PrivateRoute path="/q" component={Question} />
+          <PrivateRoute path="/user-profile" component={UserProfile} />
+          <PrivateRoute component={NotFound} />
+        </Switch>
+      </ConfigurationProvider>
     </div>
     <Footer />
   </div>

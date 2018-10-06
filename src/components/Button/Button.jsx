@@ -17,7 +17,6 @@ class Button extends Component {
       round,
       active,
       raised,
-      //disabled,
       fixed,
       ...otherProps
     } = this.props
@@ -31,7 +30,6 @@ class Button extends Component {
       'round',
       'active',
       'raised',
-      //'disabled',
       'fixed'
     ].reduce((acc, m) => {
       this.props[m] && (acc[m] = b2s(this.props[m]))

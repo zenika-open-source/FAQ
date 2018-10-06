@@ -16,7 +16,10 @@ module.exports = {
     authenticate: async (_, { idToken }, ctx, info) => {
       let userToken = null
       try {
-        userToken = await validateAndParseIdToken(idToken)
+        userToken = await validateAndParseIdToken(
+          idToken,
+          ctx.prisma._meta.configuration
+        )
       } catch (err) {
         throw new Error(err.message)
       }

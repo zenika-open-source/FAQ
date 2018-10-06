@@ -9,27 +9,30 @@ import Callback from './Callback'
 
 import Authenticated from 'components/Authenticated'
 
-const Auth = ({ match }) => (
-  <Switch>
-    <Route
-      path={`${match.url}/login`}
-      render={() => (
-        <Authenticated reverse redirect="/">
-          <Login />
-        </Authenticated>
-      )}
-    />
-    <Route path={`${match.url}/callback`} component={Callback} />
-    <Route
-      path={`${match.url}/logout`}
-      render={() => {
-        auth.logout()
-        return <Redirect to="/" />
-      }}
-    />
-    <Route render={() => <Redirect to="/" />} />
-  </Switch>
-)
+const Auth = ({ match }) => {
+  auth.initAuth0()
+  return (
+    <Switch>
+      <Route
+        path={`${match.url}/login`}
+        render={() => (
+          <Authenticated reverse redirect="/">
+            <Login />
+          </Authenticated>
+        )}
+      />
+      <Route path={`${match.url}/callback`} component={Callback} />
+      <Route
+        path={`${match.url}/logout`}
+        render={() => {
+          auth.logout()
+          return <Redirect to="/" />
+        }}
+      />
+      <Route render={() => <Redirect to="/" />} />
+    </Switch>
+  )
+}
 
 Auth.propTypes = {
   match: PropTypes.object.isRequired

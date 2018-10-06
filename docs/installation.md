@@ -1,67 +1,93 @@
 # Installation
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+Here are the instructions to quickly install and run this project with the minimum [backing services](/docs/backing_services.md) required.
 
-## Global dependencies
+## 1/ Global dependencies
 
-Before you install this project, you will need the following dependencies:
+First, you will need the following dependencies:
 
 - Docker >= 16 and docker-compose >= 1.18 (See https://www.docker.com)
 - Node >= 8 and npm >= 5 (See https://nodejs.org)
 
-> These are the currently known minimum version required. An earlier version may still work.
+> These are the currently known minimum versions required. Earlier versions may still work.
 
-## Installation
+## 2/ Clone repository
 
-First, clone the repository
+Clone this repository
 
 ```bash
-# Path: ./
 git clone https://github.com/Zenika/FAQ
 ```
 
-Then, install the dependencies of the project (Front-end & Back-end)
+## 3/ Install project dependencies
 
 ```bash
 # Path: ./FAQ/
 npm install
 
-cd server/
+# Path: ./FAQ/server
 npm install
 ```
 
-## Configuration
+## 4/ Create your environment files
 
-The app requires some environment variables to properly wire up to its backing services and integrations. See the [backing services documentation](/docs/backing_services.md) and the [integrations documentation](/docs/integrations.md) for more information on which environment variables you need.
+This project uses 2 `.env.local` file to configure its environment variables.
 
-You may define environment variables manually or you may use an `.env.local` file. This file is picked up by npm scripts. You can read an introduction to `.env` files [here](https://www.npmjs.com/package/dotenv). An `.env.local.example` file is provided with the project to initialize your own copy of `.env.local`.
+- The first `.env.local` file (for the frontend) needs to be created at the root of the project.
 
-**There is one file for the front-end at the root of the project and one for the back-end in `./server`.**
+```
+REACT_APP_FAQ_URL=faq.zenika.com
 
-## Initializing Prisma
+REACT_APP_GRAPHQL_ENDPOINT=http://localhost:4000/gql
+REACT_APP_PRISMA_SERVICE=default/default
+```
 
-The backend requires Prisma and a postgresql database to run.
+- The second `.env.local` file (for the backend) needs to be created in the `server` folder.
 
-You can use dockerized containers for both:
+```
+PRISMA_URL=http://localhost:4466
+PRISMA_API_SECRET=secret-42
+PRISMA_MANAGEMENT_API_SECRET=my-secret-42
+```
+
+## 5/ Initialize local Prisma instance
+
+```bash
+# Path: ./FAQ/server/prisma
+PRISMA_MANAGEMENT_API_SECRET=my-secret-42 docker-compose up
+```
+
+## 6/ Deploy and initializa your default service
+
+You will need your Auth0 credentials for this step.
+
+If you have a zenika.com email address, you can use the following credentials:
+
+> `AUTH0_DOMAIN` = `zenika.eu.auth0.com`
+>
+> `AUTH0_CLIENT_ID` = `wq8LU1f5iXQ4HWL0F6Z07QDcSMgWPd1p`
+
+Otherwise, you can find them on your [Auth0 dashboard](https://manage.auth0.com).
 
 ```bash
 # Path: ./FAQ/server
-npm run docker_local_up
+AUTH0_DOMAIN=your_domain AUTH0_CLIENT_ID=your npm run first_deploy
 ```
 
-## Start
-
-When your configuration is ready, deploy and start your back-end
+## 7/ Run the backend
 
 ```bash
 # Path: ./FAQ/server
-npm run deploy
-npm run start
+npm start
 ```
 
-Finally, start the application
+## 8/ Run the frontend
 
 ```bash
 # Path: ./FAQ/
 npm start
 ```
+
+And you should now have an up and running FAQ at http://localhost:3000! 🎉
+
+But wait! It's only the slim version with only the required backing services. If you want to activate more features (e.g.: Algolia, Slack, Mailgun, ...), you will need to follow the [full configuration instructions](/docs/configuration.md).

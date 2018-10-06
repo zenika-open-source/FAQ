@@ -4,9 +4,9 @@ import PropTypes from 'prop-types'
 import onClickOutside from 'react-onclickoutside'
 import map from 'lodash/map'
 
-import Button from 'components/Button'
+import { configuration } from 'services'
 
-import Tags from 'components/Tags'
+import { Button } from 'components'
 
 import './TagPicker.css'
 
@@ -22,6 +22,8 @@ class TagPicker extends Component {
   render() {
     const { label, icon, tags, onChange } = this.props
     const { opened } = this.state
+
+    const tagList = configuration.tags
 
     return (
       <div className="tagpicker">
@@ -50,7 +52,7 @@ class TagPicker extends Component {
           />
           <div className="picker" style={{ display: opened ? 'flex' : 'none' }}>
             <div className="picker-body">
-              {map(Tags.list, (category, name) => (
+              {map(tagList, (category, name) => (
                 <div key={name} className="category">
                   {category.map(tag => {
                     const isSelected = tags.includes(tag)

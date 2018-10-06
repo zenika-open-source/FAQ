@@ -35,4 +35,4 @@ This commands generate a `stats.json` file which you can vizualize on this [webs
 
 ## Algolia Synonyms
 
-To add a synonym for Algolia's full-text search, modify the [synonyms.json](server/algolia/synonyms.json) file. ([Algolia documentation on synonyms](https://www.algolia.com/doc/guides/textual-relevance/synonyms/))
+To add a synonym for Algolia's full-text search, modify the [synonyms.json](/server/scripts/algolia_settings/synonyms.json) file. ([Algolia documentation on synonyms](https://www.algolia.com/doc/guides/textual-relevance/synonyms/))

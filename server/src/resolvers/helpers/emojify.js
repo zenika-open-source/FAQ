@@ -1,3 +1,5 @@
+const emojis = require('emojilib/simplemap.json')
+
 const emojify = text => {
   let emoticons = {
     ':)': ':slightly_smiling_face:',
@@ -10,9 +12,12 @@ const emojify = text => {
   }
 
   // Ascii emoticons to :emoji:
-  return Object.keys(emoticons).reduce((text, emoticon) => {
+  text = Object.keys(emoticons).reduce((text, emoticon) => {
     return text.split(emoticon + ' ').join(emoticons[emoticon] + ' ')
   }, text)
+
+  // :emoji: to unicode emojis
+  return text.replace(/:(\w+):/gi, (str, name) => emojis[name] || str)
 }
 
 module.exports = emojify
