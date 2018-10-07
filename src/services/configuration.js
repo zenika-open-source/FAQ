@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
+import routing from './routing.js'
+
 import { Loading } from 'components'
 
 class Configuration {
@@ -20,8 +22,8 @@ class Configuration {
 
   async load() {
     const configuration = await fetch(
-      'http://localhost:4000/gql/configuration',
-      { headers: { 'prisma-service': 'default/default' } }
+      process.env.REACT_APP_GRAPHQL_ENDPOINT + '/configuration',
+      { headers: { 'prisma-service': routing.getPrismaService() } }
     ).then(res => res.json())
     this.setData(configuration)
   }

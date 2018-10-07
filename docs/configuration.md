@@ -51,6 +51,8 @@ mutation {
 }
 ```
 
+**Important note:** The configuration is cached by the backend. You will need to restart it after you create/update a configuration!
+
 > See below for a list of configuration variables
 
 ## Updating a configuration
@@ -74,6 +76,8 @@ mutation {
   }
 }
 ```
+
+**Important note:** The configuration is cached by the backend. You will need to restart it after you create/update a configuration!
 
 > See below for a list of configuration variables
 
