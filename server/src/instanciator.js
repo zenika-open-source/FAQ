@@ -10,7 +10,7 @@ class Instanciator {
     const service = req.headers['prisma-service']
 
     if (!service) {
-      throw Error("No 'prisma-service' header found, please provide one")
+      throw Error('No \'prisma-service\' header found, please provide one')
     }
 
     const [name, stage] = service.match(/([^/]+)\/([^/]+)/).splice(1, 2)
@@ -44,7 +44,8 @@ class Instanciator {
       service: {
         name,
         stage
-      }
+      },
+      configuration: null
     }
 
     if (!this.instances[name]) this.instances[name] = {}
@@ -52,6 +53,22 @@ class Instanciator {
     this.instances[name][stage] = instance
 
     return instance
+  }
+
+  async getConfiguration(req, next) {
+    const instance = this.current(req)
+
+    if (instance._meta.configuration) {
+      next()
+      return
+    }
+
+    const conf = await instance.query.configuration({
+      where: { name: 'default' }
+    })
+
+    instance._meta.configuration = conf
+    next()
   }
 }
 

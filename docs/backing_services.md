@@ -19,40 +19,40 @@ The project has the following backing services:
 
 In Algolia, you can use synonyms to improve full-text search (eg: "travel <=> trip").
 
-You can define synonyms in the [synonyms.json](/server/algolia/synonyms.json) file.
+You can define synonyms in the [synonyms.json](/server/scripts/algolia_settings/synonyms.json) file.
 
-Deploy these synonyms with the following command:
+Don't forget to redeploy after you edited the file
 
 ```bash
 # Path: ./FAQ/server
-npm run algolia
+npm run deploy
 ```
 
-### Environment variables
+### Configuration variables
 
-| Name | Used by | Notes |
-| -- | -- | -- |
-| `ALGOLIA_APP_ID` | Backend | This variable is the ID of your Algolia project. You can find it on your project interface on the [Algolia dashboard](https://www.algolia.com/dashboard). It should be a string of 10 chars (digit or uppercase letter). |
-| `API_KEY_ALL` | Backend | This variable is an API Key with the following operation access rights: `search`, `addObject`, `deleteObject`, `editSettings`. You can create an API key on your [Algolia dashboard](https://www.algolia.com/dashboard): Go to "API Keys > All API keys" |
+| Name | Notes |
+| -- | -- |
+| `algoliaAppId`| This variable is the ID of your Algolia project. You can find it on your project interface on the [Algolia dashboard](https://www.algolia.com/dashboard). It should be a string of 10 chars (digit or uppercase letter). |
+| `algoliaApiKey` | This variable is the admin API key. You can find it on your [Algolia dashboard](https://www.algolia.com/dashboard): Go to "API Keys > Your API Keys" |
 
 ## Auth0
 
 [Auth0](https://auth0.com/) is used for authentication. This is required dependency.
 
-> Note: Auth0 is required
+> Note: Auth0 is **required**
 
-### Environment variables
+### Configuration variables
 
-| Name | Used by | Notes |
-| -- | -- | -- |
-| `REACT_APP_AUTH0_DOMAIN` & `AUTH0_DOMAIN` | Frontend & Backend | Its value should be the Auth0 domain against which the app should authenticate. It ends with `auth0.com` and it can be found on the [Auth0 dashboard](https://manage.auth0.com). |
-| `REACT_APP_AUTH0_CLIENTID` & `AUTH0_CLIENTID` | Frontend & Backend | Its value should be the id of your Auth0 client against which the app should authenticate. It looks like a long string of random chars and can be found on the [Auth0 dashboard](https://manage.auth0.com): Go to "Clients > [Your client] > Settings" |
+| Name | Notes |
+| -- | -- |
+| `auth0Domain` | Its value should be the Auth0 domain against which the app should authenticate. It ends with `auth0.com` and it can be found on the [Auth0 dashboard](https://manage.auth0.com). |
+| `auth0ClientId` | Its value should be the id of your Auth0 client against which the app should authenticate. It looks like a long string of random chars and can be found on the [Auth0 dashboard](https://manage.auth0.com): Go to "Clients > [Your client] > Settings" |
 
-> If you have a zenika.com email address, you may use:
+> If you have a zenika.com email address, you can use the following credentials:
 >
-> `AUTH0_DOMAIN` = `zenika.eu.auth0.com`
+> `auth0Domain` = `zenika.eu.auth0.com`
 >
-> `AUTH0_CLIENTID` = `wq8LU1f5iXQ4HWL0F6Z07QDcSMgWPd1p`
+> `auth0ClientId` = `wq8LU1f5iXQ4HWL0F6Z07QDcSMgWPd1p`
 
 ## Mailgun
 
@@ -61,11 +61,11 @@ npm run algolia
 > Note: Mailgun is optional for the development.
 >
 > If you do not indicate an API key for Mailgun, the application will silently
-> throw an error in the backend logs
+> warn in the backend logs
 
-### Environment variables
+### Configuration variables
 
-| Name | Used by | Notes |
-| -- | -- | -- |
-| `MAILGUN_DOMAIN` | Backend | Its value should be the domain associated with the email sent by this project (eg: faq.zenika.com). It can be found on the [Mailgun dashboard](https://app.mailgun.com). |
-| `MAILGUN_API_KEY` | Backend | Its value should be the api key used to send emails. It looks like a long string of random letters starting with "key-" and can be found in the settings of your project on the [Mailgun dashboard](https://app.mailgun.com). |
+| Name | Notes |
+| -- | -- |
+| `mailgunDomain` | Its value should be the domain associated with the email sent by this project (eg: faq.zenika.com). It can be found on the [Mailgun dashboard](https://app.mailgun.com). |
+| `mailgunApiKey` | Its value should be the api key used to send emails. It looks like a long string of random letters starting with "key-" and can be found in the settings of your project on the [Mailgun dashboard](https://app.mailgun.com). |

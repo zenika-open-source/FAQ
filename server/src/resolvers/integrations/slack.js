@@ -3,15 +3,21 @@ const fetch = require('isomorphic-fetch')
 const { emojify } = require('../helpers')
 
 class Slack {
-  constructor() {
-    this.channelHook = process.env.SLACK_CHANNEL_HOOK
-
-    if (!this.channelHook) {
-      // eslint-disable-next-line no-console
-      console.log('Please provide a valid slack channel hook!')
-    }
-  }
   async sendToChannel(ctx, nodeId) {
+    const {
+      service: { name, stage },
+      configuration: conf
+    } = ctx.prisma._meta
+    const { origin } = ctx.request.headers
+
+    if (!conf.slackChannelHook) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        `Please provide a slack channel hook for service ${name}/${stage}`
+      )
+      return
+    }
+
     const node = await ctx.prisma.query.zNode(
       { where: { id: nodeId } },
       `
@@ -25,15 +31,13 @@ class Slack {
       `
     )
 
-    const url =
-      `https://${process.env['FAQ_URL']}/` +
-      `q/${node.question.slug}-${node.id}`
+    const url = origin + `/q/${node.question.slug}-${node.id}`
 
     const message = {
       text: `<${url}|${emojify(node.question.title)}>`
     }
 
-    return fetch(this.channelHook, {
+    return fetch(conf.slackChannelHook, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

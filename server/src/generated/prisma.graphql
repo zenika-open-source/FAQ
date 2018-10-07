@@ -1,7 +1,8 @@
-# source: http://localhost:4466
-# timestamp: Sun Sep 02 2018 12:34:46 GMT+0200 (Central European Summer Time)
-
 type AggregateAnswer {
+  count: Int!
+}
+
+type AggregateConfiguration {
   count: Int!
 }
 
@@ -33,22 +34,18 @@ type AggregateZNode {
   count: Int!
 }
 
-type Answer implements Node {
+type Answer {
   id: ID!
   content: String!
   sources(where: SourceWhereInput, orderBy: SourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Source!]
-  node(where: ZNodeWhereInput): ZNode!
-  user(where: UserWhereInput): User!
+  node: ZNode!
+  user: User!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
 
-"""A connection to a list of items."""
 type AnswerConnection {
-  """Information to aid in pagination."""
   pageInfo: PageInfo!
-
-  """A list of edges."""
   edges: [AnswerEdge]!
   aggregate: AggregateAnswer!
 }
@@ -93,12 +90,8 @@ input AnswerCreateWithoutUserInput {
   node: ZNodeCreateOneWithoutAnswerInput!
 }
 
-"""An edge in a connection."""
 type AnswerEdge {
-  """The item at the end of the edge."""
   node: Answer!
-
-  """A cursor for use in pagination."""
   cursor: String!
 }
 
@@ -128,86 +121,64 @@ type AnswerSubscriptionPayload {
 }
 
 input AnswerSubscriptionWhereInput {
-  """Logical AND on all given filters."""
-  AND: [AnswerSubscriptionWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [AnswerSubscriptionWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [AnswerSubscriptionWhereInput!]
-
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
   mutation_in: [MutationType!]
-
-  """
-  The subscription event gets only dispatched when one of the updated fields names is included in this list
-  """
   updatedFields_contains: String
-
-  """
-  The subscription event gets only dispatched when all of the field names included in this list have been updated
-  """
   updatedFields_contains_every: [String!]
-
-  """
-  The subscription event gets only dispatched when some of the field names included in this list have been updated
-  """
   updatedFields_contains_some: [String!]
   node: AnswerWhereInput
+  AND: [AnswerSubscriptionWhereInput!]
+  OR: [AnswerSubscriptionWhereInput!]
+  NOT: [AnswerSubscriptionWhereInput!]
 }
 
 input AnswerUpdateInput {
   content: String
   sources: SourceUpdateManyWithoutAnswerInput
-  node: ZNodeUpdateOneWithoutAnswerInput
-  user: UserUpdateOneWithoutAnswersInput
+  node: ZNodeUpdateOneRequiredWithoutAnswerInput
+  user: UserUpdateOneRequiredWithoutAnswersInput
 }
 
 input AnswerUpdateManyWithoutUserInput {
   create: [AnswerCreateWithoutUserInput!]
+  delete: [AnswerWhereUniqueInput!]
   connect: [AnswerWhereUniqueInput!]
   disconnect: [AnswerWhereUniqueInput!]
-  delete: [AnswerWhereUniqueInput!]
   update: [AnswerUpdateWithWhereUniqueWithoutUserInput!]
   upsert: [AnswerUpsertWithWhereUniqueWithoutUserInput!]
 }
 
-input AnswerUpdateOneWithoutNodeInput {
-  create: AnswerCreateWithoutNodeInput
-  connect: AnswerWhereUniqueInput
-  disconnect: Boolean
-  delete: Boolean
-  update: AnswerUpdateWithoutNodeDataInput
-  upsert: AnswerUpsertWithoutNodeInput
-}
-
-input AnswerUpdateOneWithoutSourcesInput {
+input AnswerUpdateOneRequiredWithoutSourcesInput {
   create: AnswerCreateWithoutSourcesInput
-  connect: AnswerWhereUniqueInput
-  delete: Boolean
   update: AnswerUpdateWithoutSourcesDataInput
   upsert: AnswerUpsertWithoutSourcesInput
+  connect: AnswerWhereUniqueInput
+}
+
+input AnswerUpdateOneWithoutNodeInput {
+  create: AnswerCreateWithoutNodeInput
+  update: AnswerUpdateWithoutNodeDataInput
+  upsert: AnswerUpsertWithoutNodeInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: AnswerWhereUniqueInput
 }
 
 input AnswerUpdateWithoutNodeDataInput {
   content: String
   sources: SourceUpdateManyWithoutAnswerInput
-  user: UserUpdateOneWithoutAnswersInput
+  user: UserUpdateOneRequiredWithoutAnswersInput
 }
 
 input AnswerUpdateWithoutSourcesDataInput {
   content: String
-  node: ZNodeUpdateOneWithoutAnswerInput
-  user: UserUpdateOneWithoutAnswersInput
+  node: ZNodeUpdateOneRequiredWithoutAnswerInput
+  user: UserUpdateOneRequiredWithoutAnswersInput
 }
 
 input AnswerUpdateWithoutUserDataInput {
   content: String
   sources: SourceUpdateManyWithoutAnswerInput
-  node: ZNodeUpdateOneWithoutAnswerInput
+  node: ZNodeUpdateOneRequiredWithoutAnswerInput
 }
 
 input AnswerUpdateWithWhereUniqueWithoutUserInput {
@@ -232,143 +203,58 @@ input AnswerUpsertWithWhereUniqueWithoutUserInput {
 }
 
 input AnswerWhereInput {
-  """Logical AND on all given filters."""
-  AND: [AnswerWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [AnswerWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [AnswerWhereInput!]
   id: ID
-
-  """All values that are not equal to given value."""
   id_not: ID
-
-  """All values that are contained in given list."""
   id_in: [ID!]
-
-  """All values that are not contained in given list."""
   id_not_in: [ID!]
-
-  """All values less than the given value."""
   id_lt: ID
-
-  """All values less than or equal the given value."""
   id_lte: ID
-
-  """All values greater than the given value."""
   id_gt: ID
-
-  """All values greater than or equal the given value."""
   id_gte: ID
-
-  """All values containing the given string."""
   id_contains: ID
-
-  """All values not containing the given string."""
   id_not_contains: ID
-
-  """All values starting with the given string."""
   id_starts_with: ID
-
-  """All values not starting with the given string."""
   id_not_starts_with: ID
-
-  """All values ending with the given string."""
   id_ends_with: ID
-
-  """All values not ending with the given string."""
   id_not_ends_with: ID
   content: String
-
-  """All values that are not equal to given value."""
   content_not: String
-
-  """All values that are contained in given list."""
   content_in: [String!]
-
-  """All values that are not contained in given list."""
   content_not_in: [String!]
-
-  """All values less than the given value."""
   content_lt: String
-
-  """All values less than or equal the given value."""
   content_lte: String
-
-  """All values greater than the given value."""
   content_gt: String
-
-  """All values greater than or equal the given value."""
   content_gte: String
-
-  """All values containing the given string."""
   content_contains: String
-
-  """All values not containing the given string."""
   content_not_contains: String
-
-  """All values starting with the given string."""
   content_starts_with: String
-
-  """All values not starting with the given string."""
   content_not_starts_with: String
-
-  """All values ending with the given string."""
   content_ends_with: String
-
-  """All values not ending with the given string."""
   content_not_ends_with: String
-  createdAt: DateTime
-
-  """All values that are not equal to given value."""
-  createdAt_not: DateTime
-
-  """All values that are contained in given list."""
-  createdAt_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  createdAt_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  createdAt_lt: DateTime
-
-  """All values less than or equal the given value."""
-  createdAt_lte: DateTime
-
-  """All values greater than the given value."""
-  createdAt_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  createdAt_gte: DateTime
-  updatedAt: DateTime
-
-  """All values that are not equal to given value."""
-  updatedAt_not: DateTime
-
-  """All values that are contained in given list."""
-  updatedAt_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  updatedAt_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  updatedAt_lt: DateTime
-
-  """All values less than or equal the given value."""
-  updatedAt_lte: DateTime
-
-  """All values greater than the given value."""
-  updatedAt_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  updatedAt_gte: DateTime
   sources_every: SourceWhereInput
   sources_some: SourceWhereInput
   sources_none: SourceWhereInput
   node: ZNodeWhereInput
   user: UserWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [AnswerWhereInput!]
+  OR: [AnswerWhereInput!]
+  NOT: [AnswerWhereInput!]
 }
 
 input AnswerWhereUniqueInput {
@@ -376,26 +262,270 @@ input AnswerWhereUniqueInput {
 }
 
 type BatchPayload {
-  """The number of nodes that have been affected by the Batch operation."""
   count: Long!
+}
+
+type Configuration {
+  id: ID!
+  name: String!
+  algoliaAppId: String
+  algoliaApiKey: String
+  algoliaSynonyms: Json
+  auth0Domain: String!
+  auth0ClientId: String!
+  mailgunDomain: String
+  mailgunApiKey: String
+  slackChannelHook: String
+  tags: Json
+}
+
+type ConfigurationConnection {
+  pageInfo: PageInfo!
+  edges: [ConfigurationEdge]!
+  aggregate: AggregateConfiguration!
+}
+
+input ConfigurationCreateInput {
+  name: String!
+  algoliaAppId: String
+  algoliaApiKey: String
+  algoliaSynonyms: Json
+  auth0Domain: String!
+  auth0ClientId: String!
+  mailgunDomain: String
+  mailgunApiKey: String
+  slackChannelHook: String
+  tags: Json
+}
+
+type ConfigurationEdge {
+  node: Configuration!
+  cursor: String!
+}
+
+enum ConfigurationOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  algoliaAppId_ASC
+  algoliaAppId_DESC
+  algoliaApiKey_ASC
+  algoliaApiKey_DESC
+  algoliaSynonyms_ASC
+  algoliaSynonyms_DESC
+  auth0Domain_ASC
+  auth0Domain_DESC
+  auth0ClientId_ASC
+  auth0ClientId_DESC
+  mailgunDomain_ASC
+  mailgunDomain_DESC
+  mailgunApiKey_ASC
+  mailgunApiKey_DESC
+  slackChannelHook_ASC
+  slackChannelHook_DESC
+  tags_ASC
+  tags_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type ConfigurationPreviousValues {
+  id: ID!
+  name: String!
+  algoliaAppId: String
+  algoliaApiKey: String
+  algoliaSynonyms: Json
+  auth0Domain: String!
+  auth0ClientId: String!
+  mailgunDomain: String
+  mailgunApiKey: String
+  slackChannelHook: String
+  tags: Json
+}
+
+type ConfigurationSubscriptionPayload {
+  mutation: MutationType!
+  node: Configuration
+  updatedFields: [String!]
+  previousValues: ConfigurationPreviousValues
+}
+
+input ConfigurationSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: ConfigurationWhereInput
+  AND: [ConfigurationSubscriptionWhereInput!]
+  OR: [ConfigurationSubscriptionWhereInput!]
+  NOT: [ConfigurationSubscriptionWhereInput!]
+}
+
+input ConfigurationUpdateInput {
+  name: String
+  algoliaAppId: String
+  algoliaApiKey: String
+  algoliaSynonyms: Json
+  auth0Domain: String
+  auth0ClientId: String
+  mailgunDomain: String
+  mailgunApiKey: String
+  slackChannelHook: String
+  tags: Json
+}
+
+input ConfigurationWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  algoliaAppId: String
+  algoliaAppId_not: String
+  algoliaAppId_in: [String!]
+  algoliaAppId_not_in: [String!]
+  algoliaAppId_lt: String
+  algoliaAppId_lte: String
+  algoliaAppId_gt: String
+  algoliaAppId_gte: String
+  algoliaAppId_contains: String
+  algoliaAppId_not_contains: String
+  algoliaAppId_starts_with: String
+  algoliaAppId_not_starts_with: String
+  algoliaAppId_ends_with: String
+  algoliaAppId_not_ends_with: String
+  algoliaApiKey: String
+  algoliaApiKey_not: String
+  algoliaApiKey_in: [String!]
+  algoliaApiKey_not_in: [String!]
+  algoliaApiKey_lt: String
+  algoliaApiKey_lte: String
+  algoliaApiKey_gt: String
+  algoliaApiKey_gte: String
+  algoliaApiKey_contains: String
+  algoliaApiKey_not_contains: String
+  algoliaApiKey_starts_with: String
+  algoliaApiKey_not_starts_with: String
+  algoliaApiKey_ends_with: String
+  algoliaApiKey_not_ends_with: String
+  auth0Domain: String
+  auth0Domain_not: String
+  auth0Domain_in: [String!]
+  auth0Domain_not_in: [String!]
+  auth0Domain_lt: String
+  auth0Domain_lte: String
+  auth0Domain_gt: String
+  auth0Domain_gte: String
+  auth0Domain_contains: String
+  auth0Domain_not_contains: String
+  auth0Domain_starts_with: String
+  auth0Domain_not_starts_with: String
+  auth0Domain_ends_with: String
+  auth0Domain_not_ends_with: String
+  auth0ClientId: String
+  auth0ClientId_not: String
+  auth0ClientId_in: [String!]
+  auth0ClientId_not_in: [String!]
+  auth0ClientId_lt: String
+  auth0ClientId_lte: String
+  auth0ClientId_gt: String
+  auth0ClientId_gte: String
+  auth0ClientId_contains: String
+  auth0ClientId_not_contains: String
+  auth0ClientId_starts_with: String
+  auth0ClientId_not_starts_with: String
+  auth0ClientId_ends_with: String
+  auth0ClientId_not_ends_with: String
+  mailgunDomain: String
+  mailgunDomain_not: String
+  mailgunDomain_in: [String!]
+  mailgunDomain_not_in: [String!]
+  mailgunDomain_lt: String
+  mailgunDomain_lte: String
+  mailgunDomain_gt: String
+  mailgunDomain_gte: String
+  mailgunDomain_contains: String
+  mailgunDomain_not_contains: String
+  mailgunDomain_starts_with: String
+  mailgunDomain_not_starts_with: String
+  mailgunDomain_ends_with: String
+  mailgunDomain_not_ends_with: String
+  mailgunApiKey: String
+  mailgunApiKey_not: String
+  mailgunApiKey_in: [String!]
+  mailgunApiKey_not_in: [String!]
+  mailgunApiKey_lt: String
+  mailgunApiKey_lte: String
+  mailgunApiKey_gt: String
+  mailgunApiKey_gte: String
+  mailgunApiKey_contains: String
+  mailgunApiKey_not_contains: String
+  mailgunApiKey_starts_with: String
+  mailgunApiKey_not_starts_with: String
+  mailgunApiKey_ends_with: String
+  mailgunApiKey_not_ends_with: String
+  slackChannelHook: String
+  slackChannelHook_not: String
+  slackChannelHook_in: [String!]
+  slackChannelHook_not_in: [String!]
+  slackChannelHook_lt: String
+  slackChannelHook_lte: String
+  slackChannelHook_gt: String
+  slackChannelHook_gte: String
+  slackChannelHook_contains: String
+  slackChannelHook_not_contains: String
+  slackChannelHook_starts_with: String
+  slackChannelHook_not_starts_with: String
+  slackChannelHook_ends_with: String
+  slackChannelHook_not_ends_with: String
+  AND: [ConfigurationWhereInput!]
+  OR: [ConfigurationWhereInput!]
+  NOT: [ConfigurationWhereInput!]
+}
+
+input ConfigurationWhereUniqueInput {
+  id: ID
+  name: String
 }
 
 scalar DateTime
 
-type Flag implements Node {
+type Flag {
   id: ID!
   type: String!
-  node(where: ZNodeWhereInput): ZNode!
-  user(where: UserWhereInput): User!
+  node: ZNode!
+  user: User!
   createdAt: DateTime!
 }
 
-"""A connection to a list of items."""
 type FlagConnection {
-  """Information to aid in pagination."""
   pageInfo: PageInfo!
-
-  """A list of edges."""
   edges: [FlagEdge]!
   aggregate: AggregateFlag!
 }
@@ -426,12 +556,8 @@ input FlagCreateWithoutUserInput {
   node: ZNodeCreateOneWithoutFlagsInput!
 }
 
-"""An edge in a connection."""
 type FlagEdge {
-  """The item at the end of the edge."""
   node: Flag!
-
-  """A cursor for use in pagination."""
   cursor: String!
 }
 
@@ -460,69 +586,48 @@ type FlagSubscriptionPayload {
 }
 
 input FlagSubscriptionWhereInput {
-  """Logical AND on all given filters."""
-  AND: [FlagSubscriptionWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [FlagSubscriptionWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [FlagSubscriptionWhereInput!]
-
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
   mutation_in: [MutationType!]
-
-  """
-  The subscription event gets only dispatched when one of the updated fields names is included in this list
-  """
   updatedFields_contains: String
-
-  """
-  The subscription event gets only dispatched when all of the field names included in this list have been updated
-  """
   updatedFields_contains_every: [String!]
-
-  """
-  The subscription event gets only dispatched when some of the field names included in this list have been updated
-  """
   updatedFields_contains_some: [String!]
   node: FlagWhereInput
+  AND: [FlagSubscriptionWhereInput!]
+  OR: [FlagSubscriptionWhereInput!]
+  NOT: [FlagSubscriptionWhereInput!]
 }
 
 input FlagUpdateInput {
   type: String
-  node: ZNodeUpdateOneWithoutFlagsInput
-  user: UserUpdateOneWithoutFlagsInput
+  node: ZNodeUpdateOneRequiredWithoutFlagsInput
+  user: UserUpdateOneRequiredWithoutFlagsInput
 }
 
 input FlagUpdateManyWithoutNodeInput {
   create: [FlagCreateWithoutNodeInput!]
+  delete: [FlagWhereUniqueInput!]
   connect: [FlagWhereUniqueInput!]
   disconnect: [FlagWhereUniqueInput!]
-  delete: [FlagWhereUniqueInput!]
   update: [FlagUpdateWithWhereUniqueWithoutNodeInput!]
   upsert: [FlagUpsertWithWhereUniqueWithoutNodeInput!]
 }
 
 input FlagUpdateManyWithoutUserInput {
   create: [FlagCreateWithoutUserInput!]
+  delete: [FlagWhereUniqueInput!]
   connect: [FlagWhereUniqueInput!]
   disconnect: [FlagWhereUniqueInput!]
-  delete: [FlagWhereUniqueInput!]
   update: [FlagUpdateWithWhereUniqueWithoutUserInput!]
   upsert: [FlagUpsertWithWhereUniqueWithoutUserInput!]
 }
 
 input FlagUpdateWithoutNodeDataInput {
   type: String
-  user: UserUpdateOneWithoutFlagsInput
+  user: UserUpdateOneRequiredWithoutFlagsInput
 }
 
 input FlagUpdateWithoutUserDataInput {
   type: String
-  node: ZNodeUpdateOneWithoutFlagsInput
+  node: ZNodeUpdateOneRequiredWithoutFlagsInput
 }
 
 input FlagUpdateWithWhereUniqueWithoutNodeInput {
@@ -548,140 +653,65 @@ input FlagUpsertWithWhereUniqueWithoutUserInput {
 }
 
 input FlagWhereInput {
-  """Logical AND on all given filters."""
-  AND: [FlagWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [FlagWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [FlagWhereInput!]
   id: ID
-
-  """All values that are not equal to given value."""
   id_not: ID
-
-  """All values that are contained in given list."""
   id_in: [ID!]
-
-  """All values that are not contained in given list."""
   id_not_in: [ID!]
-
-  """All values less than the given value."""
   id_lt: ID
-
-  """All values less than or equal the given value."""
   id_lte: ID
-
-  """All values greater than the given value."""
   id_gt: ID
-
-  """All values greater than or equal the given value."""
   id_gte: ID
-
-  """All values containing the given string."""
   id_contains: ID
-
-  """All values not containing the given string."""
   id_not_contains: ID
-
-  """All values starting with the given string."""
   id_starts_with: ID
-
-  """All values not starting with the given string."""
   id_not_starts_with: ID
-
-  """All values ending with the given string."""
   id_ends_with: ID
-
-  """All values not ending with the given string."""
   id_not_ends_with: ID
   type: String
-
-  """All values that are not equal to given value."""
   type_not: String
-
-  """All values that are contained in given list."""
   type_in: [String!]
-
-  """All values that are not contained in given list."""
   type_not_in: [String!]
-
-  """All values less than the given value."""
   type_lt: String
-
-  """All values less than or equal the given value."""
   type_lte: String
-
-  """All values greater than the given value."""
   type_gt: String
-
-  """All values greater than or equal the given value."""
   type_gte: String
-
-  """All values containing the given string."""
   type_contains: String
-
-  """All values not containing the given string."""
   type_not_contains: String
-
-  """All values starting with the given string."""
   type_starts_with: String
-
-  """All values not starting with the given string."""
   type_not_starts_with: String
-
-  """All values ending with the given string."""
   type_ends_with: String
-
-  """All values not ending with the given string."""
   type_not_ends_with: String
-  createdAt: DateTime
-
-  """All values that are not equal to given value."""
-  createdAt_not: DateTime
-
-  """All values that are contained in given list."""
-  createdAt_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  createdAt_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  createdAt_lt: DateTime
-
-  """All values less than or equal the given value."""
-  createdAt_lte: DateTime
-
-  """All values greater than the given value."""
-  createdAt_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  createdAt_gte: DateTime
   node: ZNodeWhereInput
   user: UserWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  AND: [FlagWhereInput!]
+  OR: [FlagWhereInput!]
+  NOT: [FlagWhereInput!]
 }
 
 input FlagWhereUniqueInput {
   id: ID
 }
 
-type HistoryAction implements Node {
+type HistoryAction {
   id: ID!
   action: String!
   model: String!
   meta: Json
-  node(where: ZNodeWhereInput): ZNode!
-  user(where: UserWhereInput): User!
+  node: ZNode!
+  user: User!
   createdAt: DateTime!
 }
 
-"""A connection to a list of items."""
 type HistoryActionConnection {
-  """Information to aid in pagination."""
   pageInfo: PageInfo!
-
-  """A list of edges."""
   edges: [HistoryActionEdge]!
   aggregate: AggregateHistoryAction!
 }
@@ -718,12 +748,8 @@ input HistoryActionCreateWithoutUserInput {
   node: ZNodeCreateOneWithoutHistoryInput!
 }
 
-"""An edge in a connection."""
 type HistoryActionEdge {
-  """The item at the end of the edge."""
   node: HistoryAction!
-
-  """A cursor for use in pagination."""
   cursor: String!
 }
 
@@ -758,59 +784,38 @@ type HistoryActionSubscriptionPayload {
 }
 
 input HistoryActionSubscriptionWhereInput {
-  """Logical AND on all given filters."""
-  AND: [HistoryActionSubscriptionWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [HistoryActionSubscriptionWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [HistoryActionSubscriptionWhereInput!]
-
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
   mutation_in: [MutationType!]
-
-  """
-  The subscription event gets only dispatched when one of the updated fields names is included in this list
-  """
   updatedFields_contains: String
-
-  """
-  The subscription event gets only dispatched when all of the field names included in this list have been updated
-  """
   updatedFields_contains_every: [String!]
-
-  """
-  The subscription event gets only dispatched when some of the field names included in this list have been updated
-  """
   updatedFields_contains_some: [String!]
   node: HistoryActionWhereInput
+  AND: [HistoryActionSubscriptionWhereInput!]
+  OR: [HistoryActionSubscriptionWhereInput!]
+  NOT: [HistoryActionSubscriptionWhereInput!]
 }
 
 input HistoryActionUpdateInput {
   action: String
   model: String
   meta: Json
-  node: ZNodeUpdateOneWithoutHistoryInput
-  user: UserUpdateOneWithoutHistoryInput
+  node: ZNodeUpdateOneRequiredWithoutHistoryInput
+  user: UserUpdateOneRequiredWithoutHistoryInput
 }
 
 input HistoryActionUpdateManyWithoutNodeInput {
   create: [HistoryActionCreateWithoutNodeInput!]
+  delete: [HistoryActionWhereUniqueInput!]
   connect: [HistoryActionWhereUniqueInput!]
   disconnect: [HistoryActionWhereUniqueInput!]
-  delete: [HistoryActionWhereUniqueInput!]
   update: [HistoryActionUpdateWithWhereUniqueWithoutNodeInput!]
   upsert: [HistoryActionUpsertWithWhereUniqueWithoutNodeInput!]
 }
 
 input HistoryActionUpdateManyWithoutUserInput {
   create: [HistoryActionCreateWithoutUserInput!]
+  delete: [HistoryActionWhereUniqueInput!]
   connect: [HistoryActionWhereUniqueInput!]
   disconnect: [HistoryActionWhereUniqueInput!]
-  delete: [HistoryActionWhereUniqueInput!]
   update: [HistoryActionUpdateWithWhereUniqueWithoutUserInput!]
   upsert: [HistoryActionUpsertWithWhereUniqueWithoutUserInput!]
 }
@@ -819,14 +824,14 @@ input HistoryActionUpdateWithoutNodeDataInput {
   action: String
   model: String
   meta: Json
-  user: UserUpdateOneWithoutHistoryInput
+  user: UserUpdateOneRequiredWithoutHistoryInput
 }
 
 input HistoryActionUpdateWithoutUserDataInput {
   action: String
   model: String
   meta: Json
-  node: ZNodeUpdateOneWithoutHistoryInput
+  node: ZNodeUpdateOneRequiredWithoutHistoryInput
 }
 
 input HistoryActionUpdateWithWhereUniqueWithoutNodeInput {
@@ -852,222 +857,126 @@ input HistoryActionUpsertWithWhereUniqueWithoutUserInput {
 }
 
 input HistoryActionWhereInput {
-  """Logical AND on all given filters."""
-  AND: [HistoryActionWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [HistoryActionWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [HistoryActionWhereInput!]
   id: ID
-
-  """All values that are not equal to given value."""
   id_not: ID
-
-  """All values that are contained in given list."""
   id_in: [ID!]
-
-  """All values that are not contained in given list."""
   id_not_in: [ID!]
-
-  """All values less than the given value."""
   id_lt: ID
-
-  """All values less than or equal the given value."""
   id_lte: ID
-
-  """All values greater than the given value."""
   id_gt: ID
-
-  """All values greater than or equal the given value."""
   id_gte: ID
-
-  """All values containing the given string."""
   id_contains: ID
-
-  """All values not containing the given string."""
   id_not_contains: ID
-
-  """All values starting with the given string."""
   id_starts_with: ID
-
-  """All values not starting with the given string."""
   id_not_starts_with: ID
-
-  """All values ending with the given string."""
   id_ends_with: ID
-
-  """All values not ending with the given string."""
   id_not_ends_with: ID
   action: String
-
-  """All values that are not equal to given value."""
   action_not: String
-
-  """All values that are contained in given list."""
   action_in: [String!]
-
-  """All values that are not contained in given list."""
   action_not_in: [String!]
-
-  """All values less than the given value."""
   action_lt: String
-
-  """All values less than or equal the given value."""
   action_lte: String
-
-  """All values greater than the given value."""
   action_gt: String
-
-  """All values greater than or equal the given value."""
   action_gte: String
-
-  """All values containing the given string."""
   action_contains: String
-
-  """All values not containing the given string."""
   action_not_contains: String
-
-  """All values starting with the given string."""
   action_starts_with: String
-
-  """All values not starting with the given string."""
   action_not_starts_with: String
-
-  """All values ending with the given string."""
   action_ends_with: String
-
-  """All values not ending with the given string."""
   action_not_ends_with: String
   model: String
-
-  """All values that are not equal to given value."""
   model_not: String
-
-  """All values that are contained in given list."""
   model_in: [String!]
-
-  """All values that are not contained in given list."""
   model_not_in: [String!]
-
-  """All values less than the given value."""
   model_lt: String
-
-  """All values less than or equal the given value."""
   model_lte: String
-
-  """All values greater than the given value."""
   model_gt: String
-
-  """All values greater than or equal the given value."""
   model_gte: String
-
-  """All values containing the given string."""
   model_contains: String
-
-  """All values not containing the given string."""
   model_not_contains: String
-
-  """All values starting with the given string."""
   model_starts_with: String
-
-  """All values not starting with the given string."""
   model_not_starts_with: String
-
-  """All values ending with the given string."""
   model_ends_with: String
-
-  """All values not ending with the given string."""
   model_not_ends_with: String
-  createdAt: DateTime
-
-  """All values that are not equal to given value."""
-  createdAt_not: DateTime
-
-  """All values that are contained in given list."""
-  createdAt_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  createdAt_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  createdAt_lt: DateTime
-
-  """All values less than or equal the given value."""
-  createdAt_lte: DateTime
-
-  """All values greater than the given value."""
-  createdAt_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  createdAt_gte: DateTime
   node: ZNodeWhereInput
   user: UserWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  AND: [HistoryActionWhereInput!]
+  OR: [HistoryActionWhereInput!]
+  NOT: [HistoryActionWhereInput!]
 }
 
 input HistoryActionWhereUniqueInput {
   id: ID
 }
 
-"""Raw JSON value"""
 scalar Json
 
-"""
-The `Long` scalar type represents non-fractional signed whole numeric values.
-Long can represent values between -(2^63) and 2^63 - 1.
-"""
 scalar Long
 
 type Mutation {
-  createZNode(data: ZNodeCreateInput!): ZNode!
-  createQuestion(data: QuestionCreateInput!): Question!
   createAnswer(data: AnswerCreateInput!): Answer!
-  createSource(data: SourceCreateInput!): Source!
-  createFlag(data: FlagCreateInput!): Flag!
-  createTag(data: TagCreateInput!): Tag!
-  createHistoryAction(data: HistoryActionCreateInput!): HistoryAction!
-  createUser(data: UserCreateInput!): User!
-  updateZNode(data: ZNodeUpdateInput!, where: ZNodeWhereUniqueInput!): ZNode
-  updateQuestion(data: QuestionUpdateInput!, where: QuestionWhereUniqueInput!): Question
   updateAnswer(data: AnswerUpdateInput!, where: AnswerWhereUniqueInput!): Answer
-  updateSource(data: SourceUpdateInput!, where: SourceWhereUniqueInput!): Source
-  updateFlag(data: FlagUpdateInput!, where: FlagWhereUniqueInput!): Flag
-  updateTag(data: TagUpdateInput!, where: TagWhereUniqueInput!): Tag
-  updateHistoryAction(data: HistoryActionUpdateInput!, where: HistoryActionWhereUniqueInput!): HistoryAction
-  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
-  deleteZNode(where: ZNodeWhereUniqueInput!): ZNode
-  deleteQuestion(where: QuestionWhereUniqueInput!): Question
-  deleteAnswer(where: AnswerWhereUniqueInput!): Answer
-  deleteSource(where: SourceWhereUniqueInput!): Source
-  deleteFlag(where: FlagWhereUniqueInput!): Flag
-  deleteTag(where: TagWhereUniqueInput!): Tag
-  deleteHistoryAction(where: HistoryActionWhereUniqueInput!): HistoryAction
-  deleteUser(where: UserWhereUniqueInput!): User
-  upsertZNode(where: ZNodeWhereUniqueInput!, create: ZNodeCreateInput!, update: ZNodeUpdateInput!): ZNode!
-  upsertQuestion(where: QuestionWhereUniqueInput!, create: QuestionCreateInput!, update: QuestionUpdateInput!): Question!
-  upsertAnswer(where: AnswerWhereUniqueInput!, create: AnswerCreateInput!, update: AnswerUpdateInput!): Answer!
-  upsertSource(where: SourceWhereUniqueInput!, create: SourceCreateInput!, update: SourceUpdateInput!): Source!
-  upsertFlag(where: FlagWhereUniqueInput!, create: FlagCreateInput!, update: FlagUpdateInput!): Flag!
-  upsertTag(where: TagWhereUniqueInput!, create: TagCreateInput!, update: TagUpdateInput!): Tag!
-  upsertHistoryAction(where: HistoryActionWhereUniqueInput!, create: HistoryActionCreateInput!, update: HistoryActionUpdateInput!): HistoryAction!
-  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
-  updateManyZNodes(data: ZNodeUpdateInput!, where: ZNodeWhereInput): BatchPayload!
-  updateManyQuestions(data: QuestionUpdateInput!, where: QuestionWhereInput): BatchPayload!
   updateManyAnswers(data: AnswerUpdateInput!, where: AnswerWhereInput): BatchPayload!
-  updateManySources(data: SourceUpdateInput!, where: SourceWhereInput): BatchPayload!
-  updateManyFlags(data: FlagUpdateInput!, where: FlagWhereInput): BatchPayload!
-  updateManyTags(data: TagUpdateInput!, where: TagWhereInput): BatchPayload!
-  updateManyHistoryActions(data: HistoryActionUpdateInput!, where: HistoryActionWhereInput): BatchPayload!
-  updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
-  deleteManyZNodes(where: ZNodeWhereInput): BatchPayload!
-  deleteManyQuestions(where: QuestionWhereInput): BatchPayload!
+  upsertAnswer(where: AnswerWhereUniqueInput!, create: AnswerCreateInput!, update: AnswerUpdateInput!): Answer!
+  deleteAnswer(where: AnswerWhereUniqueInput!): Answer
   deleteManyAnswers(where: AnswerWhereInput): BatchPayload!
-  deleteManySources(where: SourceWhereInput): BatchPayload!
+  createConfiguration(data: ConfigurationCreateInput!): Configuration!
+  updateConfiguration(data: ConfigurationUpdateInput!, where: ConfigurationWhereUniqueInput!): Configuration
+  updateManyConfigurations(data: ConfigurationUpdateInput!, where: ConfigurationWhereInput): BatchPayload!
+  upsertConfiguration(where: ConfigurationWhereUniqueInput!, create: ConfigurationCreateInput!, update: ConfigurationUpdateInput!): Configuration!
+  deleteConfiguration(where: ConfigurationWhereUniqueInput!): Configuration
+  deleteManyConfigurations(where: ConfigurationWhereInput): BatchPayload!
+  createFlag(data: FlagCreateInput!): Flag!
+  updateFlag(data: FlagUpdateInput!, where: FlagWhereUniqueInput!): Flag
+  updateManyFlags(data: FlagUpdateInput!, where: FlagWhereInput): BatchPayload!
+  upsertFlag(where: FlagWhereUniqueInput!, create: FlagCreateInput!, update: FlagUpdateInput!): Flag!
+  deleteFlag(where: FlagWhereUniqueInput!): Flag
   deleteManyFlags(where: FlagWhereInput): BatchPayload!
-  deleteManyTags(where: TagWhereInput): BatchPayload!
+  createHistoryAction(data: HistoryActionCreateInput!): HistoryAction!
+  updateHistoryAction(data: HistoryActionUpdateInput!, where: HistoryActionWhereUniqueInput!): HistoryAction
+  updateManyHistoryActions(data: HistoryActionUpdateInput!, where: HistoryActionWhereInput): BatchPayload!
+  upsertHistoryAction(where: HistoryActionWhereUniqueInput!, create: HistoryActionCreateInput!, update: HistoryActionUpdateInput!): HistoryAction!
+  deleteHistoryAction(where: HistoryActionWhereUniqueInput!): HistoryAction
   deleteManyHistoryActions(where: HistoryActionWhereInput): BatchPayload!
+  createQuestion(data: QuestionCreateInput!): Question!
+  updateQuestion(data: QuestionUpdateInput!, where: QuestionWhereUniqueInput!): Question
+  updateManyQuestions(data: QuestionUpdateInput!, where: QuestionWhereInput): BatchPayload!
+  upsertQuestion(where: QuestionWhereUniqueInput!, create: QuestionCreateInput!, update: QuestionUpdateInput!): Question!
+  deleteQuestion(where: QuestionWhereUniqueInput!): Question
+  deleteManyQuestions(where: QuestionWhereInput): BatchPayload!
+  createSource(data: SourceCreateInput!): Source!
+  updateSource(data: SourceUpdateInput!, where: SourceWhereUniqueInput!): Source
+  updateManySources(data: SourceUpdateInput!, where: SourceWhereInput): BatchPayload!
+  upsertSource(where: SourceWhereUniqueInput!, create: SourceCreateInput!, update: SourceUpdateInput!): Source!
+  deleteSource(where: SourceWhereUniqueInput!): Source
+  deleteManySources(where: SourceWhereInput): BatchPayload!
+  createTag(data: TagCreateInput!): Tag!
+  updateTag(data: TagUpdateInput!, where: TagWhereUniqueInput!): Tag
+  updateManyTags(data: TagUpdateInput!, where: TagWhereInput): BatchPayload!
+  upsertTag(where: TagWhereUniqueInput!, create: TagCreateInput!, update: TagUpdateInput!): Tag!
+  deleteTag(where: TagWhereUniqueInput!): Tag
+  deleteManyTags(where: TagWhereInput): BatchPayload!
+  createUser(data: UserCreateInput!): User!
+  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
+  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  deleteUser(where: UserWhereUniqueInput!): User
   deleteManyUsers(where: UserWhereInput): BatchPayload!
+  createZNode(data: ZNodeCreateInput!): ZNode!
+  updateZNode(data: ZNodeUpdateInput!, where: ZNodeWhereUniqueInput!): ZNode
+  updateManyZNodes(data: ZNodeUpdateInput!, where: ZNodeWhereInput): BatchPayload!
+  upsertZNode(where: ZNodeWhereUniqueInput!, create: ZNodeCreateInput!, update: ZNodeUpdateInput!): ZNode!
+  deleteZNode(where: ZNodeWhereUniqueInput!): ZNode
+  deleteManyZNodes(where: ZNodeWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -1076,76 +985,60 @@ enum MutationType {
   DELETED
 }
 
-"""An object with an ID"""
 interface Node {
-  """The id of the object."""
   id: ID!
 }
 
-"""Information about pagination in a connection."""
 type PageInfo {
-  """When paginating forwards, are there more items?"""
   hasNextPage: Boolean!
-
-  """When paginating backwards, are there more items?"""
   hasPreviousPage: Boolean!
-
-  """When paginating backwards, the cursor to continue."""
   startCursor: String
-
-  """When paginating forwards, the cursor to continue."""
   endCursor: String
 }
 
 type Query {
-  zNodes(where: ZNodeWhereInput, orderBy: ZNodeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ZNode]!
-  questions(where: QuestionWhereInput, orderBy: QuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Question]!
-  answers(where: AnswerWhereInput, orderBy: AnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Answer]!
-  sources(where: SourceWhereInput, orderBy: SourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Source]!
-  flags(where: FlagWhereInput, orderBy: FlagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Flag]!
-  tags(where: TagWhereInput, orderBy: TagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Tag]!
-  historyActions(where: HistoryActionWhereInput, orderBy: HistoryActionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [HistoryAction]!
-  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
-  zNode(where: ZNodeWhereUniqueInput!): ZNode
-  question(where: QuestionWhereUniqueInput!): Question
   answer(where: AnswerWhereUniqueInput!): Answer
-  source(where: SourceWhereUniqueInput!): Source
-  flag(where: FlagWhereUniqueInput!): Flag
-  tag(where: TagWhereUniqueInput!): Tag
-  historyAction(where: HistoryActionWhereUniqueInput!): HistoryAction
-  user(where: UserWhereUniqueInput!): User
-  zNodesConnection(where: ZNodeWhereInput, orderBy: ZNodeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ZNodeConnection!
-  questionsConnection(where: QuestionWhereInput, orderBy: QuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): QuestionConnection!
+  answers(where: AnswerWhereInput, orderBy: AnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Answer]!
   answersConnection(where: AnswerWhereInput, orderBy: AnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AnswerConnection!
-  sourcesConnection(where: SourceWhereInput, orderBy: SourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SourceConnection!
+  configuration(where: ConfigurationWhereUniqueInput!): Configuration
+  configurations(where: ConfigurationWhereInput, orderBy: ConfigurationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Configuration]!
+  configurationsConnection(where: ConfigurationWhereInput, orderBy: ConfigurationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ConfigurationConnection!
+  flag(where: FlagWhereUniqueInput!): Flag
+  flags(where: FlagWhereInput, orderBy: FlagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Flag]!
   flagsConnection(where: FlagWhereInput, orderBy: FlagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FlagConnection!
-  tagsConnection(where: TagWhereInput, orderBy: TagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TagConnection!
+  historyAction(where: HistoryActionWhereUniqueInput!): HistoryAction
+  historyActions(where: HistoryActionWhereInput, orderBy: HistoryActionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [HistoryAction]!
   historyActionsConnection(where: HistoryActionWhereInput, orderBy: HistoryActionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): HistoryActionConnection!
+  question(where: QuestionWhereUniqueInput!): Question
+  questions(where: QuestionWhereInput, orderBy: QuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Question]!
+  questionsConnection(where: QuestionWhereInput, orderBy: QuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): QuestionConnection!
+  source(where: SourceWhereUniqueInput!): Source
+  sources(where: SourceWhereInput, orderBy: SourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Source]!
+  sourcesConnection(where: SourceWhereInput, orderBy: SourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SourceConnection!
+  tag(where: TagWhereUniqueInput!): Tag
+  tags(where: TagWhereInput, orderBy: TagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Tag]!
+  tagsConnection(where: TagWhereInput, orderBy: TagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TagConnection!
+  user(where: UserWhereUniqueInput!): User
+  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
-
-  """Fetches an object given its ID"""
-  node(
-    """The ID of an object"""
-    id: ID!
-  ): Node
+  zNode(where: ZNodeWhereUniqueInput!): ZNode
+  zNodes(where: ZNodeWhereInput, orderBy: ZNodeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ZNode]!
+  zNodesConnection(where: ZNodeWhereInput, orderBy: ZNodeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ZNodeConnection!
+  node(id: ID!): Node
 }
 
-type Question implements Node {
+type Question {
   id: ID!
   title: String!
   slug: String!
-  node(where: ZNodeWhereInput): ZNode!
-  user(where: UserWhereInput): User!
+  node: ZNode!
+  user: User!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
 
-"""A connection to a list of items."""
 type QuestionConnection {
-  """Information to aid in pagination."""
   pageInfo: PageInfo!
-
-  """A list of edges."""
   edges: [QuestionEdge]!
   aggregate: AggregateQuestion!
 }
@@ -1179,12 +1072,8 @@ input QuestionCreateWithoutUserInput {
   node: ZNodeCreateOneWithoutQuestionInput!
 }
 
-"""An edge in a connection."""
 type QuestionEdge {
-  """The item at the end of the edge."""
   node: Question!
-
-  """A cursor for use in pagination."""
   cursor: String!
 }
 
@@ -1217,72 +1106,51 @@ type QuestionSubscriptionPayload {
 }
 
 input QuestionSubscriptionWhereInput {
-  """Logical AND on all given filters."""
-  AND: [QuestionSubscriptionWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [QuestionSubscriptionWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [QuestionSubscriptionWhereInput!]
-
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
   mutation_in: [MutationType!]
-
-  """
-  The subscription event gets only dispatched when one of the updated fields names is included in this list
-  """
   updatedFields_contains: String
-
-  """
-  The subscription event gets only dispatched when all of the field names included in this list have been updated
-  """
   updatedFields_contains_every: [String!]
-
-  """
-  The subscription event gets only dispatched when some of the field names included in this list have been updated
-  """
   updatedFields_contains_some: [String!]
   node: QuestionWhereInput
+  AND: [QuestionSubscriptionWhereInput!]
+  OR: [QuestionSubscriptionWhereInput!]
+  NOT: [QuestionSubscriptionWhereInput!]
 }
 
 input QuestionUpdateInput {
   title: String
   slug: String
-  node: ZNodeUpdateOneWithoutQuestionInput
-  user: UserUpdateOneWithoutQuestionsInput
+  node: ZNodeUpdateOneRequiredWithoutQuestionInput
+  user: UserUpdateOneRequiredWithoutQuestionsInput
 }
 
 input QuestionUpdateManyWithoutUserInput {
   create: [QuestionCreateWithoutUserInput!]
+  delete: [QuestionWhereUniqueInput!]
   connect: [QuestionWhereUniqueInput!]
   disconnect: [QuestionWhereUniqueInput!]
-  delete: [QuestionWhereUniqueInput!]
   update: [QuestionUpdateWithWhereUniqueWithoutUserInput!]
   upsert: [QuestionUpsertWithWhereUniqueWithoutUserInput!]
 }
 
 input QuestionUpdateOneWithoutNodeInput {
   create: QuestionCreateWithoutNodeInput
-  connect: QuestionWhereUniqueInput
-  disconnect: Boolean
-  delete: Boolean
   update: QuestionUpdateWithoutNodeDataInput
   upsert: QuestionUpsertWithoutNodeInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: QuestionWhereUniqueInput
 }
 
 input QuestionUpdateWithoutNodeDataInput {
   title: String
   slug: String
-  user: UserUpdateOneWithoutQuestionsInput
+  user: UserUpdateOneRequiredWithoutQuestionsInput
 }
 
 input QuestionUpdateWithoutUserDataInput {
   title: String
   slug: String
-  node: ZNodeUpdateOneWithoutQuestionInput
+  node: ZNodeUpdateOneRequiredWithoutQuestionInput
 }
 
 input QuestionUpdateWithWhereUniqueWithoutUserInput {
@@ -1302,199 +1170,84 @@ input QuestionUpsertWithWhereUniqueWithoutUserInput {
 }
 
 input QuestionWhereInput {
-  """Logical AND on all given filters."""
-  AND: [QuestionWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [QuestionWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [QuestionWhereInput!]
   id: ID
-
-  """All values that are not equal to given value."""
   id_not: ID
-
-  """All values that are contained in given list."""
   id_in: [ID!]
-
-  """All values that are not contained in given list."""
   id_not_in: [ID!]
-
-  """All values less than the given value."""
   id_lt: ID
-
-  """All values less than or equal the given value."""
   id_lte: ID
-
-  """All values greater than the given value."""
   id_gt: ID
-
-  """All values greater than or equal the given value."""
   id_gte: ID
-
-  """All values containing the given string."""
   id_contains: ID
-
-  """All values not containing the given string."""
   id_not_contains: ID
-
-  """All values starting with the given string."""
   id_starts_with: ID
-
-  """All values not starting with the given string."""
   id_not_starts_with: ID
-
-  """All values ending with the given string."""
   id_ends_with: ID
-
-  """All values not ending with the given string."""
   id_not_ends_with: ID
   title: String
-
-  """All values that are not equal to given value."""
   title_not: String
-
-  """All values that are contained in given list."""
   title_in: [String!]
-
-  """All values that are not contained in given list."""
   title_not_in: [String!]
-
-  """All values less than the given value."""
   title_lt: String
-
-  """All values less than or equal the given value."""
   title_lte: String
-
-  """All values greater than the given value."""
   title_gt: String
-
-  """All values greater than or equal the given value."""
   title_gte: String
-
-  """All values containing the given string."""
   title_contains: String
-
-  """All values not containing the given string."""
   title_not_contains: String
-
-  """All values starting with the given string."""
   title_starts_with: String
-
-  """All values not starting with the given string."""
   title_not_starts_with: String
-
-  """All values ending with the given string."""
   title_ends_with: String
-
-  """All values not ending with the given string."""
   title_not_ends_with: String
   slug: String
-
-  """All values that are not equal to given value."""
   slug_not: String
-
-  """All values that are contained in given list."""
   slug_in: [String!]
-
-  """All values that are not contained in given list."""
   slug_not_in: [String!]
-
-  """All values less than the given value."""
   slug_lt: String
-
-  """All values less than or equal the given value."""
   slug_lte: String
-
-  """All values greater than the given value."""
   slug_gt: String
-
-  """All values greater than or equal the given value."""
   slug_gte: String
-
-  """All values containing the given string."""
   slug_contains: String
-
-  """All values not containing the given string."""
   slug_not_contains: String
-
-  """All values starting with the given string."""
   slug_starts_with: String
-
-  """All values not starting with the given string."""
   slug_not_starts_with: String
-
-  """All values ending with the given string."""
   slug_ends_with: String
-
-  """All values not ending with the given string."""
   slug_not_ends_with: String
-  createdAt: DateTime
-
-  """All values that are not equal to given value."""
-  createdAt_not: DateTime
-
-  """All values that are contained in given list."""
-  createdAt_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  createdAt_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  createdAt_lt: DateTime
-
-  """All values less than or equal the given value."""
-  createdAt_lte: DateTime
-
-  """All values greater than the given value."""
-  createdAt_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  createdAt_gte: DateTime
-  updatedAt: DateTime
-
-  """All values that are not equal to given value."""
-  updatedAt_not: DateTime
-
-  """All values that are contained in given list."""
-  updatedAt_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  updatedAt_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  updatedAt_lt: DateTime
-
-  """All values less than or equal the given value."""
-  updatedAt_lte: DateTime
-
-  """All values greater than the given value."""
-  updatedAt_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  updatedAt_gte: DateTime
   node: ZNodeWhereInput
   user: UserWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [QuestionWhereInput!]
+  OR: [QuestionWhereInput!]
+  NOT: [QuestionWhereInput!]
 }
 
 input QuestionWhereUniqueInput {
   id: ID
 }
 
-type Source implements Node {
+type Source {
   id: ID!
   label: String!
   url: String!
-  answer(where: AnswerWhereInput): Answer!
+  answer: Answer!
 }
 
-"""A connection to a list of items."""
 type SourceConnection {
-  """Information to aid in pagination."""
   pageInfo: PageInfo!
-
-  """A list of edges."""
   edges: [SourceEdge]!
   aggregate: AggregateSource!
 }
@@ -1515,12 +1268,8 @@ input SourceCreateWithoutAnswerInput {
   url: String!
 }
 
-"""An edge in a connection."""
 type SourceEdge {
-  """The item at the end of the edge."""
   node: Source!
-
-  """A cursor for use in pagination."""
   cursor: String!
 }
 
@@ -1531,10 +1280,10 @@ enum SourceOrderByInput {
   label_DESC
   url_ASC
   url_DESC
-  updatedAt_ASC
-  updatedAt_DESC
   createdAt_ASC
   createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
 }
 
 type SourcePreviousValues {
@@ -1551,48 +1300,27 @@ type SourceSubscriptionPayload {
 }
 
 input SourceSubscriptionWhereInput {
-  """Logical AND on all given filters."""
-  AND: [SourceSubscriptionWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [SourceSubscriptionWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [SourceSubscriptionWhereInput!]
-
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
   mutation_in: [MutationType!]
-
-  """
-  The subscription event gets only dispatched when one of the updated fields names is included in this list
-  """
   updatedFields_contains: String
-
-  """
-  The subscription event gets only dispatched when all of the field names included in this list have been updated
-  """
   updatedFields_contains_every: [String!]
-
-  """
-  The subscription event gets only dispatched when some of the field names included in this list have been updated
-  """
   updatedFields_contains_some: [String!]
   node: SourceWhereInput
+  AND: [SourceSubscriptionWhereInput!]
+  OR: [SourceSubscriptionWhereInput!]
+  NOT: [SourceSubscriptionWhereInput!]
 }
 
 input SourceUpdateInput {
   label: String
   url: String
-  answer: AnswerUpdateOneWithoutSourcesInput
+  answer: AnswerUpdateOneRequiredWithoutSourcesInput
 }
 
 input SourceUpdateManyWithoutAnswerInput {
   create: [SourceCreateWithoutAnswerInput!]
+  delete: [SourceWhereUniqueInput!]
   connect: [SourceWhereUniqueInput!]
   disconnect: [SourceWhereUniqueInput!]
-  delete: [SourceWhereUniqueInput!]
   update: [SourceUpdateWithWhereUniqueWithoutAnswerInput!]
   upsert: [SourceUpsertWithWhereUniqueWithoutAnswerInput!]
 }
@@ -1614,135 +1342,52 @@ input SourceUpsertWithWhereUniqueWithoutAnswerInput {
 }
 
 input SourceWhereInput {
-  """Logical AND on all given filters."""
-  AND: [SourceWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [SourceWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [SourceWhereInput!]
   id: ID
-
-  """All values that are not equal to given value."""
   id_not: ID
-
-  """All values that are contained in given list."""
   id_in: [ID!]
-
-  """All values that are not contained in given list."""
   id_not_in: [ID!]
-
-  """All values less than the given value."""
   id_lt: ID
-
-  """All values less than or equal the given value."""
   id_lte: ID
-
-  """All values greater than the given value."""
   id_gt: ID
-
-  """All values greater than or equal the given value."""
   id_gte: ID
-
-  """All values containing the given string."""
   id_contains: ID
-
-  """All values not containing the given string."""
   id_not_contains: ID
-
-  """All values starting with the given string."""
   id_starts_with: ID
-
-  """All values not starting with the given string."""
   id_not_starts_with: ID
-
-  """All values ending with the given string."""
   id_ends_with: ID
-
-  """All values not ending with the given string."""
   id_not_ends_with: ID
   label: String
-
-  """All values that are not equal to given value."""
   label_not: String
-
-  """All values that are contained in given list."""
   label_in: [String!]
-
-  """All values that are not contained in given list."""
   label_not_in: [String!]
-
-  """All values less than the given value."""
   label_lt: String
-
-  """All values less than or equal the given value."""
   label_lte: String
-
-  """All values greater than the given value."""
   label_gt: String
-
-  """All values greater than or equal the given value."""
   label_gte: String
-
-  """All values containing the given string."""
   label_contains: String
-
-  """All values not containing the given string."""
   label_not_contains: String
-
-  """All values starting with the given string."""
   label_starts_with: String
-
-  """All values not starting with the given string."""
   label_not_starts_with: String
-
-  """All values ending with the given string."""
   label_ends_with: String
-
-  """All values not ending with the given string."""
   label_not_ends_with: String
   url: String
-
-  """All values that are not equal to given value."""
   url_not: String
-
-  """All values that are contained in given list."""
   url_in: [String!]
-
-  """All values that are not contained in given list."""
   url_not_in: [String!]
-
-  """All values less than the given value."""
   url_lt: String
-
-  """All values less than or equal the given value."""
   url_lte: String
-
-  """All values greater than the given value."""
   url_gt: String
-
-  """All values greater than or equal the given value."""
   url_gte: String
-
-  """All values containing the given string."""
   url_contains: String
-
-  """All values not containing the given string."""
   url_not_contains: String
-
-  """All values starting with the given string."""
   url_starts_with: String
-
-  """All values not starting with the given string."""
   url_not_starts_with: String
-
-  """All values ending with the given string."""
   url_ends_with: String
-
-  """All values not ending with the given string."""
   url_not_ends_with: String
   answer: AnswerWhereInput
+  AND: [SourceWhereInput!]
+  OR: [SourceWhereInput!]
+  NOT: [SourceWhereInput!]
 }
 
 input SourceWhereUniqueInput {
@@ -1750,30 +1395,27 @@ input SourceWhereUniqueInput {
 }
 
 type Subscription {
-  zNode(where: ZNodeSubscriptionWhereInput): ZNodeSubscriptionPayload
-  question(where: QuestionSubscriptionWhereInput): QuestionSubscriptionPayload
   answer(where: AnswerSubscriptionWhereInput): AnswerSubscriptionPayload
-  source(where: SourceSubscriptionWhereInput): SourceSubscriptionPayload
+  configuration(where: ConfigurationSubscriptionWhereInput): ConfigurationSubscriptionPayload
   flag(where: FlagSubscriptionWhereInput): FlagSubscriptionPayload
-  tag(where: TagSubscriptionWhereInput): TagSubscriptionPayload
   historyAction(where: HistoryActionSubscriptionWhereInput): HistoryActionSubscriptionPayload
+  question(where: QuestionSubscriptionWhereInput): QuestionSubscriptionPayload
+  source(where: SourceSubscriptionWhereInput): SourceSubscriptionPayload
+  tag(where: TagSubscriptionWhereInput): TagSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+  zNode(where: ZNodeSubscriptionWhereInput): ZNodeSubscriptionPayload
 }
 
-type Tag implements Node {
+type Tag {
   id: ID!
   label: String!
-  node(where: ZNodeWhereInput): ZNode!
-  user(where: UserWhereInput): User!
+  node: ZNode!
+  user: User!
   createdAt: DateTime!
 }
 
-"""A connection to a list of items."""
 type TagConnection {
-  """Information to aid in pagination."""
   pageInfo: PageInfo!
-
-  """A list of edges."""
   edges: [TagEdge]!
   aggregate: AggregateTag!
 }
@@ -1804,12 +1446,8 @@ input TagCreateWithoutUserInput {
   node: ZNodeCreateOneWithoutTagsInput!
 }
 
-"""An edge in a connection."""
 type TagEdge {
-  """The item at the end of the edge."""
   node: Tag!
-
-  """A cursor for use in pagination."""
   cursor: String!
 }
 
@@ -1838,69 +1476,48 @@ type TagSubscriptionPayload {
 }
 
 input TagSubscriptionWhereInput {
-  """Logical AND on all given filters."""
-  AND: [TagSubscriptionWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [TagSubscriptionWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [TagSubscriptionWhereInput!]
-
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
   mutation_in: [MutationType!]
-
-  """
-  The subscription event gets only dispatched when one of the updated fields names is included in this list
-  """
   updatedFields_contains: String
-
-  """
-  The subscription event gets only dispatched when all of the field names included in this list have been updated
-  """
   updatedFields_contains_every: [String!]
-
-  """
-  The subscription event gets only dispatched when some of the field names included in this list have been updated
-  """
   updatedFields_contains_some: [String!]
   node: TagWhereInput
+  AND: [TagSubscriptionWhereInput!]
+  OR: [TagSubscriptionWhereInput!]
+  NOT: [TagSubscriptionWhereInput!]
 }
 
 input TagUpdateInput {
   label: String
-  node: ZNodeUpdateOneWithoutTagsInput
-  user: UserUpdateOneWithoutTagsInput
+  node: ZNodeUpdateOneRequiredWithoutTagsInput
+  user: UserUpdateOneRequiredWithoutTagsInput
 }
 
 input TagUpdateManyWithoutNodeInput {
   create: [TagCreateWithoutNodeInput!]
+  delete: [TagWhereUniqueInput!]
   connect: [TagWhereUniqueInput!]
   disconnect: [TagWhereUniqueInput!]
-  delete: [TagWhereUniqueInput!]
   update: [TagUpdateWithWhereUniqueWithoutNodeInput!]
   upsert: [TagUpsertWithWhereUniqueWithoutNodeInput!]
 }
 
 input TagUpdateManyWithoutUserInput {
   create: [TagCreateWithoutUserInput!]
+  delete: [TagWhereUniqueInput!]
   connect: [TagWhereUniqueInput!]
   disconnect: [TagWhereUniqueInput!]
-  delete: [TagWhereUniqueInput!]
   update: [TagUpdateWithWhereUniqueWithoutUserInput!]
   upsert: [TagUpsertWithWhereUniqueWithoutUserInput!]
 }
 
 input TagUpdateWithoutNodeDataInput {
   label: String
-  user: UserUpdateOneWithoutTagsInput
+  user: UserUpdateOneRequiredWithoutTagsInput
 }
 
 input TagUpdateWithoutUserDataInput {
   label: String
-  node: ZNodeUpdateOneWithoutTagsInput
+  node: ZNodeUpdateOneRequiredWithoutTagsInput
 }
 
 input TagUpdateWithWhereUniqueWithoutNodeInput {
@@ -1926,125 +1543,54 @@ input TagUpsertWithWhereUniqueWithoutUserInput {
 }
 
 input TagWhereInput {
-  """Logical AND on all given filters."""
-  AND: [TagWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [TagWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [TagWhereInput!]
   id: ID
-
-  """All values that are not equal to given value."""
   id_not: ID
-
-  """All values that are contained in given list."""
   id_in: [ID!]
-
-  """All values that are not contained in given list."""
   id_not_in: [ID!]
-
-  """All values less than the given value."""
   id_lt: ID
-
-  """All values less than or equal the given value."""
   id_lte: ID
-
-  """All values greater than the given value."""
   id_gt: ID
-
-  """All values greater than or equal the given value."""
   id_gte: ID
-
-  """All values containing the given string."""
   id_contains: ID
-
-  """All values not containing the given string."""
   id_not_contains: ID
-
-  """All values starting with the given string."""
   id_starts_with: ID
-
-  """All values not starting with the given string."""
   id_not_starts_with: ID
-
-  """All values ending with the given string."""
   id_ends_with: ID
-
-  """All values not ending with the given string."""
   id_not_ends_with: ID
   label: String
-
-  """All values that are not equal to given value."""
   label_not: String
-
-  """All values that are contained in given list."""
   label_in: [String!]
-
-  """All values that are not contained in given list."""
   label_not_in: [String!]
-
-  """All values less than the given value."""
   label_lt: String
-
-  """All values less than or equal the given value."""
   label_lte: String
-
-  """All values greater than the given value."""
   label_gt: String
-
-  """All values greater than or equal the given value."""
   label_gte: String
-
-  """All values containing the given string."""
   label_contains: String
-
-  """All values not containing the given string."""
   label_not_contains: String
-
-  """All values starting with the given string."""
   label_starts_with: String
-
-  """All values not starting with the given string."""
   label_not_starts_with: String
-
-  """All values ending with the given string."""
   label_ends_with: String
-
-  """All values not ending with the given string."""
   label_not_ends_with: String
-  createdAt: DateTime
-
-  """All values that are not equal to given value."""
-  createdAt_not: DateTime
-
-  """All values that are contained in given list."""
-  createdAt_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  createdAt_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  createdAt_lt: DateTime
-
-  """All values less than or equal the given value."""
-  createdAt_lte: DateTime
-
-  """All values greater than the given value."""
-  createdAt_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  createdAt_gte: DateTime
   node: ZNodeWhereInput
   user: UserWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  AND: [TagWhereInput!]
+  OR: [TagWhereInput!]
+  NOT: [TagWhereInput!]
 }
 
 input TagWhereUniqueInput {
   id: ID
 }
 
-type User implements Node {
+type User {
   id: ID!
   auth0Id: String
   name: String
@@ -2059,12 +1605,8 @@ type User implements Node {
   createdAt: DateTime!
 }
 
-"""A connection to a list of items."""
 type UserConnection {
-  """Information to aid in pagination."""
   pageInfo: PageInfo!
-
-  """A list of edges."""
   edges: [UserEdge]!
   aggregate: AggregateUser!
 }
@@ -2167,12 +1709,8 @@ input UserCreateWithoutTagsInput {
   history: HistoryActionCreateManyWithoutUserInput
 }
 
-"""An edge in a connection."""
 type UserEdge {
-  """The item at the end of the edge."""
   node: User!
-
-  """A cursor for use in pagination."""
   cursor: String!
 }
 
@@ -2213,35 +1751,14 @@ type UserSubscriptionPayload {
 }
 
 input UserSubscriptionWhereInput {
-  """Logical AND on all given filters."""
-  AND: [UserSubscriptionWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [UserSubscriptionWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [UserSubscriptionWhereInput!]
-
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
   mutation_in: [MutationType!]
-
-  """
-  The subscription event gets only dispatched when one of the updated fields names is included in this list
-  """
   updatedFields_contains: String
-
-  """
-  The subscription event gets only dispatched when all of the field names included in this list have been updated
-  """
   updatedFields_contains_every: [String!]
-
-  """
-  The subscription event gets only dispatched when some of the field names included in this list have been updated
-  """
   updatedFields_contains_some: [String!]
   node: UserWhereInput
+  AND: [UserSubscriptionWhereInput!]
+  OR: [UserSubscriptionWhereInput!]
+  NOT: [UserSubscriptionWhereInput!]
 }
 
 input UserUpdateInput {
@@ -2257,44 +1774,39 @@ input UserUpdateInput {
   history: HistoryActionUpdateManyWithoutUserInput
 }
 
-input UserUpdateOneWithoutAnswersInput {
+input UserUpdateOneRequiredWithoutAnswersInput {
   create: UserCreateWithoutAnswersInput
-  connect: UserWhereUniqueInput
-  delete: Boolean
   update: UserUpdateWithoutAnswersDataInput
   upsert: UserUpsertWithoutAnswersInput
+  connect: UserWhereUniqueInput
 }
 
-input UserUpdateOneWithoutFlagsInput {
+input UserUpdateOneRequiredWithoutFlagsInput {
   create: UserCreateWithoutFlagsInput
-  connect: UserWhereUniqueInput
-  delete: Boolean
   update: UserUpdateWithoutFlagsDataInput
   upsert: UserUpsertWithoutFlagsInput
+  connect: UserWhereUniqueInput
 }
 
-input UserUpdateOneWithoutHistoryInput {
+input UserUpdateOneRequiredWithoutHistoryInput {
   create: UserCreateWithoutHistoryInput
-  connect: UserWhereUniqueInput
-  delete: Boolean
   update: UserUpdateWithoutHistoryDataInput
   upsert: UserUpsertWithoutHistoryInput
+  connect: UserWhereUniqueInput
 }
 
-input UserUpdateOneWithoutQuestionsInput {
+input UserUpdateOneRequiredWithoutQuestionsInput {
   create: UserCreateWithoutQuestionsInput
-  connect: UserWhereUniqueInput
-  delete: Boolean
   update: UserUpdateWithoutQuestionsDataInput
   upsert: UserUpsertWithoutQuestionsInput
+  connect: UserWhereUniqueInput
 }
 
-input UserUpdateOneWithoutTagsInput {
+input UserUpdateOneRequiredWithoutTagsInput {
   create: UserCreateWithoutTagsInput
-  connect: UserWhereUniqueInput
-  delete: Boolean
   update: UserUpdateWithoutTagsDataInput
   upsert: UserUpsertWithoutTagsInput
+  connect: UserWhereUniqueInput
 }
 
 input UserUpdateWithoutAnswersDataInput {
@@ -2383,276 +1895,90 @@ input UserUpsertWithoutTagsInput {
 }
 
 input UserWhereInput {
-  """Logical AND on all given filters."""
-  AND: [UserWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [UserWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [UserWhereInput!]
   id: ID
-
-  """All values that are not equal to given value."""
   id_not: ID
-
-  """All values that are contained in given list."""
   id_in: [ID!]
-
-  """All values that are not contained in given list."""
   id_not_in: [ID!]
-
-  """All values less than the given value."""
   id_lt: ID
-
-  """All values less than or equal the given value."""
   id_lte: ID
-
-  """All values greater than the given value."""
   id_gt: ID
-
-  """All values greater than or equal the given value."""
   id_gte: ID
-
-  """All values containing the given string."""
   id_contains: ID
-
-  """All values not containing the given string."""
   id_not_contains: ID
-
-  """All values starting with the given string."""
   id_starts_with: ID
-
-  """All values not starting with the given string."""
   id_not_starts_with: ID
-
-  """All values ending with the given string."""
   id_ends_with: ID
-
-  """All values not ending with the given string."""
   id_not_ends_with: ID
   auth0Id: String
-
-  """All values that are not equal to given value."""
   auth0Id_not: String
-
-  """All values that are contained in given list."""
   auth0Id_in: [String!]
-
-  """All values that are not contained in given list."""
   auth0Id_not_in: [String!]
-
-  """All values less than the given value."""
   auth0Id_lt: String
-
-  """All values less than or equal the given value."""
   auth0Id_lte: String
-
-  """All values greater than the given value."""
   auth0Id_gt: String
-
-  """All values greater than or equal the given value."""
   auth0Id_gte: String
-
-  """All values containing the given string."""
   auth0Id_contains: String
-
-  """All values not containing the given string."""
   auth0Id_not_contains: String
-
-  """All values starting with the given string."""
   auth0Id_starts_with: String
-
-  """All values not starting with the given string."""
   auth0Id_not_starts_with: String
-
-  """All values ending with the given string."""
   auth0Id_ends_with: String
-
-  """All values not ending with the given string."""
   auth0Id_not_ends_with: String
   name: String
-
-  """All values that are not equal to given value."""
   name_not: String
-
-  """All values that are contained in given list."""
   name_in: [String!]
-
-  """All values that are not contained in given list."""
   name_not_in: [String!]
-
-  """All values less than the given value."""
   name_lt: String
-
-  """All values less than or equal the given value."""
   name_lte: String
-
-  """All values greater than the given value."""
   name_gt: String
-
-  """All values greater than or equal the given value."""
   name_gte: String
-
-  """All values containing the given string."""
   name_contains: String
-
-  """All values not containing the given string."""
   name_not_contains: String
-
-  """All values starting with the given string."""
   name_starts_with: String
-
-  """All values not starting with the given string."""
   name_not_starts_with: String
-
-  """All values ending with the given string."""
   name_ends_with: String
-
-  """All values not ending with the given string."""
   name_not_ends_with: String
   email: String
-
-  """All values that are not equal to given value."""
   email_not: String
-
-  """All values that are contained in given list."""
   email_in: [String!]
-
-  """All values that are not contained in given list."""
   email_not_in: [String!]
-
-  """All values less than the given value."""
   email_lt: String
-
-  """All values less than or equal the given value."""
   email_lte: String
-
-  """All values greater than the given value."""
   email_gt: String
-
-  """All values greater than or equal the given value."""
   email_gte: String
-
-  """All values containing the given string."""
   email_contains: String
-
-  """All values not containing the given string."""
   email_not_contains: String
-
-  """All values starting with the given string."""
   email_starts_with: String
-
-  """All values not starting with the given string."""
   email_not_starts_with: String
-
-  """All values ending with the given string."""
   email_ends_with: String
-
-  """All values not ending with the given string."""
   email_not_ends_with: String
   picture: String
-
-  """All values that are not equal to given value."""
   picture_not: String
-
-  """All values that are contained in given list."""
   picture_in: [String!]
-
-  """All values that are not contained in given list."""
   picture_not_in: [String!]
-
-  """All values less than the given value."""
   picture_lt: String
-
-  """All values less than or equal the given value."""
   picture_lte: String
-
-  """All values greater than the given value."""
   picture_gt: String
-
-  """All values greater than or equal the given value."""
   picture_gte: String
-
-  """All values containing the given string."""
   picture_contains: String
-
-  """All values not containing the given string."""
   picture_not_contains: String
-
-  """All values starting with the given string."""
   picture_starts_with: String
-
-  """All values not starting with the given string."""
   picture_not_starts_with: String
-
-  """All values ending with the given string."""
   picture_ends_with: String
-
-  """All values not ending with the given string."""
   picture_not_ends_with: String
   locale: String
-
-  """All values that are not equal to given value."""
   locale_not: String
-
-  """All values that are contained in given list."""
   locale_in: [String!]
-
-  """All values that are not contained in given list."""
   locale_not_in: [String!]
-
-  """All values less than the given value."""
   locale_lt: String
-
-  """All values less than or equal the given value."""
   locale_lte: String
-
-  """All values greater than the given value."""
   locale_gt: String
-
-  """All values greater than or equal the given value."""
   locale_gte: String
-
-  """All values containing the given string."""
   locale_contains: String
-
-  """All values not containing the given string."""
   locale_not_contains: String
-
-  """All values starting with the given string."""
   locale_starts_with: String
-
-  """All values not starting with the given string."""
   locale_not_starts_with: String
-
-  """All values ending with the given string."""
   locale_ends_with: String
-
-  """All values not ending with the given string."""
   locale_not_ends_with: String
-  createdAt: DateTime
-
-  """All values that are not equal to given value."""
-  createdAt_not: DateTime
-
-  """All values that are contained in given list."""
-  createdAt_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  createdAt_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  createdAt_lt: DateTime
-
-  """All values less than or equal the given value."""
-  createdAt_lte: DateTime
-
-  """All values greater than the given value."""
-  createdAt_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  createdAt_gte: DateTime
   questions_every: QuestionWhereInput
   questions_some: QuestionWhereInput
   questions_none: QuestionWhereInput
@@ -2668,6 +1994,17 @@ input UserWhereInput {
   history_every: HistoryActionWhereInput
   history_some: HistoryActionWhereInput
   history_none: HistoryActionWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  AND: [UserWhereInput!]
+  OR: [UserWhereInput!]
+  NOT: [UserWhereInput!]
 }
 
 input UserWhereUniqueInput {
@@ -2675,33 +2012,29 @@ input UserWhereUniqueInput {
   auth0Id: String
 }
 
-type ZNode implements Node {
+type ZNode {
   id: ID!
-  question(where: QuestionWhereInput): Question
-  answer(where: AnswerWhereInput): Answer
+  question: Question
+  answer: Answer
   flags(where: FlagWhereInput, orderBy: FlagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Flag!]
   tags(where: TagWhereInput, orderBy: TagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Tag!]
   history(where: HistoryActionWhereInput, orderBy: HistoryActionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [HistoryAction!]
   highlights: Json
 }
 
-"""A connection to a list of items."""
 type ZNodeConnection {
-  """Information to aid in pagination."""
   pageInfo: PageInfo!
-
-  """A list of edges."""
   edges: [ZNodeEdge]!
   aggregate: AggregateZNode!
 }
 
 input ZNodeCreateInput {
-  highlights: Json
   question: QuestionCreateOneWithoutNodeInput
   answer: AnswerCreateOneWithoutNodeInput
   flags: FlagCreateManyWithoutNodeInput
   tags: TagCreateManyWithoutNodeInput
   history: HistoryActionCreateManyWithoutNodeInput
+  highlights: Json
 }
 
 input ZNodeCreateOneWithoutAnswerInput {
@@ -2730,51 +2063,47 @@ input ZNodeCreateOneWithoutTagsInput {
 }
 
 input ZNodeCreateWithoutAnswerInput {
-  highlights: Json
   question: QuestionCreateOneWithoutNodeInput
   flags: FlagCreateManyWithoutNodeInput
   tags: TagCreateManyWithoutNodeInput
   history: HistoryActionCreateManyWithoutNodeInput
+  highlights: Json
 }
 
 input ZNodeCreateWithoutFlagsInput {
-  highlights: Json
   question: QuestionCreateOneWithoutNodeInput
   answer: AnswerCreateOneWithoutNodeInput
   tags: TagCreateManyWithoutNodeInput
   history: HistoryActionCreateManyWithoutNodeInput
+  highlights: Json
 }
 
 input ZNodeCreateWithoutHistoryInput {
-  highlights: Json
   question: QuestionCreateOneWithoutNodeInput
   answer: AnswerCreateOneWithoutNodeInput
   flags: FlagCreateManyWithoutNodeInput
   tags: TagCreateManyWithoutNodeInput
+  highlights: Json
 }
 
 input ZNodeCreateWithoutQuestionInput {
-  highlights: Json
   answer: AnswerCreateOneWithoutNodeInput
   flags: FlagCreateManyWithoutNodeInput
   tags: TagCreateManyWithoutNodeInput
   history: HistoryActionCreateManyWithoutNodeInput
+  highlights: Json
 }
 
 input ZNodeCreateWithoutTagsInput {
-  highlights: Json
   question: QuestionCreateOneWithoutNodeInput
   answer: AnswerCreateOneWithoutNodeInput
   flags: FlagCreateManyWithoutNodeInput
   history: HistoryActionCreateManyWithoutNodeInput
+  highlights: Json
 }
 
-"""An edge in a connection."""
 type ZNodeEdge {
-  """The item at the end of the edge."""
   node: ZNode!
-
-  """A cursor for use in pagination."""
   cursor: String!
 }
 
@@ -2783,10 +2112,10 @@ enum ZNodeOrderByInput {
   id_DESC
   highlights_ASC
   highlights_DESC
-  updatedAt_ASC
-  updatedAt_DESC
   createdAt_ASC
   createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
 }
 
 type ZNodePreviousValues {
@@ -2802,124 +2131,98 @@ type ZNodeSubscriptionPayload {
 }
 
 input ZNodeSubscriptionWhereInput {
-  """Logical AND on all given filters."""
-  AND: [ZNodeSubscriptionWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [ZNodeSubscriptionWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [ZNodeSubscriptionWhereInput!]
-
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
   mutation_in: [MutationType!]
-
-  """
-  The subscription event gets only dispatched when one of the updated fields names is included in this list
-  """
   updatedFields_contains: String
-
-  """
-  The subscription event gets only dispatched when all of the field names included in this list have been updated
-  """
   updatedFields_contains_every: [String!]
-
-  """
-  The subscription event gets only dispatched when some of the field names included in this list have been updated
-  """
   updatedFields_contains_some: [String!]
   node: ZNodeWhereInput
+  AND: [ZNodeSubscriptionWhereInput!]
+  OR: [ZNodeSubscriptionWhereInput!]
+  NOT: [ZNodeSubscriptionWhereInput!]
 }
 
 input ZNodeUpdateInput {
-  highlights: Json
   question: QuestionUpdateOneWithoutNodeInput
   answer: AnswerUpdateOneWithoutNodeInput
   flags: FlagUpdateManyWithoutNodeInput
   tags: TagUpdateManyWithoutNodeInput
   history: HistoryActionUpdateManyWithoutNodeInput
+  highlights: Json
 }
 
-input ZNodeUpdateOneWithoutAnswerInput {
+input ZNodeUpdateOneRequiredWithoutAnswerInput {
   create: ZNodeCreateWithoutAnswerInput
-  connect: ZNodeWhereUniqueInput
-  delete: Boolean
   update: ZNodeUpdateWithoutAnswerDataInput
   upsert: ZNodeUpsertWithoutAnswerInput
+  connect: ZNodeWhereUniqueInput
 }
 
-input ZNodeUpdateOneWithoutFlagsInput {
+input ZNodeUpdateOneRequiredWithoutFlagsInput {
   create: ZNodeCreateWithoutFlagsInput
-  connect: ZNodeWhereUniqueInput
-  delete: Boolean
   update: ZNodeUpdateWithoutFlagsDataInput
   upsert: ZNodeUpsertWithoutFlagsInput
+  connect: ZNodeWhereUniqueInput
 }
 
-input ZNodeUpdateOneWithoutHistoryInput {
+input ZNodeUpdateOneRequiredWithoutHistoryInput {
   create: ZNodeCreateWithoutHistoryInput
-  connect: ZNodeWhereUniqueInput
-  delete: Boolean
   update: ZNodeUpdateWithoutHistoryDataInput
   upsert: ZNodeUpsertWithoutHistoryInput
+  connect: ZNodeWhereUniqueInput
 }
 
-input ZNodeUpdateOneWithoutQuestionInput {
+input ZNodeUpdateOneRequiredWithoutQuestionInput {
   create: ZNodeCreateWithoutQuestionInput
-  connect: ZNodeWhereUniqueInput
-  delete: Boolean
   update: ZNodeUpdateWithoutQuestionDataInput
   upsert: ZNodeUpsertWithoutQuestionInput
+  connect: ZNodeWhereUniqueInput
 }
 
-input ZNodeUpdateOneWithoutTagsInput {
+input ZNodeUpdateOneRequiredWithoutTagsInput {
   create: ZNodeCreateWithoutTagsInput
-  connect: ZNodeWhereUniqueInput
-  delete: Boolean
   update: ZNodeUpdateWithoutTagsDataInput
   upsert: ZNodeUpsertWithoutTagsInput
+  connect: ZNodeWhereUniqueInput
 }
 
 input ZNodeUpdateWithoutAnswerDataInput {
-  highlights: Json
   question: QuestionUpdateOneWithoutNodeInput
   flags: FlagUpdateManyWithoutNodeInput
   tags: TagUpdateManyWithoutNodeInput
   history: HistoryActionUpdateManyWithoutNodeInput
+  highlights: Json
 }
 
 input ZNodeUpdateWithoutFlagsDataInput {
-  highlights: Json
   question: QuestionUpdateOneWithoutNodeInput
   answer: AnswerUpdateOneWithoutNodeInput
   tags: TagUpdateManyWithoutNodeInput
   history: HistoryActionUpdateManyWithoutNodeInput
+  highlights: Json
 }
 
 input ZNodeUpdateWithoutHistoryDataInput {
-  highlights: Json
   question: QuestionUpdateOneWithoutNodeInput
   answer: AnswerUpdateOneWithoutNodeInput
   flags: FlagUpdateManyWithoutNodeInput
   tags: TagUpdateManyWithoutNodeInput
+  highlights: Json
 }
 
 input ZNodeUpdateWithoutQuestionDataInput {
-  highlights: Json
   answer: AnswerUpdateOneWithoutNodeInput
   flags: FlagUpdateManyWithoutNodeInput
   tags: TagUpdateManyWithoutNodeInput
   history: HistoryActionUpdateManyWithoutNodeInput
+  highlights: Json
 }
 
 input ZNodeUpdateWithoutTagsDataInput {
-  highlights: Json
   question: QuestionUpdateOneWithoutNodeInput
   answer: AnswerUpdateOneWithoutNodeInput
   flags: FlagUpdateManyWithoutNodeInput
   history: HistoryActionUpdateManyWithoutNodeInput
+  highlights: Json
 }
 
 input ZNodeUpsertWithoutAnswerInput {
@@ -2948,53 +2251,19 @@ input ZNodeUpsertWithoutTagsInput {
 }
 
 input ZNodeWhereInput {
-  """Logical AND on all given filters."""
-  AND: [ZNodeWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [ZNodeWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [ZNodeWhereInput!]
   id: ID
-
-  """All values that are not equal to given value."""
   id_not: ID
-
-  """All values that are contained in given list."""
   id_in: [ID!]
-
-  """All values that are not contained in given list."""
   id_not_in: [ID!]
-
-  """All values less than the given value."""
   id_lt: ID
-
-  """All values less than or equal the given value."""
   id_lte: ID
-
-  """All values greater than the given value."""
   id_gt: ID
-
-  """All values greater than or equal the given value."""
   id_gte: ID
-
-  """All values containing the given string."""
   id_contains: ID
-
-  """All values not containing the given string."""
   id_not_contains: ID
-
-  """All values starting with the given string."""
   id_starts_with: ID
-
-  """All values not starting with the given string."""
   id_not_starts_with: ID
-
-  """All values ending with the given string."""
   id_ends_with: ID
-
-  """All values not ending with the given string."""
   id_not_ends_with: ID
   question: QuestionWhereInput
   answer: AnswerWhereInput
@@ -3007,6 +2276,9 @@ input ZNodeWhereInput {
   history_every: HistoryActionWhereInput
   history_some: HistoryActionWhereInput
   history_none: HistoryActionWhereInput
+  AND: [ZNodeWhereInput!]
+  OR: [ZNodeWhereInput!]
+  NOT: [ZNodeWhereInput!]
 }
 
 input ZNodeWhereUniqueInput {

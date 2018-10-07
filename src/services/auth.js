@@ -1,19 +1,23 @@
 import auth0 from 'auth0-js'
 
+import configuration from './configuration'
+
 class Auth {
   constructor() {
+    if (localStorage.auth && localStorage.userId) {
+      this.session = JSON.parse(localStorage.auth)
+    }
+  }
+
+  initAuth0() {
     this.auth0 = new auth0.WebAuth({
-      domain: process.env.REACT_APP_AUTH0_DOMAIN,
-      clientID: process.env.REACT_APP_AUTH0_CLIENTID,
+      domain: configuration.auth0Domain,
+      clientID: configuration.auth0ClientId,
       redirectUri: window.location.origin + '/auth/callback',
-      audience: `https://${process.env.REACT_APP_AUTH0_DOMAIN}/userinfo`,
+      audience: `https://${configuration.auth0Domain}/userinfo`,
       responseType: 'token id_token',
       scope: 'openid profile email'
     })
-
-    if (!this.session && localStorage.auth && localStorage.userId) {
-      this.session = JSON.parse(localStorage.auth)
-    }
   }
 
   /* Action methods */
@@ -48,7 +52,7 @@ class Auth {
   }
 
   setSession(authResult) {
-    if (!authResult) this.logout()
+    if (!authResult) return this.logout()
 
     const expiresAt = authResult.expiresIn * 1000 + new Date().getTime()
 

@@ -43,16 +43,15 @@ Internal Knowledge Database for Zenika members - https://faq.zenika.com
 
 New to this project ?
 
-- [Step-by-step installation](/docs/step_by_step.md) with only the required backing services
+- [Step-by-step installation](/docs/installation.md) with only the required backing services
 
 More documentation available here:
 
-- [Installation](/docs/installation.md)
-- [Deployment](/docs/deployment.md)
-- [Contributing](/docs/contributing.md)
+- [Configuration](/docs/configuration.md)
 - [Backing services](/docs/backing_services.md)
 - [Integrations](/docs/integrations.md)
-- [Multi-tenancy](/docs/multi-tenancy.md)
+- [Multi-tenancy](/docs/multi_tenancy.md)
+- [Contributing](/docs/contributing.md)
 
 ## License
 

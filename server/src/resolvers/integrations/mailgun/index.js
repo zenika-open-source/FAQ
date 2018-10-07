@@ -1,28 +1,54 @@
 const fetch = require('isomorphic-fetch')
 const FormData = require('form-data')
 
-const answerText = require('./answer.text')
-const answerHtml = require('./answer.html')
+const answer = require('./answer')
 
 class Mailgun {
-  constructor() {
-    this.faq_url = process.env.FAQ_URL
-    this.api_key = process.env.MAILGUN_API_KEY
-    this.domain = process.env.MAILGUN_DOMAIN
+  async sendNewAnswer(ctx, nodeId) {
+    const {
+      service: { name, stage },
+      configuration: conf
+    } = ctx.prisma._meta
 
-    if (!this.faq_url || !this.api_key || !this.domain) {
+    if (!conf.mailgunDomain || !conf.mailgunApiKey) {
       // eslint-disable-next-line no-console
-      console.log(
-        'Please provide the FAQ_URL, MAILGUN_API_KEY and MAILGUN_DOMAIN env variables'
+      console.warn(
+        `Please provide a mailgun domain and api key for service ${name}/${stage}`
       )
+      return null
     }
 
-    this.token = Buffer.from(`api:${this.api_key}`).toString('base64')
-    this.endpoint = `https://api.mailgun.net/v3/${this.domain}/messages`
+    const node = await this.getNode(ctx, nodeId)
+
+    const mail = answer.generateMail(node, conf, ctx)
+
+    return this.sendMail(mail, conf)
   }
 
-  async sendNewAnswer(ctx, nodeId) {
-    const node = await ctx.prisma.query.zNode(
+  async sendMail({ from, to, subject, text, html }, conf) {
+    const token = Buffer.from(`api:${conf.mailgunApiKey}`).toString('base64')
+    const endpoint = `https://api.mailgun.net/v3/${conf.mailgunDomain}/messages`
+
+    const form = new FormData()
+    form.append('from', from)
+    form.append('to', to)
+    form.append('subject', subject)
+    form.append('text', text)
+    form.append('html', html)
+
+    const response = await fetch(endpoint, {
+      headers: {
+        Authorization: `Basic ${token}`
+      },
+      method: 'POST',
+      body: form
+    }).then(response => response.json())
+
+    return response
+  }
+
+  getNode(ctx, nodeId) {
+    return ctx.prisma.query.zNode(
       { where: { id: nodeId } },
       `
       {
@@ -44,34 +70,6 @@ class Mailgun {
       }
       `
     )
-
-    const from = `FAQ Zenika <no-reply@${this.faq_url}>`
-    const to = node.question.user.email
-    const subject =
-      node.answer.user.name + ' answered your question on the FAQ!'
-    const text = answerText(node)
-    const html = answerHtml(node)
-
-    return this.sendMail(from, to, subject, text, html)
-  }
-
-  async sendMail(from, to, subject, text, html) {
-    const form = new FormData()
-    form.append('from', from)
-    form.append('to', to)
-    form.append('subject', subject)
-    form.append('text', text)
-    form.append('html', html)
-
-    const response = await fetch(this.endpoint, {
-      headers: {
-        Authorization: `Basic ${this.token}`
-      },
-      method: 'POST',
-      body: form
-    }).then(response => response.json())
-
-    return response
   }
 }
 

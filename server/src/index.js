@@ -6,6 +6,7 @@ const path = require('path')
 const Instanciator = require('./instanciator.js')
 const resolvers = require('./resolvers')
 const auth = require('./middlewares/auth')
+const error = require('./middlewares/error')
 
 /* Create server */
 
@@ -25,14 +26,30 @@ const server = new GraphQLServer({
   })
 })
 
-/* Register authentication middlewares */
+/* Register middlewares */
 
-server.express.post(yogaEndpoint, auth.checkJwt, (err, req, res, next) => {
-  if (err) return res.status(err.status || 500).json(err)
-  next()
-})
-server.express.post(yogaEndpoint, (req, res, next) =>
-  auth.getUser(req, res, next, instanciator.current(req))
+server.express.post(yogaEndpoint, [
+  (req, res, next) => instanciator.getConfiguration(req, next),
+  (req, res, next) => auth.checkJwt(req, res, next, instanciator.current(req)),
+  (req, res, next) => auth.getUser(req, res, next, instanciator.current(req)),
+  error.handling
+])
+
+/* Register configuration endpoint */
+server.express.get(yogaEndpoint + '/configuration', (req, res) =>
+  instanciator.getConfiguration(req, () => {
+    const { auth0Domain, auth0ClientId, tags } = instanciator.current(
+      req
+    )._meta.configuration
+
+    res.header('Access-Control-Allow-Origin', '*')
+    // An unauthenticated user can only access this part of the configuration
+    res.json({
+      auth0Domain,
+      auth0ClientId,
+      tags
+    })
+  })
 )
 
 /* Start server */

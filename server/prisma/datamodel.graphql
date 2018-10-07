@@ -104,3 +104,23 @@ type User {
 
   createdAt: DateTime!
 }
+
+type Configuration {
+  id: ID! @unique
+
+  name: String! @unique
+
+  algoliaAppId: String
+  algoliaApiKey: String
+  algoliaSynonyms: Json
+
+  auth0Domain: String!
+  auth0ClientId: String!
+
+  mailgunDomain: String
+  mailgunApiKey: String
+
+  slackChannelHook: String
+
+  tags: Json
+}

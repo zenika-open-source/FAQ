@@ -1,32 +1,31 @@
 const jwt = require('express-jwt')
 const jwksRsa = require('jwks-rsa')
 
-if (!process.env.AUTH0_DOMAIN) {
-  throw Error(
-    "Missing env var: AUTH0_DOMAIN. You won't be able to authenticate into the app"
-  )
-}
+const checkJwt = (req, res, next, prisma) => {
+  const {
+    service: { name, stage },
+    configuration: conf
+  } = prisma._meta
 
-const checkJwt = jwt({
-  secret: jwksRsa.expressJwtSecret({
-    cache: true,
-    rateLimit: true,
-    jwksRequestsPerMinute: 1,
-    jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`
-  }),
-
-  credentialsRequired: false,
-  audience: process.env.AUTH0_CLIENTID,
-  issuer: `https://${process.env.AUTH0_DOMAIN}/`,
-  algorithms: ['RS256'],
-  getToken: req => {
-    const header = req.headers['authorization']
-    if (!header) return 'bad_token'
-    const parts = header.split(' ')
-    if (parts.length !== 2) return 'bad_token'
-    return parts[1]
+  if (!conf.auth0Domain || !conf.auth0ClientId) {
+    throw new Error(
+      `No auth0 configuration found for service ${name}/${stage}!`
+    )
   }
-})
+
+  jwt({
+    secret: jwksRsa.expressJwtSecret({
+      cache: true,
+      rateLimit: true,
+      jwksRequestsPerMinute: 1,
+      jwksUri: `https://${conf.auth0Domain}/.well-known/jwks.json`
+    }),
+    credentialsRequired: true,
+    audience: conf.auth0ClientId,
+    issuer: `https://${conf.auth0Domain}/`,
+    algorithms: ['RS256']
+  })(req, res, next)
+}
 
 const getUser = async (req, res, next, prisma) => {
   if (!req.user) return next()

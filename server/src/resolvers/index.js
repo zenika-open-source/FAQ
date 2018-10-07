@@ -1,10 +1,12 @@
-const userResolvers = require('./user')
-const questionResolvers = require('./question')
-const answerResolvers = require('./answer')
-const flagResolvers = require('./flag')
-const historyResolvers = require('./history')
-const searchResolvers = require('./search')
-const randomResolvers = require('./random')
+const resolvers = [
+  './user',
+  './question',
+  './answer',
+  './flag',
+  './history',
+  './search',
+  './random'
+]
 
 const mergeResolvers = resolvers =>
   resolvers.reduce((acc, res) => {
@@ -17,12 +19,4 @@ const mergeResolvers = resolvers =>
     return acc
   }, {})
 
-module.exports = mergeResolvers([
-  userResolvers,
-  questionResolvers,
-  answerResolvers,
-  flagResolvers,
-  historyResolvers,
-  searchResolvers,
-  randomResolvers
-])
+module.exports = mergeResolvers(resolvers.map(path => require(path)))

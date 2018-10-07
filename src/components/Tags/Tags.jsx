@@ -14,40 +14,6 @@ const Tags = props => {
   )
 }
 
-Tags.list = {
-  services: [
-    'paie',
-    'ops',
-    'recrutement',
-    'marketing',
-    'rh',
-    'dsi',
-    'dt',
-    'compta',
-    'formation',
-    'ce'
-  ],
-  agency: [
-    'nantes',
-    'paris',
-    'rennes',
-    'lyon',
-    'lille',
-    'bordeaux',
-    'singapour',
-    'montréal'
-  ],
-  theme: [
-    'nouvel arrivant',
-    'formateur',
-    'fin du mois',
-    'mission',
-    'tutoriel',
-    'matériel',
-    'meta'
-  ]
-}
-
 Tags.propTypes = {
   tags: PropTypes.array.isRequired
 }
