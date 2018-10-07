@@ -268,9 +268,9 @@ type BatchPayload {
 type Configuration {
   id: ID!
   name: String!
-  algoliaSynonyms: Json
   algoliaAppId: String
   algoliaApiKey: String
+  algoliaSynonyms: Json
   auth0Domain: String!
   auth0ClientId: String!
   mailgunDomain: String
@@ -287,9 +287,9 @@ type ConfigurationConnection {
 
 input ConfigurationCreateInput {
   name: String!
-  algoliaSynonyms: Json
   algoliaAppId: String
   algoliaApiKey: String
+  algoliaSynonyms: Json
   auth0Domain: String!
   auth0ClientId: String!
   mailgunDomain: String
@@ -308,12 +308,12 @@ enum ConfigurationOrderByInput {
   id_DESC
   name_ASC
   name_DESC
-  algoliaSynonyms_ASC
-  algoliaSynonyms_DESC
   algoliaAppId_ASC
   algoliaAppId_DESC
   algoliaApiKey_ASC
   algoliaApiKey_DESC
+  algoliaSynonyms_ASC
+  algoliaSynonyms_DESC
   auth0Domain_ASC
   auth0Domain_DESC
   auth0ClientId_ASC
@@ -335,9 +335,9 @@ enum ConfigurationOrderByInput {
 type ConfigurationPreviousValues {
   id: ID!
   name: String!
-  algoliaSynonyms: Json
   algoliaAppId: String
   algoliaApiKey: String
+  algoliaSynonyms: Json
   auth0Domain: String!
   auth0ClientId: String!
   mailgunDomain: String
@@ -366,9 +366,9 @@ input ConfigurationSubscriptionWhereInput {
 
 input ConfigurationUpdateInput {
   name: String
-  algoliaSynonyms: Json
   algoliaAppId: String
   algoliaApiKey: String
+  algoliaSynonyms: Json
   auth0Domain: String
   auth0ClientId: String
   mailgunDomain: String

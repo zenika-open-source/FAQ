@@ -23,7 +23,7 @@ class TagPicker extends Component {
     const { label, icon, tags, onChange } = this.props
     const { opened } = this.state
 
-    const tagList = configuration.tags
+    const tagList = configuration.tags || {}
 
     return (
       <div className="tagpicker">

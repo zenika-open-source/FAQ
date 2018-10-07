@@ -110,9 +110,9 @@ type Configuration {
 
   name: String! @unique
 
-  algoliaSynonyms: Json
   algoliaAppId: String
   algoliaApiKey: String
+  algoliaSynonyms: Json
 
   auth0Domain: String!
   auth0ClientId: String!
@@ -122,5 +122,5 @@ type Configuration {
 
   slackChannelHook: String
 
-  tags: Json!
+  tags: Json
 }

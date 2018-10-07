@@ -1,9 +1,9 @@
-const { env, run, queryManagement, queryService } = require('../helpers')
+const { env, run, queryManagement } = require('../helpers')
 
-const { PRISMA_URL, PRISMA_API_SECRET, PRISMA_MANAGEMENT_API_SECRET } = env([
+const { PRISMA_URL } = env([
   'PRISMA_URL',
-  'PRISMA_API_SECRET',
-  'PRISMA_MANAGEMENT_API_SECRET'
+  'PRISMA_API_SECRET', // Implicitely required
+  'PRISMA_MANAGEMENT_API_SECRET' // Implicitely required
 ])
 
 const getServices = () =>
@@ -19,34 +19,13 @@ const getServices = () =>
 const deployPrismaService = (name, stage) =>
   run('prisma deploy', { PRISMA_URL: PRISMA_URL + '/' + name + '/' + stage })
 
-const getAlgoliaCredentials = (name, stage) =>
-  queryService(
-    name,
-    stage,
-    `
-      {
-        configuration (where:{name: "default"}) {
-          algoliaAppId
-          algoliaApiKey
-        }
-      }
-    `
-  ).then(data => (data ? data.configuration : null))
-
 const deployAlgoliaIndex = async (name, stage) => {
-  const credentials = await getAlgoliaCredentials(name, stage)
-
-  if (credentials && credentials.algoliaAppId && credentials.algoliaApiKey) {
+  console.log(
     run('node ../algolia_settings/index.js', {
-      ALGOLIA_APP_ID: credentials.algoliaAppId,
-      ALGOLIA_API_KEY: credentials.algoliaApiKey,
-      ALGOLIA_INDEX: name + '_' + stage
-    })
-  } else {
-    console.warn(
-      `No algolia credentials found in configuration for ${name}/${stage}`
-    )
-  }
+      SERVICE_NAME: name,
+      SERVICE_STAGE: stage
+    }).toString()
+  )
 }
 
 const main = async () => {

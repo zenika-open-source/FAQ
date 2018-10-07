@@ -1,36 +1,81 @@
 const algoliasearch = require('algoliasearch')
-const { env } = require('../helpers')
+const { env, queryService } = require('../helpers')
 
-const synonyms = require('./synonyms.json')
-
-const { ALGOLIA_APP_ID, ALGOLIA_API_KEY, ALGOLIA_INDEX } = env([
-  'ALGOLIA_APP_ID',
-  'ALGOLIA_API_KEY',
-  'ALGOLIA_INDEX'
+const { SERVICE_NAME, SERVICE_STAGE } = env([
+  'PRISMA_URL', // Implicitely required
+  'PRISMA_API_SECRET', // Implicitely required
+  'SERVICE_NAME',
+  'SERVICE_STAGE'
 ])
 
-const main = () => {
-  const client = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_API_KEY)
+const getAlgoliaCredentials = (name, stage) =>
+  queryService(
+    name,
+    stage,
+    `
+      {
+        configuration (where:{name: "default"}) {
+          algoliaAppId
+          algoliaApiKey
+          algoliaSynonyms
+        }
+      }
+    `
+  ).then(data => (data ? data.configuration : null))
 
-  const index = client.initIndex(ALGOLIA_INDEX)
+const updateSynonyms = (index, synonyms) => {
+  return new Promise((resolve, reject) => {
+    index.batchSynonyms(
+      synonyms,
+      {
+        forwardToReplicas: true,
+        replaceExistingSynonyms: true
+      },
+      (err, content) => {
+        if (err) throw reject(err)
+        resolve(content)
+      }
+    )
+  })
+}
 
-  index.batchSynonyms(
-    synonyms,
-    {
-      forwardToReplicas: true,
-      replaceExistingSynonyms: true
-    },
-    function(err, content) {
-      if (err) throw err
+const updateSettings = index => {
+  return new Promise((resolve, reject) => {
+    index.setSettings(
+      {
+        attributesForFaceting: ['filterOnly(tag)', 'filterOnly(flag)'],
+        removeStopWords: ['en', 'fr']
+      },
+      (err, content) => {
+        if (err) reject(err)
+        resolve(content)
+      }
+    )
+  })
+}
 
-      console.log(content)
-    }
+const main = async () => {
+  const credentials = await getAlgoliaCredentials(SERVICE_NAME, SERVICE_STAGE)
+
+  if (!credentials || !credentials.algoliaAppId || !credentials.algoliaApiKey) {
+    console.warn(
+      `No algolia credentials found in configuration for ${SERVICE_NAME}/${SERVICE_STAGE}`
+    )
+    return
+  }
+
+  const client = algoliasearch(
+    credentials.algoliaAppId,
+    credentials.algoliaApiKey
   )
 
-  index.setSettings({
-    attributesForFaceting: ['filterOnly(tag)', 'filterOnly(flag)'],
-    removeStopWords: ['en', 'fr']
-  })
+  const index = client.initIndex(SERVICE_NAME + '_' + SERVICE_STAGE)
+
+  await updateSynonyms(index, credentials.algoliaSynonyms || [])
+
+  await updateSettings(index)
+
+  console.log(`Deployed algolia settings for ${SERVICE_NAME}/${SERVICE_STAGE}`)
 }
 
 main()

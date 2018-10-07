@@ -26,6 +26,7 @@
     "start": "dotenv -e .env.local node src/index.js",
     "deploy": "cd scripts/prisma_deploy_all && dotenv -e ../../.env.local node index.js",
     "new_service": "cd scripts/prisma_new_service && dotenv -e ../../.env.local node index.js",
+    "generate_schema": "prisma generate",
     "lint": "eslint src --fix --ext js"
   },
   "devDependencies": {
