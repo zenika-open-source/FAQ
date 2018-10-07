@@ -34,6 +34,7 @@ npm run deploy
 | -- | -- |
 | `algoliaAppId`| This variable is the ID of your Algolia project. You can find it on your project interface on the [Algolia dashboard](https://www.algolia.com/dashboard). It should be a string of 10 chars (digit or uppercase letter). |
 | `algoliaApiKey` | This variable is the admin API key. You can find it on your [Algolia dashboard](https://www.algolia.com/dashboard): Go to "API Keys > Your API Keys" |
+| `algoliaSynonyms` | This is a JSON array following [this documentation](https://www.algolia.com/doc/guides/textual-relevance/synonyms/)
 
 ## Auth0
 

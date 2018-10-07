@@ -71,7 +71,7 @@ Otherwise, you can find them on your [Auth0 dashboard](https://manage.auth0.com)
 
 ```bash
 # Path: ./FAQ/server
-AUTH0_DOMAIN=your_domain AUTH0_CLIENT_ID=your npm run first_deploy
+AUTH0_DOMAIN=your_domain AUTH0_CLIENT_ID=your npm run new_service
 ```
 
 ## 7/ Run the backend
