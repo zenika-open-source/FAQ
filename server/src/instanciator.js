@@ -10,7 +10,7 @@ class Instanciator {
     const service = req.headers['prisma-service']
 
     if (!service) {
-      throw Error('No \'prisma-service\' header found, please provide one')
+      throw Error("No 'prisma-service' header found, please provide one")
     }
 
     const [name, stage] = service.match(/([^/]+)\/([^/]+)/).splice(1, 2)
@@ -66,6 +66,8 @@ class Instanciator {
     const conf = await instance.query.configuration({
       where: { name: 'default' }
     })
+
+    if (!conf.tags) conf.tags = []
 
     instance._meta.configuration = conf
     next()

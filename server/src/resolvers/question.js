@@ -1,12 +1,20 @@
 const { history, ctxUser, slugify } = require('./helpers')
 const { algolia, slack } = require('./integrations')
 
+const confTagList = ctx =>
+  Object.values(ctx.prisma._meta.configuration.tags).reduce(
+    (acc, x) => acc.concat(x),
+    []
+  )
+
 module.exports = {
   Query: {
     zNode: (_, args, ctx, info) => ctx.prisma.query.zNode(args, info)
   },
   Mutation: {
     createQuestionAndTags: async (_, { title, tags }, ctx, info) => {
+      const tagList = confTagList(ctx)
+
       const node = await ctx.prisma.mutation.createZNode(
         {
           data: {
@@ -18,10 +26,12 @@ module.exports = {
               }
             },
             tags: {
-              create: tags.map(label => ({
-                label,
-                user: { connect: { id: ctxUser(ctx).id } }
-              }))
+              create: tags
+                .filter(label => tagList.includes(label))
+                .map(label => ({
+                  label,
+                  user: { connect: { id: ctxUser(ctx).id } }
+                }))
             },
             flags: {
               create: {
@@ -57,6 +67,8 @@ module.exports = {
       )
     },
     updateQuestionAndTags: async (_, { id, title, tags }, ctx, info) => {
+      const tagList = confTagList(ctx)
+
       const node = (await ctx.prisma.query.question(
         { where: { id } },
         `
@@ -85,15 +97,17 @@ module.exports = {
         oldTag => !newTags.includes(oldTag.label)
       )
 
-      const mutationsToAdd = tagsToAdd.map(label =>
-        ctx.prisma.mutation.createTag({
-          data: {
-            label,
-            node: { connect: { id: node.id } },
-            user: { connect: { id: ctxUser(ctx).id } }
-          }
-        })
-      )
+      const mutationsToAdd = tagsToAdd
+        .filter(label => tagList.includes(label))
+        .map(label =>
+          ctx.prisma.mutation.createTag({
+            data: {
+              label,
+              node: { connect: { id: node.id } },
+              user: { connect: { id: ctxUser(ctx).id } }
+            }
+          })
+        )
 
       const mutationsToRemove = tagsToRemove.map(tag =>
         ctx.prisma.mutation.deleteTag({ where: { id: tag.id } })
