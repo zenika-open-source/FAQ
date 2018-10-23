@@ -4,6 +4,7 @@ This project has the following integrations:
 
 * [Slack](#slack)
 * [Workplace](#workplace)
+* [Public API](#public-api)
 
 ## Slack
 
@@ -34,3 +35,34 @@ FAQ has the following integration with Workplace:
 ### Configuration
 
 There is no configuration needed for the workplace integration to work. Indeed, to share something with the Worplace API, we only need to open a popup with this url: `https://work.facebook.com/sharer.php?display=popup&u=[the_url_to_share]`
+
+## Public API
+
+FAQ has a public API in order to query its data.
+
+### Configuration
+
+1. Manually create a user with a `key` (You can use any string as a key, but we advise you to use a random 30 chars long string).
+2. Create a JWT with the following payload, sign with the previously created key.
+```
+{
+  "user-id": "[user_id]",
+  "prisma-service": "[name]/[stage]",
+  "iat": [timestamp_token_generated],
+  "exp": [timestamp_token_expiration]
+}
+```
+Example:
+```js
+{
+  "user-id": "cjmymlydx01780b30irsmi203",
+  "prisma-service": "demo/prod",
+  "iat": 1538908112,
+  "exp": 1538910112
+}
+```
+3. Query the backend with a POST request with your GraphQL as the body. Add the following headers:
+```
+Authorization: API [your_jwt_token]
+prisma-service: [name]/[state]
+```

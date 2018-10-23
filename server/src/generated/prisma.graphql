@@ -1593,6 +1593,7 @@ input TagWhereUniqueInput {
 type User {
   id: ID!
   auth0Id: String
+  key: String
   name: String
   email: String
   picture: String
@@ -1613,6 +1614,7 @@ type UserConnection {
 
 input UserCreateInput {
   auth0Id: String
+  key: String
   name: String
   email: String
   picture: String
@@ -1651,6 +1653,7 @@ input UserCreateOneWithoutTagsInput {
 
 input UserCreateWithoutAnswersInput {
   auth0Id: String
+  key: String
   name: String
   email: String
   picture: String
@@ -1663,6 +1666,7 @@ input UserCreateWithoutAnswersInput {
 
 input UserCreateWithoutFlagsInput {
   auth0Id: String
+  key: String
   name: String
   email: String
   picture: String
@@ -1675,6 +1679,7 @@ input UserCreateWithoutFlagsInput {
 
 input UserCreateWithoutHistoryInput {
   auth0Id: String
+  key: String
   name: String
   email: String
   picture: String
@@ -1687,6 +1692,7 @@ input UserCreateWithoutHistoryInput {
 
 input UserCreateWithoutQuestionsInput {
   auth0Id: String
+  key: String
   name: String
   email: String
   picture: String
@@ -1699,6 +1705,7 @@ input UserCreateWithoutQuestionsInput {
 
 input UserCreateWithoutTagsInput {
   auth0Id: String
+  key: String
   name: String
   email: String
   picture: String
@@ -1719,6 +1726,8 @@ enum UserOrderByInput {
   id_DESC
   auth0Id_ASC
   auth0Id_DESC
+  key_ASC
+  key_DESC
   name_ASC
   name_DESC
   email_ASC
@@ -1736,6 +1745,7 @@ enum UserOrderByInput {
 type UserPreviousValues {
   id: ID!
   auth0Id: String
+  key: String
   name: String
   email: String
   picture: String
@@ -1763,6 +1773,7 @@ input UserSubscriptionWhereInput {
 
 input UserUpdateInput {
   auth0Id: String
+  key: String
   name: String
   email: String
   picture: String
@@ -1811,6 +1822,7 @@ input UserUpdateOneRequiredWithoutTagsInput {
 
 input UserUpdateWithoutAnswersDataInput {
   auth0Id: String
+  key: String
   name: String
   email: String
   picture: String
@@ -1823,6 +1835,7 @@ input UserUpdateWithoutAnswersDataInput {
 
 input UserUpdateWithoutFlagsDataInput {
   auth0Id: String
+  key: String
   name: String
   email: String
   picture: String
@@ -1835,6 +1848,7 @@ input UserUpdateWithoutFlagsDataInput {
 
 input UserUpdateWithoutHistoryDataInput {
   auth0Id: String
+  key: String
   name: String
   email: String
   picture: String
@@ -1847,6 +1861,7 @@ input UserUpdateWithoutHistoryDataInput {
 
 input UserUpdateWithoutQuestionsDataInput {
   auth0Id: String
+  key: String
   name: String
   email: String
   picture: String
@@ -1859,6 +1874,7 @@ input UserUpdateWithoutQuestionsDataInput {
 
 input UserUpdateWithoutTagsDataInput {
   auth0Id: String
+  key: String
   name: String
   email: String
   picture: String
@@ -1923,6 +1939,20 @@ input UserWhereInput {
   auth0Id_not_starts_with: String
   auth0Id_ends_with: String
   auth0Id_not_ends_with: String
+  key: String
+  key_not: String
+  key_in: [String!]
+  key_not_in: [String!]
+  key_lt: String
+  key_lte: String
+  key_gt: String
+  key_gte: String
+  key_contains: String
+  key_not_contains: String
+  key_starts_with: String
+  key_not_starts_with: String
+  key_ends_with: String
+  key_not_ends_with: String
   name: String
   name_not: String
   name_in: [String!]
