@@ -2,9 +2,9 @@
 
 This project has the following integrations:
 
-* [Slack](#slack)
-* [Workplace](#workplace)
-* [Public API](#public-api)
+- [Slack](#slack)
+- [Workplace](#workplace)
+- [Public API](#public-api)
 
 ## Slack
 
@@ -12,16 +12,16 @@ Slack is a collaboration chat tool often used in and out of organizations to hel
 
 FAQ has the following integration with slack:
 
-* Sends new questions into a dedicated slack channel
+- Sends new questions into a dedicated slack channel
 
 ### Create Slack application
 
-In order to integrate with Slack, you will need to create an application. It can be done using the [Slack "Build" dashboard](https://api.slack.com/). Follow the instructions from Slack to create your app. See below for  your configuration variables.
+In order to integrate with Slack, you will need to create an application. It can be done using the [Slack "Build" dashboard](https://api.slack.com/). Follow the instructions from Slack to create your app. See below for your configuration variables.
 
 ### Configuration variables
 
 | Name | Notes |
-| -- |-- |
+| -- | -- |
 | `slackChannelHook` | This variable is a hook URI which is called by the backend in order to send the message to the channel. You can configure a hook on the [Slack "Build" dashboard](https://api.slack.com/). Choose your app, then go to "Features > Incoming Webhooks". Active the feature and create a hook for the dedicated channel you wish to send questions to. The generated url is what you need for this variable. |
 
 ## Workplace
@@ -30,7 +30,7 @@ Workplace is a collaborative platform run by Facebook and can be labeled as "Fac
 
 FAQ has the following integration with Workplace:
 
-* Button to share a question on Workplace
+- Button to share a question on Workplace
 
 ### Configuration
 
@@ -42,17 +42,46 @@ FAQ has a public API in order to query its data.
 
 ### Configuration
 
-1. Manually create a user with a `key` (You can use any string as a key, but we advise you to use a random 30 chars long string).
-2. Create a JWT with the following payload, sign with the previously created key.
+1. Manually create a user with a `key` (You can use any string as a key, but we advise you to use a random 30 chars long string). You can create it using the Playground (probably https://localhost:4000/gql/playground if you followed the installation process).
+
+```graphql
+mutation {
+  createUser(
+    data: {
+      key: "awesome-key"
+      name: "API"
+      email: "awesome-api@zenika.com"
+    }
+  ) {
+    id
+    key
+    name
+    email
+  }
+}
+```
+
+2. Create a JWT with the following payload, sign with the previously created key. (You can find more information about how to create a JWT and librairies [here](https://jwt.io/))
+
 ```
 {
   "user-id": "[user_id]",
   "prisma-service": "[name]/[stage]",
-  "iat": [timestamp_token_generated],
-  "exp": [timestamp_token_expiration]
+  "iat": [timestamp_generated],
+  "exp": [timestamp_expiration]
 }
 ```
+
+> `user-id` is the id of the user created in step 1
+
+> `prisma-service` is the service you want to access (See [Multi-tenancy](/docs/multi_tenancy.md) for more information)
+
+> `iat` is the current timestamp
+
+> `exp` is the current timestamp + the number of seconds you want the token to be valid
+
 Example:
+
 ```js
 {
   "user-id": "cjmymlydx01780b30irsmi203",
@@ -61,7 +90,11 @@ Example:
   "exp": 1538910112
 }
 ```
-3. Query the backend with a POST request with your GraphQL as the body. Add the following headers:
+
+> Here, `exp` = `iat` + 2000s. This token would be available for around half an hour.
+
+3. Query the backend with an HTTP POST request with your GraphQL as the body. Add the following headers:
+
 ```
 Authorization: API [your_jwt_token]
 prisma-service: [name]/[state]

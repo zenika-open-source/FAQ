@@ -13,64 +13,73 @@ const checkJwt = (req, res, next, prisma) => {
     )
   }
 
-  const authType =
-    req.headers.authorization && req.headers.authorization.split(' ')[0]
+  const [authType, token] = (req.headers.authorization || '').split(' ')
 
-  req.authType = authType
+  let secret = null
+  let issuer = null
+  let audience = null
+  let algorithms = null
+  let getUser = null
 
   if (authType === 'Bearer') {
-    jwt({
-      secret: jwksRsa.expressJwtSecret({
-        cache: true,
-        rateLimit: true,
-        jwksRequestsPerMinute: 1,
-        jwksUri: `https://${conf.auth0Domain}/.well-known/jwks.json`
-      }),
-      credentialsRequired: true,
-      audience: conf.auth0ClientId,
-      issuer: `https://${conf.auth0Domain}/`,
-      algorithms: ['RS256']
-    })(req, res, next)
+    // Auth0 Authentication
+
+    secret = jwksRsa.expressJwtSecret({
+      cache: true,
+      rateLimit: true,
+      jwksRequestsPerMinute: 1,
+      jwksUri: `https://${conf.auth0Domain}/.well-known/jwks.json`
+    })
+
+    issuer = `https://${conf.auth0Domain}/`
+    audience = conf.auth0ClientId
+    algorithms = ['RS256']
+
+    getUser = async err => {
+      if (err) next(err)
+
+      const user = await prisma.query.user({
+        where: { auth0Id: req.jwtCheckResult.sub.split('|')[1] }
+      })
+      req.user = { token: req.jwtCheckResult, ...user }
+      next()
+    }
   } else if (authType === 'API') {
-    jwt({
-      secret: (req, payload, done) => {
-        if (req.headers['prisma-service'] !== payload['prisma-service']) {
-          done(
-            new jwt.UnauthorizedError(
-              'wrong-prisma-service',
-              'Wrong prisma-service found in JWT Payload'
-            )
+    // API Authentication
+
+    secret = (req, payload, done) => {
+      if (
+        payload &&
+        req.headers['prisma-service'] !== payload['prisma-service']
+      ) {
+        done(
+          new jwt.UnauthorizedError(
+            'wrong-prisma-service',
+            'Wrong prisma-service found in JWT Payload'
           )
-        }
-        prisma.query
-          .user({ where: { id: payload['user-id'] } }, '{ id key }')
-          .then(user => done(null, user.key))
-      },
-      credentialsRequired: true,
-      algorithms: ['HS256'],
-      getToken: req =>
-        req.headers.authorization && req.headers.authorization.split(' ')[1]
-    })(req, res, next)
+        )
+      }
+      prisma.query.user({ where: { id: payload['user-id'] } }).then(user => {
+        req.user = user
+        done(null, user.key)
+      })
+    }
+
+    algorithms = ['HS256']
+    getUser = next
   } else {
     throw new Error('Authentication type not supported: ' + authType)
   }
+
+  jwt({
+    secret,
+    credentialsRequired: true,
+    algorithms,
+    audience,
+    issuer,
+    requestProperty: 'jwtCheckResult',
+    getToken: () => token
+  })(req, res, getUser)
 }
 
-const getUser = async (req, res, next, prisma) => {
-  if (!req.user) return next()
-
-  if (req.authType === 'Bearer') {
-    const user = await prisma.query.user({
-      where: { auth0Id: req.user.sub.split('|')[1] }
-    })
-    req.user = { token: req.user, ...user }
-  } else if (req.authType === 'API') {
-    const user = await prisma.query.user({
-      where: { id: req.user['user-id'] }
-    })
-    req.user = user
-  }
-  next()
-}
-
-module.exports = { checkJwt, getUser }
+module.exports = { checkJwt }
