@@ -42,16 +42,12 @@ FAQ has a public API in order to query its data.
 
 ### Configuration
 
-1. Manually create a user with a `key` (You can use any string as a key, but we advise you to use a random 30 chars long string). You can create it using the Playground (probably https://localhost:4000/gql/playground if you followed the installation process).
+1. Manually create a user with a `key` (You can use any string as a key, but we advise you to use a random 30 chars long string). You can create it using the Prisma Playground (probably https://localhost:4466 if you followed the installation process).
 
 ```graphql
 mutation {
   createUser(
-    data: {
-      key: "awesome-key"
-      name: "API"
-      email: "awesome-api@zenika.com"
-    }
+    data: { key: "awesome-key", name: "API", email: "awesome-api@zenika.com" }
   ) {
     id
     key
@@ -65,16 +61,16 @@ mutation {
 
 ```
 {
-  "user-id": "[user_id]",
-  "prisma-service": "[name]/[stage]",
+  "userId": "[user_id]",
+  "prismaService": "[name]/[stage]",
   "iat": [timestamp_generated],
   "exp": [timestamp_expiration]
 }
 ```
 
-> `user-id` is the id of the user created in step 1
+> `userId` is the id of the user created in step 1
 
-> `prisma-service` is the service you want to access (See [Multi-tenancy](/docs/multi_tenancy.md) for more information)
+> `prismaService` is the service you want to access (See [Multi-tenancy](/docs/multi_tenancy.md) for more information)
 
 > `iat` is the current timestamp
 
@@ -84,8 +80,8 @@ Example:
 
 ```js
 {
-  "user-id": "cjmymlydx01780b30irsmi203",
-  "prisma-service": "demo/prod",
+  "userId": "cjmymlydx01780b30irsmi203",
+  "prismaService": "demo/prod",
   "iat": 1538908112,
   "exp": 1538910112
 }

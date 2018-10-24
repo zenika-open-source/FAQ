@@ -50,7 +50,7 @@ const checkJwt = (req, res, next, prisma) => {
       secret: (req, payload, done) => {
         if (
           !payload ||
-          req.headers['prisma-service'] !== payload['prisma-service']
+          req.headers['prisma-service'] !== payload['prismaService']
         ) {
           return done(
             new UnauthorizedError(
@@ -59,7 +59,7 @@ const checkJwt = (req, res, next, prisma) => {
             )
           )
         }
-        prisma.query.user({ where: { id: payload['user-id'] } }).then(user => {
+        prisma.query.user({ where: { id: payload['userId'] } }).then(user => {
           req.user = user
           done(null, user.key)
         })
