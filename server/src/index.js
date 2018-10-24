@@ -31,7 +31,6 @@ const server = new GraphQLServer({
 server.express.post(yogaEndpoint, [
   (req, res, next) => instanciator.getConfiguration(req, next),
   (req, res, next) => auth.checkJwt(req, res, next, instanciator.current(req)),
-  (req, res, next) => auth.getUser(req, res, next, instanciator.current(req)),
   error.handling
 ])
 

@@ -5,7 +5,6 @@ export const me = gql`
   query {
     me {
       id
-      createdAt
       email
       name
       picture
