@@ -50,7 +50,7 @@ const checkJwt = (req, res, next, prisma) => {
       secret: (req, payload, done) => {
         if (
           !payload ||
-          req.headers['prisma-service'] !== payload['prismaService']
+          req.headers['prisma-service'] !== payload.prismaService
         ) {
           return done(
             new UnauthorizedError(
