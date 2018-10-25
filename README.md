@@ -38,6 +38,7 @@ Internal Knowledge Database for Zenika members - https://faq.zenika.com
 
 - Slack: Sending new questions into a dedicated channel
 - Workplace: Button to share questions
+- Public API: Write your own integration to query the FAQ
 
 ## Documentation
 
