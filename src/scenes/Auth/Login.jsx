@@ -2,10 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 
-import { auth } from 'services'
+import { alert, auth } from 'services'
 
-import Loading from 'components/Loading'
-import Button from 'components/Button'
+import { Loading, Button } from 'components'
 
 const Login = ({ history, location }) => {
   const redirectedFrom = location.state ? location.state.from : '/'
@@ -15,13 +14,14 @@ const Login = ({ history, location }) => {
       .renewAuth()
       .then(() => history.push(redirectedFrom))
       .catch(err => {
-        // eslint-disable-next-line
-        console.log(err)
+        if (err.error !== 'login_required') {
+          alert.pushError(
+            'Authentication failed: ' + JSON.stringify(err.message),
+            err
+          )
+        }
         auth.logout() // Remove session for clean login
-        history.push({
-          pathname: '/auth/login',
-          state: err.error === 'login_required' ? null : { error: err }
-        })
+        history.push('/auth/login')
       })
     return <Loading text="Authenticating..." />
   }
@@ -37,13 +37,6 @@ const Login = ({ history, location }) => {
         primary
         raised
       />
-      {location.state ? (
-        <div style={{ color: 'red', marginTop: '1rem' }}>
-          {JSON.stringify(location.state.error)}
-        </div>
-      ) : (
-        ''
-      )}
     </div>
   )
 }

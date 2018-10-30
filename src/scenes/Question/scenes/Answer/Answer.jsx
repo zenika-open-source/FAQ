@@ -8,7 +8,7 @@ import isEqual from 'lodash/isEqual'
 import { compose } from 'react-apollo'
 import { submitAnswer, editAnswer } from './queries'
 
-import { markdown } from 'services'
+import { alert, markdown } from 'services'
 
 import NotFound from 'scenes/NotFound'
 
@@ -80,11 +80,19 @@ class Answer extends Component {
     submitAnswer(content, sources, zNode.id)
       .then(() => {
         this.setState({ slug: zNode.question.slug + '-' + zNode.id })
+        alert.pushSuccess('Your answer was successfully submitted!')
       })
       .catch(error => {
-        alert(error)
-        // eslint-disable-next-line
-        console.log(error)
+        alert.pushError(
+          <>
+            <p>{error.message || 'An unknown error occured.'}</p>
+            <p>Please, try again</p>
+          </>,
+          error
+        )
+        this.setState({
+          loadingSubmit: false
+        })
       })
   }
 
@@ -101,11 +109,19 @@ class Answer extends Component {
     )
       .then(() => {
         this.setState({ slug: zNode.question.slug + '-' + zNode.id })
+        alert.pushSuccess('The answer was successfully edited!')
       })
       .catch(error => {
-        alert(error)
-        // eslint-disable-next-line
-        console.log(error)
+        alert.pushError(
+          <>
+            <p>{error.message || 'An unknown error occured.'}</p>
+            <p>Please, try again</p>
+          </>,
+          error
+        )
+        this.setState({
+          loadingSubmit: false
+        })
       })
   }
 

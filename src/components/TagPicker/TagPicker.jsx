@@ -47,7 +47,7 @@ class TagPicker extends Component {
           <Button
             icon={icon || 'add'}
             link
-            style={{ padding: 0, zIndex: 2 }}
+            style={{ padding: 0 }}
             onClick={() => this.setState(state => ({ opened: !state.opened }))}
           />
           <div className="picker" style={{ display: opened ? 'flex' : 'none' }}>

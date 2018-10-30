@@ -6,24 +6,6 @@
   flex-grow: 1;
 }
 
-.meta-error {
-  color: var(--error-color);
-}
-
-.meta-error-bg {
-  color: white;
-  background-color: var(--error-color);
-}
-
-.meta-warning {
-  color: var(--warning-color);
-}
-
-.meta-warning-bg {
-  color: white;
-  background-color: var(--warning-color);
-}
-
 .row-on-mobile {
   display: flex;
 }
