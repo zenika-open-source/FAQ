@@ -35,7 +35,7 @@ class Auth {
         } else if (err) {
           reject(err)
         } else {
-          reject('Unknown error')
+          reject(new Error('Unknown error'))
         }
       })
     })

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import cn from 'classnames'
 
 import AlertContext from './AlertContext'
@@ -33,6 +34,13 @@ class Alert extends Component {
       </div>
     )
   }
+}
+
+Alert.propTypes = {
+  alert: PropTypes.shape({
+    type: PropTypes.string.isRequired,
+    message: PropTypes.node.isRequired
+  }).isRequired
 }
 
 export default Alert

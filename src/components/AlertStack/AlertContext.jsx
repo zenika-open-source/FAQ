@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 const AlertContext = React.createContext()
 
@@ -73,12 +74,15 @@ class AlertProvider extends Component {
 
   render() {
     return (
-      <AlertContext.Provider
-        value={this.state}
-        children={this.props.children}
-      />
+      <AlertContext.Provider value={this.state}>
+        {this.props.children}
+      </AlertContext.Provider>
     )
   }
+}
+
+AlertProvider.propTypes = {
+  children: PropTypes.node.isRequired
 }
 
 export default AlertContext
