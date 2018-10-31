@@ -1,7 +1,7 @@
-import { AlertStore } from 'components'
+import { AlertProvider } from 'components'
 
 const alert = {
-  push: alert => AlertStore.pushAlert(alert),
+  push: alert => AlertProvider.pushAlert(alert),
   pushError: (message, err) =>
     alert.push({
       message,

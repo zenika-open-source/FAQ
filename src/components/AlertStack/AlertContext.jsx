@@ -3,8 +3,6 @@ import PropTypes from 'prop-types'
 
 const AlertContext = React.createContext()
 
-const AlertStore = {}
-
 class AlertProvider extends Component {
   constructor(props) {
     super(props)
@@ -16,7 +14,7 @@ class AlertProvider extends Component {
       closeAlert: this.closeAlert
     }
 
-    AlertStore.pushAlert = this.pushAlert
+    AlertProvider.pushAlert = this.pushAlert
   }
 
   pushAlert = alert => {
@@ -60,4 +58,4 @@ AlertProvider.propTypes = {
 }
 
 export default AlertContext
-export { AlertProvider, AlertStore }
+export { AlertProvider }

@@ -1,8 +1,7 @@
 export {
   default as AlertStack,
   AlertProvider,
-  AlertContext,
-  AlertStore
+  AlertContext
 } from './AlertStack'
 export { default as Authenticated } from './Authenticated'
 export { default as Avatar } from './Avatar'
