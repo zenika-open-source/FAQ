@@ -10,33 +10,7 @@ class AlertProvider extends Component {
     super(props)
 
     this.state = {
-      alerts: [
-        {
-          id: 1,
-          message: 'Primary alert',
-          type: 'primary'
-        },
-        {
-          id: 2,
-          message: 'Success alert',
-          type: 'success'
-        },
-        {
-          id: 3,
-          message: 'Info alert',
-          type: 'info'
-        },
-        {
-          id: 4,
-          message: 'Warning alert',
-          type: 'warning'
-        },
-        {
-          id: 5,
-          message: 'Error alert',
-          type: 'error'
-        }
-      ],
+      alerts: [],
       pushAlert: this.pushAlert,
       showAlert: this.showAlert,
       closeAlert: this.closeAlert
