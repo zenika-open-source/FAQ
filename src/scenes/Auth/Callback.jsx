@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 
 import { authUser } from './queries'
 
-import { auth } from 'services'
+import { alert, auth } from 'services'
 
-import Loading from 'components/Loading'
+import { Loading } from 'components'
 
 class Callback extends Component {
   componentDidMount() {
@@ -18,10 +18,12 @@ class Callback extends Component {
       .then(({ data }) => auth.setUserId(data.authenticate.id)) // Set user's id
       .then(() => history.push(auth.popAfterLoginRedirectUrl())) // Redirect user
       .catch(err => {
-        // eslint-disable-next-line
-        console.log(err)
+        alert.pushError(
+          'Authentication failed: ' + JSON.stringify(err.message),
+          err
+        )
         auth.setSession(null)
-        history.push({ pathname: '/auth/login', state: { error: err } })
+        history.push('/auth/login')
       })
   }
 

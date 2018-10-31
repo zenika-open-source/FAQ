@@ -25,9 +25,8 @@
   --layout-navbar-height: 64px;
 
   /* Meta colors */
-  --info-color: #fff;
-  --success-color: #7fba01;
-  --question-color: #2170bf;
-  --error-color: #c73228;
+  --info-color: #209cee;
+  --success-color: #23d160;
   --warning-color: #ff9900;
+  --error-color: #ff3860;
 }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import routing from './routing.js'
+import routing from './routing'
 
 import { Loading } from 'components'
 

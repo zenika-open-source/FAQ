@@ -6,6 +6,8 @@ import difference from 'lodash/difference'
 import { compose } from 'react-apollo'
 import { submitQuestion, editQuestion } from './queries'
 
+import { alert } from 'services'
+
 import Card, {
   CardText,
   CardActions,
@@ -66,11 +68,19 @@ class Edit extends Component {
             '-' +
             data.createQuestionAndTags.node.id
         })
+        alert.pushSuccess('Your question was successfully submitted!')
       })
       .catch(error => {
-        alert(error)
-        // eslint-disable-next-line
-        console.log(error)
+        alert.pushError(
+          <>
+            <p>{error.message || 'An unknown error occured.'}</p>
+            <p>Please, try again</p>
+          </>,
+          error
+        )
+        this.setState({
+          loadingSubmit: false
+        })
       })
   }
 
@@ -89,11 +99,19 @@ class Edit extends Component {
         this.setState({
           slug: data.updateQuestionAndTags.slug + '-' + zNode.id
         })
+        alert.pushSuccess('The question was successfully edited!')
       })
       .catch(error => {
-        alert(error)
-        // eslint-disable-next-line
-        console.log(error)
+        alert.pushError(
+          <>
+            <p>{error.message || 'An unknown error occured.'}</p>
+            <p>Please, try again</p>
+          </>,
+          error
+        )
+        this.setState({
+          loadingSubmit: false
+        })
       })
   }
 

@@ -17,15 +17,17 @@ const apollo = new ApolloClient({
     onError(({ graphQLErrors, networkError, operation }) => {
       if (graphQLErrors) {
         graphQLErrors.map(({ message, locations, path }) =>
-          // eslint-disable-next-line no-alert
-          alert(
+          // eslint-disable-next-line no-console
+          console.error(
             `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}. Please refresh the page.`
           )
         )
       }
-      // eslint-disable-next-line no-alert
       if (networkError) {
-        alert(`[Network error]: ${networkError}. Please refresh the page.`)
+        // eslint-disable-next-line no-console
+        console.error(
+          `[Network error]: ${networkError}. Please refresh the page.`
+        )
       }
     }),
     setContext((_, { headers }) => {

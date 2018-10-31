@@ -1,5 +1,6 @@
 import auth0 from 'auth0-js'
 
+import alert from './alert'
 import configuration from './configuration'
 
 class Auth {
@@ -9,21 +10,10 @@ class Auth {
     }
   }
 
-  initAuth0() {
-    this.auth0 = new auth0.WebAuth({
-      domain: configuration.auth0Domain,
-      clientID: configuration.auth0ClientId,
-      redirectUri: window.location.origin + '/auth/callback',
-      audience: `https://${configuration.auth0Domain}/userinfo`,
-      responseType: 'token id_token',
-      scope: 'openid profile email'
-    })
-  }
-
   /* Action methods */
   login(redirectTo) {
     sessionStorage.after_login_redirect_url = redirectTo
-    this.auth0.authorize()
+    this.getAuth0().authorize()
   }
 
   logout() {
@@ -39,13 +29,13 @@ class Auth {
 
   parseHash(hash) {
     return new Promise((resolve, reject) => {
-      this.auth0.parseHash({ hash }, (err, authResult) => {
+      this.getAuth0().parseHash({ hash }, (err, authResult) => {
         if (authResult && authResult.accessToken && authResult.idToken) {
           resolve(authResult)
         } else if (err) {
           reject(err)
         } else {
-          reject(new Error('Authentication did not work'))
+          reject(new Error('Unknown error'))
         }
       })
     })
@@ -64,7 +54,7 @@ class Auth {
 
     localStorage.auth = JSON.stringify(this.session)
 
-    // this.scheduleRenew()
+    this.scheduleRenew()
 
     return authResult
   }
@@ -73,10 +63,12 @@ class Auth {
 
   renewAuth() {
     return new Promise((resolve, reject) => {
-      this.auth0.checkSession({}, (err, authResult) => {
+      this.getAuth0().checkSession({}, (err, authResult) => {
         if (err) {
-          // eslint-disable-next-line
-          console.log(`Error while renewing session: ${err.error}`)
+          alert.pushError(
+            'Renewing authentication failed: ' + JSON.stringify(err),
+            err
+          )
           reject(err)
           return
         }
@@ -99,6 +91,21 @@ class Auth {
   }
 
   /* State getters and setters */
+  getAuth0() {
+    if (!this.auth0) {
+      this.auth0 = new auth0.WebAuth({
+        domain: configuration.auth0Domain,
+        clientID: configuration.auth0ClientId,
+        redirectUri: window.location.origin + '/auth/callback',
+        audience: `https://${configuration.auth0Domain}/userinfo`,
+        responseType: 'token id_token',
+        scope: 'openid profile email'
+      })
+    }
+
+    return this.auth0
+  }
+
   isAuthenticated() {
     return (
       this.session &&
