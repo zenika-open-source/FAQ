@@ -11,26 +11,29 @@ module.exports = {
     ) => {
       sources = JSON.parse(sources)
 
-      const answer = await ctx.prisma.mutation.createAnswer(
-        {
-          data: {
-            content,
-            node: {
-              connect: {
-                id: nodeId
+      let answer
+
+      try {
+        answer = await ctx.prisma.mutation.createAnswer(
+          {
+            data: {
+              content,
+              node: {
+                connect: {
+                  id: nodeId
+                }
+              },
+              user: {
+                connect: {
+                  id: ctxUser(ctx).id
+                }
+              },
+              sources: {
+                create: sources
               }
-            },
-            user: {
-              connect: {
-                id: ctxUser(ctx).id
-              }
-            },
-            sources: {
-              create: sources
             }
-          }
-        },
-        `
+          },
+          `
         {
           id
           node {
@@ -40,10 +43,19 @@ module.exports = {
           }
         }
         `
-      )
+        )
+      } catch (e) {
+        // The error doesn't includes the error code, so we use the message
+        if (e.message.includes('NodeAnswer') && e.message.includes('violate')) {
+          throw new Error(
+            'Someone already answered this question! Refresh this page.'
+          )
+        }
+        throw e
+      }
 
-      await ctx.prisma.mutation.deleteFlag({
-        where: { id: answer.node.flags[0].id }
+      await ctx.prisma.mutation.deleteManyFlags({
+        where: { node: { id: nodeId }, type: 'unanswered' }
       })
 
       await history.push(ctx, {

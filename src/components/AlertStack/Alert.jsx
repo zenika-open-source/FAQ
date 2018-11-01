@@ -11,7 +11,10 @@ class Alert extends Component {
 
   componentDidMount() {
     setTimeout(() => this.context.showAlert(this.props.alert), 0)
-    setTimeout(() => this.context.closeAlert(this.props.alert), 5000)
+    setTimeout(
+      () => this.context.closeAlert(this.props.alert),
+      this.props.alert.type === 'success' ? 5000 : 7000
+    )
   }
 
   render() {
