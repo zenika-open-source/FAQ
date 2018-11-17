@@ -1,10 +1,10 @@
 const parseQueryString = text =>
   text
-    ? text
-      .substr(1)
-      .split('&')
-      .map(s => s.split('='))
-      .reduce((obj, [k, v]) => ({ ...obj, [k]: v }), {})
+    ? decodeURI(text)
+        .substr(1)
+        .split('&')
+        .map(s => s.split('='))
+        .reduce((obj, [k, v]) => ({ ...obj, [k]: v }), {})
     : {}
 const stringifyQueryString = params =>
   '?' +
