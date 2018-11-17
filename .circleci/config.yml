@@ -20,7 +20,7 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - root-
 
-      - run: npm install
+      - run: npm ci
 
       - run: npm run lint
 
@@ -34,7 +34,7 @@ jobs:
             - server-{{ checksum "package-lock.json" }}
             - server-
 
-      - run: cd server && npm install && npm run lint && cd ..
+      - run: cd server && npm ci && npm run lint && cd ..
 
       - save_cache:
           paths:
