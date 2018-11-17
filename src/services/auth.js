@@ -65,10 +65,13 @@ class Auth {
     return new Promise((resolve, reject) => {
       this.getAuth0().checkSession({}, (err, authResult) => {
         if (err) {
-          alert.pushError(
-            'Renewing authentication failed: ' + JSON.stringify(err),
-            err
-          )
+          // "Login required" isn't an error per se
+          if (err.error !== 'login_required') {
+            alert.pushError(
+              'Renewing authentication failed: ' + JSON.stringify(err),
+              err
+            )
+          }
           reject(err)
           return
         }
