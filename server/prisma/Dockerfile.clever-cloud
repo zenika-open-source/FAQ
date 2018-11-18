@@ -1,4 +1,4 @@
-FROM prismagraphql/prisma:1.16
+FROM prismagraphql/prisma:1.20.7
 
 ARG POSTGRESQL_ADDON_DB
 ARG POSTGRESQL_ADDON_HOST
