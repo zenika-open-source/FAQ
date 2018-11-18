@@ -23,6 +23,7 @@ jobs:
           cd ..
           npm run build
           rm -rf node_modules/
+          rm -rf server/node_modules/
 
       - persist_to_workspace:
           root: *workspace_root

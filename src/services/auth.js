@@ -66,7 +66,7 @@ class Auth {
       this.getAuth0().checkSession({}, (err, authResult) => {
         if (err) {
           // "Login required" isn't an error per se
-          if (err.error !== 'login_required') {
+          if (err.error != 'login_required') {
             alert.pushError(
               'Renewing authentication failed: ' + JSON.stringify(err),
               err
