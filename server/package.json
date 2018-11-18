@@ -27,7 +27,8 @@
     "deploy": "cd scripts/prisma_deploy_all && dotenv -e ../../.env.local node index.js",
     "new_service": "cd scripts/prisma_new_service && dotenv -e ../../.env.local node index.js",
     "generate_schema": "prisma generate",
-    "lint": "eslint src --fix --ext js"
+    "lint": "eslint src --fix --ext js",
+    "local_containers": "cd prisma/ && dotenv -e ../.env.local docker-compose up"
   },
   "devDependencies": {
     "dotenv-cli": "^1.4.0",
