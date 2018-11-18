@@ -1,6 +1,11 @@
+---
+name: Getting started
+route: /getting-started
+---
+
 # Installation
 
-Here are the instructions to quickly install and run this project with the minimum [backing services](/docs/backing_services.md) required.
+Here are the instructions to quickly install and run this project with the minimum [backing services](/advanced/backing-services) required.
 
 ## 1/ Global dependencies
 
@@ -57,7 +62,7 @@ PRISMA_MANAGEMENT_API_SECRET=my-secret-42
 PRISMA_MANAGEMENT_API_SECRET=my-secret-42 docker-compose up
 ```
 
-## 6/ Deploy and initializa your default service
+## 6/ Deploy and initialize your default service
 
 You will need your Auth0 credentials for this step.
 
@@ -90,4 +95,4 @@ npm start
 
 And you should now have an up and running FAQ at http://localhost:3000! 🎉
 
-But wait! It's only the slim version with only the required backing services. If you want to activate more features (e.g.: Algolia, Slack, Mailgun, ...), you will need to follow the [full configuration instructions](/docs/configuration.md).
+But wait! It's only the slim version with only the required backing services. If you want to activate more features (e.g.: Algolia, Slack, Mailgun, ...), you will need to follow the [full configuration instructions](/advanced/configuration).

@@ -20,6 +20,7 @@ server/front_build
 .graphcoolrc
 .vscode
 stats.json
+.docz
 
 npm-debug.log*
 yarn-debug.log*

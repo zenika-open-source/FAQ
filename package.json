@@ -40,9 +40,13 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "lint": "eslint src --fix --ext js,jsx",
-    "stats": "NODE_ENV=production webpack --config node_modules/react-scripts/config/webpack.config.prod.js --json > stats.json"
+    "stats": "NODE_ENV=production webpack --config node_modules/react-scripts/config/webpack.config.prod.js --json > stats.json",
+    "docz:dev": "docz dev",
+    "docz:build": "sh ./docs/src/build.sh"
   },
   "devDependencies": {
+    "docz": "^0.12.12",
+    "docz-plugin-css": "^0.11.0",
     "dotenv": "^5.0.0",
     "dotenv-cli": "^1.4.0",
     "eslint-config-standard": "^12.0.0",

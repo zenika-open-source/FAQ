@@ -1,3 +1,9 @@
+---
+name: Integrations
+route: /advanced/integrations
+menu: Advanced
+---
+
 # Integrations
 
 This project has the following integrations:
@@ -20,8 +26,8 @@ In order to integrate with Slack, you will need to create an application. It can
 
 ### Configuration variables
 
-| Name | Notes |
-| -- | -- |
+| Name               | Notes                                                                                                                                                                                                                                                                                                                                                                                                      |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `slackChannelHook` | This variable is a hook URI which is called by the backend in order to send the message to the channel. You can configure a hook on the [Slack "Build" dashboard](https://api.slack.com/). Choose your app, then go to "Features > Incoming Webhooks". Active the feature and create a hook for the dedicated channel you wish to send questions to. The generated url is what you need for this variable. |
 
 ## Workplace
@@ -70,7 +76,7 @@ mutation {
 
 > `userId` is the id of the user created in step 1
 
-> `prismaService` is the service you want to access (See [Multi-tenancy](/docs/multi_tenancy.md) for more information)
+> `prismaService` is the service you want to access (See [Multi-tenancy](/advanced/multi-tenancy) for more information)
 
 > `iat` is the current timestamp
 
