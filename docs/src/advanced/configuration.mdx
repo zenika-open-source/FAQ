@@ -1,6 +1,12 @@
+---
+name: Configuration
+route: /advanced/configuration
+menu: Advanced
+---
+
 # Configuration
 
-FAQ is a multi-tenancy application with multi services. (Read [this documentation page](/docs/multi_tenancy.md) for more information about multi-tenancy in FAQ)
+FAQ is a multi-tenancy application with multi services. (Read [this documentation page](/advanced/multi-tenancy) for more information about multi-tenancy in FAQ)
 
 Each of these service has a configuration in the database.
 
@@ -53,7 +59,7 @@ mutation {
 
 **Important note:** The configuration is cached by the backend. You will need to restart it after you create/update a configuration!
 
-> See below for a list of configuration variables
+> See below for a [list of configuration variables](#configuration-variables)
 
 ## Updating a configuration
 
@@ -79,7 +85,7 @@ mutation {
 
 **Important note:** The configuration is cached by the backend. You will need to restart it after you create/update a configuration!
 
-> See below for a list of configuration variables
+> See below for a [list of configuration variables](#configuration-variables)
 
 ## Configuration variables
 
@@ -89,19 +95,19 @@ You can use any name you want, but only the configuration with the name `default
 
 **algoliaAppId, algoliaApiKey and algoliaSynonyms**
 
-Configuration for Algolia. See [Backing services](/docs/backing_services.md) for more information.
+Configuration for Algolia. See [Backing services](/advanced/backing-services) for more information.
 
 **auth0Domain and auth0ClientId**
 
-Configuration for Auth0. See [Backing services](/docs/backing_services.md) for more information.
+Configuration for Auth0. See [Backing services](/advanced/backing-services) for more information.
 
 **mailgunDomain and mailgunApiKey**
 
-Configuration for Mailgun. See [Backing services](/docs/backing_services.md) for more information.
+Configuration for Mailgun. See [Backing services](/advanced/backing-services) for more information.
 
 **slackChannelHook**
 
-Configuration for the Slack integration. See [integrations](/docs/integrations.md) for more information.
+Configuration for the Slack integration. See [Integrations](/advanced/integrations) for more information.
 
 **tags**
 
