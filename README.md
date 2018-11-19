@@ -1,4 +1,4 @@
-![FAQ Zenika](https://github.com/Zenika/FAQ/raw/master/docs/banner_img.png)
+![FAQ Zenika](https://raw.githubusercontent.com/Zenika/FAQ/master/docs/src/banner_img.png)
 
 # FAQ Zenika
 
@@ -44,11 +44,11 @@ Internal Knowledge Database for Zenika members - https://faq.zenika.com
 
 New to this project ?
 
-- [Step-by-step installation](https://zenika.github.io/FAQ/getting-started) with only the required backing services
+- [Step-by-step installation](https://zenika.github.io/FAQ/#/getting-started) with only the required backing services
 
 The full documentation is available here:
 
-- https://zenika.github.io/FAQ
+- https://zenika.github.io/FAQ/
 
 ## License
 

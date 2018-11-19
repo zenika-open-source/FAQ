@@ -3,7 +3,9 @@ import { css } from 'docz-plugin-css'
 export default {
   title: '🤔 FAQ Documentation',
   description: 'Documentation for the FAQ project',
+  base: '/FAQ/',
   codeSandbox: false,
+  hashRouter: true,
   wrapper: 'docs/src/Wrapper',
   plugins: [
     css({
