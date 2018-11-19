@@ -16,7 +16,7 @@
     "mjml": "^4.2.0-beta.3",
     "node-fetch": "^2.2.0",
     "path": "^0.12.7",
-    "prisma": "^1.17.1",
+    "prisma": "^1.20.7",
     "prisma-binding": "^2.1.5",
     "showdown": "^1.8.6",
     "showdown-xss-filter": "^0.2.0",
@@ -27,7 +27,8 @@
     "deploy": "cd scripts/prisma_deploy_all && dotenv -e ../../.env.local node index.js",
     "new_service": "cd scripts/prisma_new_service && dotenv -e ../../.env.local node index.js",
     "generate_schema": "prisma generate",
-    "lint": "eslint src --fix --ext js"
+    "lint": "eslint src --fix --ext js",
+    "local_containers": "cd prisma/ && dotenv -e ../.env.local docker-compose up"
   },
   "devDependencies": {
     "dotenv-cli": "^1.4.0",

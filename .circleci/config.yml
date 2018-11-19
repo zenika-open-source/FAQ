@@ -10,40 +10,19 @@ jobs:
   build:
     working_directory: *workspace_root
     docker:
-      - image: circleci/node:9-browsers
+      - image: circleci/node:10-browsers
     steps:
       - checkout
 
-      - restore_cache:
-          keys:
-            - root-{{ checksum "package-lock.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - root-
-
-      - run: npm install
-
-      - run: npm run lint
-
-      - save_cache:
-          paths:
-            - node_modules
-          key: root-{{ checksum "package-lock.json" }}
-
-      - restore_cache:
-          keys:
-            - server-{{ checksum "package-lock.json" }}
-            - server-
-
-      - run: cd server && npm install && npm run lint && cd ..
-
-      - save_cache:
-          paths:
-            - server/node_modules
-          key: server-{{ checksum "package-lock.json" }}
-
-      - run: npm run build
-
-      - run: rm -rf node_modules/
+      - run: |
+          npm ci
+          npm run lint
+          cd server/
+          npm ci
+          npm run lint
+          cd ..
+          npm run build
+          rm -rf node_modules/
 
       - persist_to_workspace:
           root: *workspace_root
@@ -53,13 +32,21 @@ jobs:
   prisma_deploy:
     environment:
       DEPLOY_DIR: ~/prisma_deploy
+      CLEVER_CLOUD_REMOTE_HOST: push-par-clevercloud-customers.services.clever-cloud.com
+      CLEVER_CLOUD_REMOTE_APP_ID: app_f9c5c1cb-fe9c-41f9-a6c0-793e8326e95b
     working_directory: *workspace_root
     docker:
       - image: circleci/node:9-browsers
     steps:
       - *attach_workspace
 
+      - add_ssh_keys:
+          fingerprints:
+            - "6f:f2:b4:c2:e5:13:28:f8:02:2d:da:48:34:0c:14:7f"
+
       - run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan ${CLEVER_CLOUD_REMOTE_HOST} >> ~/.ssh/known_hosts
           mkdir -p ${DEPLOY_DIR}
           cp server/prisma/Dockerfile.clever-cloud ${DEPLOY_DIR}/Dockerfile
           cd ${DEPLOY_DIR}
@@ -68,7 +55,7 @@ jobs:
           git config user.name "DSI Ext"
           git add .
           git commit -m "Deploy"
-          git remote add clever $CLEVER_CLOUD_PRISMA_GIT_URL
+          git remote add clever git+ssh://git@${CLEVER_CLOUD_REMOTE_HOST}/${CLEVER_CLOUD_REMOTE_APP_ID}.git
           git push --force clever master
 
   deploy:
@@ -111,12 +98,12 @@ workflows:
   build-deploy:
     jobs:
       - build
-#      - prisma_deploy:
-#          requires:
-#            - build
-#          filters:
-#            branches:
-#              only: master
+      - prisma_deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
       - deploy:
           requires:
             - build

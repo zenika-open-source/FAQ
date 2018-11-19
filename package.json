@@ -28,7 +28,7 @@
     "react-pluralize": "^1.2.0",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
-    "react-scripts": "^2.0.3",
+    "react-scripts": "^2.1.1",
     "showdown": "^1.8.6",
     "showdown-xss-filter": "^0.2.0",
     "subscriptions-transport-ws": "^0.9.7",
