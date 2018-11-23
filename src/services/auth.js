@@ -131,12 +131,17 @@ class Auth {
     return url
   }
 
-  setUserId(id) {
-    localStorage.userId = id
+  setUserData(data) {
+    localStorage.userData = JSON.stringify(data)
+    localStorage.userId = data.id
   }
 
   getUserNodeId() {
     return localStorage.userId
+  }
+
+  isAdmin() {
+    return this.isAuthenticated() && JSON.parse(localStorage.userData).admin
   }
 }
 

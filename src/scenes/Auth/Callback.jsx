@@ -15,7 +15,7 @@ class Callback extends Component {
       .parseHash(location.hash) // Get auth0 data
       .then(authResult => auth.setSession(authResult)) // Set auth0 data into session
       .then(authResult => authQL(authResult.idToken)) // Authenticate user to backend
-      .then(({ data }) => auth.setUserId(data.authenticate.id)) // Set user's id
+      .then(({ data }) => auth.setUserData(data.authenticate)) // Set user data
       .then(() => history.push(auth.popAfterLoginRedirectUrl())) // Redirect user
       .catch(err => {
         alert.pushError(

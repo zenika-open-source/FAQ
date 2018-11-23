@@ -1,7 +1,9 @@
-# import ZNode, Question, Answer, Source, Flag, Tag, HistoryAction from './generated/prisma.graphql'
+# import ZNode, Question, Answer, Source, Flag, Tag, HistoryAction, Configuration from './generated/prisma.graphql'
 
 # import ZNodeOrderByInput, ZNodeConnection, ZNodeWhereUniqueInput from './generated/prisma.graphql'
 # import HistoryActionWhereInput from './generated/prisma.graphql'
+
+directive @admin on QUERY
 
 type Query {
   me: User
@@ -25,6 +27,8 @@ type Query {
   ): SearchResult!
 
   randomNode(tag: String): ZNode
+
+  configuration: Configuration @admin
 }
 
 type Mutation {
@@ -39,6 +43,8 @@ type Mutation {
 
   addFlag(type: String!, nodeId: ID!): ZNode
   removeFlag(type: String!, nodeId: ID!): ZNode
+
+  updateConfiguration(tags: Json!, algoliaSynonyms: Json!): Configuration @admin
 }
 
 type SearchResult {
@@ -60,6 +66,7 @@ type PaginationMeta {
 type User {
   id: ID!
   auth0Id: String
+  admin: Boolean
 
   name: String
   email: String

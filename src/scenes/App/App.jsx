@@ -8,6 +8,7 @@ import Auth from 'scenes/Auth'
 import Home from 'scenes/Home'
 import Question from 'scenes/Question'
 import UserProfile from 'scenes/UserProfile'
+import Settings from 'scenes/Settings'
 import NotFound from 'scenes/NotFound'
 
 import { AlertStack, AlertProvider, PrivateRoute } from 'components'
@@ -31,6 +32,7 @@ const App = () => (
             <Route path="/auth" component={Auth} />
             <PrivateRoute path="/q" component={Question} />
             <PrivateRoute path="/user-profile" component={UserProfile} />
+            <PrivateRoute path="/settings" component={Settings} admin />
             <PrivateRoute component={NotFound} />
           </Switch>
         </ConfigurationProvider>

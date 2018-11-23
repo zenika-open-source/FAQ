@@ -18,6 +18,7 @@ class Button extends Component {
       active,
       raised,
       fixed,
+      loading,
       ...otherProps
     } = this.props
 
@@ -36,15 +37,27 @@ class Button extends Component {
       return acc
     }, {})
 
+    if (loading) {
+      buttonModifiers['disabled'] = true
+    }
+
     return (
       <button
         className={cn('btn', className)}
         {...buttonModifiers}
         {...otherProps}
       >
-        {icon && <i className="material-icons">{icon}</i>}
-        {label && <span>{label}</span>}
-        {children && <span>{children}</span>}
+        {loading ? (
+          <span>
+            <i className="fas fa-spinner fa-spin" />
+          </span>
+        ) : (
+          <>
+            {icon && <i className="material-icons">{icon}</i>}
+            {label && <span>{label}</span>}
+            {children && <span>{children}</span>}
+          </>
+        )}
       </button>
     )
   }

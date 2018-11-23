@@ -6,6 +6,7 @@ export const authUserMutation = gql`
     authenticate(idToken: $idToken) {
       id
       auth0Id
+      admin
       name
       email
       picture

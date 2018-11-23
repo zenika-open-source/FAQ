@@ -1,11 +1,12 @@
 const resolvers = [
-  './user',
-  './question',
-  './answer',
-  './flag',
-  './history',
-  './search',
-  './random'
+  'answer',
+  'configuration',
+  'flag',
+  'history',
+  'question',
+  'random',
+  'search',
+  'user'
 ]
 
 const mergeResolvers = resolvers =>
@@ -19,4 +20,4 @@ const mergeResolvers = resolvers =>
     return acc
   }, {})
 
-module.exports = mergeResolvers(resolvers.map(path => require(path)))
+module.exports = mergeResolvers(resolvers.map(path => require('./' + path)))

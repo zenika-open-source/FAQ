@@ -5,6 +5,7 @@ const path = require('path')
 
 const Instanciator = require('./instanciator.js')
 const resolvers = require('./resolvers')
+const directives = require('./directives')
 const auth = require('./middlewares/auth')
 const error = require('./middlewares/error')
 
@@ -17,12 +18,14 @@ const instanciator = new Instanciator()
 const server = new GraphQLServer({
   typeDefs: 'src/schema.graphql',
   resolvers,
+  schemaDirectives: directives,
   resolverValidationOptions: {
     requireResolversForResolveType: false
   },
   context: ctx => ({
     ...ctx,
-    prisma: instanciator.current(ctx.request)
+    prisma: instanciator.current(ctx.request),
+    instanciator
   })
 })
 

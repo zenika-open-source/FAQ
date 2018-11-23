@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Redirect, Prompt } from 'react-router-dom'
-import omit from 'lodash/omit'
 import differenceWith from 'lodash/differenceWith'
 import isEqual from 'lodash/isEqual'
 
@@ -9,10 +8,18 @@ import { compose } from 'react-apollo'
 import { submitAnswer, editAnswer } from './queries'
 
 import { alert, markdown } from 'services'
+import { isUuidV4, onListChange } from 'helpers'
 
 import NotFound from 'scenes/NotFound'
 
-import { Loading, Flags, Button, MarkdownEditor, CtrlEnter } from 'components'
+import {
+  Loading,
+  Flags,
+  Button,
+  MarkdownEditor,
+  CtrlEnter,
+  PairInputList
+} from 'components'
 import Card, {
   CardTitle,
   CardText,
@@ -22,7 +29,6 @@ import Card, {
 
 import ActionMenu from '../../components/ActionMenu'
 
-import Sources from './components/Sources'
 import Tips from './components/Tips'
 
 class Answer extends Component {
@@ -32,7 +38,7 @@ class Answer extends Component {
     const answer = props.zNode && props.zNode.answer
 
     const initialText = answer ? answer.content : ''
-    const initialSources = answer ? answer.sources : []
+    const initialSources = this.sourcesToList(answer ? answer.sources : [])
 
     this.state = {
       nodeLoaded: false,
@@ -46,19 +52,27 @@ class Answer extends Component {
     }
   }
 
-  cleanSources() {
-    const { sources } = this.state
-    return sources
-      .map(s => {
-        if (s.new) return omit(s, ['id', 'new'])
-        return s
+  sourcesToList(sources) {
+    return sources.map(({ id, label, url }) => ({
+      id,
+      key: label,
+      value: url
+    }))
+  }
+
+  listToSources(list) {
+    return list
+      .map(({ id, key, value }) => {
+        if (isUuidV4(id)) {
+          return { label: key, url: value }
+        }
+        return { id, label: key, url: value }
       })
       .filter(s => s.label !== '' && s.url !== '')
   }
 
   onTextChange = value => this.setState({ answer: value })
-
-  onSourceChange = sources => this.setState({ sources: sources })
+  onSourcesChange = onListChange(this.setState.bind(this), 'sources')
 
   submitForm = () => {
     if (this.canSubmit()) {
@@ -70,14 +84,13 @@ class Answer extends Component {
   submitAnswer = () => {
     const { submitAnswer } = this.props
     const { zNode } = this.props
-    const { answer } = this.state
+    const { answer, sources } = this.state
 
     this.setState({ loadingSubmit: true })
 
     const content = answer.text
-    const sources = this.cleanSources()
 
-    submitAnswer(content, sources, zNode.id)
+    submitAnswer(content, this.listToSources(sources), zNode.id)
       .then(() => {
         this.setState({ slug: zNode.question.slug + '-' + zNode.id })
         alert.pushSuccess('Your answer was successfully submitted!')
@@ -98,14 +111,14 @@ class Answer extends Component {
 
   editAnswer = (nodeId, answerId) => {
     const { editAnswer, zNode } = this.props
-    const { answer } = this.state
+    const { answer, sources } = this.state
 
     this.setState({ loadingSubmit: true })
 
     editAnswer(
       typeof answerId === 'string' ? answerId : zNode.answer.id,
       answer.text,
-      this.cleanSources()
+      this.listToSources(sources)
     )
       .then(() => {
         this.setState({ slug: zNode.question.slug + '-' + zNode.id })
@@ -146,7 +159,7 @@ class Answer extends Component {
   }
 
   render() {
-    const { loadingSubmit, slug, showTips } = this.state
+    const { loadingSubmit, slug, showTips, sources } = this.state
     const { zNode } = this.props
 
     if (slug) {
@@ -193,9 +206,20 @@ class Answer extends Component {
             </CtrlEnter>
           </CardText>
           <CardText>
-            <Sources
-              sources={this.state.sources}
-              onChange={this.onSourceChange}
+            <PairInputList
+              style={{ borderTop: '1px dashed var(--secondary-color)' }}
+              pairs={sources}
+              options={{
+                title: 'Sources:',
+                icons: { line: 'info_outline', value: 'link' },
+                labels: {
+                  add: 'Add a source link',
+                  more: 'More sources',
+                  key: 'Label',
+                  value: 'URL'
+                }
+              }}
+              actions={this.onSourcesChange.actions}
             />
           </CardText>
           <CardActions>
