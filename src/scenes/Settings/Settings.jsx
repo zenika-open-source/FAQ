@@ -106,7 +106,7 @@ class Settings extends Component {
               disabled={loading}
             />
             <hr />
-            <h2>Synonymes</h2>
+            <h2>Synonyms</h2>
             <br />
             <PairInputList
               pairs={synonyms}
@@ -125,12 +125,7 @@ class Settings extends Component {
             <hr />
           </CardText>
           <CardActions>
-            <Button
-              primary
-              label="Save"
-              onClick={this.onSave}
-              loading={loading}
-            />
+            <Button primary label="Save" onClick={this.onSave} loading={loading} />
           </CardActions>
         </Card>
       </div>

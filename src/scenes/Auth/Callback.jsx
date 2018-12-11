@@ -15,13 +15,10 @@ class Callback extends Component {
       .parseHash(location.hash) // Get auth0 data
       .then(authResult => auth.setSession(authResult)) // Set auth0 data into session
       .then(authResult => authQL(authResult.idToken)) // Authenticate user to backend
-      .then(({ data }) => auth.setUserData(data.authenticate)) // Set user data
+      .then(({ data }) => auth.setUserData(data.authenticate))
       .then(() => history.push(auth.popAfterLoginRedirectUrl())) // Redirect user
       .catch(err => {
-        alert.pushError(
-          'Authentication failed: ' + JSON.stringify(err.message),
-          err
-        )
+        alert.pushError('Authentication failed: ' + JSON.stringify(err.message), err)
         auth.setSession(null)
         history.push('/auth/login')
       })
