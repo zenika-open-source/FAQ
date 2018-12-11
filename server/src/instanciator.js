@@ -1,5 +1,4 @@
 const { Prisma } = require('prisma-binding')
-const { importSchema } = require('graphql-import')
 
 class Instanciator {
   constructor() {
@@ -31,11 +30,8 @@ class Instanciator {
   }
 
   instanciate(name, stage) {
-    let typeDefs = importSchema('src/generated/prisma.graphql')
-    typeDefs += `# Service: ${name} / ${stage}`
-
     const instance = new Prisma({
-      typeDefs: typeDefs,
+      typeDefs: 'src/generated/prisma.graphql',
       endpoint: process.env.PRISMA_URL + '/' + name + '/' + stage,
       secret: process.env.PRISMA_API_SECRET
     })
