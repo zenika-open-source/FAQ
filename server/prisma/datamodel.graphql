@@ -7,8 +7,7 @@ type ZNode {
   flags: [Flag!]! @relation(name: "NodeFlags", onDelete: CASCADE)
   tags: [Tag!]! @relation(name: "NodeTags", onDelete: CASCADE)
 
-  history: [HistoryAction!]!
-    @relation(name: "NodeHistoryActions", onDelete: CASCADE)
+  history: [HistoryAction!]! @relation(name: "NodeHistoryActions", onDelete: CASCADE)
 
   highlights: Json
 }
@@ -89,7 +88,7 @@ type User {
   auth0Id: String @unique
   key: String
 
-  admin: Boolean @default(value: "false")
+  admin: Boolean! @default(value: "false")
 
   name: String
   email: String

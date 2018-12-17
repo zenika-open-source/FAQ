@@ -1635,7 +1635,7 @@ type User {
   id: ID!
   auth0Id: String
   key: String
-  admin: Boolean
+  admin: Boolean!
   name: String
   email: String
   picture: String
@@ -1796,7 +1796,7 @@ type UserPreviousValues {
   id: ID!
   auth0Id: String
   key: String
-  admin: Boolean
+  admin: Boolean!
   name: String
   email: String
   picture: String
