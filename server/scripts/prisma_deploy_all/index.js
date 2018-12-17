@@ -16,8 +16,12 @@ const getServices = () =>
     }
   `).then(d => d.listProjects)
 
-const deployPrismaService = (name, stage) =>
-  run('prisma deploy', { PRISMA_URL: PRISMA_URL + '/' + name + '/' + stage })
+const deployPrismaService = (name, stage) => {
+  const isForcing = process.argv.includes('--force')
+  run('prisma deploy ' + (isForcing ? '--force' : ''), {
+    PRISMA_URL: PRISMA_URL + '/' + name + '/' + stage
+  })
+}
 
 const deployAlgoliaIndex = async (name, stage) => {
   console.log(

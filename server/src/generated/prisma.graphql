@@ -138,6 +138,10 @@ input AnswerUpdateInput {
   user: UserUpdateOneRequiredWithoutAnswersInput
 }
 
+input AnswerUpdateManyMutationInput {
+  content: String
+}
+
 input AnswerUpdateManyWithoutUserInput {
   create: [AnswerCreateWithoutUserInput!]
   delete: [AnswerWhereUniqueInput!]
@@ -377,6 +381,19 @@ input ConfigurationUpdateInput {
   tags: Json
 }
 
+input ConfigurationUpdateManyMutationInput {
+  name: String
+  algoliaAppId: String
+  algoliaApiKey: String
+  algoliaSynonyms: Json
+  auth0Domain: String
+  auth0ClientId: String
+  mailgunDomain: String
+  mailgunApiKey: String
+  slackChannelHook: String
+  tags: Json
+}
+
 input ConfigurationWhereInput {
   id: ID
   id_not: ID
@@ -602,6 +619,10 @@ input FlagUpdateInput {
   user: UserUpdateOneRequiredWithoutFlagsInput
 }
 
+input FlagUpdateManyMutationInput {
+  type: String
+}
+
 input FlagUpdateManyWithoutNodeInput {
   create: [FlagCreateWithoutNodeInput!]
   delete: [FlagWhereUniqueInput!]
@@ -802,6 +823,12 @@ input HistoryActionUpdateInput {
   user: UserUpdateOneRequiredWithoutHistoryInput
 }
 
+input HistoryActionUpdateManyMutationInput {
+  action: String
+  model: String
+  meta: Json
+}
+
 input HistoryActionUpdateManyWithoutNodeInput {
   create: [HistoryActionCreateWithoutNodeInput!]
   delete: [HistoryActionWhereUniqueInput!]
@@ -925,55 +952,55 @@ scalar Long
 type Mutation {
   createAnswer(data: AnswerCreateInput!): Answer!
   updateAnswer(data: AnswerUpdateInput!, where: AnswerWhereUniqueInput!): Answer
-  updateManyAnswers(data: AnswerUpdateInput!, where: AnswerWhereInput): BatchPayload!
+  updateManyAnswers(data: AnswerUpdateManyMutationInput!, where: AnswerWhereInput): BatchPayload!
   upsertAnswer(where: AnswerWhereUniqueInput!, create: AnswerCreateInput!, update: AnswerUpdateInput!): Answer!
   deleteAnswer(where: AnswerWhereUniqueInput!): Answer
   deleteManyAnswers(where: AnswerWhereInput): BatchPayload!
   createConfiguration(data: ConfigurationCreateInput!): Configuration!
   updateConfiguration(data: ConfigurationUpdateInput!, where: ConfigurationWhereUniqueInput!): Configuration
-  updateManyConfigurations(data: ConfigurationUpdateInput!, where: ConfigurationWhereInput): BatchPayload!
+  updateManyConfigurations(data: ConfigurationUpdateManyMutationInput!, where: ConfigurationWhereInput): BatchPayload!
   upsertConfiguration(where: ConfigurationWhereUniqueInput!, create: ConfigurationCreateInput!, update: ConfigurationUpdateInput!): Configuration!
   deleteConfiguration(where: ConfigurationWhereUniqueInput!): Configuration
   deleteManyConfigurations(where: ConfigurationWhereInput): BatchPayload!
   createFlag(data: FlagCreateInput!): Flag!
   updateFlag(data: FlagUpdateInput!, where: FlagWhereUniqueInput!): Flag
-  updateManyFlags(data: FlagUpdateInput!, where: FlagWhereInput): BatchPayload!
+  updateManyFlags(data: FlagUpdateManyMutationInput!, where: FlagWhereInput): BatchPayload!
   upsertFlag(where: FlagWhereUniqueInput!, create: FlagCreateInput!, update: FlagUpdateInput!): Flag!
   deleteFlag(where: FlagWhereUniqueInput!): Flag
   deleteManyFlags(where: FlagWhereInput): BatchPayload!
   createHistoryAction(data: HistoryActionCreateInput!): HistoryAction!
   updateHistoryAction(data: HistoryActionUpdateInput!, where: HistoryActionWhereUniqueInput!): HistoryAction
-  updateManyHistoryActions(data: HistoryActionUpdateInput!, where: HistoryActionWhereInput): BatchPayload!
+  updateManyHistoryActions(data: HistoryActionUpdateManyMutationInput!, where: HistoryActionWhereInput): BatchPayload!
   upsertHistoryAction(where: HistoryActionWhereUniqueInput!, create: HistoryActionCreateInput!, update: HistoryActionUpdateInput!): HistoryAction!
   deleteHistoryAction(where: HistoryActionWhereUniqueInput!): HistoryAction
   deleteManyHistoryActions(where: HistoryActionWhereInput): BatchPayload!
   createQuestion(data: QuestionCreateInput!): Question!
   updateQuestion(data: QuestionUpdateInput!, where: QuestionWhereUniqueInput!): Question
-  updateManyQuestions(data: QuestionUpdateInput!, where: QuestionWhereInput): BatchPayload!
+  updateManyQuestions(data: QuestionUpdateManyMutationInput!, where: QuestionWhereInput): BatchPayload!
   upsertQuestion(where: QuestionWhereUniqueInput!, create: QuestionCreateInput!, update: QuestionUpdateInput!): Question!
   deleteQuestion(where: QuestionWhereUniqueInput!): Question
   deleteManyQuestions(where: QuestionWhereInput): BatchPayload!
   createSource(data: SourceCreateInput!): Source!
   updateSource(data: SourceUpdateInput!, where: SourceWhereUniqueInput!): Source
-  updateManySources(data: SourceUpdateInput!, where: SourceWhereInput): BatchPayload!
+  updateManySources(data: SourceUpdateManyMutationInput!, where: SourceWhereInput): BatchPayload!
   upsertSource(where: SourceWhereUniqueInput!, create: SourceCreateInput!, update: SourceUpdateInput!): Source!
   deleteSource(where: SourceWhereUniqueInput!): Source
   deleteManySources(where: SourceWhereInput): BatchPayload!
   createTag(data: TagCreateInput!): Tag!
   updateTag(data: TagUpdateInput!, where: TagWhereUniqueInput!): Tag
-  updateManyTags(data: TagUpdateInput!, where: TagWhereInput): BatchPayload!
+  updateManyTags(data: TagUpdateManyMutationInput!, where: TagWhereInput): BatchPayload!
   upsertTag(where: TagWhereUniqueInput!, create: TagCreateInput!, update: TagUpdateInput!): Tag!
   deleteTag(where: TagWhereUniqueInput!): Tag
   deleteManyTags(where: TagWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
-  updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
+  updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   deleteUser(where: UserWhereUniqueInput!): User
   deleteManyUsers(where: UserWhereInput): BatchPayload!
   createZNode(data: ZNodeCreateInput!): ZNode!
   updateZNode(data: ZNodeUpdateInput!, where: ZNodeWhereUniqueInput!): ZNode
-  updateManyZNodes(data: ZNodeUpdateInput!, where: ZNodeWhereInput): BatchPayload!
+  updateManyZNodes(data: ZNodeUpdateManyMutationInput!, where: ZNodeWhereInput): BatchPayload!
   upsertZNode(where: ZNodeWhereUniqueInput!, create: ZNodeCreateInput!, update: ZNodeUpdateInput!): ZNode!
   deleteZNode(where: ZNodeWhereUniqueInput!): ZNode
   deleteManyZNodes(where: ZNodeWhereInput): BatchPayload!
@@ -1121,6 +1148,11 @@ input QuestionUpdateInput {
   slug: String
   node: ZNodeUpdateOneRequiredWithoutQuestionInput
   user: UserUpdateOneRequiredWithoutQuestionsInput
+}
+
+input QuestionUpdateManyMutationInput {
+  title: String
+  slug: String
 }
 
 input QuestionUpdateManyWithoutUserInput {
@@ -1316,6 +1348,11 @@ input SourceUpdateInput {
   answer: AnswerUpdateOneRequiredWithoutSourcesInput
 }
 
+input SourceUpdateManyMutationInput {
+  label: String
+  url: String
+}
+
 input SourceUpdateManyWithoutAnswerInput {
   create: [SourceCreateWithoutAnswerInput!]
   delete: [SourceWhereUniqueInput!]
@@ -1492,6 +1529,10 @@ input TagUpdateInput {
   user: UserUpdateOneRequiredWithoutTagsInput
 }
 
+input TagUpdateManyMutationInput {
+  label: String
+}
+
 input TagUpdateManyWithoutNodeInput {
   create: [TagCreateWithoutNodeInput!]
   delete: [TagWhereUniqueInput!]
@@ -1594,6 +1635,7 @@ type User {
   id: ID!
   auth0Id: String
   key: String
+  admin: Boolean
   name: String
   email: String
   picture: String
@@ -1615,6 +1657,7 @@ type UserConnection {
 input UserCreateInput {
   auth0Id: String
   key: String
+  admin: Boolean
   name: String
   email: String
   picture: String
@@ -1654,6 +1697,7 @@ input UserCreateOneWithoutTagsInput {
 input UserCreateWithoutAnswersInput {
   auth0Id: String
   key: String
+  admin: Boolean
   name: String
   email: String
   picture: String
@@ -1667,6 +1711,7 @@ input UserCreateWithoutAnswersInput {
 input UserCreateWithoutFlagsInput {
   auth0Id: String
   key: String
+  admin: Boolean
   name: String
   email: String
   picture: String
@@ -1680,6 +1725,7 @@ input UserCreateWithoutFlagsInput {
 input UserCreateWithoutHistoryInput {
   auth0Id: String
   key: String
+  admin: Boolean
   name: String
   email: String
   picture: String
@@ -1693,6 +1739,7 @@ input UserCreateWithoutHistoryInput {
 input UserCreateWithoutQuestionsInput {
   auth0Id: String
   key: String
+  admin: Boolean
   name: String
   email: String
   picture: String
@@ -1706,6 +1753,7 @@ input UserCreateWithoutQuestionsInput {
 input UserCreateWithoutTagsInput {
   auth0Id: String
   key: String
+  admin: Boolean
   name: String
   email: String
   picture: String
@@ -1728,6 +1776,8 @@ enum UserOrderByInput {
   auth0Id_DESC
   key_ASC
   key_DESC
+  admin_ASC
+  admin_DESC
   name_ASC
   name_DESC
   email_ASC
@@ -1746,6 +1796,7 @@ type UserPreviousValues {
   id: ID!
   auth0Id: String
   key: String
+  admin: Boolean
   name: String
   email: String
   picture: String
@@ -1774,6 +1825,7 @@ input UserSubscriptionWhereInput {
 input UserUpdateInput {
   auth0Id: String
   key: String
+  admin: Boolean
   name: String
   email: String
   picture: String
@@ -1783,6 +1835,16 @@ input UserUpdateInput {
   flags: FlagUpdateManyWithoutUserInput
   tags: TagUpdateManyWithoutUserInput
   history: HistoryActionUpdateManyWithoutUserInput
+}
+
+input UserUpdateManyMutationInput {
+  auth0Id: String
+  key: String
+  admin: Boolean
+  name: String
+  email: String
+  picture: String
+  locale: String
 }
 
 input UserUpdateOneRequiredWithoutAnswersInput {
@@ -1823,6 +1885,7 @@ input UserUpdateOneRequiredWithoutTagsInput {
 input UserUpdateWithoutAnswersDataInput {
   auth0Id: String
   key: String
+  admin: Boolean
   name: String
   email: String
   picture: String
@@ -1836,6 +1899,7 @@ input UserUpdateWithoutAnswersDataInput {
 input UserUpdateWithoutFlagsDataInput {
   auth0Id: String
   key: String
+  admin: Boolean
   name: String
   email: String
   picture: String
@@ -1849,6 +1913,7 @@ input UserUpdateWithoutFlagsDataInput {
 input UserUpdateWithoutHistoryDataInput {
   auth0Id: String
   key: String
+  admin: Boolean
   name: String
   email: String
   picture: String
@@ -1862,6 +1927,7 @@ input UserUpdateWithoutHistoryDataInput {
 input UserUpdateWithoutQuestionsDataInput {
   auth0Id: String
   key: String
+  admin: Boolean
   name: String
   email: String
   picture: String
@@ -1875,6 +1941,7 @@ input UserUpdateWithoutQuestionsDataInput {
 input UserUpdateWithoutTagsDataInput {
   auth0Id: String
   key: String
+  admin: Boolean
   name: String
   email: String
   picture: String
@@ -1953,6 +2020,8 @@ input UserWhereInput {
   key_not_starts_with: String
   key_ends_with: String
   key_not_ends_with: String
+  admin: Boolean
+  admin_not: Boolean
   name: String
   name_not: String
   name_in: [String!]
@@ -2177,6 +2246,10 @@ input ZNodeUpdateInput {
   flags: FlagUpdateManyWithoutNodeInput
   tags: TagUpdateManyWithoutNodeInput
   history: HistoryActionUpdateManyWithoutNodeInput
+  highlights: Json
+}
+
+input ZNodeUpdateManyMutationInput {
   highlights: Json
 }
 

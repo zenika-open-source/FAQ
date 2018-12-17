@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
 
-import Avatar from 'components/Avatar'
+import { Authenticated, Avatar } from 'components'
 import Dropdown, { DropdownItem, DropdownDivider } from 'components/Dropdown'
 
 import GithubIcon from '../GithubIcon'
@@ -22,6 +22,11 @@ const UserMenu = ({ history, me }) => (
     >
       Profile
     </DropdownItem>
+    <Authenticated admin>
+      <DropdownItem icon="settings" onClick={() => history.push('/settings')}>
+        Settings
+      </DropdownItem>
+    </Authenticated>
     <DropdownDivider />
     <DropdownItem
       icon={<GithubIcon />}

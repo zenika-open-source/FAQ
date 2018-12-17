@@ -22,6 +22,13 @@ export default {
           rel: 'stylesheet',
           href: 'https://fonts.googleapis.com/icon?family=Material+Icons'
         }
+      ],
+      scripts: [
+        {
+          src: 'https://use.fontawesome.com/releases/v5.0.6/js/all.js',
+          type: 'text/javascript',
+          defer: true
+        }
       ]
     }
   },

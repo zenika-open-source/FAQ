@@ -63,6 +63,11 @@ class Instanciator {
       return
     }
 
+    await this.refreshConfiguration(instance)
+    next()
+  }
+
+  async refreshConfiguration(instance) {
     const conf = await instance.query.configuration({
       where: { name: 'default' }
     })
@@ -70,7 +75,6 @@ class Instanciator {
     if (!conf.tags) conf.tags = []
 
     instance._meta.configuration = conf
-    next()
   }
 }
 

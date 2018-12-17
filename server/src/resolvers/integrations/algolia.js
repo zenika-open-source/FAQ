@@ -126,6 +126,25 @@ class Algolia {
 
     return { ids, highlights, nbHits: content.nbHits }
   }
+  resyncSynonyms(ctx, synonyms) {
+    const index = this.getIndex(ctx)
+
+    if (!index) return
+
+    return new Promise((resolve, reject) => {
+      index.batchSynonyms(
+        synonyms,
+        {
+          forwardToReplicas: true,
+          replaceExistingSynonyms: true
+        },
+        (err, content) => {
+          if (err) return reject(err)
+          resolve(content)
+        }
+      )
+    })
+  }
 }
 
 const algolia = new Algolia()

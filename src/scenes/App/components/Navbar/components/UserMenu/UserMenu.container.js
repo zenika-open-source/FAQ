@@ -9,5 +9,5 @@ import UserMenu from './UserMenu'
 export default compose(
   query(me),
   withLoading(false),
-  withError()
+  withError('')
 )(UserMenu)

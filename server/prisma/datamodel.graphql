@@ -89,6 +89,8 @@ type User {
   auth0Id: String @unique
   key: String
 
+  admin: Boolean @default(value: "false")
+
   name: String
   email: String
 
