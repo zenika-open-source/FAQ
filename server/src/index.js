@@ -3,17 +3,16 @@ const express = require('express')
 const secure = require('express-force-https')
 const path = require('path')
 
-const Instanciator = require('./instanciator.js')
 const resolvers = require('./resolvers')
 const directives = require('./directives')
-const auth = require('./middlewares/auth')
-const error = require('./middlewares/error')
+const { auth, error, getConfiguration } = require('./middlewares')
+const { configuration } = require('./endpoints')
+
+const multiTenant = require('./multiTenant')
 
 /* Create server */
 
 const yogaEndpoint = '/gql'
-
-const instanciator = new Instanciator()
 
 const server = new GraphQLServer({
   typeDefs: 'src/schema.graphql',
@@ -24,35 +23,21 @@ const server = new GraphQLServer({
   },
   context: ctx => ({
     ...ctx,
-    prisma: instanciator.current(ctx.request),
-    instanciator
+    prisma: multiTenant.current(ctx.request)
   })
 })
 
 /* Register middlewares */
 
 server.express.post(yogaEndpoint, [
-  (req, res, next) => instanciator.getConfiguration(req, next),
-  (req, res, next) => auth.checkJwt(req, res, next, instanciator.current(req)),
+  (req, res, next) => getConfiguration(multiTenant, req, next),
+  (req, res, next) => auth.checkJwt(req, res, next, multiTenant.current(req)),
   error.handling
 ])
 
 /* Register configuration endpoint */
-server.express.get(yogaEndpoint + '/configuration', (req, res) =>
-  instanciator.getConfiguration(req, () => {
-    const { auth0Domain, auth0ClientId, tags } = instanciator.current(
-      req
-    )._meta.configuration
 
-    res.header('Access-Control-Allow-Origin', '*')
-    // An unauthenticated user can only access this part of the configuration
-    res.json({
-      auth0Domain,
-      auth0ClientId,
-      tags
-    })
-  })
-)
+server.express.get(yogaEndpoint + '/configuration', configuration(multiTenant))
 
 /* Start server */
 

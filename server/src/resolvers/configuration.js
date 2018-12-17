@@ -1,4 +1,5 @@
 const { algolia } = require('./integrations')
+const { refreshConfiguration } = require('../middlewares/configuration')
 
 module.exports = {
   Query: {
@@ -14,7 +15,7 @@ module.exports = {
 
       algolia.resyncSynonyms(ctx, args.algoliaSynonyms)
 
-      ctx.instanciator.refreshConfiguration(ctx.prisma)
+      refreshConfiguration(ctx.prisma)
 
       return configuration
     }
