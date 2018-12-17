@@ -98,15 +98,15 @@ workflows:
   build-deploy:
     jobs:
       - build
-      - prisma_deploy:
+      - deploy:
           requires:
             - build
           filters:
             branches:
               only: master
-      - deploy:
+      - prisma_deploy:
           requires:
-            - build
+            - deploy
           filters:
             branches:
               only: master
