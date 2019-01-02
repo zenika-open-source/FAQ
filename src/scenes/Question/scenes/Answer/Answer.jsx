@@ -107,7 +107,7 @@ class Answer extends Component {
     editAnswer(
       typeof answerId === 'string' ? answerId : zNode.answer.id,
       answer.text,
-      this.listToSources(sources)
+      this.keyValuePairsToSources(sources)
     )
       .then(() => {
         this.setState({ slug: zNode.question.slug + '-' + zNode.id })
