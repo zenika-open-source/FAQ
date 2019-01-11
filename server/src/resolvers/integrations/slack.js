@@ -27,14 +27,18 @@ class Slack {
           title
           slug
         }
+        tags {
+          label
+        }
       }
       `
     )
 
     const url = origin + `/q/${node.question.slug}-${node.id}`
+    const tags = node.tags.map(tag => `#${tag.label}`).join(', ')
 
     const message = {
-      text: `<${url}|${emojify(node.question.title)}>`
+      text: `<${url}|${emojify(node.question.title)}> (${tags})`
     }
 
     return fetch(conf.slackChannelHook, {
