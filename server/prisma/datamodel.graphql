@@ -1,6 +1,6 @@
 type ZNode {
   id: ID! @unique
-
+ 
   question: Question @relation(name: "NodeQuestion", onDelete: CASCADE)
   answer: Answer @relation(name: "NodeAnswer", onDelete: CASCADE)
 
@@ -23,12 +23,14 @@ type Question {
 
   createdAt: DateTime!
   updatedAt: DateTime!
+
+  titles: [Translation] @relation(name: "TranslationQuestion")
 }
 
 type Answer {
   id: ID! @unique
 
-  content: String!
+  content: String! @relation(name: "TranslationText") 
 
   sources: [Source!]! @relation(name: "AnswerSources", onDelete: CASCADE)
 
@@ -37,6 +39,16 @@ type Answer {
 
   createdAt: DateTime!
   updatedAt: DateTime!
+
+  contents : [Translation] @relation(name: "TranslationAnswer")
+}
+
+type Translation {
+  id : ID! 
+
+  text : String!
+
+  langue : String!
 }
 
 type Source {
@@ -57,6 +69,7 @@ type Flag {
   user: User! @relation(name: "UserFlags")
 
   createdAt: DateTime!
+
 }
 
 type Tag {
@@ -68,6 +81,9 @@ type Tag {
   user: User! @relation(name: "UserTags")
 
   createdAt: DateTime!
+
+  labelTranslated : [Translation] @relation(name : "tagTranslation")
+
 }
 
 type HistoryAction {
