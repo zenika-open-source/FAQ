@@ -12,9 +12,7 @@ class Slack {
 
     if (!conf.slackChannelHook) {
       // eslint-disable-next-line no-console
-      console.warn(
-        `Please provide a slack channel hook for service ${name}/${stage}`
-      )
+      console.warn(`Please provide a slack channel hook for service ${name}/${stage}`)
       return
     }
 
@@ -27,14 +25,20 @@ class Slack {
           title
           slug
         }
+        tags {
+          label
+        }
       }
       `
     )
 
     const url = origin + `/q/${node.question.slug}-${node.id}`
+    const tags = node.tags.map(tag => `#${tag.label}`).join(', ')
+
+    const title = emojify(this.escapeText(node.question.title))
 
     const message = {
-      text: `<${url}|${emojify(node.question.title)}>`
+      text: `<${url}|${title}>` + (tags ? ` (${tags})` : '')
     }
 
     return fetch(conf.slackChannelHook, {
@@ -44,6 +48,10 @@ class Slack {
       },
       body: JSON.stringify(message)
     })
+  }
+
+  escapeText(text) {
+    return text.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]))
   }
 }
 
