@@ -30,7 +30,7 @@ type Question {
 type Answer {
   id: ID! @unique
 
-  content: String! @relation(name: "TranslationText") 
+  content: String! 
 
   sources: [Source!]! @relation(name: "AnswerSources", onDelete: CASCADE)
 
@@ -48,7 +48,7 @@ type Translation {
 
   text : String!
 
-  langue : String!
+  lang : String!
 }
 
 type Source {
@@ -82,7 +82,7 @@ type Tag {
 
   createdAt: DateTime!
 
-  labelTranslated : [Translation] @relation(name : "tagTranslation")
+  labelsTranslated : [Translation] @relation(name : "tagTranslation")
 
 }
 
@@ -121,6 +121,8 @@ type User {
   history: [HistoryAction!]! @relation(name: "UserHistoryActions")
 
   createdAt: DateTime!
+
+  lang: String!
 }
 
 type Configuration {
