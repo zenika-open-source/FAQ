@@ -40,15 +40,15 @@ type Answer {
   createdAt: DateTime!
   updatedAt: DateTime!
 
-  contents : [Translation!]! @relation(name: "TranslationAnswer")
+  contents: [Translation!]! @relation(name: "TranslationAnswer")
 }
 
 type Translation {
-  id : ID! @unique
+  id: ID! @unique
 
-  text : String!
+  text: String!
 
-  lang : String!
+  lang: String!
 }
 
 type Source {
@@ -82,7 +82,7 @@ type Tag {
 
   createdAt: DateTime!
 
-  labelsTranslated : [Translation!]! @relation(name : "TagTranslation")
+  labelsTranslated: [Translation!]! @relation(name : "TagTranslation")
 
 }
 
