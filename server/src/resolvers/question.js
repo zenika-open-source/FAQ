@@ -14,7 +14,46 @@ module.exports = {
   Mutation: {
     createQuestionAndTags: async (_, { title, tags }, ctx, info) => {
       const tagList = confTagList(ctx)
+      
+	  // Imports the Google Cloud client library
+const {Translate} = require('@google-cloud/translate');
 
+// Your Google Cloud Platform project ID
+const projectId = 'YOUR_PROJECT_ID';
+
+// Instantiates a client
+const translate = new Translate({
+  projectId: projectId,
+});
+
+// The text to translate
+const text = title;
+// The target language
+const targeten = 'en';
+const targetfr = 'fr';
+
+// Translates some text into Russian
+await translate
+  .translate(text, targeten)
+  .then(results => {
+    const translationen = results[0];
+
+    console.log(`Text: ${text}`);
+    console.log(`Translation en: ${translationen}`);
+  })
+  
+await translate
+  .translate(text,targetfr)
+  .then(resultsfr => { 
+  const translationfr = resultsfr[0] ;
+  
+  console.log(`Translation fr : ${translationfr}`) ;
+  })
+
+  
+  .catch(err => {
+    console.error('ERROR:', err);
+  });
       const node = await ctx.prisma.mutation.createZNode(
         {
           data: {
