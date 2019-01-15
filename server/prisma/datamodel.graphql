@@ -24,7 +24,7 @@ type Question {
   createdAt: DateTime!
   updatedAt: DateTime!
 
-  titles: [Translation!]! @relation(name: "TranslationQuestion")
+  titleTranslations: [Translation!]! @default(value: [])  @relation(name: "TranslationQuestion")
 }
 
 type Answer {
@@ -40,7 +40,7 @@ type Answer {
   createdAt: DateTime!
   updatedAt: DateTime!
 
-  contents: [Translation!]! @relation(name: "TranslationAnswer")
+  contentTranslations: [Translation!]! @default(value: []) @relation(name: "TranslationAnswer")
 }
 
 type Translation {
@@ -82,7 +82,7 @@ type Tag {
 
   createdAt: DateTime!
 
-  labelsTranslated: [Translation!]! @relation(name : "TagTranslation")
+  labelTranslations: [Translation!]! @default(value: []) @relation(name : "TagTranslation")
 
 }
 
@@ -121,8 +121,6 @@ type User {
   history: [HistoryAction!]! @relation(name: "UserHistoryActions")
 
   createdAt: DateTime!
-
-  lang: String!
 }
 
 type Configuration {
