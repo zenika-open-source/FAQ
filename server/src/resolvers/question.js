@@ -14,46 +14,52 @@ module.exports = {
   Mutation: {
     createQuestionAndTags: async (_, { title, tags }, ctx, info) => {
       const tagList = confTagList(ctx)
-      
-	  // Imports the Google Cloud client library
-const {Translate} = require('@google-cloud/translate');
 
-// Your Google Cloud Platform project ID
-const projectId = 'YOUR_PROJECT_ID';
+      // Imports the Google Cloud client library
+      const { Translate } = require('@google-cloud/translate');
 
-// Instantiates a client
-const translate = new Translate({
-  projectId: projectId,
-});
+      // Your Google Cloud Platform project ID
+      const projectId = 'YOUR_PROJECT_ID';
 
-// The text to translate
-const text = title;
-// The target language
-const targeten = 'en';
-const targetfr = 'fr';
+      // Instantiates a client
+      const translate = new Translate({
+        projectId: projectId,
+      });
 
-// Translates some text into Russian
-await translate
-  .translate(text, targeten)
-  .then(results => {
-    const translationen = results[0];
+      // Creation titleTranslations
+      const titleTranslations = [];
 
-    console.log(`Text: ${text}`);
-    console.log(`Translation en: ${translationen}`);
-  })
-  
-await translate
-  .translate(text,targetfr)
-  .then(resultsfr => { 
-  const translationfr = resultsfr[0] ;
-  
-  console.log(`Translation fr : ${translationfr}`) ;
-  })
+      // The text to translate
+      const text = title;
 
-  
-  .catch(err => {
-    console.error('ERROR:', err);
-  });
+      // The target language
+      const targeten = 'en';
+      const targetfr = 'fr';
+
+      // Translates some text into English
+      await translate
+        .translate(text, targeten)
+        .then(results => {
+          const translationen = results[0];
+          titleTranslations.push({ text: translationen, lang: targeten });
+
+          console.log(`Text: ${text}`);
+          console.log(`Translation en: ${translationen}`);
+        })
+
+      await translate
+        .translate(text, targetfr)
+        .then(resultsfr => {
+          const translationfr = resultsfr[0];
+          titleTranslations.push({ text: translationfr, lang: targetfr });
+
+          console.log(`Translation fr : ${translationfr}`);
+        })
+
+
+        .catch(err => {
+          console.error('ERROR:', err);
+        });
       const node = await ctx.prisma.mutation.createZNode(
         {
           data: {
@@ -61,7 +67,13 @@ await translate
               create: {
                 title,
                 slug: slugify(title),
-                user: { connect: { id: ctxUser(ctx).id } }
+                user: { connect: { id: ctxUser(ctx).id } },
+                titleTranslations: {
+                  create: {
+                    text: titleTranslations[0].text,
+                    lang: titleTranslations[0].lang
+                  }
+                }
               }
             },
             tags: {
@@ -107,6 +119,47 @@ await translate
     },
     updateQuestionAndTags: async (_, { id, title, tags }, ctx, info) => {
       const tagList = confTagList(ctx)
+
+      // Imports the Google Cloud client library
+      const { Translate } = require('@google-cloud/translate');
+
+      // Your Google Cloud Platform project ID
+      const projectId = 'YOUR_PROJECT_ID';
+
+      // Instantiates a client
+      const translate = new Translate({
+        projectId: projectId,
+      });
+
+      // Creation titleTranslations
+      const titleTranslations = [];
+
+      // The text to translate
+      const text = title;
+
+      // The target language
+      const targeten = 'en';
+      const targetfr = 'fr';
+
+      // Translates some text into English
+      await translate
+        .translate(text, targeten)
+        .then(results => {
+          const translationen = results[0];
+          titleTranslations.push({ text: translationen, lang: targeten });
+
+          console.log(`Text: ${text}`);
+          console.log(`Translation en: ${translationen}`);
+        })
+
+      await translate
+        .translate(text, targetfr)
+        .then(resultsfr => {
+          const translationfr = resultsfr[0];
+          titleTranslations.push({ text: translationfr, lang: targetfr });
+
+          console.log(`Translation fr : ${translationfr}`);
+        })
 
       const node = (await ctx.prisma.query.question(
         { where: { id } },
@@ -169,7 +222,13 @@ await translate
         where: { id },
         data: {
           title,
-          slug: slugify(title)
+          slug: slugify(title),
+          titleTranslations: {
+            create: {
+              text: titleTranslations[0].text,
+              lang: titleTranslations[0].lang
+            }
+          }
         }
       })
 
