@@ -26,8 +26,8 @@ module.exports = {
         projectId: projectId,
       });
 
-      // Creation titleTranslations
-      const titleTranslations = [];
+      // Creation titleTab
+      const titleTab = [];
 
       // The text to translate
       const text = title;
@@ -41,7 +41,7 @@ module.exports = {
         .translate(text, targeten)
         .then(results => {
           const translationen = results[0];
-          titleTranslations.push({ text: translationen, lang: targeten });
+          titleTab.push({ text: translationen, lang: targeten });
 
           console.log(`Text: ${text}`);
           console.log(`Translation en: ${translationen}`);
@@ -51,7 +51,7 @@ module.exports = {
         .translate(text, targetfr)
         .then(resultsfr => {
           const translationfr = resultsfr[0];
-          titleTranslations.push({ text: translationfr, lang: targetfr });
+          titleTab.push({ text: translationfr, lang: targetfr });
 
           console.log(`Translation fr : ${translationfr}`);
         })
@@ -70,8 +70,8 @@ module.exports = {
                 user: { connect: { id: ctxUser(ctx).id } },
                 titleTranslations: {
                   create: {
-                    text: titleTranslations[0].text,
-                    lang: titleTranslations[0].lang
+                    text: titleTab[0].text,
+                    lang: titleTab[0].lang
                   }
                 }
               }
@@ -131,8 +131,8 @@ module.exports = {
         projectId: projectId,
       });
 
-      // Creation titleTranslations
-      const titleTranslations = [];
+      // Creation titleTab
+      const titleTab = [];
 
       // The text to translate
       const text = title;
@@ -146,7 +146,7 @@ module.exports = {
         .translate(text, targeten)
         .then(results => {
           const translationen = results[0];
-          titleTranslations.push({ text: translationen, lang: targeten });
+          titleTab.push({ text: translationen, lang: targeten });
 
           console.log(`Text: ${text}`);
           console.log(`Translation en: ${translationen}`);
@@ -156,7 +156,7 @@ module.exports = {
         .translate(text, targetfr)
         .then(resultsfr => {
           const translationfr = resultsfr[0];
-          titleTranslations.push({ text: translationfr, lang: targetfr });
+          titleTab.push({ text: translationfr, lang: targetfr });
 
           console.log(`Translation fr : ${translationfr}`);
         })
@@ -225,8 +225,8 @@ module.exports = {
           slug: slugify(title),
           titleTranslations: {
             create: {
-              text: titleTranslations[0].text,
-              lang: titleTranslations[0].lang
+              text: titleTab[0].text,
+              lang: titleTab[0].lang
             }
           }
         }
