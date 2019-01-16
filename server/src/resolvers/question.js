@@ -69,11 +69,11 @@ module.exports = {
                 slug: slugify(title),
                 user: { connect: { id: ctxUser(ctx).id } },
                 titleTranslations: {
-                  create: {
-                    text: titleTranslations[0].text,
-                    lang: titleTranslations[0].lang
-                  }
-                }
+                  
+                           
+                  create: titleTranslations 
+                
+              }
               }
             },
             tags: {
