@@ -69,10 +69,7 @@ module.exports = {
                 slug: slugify(title),
                 user: { connect: { id: ctxUser(ctx).id } },
                 titleTranslations: {
-                  create: {
-                    text: titleTab[0].text,
-                    lang: titleTab[0].lang
-                  }
+                  create: titleTab
                 }
               }
             },
@@ -224,10 +221,7 @@ module.exports = {
           title,
           slug: slugify(title),
           titleTranslations: {
-            create: {
-              text: titleTab[0].text,
-              lang: titleTab[0].lang
-            }
+            create: titleTab
           }
         }
       })
