@@ -24,7 +24,7 @@ type Question {
   createdAt: DateTime!
   updatedAt: DateTime!
 
-  titleTranslations: [Translation!]! @default(value: [])  @relation(name: "TranslationQuestion")
+  titleTranslations: [Translation!]! @default(value: []) @relation(name: "TranslationQuestion")
 }
 
 type Answer {
