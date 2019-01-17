@@ -31,6 +31,24 @@ class Result extends Component {
       title=node.question.title;
     }
 
+  var content ;
+  if(node.answer !=null) { 
+    if ( node.answer.contentTranslations[0]) { 
+      content = node.answer.contentTranslations[0].text ;
+    }
+
+    else { 
+      content = node.answer.content ;
+    }
+
+  }
+   
+
+  
+
+    
+
+   
     return (
       <Card className="result">
         <CardTitle onClick={() => this.setState({ collapsed: !collapsed })}>
@@ -60,7 +78,7 @@ class Result extends Component {
         <CardText collapsed={collapsed}>
           {node.answer ? (
             markdown.html(
-              node.highlights ? node.highlights.answer : node.answer.content
+              node.highlights ? node.highlights.answer : content
             )
           ) : (
             <p style={{ textAlign: 'center' }}>
