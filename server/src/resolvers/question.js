@@ -215,16 +215,22 @@ module.exports = {
         meta.title = title
       }
 
-      await ctx.prisma.mutation.updateQuestion({
-        where: { id },
-        data: {
-          title,
-          slug: slugify(title),
-          titleTranslations: {
-            create: titleTab
+      const question = await ctx.prisma.query.question({
+        where: { id: id }
+      }, `{ titleTranslations { id } }`)
+
+      for (let i = 0; i < titleTab.length; i++) {
+        await ctx.prisma.mutation.updateQuestion({
+          where: { id },
+          data: {
+            title,
+            slug: slugify(title),
+            titleTranslations: {
+              update: { where: { id: question.titleTranslations[i].id }, data: { text: titleTab[i].text } }
+            }
           }
-        }
-      })
+        })
+      }
 
       await history.push(ctx, {
         action: 'UPDATED',

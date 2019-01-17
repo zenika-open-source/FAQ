@@ -73,7 +73,10 @@ module.exports = {
                 create: sources
               },
               contentTranslations: {
-                create: contentTab
+                create: {
+                  text: contentTab[0].text,
+                  lang: contentTab[0].lang
+                }
               }
             }
           },
@@ -134,7 +137,7 @@ module.exports = {
         projectId: projectId,
       });
 
-      // Creation contentTab
+      // Creation contentab
       const contentTab = [];
 
       // The text to translate
@@ -253,7 +256,8 @@ module.exports = {
         data: {
           content,
           contentTranslations: {
-            create: contentTab
+            text: contentTab[0].text,
+            lang: contentTab[0].lang
           }
         }
       })
