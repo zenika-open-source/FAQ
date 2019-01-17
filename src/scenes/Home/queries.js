@@ -31,6 +31,9 @@ export const searchNodes = gql`
         answer {
           id
           content
+          contentTranslations (where : {lang: "en"}){
+            text
+          }
         }
         flags {
           id
