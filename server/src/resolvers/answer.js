@@ -24,8 +24,8 @@ module.exports = {
         projectId: projectId,
       });
 
-      // Creation contentTranslations
-      const contentTranslations = [];
+      // Creation contentTab
+      const contentTab = [];
 
       // The text to translate
       const text = content;
@@ -39,7 +39,7 @@ module.exports = {
         .translate(text, targeten)
         .then(results => {
           const translationen = results[0];
-          contentTranslations.push({ text: translationen, lang: targeten });
+          contentTab.push({ text: translationen, lang: targeten });
 
           console.log(`Text: ${text}`);
           console.log(`Translation en: ${translationen}`);
@@ -49,7 +49,7 @@ module.exports = {
         .translate(text, targetfr)
         .then(resultsfr => {
           const translationfr = resultsfr[0];
-          contentTranslations.push({ text: translationfr, lang: targetfr });
+          contentTab.push({ text: translationfr, lang: targetfr });
 
           console.log(`Translation fr : ${translationfr}`);
         })
@@ -71,6 +71,9 @@ module.exports = {
               },
               sources: {
                 create: sources
+              },
+              contentTranslations: {
+                create: contentTab
               }
             }
           },
@@ -131,8 +134,8 @@ module.exports = {
         projectId: projectId,
       });
 
-      // Creation contentTranslations
-      const contentTranslations = [];
+      // Creation contentTab
+      const contentTab = [];
 
       // The text to translate
       const text = content;
@@ -146,7 +149,7 @@ module.exports = {
         .translate(text, targeten)
         .then(results => {
           const translationen = results[0];
-          contentTranslations.push({ text: translationen, lang: targeten });
+          contentTab.push({ text: translationen, lang: targeten });
 
           console.log(`Text: ${text}`);
           console.log(`Translation en: ${translationen}`);
@@ -156,7 +159,7 @@ module.exports = {
         .translate(text, targetfr)
         .then(resultsfr => {
           const translationfr = resultsfr[0];
-          contentTranslations.push({ text: translationfr, lang: targetfr });
+          contentTab.push({ text: translationfr, lang: targetfr });
 
           console.log(`Translation fr : ${translationfr}`);
         })
@@ -248,7 +251,10 @@ module.exports = {
       await ctx.prisma.mutation.updateAnswer({
         where: { id },
         data: {
-          content
+          content,
+          contentTranslations: {
+            create: contentTab
+          }
         }
       })
 
