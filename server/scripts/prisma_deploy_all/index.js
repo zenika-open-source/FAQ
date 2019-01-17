@@ -18,7 +18,7 @@ const getServices = () =>
 
 const deployPrismaService = (name, stage) => {
   const isForcing = process.argv.includes('--force')
-  run('prisma deploy ' + (isForcing ? '--force' : ''), {
+  run('C:\\Users\\Tom\\FAQ\\server\\node_modules\\.bin\\prisma.cmd deploy' + (isForcing ? '--force' : ''), {
     PRISMA_URL: PRISMA_URL + '/' + name + '/' + stage
   })
 }

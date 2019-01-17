@@ -24,12 +24,19 @@ class Result extends Component {
     const { node } = this.props
     const { collapsed } = this.state
 
+    var title;
+    if (node.question.titleTranslations[0]){
+      title=node.question.titleTranslations[0].text
+    } else {
+      title=node.question.title;
+    }
+
     return (
       <Card className="result">
         <CardTitle onClick={() => this.setState({ collapsed: !collapsed })}>
           <div className="grow">
             {!node.highlights ? (
-              <h1>{markdown.title(node.question.title)}</h1>
+              <h1>{markdown.title(title)}</h1>
             ) : (
               <h1
                 dangerouslySetInnerHTML={{
@@ -65,6 +72,7 @@ class Result extends Component {
     )
   }
 }
+
 
 Result.propTypes = {
   node: PropTypes.object.isRequired,
