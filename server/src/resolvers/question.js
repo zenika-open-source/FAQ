@@ -137,6 +137,7 @@ module.exports = {
       // The target language
       const targeten = 'en';
       const targetfr = 'fr';
+      const targetes = 'es';
 
       // Translates some text into English
       await translate
@@ -156,6 +157,16 @@ module.exports = {
           titleTab.push({ text: translationfr, lang: targetfr });
 
           console.log(`Translation fr : ${translationfr}`);
+        })
+
+      await translate
+        .translate(text, targetes)
+        .then(resultses => {
+          const translationes = resultses[0];
+          titleTab.push({ text: translationes, lang: targetes });
+
+          console.log(`Text: ${text}`);
+          console.log(`Translation es: ${translationes}`);
         })
 
       const node = (await ctx.prisma.query.question(
@@ -219,14 +230,36 @@ module.exports = {
         where: { id: id }
       }, `{ titleTranslations { id } }`)
 
-      for (let i = 0; i < titleTab.length; i++) {
+      if (titleTab.length > question.titleTranslations.length) {
+        const oldTitleTranslationsIds = [];
+        for (let i = 0; i < question.titleTranslations.length; i++){
+          oldTitleTranslationsIds.push({id: question.titleTranslations[i].id})
+        }
         await ctx.prisma.mutation.updateQuestion({
           where: { id },
           data: {
             title,
             slug: slugify(title),
             titleTranslations: {
-              update: { where: { id: question.titleTranslations[i].id }, data: { text: titleTab[i].text } }
+              delete: oldTitleTranslationsIds,
+              create: titleTab
+            }
+          }
+        })
+      }
+
+      else {
+        const newTitleTranslations = [];
+        for (let i = 0; i < Math.min(titleTab.length, question.titleTranslations.length); i++) {
+          newTitleTranslations.push({ where: { id: question.titleTranslations[i].id }, data: { text: titleTab[i].text, lang: titleTab[i].lang } })
+        }
+        await ctx.prisma.mutation.updateQuestion({
+          where: { id },
+          data: {
+            title,
+            slug: slugify(title),
+            titleTranslations: {
+              update: newTitleTranslations
             }
           }
         })
