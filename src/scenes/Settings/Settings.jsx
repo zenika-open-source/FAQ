@@ -4,8 +4,10 @@ import PropTypes from 'prop-types'
 import { onListChange } from 'helpers'
 import { alert, configuration } from 'services'
 
-import { PairInputList, Button } from 'components'
+import { PairInputList, Button, Input } from 'components'
 import Card, { CardTitle, CardText, CardActions } from 'components/Card'
+
+import './Settings.css'
 
 class Settings extends Component {
   constructor(props) {
@@ -15,10 +17,13 @@ class Settings extends Component {
 
     this.state = {
       loading: false,
+      title: configuration.title,
       tags: this.tagsToList(configuration.tags),
       synonyms: this.synonymsToList(configuration.algoliaSynonyms)
     }
   }
+
+  onTitleChange = title => this.setState({ title })
 
   tagsToList(tags) {
     return Object.entries(tags || {}).map(([key, value], id) => ({
@@ -55,10 +60,11 @@ class Settings extends Component {
   onSynonymsChange = onListChange(this.setState.bind(this), 'synonyms')
 
   onSave = () => {
-    const { tags, synonyms } = this.state
+    const { title, tags, synonyms } = this.state
     this.setState({ loading: true })
     this.props
       .updateConfiguration({
+        title,
         tags: this.listToTags(tags),
         synonyms: this.listToSynonyms(synonyms)
       })
@@ -81,7 +87,7 @@ class Settings extends Component {
   }
 
   render() {
-    const { loading, tags, synonyms } = this.state
+    const { loading, title, tags, synonyms } = this.state
     return (
       <div>
         <Card>
@@ -89,6 +95,14 @@ class Settings extends Component {
             <h1>FAQ Settings</h1>
           </CardTitle>
           <CardText>
+            <h2>Title</h2>
+            <br />
+            <div className="title-input">
+              <i className="material-icons">home</i>
+              <Input value={title} onChange={e => this.onTitleChange(e.target.value)} />
+            </div>
+            <br />
+            <hr />
             <h2>Tags</h2>
             <br />
             <PairInputList

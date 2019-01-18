@@ -21,10 +21,9 @@ class Configuration {
   }
 
   async load() {
-    const configuration = await fetch(
-      process.env.REACT_APP_GRAPHQL_ENDPOINT + '/configuration',
-      { headers: { 'prisma-service': routing.getPrismaService() } }
-    ).then(res => res.json())
+    const configuration = await fetch(process.env.REACT_APP_GRAPHQL_ENDPOINT + '/configuration', {
+      headers: { 'prisma-service': routing.getPrismaService() }
+    }).then(res => res.json())
     this.setData(configuration)
   }
 

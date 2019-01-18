@@ -44,7 +44,7 @@ type Mutation {
   addFlag(type: String!, nodeId: ID!): ZNode
   removeFlag(type: String!, nodeId: ID!): ZNode
 
-  updateConfiguration(tags: Json!, algoliaSynonyms: Json!): Configuration @admin
+  updateConfiguration(title: String, tags: Json!, algoliaSynonyms: Json!): Configuration @admin
 }
 
 type SearchResult {

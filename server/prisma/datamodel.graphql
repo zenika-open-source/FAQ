@@ -112,6 +112,8 @@ type Configuration {
 
   name: String! @unique
 
+  title: String
+
   algoliaAppId: String
   algoliaApiKey: String
   algoliaSynonyms: Json

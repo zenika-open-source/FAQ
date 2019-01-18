@@ -5,6 +5,7 @@ export const getConfiguration = gql`
   query {
     configuration {
       id
+      title
       algoliaSynonyms
       tags
     }
@@ -12,8 +13,8 @@ export const getConfiguration = gql`
 `
 
 export const updateConfigurationMutation = gql`
-  mutation updateConfiguration($tags: Json!, $synonyms: Json!) {
-    updateConfiguration(tags: $tags, algoliaSynonyms: $synonyms) {
+  mutation updateConfiguration($title: String, $tags: Json!, $synonyms: Json!) {
+    updateConfiguration(title: $title, tags: $tags, algoliaSynonyms: $synonyms) {
       id
     }
   }
