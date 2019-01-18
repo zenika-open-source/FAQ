@@ -73,10 +73,7 @@ module.exports = {
                 create: sources
               },
               contentTranslations: {
-                create: {
-                  text: contentTab[0].text,
-                  lang: contentTab[0].lang
-                }
+                create: contentTab
               }
             }
           },
@@ -137,7 +134,7 @@ module.exports = {
         projectId: projectId,
       });
 
-      // Creation contentab
+      // Creation contentTab
       const contentTab = [];
 
       // The text to translate
@@ -251,16 +248,21 @@ module.exports = {
         meta.content = content
       }
 
-      await ctx.prisma.mutation.updateAnswer({
-        where: { id },
-        data: {
-          content,
-          contentTranslations: {
-            text: contentTab[0].text,
-            lang: contentTab[0].lang
+      const selectedAnswer = await ctx.prisma.query.answer({
+        where: { id: id }
+      }, `{ contentTranslations { id } }`)
+
+      for (let i = 0; i < contentTab.length; i++) {
+        await ctx.prisma.mutation.updateAnswer({
+          where: { id },
+          data: {
+            content,
+            contentTranslations: {
+              update: { where: { id: selectedAnswer.titleTranslations[i].id }, data: { text: contentTab[i].text } }
+            }
           }
-        }
-      })
+        })
+      }
 
       await history.push(ctx, {
         action: 'UPDATED',
