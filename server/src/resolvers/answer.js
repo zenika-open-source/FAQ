@@ -252,17 +252,22 @@ module.exports = {
         where: { id: id }
       }, `{ contentTranslations { id } }`)
 
-      for (let i = 0; i < contentTab.length; i++) {
-        await ctx.prisma.mutation.updateAnswer({
-          where: { id },
-          data: {
-            content,
-            contentTranslations: {
-              update: { where: { id: selectedAnswer.titleTranslations[i].id }, data: { text: contentTab[i].text } }
-            }
-          }
-        })
+      const oldContentTranslationsIds = [];
+      for (let i = 0; i < selectedAnswer.contentTranslations.length; i++) {
+        oldContentTranslationsIds.push({ id: selectedAnswer.contentTranslations[i].id })
       }
+
+      await ctx.prisma.mutation.updateAnswer({
+        where: { id },
+        data: {
+          content,
+          contentTranslations: {
+            delete: oldContentTranslationsIds,
+            create: contentTab
+          }
+        }
+      })
+
 
       await history.push(ctx, {
         action: 'UPDATED',

@@ -137,7 +137,6 @@ module.exports = {
       // The target language
       const targeten = 'en';
       const targetfr = 'fr';
-      const targetes = 'es';
 
       // Translates some text into English
       await translate
@@ -159,15 +158,7 @@ module.exports = {
           console.log(`Translation fr : ${translationfr}`);
         })
 
-      await translate
-        .translate(text, targetes)
-        .then(resultses => {
-          const translationes = resultses[0];
-          titleTab.push({ text: translationes, lang: targetes });
-
-          console.log(`Text: ${text}`);
-          console.log(`Translation es: ${translationes}`);
-        })
+     
 
       const node = (await ctx.prisma.query.question(
         { where: { id } },
@@ -230,40 +221,22 @@ module.exports = {
         where: { id: id }
       }, `{ titleTranslations { id } }`)
 
-      if (titleTab.length > selectedQuestion.titleTranslations.length) {
-        const oldTitleTranslationsIds = [];
-        for (let i = 0; i < selectedQuestion.titleTranslations.length; i++) {
-          oldTitleTranslationsIds.push( {id: selectedQuestion.titleTranslations[i].id} )
-        }
-        await ctx.prisma.mutation.updateQuestion({
-          where: { id },
-          data: {
-            title,
-            slug: slugify(title),
-            titleTranslations: {
-              delete: oldTitleTranslationsIds,
-              create: titleTab
-            }
-          }
-        })
+      const oldTitleTranslationsIds = [];
+      for (let i = 0; i < selectedQuestion.titleTranslations.length; i++) {
+        oldTitleTranslationsIds.push({ id: selectedQuestion.titleTranslations[i].id })
       }
 
-      else {
-        const newTitleTranslations = [];
-        for (let i = 0; i < selectedQuestion.titleTranslations.length; i++) {
-          newTitleTranslations.push({ where: { id: selectedQuestion.titleTranslations[i].id }, data: { text: titleTab[i].text, lang: titleTab[i].lang } })
-        }
-        await ctx.prisma.mutation.updateQuestion({
-          where: { id },
-          data: {
-            title,
-            slug: slugify(title),
-            titleTranslations: {
-              update: newTitleTranslations
-            }
+      await ctx.prisma.mutation.updateQuestion({
+        where: { id },
+        data: {
+          title,
+          slug: slugify(title),
+          titleTranslations: {
+            delete: oldTitleTranslationsIds,
+            create: titleTab
           }
-        })
-      }
+        }
+      })
 
       await history.push(ctx, {
         action: 'UPDATED',
