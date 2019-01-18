@@ -5,6 +5,9 @@ export const zNodeFragment = `
   question {
     id
     title
+    titleTranslations (where : {lang: "en"}){
+      text
+    }
     slug
     user {
       id
@@ -16,6 +19,9 @@ export const zNodeFragment = `
   answer {
     id
     content
+    contentTranslations (where : {lang: "en"}){
+      text
+    }
     sources {
       id
       label

@@ -32,10 +32,26 @@ const Read = ({ history, match, zNode, createFlag, removeFlag }) => {
     return <Redirect to={'/q/' + correctSlug} />
   }
 
+var titlebis;
+if (zNode.question.titleTranslations[0]){
+  titlebis=zNode.question.titleTranslations[0].text;
+} else {
+  titlebis=zNode.question.title
+}
+
+var contentbis;
+if (zNode.answer !=null) {
+if (zNode.answer.contentTranslations[0].text){
+  contentbis=zNode.answer.contentTranslations[0].text;
+} else {
+  contentbis=zNode.answer.content;
+}
+}
+
   return (
     <div>
       <Helmet>
-        <title>FAQ - {markdown.title(zNode.question.title)}</title>
+        <title>FAQ - {markdown.title(titlebis)}</title>
       </Helmet>
       <ActionMenu backLink="/" backLabel="Home" goBack>
         <FlagsDropdown
@@ -61,7 +77,7 @@ const Read = ({ history, match, zNode, createFlag, removeFlag }) => {
       <Card>
         <CardTitle style={{ padding: '1.2rem' }}>
           <div className="grow">
-            <h1>{markdown.title(zNode.question.title)}</h1>
+            <h1>{markdown.title(titlebis)}</h1>
             {zNode.tags.length > 0 && <Tags tags={zNode.tags} />}
           </div>
           <Flags node={zNode} withLabels={true} />
@@ -71,7 +87,7 @@ const Read = ({ history, match, zNode, createFlag, removeFlag }) => {
           {zNode.answer ? (
             <>
               <div style={{ padding: '0.5rem', marginBottom: '0.5rem' }}>
-                {markdown.html(zNode.answer.content)}
+                {markdown.html(contentbis)}
               </div>
               <Sources sources={zNode.answer.sources} />
             </>
