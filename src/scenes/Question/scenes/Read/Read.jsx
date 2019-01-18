@@ -40,10 +40,12 @@ if (zNode.question.titleTranslations[0]){
 }
 
 var contentbis;
+if (zNode.answer !=null) {
 if (zNode.answer.contentTranslations[0].text){
   contentbis=zNode.answer.contentTranslations[0].text;
 } else {
   contentbis=zNode.answer.content;
+}
 }
 
   return (
