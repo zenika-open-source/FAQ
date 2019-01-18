@@ -226,17 +226,22 @@ module.exports = {
         meta.title = title
       }
 
-      const question = await ctx.prisma.query.question({
+      const selectedQuestion = await ctx.prisma.query.question({
         where: { id: id }
       }, `{ titleTranslations { id } }`)
 
-      if (titleTab.length > question.titleTranslations.length) {
+      if (titleTab.length > selectedQuestion.titleTranslations.length) {
+        const oldTitleTranslationsIds = [];
+        for (let i = 0; i < selectedQuestion.titleTranslations.length; i++) {
+          oldTitleTranslationsIds.push( {id: selectedQuestion.titleTranslations[i].id} )
+        }
         await ctx.prisma.mutation.updateQuestion({
           where: { id },
           data: {
             title,
             slug: slugify(title),
             titleTranslations: {
+              delete: oldTitleTranslationsIds,
               create: titleTab
             }
           }
@@ -245,10 +250,9 @@ module.exports = {
 
       else {
         const newTitleTranslations = [];
-        for (let i = 0; i < Math.min(titleTab.length, question.titleTranslations.length); i++) {
-          newTitleTranslations.push({ where: { id: question.titleTranslations[i].id }, data: { text: titleTab[i].text, lang: titleTab[i].lang } })
+        for (let i = 0; i < selectedQuestion.titleTranslations.length; i++) {
+          newTitleTranslations.push({ where: { id: selectedQuestion.titleTranslations[i].id }, data: { text: titleTab[i].text, lang: titleTab[i].lang } })
         }
-
         await ctx.prisma.mutation.updateQuestion({
           where: { id },
           data: {
