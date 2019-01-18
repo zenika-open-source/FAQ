@@ -258,7 +258,7 @@ module.exports = {
           data: {
             content,
             contentTranslations: {
-              update: { where: { id: selectedAnswer.titleTranslations[i].id }, data: { text: contentTab[i].text } }
+              update: { where: { id: selectedAnswer.contentTranslations[i].id }, data: { text: contentTab[i].text } }
             }
           }
         })
