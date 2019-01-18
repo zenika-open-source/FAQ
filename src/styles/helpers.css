@@ -10,6 +10,10 @@
   display: flex;
 }
 
+.centered {
+  text-align: center;
+}
+
 @media screen and (max-width: 480px) {
   /* --mobile-breakpoint */
   .row-on-mobile {

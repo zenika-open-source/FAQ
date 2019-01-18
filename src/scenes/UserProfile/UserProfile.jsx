@@ -46,11 +46,7 @@ class UserProfile extends Component {
       <div>
         <Card>
           <CardText>
-            <h1>Profile</h1>
-            <p>
-              This page displays all your personal data (as defined by the GDPR)
-              processed by FAQ.
-            </p>
+            <h1 className="centered">Profile</h1>
           </CardText>
         </Card>
         <Card>
@@ -103,6 +99,17 @@ class UserProfile extends Component {
           </CardText>
         </Card>
         <Logs />
+        <Card>
+          <CardText>
+            <h1 style={{ marginBottom: '1rem' }}>GDPR</h1>
+            <p>
+              <span style={{ marginRight: '5px' }}>
+                You can contact us about any GDPR-related issue at:
+              </span>
+              <a href="mailto:mydata@zenika.com">mydata@zenika.com</a>
+            </p>
+          </CardText>
+        </Card>
       </div>
     )
   }
