@@ -17,37 +17,24 @@ module.exports = {
 
       const { Translate } = require('@google-cloud/translate');
 
-      const projectId = 'YOUR_PROJECT_ID';
-
       const translate = new Translate({
-        projectId: projectId,
       });
 
       const titleTab = [];
 
-      const text = title;
+      const textToTranslate = title;
 
       const targeten = 'en';
       const targetfr = 'fr';
 
-      await translate
-        .translate(text, targeten)
-        .then(results => {
-          const translationen = results[0];
-          titleTab.push({ text: translationen, lang: targeten });
-        })
+      const resultsen = await translate.translate(textToTranslate, targeten)
+      const translationen = resultsen[0];
+      titleTab.push({ text: translationen, lang: targeten });
 
-      await translate
-        .translate(text, targetfr)
-        .then(resultsfr => {
-          const translationfr = resultsfr[0];
-          titleTab.push({ text: translationfr, lang: targetfr });
-        })
+      const resultsfr = await translate.translate(textToTranslate, targetfr)
+      const translationfr = resultsfr[0];
+      titleTab.push({ text: translationfr, lang: targetfr });
 
-
-        .catch(err => {
-          console.error('ERROR:', err);
-        });
       const node = await ctx.prisma.mutation.createZNode(
         {
           data: {
@@ -107,34 +94,23 @@ module.exports = {
 
       const { Translate } = require('@google-cloud/translate');
 
-      const projectId = 'YOUR_PROJECT_ID';
-
       const translate = new Translate({
-        projectId: projectId,
       });
 
       const titleTab = [];
 
-      const text = title;
+      const textToTranslate = title;
 
       const targeten = 'en';
       const targetfr = 'fr';
+    
+      const resultsen = await translate.translate(textToTranslate, targeten)
+      const translationen = resultsen[0];
+      titleTab.push({ text: translationen, lang: targeten });
 
-      await translate
-        .translate(text, targeten)
-        .then(results => {
-          const translationen = results[0];
-          titleTab.push({ text: translationen, lang: targeten });
-        })
-
-      await translate
-        .translate(text, targetfr)
-        .then(resultsfr => {
-          const translationfr = resultsfr[0];
-          titleTab.push({ text: translationfr, lang: targetfr });
-        })
-
-     
+      const resultsfr = await translate.translate(textToTranslate, targetfr)
+      const translationfr = resultsfr[0];
+      titleTab.push({ text: translationfr, lang: targetfr });
 
       const node = (await ctx.prisma.query.question(
         { where: { id } },

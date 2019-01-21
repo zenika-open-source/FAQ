@@ -15,32 +15,23 @@ module.exports = {
 
       const { Translate } = require('@google-cloud/translate');
 
-      const projectId = 'YOUR_PROJECT_ID';
-
       const translate = new Translate({
-        projectId: projectId,
       });
 
       const contentTab = [];
 
-      const text = content;
+      const textToTranslate = content;
 
       const targeten = 'en';
       const targetfr = 'fr';
 
-      await translate
-        .translate(text, targeten)
-        .then(results => {
-          const translationen = results[0];
-          contentTab.push({ text: translationen, lang: targeten });
-        })
+      const resultsen = await translate.translate(textToTranslate, targeten)
+      const translationen = resultsen[0];
+      contentTab.push({ text: translationen, lang: targeten });
 
-      await translate
-        .translate(text, targetfr)
-        .then(resultsfr => {
-          const translationfr = resultsfr[0];
-          contentTab.push({ text: translationfr, lang: targetfr });
-        })
+      const resultsfr = await translate.translate(textToTranslate, targetfr)
+      const translationfr = resultsfr[0];
+      contentTab.push({ text: translationfr, lang: targetfr });
 
       try {
         answer = await ctx.prisma.mutation.createAnswer(
@@ -114,32 +105,24 @@ module.exports = {
 
       const { Translate } = require('@google-cloud/translate');
 
-      const projectId = 'YOUR_PROJECT_ID';
-
       const translate = new Translate({
-        projectId: projectId,
       });
 
       const contentTab = [];
 
-      const text = content;
+      const textToTranslate = content;
 
       const targeten = 'en';
       const targetfr = 'fr';
 
-      await translate
-        .translate(text, targeten)
-        .then(results => {
-          const translationen = results[0];
-          contentTab.push({ text: translationen, lang: targeten });
-        })
+      const resultsen = await translate.translate(textToTranslate, targeten)
+      const translationen = resultsen[0];
+      contentTab.push({ text: translationen, lang: targeten });
 
-      await translate
-        .translate(text, targetfr)
-        .then(resultsfr => {
-          const translationfr = resultsfr[0];
-          contentTab.push({ text: translationfr, lang: targetfr });
-        })
+      const resultsfr = await translate.translate(textToTranslate, targetfr)
+      const translationfr = resultsfr[0];
+      contentTab.push({ text: translationfr, lang: targetfr });
+
 
       const answer = await ctx.prisma.query.answer(
         { where: { id } },
