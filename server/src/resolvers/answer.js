@@ -13,36 +13,26 @@ module.exports = {
 
       let answer
 
-      // Imports the Google Cloud client library
       const { Translate } = require('@google-cloud/translate');
 
-      // Your Google Cloud Platform project ID
       const projectId = 'YOUR_PROJECT_ID';
 
-      // Instantiates a client
       const translate = new Translate({
         projectId: projectId,
       });
 
-      // Creation contentTab
       const contentTab = [];
 
-      // The text to translate
       const text = content;
 
-      // The target language
       const targeten = 'en';
       const targetfr = 'fr';
 
-      // Translates some text into English
       await translate
         .translate(text, targeten)
         .then(results => {
           const translationen = results[0];
           contentTab.push({ text: translationen, lang: targeten });
-
-          console.log(`Text: ${text}`);
-          console.log(`Translation en: ${translationen}`);
         })
 
       await translate
@@ -50,8 +40,6 @@ module.exports = {
         .then(resultsfr => {
           const translationfr = resultsfr[0];
           contentTab.push({ text: translationfr, lang: targetfr });
-
-          console.log(`Translation fr : ${translationfr}`);
         })
 
       try {
@@ -123,36 +111,27 @@ module.exports = {
       )
     },
     updateAnswerAndSources: async (_, { id, content, sources }, ctx, info) => {
-      // Imports the Google Cloud client library
+
       const { Translate } = require('@google-cloud/translate');
 
-      // Your Google Cloud Platform project ID
       const projectId = 'YOUR_PROJECT_ID';
 
-      // Instantiates a client
       const translate = new Translate({
         projectId: projectId,
       });
 
-      // Creation contentTab
       const contentTab = [];
 
-      // The text to translate
       const text = content;
 
-      // The target language
       const targeten = 'en';
       const targetfr = 'fr';
 
-      // Translates some text into English
       await translate
         .translate(text, targeten)
         .then(results => {
           const translationen = results[0];
           contentTab.push({ text: translationen, lang: targeten });
-
-          console.log(`Text: ${text}`);
-          console.log(`Translation en: ${translationen}`);
         })
 
       await translate
@@ -160,8 +139,6 @@ module.exports = {
         .then(resultsfr => {
           const translationfr = resultsfr[0];
           contentTab.push({ text: translationfr, lang: targetfr });
-
-          console.log(`Translation fr : ${translationfr}`);
         })
 
       const answer = await ctx.prisma.query.answer(

@@ -15,36 +15,26 @@ module.exports = {
     createQuestionAndTags: async (_, { title, tags }, ctx, info) => {
       const tagList = confTagList(ctx)
 
-      // Imports the Google Cloud client library
       const { Translate } = require('@google-cloud/translate');
 
-      // Your Google Cloud Platform project ID
       const projectId = 'YOUR_PROJECT_ID';
 
-      // Instantiates a client
       const translate = new Translate({
         projectId: projectId,
       });
 
-      // Creation titleTab
       const titleTab = [];
 
-      // The text to translate
       const text = title;
 
-      // The target language
       const targeten = 'en';
       const targetfr = 'fr';
 
-      // Translates some text into English
       await translate
         .translate(text, targeten)
         .then(results => {
           const translationen = results[0];
           titleTab.push({ text: translationen, lang: targeten });
-
-          console.log(`Text: ${text}`);
-          console.log(`Translation en: ${translationen}`);
         })
 
       await translate
@@ -52,8 +42,6 @@ module.exports = {
         .then(resultsfr => {
           const translationfr = resultsfr[0];
           titleTab.push({ text: translationfr, lang: targetfr });
-
-          console.log(`Translation fr : ${translationfr}`);
         })
 
 
@@ -117,36 +105,26 @@ module.exports = {
     updateQuestionAndTags: async (_, { id, title, tags }, ctx, info) => {
       const tagList = confTagList(ctx)
 
-      // Imports the Google Cloud client library
       const { Translate } = require('@google-cloud/translate');
 
-      // Your Google Cloud Platform project ID
       const projectId = 'YOUR_PROJECT_ID';
 
-      // Instantiates a client
       const translate = new Translate({
         projectId: projectId,
       });
 
-      // Creation titleTab
       const titleTab = [];
 
-      // The text to translate
       const text = title;
 
-      // The target language
       const targeten = 'en';
       const targetfr = 'fr';
 
-      // Translates some text into English
       await translate
         .translate(text, targeten)
         .then(results => {
           const translationen = results[0];
           titleTab.push({ text: translationen, lang: targeten });
-
-          console.log(`Text: ${text}`);
-          console.log(`Translation en: ${translationen}`);
         })
 
       await translate
@@ -154,8 +132,6 @@ module.exports = {
         .then(resultsfr => {
           const translationfr = resultsfr[0];
           titleTab.push({ text: translationfr, lang: targetfr });
-
-          console.log(`Translation fr : ${translationfr}`);
         })
 
      
