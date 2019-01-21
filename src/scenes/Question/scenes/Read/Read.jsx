@@ -32,18 +32,22 @@ const Read = ({ history, match, zNode, createFlag, removeFlag }) => {
     return <Redirect to={'/q/' + correctSlug} />
   }
 
+
+
 var titlebis;
-if (zNode.question.titleTranslations[0]){
+if (zNode.question.titleTranslations){
   titlebis=zNode.question.titleTranslations[0].text;
 } else {
   titlebis=zNode.question.title
 }
 
 var contentbis;
+if (zNode.answer){
 if (zNode.answer.contentTranslations[0].text){
   contentbis=zNode.answer.contentTranslations[0].text;
 } else {
   contentbis=zNode.answer.content;
+  }
 }
 
   return (
