@@ -25,73 +25,191 @@ class Result extends Component {
     const { collapsed } = this.state
 
     var title;
-    if (node.question.titleTranslations[0]){
-      title=node.question.titleTranslations[0].text
+    if (node.question.titleTranslations[0]) {
+      title = node.question.titleTranslations[0].text
     } else {
-      title=node.question.title;
+      title = node.question.title;
     }
 
-  var content ;
-  if(node.answer !=null) { 
-    if ( node.answer.contentTranslations[0]) { 
-      content = node.answer.contentTranslations[0].text ;
+    var content;
+    if (node.answer != null) {
+      if (node.answer.contentTranslations[0]) {
+        content = node.answer.contentTranslations[0].text;
+      } else {
+        content = node.answer.content;
+      }
     }
 
-    else { 
-      content = node.answer.content ;
-    }
-
-  }
-   
-
-  
-
-    
-
-   
-    return (
-      <Card className="result">
-        <CardTitle onClick={() => this.setState({ collapsed: !collapsed })}>
-          <div className="grow">
-            {!node.highlights ? (
-              <h1>{markdown.title(title)}</h1>
-            ) : (
-              <h1
-                dangerouslySetInnerHTML={{
-                  __html: markdown.title(node.highlights.question)
+    if (node.answer != null && content != node.answer.content) {
+      if (node.question.title != title) {
+        return (
+          <Card className="result">
+            <CardTitle onClick={() => this.setState({ collapsed: !collapsed })}>
+              <div className="grow">
+                {!node.highlights ? (
+                  <h1>{markdown.title(title)}</h1>
+                ) : (
+                    <h1
+                      dangerouslySetInnerHTML={{
+                        __html: markdown.title(node.highlights.question)
+                      }}
+                    />
+                  )}
+                {node.tags.length > 0 && <Tags tags={node.tags} />}
+                <p style={{ textAlign: 'right' }}> <i>Translated by Google Translate</i></p>
+              </div>
+              <Flags node={node} withLabels={false} />
+              <Link
+                to={{
+                  pathname: `/q/${node.question.slug}-${node.id}`,
+                  state: { from: 'home' }
                 }}
-              />
-            )}
-            {node.tags.length > 0 && <Tags tags={node.tags} />}
-          </div>
-          <Flags node={node} withLabels={false} />
-          <Link
-            to={{
-              pathname: `/q/${node.question.slug}-${node.id}`,
-              state: { from: 'home' }
-            }}
-            className="open-card"
-          >
-            <i className="material-icons">keyboard_arrow_right</i>
-          </Link>
-        </CardTitle>
-        <CardText collapsed={collapsed}>
-          {node.answer ? (
-            markdown.html(
-              node.highlights ? node.highlights.answer : content
-            )
-          ) : (
-            <p style={{ textAlign: 'center' }}>
-              <i>No answer yet...</i>
-            </p>
-          )}
-        </CardText>
-      </Card>
-    )
+                className="open-card"
+              >
+                <i className="material-icons">keyboard_arrow_right</i>
+              </Link>
+            </CardTitle>
+            <CardText collapsed={collapsed}>
+              {node.answer ? (
+                markdown.html(
+                  node.highlights ? node.highlights.answer : content)
+              ) : (
+                  <p style={{ textAlign: 'center' }}>
+                    <i>No answer yet...</i>
+                  </p>
+                )}
+              <p style={{ textAlign: 'right' }}> <i>Translated by Google Translate</i></p>
+            </CardText>
+          </Card>
+        )
+      } else {
+        return (
+          <Card className="result">
+            <CardTitle onClick={() => this.setState({ collapsed: !collapsed })}>
+              <div className="grow">
+                {!node.highlights ? (
+                  <h1>{markdown.title(title)}</h1>
+                ) : (
+                    <h1
+                      dangerouslySetInnerHTML={{
+                        __html: markdown.title(node.highlights.question)
+                      }}
+                    />
+                  )}
+                {node.tags.length > 0 && <Tags tags={node.tags} />}
+              </div>
+              <Flags node={node} withLabels={false} />
+              <Link
+                to={{
+                  pathname: `/q/${node.question.slug}-${node.id}`,
+                  state: { from: 'home' }
+                }}
+                className="open-card"
+              >
+                <i className="material-icons">keyboard_arrow_right</i>
+              </Link>
+            </CardTitle>
+            <CardText collapsed={collapsed}>
+              {node.answer ? (
+                markdown.html(
+                  node.highlights ? node.highlights.answer : content)
+              ) : (
+                  <p style={{ textAlign: 'center' }}>
+                    <i>No answer yet...</i>
+                  </p>
+                )}
+              <p style={{ textAlign: 'right' }}> <i>Translated by Google Translate</i></p>
+            </CardText>
+          </Card>
+        )
+      }
+    }
+    else {
+      if (node.answer == null || node.answer.content == content) {
+        if (node.question.title != title) {
+          return (
+            <Card className="result">
+              <CardTitle onClick={() => this.setState({ collapsed: !collapsed })}>
+                <div className="grow">
+                  {!node.highlights ? (
+                    <h1>{markdown.title(title)}</h1>
+                  ) : (
+                      <h1
+                        dangerouslySetInnerHTML={{
+                          __html: markdown.title(node.highlights.question)
+                        }}
+                      />
+                    )}
+                  {node.tags.length > 0 && <Tags tags={node.tags} />}
+                  <p style={{ textAlign: 'right' }}> <i>Translated by Google Translate</i></p>
+                </div>
+                <Flags node={node} withLabels={false} />
+                <Link
+                  to={{
+                    pathname: `/q/${node.question.slug}-${node.id}`,
+                    state: { from: 'home' }
+                  }}
+                  className="open-card"
+                >
+                  <i className="material-icons">keyboard_arrow_right</i>
+                </Link>
+              </CardTitle>
+              <CardText collapsed={collapsed}>
+                {node.answer ? (
+                  markdown.html(
+                    node.highlights ? node.highlights.answer : content)
+                ) : (
+                    <p style={{ textAlign: 'center' }}>
+                      <i>No answer yet...</i>
+                    </p>
+                  )}
+              </CardText>
+            </Card>
+          )
+        } else {
+          return (
+            <Card className="result">
+              <CardTitle onClick={() => this.setState({ collapsed: !collapsed })}>
+                <div className="grow">
+                  {!node.highlights ? (
+                    <h1>{markdown.title(title)}</h1>
+                  ) : (
+                      <h1
+                        dangerouslySetInnerHTML={{
+                          __html: markdown.title(node.highlights.question)
+                        }}
+                      />
+                    )}
+                  {node.tags.length > 0 && <Tags tags={node.tags} />}
+                </div>
+                <Flags node={node} withLabels={false} />
+                <Link
+                  to={{
+                    pathname: `/q/${node.question.slug}-${node.id}`,
+                    state: { from: 'home' }
+                  }}
+                  className="open-card"
+                >
+                  <i className="material-icons">keyboard_arrow_right</i>
+                </Link>
+              </CardTitle>
+              <CardText collapsed={collapsed}>
+                {node.answer ? (
+                  markdown.html(
+                    node.highlights ? node.highlights.answer : content)
+                ) : (
+                    <p style={{ textAlign: 'center' }}>
+                      <i>No answer yet...</i>
+                    </p>
+                  )}
+              </CardText>
+            </Card>
+          )
+        }
+      }
+    }
   }
 }
-
-
 Result.propTypes = {
   node: PropTypes.object.isRequired,
   collapsed: PropTypes.bool
