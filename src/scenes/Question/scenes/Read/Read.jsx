@@ -81,7 +81,7 @@ class Read extends React.Component {
     }
 
     var buttonShowDesignation;
-    if (this.state.showingOriginalContent){
+    if (this.state.showingOriginalContent) {
       buttonShowDesignation = "Show the translation"
     } else {
       buttonShowDesignation = "Show the original"
@@ -94,9 +94,9 @@ class Read extends React.Component {
         </Helmet>
         <ActionMenu backLink="/" backLabel="Home" goBack>
           <Button
-            onClick={() => this.setState({
-              showingOriginalContent: !this.state.showingOriginalContent
-            })} primary>
+            icon="cached"
+            style={{ "paddingTop": '0.42rem' }}
+            onClick={() => this.setState({ showingOriginalContent: !this.state.showingOriginalContent })}>
             {buttonShowDesignation}
           </Button>
           <FlagsDropdown
@@ -122,10 +122,15 @@ class Read extends React.Component {
         <Card>
           <CardTitle style={{ padding: '1.2rem' }}>
             <div className="grow">
-              <h1>{markdown.title(titlebis)}</h1>
-              <p style={{ textAlign: 'right' }}> <i>{translationMessageTitle}</i></p>
+              <h1
+              style = {{"width": '50%'}}>
+              {markdown.title(titlebis)}</h1>
+              <div class="translationMessage"              > 
+              <p style={{ "textAlign": 'right' }}> <i>{translationMessageTitle}</i></p>
+              </div>
               {zNode.tags.length > 0 && <Tags tags={zNode.tags} />}
             </div>
+
             <Flags node={zNode} withLabels={true} />
             <Share node={zNode} />
           </CardTitle>
@@ -134,7 +139,7 @@ class Read extends React.Component {
               <>
                 <div style={{ padding: '0.5rem', marginBottom: '0.5rem' }}>
                   {markdown.html(contentbis)}
-                  <p style={{ textAlign: 'right' }}> <i>{translationMessageAnswer}</i></p>
+                  <p style={{ "textAlign": 'right' }}> <i>{translationMessageAnswer}</i></p>
                 </div>
                 <Sources sources={zNode.answer.sources} />
               </>
