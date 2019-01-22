@@ -81,10 +81,10 @@ class Read extends React.Component {
     }
 
     var buttonShowDesignation;
-    if (zNode.answer.content !== contentbis || zNode.question.title !== titlebis ) {
-      buttonShowDesignation = "Show the original"
-    } else {
+    if (this.state.showingOriginalContent) {
       buttonShowDesignation = "Show the translation"
+    } else {
+      buttonShowDesignation = "Show the original"
     }
 
     return (
