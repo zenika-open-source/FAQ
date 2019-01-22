@@ -13,46 +13,25 @@ module.exports = {
 
       let answer
 
-      // Imports the Google Cloud client library
       const { Translate } = require('@google-cloud/translate');
 
-      // Your Google Cloud Platform project ID
-      const projectId = 'YOUR_PROJECT_ID';
-
-      // Instantiates a client
       const translate = new Translate({
-        projectId: projectId,
       });
 
-      // Creation contentTab
       const contentTab = [];
 
-      // The text to translate
-      const text = content;
+      const textToTranslate = content;
 
-      // The target language
       const targeten = 'en';
       const targetfr = 'fr';
 
-      // Translates some text into English
-      await translate
-        .translate(text, targeten)
-        .then(results => {
-          const translationen = results[0];
-          contentTab.push({ text: translationen, lang: targeten });
+      const resultsen = await translate.translate(textToTranslate, targeten)
+      const translationen = resultsen[0];
+      contentTab.push({ text: translationen, lang: targeten });
 
-          console.log(`Text: ${text}`);
-          console.log(`Translation en: ${translationen}`);
-        })
-
-      await translate
-        .translate(text, targetfr)
-        .then(resultsfr => {
-          const translationfr = resultsfr[0];
-          contentTab.push({ text: translationfr, lang: targetfr });
-
-          console.log(`Translation fr : ${translationfr}`);
-        })
+      const resultsfr = await translate.translate(textToTranslate, targetfr)
+      const translationfr = resultsfr[0];
+      contentTab.push({ text: translationfr, lang: targetfr });
 
       try {
         answer = await ctx.prisma.mutation.createAnswer(
@@ -123,46 +102,27 @@ module.exports = {
       )
     },
     updateAnswerAndSources: async (_, { id, content, sources }, ctx, info) => {
-      // Imports the Google Cloud client library
+
       const { Translate } = require('@google-cloud/translate');
 
-      // Your Google Cloud Platform project ID
-      const projectId = 'YOUR_PROJECT_ID';
-
-      // Instantiates a client
       const translate = new Translate({
-        projectId: projectId,
       });
 
-      // Creation contentTab
       const contentTab = [];
 
-      // The text to translate
-      const text = content;
+      const textToTranslate = content;
 
-      // The target language
       const targeten = 'en';
       const targetfr = 'fr';
 
-      // Translates some text into English
-      await translate
-        .translate(text, targeten)
-        .then(results => {
-          const translationen = results[0];
-          contentTab.push({ text: translationen, lang: targeten });
+      const resultsen = await translate.translate(textToTranslate, targeten)
+      const translationen = resultsen[0];
+      contentTab.push({ text: translationen, lang: targeten });
 
-          console.log(`Text: ${text}`);
-          console.log(`Translation en: ${translationen}`);
-        })
+      const resultsfr = await translate.translate(textToTranslate, targetfr)
+      const translationfr = resultsfr[0];
+      contentTab.push({ text: translationfr, lang: targetfr });
 
-      await translate
-        .translate(text, targetfr)
-        .then(resultsfr => {
-          const translationfr = resultsfr[0];
-          contentTab.push({ text: translationfr, lang: targetfr });
-
-          console.log(`Translation fr : ${translationfr}`);
-        })
 
       const answer = await ctx.prisma.query.answer(
         { where: { id } },
@@ -252,17 +212,22 @@ module.exports = {
         where: { id: id }
       }, `{ contentTranslations { id } }`)
 
-      for (let i = 0; i < contentTab.length; i++) {
-        await ctx.prisma.mutation.updateAnswer({
-          where: { id },
-          data: {
-            content,
-            contentTranslations: {
-              update: { where: { id: selectedAnswer.titleTranslations[i].id }, data: { text: contentTab[i].text } }
-            }
-          }
-        })
+      const oldContentTranslationsIds = [];
+      for (let i = 0; i < selectedAnswer.contentTranslations.length; i++) {
+        oldContentTranslationsIds.push({ id: selectedAnswer.contentTranslations[i].id })
       }
+
+      await ctx.prisma.mutation.updateAnswer({
+        where: { id },
+        data: {
+          content,
+          contentTranslations: {
+            delete: oldContentTranslationsIds,
+            create: contentTab
+          }
+        }
+      })
+
 
       await history.push(ctx, {
         action: 'UPDATED',
