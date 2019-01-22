@@ -21,104 +21,121 @@ import Meta from './components/Meta'
 import Share from './components/Share'
 import History from './components/History'
 
-const Read = ({ history, match, zNode, createFlag, removeFlag }) => {
-  if (zNode === null) {
-    return <NotFound />
+
+class Read extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      showingOriginalContent: false
+    }
   }
 
-  /* Redirect to correct URL if old slug used */
-  const correctSlug = zNode.question.slug + '-' + zNode.id
-  if (match.params.slug !== correctSlug) {
-    return <Redirect to={'/q/' + correctSlug} />
-  }
+  render() {
+    const { history, match, zNode, createFlag, removeFlag } = this.props
+    if (zNode === null) {
+      return <NotFound />
+    }
 
-var titlebis;
-if (zNode.question.titleTranslations[0]){
-  titlebis=zNode.question.titleTranslations[0].text;
-} else {
-  titlebis=zNode.question.title
-}
+    /* Redirect to correct URL if old slug used */
+    const correctSlug = zNode.question.slug + '-' + zNode.id
+    if (match.params.slug !== correctSlug) {
+      return <Redirect to={'/q/' + correctSlug} />
+    }
 
-var contentbis;
-if (zNode.answer !=null) {
-if (zNode.answer.contentTranslations[0].text){
-  contentbis=zNode.answer.contentTranslations[0].text;
-} else {
-  contentbis=zNode.answer.content;
-}
-}
+    var titlebis;
+    if (zNode.question.titleTranslations[0] && !this.state.showingOriginalContent) {
+      titlebis = zNode.question.titleTranslations[0].text;
+    } else {
+      titlebis = zNode.question.title
+    }
 
-  return (
-    <div>
-      <Helmet>
-        <title>FAQ - {markdown.title(titlebis)}</title>
-      </Helmet>
-      <ActionMenu backLink="/" backLabel="Home" goBack>
-        <FlagsDropdown
-          flags={zNode.flags}
-          onSelect={type => createFlag(type, zNode.id)}
-          onRemove={type => removeFlag(type, zNode.id)}
-        />
-        <Dropdown button={<Button icon="edit" label="Edit ..." link />}>
-          <DropdownItem
-            icon="edit"
-            onClick={() => history.push(`/q/${match.params.slug}/edit`)}
-          >
-            Question
-          </DropdownItem>
-          <DropdownItem
-            icon="question_answer"
-            onClick={() => history.push(`/q/${match.params.slug}/answer`)}
-          >
-            Answer
-          </DropdownItem>
-        </Dropdown>
-      </ActionMenu>
-      <Card>
-        <CardTitle style={{ padding: '1.2rem' }}>
-          <div className="grow">
-            <h1>{markdown.title(titlebis)}</h1>
-            {zNode.tags.length > 0 && <Tags tags={zNode.tags} />}
-          </div>
-          <Flags node={zNode} withLabels={true} />
-          <Share node={zNode} />
-        </CardTitle>
-        <CardText>
-          {zNode.answer ? (
-            <>
-              <div style={{ padding: '0.5rem', marginBottom: '0.5rem' }}>
-                {markdown.html(contentbis)}
-              </div>
-              <Sources sources={zNode.answer.sources} />
-            </>
-          ) : (
-            <div
-              style={{
-                textAlign: 'center',
-                marginTop: '2rem',
-                marginBottom: '2rem'
-              }}
+    var contentbis;
+    if (zNode.answer != null) {
+      if (zNode.answer.contentTranslations[0].text && !this.state.showingOriginalContent) {
+        contentbis = zNode.answer.contentTranslations[0].text;
+      } else {
+        contentbis = zNode.answer.content;
+      }
+    }
+
+    return (
+      <div>
+        <Helmet>
+          <title>FAQ - {markdown.title(titlebis)}</title>
+        </Helmet>
+        <ActionMenu backLink="/" backLabel="Home" goBack>
+          <FlagsDropdown
+            flags={zNode.flags}
+            onSelect={type => createFlag(type, zNode.id)}
+            onRemove={type => removeFlag(type, zNode.id)}
+          />
+          <Dropdown button={<Button icon="edit" label="Edit ..." link />}>
+            <DropdownItem
+              icon="edit"
+              onClick={() => history.push(`/q/${match.params.slug}/edit`)}
             >
-              <b>No answer yet...</b>
-              <br />
-              <br />
-              <Link
-                to={`/q/${match.params.slug}/answer`}
-                className="btn-container"
-              >
-                <Button icon="question_answer" primary>
-                  Answer the question
-                </Button>
-              </Link>
+              Question
+            </DropdownItem>
+            <DropdownItem
+              icon="question_answer"
+              onClick={() => history.push(`/q/${match.params.slug}/answer`)}
+            >
+              Answer
+            </DropdownItem>
+          </Dropdown>
+        </ActionMenu>
+        <Card>
+          <CardTitle style={{ padding: '1.2rem' }}>
+            <div className="grow">
+              <h1>{markdown.title(titlebis)}</h1>
+              {zNode.tags.length > 0 && <Tags tags={zNode.tags} />}
             </div>
-          )}
-          <hr />
-          <Meta node={zNode} />
-          <History />
-        </CardText>
-      </Card>
-    </div>
-  )
+            <Flags node={zNode} withLabels={true} />
+            <Share node={zNode} />
+          </CardTitle>
+          <CardText>
+            {zNode.answer ? (
+              <>
+                <div style={{ padding: '0.5rem', marginBottom: '0.5rem' }}>
+                  {markdown.html(contentbis)}
+                </div>
+                <Sources sources={zNode.answer.sources} />
+              </>
+            ) : (
+                <div
+                  style={{
+                    textAlign: 'center',
+                    marginTop: '2rem',
+                    marginBottom: '2rem'
+                  }}
+                >
+                  <b>No answer yet...</b>
+                  <br />
+                  <br />
+                  <Link
+                    to={`/q/${match.params.slug}/answer`}
+                    className="btn-container"
+                  >
+                    <Button icon="question_answer" primary>
+                      Answer the question
+                  </Button>
+                  </Link>
+                </div>
+              )}
+            <Button
+              onClick={() => this.setState({
+                showingOriginalContent: true
+              })} primary>
+              Show the original
+            </Button>
+            <hr />
+            <Meta node={zNode} />
+            <History />
+          </CardText>
+        </Card>
+      </div>
+    )
+  }
 }
 
 Read.propTypes = {
