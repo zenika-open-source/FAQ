@@ -30,6 +30,8 @@ class Read extends React.Component {
     }
   }
 
+
+
   render() {
     const { history, match, zNode, createFlag, removeFlag } = this.props
     if (zNode === null) {
