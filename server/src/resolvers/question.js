@@ -15,51 +15,26 @@ module.exports = {
     createQuestionAndTags: async (_, { title, tags }, ctx, info) => {
       const tagList = confTagList(ctx)
 
-      // Imports the Google Cloud client library
       const { Translate } = require('@google-cloud/translate');
 
-      // Your Google Cloud Platform project ID
-      const projectId = 'YOUR_PROJECT_ID';
-
-      // Instantiates a client
       const translate = new Translate({
-        projectId: projectId,
       });
 
-      // Creation titleTab
       const titleTab = [];
 
-      // The text to translate
-      const text = title;
+      const textToTranslate = title;
 
-      // The target language
       const targeten = 'en';
       const targetfr = 'fr';
 
-      // Translates some text into English
-      await translate
-        .translate(text, targeten)
-        .then(results => {
-          const translationen = results[0];
-          titleTab.push({ text: translationen, lang: targeten });
+      const resultsen = await translate.translate(textToTranslate, targeten)
+      const translationen = resultsen[0];
+      titleTab.push({ text: translationen, lang: targeten });
 
-          console.log(`Text: ${text}`);
-          console.log(`Translation en: ${translationen}`);
-        })
+      const resultsfr = await translate.translate(textToTranslate, targetfr)
+      const translationfr = resultsfr[0];
+      titleTab.push({ text: translationfr, lang: targetfr });
 
-      await translate
-        .translate(text, targetfr)
-        .then(resultsfr => {
-          const translationfr = resultsfr[0];
-          titleTab.push({ text: translationfr, lang: targetfr });
-
-          console.log(`Translation fr : ${translationfr}`);
-        })
-
-
-        .catch(err => {
-          console.error('ERROR:', err);
-        });
       const node = await ctx.prisma.mutation.createZNode(
         {
           data: {
@@ -117,46 +92,25 @@ module.exports = {
     updateQuestionAndTags: async (_, { id, title, tags }, ctx, info) => {
       const tagList = confTagList(ctx)
 
-      // Imports the Google Cloud client library
       const { Translate } = require('@google-cloud/translate');
 
-      // Your Google Cloud Platform project ID
-      const projectId = 'YOUR_PROJECT_ID';
-
-      // Instantiates a client
       const translate = new Translate({
-        projectId: projectId,
       });
 
-      // Creation titleTab
       const titleTab = [];
 
-      // The text to translate
-      const text = title;
+      const textToTranslate = title;
 
-      // The target language
       const targeten = 'en';
       const targetfr = 'fr';
+    
+      const resultsen = await translate.translate(textToTranslate, targeten)
+      const translationen = resultsen[0];
+      titleTab.push({ text: translationen, lang: targeten });
 
-      // Translates some text into English
-      await translate
-        .translate(text, targeten)
-        .then(results => {
-          const translationen = results[0];
-          titleTab.push({ text: translationen, lang: targeten });
-
-          console.log(`Text: ${text}`);
-          console.log(`Translation en: ${translationen}`);
-        })
-
-      await translate
-        .translate(text, targetfr)
-        .then(resultsfr => {
-          const translationfr = resultsfr[0];
-          titleTab.push({ text: translationfr, lang: targetfr });
-
-          console.log(`Translation fr : ${translationfr}`);
-        })
+      const resultsfr = await translate.translate(textToTranslate, targetfr)
+      const translationfr = resultsfr[0];
+      titleTab.push({ text: translationfr, lang: targetfr });
 
       const node = (await ctx.prisma.query.question(
         { where: { id } },
@@ -215,22 +169,26 @@ module.exports = {
         meta.title = title
       }
 
-      const question = await ctx.prisma.query.question({
+      const selectedQuestion = await ctx.prisma.query.question({
         where: { id: id }
       }, `{ titleTranslations { id } }`)
 
-      for (let i = 0; i < titleTab.length; i++) {
-        await ctx.prisma.mutation.updateQuestion({
-          where: { id },
-          data: {
-            title,
-            slug: slugify(title),
-            titleTranslations: {
-              update: { where: { id: question.titleTranslations[i].id }, data: { text: titleTab[i].text } }
-            }
-          }
-        })
+      const oldTitleTranslationsIds = [];
+      for (let i = 0; i < selectedQuestion.titleTranslations.length; i++) {
+        oldTitleTranslationsIds.push({ id: selectedQuestion.titleTranslations[i].id })
       }
+
+      await ctx.prisma.mutation.updateQuestion({
+        where: { id },
+        data: {
+          title,
+          slug: slugify(title),
+          titleTranslations: {
+            delete: oldTitleTranslationsIds,
+            create: titleTab
+          }
+        }
+      })
 
       await history.push(ctx, {
         action: 'UPDATED',
