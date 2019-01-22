@@ -103,7 +103,7 @@ module.exports = {
 
       const targeten = 'en';
       const targetfr = 'fr';
-    
+
       const resultsen = await translate.translate(textToTranslate, targeten)
       const translationen = resultsen[0];
       titleTab.push({ text: translationen, lang: targeten });
