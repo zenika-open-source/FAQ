@@ -25,7 +25,12 @@ class Read extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      showingOriginalContent: false
+      showingOriginalContent: ((props.zNode.answer) ?
+        (props.zNode.question.titleTranslations[0].text === props.zNode.question.title && props.zNode.answer.contentTranslations[0].text === props.zNode.answer.content)
+        : (props.zNode.question.titleTranslations[0].text === props.zNode.question.title)),
+      onlyOriginalContent: ((props.zNode.answer) ?
+        (props.zNode.question.titleTranslations[0].text === props.zNode.question.title && props.zNode.answer.contentTranslations[0].text === props.zNode.answer.content)
+        : (props.zNode.question.titleTranslations[0].text === props.zNode.question.title))
     }
   }
   render() {
@@ -41,7 +46,7 @@ class Read extends React.Component {
     }
 
     var titlebis;
-    if (zNode.question.titleTranslations && !this.state.showingOriginalContent) {
+    if (!this.state.showingOriginalContent) {
       titlebis = zNode.question.titleTranslations[0].text;
     } else {
       titlebis = zNode.question.title
@@ -49,7 +54,7 @@ class Read extends React.Component {
 
     var contentbis;
     if (zNode.answer) {
-      if (zNode.answer.contentTranslations[0].text && !this.state.showingOriginalContent) {
+      if (!this.state.showingOriginalContent) {
         contentbis = zNode.answer.contentTranslations[0].text;
       } else {
         contentbis = zNode.answer.content;
@@ -81,10 +86,14 @@ class Read extends React.Component {
     }
 
     var buttonShowDesignation;
-    if (this.state.showingOriginalContent) {
-      buttonShowDesignation = "Show the translation"
+    if (!this.state.onlyOriginalContent) {
+      if (this.state.showingOriginalContent) {
+        buttonShowDesignation = "Show the translation"
+      } else {
+        buttonShowDesignation = "Show the original"
+      }
     } else {
-      buttonShowDesignation = "Show the original"
+      buttonShowDesignation = "It's the original content"
     }
 
     return (
@@ -123,10 +132,10 @@ class Read extends React.Component {
           <CardTitle style={{ padding: '1.2rem' }}>
             <div className="grow">
               <h1
-              style = {{"width": '50%'}}>
-              {markdown.title(titlebis)}</h1>
-              <div class="translationMessage"              > 
-              <p style={{ "textAlign": 'right' }}> <i>{translationMessageTitle}</i></p>
+                style={{ "width": '50%' }}>
+                {markdown.title(titlebis)}</h1>
+              <div class="translationMessage"              >
+                <p style={{ "textAlign": 'right' }}> <i>{translationMessageTitle}</i></p>
               </div>
               {zNode.tags.length > 0 && <Tags tags={zNode.tags} />}
             </div>
