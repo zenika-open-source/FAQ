@@ -84,16 +84,19 @@ class Read extends React.Component {
         translationMessageAnswer = "";
       }
     }
-
+    
+    var iconDesignation;
     var buttonShowDesignation;
     if (!this.state.onlyOriginalContent) {
       if (this.state.showingOriginalContent) {
         buttonShowDesignation = "Show the translation"
+        iconDesignation = "cached"
       } else {
         buttonShowDesignation = "Show the original"
+        iconDesignation = "cached"
       }
     } else {
-      buttonShowDesignation = "It's the original content"
+      buttonShowDesignation = ""
     }
 
     return (
@@ -103,7 +106,7 @@ class Read extends React.Component {
         </Helmet>
         <ActionMenu backLink="/" backLabel="Home" goBack>
           <Button
-            icon="cached"
+            icon = {iconDesignation}
             style={{ "paddingTop": '0.42rem' }}
             onClick={() => this.setState({ showingOriginalContent: !this.state.showingOriginalContent })}>
             {buttonShowDesignation}
