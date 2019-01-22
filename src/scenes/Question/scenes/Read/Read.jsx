@@ -34,93 +34,322 @@ const Read = ({ history, match, zNode, createFlag, removeFlag }) => {
 
 
 
-var titlebis;
-if (zNode.question.titleTranslations){
-  titlebis=zNode.question.titleTranslations[0].text;
-} else {
-  titlebis=zNode.question.title
-}
-
-var contentbis;
-if (zNode.answer){
-if (zNode.answer.contentTranslations[0].text){
-  contentbis=zNode.answer.contentTranslations[0].text;
-} else {
-  contentbis=zNode.answer.content;
+  var titlebis;
+  if (zNode.question.titleTranslations) {
+    titlebis = zNode.question.titleTranslations[0].text;
+  } else {
+    titlebis = zNode.question.title
   }
-}
 
-  return (
-    <div>
-      <Helmet>
-        <title>FAQ - {markdown.title(titlebis)}</title>
-      </Helmet>
-      <ActionMenu backLink="/" backLabel="Home" goBack>
-        <FlagsDropdown
-          flags={zNode.flags}
-          onSelect={type => createFlag(type, zNode.id)}
-          onRemove={type => removeFlag(type, zNode.id)}
-        />
-        <Dropdown button={<Button icon="edit" label="Edit ..." link />}>
-          <DropdownItem
-            icon="edit"
-            onClick={() => history.push(`/q/${match.params.slug}/edit`)}
-          >
-            Question
-          </DropdownItem>
-          <DropdownItem
-            icon="question_answer"
-            onClick={() => history.push(`/q/${match.params.slug}/answer`)}
-          >
-            Answer
-          </DropdownItem>
-        </Dropdown>
-      </ActionMenu>
-      <Card>
-        <CardTitle style={{ padding: '1.2rem' }}>
-          <div className="grow">
-            <h1>{markdown.title(titlebis)}</h1>
-            {zNode.tags.length > 0 && <Tags tags={zNode.tags} />}
-          </div>
-          <Flags node={zNode} withLabels={true} />
-          <Share node={zNode} />
-        </CardTitle>
-        <CardText>
-          {zNode.answer ? (
-            <>
-              <div style={{ padding: '0.5rem', marginBottom: '0.5rem' }}>
-                {markdown.html(contentbis)}
-              </div>
-              <Sources sources={zNode.answer.sources} />
-            </>
-          ) : (
-            <div
-              style={{
-                textAlign: 'center',
-                marginTop: '2rem',
-                marginBottom: '2rem'
-              }}
-            >
-              <b>No answer yet...</b>
-              <br />
-              <br />
-              <Link
-                to={`/q/${match.params.slug}/answer`}
-                className="btn-container"
+  var contentbis;
+  if (zNode.answer) {
+    if (zNode.answer.contentTranslations[0].text) {
+      contentbis = zNode.answer.contentTranslations[0].text;
+    } else {
+      contentbis = zNode.answer.content;
+    }
+  }
+
+
+  if (zNode.answer != null && contentbis != zNode.answer.content) {
+    if (zNode.question.title != titlebis) {
+      return (
+        <div>
+          <Helmet>
+            <title>FAQ - {markdown.title(titlebis)}</title>
+          </Helmet>
+          <ActionMenu backLink="/" backLabel="Home" goBack>
+            <FlagsDropdown
+              flags={zNode.flags}
+              onSelect={type => createFlag(type, zNode.id)}
+              onRemove={type => removeFlag(type, zNode.id)}
+            />
+            <Dropdown button={<Button icon="edit" label="Edit ..." link />}>
+              <DropdownItem
+                icon="edit"
+                onClick={() => history.push(`/q/${match.params.slug}/edit`)}
               >
-                <Button icon="question_answer" primary>
-                  Answer the question
+                Question
+          </DropdownItem>
+              <DropdownItem
+                icon="question_answer"
+                onClick={() => history.push(`/q/${match.params.slug}/answer`)}
+              >
+                Answer
+          </DropdownItem>
+            </Dropdown>
+          </ActionMenu>
+          <Card>
+            <CardTitle style={{ padding: '1.2rem' }}>
+              <div className="grow">
+                <h1>{markdown.title(titlebis)}</h1>
+                <p style={{ textAlign: 'right' }}> <i>Translated by Google Translate</i></p>
+                {zNode.tags.length > 0 && <Tags tags={zNode.tags} />}
+              </div>
+              <Flags node={zNode} withLabels={true} />
+              <Share node={zNode} />
+            </CardTitle>
+            <CardText>
+              {zNode.answer ? (
+                <>
+                  <div style={{ padding: '0.5rem', marginBottom: '0.5rem' }}>
+                    {markdown.html(contentbis)}
+                    <p style={{ textAlign: 'right' }}> <i>Translated by Google Translate</i></p>
+                  </div>
+                  <Sources sources={zNode.answer.sources} />
+                </>
+              ) : (
+                  <div
+                    style={{
+                      textAlign: 'center',
+                      marginTop: '2rem',
+                      marginBottom: '2rem'
+                    }}
+                  >
+                    <b>No answer yet...</b>
+                    <br />
+                    <br />
+                    <Link
+                      to={`/q/${match.params.slug}/answer`}
+                      className="btn-container"
+                    >
+                      <Button icon="question_answer" primary>
+                        Answer the question
                 </Button>
-              </Link>
-            </div>
-          )}
-          <hr />
-          <Meta node={zNode} />
-          <History />
-        </CardText>
-      </Card>
-    </div>
-  )
+                    </Link>
+                  </div>
+                )}
+              <hr />
+              <Meta node={zNode} />
+              <History />
+            </CardText>
+          </Card>
+        </div>
+      )
+    } else {
+      return (
+        <div>
+          <Helmet>
+            <title>FAQ - {markdown.title(titlebis)}</title>
+          </Helmet>
+          <ActionMenu backLink="/" backLabel="Home" goBack>
+            <FlagsDropdown
+              flags={zNode.flags}
+              onSelect={type => createFlag(type, zNode.id)}
+              onRemove={type => removeFlag(type, zNode.id)}
+            />
+            <Dropdown button={<Button icon="edit" label="Edit ..." link />}>
+              <DropdownItem
+                icon="edit"
+                onClick={() => history.push(`/q/${match.params.slug}/edit`)}
+              >
+                Question
+          </DropdownItem>
+              <DropdownItem
+                icon="question_answer"
+                onClick={() => history.push(`/q/${match.params.slug}/answer`)}
+              >
+                Answer
+          </DropdownItem>
+            </Dropdown>
+          </ActionMenu>
+          <Card>
+            <CardTitle style={{ padding: '1.2rem' }}>
+              <div className="grow">
+                <h1>{markdown.title(titlebis)}</h1>
+                {zNode.tags.length > 0 && <Tags tags={zNode.tags} />}
+              </div>
+              <Flags node={zNode} withLabels={true} />
+              <Share node={zNode} />
+            </CardTitle>
+            <CardText>
+              {zNode.answer ? (
+                <>
+                  <div style={{ padding: '0.5rem', marginBottom: '0.5rem' }}>
+                    {markdown.html(contentbis)}
+                    <p style={{ textAlign: 'right' }}> <i>Translated by Google Translate</i></p>
+                  </div>
+                  <Sources sources={zNode.answer.sources} />
+                </>
+              ) : (
+                  <div
+                    style={{
+                      textAlign: 'center',
+                      marginTop: '2rem',
+                      marginBottom: '2rem'
+                    }}
+                  >
+                    <b>No answer yet...</b>
+                    <br />
+                    <br />
+                    <Link
+                      to={`/q/${match.params.slug}/answer`}
+                      className="btn-container"
+                    >
+                      <Button icon="question_answer" primary>
+                        Answer the question
+                </Button>
+                    </Link>
+                  </div>
+                )}
+              <hr />
+              <Meta node={zNode} />
+              <History />
+            </CardText>
+          </Card>
+        </div>
+      )
+    }
+  } else {
+    if (zNode.answer == null || zNode.answer.content == contentbis) {
+      if (zNode.question.title != titlebis) {
+        return (
+          <div>
+            <Helmet>
+              <title>FAQ - {markdown.title(titlebis)}</title>
+            </Helmet>
+            <ActionMenu backLink="/" backLabel="Home" goBack>
+              <FlagsDropdown
+                flags={zNode.flags}
+                onSelect={type => createFlag(type, zNode.id)}
+                onRemove={type => removeFlag(type, zNode.id)}
+              />
+              <Dropdown button={<Button icon="edit" label="Edit ..." link />}>
+                <DropdownItem
+                  icon="edit"
+                  onClick={() => history.push(`/q/${match.params.slug}/edit`)}
+                >
+                  Question
+            </DropdownItem>
+                <DropdownItem
+                  icon="question_answer"
+                  onClick={() => history.push(`/q/${match.params.slug}/answer`)}
+                >
+                  Answer
+            </DropdownItem>
+              </Dropdown>
+            </ActionMenu>
+            <Card>
+              <CardTitle style={{ padding: '1.2rem' }}>
+                <div className="grow">
+                  <h1>{markdown.title(titlebis)}</h1>
+                  <p style={{ textAlign: 'right' }}> <i>Translated by Google Translate</i></p>
+                  {zNode.tags.length > 0 && <Tags tags={zNode.tags} />}
+                </div>
+                <Flags node={zNode} withLabels={true} />
+                <Share node={zNode} />
+              </CardTitle>
+              <CardText>
+                {zNode.answer ? (
+                  <>
+                    <div style={{ padding: '0.5rem', marginBottom: '0.5rem' }}>
+                      {markdown.html(contentbis)}
+                    </div>
+                    <Sources sources={zNode.answer.sources} />
+                  </>
+                ) : (
+                    <div
+                      style={{
+                        textAlign: 'center',
+                        marginTop: '2rem',
+                        marginBottom: '2rem'
+                      }}
+                    >
+                      <b>No answer yet...</b>
+                      <br />
+                      <br />
+                      <Link
+                        to={`/q/${match.params.slug}/answer`}
+                        className="btn-container"
+                      >
+                        <Button icon="question_answer" primary>
+                          Answer the question
+                  </Button>
+                      </Link>
+                    </div>
+                  )}
+                <hr />
+                <Meta node={zNode} />
+                <History />
+              </CardText>
+            </Card>
+          </div>
+        )
+      } else {
+        return (
+          <div>
+            <Helmet>
+              <title>FAQ - {markdown.title(titlebis)}</title>
+            </Helmet>
+            <ActionMenu backLink="/" backLabel="Home" goBack>
+              <FlagsDropdown
+                flags={zNode.flags}
+                onSelect={type => createFlag(type, zNode.id)}
+                onRemove={type => removeFlag(type, zNode.id)}
+              />
+              <Dropdown button={<Button icon="edit" label="Edit ..." link />}>
+                <DropdownItem
+                  icon="edit"
+                  onClick={() => history.push(`/q/${match.params.slug}/edit`)}
+                >
+                  Question
+            </DropdownItem>
+                <DropdownItem
+                  icon="question_answer"
+                  onClick={() => history.push(`/q/${match.params.slug}/answer`)}
+                >
+                  Answer
+            </DropdownItem>
+              </Dropdown>
+            </ActionMenu>
+            <Card>
+              <CardTitle style={{ padding: '1.2rem' }}>
+                <div className="grow">
+                  <h1>{markdown.title(titlebis)}</h1>
+                  {zNode.tags.length > 0 && <Tags tags={zNode.tags} />}
+                </div>
+                <Flags node={zNode} withLabels={true} />
+                <Share node={zNode} />
+              </CardTitle>
+              <CardText>
+                {zNode.answer ? (
+                  <>
+                    <div style={{ padding: '0.5rem', marginBottom: '0.5rem' }}>
+                      {markdown.html(contentbis)}
+                    </div>
+                    <Sources sources={zNode.answer.sources} />
+                  </>
+                ) : (
+                    <div
+                      style={{
+                        textAlign: 'center',
+                        marginTop: '2rem',
+                        marginBottom: '2rem'
+                      }}
+                    >
+                      <b>No answer yet...</b>
+                      <br />
+                      <br />
+                      <Link
+                        to={`/q/${match.params.slug}/answer`}
+                        className="btn-container"
+                      >
+                        <Button icon="question_answer" primary>
+                          Answer the question
+                  </Button>
+                      </Link>
+                    </div>
+                  )}
+                <hr />
+                <Meta node={zNode} />
+                <History />
+              </CardText>
+            </Card>
+          </div>
+        )
+      }
+    }
+  }
 }
 
 Read.propTypes = {
