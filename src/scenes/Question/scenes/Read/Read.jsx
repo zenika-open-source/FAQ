@@ -21,7 +21,6 @@ import Meta from './components/Meta'
 import Share from './components/Share'
 import History from './components/History'
 
-
 class Read extends React.Component {
   constructor(props) {
     super(props)
@@ -29,7 +28,6 @@ class Read extends React.Component {
       showingOriginalContent: false
     }
   }
-
   render() {
     const { history, match, zNode, createFlag, removeFlag } = this.props
     if (zNode === null) {
@@ -42,8 +40,10 @@ class Read extends React.Component {
       return <Redirect to={'/q/' + correctSlug} />
     }
 
+
+
     var titlebis;
-    if (zNode.question.titleTranslations) {
+    if (zNode.question.titleTranslations && !this.state.showingOriginalContent) {
       titlebis = zNode.question.titleTranslations[0].text;
     } else {
       titlebis = zNode.question.title
@@ -51,7 +51,7 @@ class Read extends React.Component {
 
     var contentbis;
     if (zNode.answer) {
-      if (zNode.answer.contentTranslations[0].text) {
+      if (zNode.answer.contentTranslations[0].text && !this.state.showingOriginalContent) {
         contentbis = zNode.answer.contentTranslations[0].text;
       } else {
         contentbis = zNode.answer.content;
@@ -67,6 +67,12 @@ class Read extends React.Component {
               <title>FAQ - {markdown.title(titlebis)}</title>
             </Helmet>
             <ActionMenu backLink="/" backLabel="Home" goBack>
+              <Button
+                onClick={() => this.setState({
+                  showingOriginalContent: true
+                })} primary>
+                Show the original
+            </Button>
               <FlagsDropdown
                 flags={zNode.flags}
                 onSelect={type => createFlag(type, zNode.id)}
