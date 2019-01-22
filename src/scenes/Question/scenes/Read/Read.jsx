@@ -84,19 +84,21 @@ class Read extends React.Component {
         translationMessageAnswer = "";
       }
     }
-    
-    var iconDesignation;
+
     var buttonShowDesignation;
-    if (!this.state.onlyOriginalContent) {
-      if (this.state.showingOriginalContent) {
-        buttonShowDesignation = "Show the translation"
-        iconDesignation = "cached"
-      } else {
-        buttonShowDesignation = "Show the original"
-        iconDesignation = "cached"
-      }
+    if (this.state.showingOriginalContent) {
+      buttonShowDesignation = "Show the translation"
     } else {
-      buttonShowDesignation = ""
+      buttonShowDesignation = "Show the original"
+    }
+
+    if (!this.state.onlyOriginalContent) {
+      var buttonShow = <Button
+        icon="cached"
+        style={{ "paddingTop": '0.42rem' }}
+        onClick={() => this.setState({ showingOriginalContent: !this.state.showingOriginalContent })}>
+        {buttonShowDesignation}
+      </Button>
     }
 
     return (
@@ -105,12 +107,7 @@ class Read extends React.Component {
           <title>FAQ - {markdown.title(titlebis)}</title>
         </Helmet>
         <ActionMenu backLink="/" backLabel="Home" goBack>
-          <Button
-            icon = {iconDesignation}
-            style={{ "paddingTop": '0.42rem' }}
-            onClick={() => this.setState({ showingOriginalContent: !this.state.showingOriginalContent })}>
-            {buttonShowDesignation}
-          </Button>
+          {buttonShow}
           <FlagsDropdown
             flags={zNode.flags}
             onSelect={type => createFlag(type, zNode.id)}
