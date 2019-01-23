@@ -24,45 +24,38 @@ class Result extends Component {
     const { node } = this.props
     const { collapsed } = this.state
 
-    var title;
+    var titlebis;
     if (node.question.titleTranslations[0]) {
-      title = node.question.titleTranslations[0].text
+      titlebis = node.question.titleTranslations[0].text
     } else {
-      title = node.question.title;
+      titlebis = node.question.title;
     }
 
-    var content;
+    var contentbis;
     if (node.answer != null) {
       if (node.answer.contentTranslations[0]) {
-        content = node.answer.contentTranslations[0].text;
+        contentbis = node.answer.contentTranslations[0].text;
       } else {
-        content = node.answer.content;
+        contentbis = node.answer.content;
       }
     }
 
-    var translationMessageTitle = "";
-    var translationMessageAnswer = "";
-
-    if (node.answer != null && content != node.answer.content) {
-      if (node.question.title != title) {
-        translationMessageTitle = "Translated by Google Translate";
-        translationMessageAnswer = "Translated by Google Translate";
+    var messageTranslationTitle;
+    var messageTranslationAnswer
+    if (node.answer != null && contentbis != node.answer.content) {
+      if (node.question.title != titlebis) {
+        messageTranslationTitle = <p style={{ "textAlign": 'right' }}> <i>{"Translated by Google Translated"}</i></p>
+        messageTranslationAnswer = <p style={{ "textAlign": 'right' }}> <i>{"Translated by Google Translated"}</i></p>
       }
       else {
-        translationMessageTitle = "";
-        translationMessageAnswer = "Translated by Google Translate";
+        messageTranslationAnswer = <p style={{ "textAlign": 'right' }}> <i>{"Translated by Google Translated"}</i></p>
       }
     } else {
-      if (node.answer == null || node.answer.content == content) {
-        if (node.question.title != title) {
-          translationMessageTitle = "Translated by Google Translate";
-          translationMessageAnswer = "";
+      if (node.answer == null || node.answer.content == contentbis) {
+        if (node.question.title != titlebis) {
+          messageTranslationTitle = <p style={{ "textAlign": 'right' }}> <i>{"Translated by Google Translated"}</i></p>
         }
-      } else {
-        translationMessageTitle = "";
-        translationMessageAnswer = "";
       }
-
     }
 
 
@@ -71,7 +64,7 @@ class Result extends Component {
         <CardTitle onClick={() => this.setState({ collapsed: !collapsed })}>
           <div className="grow">
             {!node.highlights ? (
-              <h1>{markdown.title(title)}</h1>
+              <h1>{markdown.title(titlebis)}</h1>
             ) : (
                 <h1
                   dangerouslySetInnerHTML={{
@@ -80,7 +73,7 @@ class Result extends Component {
                 />
               )}
             {node.tags.length > 0 && <Tags tags={node.tags} />}
-            <p style={{ textAlign: 'right' }}> <i>{translationMessageTitle}</i></p>
+            {messageTranslationTitle}
           </div>
           <Flags node={node} withLabels={false} />
           <Link
@@ -96,13 +89,13 @@ class Result extends Component {
         <CardText collapsed={collapsed}>
           {node.answer ? (
             markdown.html(
-              node.highlights ? node.highlights.answer : content)
+              node.highlights ? node.highlights.answer : contentbis)
           ) : (
               <p style={{ textAlign: 'center' }}>
                 <i>No answer yet...</i>
               </p>
             )}
-          <p style={{ textAlign: 'right' }}> <i>{translationMessageAnswer}</i></p>
+          {messageTranslationAnswer}
         </CardText>
       </Card>
     )
