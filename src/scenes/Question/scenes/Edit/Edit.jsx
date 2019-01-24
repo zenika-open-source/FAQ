@@ -28,7 +28,7 @@ class Edit extends Component {
     const { location, zNode } = this.props
 
     const passedQuestionText = location.state ? location.state.question : ''
-    const initialQuestion = zNode ? zNode.question.title : passedQuestionText
+    const initialQuestion = zNode ? zNode.question.titleTranslations[0].text : passedQuestionText
     const initialTags = zNode ? zNode.tags.map(x => x.label) : []
 
     this.state = {

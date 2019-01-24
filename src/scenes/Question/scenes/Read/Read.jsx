@@ -49,7 +49,7 @@ class Read extends React.Component {
     if (!this.state.showingOriginalContent) {
       titlebis = zNode.question.titleTranslations[0].text;
     } else {
-      titlebis = zNode.question.title
+      titlebis = zNode.question.title;
     }
 
     var contentbis;
@@ -61,27 +61,30 @@ class Read extends React.Component {
       }
     }
 
-    var translationMessageTitle = "";
-    var translationMessageAnswer = "";
+    
+    var buttonTranslation;
+    buttonTranslation = <Button
+      icon="language"
+      data-tooltip="Translated by Google Translate"
+      round
+      disabled
+      ></Button>
 
+    var messageTranslationTitle;
+    var messageTranslationAnswer
     if (zNode.answer != null && contentbis != zNode.answer.content) {
       if (zNode.question.title != titlebis) {
-        translationMessageTitle = "Translated by Google Translate";
-        translationMessageAnswer = "Translated by Google Translate";
+        messageTranslationTitle = buttonTranslation
+        messageTranslationAnswer = buttonTranslation
       }
       else {
-        translationMessageTitle = "";
-        translationMessageAnswer = "Translated by Google Translate";
+        messageTranslationAnswer = buttonTranslation
       }
     } else {
       if (zNode.answer == null || zNode.answer.content == contentbis) {
         if (zNode.question.title != titlebis) {
-          translationMessageTitle = "Translated by Google Translate";
-          translationMessageAnswer = "";
+          messageTranslationTitle = buttonTranslation
         }
-      } else {
-        translationMessageTitle = "";
-        translationMessageAnswer = "";
       }
     }
 
@@ -92,8 +95,9 @@ class Read extends React.Component {
       buttonShowDesignation = "Show the original"
     }
 
+    var buttonShow;
     if (!this.state.onlyOriginalContent) {
-      var buttonShow = <Button
+        buttonShow = <Button
         icon="cached"
         style={{ "paddingTop": '0.42rem' }}
         onClick={() => this.setState({ showingOriginalContent: !this.state.showingOriginalContent })}>
@@ -131,12 +135,12 @@ class Read extends React.Component {
         <Card>
           <CardTitle style={{ padding: '1.2rem' }}>
             <div className="grow">
-              <h1
-                style={{ "width": '50%' }}>
-                {markdown.title(titlebis)}</h1>
-              <div class="translationMessage"              >
-                <p style={{ "textAlign": 'right' }}> <i>{translationMessageTitle}</i></p>
-              </div>
+              <h1>
+              {markdown.title(titlebis)} </h1>
+              <div className= "translationMessage"
+               style = {{ "textAlign" : 'right'}}>
+               {messageTranslationTitle}
+               </div>
               {zNode.tags.length > 0 && <Tags tags={zNode.tags} />}
             </div>
 
@@ -148,7 +152,10 @@ class Read extends React.Component {
               <>
                 <div style={{ padding: '0.5rem', marginBottom: '0.5rem' }}>
                   {markdown.html(contentbis)}
-                  <p style={{ "textAlign": 'right' }}> <i>{translationMessageAnswer}</i></p>
+                  <div className="translationMessage"
+                    style={{ "textAlign": 'right' }}>
+                    {messageTranslationAnswer}
+                  </div>
                 </div>
                 <Sources sources={zNode.answer.sources} />
               </>
