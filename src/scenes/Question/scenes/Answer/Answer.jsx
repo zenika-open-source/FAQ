@@ -25,7 +25,7 @@ class Answer extends Component {
 
     const answer = props.zNode && props.zNode.answer
 
-    const initialText = answer ? answer.content : ''
+    const initialText = answer ? answer.contentTranslations[0].text : ''
     const initialSources = this.sourcesToKeyValuePairs(answer ? answer.sources : [])
 
     this.state = {
@@ -177,7 +177,7 @@ class Answer extends Component {
         <Card style={{ marginTop: '0.3rem' }}>
           <CardTitle style={{ padding: '1.2rem' }}>
             <div className="grow">
-              <h1>{markdown.title(zNode.question.title)}</h1>
+              <h1>{markdown.title(zNode.question.titleTranslations[0].text)}</h1>
             </div>
             <Flags node={zNode} withLabels={true} />
           </CardTitle>
