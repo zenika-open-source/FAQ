@@ -7,6 +7,7 @@ export const searchNodes = gql`
     $flags: [String!]
     $first: Int!
     $skip: Int!
+    $locale : String!
     
   ) {
     search(
@@ -22,7 +23,7 @@ export const searchNodes = gql`
         question {
           id
           title
-          titleTranslations (where : {lang: "en"}){
+          titleTranslations (where : {lang: $locale}){
             text 
           }
           slug
@@ -31,7 +32,7 @@ export const searchNodes = gql`
         answer {
           id
           content
-          contentTranslations (where : {lang: "en"}){
+          contentTranslations (where : {lang: $locale}){
             text
           }
         }

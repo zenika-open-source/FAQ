@@ -6,6 +6,7 @@ import { withError, withPagination } from 'components'
 
 import { searchNodes } from '../../queries'
 import ResultList from './ResultList'
+import Auth from 'services/auth'
 
 const RESULTS_PER_PAGE = 10
 
@@ -20,7 +21,8 @@ export default compose(
         tags,
         flags,
         first: RESULTS_PER_PAGE,
-        skip: RESULTS_PER_PAGE * (page - 1)
+        skip: RESULTS_PER_PAGE * (page - 1),
+        locale : Auth.getlocale()
       }
     },
     parse: ({ search = {} }) => ({ ...search })
