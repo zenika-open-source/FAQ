@@ -61,20 +61,29 @@ class Read extends React.Component {
       }
     }
 
+    
+    var buttonTranslation;
+    buttonTranslation = <Button
+      icon="language"
+      data-tooltip="Translated by Google Translate"
+      round
+      disabled
+      ></Button>
+
     var messageTranslationTitle;
     var messageTranslationAnswer
     if (zNode.answer != null && contentbis != zNode.answer.content) {
       if (zNode.question.title != titlebis) {
-        messageTranslationTitle = <p style={{ "textAlign": 'right' }}> <i>{"Translated by Google Translated"}</i></p>
-        messageTranslationAnswer = <p style={{ "textAlign": 'right' }}> <i>{"Translated by Google Translated"}</i></p>
+        messageTranslationTitle = buttonTranslation
+        messageTranslationAnswer = buttonTranslation
       }
       else {
-        messageTranslationAnswer = <p style={{ "textAlign": 'right' }}> <i>{"Translated by Google Translated"}</i></p>
+        messageTranslationAnswer = buttonTranslation
       }
     } else {
       if (zNode.answer == null || zNode.answer.content == contentbis) {
         if (zNode.question.title != titlebis) {
-          messageTranslationTitle = <p style={{ "textAlign": 'right' }}> <i>{"Translated by Google Translated"}</i></p>
+          messageTranslationTitle = buttonTranslation
         }
       }
     }
@@ -128,7 +137,10 @@ class Read extends React.Component {
             <div className="grow">
               <h1>
               {markdown.title(titlebis)} </h1>
-              {messageTranslationTitle}
+              <div className= "translationMessage"
+               style = {{ "textAlign" : 'right'}}>
+               {messageTranslationTitle}
+               </div>
               {zNode.tags.length > 0 && <Tags tags={zNode.tags} />}
             </div>
 
@@ -140,7 +152,10 @@ class Read extends React.Component {
               <>
                 <div style={{ padding: '0.5rem', marginBottom: '0.5rem' }}>
                   {markdown.html(contentbis)}
-                  {messageTranslationAnswer}
+                  <div className="translationMessage"
+                    style={{ "textAlign": 'right' }}>
+                    {messageTranslationAnswer}
+                  </div>
                 </div>
                 <Sources sources={zNode.answer.sources} />
               </>

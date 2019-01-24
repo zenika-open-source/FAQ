@@ -2,6 +2,11 @@
   padding-right: 4rem;
 }
 
+.result .grow {
+  display: flex;
+  justify-content: space-between;
+}
+
 .result em {
   font-weight: bold;
   font-style: normal;

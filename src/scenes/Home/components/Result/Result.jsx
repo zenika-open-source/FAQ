@@ -8,6 +8,7 @@ import { markdown } from 'services'
 import Card, { CardTitle, CardText } from 'components/Card'
 import Flags from 'components/Flags'
 import Tags from 'components/Tags'
+import { Button } from 'components'
 
 import './Result.css'
 
@@ -40,20 +41,30 @@ class Result extends Component {
       }
     }
 
+    
+    var buttonTranslation;
+    buttonTranslation = <Button
+      style = {{ "textAlign" : 'right'}}
+      icon="language"
+      data-tooltip="Translated by Google Translate"
+      round
+      disabled
+      ></Button>
+
     var messageTranslationTitle;
     var messageTranslationAnswer
     if (node.answer != null && contentbis != node.answer.content) {
       if (node.question.title != titlebis) {
-        messageTranslationTitle = <p style={{ "textAlign": 'right' }}> <i>{"Translated by Google Translated"}</i></p>
-        messageTranslationAnswer = <p style={{ "textAlign": 'right' }}> <i>{"Translated by Google Translated"}</i></p>
+        messageTranslationTitle = buttonTranslation
+        messageTranslationAnswer = buttonTranslation
       }
       else {
-        messageTranslationAnswer = <p style={{ "textAlign": 'right' }}> <i>{"Translated by Google Translated"}</i></p>
+        messageTranslationAnswer = buttonTranslation
       }
     } else {
       if (node.answer == null || node.answer.content == contentbis) {
         if (node.question.title != titlebis) {
-          messageTranslationTitle = <p style={{ "textAlign": 'right' }}> <i>{"Translated by Google Translated"}</i></p>
+          messageTranslationTitle = buttonTranslation
         }
       }
     }
@@ -95,7 +106,10 @@ class Result extends Component {
                 <i>No answer yet...</i>
               </p>
             )}
-          {messageTranslationAnswer}
+          <div className="translationMessage"
+            style={{ "textAlign": 'right' }}>
+            {messageTranslationAnswer}
+          </div>
         </CardText>
       </Card>
     )
