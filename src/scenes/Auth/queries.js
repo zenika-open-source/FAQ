@@ -10,6 +10,7 @@ export const authUserMutation = gql`
       name
       email
       picture
+      locale
     }
   }
 `

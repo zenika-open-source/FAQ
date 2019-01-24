@@ -143,6 +143,10 @@ class Auth {
   isAdmin() {
     return this.isAuthenticated() && JSON.parse(localStorage.userData).admin
   }
+
+  getLocale() {
+    return this.isAuthenticated() && JSON.parse(localStorage.userData).locale
+  }
 }
 
 const auth = new Auth()
