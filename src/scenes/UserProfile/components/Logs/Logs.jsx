@@ -10,21 +10,13 @@ import { DefaultPagination } from 'components/Pagination'
 
 import './Logs.css'
 
-const Logs = ({
-  logs,
-  loading,
-  pagesCount,
-  pageCurrent,
-  onPageSelected,
-  meta
-}) => {
-  const shouldShowLoading =
-    loading && (meta ? meta.pageCurrent !== pageCurrent : true)
+const Logs = ({ logs, loading, pagesCount, pageCurrent, onPageSelected, meta }) => {
+  const shouldShowLoading = loading && (meta ? meta.pageCurrent !== pageCurrent : true)
 
   return (
     <Card>
       <CardText className="logs">
-        <h1 style={{ textAlign: 'center', marginBottom: '1rem' }}>Logs</h1>
+        <h1 style={{ marginBottom: '1rem' }}>Logs</h1>
         {shouldShowLoading && <Loading />}
         {!shouldShowLoading &&
           logs.map(h => {
@@ -36,17 +28,12 @@ const Logs = ({
                   <div style={{ padding: '0.5rem' }}>
                     <i className="material-icons">{action.icon}</i>
                   </div>
-                  <div style={{ marginLeft: '0.5rem' }}>
-                    You {action.sentence}.
-                  </div>
+                  <div style={{ marginLeft: '0.5rem' }}>You {action.sentence}.</div>
                 </div>
                 <div className="right">
                   <i style={{ marginLeft: 'auto' }}>{action.date}</i>
                   <Link to={nodeUrl(h.node)}>
-                    <i
-                      className="material-icons"
-                      style={{ marginLeft: '10px' }}
-                    >
+                    <i className="material-icons" style={{ marginLeft: '10px' }}>
                       arrow_forward
                     </i>
                   </Link>
