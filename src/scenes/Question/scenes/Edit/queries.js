@@ -49,7 +49,7 @@ export const submitQuestion = graphql(submitQuestionMutation, {
         variables: {
           title,
           tags, 
-          locale: auth.getlocale()
+          locale: auth.getLocale()
         }
       })
     }
@@ -65,7 +65,7 @@ export const editQuestion = graphql(editQuestionMutation, {
           questionId,
           title,
           tags,
-          locale: auth.getlocale()
+          locale: auth.getLocale()
         }
       })
     }

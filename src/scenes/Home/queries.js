@@ -7,11 +7,7 @@ export const searchNodes = gql`
     $flags: [String!]
     $first: Int!
     $skip: Int!
-<<<<<<< HEAD
-    $locale : String!
-=======
     $locale: String!
->>>>>>> 49a58c97bb87caeea8f0dda3d3edd22f226b50cd
     
   ) {
     search(

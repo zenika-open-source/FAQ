@@ -10,7 +10,7 @@ import Auth from 'services/auth'
 export const withNode = compose(
   query(getNode, {
     skip: props => !props.match.params.slug,
-    variables: props => ({ id: routing.getUIDFromSlug(props.match), locale: Auth.getlocale() })
+    variables: props => ({ id: routing.getUIDFromSlug(props.match), locale: Auth.getLocale() })
 
   }),
 withLoading(),

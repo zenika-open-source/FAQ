@@ -46,7 +46,7 @@ export const submitAnswer = graphql(submitAnswerMutation, {
   props: ({ submitAnswer }) => ({
     submitAnswer: (content, sources, nodeId) => {
       return submitAnswer({
-        variables: { content, sources: JSON.stringify(sources), nodeId, locale: auth.getlocale() }
+        variables: { content, sources: JSON.stringify(sources), nodeId, locale: auth.getLocale() }
       })
     }
   })
@@ -57,7 +57,7 @@ export const editAnswer = graphql(editAnswerMutation, {
   props: ({ editAnswer }) => ({
     editAnswer: (id, content, sources) => {
       return editAnswer({
-        variables: { id, content, sources: JSON.stringify(sources), locale: auth.getlocale() }
+        variables: { id, content, sources: JSON.stringify(sources), locale: auth.getLocale() }
       })
     }
   })
