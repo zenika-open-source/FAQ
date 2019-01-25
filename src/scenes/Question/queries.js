@@ -5,7 +5,7 @@ export const zNodeFragment = `
   question {
     id
     title
-    titleTranslations (where : {lang: "en"}){
+    titleTranslations (where : {lang: $locale}){
       text
     }
     slug
@@ -19,7 +19,7 @@ export const zNodeFragment = `
   answer {
     id
     content
-    contentTranslations (where : {lang: "en"}){
+    contentTranslations (where : {lang: $locale}){
       text
     }
     sources {
@@ -31,6 +31,7 @@ export const zNodeFragment = `
       id
       name
       picture
+      locale
     }
     createdAt
   }
@@ -50,7 +51,9 @@ export const zNodeFragment = `
 `
 
 export const getNode = gql`
-  query($id: ID!) {
+  query($id: ID!
+    $locale: String!
+    ) {
     zNode(where: { id: $id }) {
       ${zNodeFragment}
     }

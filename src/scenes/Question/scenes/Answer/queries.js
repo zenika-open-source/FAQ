@@ -2,9 +2,10 @@ import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 
 import { zNodeFragment } from '../../queries'
+import auth from 'services/auth'
 
 export const submitAnswerMutation = gql`
-  mutation($content: String!, $sources: String!, $nodeId: ID!) {
+  mutation($content: String!, $sources: String!, $nodeId: ID!, $locale: String!) {
     createAnswerAndSources(
       content: $content
       sources: $sources
@@ -45,7 +46,7 @@ export const submitAnswer = graphql(submitAnswerMutation, {
   props: ({ submitAnswer }) => ({
     submitAnswer: (content, sources, nodeId) => {
       return submitAnswer({
-        variables: { content, sources: JSON.stringify(sources), nodeId }
+        variables: { content, sources: JSON.stringify(sources), nodeId, locale: auth.getlocale() }
       })
     }
   })
@@ -56,7 +57,7 @@ export const editAnswer = graphql(editAnswerMutation, {
   props: ({ editAnswer }) => ({
     editAnswer: (id, content, sources) => {
       return editAnswer({
-        variables: { id, content, sources: JSON.stringify(sources) }
+        variables: { id, content, sources: JSON.stringify(sources), locale: auth.getlocale() }
       })
     }
   })

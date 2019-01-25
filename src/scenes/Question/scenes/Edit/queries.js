@@ -2,9 +2,10 @@ import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 
 import { zNodeFragment } from '../../queries'
+import auth from '../../../../services/auth';
 
 export const submitQuestionMutation = gql`
-  mutation($title: String!, $tags: [String!]!) {
+  mutation($title: String!, $tags: [String!]!, $locale: String!) {
     createQuestionAndTags(title: $title, tags: $tags) {
       id
       title
@@ -47,7 +48,8 @@ export const submitQuestion = graphql(submitQuestionMutation, {
       return submitQuestion({
         variables: {
           title,
-          tags
+          tags, 
+          locale: auth.getlocale()
         }
       })
     }
@@ -62,7 +64,8 @@ export const editQuestion = graphql(editQuestionMutation, {
         variables: {
           questionId,
           title,
-          tags
+          tags,
+          locale: auth.getlocale()
         }
       })
     }
