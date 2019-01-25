@@ -8,6 +8,8 @@ import { searchNodes } from '../../queries'
 import ResultList from './ResultList'
 import Auth from 'services/auth'
 
+import Auth from 'services/auth'
+
 const RESULTS_PER_PAGE = 10
 
 export default compose(
@@ -22,7 +24,11 @@ export default compose(
         flags,
         first: RESULTS_PER_PAGE,
         skip: RESULTS_PER_PAGE * (page - 1),
+<<<<<<< HEAD
         locale : Auth.getlocale()
+=======
+        locale: Auth.getLocale()
+>>>>>>> 49a58c97bb87caeea8f0dda3d3edd22f226b50cd
       }
     },
     parse: ({ search = {} }) => ({ ...search })

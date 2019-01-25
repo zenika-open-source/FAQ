@@ -144,7 +144,11 @@ class Auth {
     return this.isAuthenticated() && JSON.parse(localStorage.userData).admin
   }
 
+<<<<<<< HEAD
   getlocale(){
+=======
+  getLocale() {
+>>>>>>> 49a58c97bb87caeea8f0dda3d3edd22f226b50cd
     return this.isAuthenticated() && JSON.parse(localStorage.userData).locale
   }
 }
