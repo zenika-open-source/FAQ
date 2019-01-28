@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { auth } from 'services'
+import { auth, configuration } from 'services'
 
 import GithubIcon from './components/GithubIcon'
 import UserMenu from './components/UserMenu'
@@ -13,15 +13,11 @@ const Navbar = () => (
     <Link to="/">
       <div className="brand">
         <img alt="emoji" src="/img/favicon/favicon-64.png" />
-        FAQ Zenika
+        FAQ {configuration.title || ''}
       </div>
     </Link>
     <div className="navigation">
-      <a
-        href="https://github.com/Zenika/FAQ"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+      <a href="https://github.com/Zenika/FAQ" target="_blank" rel="noopener noreferrer">
         <GithubIcon />
         <span>report a bug</span>
       </a>

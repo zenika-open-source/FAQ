@@ -272,6 +272,7 @@ type BatchPayload {
 type Configuration {
   id: ID!
   name: String!
+  title: String
   algoliaAppId: String
   algoliaApiKey: String
   algoliaSynonyms: Json
@@ -291,6 +292,7 @@ type ConfigurationConnection {
 
 input ConfigurationCreateInput {
   name: String!
+  title: String
   algoliaAppId: String
   algoliaApiKey: String
   algoliaSynonyms: Json
@@ -312,6 +314,8 @@ enum ConfigurationOrderByInput {
   id_DESC
   name_ASC
   name_DESC
+  title_ASC
+  title_DESC
   algoliaAppId_ASC
   algoliaAppId_DESC
   algoliaApiKey_ASC
@@ -339,6 +343,7 @@ enum ConfigurationOrderByInput {
 type ConfigurationPreviousValues {
   id: ID!
   name: String!
+  title: String
   algoliaAppId: String
   algoliaApiKey: String
   algoliaSynonyms: Json
@@ -370,6 +375,7 @@ input ConfigurationSubscriptionWhereInput {
 
 input ConfigurationUpdateInput {
   name: String
+  title: String
   algoliaAppId: String
   algoliaApiKey: String
   algoliaSynonyms: Json
@@ -383,6 +389,7 @@ input ConfigurationUpdateInput {
 
 input ConfigurationUpdateManyMutationInput {
   name: String
+  title: String
   algoliaAppId: String
   algoliaApiKey: String
   algoliaSynonyms: Json
@@ -423,6 +430,20 @@ input ConfigurationWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
   algoliaAppId: String
   algoliaAppId_not: String
   algoliaAppId_in: [String!]

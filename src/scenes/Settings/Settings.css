@@ -1,0 +1,8 @@
+.title-input {
+  display: flex;
+  align-items: center;
+}
+
+.title-input i {
+  margin-right: 0.5rem;
+}
