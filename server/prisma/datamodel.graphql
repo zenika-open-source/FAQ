@@ -112,7 +112,7 @@ type Configuration {
 
   name: String! @unique
 
-  title: String
+  title: String! @default(value: "Demo")
 
   algoliaAppId: String
   algoliaApiKey: String

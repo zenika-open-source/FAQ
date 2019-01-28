@@ -272,7 +272,7 @@ type BatchPayload {
 type Configuration {
   id: ID!
   name: String!
-  title: String
+  title: String!
   algoliaAppId: String
   algoliaApiKey: String
   algoliaSynonyms: Json
@@ -343,7 +343,7 @@ enum ConfigurationOrderByInput {
 type ConfigurationPreviousValues {
   id: ID!
   name: String!
-  title: String
+  title: String!
   algoliaAppId: String
   algoliaApiKey: String
   algoliaSynonyms: Json
