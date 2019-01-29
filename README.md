@@ -2,17 +2,17 @@
 
 # FAQ Zenika
 
-Internal Knowledge Database for Zenika members - https://faq.zenika.com
+Internal Knowledge Database for your organization - https://demo.faq.zenika.com
 
 ## What is FAQ?
 
-**FAQ** is an **internal knowledge database** for Zenika members. It aims to be the **"single source of truth"** for most of Zenika-oriented information: _"How does the variable part of the salary work?"_, _"Can the client ask me to stay late at work?"_, ...
+**FAQ** is an **internal knowledge database** for your organization's members. It aims to be the **"single source of truth"** for most of your company-oriented information: _"How does the variable part of the salary work?"_, _"Can the client ask me to stay late at work?"_, ...
 
 ## Philosophy
 
 - **Single source of truth:** Regrouping useful information
 - **Intuitive:** Not only developer-oriented
-- **Integrated:** Works well with the Zenika tool suite
+- **Integrated:** Works well with your existing tool suite
 - **Internationalized:** Open to the world
 
 ## Architecture
@@ -36,7 +36,7 @@ Internal Knowledge Database for Zenika members - https://faq.zenika.com
 
 #### Integrations :
 
-- Slack: Sending new questions into a dedicated channel
+- Slack: Sending new questions into a dedicated channel and `/faq` command
 - Workplace: Button to share questions
 - Public API: Write your own integration to query the FAQ
 
