@@ -33,6 +33,9 @@ export const deleteIdentityMutation = gql`
   mutation deleteIdentity {
     updateMe(name: "anonymous", email: "", picture: "") {
       id
+      email
+      name
+      picture
     }
   }
 `
