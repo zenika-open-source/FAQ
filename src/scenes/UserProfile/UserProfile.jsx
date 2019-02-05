@@ -10,6 +10,8 @@ import Card, { CardText, CardActions } from 'components/Card'
 import Logs from './components/Logs'
 
 import { updateIdentity } from './queries'
+import { deleteIdentity } from './queries'
+import { from } from 'zen-observable';
 
 class UserProfile extends Component {
   static contextType = AuthContext
@@ -44,6 +46,16 @@ class UserProfile extends Component {
         })
     } finally {
       this.setState({ savingIdentity: false })
+    }
+  }
+
+  async deleteIdentity(identity) {
+    const { deleteIdentity } = this.props
+    this.setState({ deletingIdentity: true })
+    try {
+      await deleteIdentity(identity)
+    } finally {
+      this.setState({ deletingIdentity: false })
     }
   }
 
@@ -103,6 +115,13 @@ class UserProfile extends Component {
               <Button
                 primary
                 type="button"
+                onClick={() => this.deleteIdentity(this.state.identity)}
+              >
+                Forget Me
+              </Button>
+              <Button
+                primary
+                type="button"
                 disabled={savingIdentity}
                 onClick={() => this.updateIdentity(this.state.identity)}
               >
@@ -131,7 +150,8 @@ class UserProfile extends Component {
 UserProfile.propTypes = {
   history: PropTypes.object.isRequired,
   me: PropTypes.object.isRequired,
-  updateIdentity: PropTypes.func.isRequired
+  updateIdentity: PropTypes.func.isRequired,
+  deleteIdentity: PropTypes.func.isRequired
 }
 
-export default updateIdentity(UserProfile)
+export default deleteIdentity(updateIdentity(UserProfile))
