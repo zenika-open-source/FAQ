@@ -6,15 +6,15 @@ import cn from 'classnames'
 const flagMeta = {
   duplicate: {
     icon: 'filter_2',
-    color: '#AF1E3A'
+    color: '#BC5820'
   },
   outdated: {
     icon: 'history',
-    color: '#BC5820'
+    color: '#586069'
   },
   incomplete: {
     icon: 'report',
-    color: '#48A31C'
+    color: '#AF1E3A'
   },
   unanswered: {
     icon: 'help_outline',
