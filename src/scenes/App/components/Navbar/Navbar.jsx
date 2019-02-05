@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 import { auth, configuration } from 'services'
+import Button from 'components/Button'
 
 import GithubIcon from './components/GithubIcon'
 import UserMenu from './components/UserMenu'
@@ -22,6 +23,14 @@ const Navbar = () => (
         <span>report a bug</span>
       </a>
       {auth.isAuthenticated() && <UserMenu />}
+      <Link to="/q/new">
+          <Button
+            label="New question"
+            primary
+            round
+            fixed
+        />
+        </Link>
     </div>
   </div>
 )
