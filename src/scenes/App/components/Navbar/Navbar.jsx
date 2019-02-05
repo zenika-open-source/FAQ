@@ -27,7 +27,6 @@ const Navbar = () => (
           <Button
             label="New question"
             primary
-            round
             fixed
         />
         </Link>
