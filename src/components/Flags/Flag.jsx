@@ -6,7 +6,7 @@ import cn from 'classnames'
 const flagMeta = {
   duplicate: {
     icon: 'filter_2',
-    color: '#BC5820'
+    color: '#AF1E3A'
   },
   outdated: {
     icon: 'history',
@@ -14,7 +14,7 @@ const flagMeta = {
   },
   incomplete: {
     icon: 'report',
-    color: '#AF1E3A'
+    color: '#BC5820'
   },
   unanswered: {
     icon: 'help_outline',
