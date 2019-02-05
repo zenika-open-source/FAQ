@@ -28,6 +28,10 @@
   color: var(--primary-color-font);
 }
 
+.navbar .btn {
+  margin-left: 20px;
+}
+
 .navbar .navigation > a:last-child {
   margin-right: 0;
 }
@@ -41,5 +45,6 @@
 @media all and (max-width: 480px) {
   .navbar .btn {
     display: none;
+    margin-left: 0;
   }
 }
