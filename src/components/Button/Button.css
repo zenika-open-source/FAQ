@@ -40,7 +40,7 @@
 }
 
 .navbar .btn[primary] {
-  background-color: var(--primary-color-font);
+  background-color: var(--secondary-color-light);
   color: var(--primary-color);
 }
 
