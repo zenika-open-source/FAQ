@@ -32,6 +32,7 @@ jobs:
       - *attach_workspace
 
       - run: |
+          cd server/
           npm run lint
 
   ui/install:
