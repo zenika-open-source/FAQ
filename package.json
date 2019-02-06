@@ -39,7 +39,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "lint": "eslint src --fix --ext js,jsx",
+    "lint": "eslint src --ext js,jsx",
+    "lint:fix": "npm run lint -- --fix",
     "stats": "NODE_ENV=production webpack --config node_modules/react-scripts/config/webpack.config.prod.js --json > stats.json",
     "docz:dev": "docz dev",
     "docz:build": "sh ./docs/src/build.sh"

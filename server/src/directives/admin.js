@@ -10,7 +10,7 @@ class AdminDirective extends SchemaDirectiveVisitor {
         return resolve.apply(this, args)
       }
 
-      throw new Error(`You are not authorized to execute this operation.`)
+      throw new Error('You are not authorized to execute this operation.')
     }
   }
 }
