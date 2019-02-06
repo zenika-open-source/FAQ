@@ -2,7 +2,8 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 import { auth, configuration } from 'services'
-import Button from 'components/Button'
+
+import { Button } from 'components'
 
 import GithubIcon from './components/GithubIcon'
 import UserMenu from './components/UserMenu'
@@ -18,19 +19,19 @@ const Navbar = () => (
       </div>
     </Link>
     <div className="navigation">
-      <a href="https://github.com/Zenika/FAQ" target="_blank" rel="noopener noreferrer">
+      <a
+        className="report-bug"
+        href="https://github.com/Zenika/FAQ"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <GithubIcon />
         <span>report a bug</span>
       </a>
       {auth.isAuthenticated() && <UserMenu />}
-      <Link to="/q/new">
-          <Button
-            icon="record_voice_over"
-            label="New question"
-            primary
-            fixed
-        />
-        </Link>
+      <Link to="/q/new" className="new-question">
+        <Button icon="record_voice_over" label="New question" primary fixed />
+      </Link>
     </div>
   </div>
 )
