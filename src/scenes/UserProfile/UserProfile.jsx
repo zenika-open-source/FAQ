@@ -9,9 +9,7 @@ import Card, { CardText, CardActions } from 'components/Card'
 
 import Logs from './components/Logs'
 
-import { updateIdentity } from './queries'
-import { deleteIdentity } from './queries'
-import { from } from 'zen-observable';
+import { updateIdentity, deleteIdentity } from './queries'
 
 class UserProfile extends Component {
   static contextType = AuthContext
