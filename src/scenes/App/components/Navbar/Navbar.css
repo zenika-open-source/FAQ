@@ -24,16 +24,22 @@
 .navbar .navigation > a {
   display: flex;
   align-items: center;
-  margin-right: 1.5rem;
   color: var(--primary-color-font);
 }
 
-.navbar .btn {
-  margin-left: 20px;
+
+
+.navbar .navigation > * {
+  margin-right: 10px;
+  margin-left: 10px;
 }
 
-.navbar .navigation > a:last-child {
+.navbar .navigation > :last-child {
   margin-right: 0;
+}
+
+.navbar .navigation > :first-child {
+  margin-left: 0;
 }
 
 .navbar .navigation > a svg {
