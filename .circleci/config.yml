@@ -104,7 +104,7 @@ jobs:
       CLEVER_CLOUD_REMOTE_HOST: push-par-clevercloud-customers.services.clever-cloud.com
       CLEVER_CLOUD_REMOTE_APP_ID: app_c61407ae-b417-4406-86ed-cfd1acf84466
     docker:
-      - image: circleci/node:9-browsers
+      - image: circleci/node:10
     steps:
       - *attach_workspace
 
