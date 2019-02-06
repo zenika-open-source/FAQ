@@ -29,17 +29,8 @@
 
 
 
-.navbar .navigation > * {
-  margin-right: 10px;
-  margin-left: 10px;
-}
-
-.navbar .navigation > :last-child {
-  margin-right: 0;
-}
-
-.navbar .navigation > :first-child {
-  margin-left: 0;
+.navbar .navigation > * + * {
+  margin-left: 20px;
 }
 
 .navbar .navigation > a svg {
@@ -48,12 +39,7 @@
   height: 0.8rem !important;
 }
 
-@media all and (max-width: 480px) {
-  .navbar .btn {
-    display: none;
-    margin-left: 0;
-  }
-  
+@media screen and (max-width: 480px) {  
   .navbar .navigation > *:not(.dropdown) {
     display: none;
   }

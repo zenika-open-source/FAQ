@@ -12,7 +12,6 @@ const UserMenu = ({ history, me }) => (
     button={
       <div>
         <Avatar image={me.picture} style={{ width: '25px' }} />
-        <i className="material-icons">arrow_drop_down</i>
       </div>
     }
   >
