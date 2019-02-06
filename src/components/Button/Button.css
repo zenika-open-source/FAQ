@@ -34,16 +34,6 @@
   border-color: var(--primary-color-light);
 }
 
-.navbar .btn[primary]:not([active]):hover,
-.navbar .dropdown:hover .btn[primary]:not([active]) {
-  background-color: var(--background-color); 
-}
-
-.navbar .btn[primary] {
-  background-color: var(--secondary-color-light);
-  color: var(--primary-color);
-}
-
 .btn[secondary] {
   color: var(--secondary-color-font);
   background-color: var(--secondary-color);

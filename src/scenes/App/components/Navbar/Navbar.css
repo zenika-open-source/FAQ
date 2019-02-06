@@ -27,7 +27,15 @@
   color: var(--primary-color-font);
 }
 
+.navbar .btn[primary]:not([active]):hover,
+.navbar .dropdown:hover .btn[primary]:not([active]) {
+  background-color: var(--background-color); 
+}
 
+.navbar .btn[primary] {
+  background-color: var(--secondary-color-light);
+  color: var(--primary-color);
+}
 
 .navbar .navigation > * + * {
   margin-left: 20px;
