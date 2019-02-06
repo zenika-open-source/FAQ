@@ -45,7 +45,7 @@ Execute this mutation in your **Prisma service Playground**:
 ```graphql
 mutation {
   createConfiguration(
-    input: {
+    data: {
       name: "default"
       auth0Domain: ""
       ...
@@ -71,7 +71,7 @@ mutation {
     where: {
       name: "default"
     }
-    input: {
+    data: {
       auth0Domain: ""
       auth0ApiKey: ""
       ...
