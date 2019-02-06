@@ -7,27 +7,74 @@ references:
 
 version: 2
 jobs:
-  build:
+  server/install:
     working_directory: *workspace_root
     docker:
-      - image: circleci/node:10-browsers
+      - image: circleci/node:10
+    steps:
+      - checkout
+
+      - run: |
+          cd server/
+          npm ci
+
+      - persist_to_workspace:
+          root: *workspace_root
+          paths:
+            - server/node_modules/
+
+  server/lint:
+    working_directory: *workspace_root
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - *attach_workspace
+
+      - run: |
+          npm lint
+
+  ui/install:
+    working_directory: *workspace_root
+    docker:
+      - image: circleci/node:10
     steps:
       - checkout
 
       - run: |
           npm ci
-          npm run lint
-          cd server/
-          npm ci
-          npm run lint
-          cd ..
-          npm run build
-          rm -rf node_modules/
 
       - persist_to_workspace:
           root: *workspace_root
           paths:
-            - .
+            - node_modules/
+
+  ui/lint:
+    working_directory: *workspace_root
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - *attach_workspace
+
+      - run: |
+          npm lint
+
+  ui/build:
+    working_directory: *workspace_root
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - *attach_workspace
+
+      - run: |
+          npm run build
+
+      - persist_to_workspace:
+          root: *workspace_root
+          paths:
+            - build/
 
   prisma_deploy:
     environment:
@@ -36,7 +83,7 @@ jobs:
       CLEVER_CLOUD_REMOTE_APP_ID: app_f9c5c1cb-fe9c-41f9-a6c0-793e8326e95b
     working_directory: *workspace_root
     docker:
-      - image: circleci/node:9-browsers
+      - image: circleci/node:10
     steps:
       - *attach_workspace
 
@@ -97,10 +144,22 @@ workflows:
   version: 2
   build-deploy:
     jobs:
-      - build
+      - server/install
+      - server/lint:
+          requires:
+            - server/install
+      - ui/install
+      - ui/lint:
+          requires:
+            - ui/install
+      - ui/build:
+          requires:
+            - ui/install
       - deploy:
           requires:
-            - build
+            - server/lint
+            - ui/lint
+            - ui/build
           filters:
             branches:
               only: master
