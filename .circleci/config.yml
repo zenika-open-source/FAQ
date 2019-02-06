@@ -1,14 +1,11 @@
 references:
-  workspace_root: &workspace_root /home/circleci/my-workspace
-
   attach_workspace: &attach_workspace
     attach_workspace:
-      at: *workspace_root
+      at: ./
 
 version: 2
 jobs:
   server/install:
-    working_directory: *workspace_root
     docker:
       - image: circleci/node:10
     steps:
@@ -24,7 +21,6 @@ jobs:
             - server/node_modules/
 
   server/lint:
-    working_directory: *workspace_root
     docker:
       - image: circleci/node:10
     steps:
@@ -36,7 +32,6 @@ jobs:
           npm run lint
 
   ui/install:
-    working_directory: *workspace_root
     docker:
       - image: circleci/node:10
     steps:
@@ -51,7 +46,6 @@ jobs:
             - node_modules/
 
   ui/lint:
-    working_directory: *workspace_root
     docker:
       - image: circleci/node:10
     steps:
@@ -62,7 +56,6 @@ jobs:
           npm run lint
 
   ui/build:
-    working_directory: *workspace_root
     docker:
       - image: circleci/node:10
     steps:
@@ -82,7 +75,6 @@ jobs:
       DEPLOY_DIR: ~/prisma_deploy
       CLEVER_CLOUD_REMOTE_HOST: push-par-clevercloud-customers.services.clever-cloud.com
       CLEVER_CLOUD_REMOTE_APP_ID: app_f9c5c1cb-fe9c-41f9-a6c0-793e8326e95b
-    working_directory: *workspace_root
     docker:
       - image: circleci/node:10
     steps:
@@ -111,7 +103,6 @@ jobs:
       DEPLOY_DIR: ~/deploy
       CLEVER_CLOUD_REMOTE_HOST: push-par-clevercloud-customers.services.clever-cloud.com
       CLEVER_CLOUD_REMOTE_APP_ID: app_c61407ae-b417-4406-86ed-cfd1acf84466
-    working_directory: *workspace_root
     docker:
       - image: circleci/node:9-browsers
     steps:
