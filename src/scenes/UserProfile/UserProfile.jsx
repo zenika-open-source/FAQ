@@ -53,9 +53,9 @@ class UserProfile extends Component {
     const { deleteIdentity } = this.props
     this.setState({ deletingIdentity: true })
     try {
-      await deleteIdentity(identity)
+      var newIdentity = await deleteIdentity(identity)
     } finally {
-      this.setState({ deletingIdentity: false })
+      this.setState({ deletingIdentity: false, identity: newIdentity.data.updateMe})
     }
   }
 
