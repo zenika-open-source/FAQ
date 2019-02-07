@@ -27,14 +27,19 @@
     "deploy": "cd scripts/prisma_deploy_all && dotenv -e ../../.env.local node index.js",
     "new_service": "cd scripts/prisma_new_service && dotenv -e ../../.env.local node index.js",
     "generate_schema": "prisma generate",
-    "lint": "eslint src --fix --ext js",
+    "lint": "eslint src --ext js",
+    "lint:fix": "npm run lint -- --fix",
     "local_containers": "cd prisma/ && dotenv -e ../.env.local docker-compose up",
     "token": "dotenv -e .env.local bash scripts/prisma_token/token.sh"
   },
   "devDependencies": {
+    "babel-eslint": "^10.0.1",
     "dotenv-cli": "^1.4.0",
     "eslint": "^5.4.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-node": "^6.0.0",
+    "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^3.0.1",
     "prisma-yml": "^1.17.1"
   }

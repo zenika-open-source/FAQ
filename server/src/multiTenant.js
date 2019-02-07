@@ -12,7 +12,7 @@ const multiTenant = new MultiTenant({
     const service = req.headers['prisma-service']
 
     if (!service) {
-      throw Error("No 'prisma-service' header found, please provide one")
+      throw Error('No \'prisma-service\' header found, please provide one')
     }
 
     return service.match(/([^/]+)\/([^/]+)/).splice(1, 2)
