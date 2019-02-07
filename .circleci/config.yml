@@ -34,6 +34,7 @@ jobs:
       - run: |
           cd server/
           npm run lint
+          npm run prettier:check
 
   client/install:
     working_directory: *workspace_root
@@ -60,6 +61,7 @@ jobs:
 
       - run: |
           npm run lint
+          npm run prettier:check
 
   client/build:
     working_directory: *workspace_root
