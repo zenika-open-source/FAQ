@@ -3,12 +3,7 @@ const { algolia, mailgun } = require('./integrations')
 
 module.exports = {
   Mutation: {
-    createAnswerAndSources: async (
-      _,
-      { content, sources, nodeId },
-      ctx,
-      info
-    ) => {
+    createAnswerAndSources: async (_, { content, sources, nodeId }, ctx, info) => {
       sources = JSON.parse(sources)
 
       let answer
@@ -47,9 +42,7 @@ module.exports = {
       } catch (e) {
         // The error doesn't includes the error code, so we use the message
         if (e.message.includes('NodeAnswer') && e.message.includes('violate')) {
-          throw new Error(
-            'Someone already answered this question! Refresh this page.'
-          )
+          throw new Error('Someone already answered this question! Refresh this page.')
         }
         throw e
       }
@@ -107,10 +100,7 @@ module.exports = {
         if (oldSources.map(s => s.id).includes(newSource.id)) {
           const oldSource = oldSources.filter(s => s.id === newSource.id)[0]
 
-          return (
-            oldSource.label !== newSource.label ||
-            oldSource.url !== newSource.url
-          )
+          return oldSource.label !== newSource.label || oldSource.url !== newSource.url
         }
         return false
       })
@@ -142,14 +132,9 @@ module.exports = {
         ctx.prisma.mutation.deleteSource({ where: { id: source.id } })
       )
 
-      await Promise.all([
-        ...mutationsToAdd,
-        ...mutationsToUpdate,
-        ...mutationsToRemove
-      ])
+      await Promise.all([...mutationsToAdd, ...mutationsToUpdate, ...mutationsToRemove])
 
-      const clean = sources =>
-        sources.map(s => ({ label: s.label, url: s.url }))
+      const clean = sources => sources.map(s => ({ label: s.label, url: s.url }))
 
       const meta = {
         sourcesChanges: {

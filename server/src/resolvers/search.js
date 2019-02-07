@@ -15,10 +15,8 @@ module.exports = {
       }
 
       if (!text && tags.length === 0 && flags.length === 0) {
-        const count = (await ctx.prisma.query.zNodesConnection(
-          params,
-          '{ aggregate { count } }'
-        )).aggregate.count
+        const count = (await ctx.prisma.query.zNodesConnection(params, '{ aggregate { count } }'))
+          .aggregate.count
 
         results = {
           ...results,
@@ -49,10 +47,7 @@ module.exports = {
   SearchResult: {
     nodes: async ({ ids, highlights, ...params }, args, ctx, info) => {
       if (!ids) {
-        return ctx.prisma.query.zNodes(
-          { orderBy: 'createdAt_DESC', ...params },
-          info
-        )
+        return ctx.prisma.query.zNodes({ orderBy: 'createdAt_DESC', ...params }, info)
       }
 
       let nodes = await ctx.prisma.query.zNodes(
