@@ -35,7 +35,7 @@ jobs:
           cd server/
           npm run lint
 
-  ui/install:
+  client/install:
     working_directory: *workspace_root
     docker:
       - image: circleci/node:10
@@ -50,7 +50,7 @@ jobs:
           paths:
             - node_modules/
 
-  ui/lint:
+  client/lint:
     working_directory: *workspace_root
     docker:
       - image: circleci/node:10
@@ -61,7 +61,7 @@ jobs:
       - run: |
           npm run lint
 
-  ui/build:
+  client/build:
     working_directory: *workspace_root
     docker:
       - image: circleci/node:10
@@ -149,18 +149,18 @@ workflows:
       - server/lint:
           requires:
             - server/install
-      - ui/install
-      - ui/lint:
+      - client/install
+      - client/lint:
           requires:
-            - ui/install
-      - ui/build:
+            - client/install
+      - client/build:
           requires:
-            - ui/install
+            - client/install
       - deploy:
           requires:
             - server/lint
-            - ui/lint
-            - ui/build
+            - client/lint
+            - client/build
           filters:
             branches:
               only: master
