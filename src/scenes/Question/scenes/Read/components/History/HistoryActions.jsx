@@ -13,12 +13,9 @@ const HistoryActions = ({
   loading,
   meta
 }) => {
-  const shouldShowLoading =
-    loading && (meta ? meta.pageCurrent !== pageCurrent : true)
+  const shouldShowLoading = loading && (meta ? meta.pageCurrent !== pageCurrent : true)
 
-  const actions = historyActions.map(action => (
-    <HistoryAction key={action.id} action={action} />
-  ))
+  const actions = historyActions.map(action => <HistoryAction key={action.id} action={action} />)
 
   return (
     <div>

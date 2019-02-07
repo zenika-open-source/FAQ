@@ -12,17 +12,12 @@ const HistoryAction = ({ action }) => {
 
   return (
     <div className="history-action">
-      <div
-        style={{ display: 'flex', alignItems: 'center', flexDirection: 'row' }}
-      >
+      <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'row' }}>
         <div>
           <i className="material-icons">{action.icon}</i>
         </div>
         <div>
-          <Avatar
-            image={action.user.picture}
-            style={{ width: '25px', minWidth: '25px' }}
-          />
+          <Avatar image={action.user.picture} style={{ width: '25px', minWidth: '25px' }} />
         </div>
         <div>
           {action.user.name} {action.sentence}.

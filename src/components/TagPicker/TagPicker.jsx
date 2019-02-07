@@ -31,13 +31,8 @@ class TagPicker extends Component {
         <div className="tags-list">
           {tags.map(tag => (
             <div key={tag} className="tag">
-              <span style={{ fontVariant: 'small-caps', paddingBottom: '1px' }}>
-                {tag}
-              </span>
-              <i
-                className="material-icons"
-                onClick={() => onChange(tags.filter(t => t !== tag))}
-              >
+              <span style={{ fontVariant: 'small-caps', paddingBottom: '1px' }}>{tag}</span>
+              <i className="material-icons" onClick={() => onChange(tags.filter(t => t !== tag))}>
                 close
               </i>
             </div>
@@ -63,11 +58,7 @@ class TagPicker extends Component {
                           selected: isSelected
                         })}
                         onClick={() =>
-                          onChange(
-                            isSelected
-                              ? tags.filter(t => t !== tag)
-                              : [...tags, tag]
-                          )
+                          onChange(isSelected ? tags.filter(t => t !== tag) : [...tags, tag])
                         }
                       >
                         {tag}

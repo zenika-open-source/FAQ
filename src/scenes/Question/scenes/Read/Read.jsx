@@ -44,10 +44,7 @@ const Read = ({ history, match, zNode, createFlag, removeFlag }) => {
           onRemove={type => removeFlag(type, zNode.id)}
         />
         <Dropdown button={<Button icon="edit" label="Edit ..." link />}>
-          <DropdownItem
-            icon="edit"
-            onClick={() => history.push(`/q/${match.params.slug}/edit`)}
-          >
+          <DropdownItem icon="edit" onClick={() => history.push(`/q/${match.params.slug}/edit`)}>
             Question
           </DropdownItem>
           <DropdownItem
@@ -86,10 +83,7 @@ const Read = ({ history, match, zNode, createFlag, removeFlag }) => {
               <b>No answer yet...</b>
               <br />
               <br />
-              <Link
-                to={`/q/${match.params.slug}/answer`}
-                className="btn-container"
-              >
+              <Link to={`/q/${match.params.slug}/answer`} className="btn-container">
                 <Button icon="question_answer" primary>
                   Answer the question
                 </Button>

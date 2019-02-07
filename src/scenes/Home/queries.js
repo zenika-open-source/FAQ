@@ -1,13 +1,7 @@
 import gql from 'graphql-tag'
 
 export const searchNodes = gql`
-  query(
-    $text: String
-    $tags: [String!]
-    $flags: [String!]
-    $first: Int!
-    $skip: Int!
-  ) {
+  query($text: String, $tags: [String!], $flags: [String!], $first: Int!, $skip: Int!) {
     search(
       text: $text
       tags: $tags

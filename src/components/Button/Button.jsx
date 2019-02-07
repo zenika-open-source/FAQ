@@ -42,11 +42,7 @@ class Button extends Component {
     }
 
     return (
-      <button
-        className={cn('btn', className)}
-        {...buttonModifiers}
-        {...otherProps}
-      >
+      <button className={cn('btn', className)} {...buttonModifiers} {...otherProps}>
         {loading ? (
           <span>
             <i className="fas fa-spinner fa-spin" />

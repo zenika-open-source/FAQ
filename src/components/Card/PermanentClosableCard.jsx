@@ -8,8 +8,7 @@ import CardActions from './CardActions'
 
 class PermanentClosableCard extends Component {
   static setValue(name, value) {
-    const json =
-      JSON.parse(localStorage.getItem('permanent_closable_cards')) || {}
+    const json = JSON.parse(localStorage.getItem('permanent_closable_cards')) || {}
     json[name] = value
     localStorage.setItem('permanent_closable_cards', JSON.stringify(json))
   }

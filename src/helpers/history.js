@@ -18,24 +18,15 @@ const join = array => {
 const sentencer = (array, action, label, details) => {
   if (array && array.length > 0) {
     if (array.length === 1) {
-      return (
-        `${action} ${details ? 'the' : 'one'} ${label}` +
-        (details ? ` "${array[0]}"` : '')
-      )
+      return `${action} ${details ? 'the' : 'one'} ${label}` + (details ? ` "${array[0]}"` : '')
     } else {
-      return (
-        `${action} ${array.length} ${label}s` +
-        (details ? ` (${join(array)})` : '')
-      )
+      return `${action} ${array.length} ${label}s` + (details ? ` (${join(array)})` : '')
     }
   }
   return ''
 }
 
-export const formatHistoryAction = (
-  historyAction,
-  options = { relative: true }
-) => {
+export const formatHistoryAction = (historyAction, options = { relative: true }) => {
   const { action, model, meta, user, createdAt, node } = historyAction
 
   const what = options.relative
@@ -44,10 +35,8 @@ export const formatHistoryAction = (
 
   const sentences = {
     CREATED: {
-      Question: () =>
-        join([`asked ${what}`, sentencer(meta.tags, 'added', 'tag', true)]),
-      Answer: () =>
-        join([`answered ${what}`, sentencer(meta.sources, 'added', 'source')]),
+      Question: () => join([`asked ${what}`, sentencer(meta.tags, 'added', 'tag', true)]),
+      Answer: () => join([`answered ${what}`, sentencer(meta.sources, 'added', 'source')]),
       Flag: () => `flagged ${what} with "${meta.type}"`
     },
     UPDATED: {
@@ -74,9 +63,7 @@ export const formatHistoryAction = (
       }
     },
     DELETED: {
-      Flag: () =>
-        `removed the flag "${meta.type}"` +
-        (options.relative ? '' : ` from ${what}`)
+      Flag: () => `removed the flag "${meta.type}"` + (options.relative ? '' : ` from ${what}`)
     }
   }
 
@@ -100,8 +87,8 @@ export const formatHistoryAction = (
   const date =
     differenceInMilliseconds(createdAt, monthOld) > 0
       ? distanceInWordsToNow(createdAt, {
-        addSuffix: true
-      })
+          addSuffix: true
+        })
       : format(createdAt, 'D MMM YYYY, HH:mm')
 
   return {

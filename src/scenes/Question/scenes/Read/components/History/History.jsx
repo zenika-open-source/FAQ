@@ -20,10 +20,7 @@ class History extends Component {
 
     return (
       <div className="history">
-        <div
-          className={cn('toggler', open ? 'up' : 'down')}
-          onClick={this.toggleState}
-        >
+        <div className={cn('toggler', open ? 'up' : 'down')} onClick={this.toggleState}>
           <span>history</span>
           <div className="arrow" />
         </div>

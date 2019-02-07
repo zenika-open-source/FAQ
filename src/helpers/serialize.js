@@ -1,10 +1,10 @@
 const parseQueryString = text =>
   text
     ? decodeURI(text)
-      .substr(1)
-      .split('&')
-      .map(s => s.split('='))
-      .reduce((obj, [k, v]) => ({ ...obj, [k]: v }), {})
+        .substr(1)
+        .split('&')
+        .map(s => s.split('='))
+        .reduce((obj, [k, v]) => ({ ...obj, [k]: v }), {})
     : {}
 const stringifyQueryString = params =>
   '?' +
@@ -35,12 +35,7 @@ export const unserialize = queryString => {
   }
 }
 
-export const addToQueryString = (
-  history,
-  location,
-  addedParams,
-  options = { push: true }
-) => {
+export const addToQueryString = (history, location, addedParams, options = { push: true }) => {
   const params = unserialize(location.search)
 
   const qs = serialize({

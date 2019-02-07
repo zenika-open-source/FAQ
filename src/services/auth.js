@@ -67,10 +67,7 @@ class Auth {
         if (err) {
           // "Login required" isn't an error per se
           if (err.error !== 'login_required') {
-            alert.pushError(
-              'Renewing authentication failed: ' + JSON.stringify(err),
-              err
-            )
+            alert.pushError('Renewing authentication failed: ' + JSON.stringify(err), err)
           }
           reject(err)
           return
@@ -110,19 +107,11 @@ class Auth {
   }
 
   isAuthenticated() {
-    return (
-      this.session &&
-      this.session.expiresAt > new Date().getTime() &&
-      localStorage.userId
-    )
+    return this.session && this.session.expiresAt > new Date().getTime() && localStorage.userId
   }
 
   wasAuthenticated() {
-    return (
-      this.session &&
-      this.session.expiresAt < new Date().getTime() &&
-      localStorage.userId
-    )
+    return this.session && this.session.expiresAt < new Date().getTime() && localStorage.userId
   }
 
   popAfterLoginRedirectUrl() {

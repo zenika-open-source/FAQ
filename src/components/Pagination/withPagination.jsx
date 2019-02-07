@@ -20,12 +20,7 @@ const withPagination = (options = { push: true }) => Component => {
 
       // If currentPage > pagesCount, redirect to last page
       if (!loading && pagesCount > 0 && currentPage > pagesCount) {
-        addToQueryString(
-          history,
-          location,
-          { page: pagesCount },
-          { push: options.push }
-        )
+        addToQueryString(history, location, { page: pagesCount }, { push: options.push })
       }
     }
 
@@ -43,12 +38,7 @@ const withPagination = (options = { push: true }) => Component => {
           pageCurrent={page}
           pagesCount={pagesCount}
           onPageSelected={page =>
-            addToQueryString(
-              history,
-              location,
-              { page },
-              { push: options.push }
-            )
+            addToQueryString(history, location, { page }, { push: options.push })
           }
         />
       )

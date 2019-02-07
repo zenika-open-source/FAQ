@@ -45,11 +45,7 @@ class AlertProvider extends Component {
     }))
 
   render() {
-    return (
-      <AlertContext.Provider value={this.state}>
-        {this.props.children}
-      </AlertContext.Provider>
-    )
+    return <AlertContext.Provider value={this.state}>{this.props.children}</AlertContext.Provider>
   }
 }
 
