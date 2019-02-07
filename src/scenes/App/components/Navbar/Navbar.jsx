@@ -24,13 +24,8 @@ const Navbar = () => (
       </a>
       {auth.isAuthenticated() && <UserMenu />}
       <Link to="/q/new">
-          <Button
-            icon="record_voice_over"
-            label="New question"
-            primary
-            fixed
-        />
-        </Link>
+        <Button label={<b>New question</b>} primary fixed />
+      </Link>
     </div>
   </div>
 )
