@@ -18,12 +18,11 @@ const routing = {
   getUIDFromSlug(match) {
     return match.params.slug.split('-').pop()
   },
+  getShareUrl(UID) {
+    return `${window.location.origin}/q/${UID}`
+  },
   getPrismaService() {
-    const {
-      REACT_APP_PRISMA_SERVICE,
-      NODE_ENV,
-      REACT_APP_FAQ_URL
-    } = process.env
+    const { REACT_APP_PRISMA_SERVICE, NODE_ENV, REACT_APP_FAQ_URL } = process.env
 
     // You can override the service with REACT_APP_PRISMA_SERVICE
     if (REACT_APP_PRISMA_SERVICE) return REACT_APP_PRISMA_SERVICE
@@ -32,9 +31,7 @@ const routing = {
     if (NODE_ENV === 'production' && !!REACT_APP_FAQ_URL) {
       const url = new URL(window.location.href).hostname
       if (url.endsWith(REACT_APP_FAQ_URL)) {
-        const match = url
-          .replace(REACT_APP_FAQ_URL, '')
-          .match(/(?:(?:([^.]*)\.)?([^.]*)\.)?/)
+        const match = url.replace(REACT_APP_FAQ_URL, '').match(/(?:(?:([^.]*)\.)?([^.]*)\.)?/)
         const name = match[2] || 'default'
         const stage = match[1] || 'prod'
         return name + '/' + stage
