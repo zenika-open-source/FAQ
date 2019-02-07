@@ -6,7 +6,7 @@
   },
   "extends": ["standard", "react-app", "prettier", "prettier/standard"],
   "parserOptions": {
-    "ecmaVersion": 2018,
+    "ecmaVersion": 2019,
     "sourceType": "module",
     "ecmaFeatures": {
       "jsx": true
@@ -19,10 +19,5 @@
       "error",
       { "anonymous": "never", "named": "never", "asyncArrow": "always" }
     ]
-  },
-  "settings": {
-    "react": {
-      "version": "16.6"
-    }
   }
 }
