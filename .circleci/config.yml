@@ -86,6 +86,7 @@ jobs:
     docker:
       - image: circleci/node:10
     steps:
+      - checkout
       - *attach_workspace
 
       - add_ssh_keys:
@@ -115,6 +116,7 @@ jobs:
     docker:
       - image: circleci/node:10
     steps:
+      - checkout
       - *attach_workspace
 
       - add_ssh_keys:
