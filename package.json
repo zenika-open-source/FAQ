@@ -54,10 +54,10 @@
     "dotenv": "^5.0.0",
     "dotenv-cli": "^1.4.0",
     "eslint-config-prettier": "^4.0.0",
+    "eslint-config-react-app": "^3.0.6",
     "eslint-config-standard": "^12.0.0",
     "eslint-plugin-node": "^7.0.1",
     "eslint-plugin-promise": "^4.0.1",
-    "eslint-plugin-react": "^7.11.1",
     "eslint-plugin-standard": "^4.0.0",
     "prettier": "^1.16.4",
     "webpack-cli": "^3.1.2"
