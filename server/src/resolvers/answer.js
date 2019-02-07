@@ -91,7 +91,7 @@ module.exports = {
       )
       if (previousContent !== answer.content)
       {
-        throw new Error ("Another user edited the answer before you")
+        throw new Error ("Another user edited the answer before you, please refresh the page")
       }
 
       const oldSources = answer.sources

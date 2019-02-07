@@ -82,7 +82,7 @@ module.exports = {
       )).node
       if (previousTitle !== node.question.title)
       {
-        throw new Error ("Another user edited the question before you")
+        throw new Error ("Another user edited the question before you, please refresh the page.")
       }
 
       const oldTags = node.tags
