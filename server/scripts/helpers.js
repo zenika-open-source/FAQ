@@ -1,6 +1,6 @@
 const fetch = require('node-fetch')
 const jwt = require('jsonwebtoken')
-const { execFileSync } = require('child_process')
+const { execSync } = require('child_process')
 
 const generateToken = (payload, secret) => {
   const fullPayload = {
@@ -92,8 +92,8 @@ const queryManagement = gql => {
 }
 
 const run = (command, env) => {
-  command = command.split(' ')
-  return execFileSync(command[0], command.slice(1), {
+  const [executable, ...args] = command.split(' ')
+  return execSync(executable, args, {
     env: {
       ...process.env,
       ...env
