@@ -89,7 +89,7 @@ module.exports = {
         }
         `
       )
-      if (previousContent != answer.content)
+      if (previousContent !== answer.content)
       {
         throw new Error ("Another user edited the answer before you")
       }

@@ -80,7 +80,7 @@ module.exports = {
         }
         `
       )).node
-      if (previousTitle != node.question.title)
+      if (previousTitle !== node.question.title)
       {
         throw new Error ("Another user edited the question before you")
       }
