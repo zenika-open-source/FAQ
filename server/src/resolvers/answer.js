@@ -71,7 +71,7 @@ module.exports = {
         info
       )
     },
-    updateAnswerAndSources: async (_, { id, content, sources }, ctx, info) => {
+    updateAnswerAndSources: async (_, { id, content, previousContent, sources }, ctx, info) => {
       const answer = await ctx.prisma.query.answer(
         { where: { id } },
         `
@@ -89,6 +89,10 @@ module.exports = {
         }
         `
       )
+      if (previousContent != answer.content)
+      {
+        throw new Error ("Another user edited the answer before you")
+      }
 
       const oldSources = answer.sources
       const newSources = JSON.parse(sources)

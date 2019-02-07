@@ -28,8 +28,8 @@ export const submitAnswerMutation = gql`
 `
 
 export const editAnswerMutation = gql`
-  mutation($id: ID!, $content: String!, $sources: String!) {
-    updateAnswerAndSources(id: $id, content: $content, sources: $sources) {
+  mutation($id: ID!, $content: String!, $previousContent: String!, $sources: String!) {
+    updateAnswerAndSources(id: $id, content: $content, previousContent: $previousContent, sources: $sources) {
       id
       content
       sources {
@@ -54,9 +54,9 @@ export const submitAnswer = graphql(submitAnswerMutation, {
 export const editAnswer = graphql(editAnswerMutation, {
   name: 'editAnswer',
   props: ({ editAnswer }) => ({
-    editAnswer: (id, content, sources) => {
+    editAnswer: (id, content, previousContent, sources) => {
       return editAnswer({
-        variables: { id, content, sources: JSON.stringify(sources) }
+        variables: { id, content, previousContent, sources: JSON.stringify(sources) }
       })
     }
   })

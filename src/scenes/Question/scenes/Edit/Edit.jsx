@@ -82,7 +82,13 @@ class Edit extends Component {
 
     this.setState({ loadingSubmit: true })
 
-    editQuestion(zNode.question.id, this.state.question, this.state.tags, zNode.id)
+    editQuestion(
+      zNode.question.id,
+      this.state.question,
+      this.state.initialQuestion, 
+      this.state.tags,
+      zNode.id
+    )
       .then(({ data }) => {
         this.setState({
           slug: data.updateQuestionAndTags.slug + '-' + zNode.id
