@@ -1,8 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { auth, configuration } from 'services'
-import Button from 'components/Button'
+import { configuration } from 'services'
+import { Authenticated, Button } from 'components'
 
 import GithubIcon from './components/GithubIcon'
 import UserMenu from './components/UserMenu'
@@ -22,10 +22,12 @@ const Navbar = () => (
         <GithubIcon />
         <span>report a bug</span>
       </a>
-      {auth.isAuthenticated() && <UserMenu />}
-      <Link to="/q/new">
-        <Button label={<b>New question</b>} primary fixed />
-      </Link>
+      <Authenticated>
+        <UserMenu />
+        <Link to="/q/new">
+          <Button label={<b>New question</b>} primary fixed />
+        </Link>
+      </Authenticated>
     </div>
   </div>
 )
