@@ -54,7 +54,16 @@ class UserProfile extends Component {
   }
 
   async deleteIdentity(identity) {
-    if (!window.confirm('Are you sure you want to be forgotten? This is irreversible.')) {
+    if (
+      !window.confirm(
+        [
+          'Are you sure you want to be forgotten?',
+          'Your personal data will be erased, which means your actions will become anonymous.',
+          'The content you have written and edited will remain.',
+          'This is irreversible.'
+        ].join(' ')
+      )
+    ) {
       return
     }
     const { deleteIdentity } = this.props
