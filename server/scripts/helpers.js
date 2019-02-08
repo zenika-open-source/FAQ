@@ -92,8 +92,7 @@ const queryManagement = gql => {
 }
 
 const run = (command, env) => {
-  const [executable, ...args] = command.split(' ')
-  return execSync(executable, args, {
+  return execSync(command, {
     env: {
       ...process.env,
       ...env

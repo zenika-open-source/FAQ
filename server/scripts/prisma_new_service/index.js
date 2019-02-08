@@ -36,7 +36,7 @@ const main = async () => {
   }
 
   // Deploy the service
-  await run('prisma deploy', {
+  run('prisma deploy', {
     PRISMA_URL: serviceUrl
   })
 
