@@ -85,7 +85,7 @@ class Edit extends Component {
     editQuestion(
       zNode.question.id,
       this.state.question,
-      this.state.initialQuestion, 
+      this.state.initialQuestion,
       this.state.tags,
       zNode.id
     )

@@ -67,7 +67,7 @@ export const editQuestion = graphql(editQuestionMutation, {
         variables: {
           questionId,
           title,
-          previousTitle, 
+          previousTitle,
           tags
         }
       })
