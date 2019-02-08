@@ -91,14 +91,13 @@ const queryManagement = gql => {
   })
 }
 
-const run = (command, env) => {
-  return execSync(command, {
+const run = (command, env) =>
+  execSync(command, {
     env: {
       ...process.env,
       ...env
     }
   })
-}
 
 module.exports = {
   env,

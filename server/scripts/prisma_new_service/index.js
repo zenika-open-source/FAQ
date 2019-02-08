@@ -36,9 +36,11 @@ const main = async () => {
   }
 
   // Deploy the service
-  run('prisma deploy', {
-    PRISMA_URL: serviceUrl
-  })
+  console.log(
+    run('prisma deploy', {
+      PRISMA_URL: serviceUrl
+    })
+  )
 
   // Add a default configuration
   await queryService(
