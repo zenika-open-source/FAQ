@@ -47,11 +47,11 @@ module.exports = {
         },
         info
       ),
-    forgetMe: (_, args, ctx, info) => 
+    forgetMe: (_, args, ctx, info) =>
       ctx.prisma.mutation.updateUser(
         {
           where: { id: ctxUser(ctx).id },
-          data: { name: 'anonymous', email: '', picture: '/img/portrait_placeholder.png', auth0Id: null}
+          data: { name: 'anonymous', email: '', picture: '/img/portrait_placeholder.png', auth0Id: null }
         },
         info
       )
