@@ -54,6 +54,9 @@ class UserProfile extends Component {
   }
 
   async deleteIdentity(identity) {
+    if (!window.confirm('Are you sure you want to be forgotten? This is irreversible.')) {
+      return
+    }
     const { deleteIdentity } = this.props
     this.setState({ deletingIdentity: true })
     try {
