@@ -58,7 +58,7 @@ class ConfigurationProvider extends Component {
         .catch(err => this.setState({ error: err }))
     } else {
       // Else, load the configuration in the background anyway
-      configuration.load()
+      configuration.load().catch(err => console.warn('Configuration could not be refreshed:', err))
     }
   }
   render() {
