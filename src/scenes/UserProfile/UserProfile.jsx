@@ -68,9 +68,9 @@ class UserProfile extends Component {
   render() {
     const {
       savingIdentity,
-      identity: { name, email, picture }
+      identity: { name, email, picture },
+      redirectToLogin
     } = this.state
-    const { redirectToLogin } = this.state;
 
     if (redirectToLogin) {
       return <Redirect to="auth/login" />
