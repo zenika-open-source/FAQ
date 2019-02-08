@@ -26,7 +26,7 @@ class UserProfile extends Component {
 
   state = {
     redirectToLogin: false
-  };
+  }
 
   onIdentityChange(event) {
     this.setState({
