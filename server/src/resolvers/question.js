@@ -80,9 +80,8 @@ module.exports = {
         }
         `
       )).node
-      if (previousTitle !== node.question.title)
-      {
-        throw new Error ("Another user edited the question before you, copy your version and refresh the page. If you don't copy your version, It will be lost")
+      if (previousTitle !== node.question.title) {
+        throw new Error('Another user edited the question before you, copy your version and refresh the page. If you don\'t copy your version, It will be lost')
       }
 
       const oldTags = node.tags
