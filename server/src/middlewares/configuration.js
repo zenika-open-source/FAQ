@@ -6,8 +6,12 @@ const getConfiguration = async (multiTenant, req, next) => {
     return
   }
 
-  await refreshConfiguration(tenant)
-  next()
+  try {
+    await refreshConfiguration(tenant)
+    next()
+  } catch (err) {
+    next(err)
+  }
 }
 
 const refreshConfiguration = async tenant => {

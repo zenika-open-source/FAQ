@@ -39,19 +39,26 @@ class ConfigurationProvider extends Component {
     super(props)
 
     this.state = {
-      loaded: configuration.isLoaded()
+      loaded: configuration.isLoaded(),
+      error: null
     }
   }
   componentDidMount() {
     if (!configuration.isLoaded()) {
       // If no configuration is loaded, load configuration and refresh
-      configuration.load().then(() => this.setState({ loaded: true }))
+      configuration
+        .load()
+        .then(() => this.setState({ loaded: true }))
+        .catch(err => this.setState({ error: err }))
     } else {
       // Else, load the configuration in the background anyway
       configuration.load()
     }
   }
   render() {
+    if (this.state.error) {
+      return <span>Error :(</span>
+    }
     if (!this.state.loaded) {
       return <Loading text="Retrieving configuration..." />
     }
