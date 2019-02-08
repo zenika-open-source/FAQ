@@ -10,6 +10,8 @@ import Card, { CardText, CardActions } from 'components/Card'
 import Logs from './components/Logs'
 
 import { updateIdentity, deleteIdentity } from './queries'
+import auth from 'services/auth'
+import { Redirect } from 'react-router-dom'
 
 class UserProfile extends Component {
   static contextType = AuthContext
@@ -21,6 +23,10 @@ class UserProfile extends Component {
       savingIdentity: false
     }
   }
+
+  state = {
+    redirectToLogin: false
+  };
 
   onIdentityChange(event) {
     this.setState({
@@ -51,10 +57,12 @@ class UserProfile extends Component {
     const { deleteIdentity } = this.props
     this.setState({ deletingIdentity: true })
     try {
-      var newIdentity = await deleteIdentity(identity)
+      await deleteIdentity(identity)
     } finally {
-      this.setState({ deletingIdentity: false, identity: newIdentity.data.updateMe})
+      this.setState({ deletingIdentity: false})
     }
+    auth.logout()
+    this.setState({ redirectToLogin: true })
   }
 
   render() {
@@ -62,6 +70,11 @@ class UserProfile extends Component {
       savingIdentity,
       identity: { name, email, picture }
     } = this.state
+    const { redirectToLogin } = this.state;
+
+    if (redirectToLogin) {
+      return <Redirect to="auth/login" />
+    }
 
     const auth = this.context
 

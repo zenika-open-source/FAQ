@@ -31,11 +31,8 @@ export const updateIdentity = graphql(updateIdentityMutation, {
 
 export const deleteIdentityMutation = gql`
   mutation deleteIdentity {
-    updateMe(name: "anonymous", email: "", picture: "/img/portrait_placeholder.png") {
+    forgetMe {
       id
-      email
-      name
-      picture
     }
   }
 `
