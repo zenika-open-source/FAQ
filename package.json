@@ -40,8 +40,9 @@
     "test": "react-scripts test --env=jsdom",
     "lint": "eslint src --ext js,jsx",
     "lint:fix": "npm run lint -- --fix",
-    "prettier": "prettier \"src/**/*.{jsx,css,js}\" --write",
-    "prettier:check": "npm run prettier --check",
+    "prettier": "prettier \"src/**/*.{jsx,css,js}\"",
+    "prettier:write": "npm run prettier -- --write",
+    "prettier:check": "npm run prettier -- --check",
     "stats": "NODE_ENV=production webpack --config node_modules/react-scripts/config/webpack.config.prod.js --json > stats.json",
     "docz:dev": "docz dev",
     "docz:build": "sh ./docs/src/build.sh"

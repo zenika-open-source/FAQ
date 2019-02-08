@@ -29,8 +29,9 @@
     "generate_schema": "prisma generate",
     "lint": "eslint src --ext js",
     "lint:fix": "npm run lint -- --fix",
-    "prettier": "prettier src/**/* --write",
-    "prettier:check": "npm run prettier --check",
+    "prettier": "prettier src/**/*",
+    "prettier:write": "npm run prettier -- --write",
+    "prettier:check": "npm run prettier -- --check",
     "local_containers": "cd prisma/ && dotenv -e ../.env.local docker-compose up",
     "token": "dotenv -e .env.local bash scripts/prisma_token/token.sh"
   },
