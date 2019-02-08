@@ -59,7 +59,7 @@ class UserProfile extends Component {
     try {
       await deleteIdentity(identity)
     } finally {
-      this.setState({ deletingIdentity: false})
+      this.setState({ deletingIdentity: false })
     }
     auth.logout()
     this.setState({ redirectToLogin: true })
