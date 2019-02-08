@@ -18,8 +18,7 @@ const ResultList = ({
   onPageSelected,
   meta
 }) => {
-  const shouldShowLoading =
-    loading && (meta ? meta.pageCurrent !== pageCurrent : true)
+  const shouldShowLoading = loading && (meta ? meta.pageCurrent !== pageCurrent : true)
 
   if (!loading && nodes.length === 0) {
     return <NoResults prefill={searchText} />

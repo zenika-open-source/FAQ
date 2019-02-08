@@ -38,9 +38,11 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
     "lint": "eslint src --ext js,jsx",
     "lint:fix": "npm run lint -- --fix",
+    "prettier": "prettier \"src/**/*.{jsx,css,js}\"",
+    "prettier:write": "npm run prettier -- --write",
+    "prettier:check": "npm run prettier -- --check",
     "stats": "NODE_ENV=production webpack --config node_modules/react-scripts/config/webpack.config.prod.js --json > stats.json",
     "docz:dev": "docz dev",
     "docz:build": "sh ./docs/src/build.sh"
@@ -51,11 +53,13 @@
     "docz-theme-default": "^0.13.7",
     "dotenv": "^5.0.0",
     "dotenv-cli": "^1.4.0",
+    "eslint-config-prettier": "^4.0.0",
+    "eslint-config-react-app": "^3.0.6",
     "eslint-config-standard": "^12.0.0",
     "eslint-plugin-node": "^7.0.1",
     "eslint-plugin-promise": "^4.0.1",
-    "eslint-plugin-react": "^7.11.1",
     "eslint-plugin-standard": "^4.0.0",
+    "prettier": "^1.16.4",
     "webpack-cli": "^3.1.2"
   },
   "browserslist": [
@@ -63,5 +67,10 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "prettier": {
+    "semi": false,
+    "printWidth": 100,
+    "singleQuote": true
+  }
 }

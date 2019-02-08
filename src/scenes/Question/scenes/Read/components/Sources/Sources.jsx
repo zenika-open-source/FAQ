@@ -24,12 +24,7 @@ const Sources = ({ sources }) => {
         }}
       >
         {sources.map(source => (
-          <ListItem
-            key={source.id}
-            caption={source.label}
-            icon="library_books"
-            href={source.url}
-          />
+          <ListItem key={source.id} caption={source.label} icon="library_books" href={source.url} />
         ))}
       </List>
     </div>

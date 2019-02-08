@@ -3,10 +3,7 @@ import PropTypes from 'prop-types'
 import cn from 'classnames'
 
 const CardText = ({ children, collapsed, className, ...otherProps }) => (
-  <div
-    className={cn('card-item card-text', { collapsed }, className)}
-    {...otherProps}
-  >
+  <div className={cn('card-item card-text', { collapsed }, className)} {...otherProps}>
     {children}
   </div>
 )

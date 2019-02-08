@@ -2,10 +2,7 @@ const { history, ctxUser, slugify } = require('./helpers')
 const { algolia, slack } = require('./integrations')
 
 const confTagList = ctx =>
-  Object.values(ctx.prisma._meta.configuration.tags).reduce(
-    (acc, x) => acc.concat(x),
-    []
-  )
+  Object.values(ctx.prisma._meta.configuration.tags).reduce((acc, x) => acc.concat(x), [])
 
 module.exports = {
   Query: {
@@ -61,10 +58,7 @@ module.exports = {
       algolia.addNode(ctx, node.id)
       slack.sendToChannel(ctx, node.id)
 
-      return ctx.prisma.query.question(
-        { where: { id: node.question.id } },
-        info
-      )
+      return ctx.prisma.query.question({ where: { id: node.question.id } }, info)
     },
     updateQuestionAndTags: async (_, { id, title, tags }, ctx, info) => {
       const tagList = confTagList(ctx)
@@ -90,12 +84,8 @@ module.exports = {
       const oldTags = node.tags
       const newTags = tags
 
-      const tagsToAdd = newTags.filter(
-        newTag => !oldTags.map(t => t.label).includes(newTag)
-      )
-      const tagsToRemove = oldTags.filter(
-        oldTag => !newTags.includes(oldTag.label)
-      )
+      const tagsToAdd = newTags.filter(newTag => !oldTags.map(t => t.label).includes(newTag))
+      const tagsToRemove = oldTags.filter(oldTag => !newTags.includes(oldTag.label))
 
       const mutationsToAdd = tagsToAdd
         .filter(label => tagList.includes(label))

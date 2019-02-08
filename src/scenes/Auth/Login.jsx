@@ -15,10 +15,7 @@ const Login = ({ history, location }) => {
       .then(() => history.push(redirectedFrom))
       .catch(err => {
         if (err.error !== 'login_required') {
-          alert.pushError(
-            'Authentication failed: ' + JSON.stringify(err.message),
-            err
-          )
+          alert.pushError('Authentication failed: ' + JSON.stringify(err.message), err)
         }
         auth.logout() // Remove session for clean login
         history.push('/auth/login')

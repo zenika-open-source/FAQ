@@ -27,12 +27,7 @@ const Searchbar = ({ text, tags, loading, onTextChange, onTagsChange }) => (
       onClear={() => onTextChange('')}
     />
     <div className="filters">
-      <TagPicker
-        label="Filter by tags:"
-        icon="local_offer"
-        tags={tags}
-        onChange={onTagsChange}
-      />
+      <TagPicker label="Filter by tags:" icon="local_offer" tags={tags} onChange={onTagsChange} />
     </div>
   </div>
 )

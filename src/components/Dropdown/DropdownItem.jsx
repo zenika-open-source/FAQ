@@ -23,20 +23,12 @@ const DropdownItem = ({
   >
     <span className="left">
       {icon &&
-        (typeof icon === 'string' ? (
-          <i className="material-icons">{icon}</i>
-        ) : (
-          <i>{icon}</i>
-        ))}
+        (typeof icon === 'string' ? <i className="material-icons">{icon}</i> : <i>{icon}</i>)}
       {children}
     </span>
     <span className="right">
       {rightIcon &&
-        (typeof rightIcon === 'string' ? (
-          <i className="material-icons">{rightIcon}</i>
-        ) : (
-          rightIcon
-        ))}
+        (typeof rightIcon === 'string' ? <i className="material-icons">{rightIcon}</i> : rightIcon)}
     </span>
   </a>
 )

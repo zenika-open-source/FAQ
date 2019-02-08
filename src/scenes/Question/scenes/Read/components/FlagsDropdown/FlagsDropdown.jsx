@@ -18,10 +18,7 @@ const FlagsDropdown = ({ flags, onSelect, onRemove }) => {
         icon={flagMeta[type].icon}
         rightIcon={
           isSelected ? (
-            <i
-              className="material-icons close-icon"
-              onClick={() => isSelected && onRemove(type)}
-            >
+            <i className="material-icons close-icon" onClick={() => isSelected && onRemove(type)}>
               close
             </i>
           ) : null
@@ -34,11 +31,7 @@ const FlagsDropdown = ({ flags, onSelect, onRemove }) => {
     )
   })
 
-  return (
-    <Dropdown button={<Button icon="flag" label="Flag as ..." link />}>
-      {items}
-    </Dropdown>
-  )
+  return <Dropdown button={<Button icon="flag" label="Flag as ..." link />}>{items}</Dropdown>
 }
 
 FlagsDropdown.propTypes = {

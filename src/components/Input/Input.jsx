@@ -12,15 +12,7 @@ class Input extends Component {
   }
 
   render() {
-    const {
-      className,
-      value,
-      limit,
-      icon,
-      style,
-      onClear,
-      ...otherProps
-    } = this.props
+    const { className, value, limit, icon, style, onClear, ...otherProps } = this.props
     return (
       <div
         className={cn('input', className)}
@@ -29,29 +21,18 @@ class Input extends Component {
       >
         {icon && (
           <span className="input-icon">
-            {typeof icon === 'string' ? (
-              <i className="material-icons">{icon}</i>
-            ) : (
-              <i>{icon}</i>
-            )}
+            {typeof icon === 'string' ? <i className="material-icons">{icon}</i> : <i>{icon}</i>}
           </span>
         )}
-        <input
-          type="text"
-          value={value}
-          maxLength={limit}
-          ref={this.input}
-          {...otherProps}
-        />
+        <input type="text" value={value} maxLength={limit} ref={this.input} {...otherProps} />
         {limit && (
           <i className="limit">
             {value ? value.length : 0}/{limit}
           </i>
         )}
-        {onClear &&
-          value.length > 0 && (
+        {onClear && value.length > 0 && (
           <i className="close material-icons" onClick={onClear}>
-              close
+            close
           </i>
         )}
       </div>

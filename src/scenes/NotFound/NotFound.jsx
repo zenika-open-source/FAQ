@@ -6,12 +6,7 @@ import Button from 'components/Button'
 
 const NotFound = ({ history }) => (
   <div>
-    <Button
-      icon="chevron_left"
-      label="Home"
-      link
-      onClick={() => history.push('/')}
-    />
+    <Button icon="chevron_left" label="Home" link onClick={() => history.push('/')} />
     <div style={{ textAlign: 'center' }}>
       <h1>Ooops! 404</h1>
       <br />

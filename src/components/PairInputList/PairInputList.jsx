@@ -9,14 +9,7 @@ import PairInput from './PairInput'
 
 const noop = () => {}
 
-const PairInputList = ({
-  pairs,
-  options,
-  actions,
-  disabled,
-  className,
-  ...rest
-}) => {
+const PairInputList = ({ pairs, options, actions, disabled, className, ...rest }) => {
   const defaultOptions = {
     labels: {
       more: 'More pairs',
@@ -45,9 +38,7 @@ const PairInputList = ({
   return (
     <div className={cn('pair-input-list', className)} {...rest}>
       {options.title && !isEmpty ? (
-        <h3 style={{ color: 'var(--primary-color)', margin: '0.7rem' }}>
-          {options.title}
-        </h3>
+        <h3 style={{ color: 'var(--primary-color)', margin: '0.7rem' }}>{options.title}</h3>
       ) : null}
       {pairs.map(pair => (
         <PairInput
@@ -65,16 +56,8 @@ const PairInputList = ({
       >
         {
           <Button
-            icon={
-              isEmpty
-                ? options.icons.add || options.icons.more
-                : options.icons.more
-            }
-            label={
-              isEmpty
-                ? options.labels.add || options.labels.more
-                : options.labels.more
-            }
+            icon={isEmpty ? options.icons.add || options.icons.more : options.icons.more}
+            label={isEmpty ? options.labels.add || options.labels.more : options.labels.more}
             link
             raised
             onClick={actions.create}

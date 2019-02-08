@@ -16,7 +16,6 @@ module.exports = {
     }
   },
   History: {
-    historyActions: (parent, args, ctx, info) =>
-      ctx.prisma.query.historyActions(parent, info)
+    historyActions: (parent, args, ctx, info) => ctx.prisma.query.historyActions(parent, info)
   }
 }

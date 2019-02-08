@@ -9,9 +9,7 @@ const checkJwt = (req, res, next, prisma) => {
   } = prisma._meta
 
   if (!conf.auth0Domain || !conf.auth0ClientId) {
-    throw new Error(
-      `No auth0 configuration found for service ${name}/${stage}!`
-    )
+    throw new Error(`No auth0 configuration found for service ${name}/${stage}!`)
   }
 
   const [authType, token] = (req.headers.authorization || '').split(' ')
@@ -48,10 +46,7 @@ const checkJwt = (req, res, next, prisma) => {
 
     options = {
       secret: (req, payload, done) => {
-        if (
-          !payload ||
-          req.headers['prisma-service'] !== payload.prismaService
-        ) {
+        if (!payload || req.headers['prisma-service'] !== payload.prismaService) {
           return done(
             new UnauthorizedError(
               'wrong-prisma-service',

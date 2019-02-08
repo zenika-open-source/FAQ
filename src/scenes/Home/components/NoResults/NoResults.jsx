@@ -18,12 +18,7 @@ const NoResults = ({ prefill }) => (
     </div>
     <br />
     <Link to={{ pathname: '/q/new', state: { question: prefill } }}>
-      <Button
-        icon="record_voice_over"
-        label="Ask the question!"
-        primary
-        raised
-      />
+      <Button icon="record_voice_over" label="Ask the question!" primary raised />
     </Link>
   </div>
 )

@@ -28,10 +28,7 @@ class Alert extends Component {
         })}
       >
         <div className={cn('alert', 'is-' + alert.type)}>
-          <button
-            className="delete"
-            onClick={() => this.context.closeAlert(alert)}
-          />
+          <button className="delete" onClick={() => this.context.closeAlert(alert)} />
           <div className="alert-content">{alert.message}</div>
         </div>
       </div>

@@ -25,9 +25,7 @@ const apollo = new ApolloClient({
       }
       if (networkError) {
         // eslint-disable-next-line no-console
-        console.error(
-          `[Network error]: ${networkError}. Please refresh the page.`
-        )
+        console.error(`[Network error]: ${networkError}. Please refresh the page.`)
       }
     }),
     setContext((_, { headers }) => {
@@ -52,10 +50,7 @@ const apollo = new ApolloClient({
   }
 })
 
-const query = (
-  query,
-  { variables, skip, parse, ...queryProps } = {}
-) => Wrapped => {
+const query = (query, { variables, skip, parse, ...queryProps } = {}) => Wrapped => {
   const ApolloQueryWrapper = props => (
     <Query
       query={query}

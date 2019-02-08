@@ -8,11 +8,7 @@ import { submitQuestion, editQuestion } from './queries'
 
 import { alert } from 'services'
 
-import Card, {
-  CardText,
-  CardActions,
-  PermanentClosableCard
-} from 'components/Card'
+import Card, { CardText, CardActions, PermanentClosableCard } from 'components/Card'
 import { Loading, Button, Input, CtrlEnter, TagPicker } from 'components'
 
 import ActionMenu from '../../components/ActionMenu'
@@ -63,10 +59,7 @@ class Edit extends Component {
     submitQuestion(this.state.question, this.state.tags)
       .then(({ data }) => {
         this.setState({
-          slug:
-            data.createQuestionAndTags.slug +
-            '-' +
-            data.createQuestionAndTags.node.id
+          slug: data.createQuestionAndTags.slug + '-' + data.createQuestionAndTags.node.id
         })
         alert.pushSuccess('Your question was successfully submitted!')
       })
@@ -89,12 +82,7 @@ class Edit extends Component {
 
     this.setState({ loadingSubmit: true })
 
-    editQuestion(
-      zNode.question.id,
-      this.state.question,
-      this.state.tags,
-      zNode.id
-    )
+    editQuestion(zNode.question.id, this.state.question, this.state.tags, zNode.id)
       .then(({ data }) => {
         this.setState({
           slug: data.updateQuestionAndTags.slug + '-' + zNode.id
@@ -135,14 +123,7 @@ class Edit extends Component {
 
   render() {
     const { match, zNode } = this.props
-    const {
-      isEditing,
-      loadingSubmit,
-      slug,
-      question,
-      tags,
-      showTips
-    } = this.state
+    const { isEditing, loadingSubmit, slug, question, tags, showTips } = this.state
 
     if (slug) {
       return <Redirect to={`/q/${slug}`} />
@@ -178,10 +159,7 @@ class Edit extends Component {
         <Tips close={this.toggleTips(false)} open={showTips} />
         <Card>
           <CardText style={{ display: 'flex', paddingBottom: 0 }}>
-            <CtrlEnter
-              onCtrlEnterCallback={this.submitForm}
-              style={{ width: '100%' }}
-            >
+            <CtrlEnter onCtrlEnterCallback={this.submitForm} style={{ width: '100%' }}>
               <Input
                 autoFocus
                 icon="help"

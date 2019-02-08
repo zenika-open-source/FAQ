@@ -52,9 +52,7 @@ class Result extends Component {
         </CardTitle>
         <CardText collapsed={collapsed}>
           {node.answer ? (
-            markdown.html(
-              node.highlights ? node.highlights.answer : node.answer.content
-            )
+            markdown.html(node.highlights ? node.highlights.answer : node.answer.content)
           ) : (
             <p style={{ textAlign: 'center' }}>
               <i>No answer yet...</i>

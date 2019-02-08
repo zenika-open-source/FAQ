@@ -7,25 +7,11 @@ import Button from 'components/Button'
 
 import './ActionMenu.css'
 
-const ActionMenu = ({
-  backLabel,
-  backLink,
-  goBack,
-  title,
-  children,
-  history,
-  location
-}) => (
+const ActionMenu = ({ backLabel, backLink, goBack, title, children, history, location }) => (
   <div className="action-menu">
     <div className="back-btn">
       {goBack && location.state && location.state.from === 'home' ? (
-        <Button
-          icon="chevron_left"
-          label={'Back'}
-          link
-          raised
-          onClick={() => history.goBack()}
-        />
+        <Button icon="chevron_left" label={'Back'} link raised onClick={() => history.goBack()} />
       ) : (
         <Link to={backLink}>
           <Button icon="chevron_left" label={backLabel || 'Back'} link raised />

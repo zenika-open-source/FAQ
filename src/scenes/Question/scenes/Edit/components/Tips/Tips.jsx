@@ -8,17 +8,12 @@ const Tips = props => (
     <div style={{ textAlign: 'center' }}>
       <ul style={{ textAlign: 'left' }}>
         <li>
-          Search the FAQ before you add your question to make sure it
-          doesn&#39;t already exist.
+          Search the FAQ before you add your question to make sure it doesn&#39;t already exist.
         </li>
-        <li>
-          You don&#39;t have to strike for the perfect wording. Others can
-          improve it.
-        </li>
+        <li>You don&#39;t have to strike for the perfect wording. Others can improve it.</li>
         <li>
           <span>
-            Privilege questions responding to the <b>how</b> rather than the{' '}
-            <b>why</b>.
+            Privilege questions responding to the <b>how</b> rather than the <b>why</b>.
           </span>
         </li>
         <li>Stay objective and factual.</li>
@@ -36,9 +31,7 @@ const Tips = props => (
           <li>Where can I get the ElasticSearch training material?</li>
           <li>How can I use Alibeez API?</li>
           <li>How to reach the Nantes office from the train station?</li>
-          <li>
-            What&#39;s the difference between pay with and without variable?
-          </li>
+          <li>What&#39;s the difference between pay with and without variable?</li>
         </ul>
       </div>
       <div>

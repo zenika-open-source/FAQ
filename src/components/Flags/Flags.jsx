@@ -24,23 +24,12 @@ const Flags = ({ node, withLabels }) => {
         let tooltip
 
         if (withLabels && flag.user) {
-          tooltip =
-            'By ' +
-            flag.user.name +
-            ' on ' +
-            format(flag.createdAt, 'D MMM YYYY')
+          tooltip = 'By ' + flag.user.name + ' on ' + format(flag.createdAt, 'D MMM YYYY')
         } else {
           tooltip = flag.type.toUpperCase()
         }
 
-        return (
-          <Flag
-            key={flag.id}
-            withlabel={withLabels}
-            data-tooltip={tooltip}
-            flag={flag}
-          />
-        )
+        return <Flag key={flag.id} withlabel={withLabels} data-tooltip={tooltip} flag={flag} />
       })}
     </div>
   )
