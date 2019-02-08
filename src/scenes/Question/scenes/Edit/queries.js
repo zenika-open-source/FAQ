@@ -22,7 +22,12 @@ export const submitQuestionMutation = gql`
 
 export const editQuestionMutation = gql`
   mutation($questionId: ID!, $title: String!, $previousTitle: String!, $tags: [String!]!) {
-    updateQuestionAndTags(id: $questionId, title: $title, previousTitle: $previousTitle, tags: $tags) {
+    updateQuestionAndTags(
+      id: $questionId
+      title: $title
+      previousTitle: $previousTitle
+      tags: $tags
+    ) {
       id
       title
       slug

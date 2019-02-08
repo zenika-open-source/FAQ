@@ -29,7 +29,12 @@ export const submitAnswerMutation = gql`
 
 export const editAnswerMutation = gql`
   mutation($id: ID!, $content: String!, $previousContent: String!, $sources: String!) {
-    updateAnswerAndSources(id: $id, content: $content, previousContent: $previousContent, sources: $sources) {
+    updateAnswerAndSources(
+      id: $id
+      content: $content
+      previousContent: $previousContent
+      sources: $sources
+    ) {
       id
       content
       sources {

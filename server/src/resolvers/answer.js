@@ -90,7 +90,9 @@ module.exports = {
         `
       )
       if (previousContent !== answer.content) {
-        throw new Error('Another user edited the answer before you, copy your version and refresh the page. If you don\'t copy your version, It will be lost')
+        throw new Error(
+          "Another user edited the answer before you, copy your version and refresh the page. If you don't copy your version, It will be lost"
+        )
       }
 
       const oldSources = answer.sources
