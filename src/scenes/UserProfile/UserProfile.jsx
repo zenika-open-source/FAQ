@@ -130,6 +130,7 @@ class UserProfile extends Component {
                 primary
                 type="button"
                 onClick={() => this.deleteIdentity(this.state.identity)}
+                data-tooltip="This will erase all your personal data from FAQ"
               >
                 Forget Me
               </Button>
