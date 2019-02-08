@@ -30,11 +30,12 @@ class Input extends Component {
             {value ? value.length : 0}/{limit}
           </i>
         )}
-        {onClear && value.length > 0 && (
-          <i className="close material-icons" onClick={onClear}>
-            close
-          </i>
-        )}
+        {onClear &&
+          value.length > 0 && (
+            <i className="close material-icons" onClick={onClear}>
+              close
+            </i>
+          )}
       </div>
     )
   }

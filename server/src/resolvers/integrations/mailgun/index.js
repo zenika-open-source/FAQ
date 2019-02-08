@@ -12,9 +12,7 @@ class Mailgun {
 
     if (!conf.mailgunDomain || !conf.mailgunApiKey) {
       // eslint-disable-next-line no-console
-      console.warn(
-        `Please provide a mailgun domain and api key for service ${name}/${stage}`
-      )
+      console.warn(`Please provide a mailgun domain and api key for service ${name}/${stage}`)
       return null
     }
 

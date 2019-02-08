@@ -4,8 +4,7 @@ const XSSFilter = require('showdown-xss-filter')
 const { requireText, emojify } = require('../../../helpers')
 
 const answer = {
-  generateHtml: variables =>
-    mjml2html(requireText('./answer.mjml', require, variables)).html,
+  generateHtml: variables => mjml2html(requireText('./answer.mjml', require, variables)).html,
   generateText: variables => requireText('./answer.txt', require, variables),
   generateMail(node, conf, ctx) {
     const showdown = new Converter({

@@ -14,7 +14,8 @@ const NoResults = ({ prefill }) => (
         alignItems: 'center'
       }}
     >
-      Nothing found &nbsp;<i className="material-icons">sms_failed</i>
+      Nothing found &nbsp;
+      <i className="material-icons">sms_failed</i>
     </div>
     <br />
     <Link to={{ pathname: '/q/new', state: { question: prefill } }}>
