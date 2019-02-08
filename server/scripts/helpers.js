@@ -81,9 +81,7 @@ const queryService = (name, stage, gql) => {
 
 // Implicit env required: PRISMA_URL, PRISMA_MANAGEMENT_API_SECRET
 const queryManagement = gql => {
-  const token = generateManagementToken(
-    process.env.PRISMA_MANAGEMENT_API_SECRET
-  )
+  const token = generateManagementToken(process.env.PRISMA_MANAGEMENT_API_SECRET)
   return gqlQuery({
     url: process.env.PRISMA_URL + '/management',
     token,

@@ -1,12 +1,6 @@
 const { env, run, queryManagement, queryService } = require('../helpers')
 
-const {
-  PRISMA_URL,
-  AUTH0_DOMAIN,
-  AUTH0_CLIENT_ID,
-  SERVICE_NAME,
-  SERVICE_STAGE
-} = env([
+const { PRISMA_URL, AUTH0_DOMAIN, AUTH0_CLIENT_ID, SERVICE_NAME, SERVICE_STAGE } = env([
   'PRISMA_URL',
   'PRISMA_API_SECRET', // Implicitely required
   'PRISMA_MANAGEMENT_API_SECRET', // Implicitely required
@@ -67,9 +61,7 @@ const main = async () => {
   )
 
   // Log success
-  console.log(
-    `Successfully deployed a new service (${serviceName}/${serviceStage})!`
-  )
+  console.log(`Successfully deployed a new service (${serviceName}/${serviceStage})!`)
 }
 
 main()
