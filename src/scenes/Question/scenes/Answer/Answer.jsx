@@ -107,6 +107,7 @@ class Answer extends Component {
     editAnswer(
       typeof answerId === 'string' ? answerId : zNode.answer.id,
       answer.text,
+      this.state.initialAnswer,
       this.keyValuePairsToSources(sources)
     )
       .then(() => {

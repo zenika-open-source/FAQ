@@ -36,10 +36,15 @@ type Mutation {
   authenticate(idToken: String!): User
 
   createQuestionAndTags(title: String!, tags: [String!]!): Question
-  updateQuestionAndTags(id: ID!, title: String!, tags: [String!]!): Question
+  updateQuestionAndTags(id: ID!, title: String!, previousTitle: String!, tags: [String!]!): Question
 
   createAnswerAndSources(content: String, sources: String!, nodeId: ID!): Answer
-  updateAnswerAndSources(id: ID!, content: String, sources: String!): Answer
+  updateAnswerAndSources(
+    id: ID!
+    content: String
+    previousContent: String!
+    sources: String!
+  ): Answer
 
   addFlag(type: String!, nodeId: ID!): ZNode
   removeFlag(type: String!, nodeId: ID!): ZNode
