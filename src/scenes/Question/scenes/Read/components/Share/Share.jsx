@@ -12,10 +12,12 @@ import './Share.css'
 
 const Share = props => {
   const shareUrl = routing.getShareUrl(props.node.id)
+  // Change Here the showWorkplaceButton status
+  const showWorkplaceButton = true
   return (
     <div className="share">
       <Dropdown button={<Button icon="share" link style={{ padding: '0.2rem' }} />}>
-        <DropdownItem
+      { showWorkplaceButton ? <DropdownItem
           icon={<i className="fab fa-facebook" />}
           onClick={() => {
             let url =
@@ -28,7 +30,7 @@ const Share = props => {
           }}
         >
           Workplace
-        </DropdownItem>
+        </DropdownItem> : null}        
         <DropdownItem icon="link" onClick={() => copy(shareUrl)}>
           Copy link
         </DropdownItem>
