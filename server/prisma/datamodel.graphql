@@ -128,5 +128,5 @@ type Configuration {
 
   tags: Json
 
-  workplaceButton: Boolean! @default(value:false)
+  enableWorkplaceSharing: Boolean! @default(value:false)
 }
