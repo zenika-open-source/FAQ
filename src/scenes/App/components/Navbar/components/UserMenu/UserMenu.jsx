@@ -21,7 +21,11 @@ const UserMenu = ({ history, me }) => (
     <DropdownItem icon={<GithubIcon />} href="https://github.com/Zenika/FAQ" target="_blank">
       Github
     </DropdownItem>
-    <DropdownItem icon="bug_report" href="https://github.com/Zenika/FAQ/issues" target="_blank">
+    <DropdownItem
+      icon="bug_report"
+      href="https://github.com/Zenika/FAQ/issues/new?template=bug_report.md"
+      target="_blank"
+    >
       Bug report
     </DropdownItem>
     <DropdownDivider />
