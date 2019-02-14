@@ -282,7 +282,7 @@ type Configuration {
   mailgunApiKey: String
   slackChannelHook: String
   tags: Json
-  enableWorkplaceSharing: Boolean
+  enableWorkplaceSharing: Boolean!
 }
 
 type ConfigurationConnection {
@@ -357,7 +357,7 @@ type ConfigurationPreviousValues {
   mailgunApiKey: String
   slackChannelHook: String
   tags: Json
-  enableWorkplaceSharing: Boolean
+  enableWorkplaceSharing: Boolean!
 }
 
 type ConfigurationSubscriptionPayload {
