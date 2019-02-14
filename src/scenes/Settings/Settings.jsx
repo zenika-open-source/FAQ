@@ -25,7 +25,7 @@ class Settings extends Component {
   }
 
   onTitleChange = title => this.setState({ title })
-  onEnableWorkplaceChange = enableWorkplace => this.setState({enableWorkplace})
+  onEnableWorkplaceChange = enableWorkplace => this.setState({ enableWorkplace })
 
   tagsToList(tags) {
     return Object.entries(tags || {}).map(([key, value], id) => ({
@@ -141,8 +141,12 @@ class Settings extends Component {
             />
             <hr />
             <h2>Integrations</h2>
-            <br/>
-            <Checkbox label="Workplace" checked={enableWorkplace} onChange={e => this.onEnableWorkplaceChange(e.target.checked)}></Checkbox>
+            <br />
+            <Checkbox
+              label="Workplace"
+              checked={enableWorkplace}
+              onChange={e => this.onEnableWorkplaceChange(e.target.checked)}
+            />
           </CardText>
           <CardActions>
             <Button primary label="Save" onClick={this.onSave} loading={loading} />
