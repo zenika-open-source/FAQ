@@ -37,15 +37,7 @@ type AggregateZNode {
 type Answer {
   id: ID!
   content: String!
-  sources(
-    where: SourceWhereInput
-    orderBy: SourceOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [Source!]
+  sources(where: SourceWhereInput, orderBy: SourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Source!]
   node: ZNode!
   user: User!
   createdAt: DateTime!
@@ -290,6 +282,7 @@ type Configuration {
   mailgunApiKey: String
   slackChannelHook: String
   tags: Json
+  enableWorkplaceSharing: Boolean
 }
 
 type ConfigurationConnection {
@@ -310,6 +303,7 @@ input ConfigurationCreateInput {
   mailgunApiKey: String
   slackChannelHook: String
   tags: Json
+  enableWorkplaceSharing: Boolean
 }
 
 type ConfigurationEdge {
@@ -342,6 +336,8 @@ enum ConfigurationOrderByInput {
   slackChannelHook_DESC
   tags_ASC
   tags_DESC
+  enableWorkplaceSharing_ASC
+  enableWorkplaceSharing_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -361,6 +357,7 @@ type ConfigurationPreviousValues {
   mailgunApiKey: String
   slackChannelHook: String
   tags: Json
+  enableWorkplaceSharing: Boolean
 }
 
 type ConfigurationSubscriptionPayload {
@@ -393,6 +390,7 @@ input ConfigurationUpdateInput {
   mailgunApiKey: String
   slackChannelHook: String
   tags: Json
+  enableWorkplaceSharing: Boolean
 }
 
 input ConfigurationUpdateManyMutationInput {
@@ -407,6 +405,7 @@ input ConfigurationUpdateManyMutationInput {
   mailgunApiKey: String
   slackChannelHook: String
   tags: Json
+  enableWorkplaceSharing: Boolean
 }
 
 input ConfigurationWhereInput {
@@ -550,6 +549,8 @@ input ConfigurationWhereInput {
   slackChannelHook_not_starts_with: String
   slackChannelHook_ends_with: String
   slackChannelHook_not_ends_with: String
+  enableWorkplaceSharing: Boolean
+  enableWorkplaceSharing_not: Boolean
   AND: [ConfigurationWhereInput!]
   OR: [ConfigurationWhereInput!]
   NOT: [ConfigurationWhereInput!]
@@ -982,76 +983,37 @@ type Mutation {
   createAnswer(data: AnswerCreateInput!): Answer!
   updateAnswer(data: AnswerUpdateInput!, where: AnswerWhereUniqueInput!): Answer
   updateManyAnswers(data: AnswerUpdateManyMutationInput!, where: AnswerWhereInput): BatchPayload!
-  upsertAnswer(
-    where: AnswerWhereUniqueInput!
-    create: AnswerCreateInput!
-    update: AnswerUpdateInput!
-  ): Answer!
+  upsertAnswer(where: AnswerWhereUniqueInput!, create: AnswerCreateInput!, update: AnswerUpdateInput!): Answer!
   deleteAnswer(where: AnswerWhereUniqueInput!): Answer
   deleteManyAnswers(where: AnswerWhereInput): BatchPayload!
   createConfiguration(data: ConfigurationCreateInput!): Configuration!
-  updateConfiguration(
-    data: ConfigurationUpdateInput!
-    where: ConfigurationWhereUniqueInput!
-  ): Configuration
-  updateManyConfigurations(
-    data: ConfigurationUpdateManyMutationInput!
-    where: ConfigurationWhereInput
-  ): BatchPayload!
-  upsertConfiguration(
-    where: ConfigurationWhereUniqueInput!
-    create: ConfigurationCreateInput!
-    update: ConfigurationUpdateInput!
-  ): Configuration!
+  updateConfiguration(data: ConfigurationUpdateInput!, where: ConfigurationWhereUniqueInput!): Configuration
+  updateManyConfigurations(data: ConfigurationUpdateManyMutationInput!, where: ConfigurationWhereInput): BatchPayload!
+  upsertConfiguration(where: ConfigurationWhereUniqueInput!, create: ConfigurationCreateInput!, update: ConfigurationUpdateInput!): Configuration!
   deleteConfiguration(where: ConfigurationWhereUniqueInput!): Configuration
   deleteManyConfigurations(where: ConfigurationWhereInput): BatchPayload!
   createFlag(data: FlagCreateInput!): Flag!
   updateFlag(data: FlagUpdateInput!, where: FlagWhereUniqueInput!): Flag
   updateManyFlags(data: FlagUpdateManyMutationInput!, where: FlagWhereInput): BatchPayload!
-  upsertFlag(
-    where: FlagWhereUniqueInput!
-    create: FlagCreateInput!
-    update: FlagUpdateInput!
-  ): Flag!
+  upsertFlag(where: FlagWhereUniqueInput!, create: FlagCreateInput!, update: FlagUpdateInput!): Flag!
   deleteFlag(where: FlagWhereUniqueInput!): Flag
   deleteManyFlags(where: FlagWhereInput): BatchPayload!
   createHistoryAction(data: HistoryActionCreateInput!): HistoryAction!
-  updateHistoryAction(
-    data: HistoryActionUpdateInput!
-    where: HistoryActionWhereUniqueInput!
-  ): HistoryAction
-  updateManyHistoryActions(
-    data: HistoryActionUpdateManyMutationInput!
-    where: HistoryActionWhereInput
-  ): BatchPayload!
-  upsertHistoryAction(
-    where: HistoryActionWhereUniqueInput!
-    create: HistoryActionCreateInput!
-    update: HistoryActionUpdateInput!
-  ): HistoryAction!
+  updateHistoryAction(data: HistoryActionUpdateInput!, where: HistoryActionWhereUniqueInput!): HistoryAction
+  updateManyHistoryActions(data: HistoryActionUpdateManyMutationInput!, where: HistoryActionWhereInput): BatchPayload!
+  upsertHistoryAction(where: HistoryActionWhereUniqueInput!, create: HistoryActionCreateInput!, update: HistoryActionUpdateInput!): HistoryAction!
   deleteHistoryAction(where: HistoryActionWhereUniqueInput!): HistoryAction
   deleteManyHistoryActions(where: HistoryActionWhereInput): BatchPayload!
   createQuestion(data: QuestionCreateInput!): Question!
   updateQuestion(data: QuestionUpdateInput!, where: QuestionWhereUniqueInput!): Question
-  updateManyQuestions(
-    data: QuestionUpdateManyMutationInput!
-    where: QuestionWhereInput
-  ): BatchPayload!
-  upsertQuestion(
-    where: QuestionWhereUniqueInput!
-    create: QuestionCreateInput!
-    update: QuestionUpdateInput!
-  ): Question!
+  updateManyQuestions(data: QuestionUpdateManyMutationInput!, where: QuestionWhereInput): BatchPayload!
+  upsertQuestion(where: QuestionWhereUniqueInput!, create: QuestionCreateInput!, update: QuestionUpdateInput!): Question!
   deleteQuestion(where: QuestionWhereUniqueInput!): Question
   deleteManyQuestions(where: QuestionWhereInput): BatchPayload!
   createSource(data: SourceCreateInput!): Source!
   updateSource(data: SourceUpdateInput!, where: SourceWhereUniqueInput!): Source
   updateManySources(data: SourceUpdateManyMutationInput!, where: SourceWhereInput): BatchPayload!
-  upsertSource(
-    where: SourceWhereUniqueInput!
-    create: SourceCreateInput!
-    update: SourceUpdateInput!
-  ): Source!
+  upsertSource(where: SourceWhereUniqueInput!, create: SourceCreateInput!, update: SourceUpdateInput!): Source!
   deleteSource(where: SourceWhereUniqueInput!): Source
   deleteManySources(where: SourceWhereInput): BatchPayload!
   createTag(data: TagCreateInput!): Tag!
@@ -1063,21 +1025,13 @@ type Mutation {
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
-  upsertUser(
-    where: UserWhereUniqueInput!
-    create: UserCreateInput!
-    update: UserUpdateInput!
-  ): User!
+  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   deleteUser(where: UserWhereUniqueInput!): User
   deleteManyUsers(where: UserWhereInput): BatchPayload!
   createZNode(data: ZNodeCreateInput!): ZNode!
   updateZNode(data: ZNodeUpdateInput!, where: ZNodeWhereUniqueInput!): ZNode
   updateManyZNodes(data: ZNodeUpdateManyMutationInput!, where: ZNodeWhereInput): BatchPayload!
-  upsertZNode(
-    where: ZNodeWhereUniqueInput!
-    create: ZNodeCreateInput!
-    update: ZNodeUpdateInput!
-  ): ZNode!
+  upsertZNode(where: ZNodeWhereUniqueInput!, create: ZNodeCreateInput!, update: ZNodeUpdateInput!): ZNode!
   deleteZNode(where: ZNodeWhereUniqueInput!): ZNode
   deleteManyZNodes(where: ZNodeWhereInput): BatchPayload!
 }
@@ -1101,176 +1055,32 @@ type PageInfo {
 
 type Query {
   answer(where: AnswerWhereUniqueInput!): Answer
-  answers(
-    where: AnswerWhereInput
-    orderBy: AnswerOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [Answer]!
-  answersConnection(
-    where: AnswerWhereInput
-    orderBy: AnswerOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): AnswerConnection!
+  answers(where: AnswerWhereInput, orderBy: AnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Answer]!
+  answersConnection(where: AnswerWhereInput, orderBy: AnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AnswerConnection!
   configuration(where: ConfigurationWhereUniqueInput!): Configuration
-  configurations(
-    where: ConfigurationWhereInput
-    orderBy: ConfigurationOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [Configuration]!
-  configurationsConnection(
-    where: ConfigurationWhereInput
-    orderBy: ConfigurationOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): ConfigurationConnection!
+  configurations(where: ConfigurationWhereInput, orderBy: ConfigurationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Configuration]!
+  configurationsConnection(where: ConfigurationWhereInput, orderBy: ConfigurationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ConfigurationConnection!
   flag(where: FlagWhereUniqueInput!): Flag
-  flags(
-    where: FlagWhereInput
-    orderBy: FlagOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [Flag]!
-  flagsConnection(
-    where: FlagWhereInput
-    orderBy: FlagOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): FlagConnection!
+  flags(where: FlagWhereInput, orderBy: FlagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Flag]!
+  flagsConnection(where: FlagWhereInput, orderBy: FlagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FlagConnection!
   historyAction(where: HistoryActionWhereUniqueInput!): HistoryAction
-  historyActions(
-    where: HistoryActionWhereInput
-    orderBy: HistoryActionOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [HistoryAction]!
-  historyActionsConnection(
-    where: HistoryActionWhereInput
-    orderBy: HistoryActionOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): HistoryActionConnection!
+  historyActions(where: HistoryActionWhereInput, orderBy: HistoryActionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [HistoryAction]!
+  historyActionsConnection(where: HistoryActionWhereInput, orderBy: HistoryActionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): HistoryActionConnection!
   question(where: QuestionWhereUniqueInput!): Question
-  questions(
-    where: QuestionWhereInput
-    orderBy: QuestionOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [Question]!
-  questionsConnection(
-    where: QuestionWhereInput
-    orderBy: QuestionOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): QuestionConnection!
+  questions(where: QuestionWhereInput, orderBy: QuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Question]!
+  questionsConnection(where: QuestionWhereInput, orderBy: QuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): QuestionConnection!
   source(where: SourceWhereUniqueInput!): Source
-  sources(
-    where: SourceWhereInput
-    orderBy: SourceOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [Source]!
-  sourcesConnection(
-    where: SourceWhereInput
-    orderBy: SourceOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): SourceConnection!
+  sources(where: SourceWhereInput, orderBy: SourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Source]!
+  sourcesConnection(where: SourceWhereInput, orderBy: SourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SourceConnection!
   tag(where: TagWhereUniqueInput!): Tag
-  tags(
-    where: TagWhereInput
-    orderBy: TagOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [Tag]!
-  tagsConnection(
-    where: TagWhereInput
-    orderBy: TagOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): TagConnection!
+  tags(where: TagWhereInput, orderBy: TagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Tag]!
+  tagsConnection(where: TagWhereInput, orderBy: TagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TagConnection!
   user(where: UserWhereUniqueInput!): User
-  users(
-    where: UserWhereInput
-    orderBy: UserOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [User]!
-  usersConnection(
-    where: UserWhereInput
-    orderBy: UserOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): UserConnection!
+  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
+  usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   zNode(where: ZNodeWhereUniqueInput!): ZNode
-  zNodes(
-    where: ZNodeWhereInput
-    orderBy: ZNodeOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [ZNode]!
-  zNodesConnection(
-    where: ZNodeWhereInput
-    orderBy: ZNodeOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): ZNodeConnection!
+  zNodes(where: ZNodeWhereInput, orderBy: ZNodeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ZNode]!
+  zNodesConnection(where: ZNodeWhereInput, orderBy: ZNodeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ZNodeConnection!
   node(id: ID!): Node
 }
 
@@ -1860,51 +1670,11 @@ type User {
   email: String
   picture: String
   locale: String
-  questions(
-    where: QuestionWhereInput
-    orderBy: QuestionOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [Question!]
-  answers(
-    where: AnswerWhereInput
-    orderBy: AnswerOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [Answer!]
-  flags(
-    where: FlagWhereInput
-    orderBy: FlagOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [Flag!]
-  tags(
-    where: TagWhereInput
-    orderBy: TagOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [Tag!]
-  history(
-    where: HistoryActionWhereInput
-    orderBy: HistoryActionOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [HistoryAction!]
+  questions(where: QuestionWhereInput, orderBy: QuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Question!]
+  answers(where: AnswerWhereInput, orderBy: AnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Answer!]
+  flags(where: FlagWhereInput, orderBy: FlagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Flag!]
+  tags(where: TagWhereInput, orderBy: TagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Tag!]
+  history(where: HistoryActionWhereInput, orderBy: HistoryActionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [HistoryAction!]
   createdAt: DateTime!
 }
 
@@ -2375,33 +2145,9 @@ type ZNode {
   id: ID!
   question: Question
   answer: Answer
-  flags(
-    where: FlagWhereInput
-    orderBy: FlagOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [Flag!]
-  tags(
-    where: TagWhereInput
-    orderBy: TagOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [Tag!]
-  history(
-    where: HistoryActionWhereInput
-    orderBy: HistoryActionOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [HistoryAction!]
+  flags(where: FlagWhereInput, orderBy: FlagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Flag!]
+  tags(where: TagWhereInput, orderBy: TagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Tag!]
+  history(where: HistoryActionWhereInput, orderBy: HistoryActionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [HistoryAction!]
   highlights: Json
 }
 

@@ -127,4 +127,6 @@ type Configuration {
   slackChannelHook: String
 
   tags: Json
+
+  enableWorkplaceSharing: Boolean @default(value:false)
 }
