@@ -8,13 +8,14 @@ export const getConfiguration = gql`
       title
       algoliaSynonyms
       tags
+      enableWorkplaceSharing
     }
   }
 `
 
 export const updateConfigurationMutation = gql`
-  mutation updateConfiguration($title: String, $tags: Json!, $synonyms: Json!) {
-    updateConfiguration(title: $title, tags: $tags, algoliaSynonyms: $synonyms) {
+  mutation updateConfiguration($title: String, $tags: Json!, $synonyms: Json!, $enableWorkplace: Boolean!) {
+    updateConfiguration(title: $title, tags: $tags, algoliaSynonyms: $synonyms, enableWorkplaceSharing: $enableWorkplace) {
       id
     }
   }

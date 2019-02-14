@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { onListChange } from 'helpers'
 import { alert, configuration } from 'services'
 
-import { PairInputList, Button, Input } from 'components'
+import { PairInputList, Button, Input, Checkbox } from 'components'
 import Card, { CardTitle, CardText, CardActions } from 'components/Card'
 
 import './Settings.css'
@@ -19,11 +19,13 @@ class Settings extends Component {
       loading: false,
       title: configuration.title,
       tags: this.tagsToList(configuration.tags),
-      synonyms: this.synonymsToList(configuration.algoliaSynonyms)
+      synonyms: this.synonymsToList(configuration.algoliaSynonyms),
+      enableWorkplace: configuration.enableWorkplaceSharing
     }
   }
 
   onTitleChange = title => this.setState({ title })
+  onEnableWorkplaceChange = enableWorkplace => this.setState({enableWorkplace})
 
   tagsToList(tags) {
     return Object.entries(tags || {}).map(([key, value], id) => ({
@@ -60,13 +62,14 @@ class Settings extends Component {
   onSynonymsChange = onListChange(this.setState.bind(this), 'synonyms')
 
   onSave = () => {
-    const { title, tags, synonyms } = this.state
+    const { title, tags, synonyms, enableWorkplace } = this.state
     this.setState({ loading: true })
     this.props
       .updateConfiguration({
         title,
         tags: this.listToTags(tags),
-        synonyms: this.listToSynonyms(synonyms)
+        synonyms: this.listToSynonyms(synonyms),
+        enableWorkplace
       })
       .then(() => {
         alert.pushSuccess('The answer was successfully edited!')
@@ -87,7 +90,7 @@ class Settings extends Component {
   }
 
   render() {
-    const { loading, title, tags, synonyms } = this.state
+    const { loading, title, tags, synonyms, enableWorkplace } = this.state
     return (
       <div>
         <Card>
@@ -137,6 +140,9 @@ class Settings extends Component {
               disabled={loading}
             />
             <hr />
+            <h2>Integrations</h2>
+            <br/>
+            <Checkbox label="Workplace" checked={enableWorkplace} onChange={e => this.onEnableWorkplaceChange(e.target.checked)}></Checkbox>
           </CardText>
           <CardActions>
             <Button primary label="Save" onClick={this.onSave} loading={loading} />
