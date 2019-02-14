@@ -35,6 +35,7 @@ server.express.use(cors())
 server.express.post(yogaEndpoint, [
   (req, res, next) => getConfiguration(multiTenant, req, next),
   (req, res, next) => auth.checkJwt(req, res, next, multiTenant.current(req)),
+  (req, res, next) => auth.checkDomain(req, res, next, multiTenant.current(req)),
   error.handling
 ])
 

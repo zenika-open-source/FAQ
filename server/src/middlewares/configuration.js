@@ -11,9 +11,12 @@ const getConfiguration = async (multiTenant, req, next) => {
 }
 
 const refreshConfiguration = async tenant => {
-  const conf = await tenant.query.configuration({
-    where: { name: 'default' }
-  })
+  const conf = await tenant.query.configuration(
+    {
+      where: { name: 'default' }
+    },
+    `{id, name, title, algoliaAppId, algoliaApiKey, algoliaSynonyms, auth0Domain, auth0ClientId, mailgunDomain, mailgunApiKey, slackChannelHook, tags, enableWorkplaceSharing, authorizedDomains}`
+  )
 
   if (!conf.tags) conf.tags = []
 

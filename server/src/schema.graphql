@@ -54,6 +54,7 @@ type Mutation {
     tags: Json!
     algoliaSynonyms: Json!
     workplaceSharing: Boolean!
+    authorizedMails: [String!]!
   ): Configuration @admin
 }
 

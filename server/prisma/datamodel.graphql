@@ -116,6 +116,7 @@ type Configuration {
 
   auth0Domain: String!
   auth0ClientId: String!
+  authorizedMails: [String!] @default(value: [])
 
   algoliaAppId: String
   algoliaApiKey: String
