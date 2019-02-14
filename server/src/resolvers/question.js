@@ -60,7 +60,7 @@ module.exports = {
 
       return ctx.prisma.query.question({ where: { id: node.question.id } }, info)
     },
-    updateQuestionAndTags: async (_, { id, title, tags }, ctx, info) => {
+    updateQuestionAndTags: async (_, { id, title, previousTitle, tags }, ctx, info) => {
       const tagList = confTagList(ctx)
 
       const node = (await ctx.prisma.query.question(
@@ -80,6 +80,11 @@ module.exports = {
         }
         `
       )).node
+      if (previousTitle !== node.question.title) {
+        throw new Error(
+          "Another user edited the question before you, copy your version and refresh the page. If you don't copy your version, It will be lost"
+        )
+      }
 
       const oldTags = node.tags
       const newTags = tags

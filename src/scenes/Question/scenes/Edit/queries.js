@@ -21,8 +21,13 @@ export const submitQuestionMutation = gql`
 `
 
 export const editQuestionMutation = gql`
-  mutation($questionId: ID!, $title: String!, $tags: [String!]!) {
-    updateQuestionAndTags(id: $questionId, title: $title, tags: $tags) {
+  mutation($questionId: ID!, $title: String!, $previousTitle: String!, $tags: [String!]!) {
+    updateQuestionAndTags(
+      id: $questionId
+      title: $title
+      previousTitle: $previousTitle
+      tags: $tags
+    ) {
       id
       title
       slug
@@ -57,11 +62,12 @@ export const submitQuestion = graphql(submitQuestionMutation, {
 export const editQuestion = graphql(editQuestionMutation, {
   name: 'editQuestion',
   props: ({ editQuestion }) => ({
-    editQuestion: (questionId, title, tags) => {
+    editQuestion: (questionId, title, previousTitle, tags) => {
       return editQuestion({
         variables: {
           questionId,
           title,
+          previousTitle,
           tags
         }
       })

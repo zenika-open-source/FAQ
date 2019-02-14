@@ -21,9 +21,15 @@ class Configuration {
   }
 
   async load() {
-    const configuration = await fetch(process.env.REACT_APP_GRAPHQL_ENDPOINT + '/configuration', {
+    const response = await fetch(process.env.REACT_APP_GRAPHQL_ENDPOINT + '/configuration', {
       headers: { 'prisma-service': routing.getPrismaService() }
-    }).then(res => res.json())
+    })
+    if (!response.ok) {
+      throw new Error(
+        `Error response from server while retrieving configuration: HTTP status ${response.status}`
+      )
+    }
+    const configuration = await response.json()
     this.setData(configuration)
   }
 
@@ -39,19 +45,26 @@ class ConfigurationProvider extends Component {
     super(props)
 
     this.state = {
-      loaded: configuration.isLoaded()
+      loaded: configuration.isLoaded(),
+      error: null
     }
   }
   componentDidMount() {
     if (!configuration.isLoaded()) {
       // If no configuration is loaded, load configuration and refresh
-      configuration.load().then(() => this.setState({ loaded: true }))
+      configuration
+        .load()
+        .then(() => this.setState({ loaded: true }))
+        .catch(err => this.setState({ error: err }))
     } else {
       // Else, load the configuration in the background anyway
-      configuration.load()
+      configuration.load().catch(err => console.warn('Configuration could not be refreshed:', err))
     }
   }
   render() {
+    if (this.state.error) {
+      return <span>Error :(</span>
+    }
     if (!this.state.loaded) {
       return <Loading text="Retrieving configuration..." />
     }
