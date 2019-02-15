@@ -74,7 +74,7 @@ class Settings extends Component {
       .then(() => {
         alert.pushSuccess('The answer was successfully edited!')
         // TODO: FIND A WAY TO RE-ENABLE THIS
-        //configuration.load()
+        // configuration.load()
       })
       .catch(error => {
         alert.pushError(

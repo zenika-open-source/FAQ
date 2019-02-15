@@ -4,8 +4,6 @@ import { compose, unserialize } from 'helpers'
 import { query } from 'services/apollo'
 import { withError, withPagination } from 'components'
 
-//import { auth } from 'services'
-
 import { meHistory } from './queries'
 
 import Logs from './Logs'
