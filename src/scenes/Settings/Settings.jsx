@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 import { onListChange } from 'helpers'
 import { alert } from 'services'
+import { ConfigurationContext } from 'contexts'
 
 import { PairInputList, Button, Input, Checkbox } from 'components'
 import Card, { CardTitle, CardText, CardActions } from 'components/Card'
@@ -10,6 +11,8 @@ import Card, { CardTitle, CardText, CardActions } from 'components/Card'
 import './Settings.css'
 
 class Settings extends Component {
+  static contextType = ConfigurationContext
+
   constructor(props) {
     super(props)
 
@@ -61,7 +64,7 @@ class Settings extends Component {
   onTagsChange = onListChange(this.setState.bind(this), 'tags')
   onSynonymsChange = onListChange(this.setState.bind(this), 'synonyms')
 
-  onSave = () => {
+  onSave = reloadConf => {
     const { title, tags, synonyms, enableWorkplace } = this.state
     this.setState({ loading: true })
     this.props
@@ -73,8 +76,7 @@ class Settings extends Component {
       })
       .then(() => {
         alert.pushSuccess('The answer was successfully edited!')
-        // TODO: FIND A WAY TO RE-ENABLE THIS
-        // configuration.load()
+        reloadConf()
       })
       .catch(error => {
         alert.pushError(
@@ -92,6 +94,7 @@ class Settings extends Component {
 
   render() {
     const { loading, title, tags, synonyms, enableWorkplace } = this.state
+    const { reload } = this.context
     return (
       <div>
         <Card>
@@ -150,7 +153,7 @@ class Settings extends Component {
             />
           </CardText>
           <CardActions>
-            <Button primary label="Save" onClick={this.onSave} loading={loading} />
+            <Button primary label="Save" onClick={() => this.onSave(reload)} loading={loading} />
           </CardActions>
         </Card>
       </div>

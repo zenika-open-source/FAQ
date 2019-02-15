@@ -5,11 +5,19 @@ import routing from 'services/routing'
 export const ConfigurationContext = React.createContext()
 
 const ConfigurationProvider = ({ children }) => {
-  const [configuration, setConfiguration] = useState({ loading: true })
+  const [reload, setReload] = useState(0)
+  const [configuration, setConfiguration] = useState({
+    loading: true,
+    reload: () => setReload(state => state + 1)
+  })
 
   useEffect(() => {
     if (localStorage.configuration) {
-      setConfiguration({ loading: false, ...JSON.parse(localStorage.configuration) })
+      setConfiguration(conf => ({
+        ...conf,
+        loading: false,
+        ...JSON.parse(localStorage.configuration)
+      }))
     }
 
     fetch(process.env.REACT_APP_GRAPHQL_ENDPOINT + '/configuration', {
@@ -27,12 +35,12 @@ const ConfigurationProvider = ({ children }) => {
       .then(conf => {
         localStorage.configuration = JSON.stringify(conf)
         if (configuration.loading) {
-          setConfiguration({ loading: false, ...conf })
+          setConfiguration(state => ({ ...state, loading: false, ...conf }))
         }
       })
 
-    return () => setConfiguration(state => ({ loading: false, ...state }))
-  }, [])
+    return () => setConfiguration(state => ({ ...state, loading: false }))
+  }, [reload])
 
   return (
     <ConfigurationContext.Provider value={configuration}>{children}</ConfigurationContext.Provider>

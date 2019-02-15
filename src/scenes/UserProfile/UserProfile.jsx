@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import { useAuth } from 'contexts'
+import { AuthContext } from 'contexts'
 
 import { Avatar, Button } from 'components'
 import Card, { CardText, CardActions } from 'components/Card'
@@ -11,6 +11,8 @@ import Logs from './components/Logs'
 import { updateIdentity } from './queries'
 
 class UserProfile extends Component {
+  static contextType = AuthContext
+
   constructor(props) {
     super(props)
     this.state = {
@@ -44,7 +46,7 @@ class UserProfile extends Component {
       identity: { name, email, picture }
     } = this.state
 
-    const auth = useAuth()
+    const auth = this.context
 
     return (
       <div>

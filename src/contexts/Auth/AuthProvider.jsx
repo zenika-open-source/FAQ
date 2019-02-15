@@ -25,7 +25,8 @@ class AuthProvider extends Component {
       actions: {
         login: this.login,
         logout: this.logout,
-        parseHash: this.parseHash
+        parseHash: this.parseHash,
+        renewAuth: this.renewAuth
       }
     }
   }
@@ -108,7 +109,7 @@ class AuthProvider extends Component {
     })
   }
 
-  renewAuth() {
+  renewAuth = () => {
     const { history, location } = this.props
     const { auth0 } = this.state
 

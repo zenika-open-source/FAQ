@@ -18,7 +18,7 @@ const Login = ({ location }) => {
   }
 
   if (wasAuth) {
-    auth.action.renewAuth()
+    auth.actions.renewAuth()
 
     return <Loading text="Authenticating..." />
   }
