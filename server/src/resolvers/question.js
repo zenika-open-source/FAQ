@@ -10,11 +10,16 @@ module.exports = {
   },
   Mutation: {
     createQuestionAndTags: async (_, { title, tags }, ctx, info) => {
+      const user = ctxUser(ctx)
+
       const tagList = confTagList(ctx)
 
       const node = await ctx.prisma.mutation.createZNode(
         {
           data: {
+            group: {
+              connect: { id: user.currentGroup.id }
+            },
             question: {
               create: {
                 title,

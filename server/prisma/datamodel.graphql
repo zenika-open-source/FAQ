@@ -115,6 +115,7 @@ type Group {
   id: ID! @unique
 
   name: String!
+  slug: String! @unique
 
   nodes: [ZNode!]! @relation(name: "GroupNodes", onDelete: CASCADE)
   users: [User!]! @relation(name: "GroupUsers")

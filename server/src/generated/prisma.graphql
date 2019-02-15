@@ -758,6 +758,7 @@ input FlagWhereUniqueInput {
 type Group {
   id: ID!
   name: String!
+  slug: String!
   nodes(where: ZNodeWhereInput, orderBy: ZNodeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ZNode!]
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
 }
@@ -770,6 +771,7 @@ type GroupConnection {
 
 input GroupCreateInput {
   name: String!
+  slug: String!
   nodes: ZNodeCreateManyWithoutGroupInput
   users: UserCreateManyWithoutCurrentGroupInput
 }
@@ -786,11 +788,13 @@ input GroupCreateOneWithoutUsersInput {
 
 input GroupCreateWithoutNodesInput {
   name: String!
+  slug: String!
   users: UserCreateManyWithoutCurrentGroupInput
 }
 
 input GroupCreateWithoutUsersInput {
   name: String!
+  slug: String!
   nodes: ZNodeCreateManyWithoutGroupInput
 }
 
@@ -804,6 +808,8 @@ enum GroupOrderByInput {
   id_DESC
   name_ASC
   name_DESC
+  slug_ASC
+  slug_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -813,6 +819,7 @@ enum GroupOrderByInput {
 type GroupPreviousValues {
   id: ID!
   name: String!
+  slug: String!
 }
 
 type GroupSubscriptionPayload {
@@ -835,12 +842,14 @@ input GroupSubscriptionWhereInput {
 
 input GroupUpdateInput {
   name: String
+  slug: String
   nodes: ZNodeUpdateManyWithoutGroupInput
   users: UserUpdateManyWithoutCurrentGroupInput
 }
 
 input GroupUpdateManyMutationInput {
   name: String
+  slug: String
 }
 
 input GroupUpdateOneWithoutNodesInput {
@@ -863,11 +872,13 @@ input GroupUpdateOneWithoutUsersInput {
 
 input GroupUpdateWithoutNodesDataInput {
   name: String
+  slug: String
   users: UserUpdateManyWithoutCurrentGroupInput
 }
 
 input GroupUpdateWithoutUsersDataInput {
   name: String
+  slug: String
   nodes: ZNodeUpdateManyWithoutGroupInput
 }
 
@@ -910,6 +921,20 @@ input GroupWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
+  slug: String
+  slug_not: String
+  slug_in: [String!]
+  slug_not_in: [String!]
+  slug_lt: String
+  slug_lte: String
+  slug_gt: String
+  slug_gte: String
+  slug_contains: String
+  slug_not_contains: String
+  slug_starts_with: String
+  slug_not_starts_with: String
+  slug_ends_with: String
+  slug_not_ends_with: String
   nodes_every: ZNodeWhereInput
   nodes_some: ZNodeWhereInput
   nodes_none: ZNodeWhereInput
@@ -923,6 +948,7 @@ input GroupWhereInput {
 
 input GroupWhereUniqueInput {
   id: ID
+  slug: String
 }
 
 type HistoryAction {

@@ -1,3 +1,4 @@
+const { ctxUser } = require('./helpers')
 const { algolia } = require('./integrations')
 
 module.exports = {
@@ -13,10 +14,13 @@ module.exports = {
         first,
         ...params
       }
+      const group = ctxUser(ctx).currentGroup.id
 
       if (!text && tags.length === 0 && flags.length === 0) {
-        const count = (await ctx.prisma.query.zNodesConnection(params, '{ aggregate { count } }'))
-          .aggregate.count
+        const count = (await ctx.prisma.query.zNodesConnection(
+          { ...params, where: { group: { id: group } } },
+          '{ aggregate { count } }'
+        )).aggregate.count
 
         results = {
           ...results,
@@ -36,6 +40,7 @@ module.exports = {
 
       return {
         ...results,
+        group,
         meta: {
           ...results.meta,
           entriesCount: results.count,
@@ -45,15 +50,19 @@ module.exports = {
     }
   },
   SearchResult: {
-    nodes: async ({ ids, highlights, ...params }, args, ctx, info) => {
+    nodes: async ({ ids, highlights, group, ...params }, args, ctx, info) => {
       if (!ids) {
-        return ctx.prisma.query.zNodes({ orderBy: 'createdAt_DESC', ...params }, info)
+        return ctx.prisma.query.zNodes(
+          { orderBy: 'createdAt_DESC', ...params, where: { group: { id: group } } },
+          info
+        )
       }
 
       let nodes = await ctx.prisma.query.zNodes(
         {
           where: {
-            id_in: ids
+            id_in: ids,
+            group: { id: group }
           }
         },
         info
