@@ -10,6 +10,10 @@ type AggregateFlag {
   count: Int!
 }
 
+type AggregateGroup {
+  count: Int!
+}
+
 type AggregateHistoryAction {
   count: Int!
 }
@@ -751,6 +755,176 @@ input FlagWhereUniqueInput {
   id: ID
 }
 
+type Group {
+  id: ID!
+  name: String!
+  nodes(where: ZNodeWhereInput, orderBy: ZNodeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ZNode!]
+  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+}
+
+type GroupConnection {
+  pageInfo: PageInfo!
+  edges: [GroupEdge]!
+  aggregate: AggregateGroup!
+}
+
+input GroupCreateInput {
+  name: String!
+  nodes: ZNodeCreateManyWithoutGroupInput
+  users: UserCreateManyWithoutCurrentGroupInput
+}
+
+input GroupCreateOneWithoutNodesInput {
+  create: GroupCreateWithoutNodesInput
+  connect: GroupWhereUniqueInput
+}
+
+input GroupCreateOneWithoutUsersInput {
+  create: GroupCreateWithoutUsersInput
+  connect: GroupWhereUniqueInput
+}
+
+input GroupCreateWithoutNodesInput {
+  name: String!
+  users: UserCreateManyWithoutCurrentGroupInput
+}
+
+input GroupCreateWithoutUsersInput {
+  name: String!
+  nodes: ZNodeCreateManyWithoutGroupInput
+}
+
+type GroupEdge {
+  node: Group!
+  cursor: String!
+}
+
+enum GroupOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type GroupPreviousValues {
+  id: ID!
+  name: String!
+}
+
+type GroupSubscriptionPayload {
+  mutation: MutationType!
+  node: Group
+  updatedFields: [String!]
+  previousValues: GroupPreviousValues
+}
+
+input GroupSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: GroupWhereInput
+  AND: [GroupSubscriptionWhereInput!]
+  OR: [GroupSubscriptionWhereInput!]
+  NOT: [GroupSubscriptionWhereInput!]
+}
+
+input GroupUpdateInput {
+  name: String
+  nodes: ZNodeUpdateManyWithoutGroupInput
+  users: UserUpdateManyWithoutCurrentGroupInput
+}
+
+input GroupUpdateManyMutationInput {
+  name: String
+}
+
+input GroupUpdateOneWithoutNodesInput {
+  create: GroupCreateWithoutNodesInput
+  update: GroupUpdateWithoutNodesDataInput
+  upsert: GroupUpsertWithoutNodesInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: GroupWhereUniqueInput
+}
+
+input GroupUpdateOneWithoutUsersInput {
+  create: GroupCreateWithoutUsersInput
+  update: GroupUpdateWithoutUsersDataInput
+  upsert: GroupUpsertWithoutUsersInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: GroupWhereUniqueInput
+}
+
+input GroupUpdateWithoutNodesDataInput {
+  name: String
+  users: UserUpdateManyWithoutCurrentGroupInput
+}
+
+input GroupUpdateWithoutUsersDataInput {
+  name: String
+  nodes: ZNodeUpdateManyWithoutGroupInput
+}
+
+input GroupUpsertWithoutNodesInput {
+  update: GroupUpdateWithoutNodesDataInput!
+  create: GroupCreateWithoutNodesInput!
+}
+
+input GroupUpsertWithoutUsersInput {
+  update: GroupUpdateWithoutUsersDataInput!
+  create: GroupCreateWithoutUsersInput!
+}
+
+input GroupWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  nodes_every: ZNodeWhereInput
+  nodes_some: ZNodeWhereInput
+  nodes_none: ZNodeWhereInput
+  users_every: UserWhereInput
+  users_some: UserWhereInput
+  users_none: UserWhereInput
+  AND: [GroupWhereInput!]
+  OR: [GroupWhereInput!]
+  NOT: [GroupWhereInput!]
+}
+
+input GroupWhereUniqueInput {
+  id: ID
+}
+
 type HistoryAction {
   id: ID!
   action: String!
@@ -998,6 +1172,12 @@ type Mutation {
   upsertFlag(where: FlagWhereUniqueInput!, create: FlagCreateInput!, update: FlagUpdateInput!): Flag!
   deleteFlag(where: FlagWhereUniqueInput!): Flag
   deleteManyFlags(where: FlagWhereInput): BatchPayload!
+  createGroup(data: GroupCreateInput!): Group!
+  updateGroup(data: GroupUpdateInput!, where: GroupWhereUniqueInput!): Group
+  updateManyGroups(data: GroupUpdateManyMutationInput!, where: GroupWhereInput): BatchPayload!
+  upsertGroup(where: GroupWhereUniqueInput!, create: GroupCreateInput!, update: GroupUpdateInput!): Group!
+  deleteGroup(where: GroupWhereUniqueInput!): Group
+  deleteManyGroups(where: GroupWhereInput): BatchPayload!
   createHistoryAction(data: HistoryActionCreateInput!): HistoryAction!
   updateHistoryAction(data: HistoryActionUpdateInput!, where: HistoryActionWhereUniqueInput!): HistoryAction
   updateManyHistoryActions(data: HistoryActionUpdateManyMutationInput!, where: HistoryActionWhereInput): BatchPayload!
@@ -1063,6 +1243,9 @@ type Query {
   flag(where: FlagWhereUniqueInput!): Flag
   flags(where: FlagWhereInput, orderBy: FlagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Flag]!
   flagsConnection(where: FlagWhereInput, orderBy: FlagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FlagConnection!
+  group(where: GroupWhereUniqueInput!): Group
+  groups(where: GroupWhereInput, orderBy: GroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Group]!
+  groupsConnection(where: GroupWhereInput, orderBy: GroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GroupConnection!
   historyAction(where: HistoryActionWhereUniqueInput!): HistoryAction
   historyActions(where: HistoryActionWhereInput, orderBy: HistoryActionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [HistoryAction]!
   historyActionsConnection(where: HistoryActionWhereInput, orderBy: HistoryActionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): HistoryActionConnection!
@@ -1465,6 +1648,7 @@ type Subscription {
   answer(where: AnswerSubscriptionWhereInput): AnswerSubscriptionPayload
   configuration(where: ConfigurationSubscriptionWhereInput): ConfigurationSubscriptionPayload
   flag(where: FlagSubscriptionWhereInput): FlagSubscriptionPayload
+  group(where: GroupSubscriptionWhereInput): GroupSubscriptionPayload
   historyAction(where: HistoryActionSubscriptionWhereInput): HistoryActionSubscriptionPayload
   question(where: QuestionSubscriptionWhereInput): QuestionSubscriptionPayload
   source(where: SourceSubscriptionWhereInput): SourceSubscriptionPayload
@@ -1666,6 +1850,7 @@ type User {
   auth0Id: String
   key: String
   admin: Boolean!
+  currentGroup: Group
   name: String
   email: String
   picture: String
@@ -1688,6 +1873,7 @@ input UserCreateInput {
   auth0Id: String
   key: String
   admin: Boolean
+  currentGroup: GroupCreateOneWithoutUsersInput
   name: String
   email: String
   picture: String
@@ -1697,6 +1883,11 @@ input UserCreateInput {
   flags: FlagCreateManyWithoutUserInput
   tags: TagCreateManyWithoutUserInput
   history: HistoryActionCreateManyWithoutUserInput
+}
+
+input UserCreateManyWithoutCurrentGroupInput {
+  create: [UserCreateWithoutCurrentGroupInput!]
+  connect: [UserWhereUniqueInput!]
 }
 
 input UserCreateOneWithoutAnswersInput {
@@ -1728,6 +1919,7 @@ input UserCreateWithoutAnswersInput {
   auth0Id: String
   key: String
   admin: Boolean
+  currentGroup: GroupCreateOneWithoutUsersInput
   name: String
   email: String
   picture: String
@@ -1738,10 +1930,26 @@ input UserCreateWithoutAnswersInput {
   history: HistoryActionCreateManyWithoutUserInput
 }
 
+input UserCreateWithoutCurrentGroupInput {
+  auth0Id: String
+  key: String
+  admin: Boolean
+  name: String
+  email: String
+  picture: String
+  locale: String
+  questions: QuestionCreateManyWithoutUserInput
+  answers: AnswerCreateManyWithoutUserInput
+  flags: FlagCreateManyWithoutUserInput
+  tags: TagCreateManyWithoutUserInput
+  history: HistoryActionCreateManyWithoutUserInput
+}
+
 input UserCreateWithoutFlagsInput {
   auth0Id: String
   key: String
   admin: Boolean
+  currentGroup: GroupCreateOneWithoutUsersInput
   name: String
   email: String
   picture: String
@@ -1756,6 +1964,7 @@ input UserCreateWithoutHistoryInput {
   auth0Id: String
   key: String
   admin: Boolean
+  currentGroup: GroupCreateOneWithoutUsersInput
   name: String
   email: String
   picture: String
@@ -1770,6 +1979,7 @@ input UserCreateWithoutQuestionsInput {
   auth0Id: String
   key: String
   admin: Boolean
+  currentGroup: GroupCreateOneWithoutUsersInput
   name: String
   email: String
   picture: String
@@ -1784,6 +1994,7 @@ input UserCreateWithoutTagsInput {
   auth0Id: String
   key: String
   admin: Boolean
+  currentGroup: GroupCreateOneWithoutUsersInput
   name: String
   email: String
   picture: String
@@ -1856,6 +2067,7 @@ input UserUpdateInput {
   auth0Id: String
   key: String
   admin: Boolean
+  currentGroup: GroupUpdateOneWithoutUsersInput
   name: String
   email: String
   picture: String
@@ -1875,6 +2087,15 @@ input UserUpdateManyMutationInput {
   email: String
   picture: String
   locale: String
+}
+
+input UserUpdateManyWithoutCurrentGroupInput {
+  create: [UserCreateWithoutCurrentGroupInput!]
+  delete: [UserWhereUniqueInput!]
+  connect: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutCurrentGroupInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutCurrentGroupInput!]
 }
 
 input UserUpdateOneRequiredWithoutAnswersInput {
@@ -1916,6 +2137,7 @@ input UserUpdateWithoutAnswersDataInput {
   auth0Id: String
   key: String
   admin: Boolean
+  currentGroup: GroupUpdateOneWithoutUsersInput
   name: String
   email: String
   picture: String
@@ -1926,10 +2148,26 @@ input UserUpdateWithoutAnswersDataInput {
   history: HistoryActionUpdateManyWithoutUserInput
 }
 
+input UserUpdateWithoutCurrentGroupDataInput {
+  auth0Id: String
+  key: String
+  admin: Boolean
+  name: String
+  email: String
+  picture: String
+  locale: String
+  questions: QuestionUpdateManyWithoutUserInput
+  answers: AnswerUpdateManyWithoutUserInput
+  flags: FlagUpdateManyWithoutUserInput
+  tags: TagUpdateManyWithoutUserInput
+  history: HistoryActionUpdateManyWithoutUserInput
+}
+
 input UserUpdateWithoutFlagsDataInput {
   auth0Id: String
   key: String
   admin: Boolean
+  currentGroup: GroupUpdateOneWithoutUsersInput
   name: String
   email: String
   picture: String
@@ -1944,6 +2182,7 @@ input UserUpdateWithoutHistoryDataInput {
   auth0Id: String
   key: String
   admin: Boolean
+  currentGroup: GroupUpdateOneWithoutUsersInput
   name: String
   email: String
   picture: String
@@ -1958,6 +2197,7 @@ input UserUpdateWithoutQuestionsDataInput {
   auth0Id: String
   key: String
   admin: Boolean
+  currentGroup: GroupUpdateOneWithoutUsersInput
   name: String
   email: String
   picture: String
@@ -1972,6 +2212,7 @@ input UserUpdateWithoutTagsDataInput {
   auth0Id: String
   key: String
   admin: Boolean
+  currentGroup: GroupUpdateOneWithoutUsersInput
   name: String
   email: String
   picture: String
@@ -1980,6 +2221,11 @@ input UserUpdateWithoutTagsDataInput {
   answers: AnswerUpdateManyWithoutUserInput
   flags: FlagUpdateManyWithoutUserInput
   history: HistoryActionUpdateManyWithoutUserInput
+}
+
+input UserUpdateWithWhereUniqueWithoutCurrentGroupInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutCurrentGroupDataInput!
 }
 
 input UserUpsertWithoutAnswersInput {
@@ -2005,6 +2251,12 @@ input UserUpsertWithoutQuestionsInput {
 input UserUpsertWithoutTagsInput {
   update: UserUpdateWithoutTagsDataInput!
   create: UserCreateWithoutTagsInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutCurrentGroupInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutCurrentGroupDataInput!
+  create: UserCreateWithoutCurrentGroupInput!
 }
 
 input UserWhereInput {
@@ -2052,6 +2304,7 @@ input UserWhereInput {
   key_not_ends_with: String
   admin: Boolean
   admin_not: Boolean
+  currentGroup: GroupWhereInput
   name: String
   name_not: String
   name_in: [String!]
@@ -2143,6 +2396,7 @@ input UserWhereUniqueInput {
 
 type ZNode {
   id: ID!
+  group: Group
   question: Question
   answer: Answer
   flags(where: FlagWhereInput, orderBy: FlagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Flag!]
@@ -2158,12 +2412,18 @@ type ZNodeConnection {
 }
 
 input ZNodeCreateInput {
+  group: GroupCreateOneWithoutNodesInput
   question: QuestionCreateOneWithoutNodeInput
   answer: AnswerCreateOneWithoutNodeInput
   flags: FlagCreateManyWithoutNodeInput
   tags: TagCreateManyWithoutNodeInput
   history: HistoryActionCreateManyWithoutNodeInput
   highlights: Json
+}
+
+input ZNodeCreateManyWithoutGroupInput {
+  create: [ZNodeCreateWithoutGroupInput!]
+  connect: [ZNodeWhereUniqueInput!]
 }
 
 input ZNodeCreateOneWithoutAnswerInput {
@@ -2192,6 +2452,7 @@ input ZNodeCreateOneWithoutTagsInput {
 }
 
 input ZNodeCreateWithoutAnswerInput {
+  group: GroupCreateOneWithoutNodesInput
   question: QuestionCreateOneWithoutNodeInput
   flags: FlagCreateManyWithoutNodeInput
   tags: TagCreateManyWithoutNodeInput
@@ -2200,6 +2461,7 @@ input ZNodeCreateWithoutAnswerInput {
 }
 
 input ZNodeCreateWithoutFlagsInput {
+  group: GroupCreateOneWithoutNodesInput
   question: QuestionCreateOneWithoutNodeInput
   answer: AnswerCreateOneWithoutNodeInput
   tags: TagCreateManyWithoutNodeInput
@@ -2207,7 +2469,17 @@ input ZNodeCreateWithoutFlagsInput {
   highlights: Json
 }
 
+input ZNodeCreateWithoutGroupInput {
+  question: QuestionCreateOneWithoutNodeInput
+  answer: AnswerCreateOneWithoutNodeInput
+  flags: FlagCreateManyWithoutNodeInput
+  tags: TagCreateManyWithoutNodeInput
+  history: HistoryActionCreateManyWithoutNodeInput
+  highlights: Json
+}
+
 input ZNodeCreateWithoutHistoryInput {
+  group: GroupCreateOneWithoutNodesInput
   question: QuestionCreateOneWithoutNodeInput
   answer: AnswerCreateOneWithoutNodeInput
   flags: FlagCreateManyWithoutNodeInput
@@ -2216,6 +2488,7 @@ input ZNodeCreateWithoutHistoryInput {
 }
 
 input ZNodeCreateWithoutQuestionInput {
+  group: GroupCreateOneWithoutNodesInput
   answer: AnswerCreateOneWithoutNodeInput
   flags: FlagCreateManyWithoutNodeInput
   tags: TagCreateManyWithoutNodeInput
@@ -2224,6 +2497,7 @@ input ZNodeCreateWithoutQuestionInput {
 }
 
 input ZNodeCreateWithoutTagsInput {
+  group: GroupCreateOneWithoutNodesInput
   question: QuestionCreateOneWithoutNodeInput
   answer: AnswerCreateOneWithoutNodeInput
   flags: FlagCreateManyWithoutNodeInput
@@ -2271,6 +2545,7 @@ input ZNodeSubscriptionWhereInput {
 }
 
 input ZNodeUpdateInput {
+  group: GroupUpdateOneWithoutNodesInput
   question: QuestionUpdateOneWithoutNodeInput
   answer: AnswerUpdateOneWithoutNodeInput
   flags: FlagUpdateManyWithoutNodeInput
@@ -2281,6 +2556,15 @@ input ZNodeUpdateInput {
 
 input ZNodeUpdateManyMutationInput {
   highlights: Json
+}
+
+input ZNodeUpdateManyWithoutGroupInput {
+  create: [ZNodeCreateWithoutGroupInput!]
+  delete: [ZNodeWhereUniqueInput!]
+  connect: [ZNodeWhereUniqueInput!]
+  disconnect: [ZNodeWhereUniqueInput!]
+  update: [ZNodeUpdateWithWhereUniqueWithoutGroupInput!]
+  upsert: [ZNodeUpsertWithWhereUniqueWithoutGroupInput!]
 }
 
 input ZNodeUpdateOneRequiredWithoutAnswerInput {
@@ -2319,6 +2603,7 @@ input ZNodeUpdateOneRequiredWithoutTagsInput {
 }
 
 input ZNodeUpdateWithoutAnswerDataInput {
+  group: GroupUpdateOneWithoutNodesInput
   question: QuestionUpdateOneWithoutNodeInput
   flags: FlagUpdateManyWithoutNodeInput
   tags: TagUpdateManyWithoutNodeInput
@@ -2327,6 +2612,7 @@ input ZNodeUpdateWithoutAnswerDataInput {
 }
 
 input ZNodeUpdateWithoutFlagsDataInput {
+  group: GroupUpdateOneWithoutNodesInput
   question: QuestionUpdateOneWithoutNodeInput
   answer: AnswerUpdateOneWithoutNodeInput
   tags: TagUpdateManyWithoutNodeInput
@@ -2334,7 +2620,17 @@ input ZNodeUpdateWithoutFlagsDataInput {
   highlights: Json
 }
 
+input ZNodeUpdateWithoutGroupDataInput {
+  question: QuestionUpdateOneWithoutNodeInput
+  answer: AnswerUpdateOneWithoutNodeInput
+  flags: FlagUpdateManyWithoutNodeInput
+  tags: TagUpdateManyWithoutNodeInput
+  history: HistoryActionUpdateManyWithoutNodeInput
+  highlights: Json
+}
+
 input ZNodeUpdateWithoutHistoryDataInput {
+  group: GroupUpdateOneWithoutNodesInput
   question: QuestionUpdateOneWithoutNodeInput
   answer: AnswerUpdateOneWithoutNodeInput
   flags: FlagUpdateManyWithoutNodeInput
@@ -2343,6 +2639,7 @@ input ZNodeUpdateWithoutHistoryDataInput {
 }
 
 input ZNodeUpdateWithoutQuestionDataInput {
+  group: GroupUpdateOneWithoutNodesInput
   answer: AnswerUpdateOneWithoutNodeInput
   flags: FlagUpdateManyWithoutNodeInput
   tags: TagUpdateManyWithoutNodeInput
@@ -2351,11 +2648,17 @@ input ZNodeUpdateWithoutQuestionDataInput {
 }
 
 input ZNodeUpdateWithoutTagsDataInput {
+  group: GroupUpdateOneWithoutNodesInput
   question: QuestionUpdateOneWithoutNodeInput
   answer: AnswerUpdateOneWithoutNodeInput
   flags: FlagUpdateManyWithoutNodeInput
   history: HistoryActionUpdateManyWithoutNodeInput
   highlights: Json
+}
+
+input ZNodeUpdateWithWhereUniqueWithoutGroupInput {
+  where: ZNodeWhereUniqueInput!
+  data: ZNodeUpdateWithoutGroupDataInput!
 }
 
 input ZNodeUpsertWithoutAnswerInput {
@@ -2383,6 +2686,12 @@ input ZNodeUpsertWithoutTagsInput {
   create: ZNodeCreateWithoutTagsInput!
 }
 
+input ZNodeUpsertWithWhereUniqueWithoutGroupInput {
+  where: ZNodeWhereUniqueInput!
+  update: ZNodeUpdateWithoutGroupDataInput!
+  create: ZNodeCreateWithoutGroupInput!
+}
+
 input ZNodeWhereInput {
   id: ID
   id_not: ID
@@ -2398,6 +2707,7 @@ input ZNodeWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  group: GroupWhereInput
   question: QuestionWhereInput
   answer: AnswerWhereInput
   flags_every: FlagWhereInput

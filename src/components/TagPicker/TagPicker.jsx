@@ -4,13 +4,15 @@ import PropTypes from 'prop-types'
 import onClickOutside from 'react-onclickoutside'
 import map from 'lodash/map'
 
-import { configuration } from 'services'
+import { ConfigurationContext } from 'contexts'
 
 import { Button } from 'components'
 
 import './TagPicker.css'
 
 class TagPicker extends Component {
+  static contextType = ConfigurationContext
+
   state = {
     opened: false
   }
@@ -23,7 +25,9 @@ class TagPicker extends Component {
     const { label, icon, tags, onChange } = this.props
     const { opened } = this.state
 
-    const tagList = configuration.tags || {}
+    const conf = this.context
+
+    const tagList = conf.tags || {}
 
     return (
       <div className="tagpicker">

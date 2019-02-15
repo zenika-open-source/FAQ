@@ -1,4 +1,4 @@
-# import ZNode, Question, Answer, Source, Flag, Tag, HistoryAction, Configuration from './generated/prisma.graphql'
+# import ZNode, Question, Answer, Source, Flag, Tag, HistoryAction, Configuration, Group from './generated/prisma.graphql'
 
 # import ZNodeOrderByInput, ZNodeConnection, ZNodeWhereUniqueInput from './generated/prisma.graphql'
 # import HistoryActionWhereInput from './generated/prisma.graphql'
@@ -49,7 +49,12 @@ type Mutation {
   addFlag(type: String!, nodeId: ID!): ZNode
   removeFlag(type: String!, nodeId: ID!): ZNode
 
-  updateConfiguration(title: String, tags: Json!, algoliaSynonyms: Json!, enableWorkplaceSharing: Boolean!): Configuration @admin
+  updateConfiguration(
+    title: String
+    tags: Json!
+    algoliaSynonyms: Json!
+    enableWorkplaceSharing: Boolean!
+  ): Configuration @admin
 }
 
 type SearchResult {
@@ -71,7 +76,9 @@ type PaginationMeta {
 type User {
   id: ID!
   auth0Id: String
+
   admin: Boolean
+  currentGroup: Group!
 
   name: String
   email: String

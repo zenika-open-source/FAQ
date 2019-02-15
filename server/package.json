@@ -24,6 +24,7 @@
   },
   "scripts": {
     "start": "dotenv -e .env.local node src/index.js",
+    "dev": "dotenv -e .env.local nodemon src/index.js",
     "deploy": "cd scripts/prisma_deploy_all && dotenv -e ../../.env.local node index.js",
     "new_service": "cd scripts/prisma_new_service && dotenv -e ../../.env.local node index.js",
     "generate_schema": "prisma generate",
@@ -45,6 +46,7 @@
     "eslint-plugin-node": "^6.0.0",
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^3.0.1",
+    "nodemon": "^1.18.10",
     "prettier": "^1.16.4",
     "prisma-yml": "^1.17.1"
   },

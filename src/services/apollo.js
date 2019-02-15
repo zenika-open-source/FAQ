@@ -9,7 +9,7 @@ import { onError } from 'apollo-link-error'
 import { ApolloLink } from 'apollo-link'
 import { setContext } from 'apollo-link-context'
 
-import auth from './auth'
+//import auth from './auth'
 import routing from './routing'
 
 const apollo = new ApolloClient({
@@ -29,7 +29,7 @@ const apollo = new ApolloClient({
       }
     }),
     setContext((_, { headers }) => {
-      const token = auth.session ? auth.session.idToken : null
+      const token = localStorage.accessToken || null
       return {
         headers: {
           ...headers,

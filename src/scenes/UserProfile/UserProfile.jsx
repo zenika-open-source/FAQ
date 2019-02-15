@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
+import { useAuth } from 'contexts'
+
 import { Avatar, Button } from 'components'
 import Card, { CardText, CardActions } from 'components/Card'
 
@@ -41,6 +43,8 @@ class UserProfile extends Component {
       savingIdentity,
       identity: { name, email, picture }
     } = this.state
+
+    const auth = useAuth()
 
     return (
       <div>
@@ -98,7 +102,7 @@ class UserProfile extends Component {
             </CardActions>
           </CardText>
         </Card>
-        <Logs />
+        <Logs userId={auth.user.id} />
         <Card>
           <CardText>
             <h1 style={{ marginBottom: '1rem' }}>GDPR</h1>

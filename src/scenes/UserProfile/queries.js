@@ -8,6 +8,10 @@ export const me = gql`
       email
       name
       picture
+      currentGroup {
+        id
+        name
+      }
     }
   }
 `

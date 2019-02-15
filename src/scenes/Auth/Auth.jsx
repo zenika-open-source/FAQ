@@ -2,31 +2,15 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Route, Switch, Redirect } from 'react-router-dom'
 
-import { auth } from 'services'
-
 import Login from './Login'
 import Callback from './Callback'
-
-import Authenticated from 'components/Authenticated'
+import Logout from './Logout'
 
 const Auth = ({ match }) => (
   <Switch>
-    <Route
-      path={`${match.url}/login`}
-      render={() => (
-        <Authenticated reverse redirect="/">
-          <Login />
-        </Authenticated>
-      )}
-    />
+    <Route path={`${match.url}/login`} component={Login} />
     <Route path={`${match.url}/callback`} component={Callback} />
-    <Route
-      path={`${match.url}/logout`}
-      render={() => {
-        auth.logout()
-        return <Redirect to="/" />
-      }}
-    />
+    <Route path={`${match.url}/logout`} component={Logout} />
     <Route render={() => <Redirect to="/" />} />
   </Switch>
 )

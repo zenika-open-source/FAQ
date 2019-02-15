@@ -4,7 +4,7 @@ import { compose, unserialize } from 'helpers'
 import { query } from 'services/apollo'
 import { withError, withPagination } from 'components'
 
-import { auth } from 'services'
+//import { auth } from 'services'
 
 import { meHistory } from './queries'
 
@@ -19,7 +19,7 @@ export default compose(
       const { page } = unserialize(props.location.search)
 
       return {
-        id: auth.getUserNodeId(),
+        id: props.userId,
         first: ENTRIES_PER_PAGE,
         skip: ENTRIES_PER_PAGE * (page - 1)
       }

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
 import { onListChange } from 'helpers'
-import { alert, configuration } from 'services'
+import { alert } from 'services'
 
 import { PairInputList, Button, Input, Checkbox } from 'components'
 import Card, { CardTitle, CardText, CardActions } from 'components/Card'
@@ -73,7 +73,8 @@ class Settings extends Component {
       })
       .then(() => {
         alert.pushSuccess('The answer was successfully edited!')
-        configuration.load()
+        // TODO: FIND A WAY TO RE-ENABLE THIS
+        //configuration.load()
       })
       .catch(error => {
         alert.pushError(

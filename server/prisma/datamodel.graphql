@@ -1,6 +1,8 @@
 type ZNode {
   id: ID! @unique
 
+  group: Group @relation(name: "GroupNodes")
+
   question: Question @relation(name: "NodeQuestion", onDelete: CASCADE)
   answer: Answer @relation(name: "NodeAnswer", onDelete: CASCADE)
 
@@ -90,6 +92,8 @@ type User {
 
   admin: Boolean! @default(value: "false")
 
+  currentGroup: Group @relation(name: "GroupUsers")
+
   name: String
   email: String
 
@@ -105,6 +109,15 @@ type User {
   history: [HistoryAction!]! @relation(name: "UserHistoryActions")
 
   createdAt: DateTime!
+}
+
+type Group {
+  id: ID! @unique
+
+  name: String!
+
+  nodes: [ZNode!]! @relation(name: "GroupNodes", onDelete: CASCADE)
+  users: [User!]! @relation(name: "GroupUsers")
 }
 
 type Configuration {
@@ -128,5 +141,5 @@ type Configuration {
 
   tags: Json
 
-  enableWorkplaceSharing: Boolean! @default(value:false)
+  enableWorkplaceSharing: Boolean! @default(value: false)
 }
