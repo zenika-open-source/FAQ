@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import cn from 'classnames'
 
-import { useAuth } from 'contexts'
+import { useUser } from 'contexts'
 
 import { Icon } from 'components'
 
@@ -13,9 +13,8 @@ const GroupSwitcher = props => {
   const [active, setActive] = useState(false)
   const { ref } = useClickOutside(() => setActive(false))
 
-  const auth = useAuth()
-
-  const groupName = auth.user && auth.user.currentGroup && auth.user.currentGroup.name
+  const user = useUser()
+  const groupName = user && user.currentGroup && user.currentGroup.name
 
   return (
     <div {...props} ref={ref}>

@@ -1,1 +1,1 @@
-export { default } from './UserMenu.container'
+export { default } from './UserMenu'

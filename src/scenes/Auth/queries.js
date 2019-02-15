@@ -10,10 +10,6 @@ export const authUserMutation = gql`
       name
       email
       picture
-      currentGroup {
-        id
-        name
-      }
     }
   }
 `
