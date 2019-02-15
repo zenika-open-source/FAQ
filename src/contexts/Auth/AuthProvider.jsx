@@ -31,6 +31,11 @@ class AuthProvider extends Component {
     }
   }
 
+  componentDidMount() {
+    const { session, user } = this.state
+    if (session && user) this.scheduleRenew()
+  }
+
   componentDidUpdate(prevProps, prevState) {
     const conf = this.context
 

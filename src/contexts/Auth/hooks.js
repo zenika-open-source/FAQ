@@ -9,13 +9,13 @@ export const useAuth = () => {
 export const isAuthenticated = () => {
   const auth = useAuth()
 
-  return auth.session && auth.session.expiresAt > new Date().getTime() && auth.user && true
+  return !!(auth.session && auth.session.expiresAt > new Date().getTime() && auth.user)
 }
 
 export const wasAuthenticated = () => {
   const auth = useAuth()
 
-  return auth.session && auth.session.expiresAt < new Date().getTime() && auth.user && true
+  return !!(auth.session && auth.session.expiresAt < new Date().getTime() && auth.user)
 }
 
 export const isAdmin = () => {

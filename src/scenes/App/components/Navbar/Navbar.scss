@@ -24,20 +24,24 @@
     }
 
     .subtitle {
-      align-items: flex-end;
-      font-size: var(--h3-font-size);
-      margin-left: 10px;
+      position: relative;
 
-      i {
+      & > span {
+        display: flex;
+        align-items: flex-end;
         font-size: var(--h3-font-size);
-        margin-left: 3px;
-        visibility: hidden;
-      }
+        margin-left: 10px;
 
-      &:hover {
-        i {
-          visibility: visible;
-          animation: rotating 3s linear infinite;
+        & > i {
+          font-size: var(--h3-font-size);
+          margin-left: 3px;
+          visibility: hidden;
+        }
+
+        &:hover {
+          & > i {
+            visibility: visible;
+          }
         }
       }
     }

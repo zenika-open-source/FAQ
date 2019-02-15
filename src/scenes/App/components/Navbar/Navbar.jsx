@@ -1,19 +1,15 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { useConfiguration, useAuth } from 'contexts'
-import { Authenticated, Button, Icon } from 'components'
+import { useConfiguration } from 'contexts'
+import { Authenticated, Button } from 'components'
 
-import GithubIcon from './components/GithubIcon'
-import UserMenu from './components/UserMenu'
+import { GithubIcon, GroupSwitcher, UserMenu } from './components'
 
 import './Navbar.scss'
 
 const Navbar = () => {
   const conf = useConfiguration()
-  const auth = useAuth()
-
-  const groupName = auth.user && auth.user.currentGroup && auth.user.currentGroup.name
 
   return (
     <div className="navbar">
@@ -22,10 +18,7 @@ const Navbar = () => {
           <img alt="emoji" src="/img/favicon/favicon-64.png" />
           FAQ {conf.title || ''}
         </Link>
-        <Link to="/" className="subtitle tooltip-bottom" data-tooltip="Change group">
-          {groupName || ''}
-          <Icon material="autorenew" />
-        </Link>
+        <GroupSwitcher className="subtitle" />
       </div>
       <div className="navigation">
         <a
