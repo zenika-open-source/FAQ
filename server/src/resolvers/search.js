@@ -15,11 +15,11 @@ module.exports = {
         ...params
       }
 
-      if (!group) group = ctxUser(ctx).currentGroup.id
+      const currentGroup = ctxUser(ctx).currentGroup.id
 
       if (!text && tags.length === 0 && flags.length === 0) {
         const count = (await ctx.prisma.query.zNodesConnection(
-          { ...params, where: { group: { id: group } } },
+          { ...params, where: { group: { id: group || currentGroup } } },
           '{ aggregate { count } }'
         )).aggregate.count
 
@@ -41,7 +41,7 @@ module.exports = {
 
       return {
         ...results,
-        group,
+        group: group || currentGroup,
         meta: {
           ...results.meta,
           entriesCount: results.count,
