@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Query } from 'react-apollo'
 
 import { ApolloClient } from 'apollo-client'
@@ -66,6 +66,29 @@ const query = (query, { variables, skip, parse, ...queryProps } = {}) => Wrapped
   return ApolloQueryWrapper
 }
 
+const useMutation = mutation => {
+  const [response, setResponse] = useState({ loading: false, variables: null })
+
+  const mutate = (variables, callback) => {
+    setResponse({ ...response, loading: true, variables })
+    apollo.mutate({ mutation, variables }).then(resp => {
+      if (mounted) {
+        setResponse({ ...response, ...resp, loading: false })
+        callback()
+      }
+    })
+  }
+
+  let mounted = true
+  useEffect(() => {
+    return () => {
+      mounted = false
+    }
+  }, [])
+
+  return [response, mutate]
+}
+
 export default apollo
 
-export { query }
+export { query, useMutation }

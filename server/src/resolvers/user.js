@@ -46,6 +46,14 @@ module.exports = {
           data: { name, email, picture }
         },
         info
+      ),
+    changeCurrentGroup: (_, { group }, ctx, info) =>
+      ctx.prisma.mutation.updateUser(
+        {
+          where: { id: ctxUser(ctx).id },
+          data: { currentGroup: { connect: { id: group } } }
+        },
+        info
       )
   }
 }

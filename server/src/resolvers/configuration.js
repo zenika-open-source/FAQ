@@ -4,7 +4,8 @@ const { refreshConfiguration } = require('../middlewares/configuration')
 module.exports = {
   Query: {
     configuration: (_, args, ctx, info) =>
-      ctx.prisma.query.configuration({ where: { name: 'default' } }, info)
+      ctx.prisma.query.configuration({ where: { name: 'default' } }, info),
+    groups: (_, args, ctx, info) => ctx.prisma.query.groups(null, info)
   },
   Mutation: {
     updateConfiguration: async (_, args, ctx, info) => {

@@ -29,11 +29,13 @@ type Query {
   randomNode(tag: String): ZNode
 
   configuration: Configuration @admin
+  groups: [Group!]!
 }
 
 type Mutation {
   updateMe(name: String!, email: String!, picture: String!): User
   authenticate(idToken: String!): User
+  changeCurrentGroup(group: ID!): User
 
   createQuestionAndTags(title: String!, tags: [String!]!): Question
   updateQuestionAndTags(id: ID!, title: String!, previousTitle: String!, tags: [String!]!): Question
