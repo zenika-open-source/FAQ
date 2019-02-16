@@ -7,6 +7,7 @@ import isEqual from 'lodash/isEqual'
 import { compose } from 'react-apollo'
 import { submitAnswer, editAnswer } from './queries'
 
+import { UserContext } from 'contexts'
 import { alert, markdown } from 'services'
 import { isUuidV4, onListChange } from 'helpers'
 
@@ -15,11 +16,13 @@ import NotFound from 'scenes/NotFound'
 import { Loading, Flags, Button, MarkdownEditor, CtrlEnter, PairInputList } from 'components'
 import Card, { CardTitle, CardText, CardActions, PermanentClosableCard } from 'components/Card'
 
-import ActionMenu from '../../components/ActionMenu'
+import { ActionMenu, DifferentGroup } from '../../components'
 
 import Tips from './components/Tips'
 
 class Answer extends Component {
+  static contextType = UserContext
+
   constructor(props) {
     super(props)
 
@@ -164,11 +167,14 @@ class Answer extends Component {
       return <NotFound />
     }
 
+    const fromDifferentGroup = this.context.currentGroup.id !== zNode.group.id
+
     return (
       <div>
         {this.canSubmit() && (
           <Prompt message="Are you sure you want to leave this page with an unsaved answer?" />
         )}
+        {fromDifferentGroup && <DifferentGroup action="answering" group={zNode.group} />}
         <ActionMenu backLink={`/q/${zNode.question.slug}-${zNode.id}`}>
           {!showTips && (
             <Button link icon="lightbulb_outline" label="Show tips" onClick={this.openTips} />

@@ -6,6 +6,7 @@ import Helmet from 'react-helmet'
 import { compose } from 'react-apollo'
 import { createFlag, removeFlag } from './queries'
 
+import { useUser } from 'contexts'
 import { markdown } from 'services'
 
 import NotFound from 'scenes/NotFound'
@@ -14,14 +15,12 @@ import { Button, Flags, Tags } from 'components'
 import Card, { CardTitle, CardText } from 'components/Card'
 import Dropdown, { DropdownItem } from 'components/Dropdown'
 
-import ActionMenu from '../../components/ActionMenu'
-import FlagsDropdown from './components/FlagsDropdown'
-import Sources from './components/Sources'
-import Meta from './components/Meta'
-import Share from './components/Share'
-import History from './components/History'
+import { ActionMenu, DifferentGroup } from '../../components'
+import { FlagsDropdown, Sources, Meta, Share, History } from './components'
 
 const Read = ({ history, match, zNode, createFlag, removeFlag }) => {
+  const user = useUser()
+
   if (zNode === null) {
     return <NotFound />
   }
@@ -32,11 +31,14 @@ const Read = ({ history, match, zNode, createFlag, removeFlag }) => {
     return <Redirect to={'/q/' + correctSlug} />
   }
 
+  const fromDifferentGroup = user.currentGroup.id !== zNode.group.id
+
   return (
     <div>
       <Helmet>
         <title>FAQ - {markdown.title(zNode.question.title)}</title>
       </Helmet>
+      {fromDifferentGroup && <DifferentGroup action="reading" group={zNode.group} />}
       <ActionMenu backLink="/" backLabel="Home" goBack>
         <FlagsDropdown
           flags={zNode.flags}

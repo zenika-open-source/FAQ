@@ -1,10 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import cn from 'classnames'
 
-const Icon = ({ material, ...rest }) => {
+const Icon = ({ material, className, ...rest }) => {
   if (material)
     return (
-      <i className="material-icons" {...rest}>
+      <i className={cn('material-icons', className)} {...rest}>
         {material}
       </i>
     )

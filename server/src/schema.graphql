@@ -3,7 +3,7 @@
 # import ZNodeOrderByInput, ZNodeConnection, ZNodeWhereUniqueInput from './generated/prisma.graphql'
 # import HistoryActionWhereInput from './generated/prisma.graphql'
 
-directive @admin on QUERY
+directive @admin on QUERY | FIELD_DEFINITION
 
 type Query {
   me: User

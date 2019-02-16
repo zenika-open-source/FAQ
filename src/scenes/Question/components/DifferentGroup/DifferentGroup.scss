@@ -1,0 +1,14 @@
+.different-group {
+  background-color: SandyBrown;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--secondary-color-font);
+  border-radius: 5px;
+  margin-bottom: 0.5rem;
+
+  .icon {
+    margin-right: 0.5rem;
+  }
+}

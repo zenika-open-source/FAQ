@@ -2,6 +2,10 @@ import gql from 'graphql-tag'
 
 export const zNodeFragment = `
   id
+  group {
+    id
+    name
+  }
   question {
     id
     title

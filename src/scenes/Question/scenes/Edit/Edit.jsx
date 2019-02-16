@@ -6,18 +6,21 @@ import difference from 'lodash/difference'
 import { compose } from 'react-apollo'
 import { submitQuestion, editQuestion } from './queries'
 
+import { UserContext } from 'contexts'
 import { alert } from 'services'
 
 import Card, { CardText, CardActions, PermanentClosableCard } from 'components/Card'
 import { Loading, Button, Input, CtrlEnter, TagPicker } from 'components'
 
-import ActionMenu from '../../components/ActionMenu'
+import { ActionMenu, DifferentGroup } from '../../components'
 
 import Tips from './components/Tips'
 
 import './Edit.css'
 
 class Edit extends Component {
+  static contextType = UserContext
+
   constructor(props) {
     super(props)
 
@@ -143,11 +146,14 @@ class Edit extends Component {
       return <Redirect to={'/'} />
     }
 
+    const fromDifferentGroup = this.context.currentGroup.id !== zNode.group.id
+
     return (
       <div className="Edit">
         {this.canSubmit() && (
           <Prompt message="Are you sure you want to leave this page with an unsaved question?" />
         )}
+        {fromDifferentGroup && <DifferentGroup action="editing" group={zNode.group} />}
         <ActionMenu
           backLabel={isEditing ? 'Back' : 'Home'}
           backLink={isEditing ? `/q/${match.params.slug}` : '/'}
