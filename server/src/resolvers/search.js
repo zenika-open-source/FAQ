@@ -4,7 +4,7 @@ const { algolia } = require('./integrations')
 module.exports = {
   Query: {
     search: async (_, args, ctx, info) => {
-      const { text, tags = [], flags = [], skip, first, ...params } = args
+      const { text, tags = [], flags = [], skip, first, group, ...params } = args
 
       let results = {
         meta: {
@@ -14,7 +14,8 @@ module.exports = {
         first,
         ...params
       }
-      const group = ctxUser(ctx).currentGroup.id
+
+      if (!group) group = ctxUser(ctx).currentGroup.id
 
       if (!text && tags.length === 0 && flags.length === 0) {
         const count = (await ctx.prisma.query.zNodesConnection(

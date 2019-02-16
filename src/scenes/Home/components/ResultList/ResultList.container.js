@@ -20,7 +20,8 @@ export default compose(
         tags,
         flags,
         first: RESULTS_PER_PAGE,
-        skip: RESULTS_PER_PAGE * (page - 1)
+        skip: RESULTS_PER_PAGE * (page - 1),
+        group: props.group.id
       }
     },
     parse: ({ search = {} }) => ({ ...search })

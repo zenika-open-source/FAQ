@@ -3,13 +3,17 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import debounce from 'lodash/debounce'
 
-import Button from 'components/Button'
+import { UserContext } from 'contexts'
+
+import { Loading, Button } from 'components'
 
 import { unserialize, addToQueryString } from 'helpers'
 
 import { Searchbar, ResultList } from './components'
 
 class Home extends Component {
+  static contextType = UserContext
+
   constructor(props) {
     super(props)
 
@@ -51,6 +55,8 @@ class Home extends Component {
   }
 
   render() {
+    if (!this.context) return <Loading />
+
     return (
       <div>
         <Searchbar
@@ -63,6 +69,7 @@ class Home extends Component {
         <ResultList
           searchText={this.state.debouncedSearchText}
           setSearchLoading={this.setSearchLoading}
+          group={this.context.currentGroup}
         />
         <Link to="/q/new">
           <Button
