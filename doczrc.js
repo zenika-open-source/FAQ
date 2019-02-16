@@ -38,13 +38,7 @@ export default {
     'Getting started',
     {
       name: 'Advanced',
-      menu: [
-        'Configuration',
-        'Backing services',
-        'Integrations',
-        'Multi-tenancy',
-        'Contributing'
-      ]
+      menu: ['Configuration', 'Backing services', 'Integrations', 'Organizations', 'Contributing']
     },
     'Components'
   ]

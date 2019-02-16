@@ -1,11 +1,12 @@
 const algoliasearch = require('algoliasearch')
 const { env, queryService } = require('../helpers')
 
-const { SERVICE_NAME, SERVICE_STAGE } = env([
+const { SERVICE_NAME, SERVICE_STAGE, GROUP_SLUG } = env([
   'PRISMA_URL', // Implicitely required
   'PRISMA_API_SECRET', // Implicitely required
   'SERVICE_NAME',
-  'SERVICE_STAGE'
+  'SERVICE_STAGE',
+  'GROUP_SLUG'
 ])
 
 const getAlgoliaCredentials = (name, stage) =>
@@ -64,18 +65,15 @@ const main = async () => {
     return
   }
 
-  const client = algoliasearch(
-    credentials.algoliaAppId,
-    credentials.algoliaApiKey
-  )
+  const client = algoliasearch(credentials.algoliaAppId, credentials.algoliaApiKey)
 
-  const index = client.initIndex(SERVICE_NAME + '_' + SERVICE_STAGE)
+  const index = client.initIndex(SERVICE_NAME + '_' + SERVICE_STAGE + '_' + GROUP_SLUG)
 
   await updateSynonyms(index, credentials.algoliaSynonyms || [])
 
   await updateSettings(index)
 
-  console.log(`Deployed algolia settings for ${SERVICE_NAME}/${SERVICE_STAGE}`)
+  console.log(`Deployed algolia settings for ${SERVICE_NAME}/${SERVICE_STAGE}/${GROUP_SLUG}`)
 }
 
 main()

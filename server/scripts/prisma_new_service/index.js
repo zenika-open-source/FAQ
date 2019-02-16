@@ -1,19 +1,24 @@
-const { env, run, queryManagement, queryService } = require('../helpers')
+const {
+  env,
+  queryManagement,
+  queryService,
+  deployPrismaService,
+  deployAlgoliaIndex,
+  fromArgs
+} = require('../helpers')
 
-const { PRISMA_URL, AUTH0_DOMAIN, AUTH0_CLIENT_ID, SERVICE_NAME, SERVICE_STAGE } = env([
-  'PRISMA_URL',
+const { AUTH0_DOMAIN, AUTH0_CLIENT_ID, ALGOLIA_APP_ID, ALGOLIA_API_KEY_ALL } = env([
+  'PRISMA_URL', // Implicitely required
   'PRISMA_API_SECRET', // Implicitely required
   'PRISMA_MANAGEMENT_API_SECRET', // Implicitely required
   'AUTH0_DOMAIN',
   'AUTH0_CLIENT_ID',
-  'SERVICE_NAME?',
-  'SERVICE_STAGE?'
+  'ALGOLIA_APP_ID?',
+  'ALGOLIA_API_KEY_ALL?'
 ])
 
 const main = async () => {
-  const serviceName = SERVICE_NAME || 'default'
-  const serviceStage = SERVICE_STAGE || 'default'
-  const serviceUrl = PRISMA_URL + '/' + serviceName + '/' + serviceStage
+  const [serviceName, serviceStage] = fromArgs()
 
   // Check if service already exists
   const service = await queryManagement(`
@@ -30,11 +35,7 @@ const main = async () => {
   }
 
   // Deploy the service
-  console.log(
-    run('prisma deploy', {
-      PRISMA_URL: serviceUrl
-    })
-  )
+  deployPrismaService(serviceName, serviceStage)
 
   // Add a default configuration
   await queryService(
@@ -47,6 +48,8 @@ const main = async () => {
             name: "default"
             auth0Domain: "${AUTH0_DOMAIN}"
             auth0ClientId: "${AUTH0_CLIENT_ID}"
+            algoliaAppId: "${ALGOLIA_APP_ID || ''}"
+            algoliaApiKey: "${ALGOLIA_API_KEY_ALL || ''}"
             tags: "${JSON.stringify({
               agencies: ['paris', 'nantes'],
               theme: ['tutorial', 'meta']
@@ -54,11 +57,31 @@ const main = async () => {
           }
         ) {
           id
-          name
         }
       }
     `
   )
+
+  // Add a default group
+  await queryService(
+    serviceName,
+    serviceStage,
+    `
+      mutation {
+        createGroup(
+          data: {
+            name: "general"
+            slug: "general"
+          }
+        ) {
+          id
+        }
+      }
+    `
+  )
+
+  // Deploy algolia index
+  await deployAlgoliaIndex(serviceName, serviceStage, 'general')
 
   // Log success
   console.log(`Successfully deployed a new service (${serviceName}/${serviceStage})!`)

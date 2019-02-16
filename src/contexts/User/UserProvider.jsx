@@ -22,7 +22,7 @@ const UserProvider = ({ children }) => {
           }}
         </Query>
       )}
-      <UserContext.Provider value={user}>{children}</UserContext.Provider>
+      <UserContext.Provider value={isAuth && user}>{children}</UserContext.Provider>
     </>
   )
 }
