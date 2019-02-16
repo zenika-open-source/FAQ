@@ -43,9 +43,7 @@ const ConfigurationProvider = ({ children }) => {
   }, [reload])
 
   return (
-    <ConfigurationContext.Provider value={configuration}>
-      {children(configuration)}
-    </ConfigurationContext.Provider>
+    <ConfigurationContext.Provider value={configuration}>{children}</ConfigurationContext.Provider>
   )
 }
 

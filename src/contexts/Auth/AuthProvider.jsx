@@ -5,8 +5,6 @@ import { withRouter } from 'react-router'
 import { ConfigurationContext } from '../Configuration'
 import { alert } from 'services'
 
-import { Loading } from 'components'
-
 import { authUser } from './queries'
 
 export const AuthContext = React.createContext()
@@ -40,12 +38,11 @@ class AuthProvider extends Component {
     const conf = this.context
 
     if (!conf.loading && !prevState.auth0 && !this.state.auth0) {
-      this.setState({ auth0: this.initAuth0(conf) })
+      this.setState({ auth0: this.initAuth0(conf), ready: true })
     }
   }
 
   render() {
-    if (!this.state.auth0) return <Loading />
     return <AuthContext.Provider value={this.state}>{this.props.children}</AuthContext.Provider>
   }
 
@@ -102,7 +99,7 @@ class AuthProvider extends Component {
 
           history.push(this.popAfterLoginRedirectUrl())
         } else if (err) {
-          throw new Error(err)
+          throw new Error(JSON.stringify(err))
         } else {
           throw new Error('Unknown error')
         }

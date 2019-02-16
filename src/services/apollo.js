@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { Query } from 'react-apollo'
 
 import { ApolloClient } from 'apollo-client'
@@ -66,49 +66,6 @@ const query = (query, { variables, skip, parse, ...queryProps } = {}) => Wrapped
   return ApolloQueryWrapper
 }
 
-const useQuery = (query, variables) => {
-  const [response, setResponse] = useState({ loading: true })
-
-  let mounted = true
-  useEffect(() => {
-    apollo
-      .query({
-        query,
-        variables
-      })
-      .then(resp => mounted && setResponse(resp))
-
-    return () => {
-      mounted = false
-    }
-  }, [])
-
-  return response
-}
-
-const useTriggeredQuery = (query, variables) => {
-  const [ready, setReady] = useState(false)
-  const [response, setResponse] = useState({ loading: true })
-
-  let mounted = true
-  useEffect(() => {
-    if (ready) {
-      apollo
-        .query({
-          query,
-          variables
-        })
-        .then(resp => mounted && setResponse(state => ({ ...state, ...resp })))
-    }
-
-    return () => {
-      mounted = false
-    }
-  }, [ready])
-
-  return [response, setReady]
-}
-
 export default apollo
 
-export { query, useQuery, useTriggeredQuery }
+export { query }

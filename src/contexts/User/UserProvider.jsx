@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react'
+import React, { useState } from 'react'
+import { Query } from 'react-apollo'
 
 import { isAuthenticated } from '../Auth'
-
-import { useTriggeredQuery } from 'services/apollo'
 
 import { me } from './queries'
 
@@ -11,15 +10,21 @@ export const UserContext = React.createContext()
 const UserProvider = ({ children }) => {
   const isAuth = isAuthenticated()
 
-  const [{ data }, setReady] = useTriggeredQuery(me)
+  const [user, setUser] = useState(null)
 
-  useEffect(() => {
-    if (isAuth) {
-      setReady(true)
-    }
-  }, [isAuth])
-
-  return <UserContext.Provider value={data && data.me}>{children}</UserContext.Provider>
+  return (
+    <>
+      {isAuth && (
+        <Query query={me}>
+          {({ data }) => {
+            if (data && data.me && data.me !== user) setUser(data.me)
+            return null
+          }}
+        </Query>
+      )}
+      <UserContext.Provider value={user}>{children}</UserContext.Provider>
+    </>
+  )
 }
 
 export default UserProvider
