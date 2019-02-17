@@ -13,7 +13,7 @@ import routing from './routing'
 
 const apollo = new ApolloClient({
   link: ApolloLink.from([
-    onError(({ graphQLErrors, networkError, operation }) => {
+    onError(({ graphQLErrors, networkError }) => {
       if (graphQLErrors) {
         graphQLErrors.map(({ message, locations, path }) =>
           // eslint-disable-next-line no-console
