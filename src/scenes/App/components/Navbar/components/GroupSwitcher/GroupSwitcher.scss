@@ -9,6 +9,7 @@
   display: none;
   flex-direction: column;
   padding: 0.2rem;
+  z-index: 1;
 
   &.active {
     display: flex;
