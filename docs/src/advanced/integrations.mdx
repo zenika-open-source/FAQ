@@ -8,9 +8,9 @@ menu: Advanced
 
 This project has the following integrations:
 
-- [Slack](#slack)
-- [Workplace](#workplace)
-- [Public API](#public-api)
+- [Slack](#/advanced/integrations#slack)
+- [Workplace](/advanced/integrations/#workplace)
+- [Public API](/advanced/integrations/#public-api)
 
 ## Slack
 
@@ -50,54 +50,59 @@ FAQ has a public API in order to query its data.
 
 1. Manually create a user with a `key` (You can use any string as a key, but we advise you to use a random 30 chars long string). You can create it using the Prisma Playground (probably https://localhost:4466 if you followed the installation process).
 
-```graphql
-mutation {
-  createUser(
-    data: { key: "awesome-key", name: "API", email: "awesome-api@zenika.com" }
-  ) {
-    id
-    key
-    name
-    email
-  }
-}
-```
+   ```graphql
+   mutation {
+     createUser(
+       data: {
+         key: "awesome-key"
+         name: "API"
+         email: "awesome-api@zenika.com"
+         group: { connect: { slug: "general" } }
+       }
+     ) {
+       id
+       key
+       name
+       email
+     }
+   }
+   ```
 
 2. Create a JWT with the following payload, sign with the previously created key. (You can find more information about how to create a JWT and librairies [here](https://jwt.io/))
 
-```
-{
-  "userId": "[user_id]",
-  "prismaService": "[name]/[stage]",
-  "iat": [timestamp_generated],
-  "exp": [timestamp_expiration]
-}
-```
+   ```
+   {
+     "userId": "[user_id]",
+     "prismaService": "[name]/[stage]",
+     "iat": [timestamp_generated],
+     "exp": [timestamp_expiration]
+   }
+   ```
 
-> `userId` is the id of the user created in step 1
+   > `userId` is the id of the user created in step 1
 
-> `prismaService` is the service you want to access (See [Multi-tenancy](/advanced/multi-tenancy) for more information)
+   > `prismaService` is the service you want to access (See [Multi-tenancy](/advanced/multi-tenancy) for more information)
 
-> `iat` is the current timestamp
+   > `iat` is the current timestamp
 
-> `exp` is the current timestamp + the number of seconds you want the token to be valid
+   > `exp` is the current timestamp + the number of seconds you want the token to be valid
 
-Example:
+   Example:
 
-```js
-{
-  "userId": "cjmymlydx01780b30irsmi203",
-  "prismaService": "demo/prod",
-  "iat": 1538908112,
-  "exp": 1538910112
-}
-```
+   ```js
+   {
+     "userId": "cjmymlydx01780b30irsmi203",
+     "prismaService": "demo/prod",
+     "iat": 1538908112,
+     "exp": 1538910112
+   }
+   ```
 
-> Here, `exp` = `iat` + 2000s. This token would be available for around half an hour.
+   > Here, `exp` = `iat` + 2000s. This token would be available for around half an hour.
 
 3. Query the backend with an HTTP POST request with your GraphQL as the body. Add the following headers:
 
-```
-Authorization: API [your_jwt_token]
-prisma-service: [name]/[state]
-```
+   ```
+   Authorization: API [your_jwt_token]
+   prisma-service: [name]/[state]
+   ```
