@@ -48,8 +48,8 @@ class AuthProvider extends Component {
 
   /* Auth lifecyle */
 
-  login = redirectTo => {
-    this.cacheUrlBeforeLogin(redirectTo)
+  login = (redirectTo, group) => {
+    this.cacheStateBeforeLogin({ redirectTo, group })
     this.state.auth0.authorize()
   }
 
@@ -78,11 +78,13 @@ class AuthProvider extends Component {
     const { history, authQL } = this.props
 
     this.state.auth0.parseHash({ hash }, async (err, authResult) => {
+      const { redirectTo, group } = this.retrieveStateBeforeLogin()
+
       try {
         if (authResult && authResult.accessToken && authResult.idToken) {
           localStorage.accessToken = authResult.idToken
 
-          const { data } = await authQL(authResult.idToken)
+          const { data } = await authQL(authResult.idToken, group)
 
           const session = this.setSession(authResult)
 
@@ -97,7 +99,7 @@ class AuthProvider extends Component {
             }
           )
 
-          history.push(this.popAfterLoginRedirectUrl())
+          history.push(redirectTo || '')
         } else if (err) {
           throw new Error(JSON.stringify(err))
         } else {
@@ -106,7 +108,7 @@ class AuthProvider extends Component {
       } catch (err) {
         alert.pushError('Authentication failed: ' + JSON.stringify(err.message), err)
         this.logout()
-        history.push('/auth/login')
+        history.push('/auth/login' + (group ? `?group=${group}` : ''))
       }
     })
   }
@@ -160,14 +162,14 @@ class AuthProvider extends Component {
     localStorage.removeItem('accessToken')
   }
 
-  cacheUrlBeforeLogin(redirectTo) {
-    localStorage.after_login_redirect_url = redirectTo
+  cacheStateBeforeLogin(state) {
+    localStorage.state_before_login = JSON.stringify(state)
   }
 
-  popAfterLoginRedirectUrl() {
-    const url = localStorage.after_login_redirect_url
-    localStorage.removeItem('after_login_redirect_url')
-    return url || '/'
+  retrieveStateBeforeLogin() {
+    const state = JSON.parse(localStorage.state_before_login)
+    localStorage.removeItem('state_before_login')
+    return state
   }
 
   initAuth0(configuration) {

@@ -2,8 +2,8 @@ import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 
 export const authUserMutation = gql`
-  mutation($idToken: String!) {
-    authenticate(idToken: $idToken) {
+  mutation($idToken: String!, $group: String) {
+    authenticate(idToken: $idToken, group: $group) {
       id
       auth0Id
       admin
@@ -16,8 +16,8 @@ export const authUserMutation = gql`
 
 export const authUser = graphql(authUserMutation, {
   props: ({ mutate }) => ({
-    authQL: idToken => {
-      return mutate({ variables: { idToken } })
+    authQL: (idToken, group) => {
+      return mutate({ variables: { idToken, group } })
     }
   })
 })

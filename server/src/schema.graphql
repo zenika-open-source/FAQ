@@ -35,7 +35,7 @@ type Query {
 
 type Mutation {
   updateMe(name: String!, email: String!, picture: String!): User
-  authenticate(idToken: String!): User
+  authenticate(idToken: String!, group: String): User
   changeCurrentGroup(group: ID!): User
 
   createQuestionAndTags(title: String!, tags: [String!]!): Question

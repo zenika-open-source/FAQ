@@ -13,7 +13,7 @@ module.exports = {
       )
   },
   Mutation: {
-    authenticate: async (_, { idToken }, ctx, info) => {
+    authenticate: async (_, { idToken, group }, ctx, info) => {
       let userToken = null
       try {
         userToken = await validateAndParseIdToken(idToken, ctx.prisma._meta.configuration)
@@ -30,10 +30,12 @@ module.exports = {
             name: userToken.name,
             email: userToken.email,
             picture: userToken.picture,
-            locale: userToken.locale
+            locale: userToken.locale,
+            currentGroup: { connect: { slug: group || 'general' } }
           },
           update: {
-            picture: userToken.picture
+            picture: userToken.picture,
+            ...(group ? { currentGroup: { connect: { slug: group } } } : {}) // Only update group is slug provided
           }
         },
         info

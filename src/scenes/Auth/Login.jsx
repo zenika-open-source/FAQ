@@ -3,11 +3,13 @@ import PropTypes from 'prop-types'
 import { withRouter, Redirect } from 'react-router-dom'
 
 import { useAuth, isAuthenticated, wasAuthenticated } from 'contexts'
+import { routing } from 'services'
 
 import { Loading, Button } from 'components'
 
 const Login = ({ location }) => {
   const redirectedFrom = location.state ? location.state.from : '/'
+  const group = routing.getQueryParam(location, 'group')
 
   const auth = useAuth()
   const isAuth = isAuthenticated()
@@ -30,7 +32,7 @@ const Login = ({ location }) => {
       <Button
         icon="fingerprint"
         label="Sign in"
-        onClick={() => auth.actions.login(redirectedFrom)}
+        onClick={() => auth.actions.login(redirectedFrom, group)}
         primary
         raised
       />
