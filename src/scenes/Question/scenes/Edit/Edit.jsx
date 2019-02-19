@@ -146,7 +146,7 @@ class Edit extends Component {
       return <Redirect to={'/'} />
     }
 
-    const fromDifferentGroup = this.context.currentGroup.id !== zNode.group.id
+    const fromDifferentGroup = isEditing && this.context.currentGroup.id !== zNode.group.id
 
     return (
       <div className="Edit">

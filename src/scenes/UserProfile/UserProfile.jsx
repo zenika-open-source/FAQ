@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
 import { AuthContext } from 'contexts'
+import { alert } from 'services'
 
 import { Avatar, Button } from 'components'
 import Card, { CardText, CardActions } from 'components/Card'
@@ -35,6 +36,18 @@ class UserProfile extends Component {
     this.setState({ savingIdentity: true })
     try {
       await updateIdentity(identity)
+        .then(() => {
+          alert.pushSuccess('Your profile was successfully updated!')
+        })
+        .catch(error => {
+          alert.pushError(
+            <>
+              <p>{error.message || 'An unknown error occured.'}</p>
+              <p>Please, try again</p>
+            </>,
+            error
+          )
+        })
     } finally {
       this.setState({ savingIdentity: false })
     }

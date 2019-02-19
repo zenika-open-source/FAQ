@@ -1,18 +1,20 @@
 const fetch = require('isomorphic-fetch')
 
-const { emojify } = require('../helpers')
+const { emojify, ctxUser } = require('../helpers')
 
 class Slack {
   async sendToChannel(ctx, nodeId) {
     const {
-      service: { name, stage },
-      configuration: conf
+      service: { name, stage }
     } = ctx.prisma._meta
+    const group = ctxUser(ctx).currentGroup
     const { origin } = ctx.request.headers
 
-    if (!conf.slackChannelHook) {
+    if (!group.slackChannelHook) {
       // eslint-disable-next-line no-console
-      console.warn(`Please provide a slack channel hook for service ${name}/${stage}`)
+      console.warn(
+        `Please provide a slack channel hook for group "${group.name}" in service ${name}/${stage}`
+      )
       return
     }
 
@@ -41,7 +43,7 @@ class Slack {
       text: `<${url}|${title}>` + (tags ? ` (${tags})` : '')
     }
 
-    return fetch(conf.slackChannelHook, {
+    return fetch(group.slackChannelHook, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
