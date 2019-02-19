@@ -9,7 +9,7 @@ const configurationEndpoint = multiTenant => async (req, res) =>
       return
     }
 
-    const { title, auth0Domain, auth0ClientId, tags, workplaceEnable } = multiTenant.current(
+    const { title, auth0Domain, auth0ClientId, tags, workplaceSharing } = multiTenant.current(
       req
     )._meta.configuration
 
@@ -19,7 +19,7 @@ const configurationEndpoint = multiTenant => async (req, res) =>
       auth0Domain,
       auth0ClientId,
       tags,
-      workplaceEnable
+      workplaceSharing
     })
   })
 
