@@ -1,25 +1,25 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { withRouter } from 'react-router-dom'
+import { withRouter, Redirect } from 'react-router-dom'
 
-import { alert, auth } from 'services'
+import { useAuth, isAuthenticated, wasAuthenticated } from 'contexts'
 
 import { Loading, Button } from 'components'
 
-const Login = ({ history, location }) => {
-  const redirectedFrom = location.state ? location.state.from : '/'
+const Login = ({ location }) => {
+  const redirectedFrom = location.state && location.state.from
 
-  if (auth.wasAuthenticated()) {
-    auth
-      .renewAuth()
-      .then(() => history.push(redirectedFrom))
-      .catch(err => {
-        if (err.error !== 'login_required') {
-          alert.pushError('Authentication failed: ' + JSON.stringify(err.message), err)
-        }
-        auth.logout() // Remove session for clean login
-        history.push('/auth/login')
-      })
+  const auth = useAuth()
+  const isAuth = isAuthenticated()
+  const wasAuth = wasAuthenticated()
+
+  if (isAuth) {
+    return <Redirect to="/" />
+  }
+
+  if (wasAuth) {
+    auth.actions.renewAuth()
+
     return <Loading text="Authenticating..." />
   }
 
@@ -30,7 +30,7 @@ const Login = ({ history, location }) => {
       <Button
         icon="fingerprint"
         label="Sign in"
-        onClick={() => auth.login(redirectedFrom)}
+        onClick={() => auth.actions.login(redirectedFrom)}
         primary
         raised
       />

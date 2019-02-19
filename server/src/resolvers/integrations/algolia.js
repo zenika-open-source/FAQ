@@ -1,3 +1,4 @@
+const { ctxUser } = require('../helpers')
 const algoliasearch = require('algoliasearch')
 
 const nodeQuery = `
@@ -31,9 +32,7 @@ class Algolia {
 
     if (!conf.algoliaAppId || !conf.algoliaApiKey) {
       // eslint-disable-next-line no-console
-      console.warn(
-        `Please provide an algolia app id and an api key for service ${name}/${stage}`
-      )
+      console.warn(`Please provide an algolia app id and an api key for service ${name}/${stage}`)
       return null
     }
 
@@ -43,18 +42,14 @@ class Algolia {
 
     if (!this.indices[name]) this.indices[name] = []
 
-    this.indices[name][stage] = algoliasearch(
-      conf.algoliaAppId,
-      conf.algoliaApiKey
-    ).initIndex(name + '_' + stage)
+    this.indices[name][stage] = algoliasearch(conf.algoliaAppId, conf.algoliaApiKey).initIndex(
+      name + '_' + stage
+    )
 
     return this.indices[name][stage]
   }
   async getNode(ctx, id) {
-    const { tags, flags, ...node } = await ctx.prisma.query.zNode(
-      { where: { id } },
-      nodeQuery
-    )
+    const { tags, flags, ...node } = await ctx.prisma.query.zNode({ where: { id } }, nodeQuery)
 
     return {
       ...node,

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link, Redirect } from 'react-router-dom'
-import Helmet from 'react-helmet'
+import { Helmet } from 'react-helmet'
 
 import { compose } from 'react-apollo'
 import { createFlag, removeFlag } from './queries'
@@ -14,12 +14,8 @@ import { Button, Flags, Tags } from 'components'
 import Card, { CardTitle, CardText } from 'components/Card'
 import Dropdown, { DropdownItem } from 'components/Dropdown'
 
-import ActionMenu from '../../components/ActionMenu'
-import FlagsDropdown from './components/FlagsDropdown'
-import Sources from './components/Sources'
-import Meta from './components/Meta'
-import Share from './components/Share'
-import History from './components/History'
+import { ActionMenu } from '../../components'
+import { FlagsDropdown, Sources, Meta, Share, History } from './components'
 
 const Read = ({ history, match, zNode, createFlag, removeFlag }) => {
   if (zNode === null) {

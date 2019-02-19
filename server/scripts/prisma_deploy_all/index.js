@@ -1,7 +1,7 @@
-const { env, run, queryManagement } = require('../helpers')
+const { env, deployPrismaService, deployAlgoliaIndex, queryManagement } = require('../helpers')
 
-const { PRISMA_URL } = env([
-  'PRISMA_URL',
+env([
+  'PRISMA_URL', // Implicitely required
   'PRISMA_API_SECRET', // Implicitely required
   'PRISMA_MANAGEMENT_API_SECRET' // Implicitely required
 ])
@@ -16,24 +16,9 @@ const getServices = () =>
     }
   `).then(d => d.listProjects)
 
-const deployPrismaService = (name, stage) => {
-  const isForcing = process.argv.includes('--force')
-  run('prisma deploy ' + (isForcing ? '--force' : ''), {
-    PRISMA_URL: PRISMA_URL + '/' + name + '/' + stage
-  })
-}
-
-const deployAlgoliaIndex = async (name, stage) => {
-  console.log(
-    run('node ../algolia_settings/index.js', {
-      SERVICE_NAME: name,
-      SERVICE_STAGE: stage
-    }).toString()
-  )
-}
-
 const main = async () => {
   const services = await getServices()
+
   services.map(({ name, stage }) => {
     deployPrismaService(name, stage)
     deployAlgoliaIndex(name, stage)

@@ -29,4 +29,23 @@ const onListChange = (setState, name) => {
   return actionBuilder
 }
 
+export const onListChangeReducer = prefix => (state, action) => {
+  switch (action.type) {
+    case `${prefix}_create`:
+      return [...state, { id: uuid(), key: '', value: '' }]
+    case `${prefix}_update`:
+      return state.map(x => (x.id === action.data.id ? action.data : x))
+    case `${prefix}_delete`:
+      return state.filter(x => x.id !== action.data.id)
+    default:
+      return state
+  }
+}
+
+export const onListChangeActions = (prefix, dispatch) => ({
+  create: data => dispatch({ type: `${prefix}_create`, data }),
+  update: data => dispatch({ type: `${prefix}_update`, data }),
+  delete: data => dispatch({ type: `${prefix}_delete`, data })
+})
+
 export default onListChange

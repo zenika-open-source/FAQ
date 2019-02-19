@@ -17,6 +17,7 @@ type Configuration {
   id: ID! @unique
 
   name: String! @unique
+  title: String!
 
   algoliaAppId: String
   algoliaApiKey: String
@@ -36,7 +37,7 @@ type Configuration {
 
 > Note: `name`, `auth0Domain` and `auth0ClientId` are required fields
 
-You can have multiple `Configuration` object, but only the one with the name **"default"** will be read by the backend and frontend.
+You can have multiple `Configuration` object, but only the one with the name **"default"** will be used by the backend and frontend.
 
 ## Creating a configuration
 
@@ -92,6 +93,10 @@ mutation {
 **name**
 
 You can use any name you want, but only the configuration with the name `default` will be used by the application.
+
+**title**
+
+This is the title of the Organization, shown in the navbar.
 
 **algoliaAppId, algoliaApiKey and algoliaSynonyms**
 
@@ -151,4 +156,4 @@ Example:
 
 ## Settings page
 
-If a user has the `admin` attribute set to `true`, he will have access to a **Settings page** where he will be able to manually change the `tags` and `algoliaSynonyms` values.
+If a user has the `admin` attribute set to `true`, he will have access to a **Settings page** where he will be able to manually change some of the configuration.

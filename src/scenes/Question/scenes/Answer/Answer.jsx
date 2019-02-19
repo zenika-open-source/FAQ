@@ -15,7 +15,7 @@ import NotFound from 'scenes/NotFound'
 import { Loading, Flags, Button, MarkdownEditor, CtrlEnter, PairInputList } from 'components'
 import Card, { CardTitle, CardText, CardActions, PermanentClosableCard } from 'components/Card'
 
-import ActionMenu from '../../components/ActionMenu'
+import { ActionMenu } from '../../components'
 
 import Tips from './components/Tips'
 
@@ -85,13 +85,7 @@ class Answer extends Component {
         alert.pushSuccess('Your answer was successfully submitted!')
       })
       .catch(error => {
-        alert.pushError(
-          <>
-            <p>{error.message || 'An unknown error occured.'}</p>
-            <p>Please, try again</p>
-          </>,
-          error
-        )
+        alert.pushDefaultError(error)
         this.setState({
           loadingSubmit: false
         })
@@ -115,13 +109,7 @@ class Answer extends Component {
         alert.pushSuccess('The answer was successfully edited!')
       })
       .catch(error => {
-        alert.pushError(
-          <>
-            <p>{error.message || 'An unknown error occured.'}</p>
-            <p>Please, try again</p>
-          </>,
-          error
-        )
+        alert.pushDefaultError(error)
         this.setState({
           loadingSubmit: false
         })

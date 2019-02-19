@@ -17,7 +17,6 @@ const getAlgoliaCredentials = (name, stage) =>
         configuration (where:{name: "default"}) {
           algoliaAppId
           algoliaApiKey
-          algoliaSynonyms
         }
       }
     `
@@ -64,10 +63,7 @@ const main = async () => {
     return
   }
 
-  const client = algoliasearch(
-    credentials.algoliaAppId,
-    credentials.algoliaApiKey
-  )
+  const client = algoliasearch(credentials.algoliaAppId, credentials.algoliaApiKey)
 
   const index = client.initIndex(SERVICE_NAME + '_' + SERVICE_STAGE)
 

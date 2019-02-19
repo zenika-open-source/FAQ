@@ -89,17 +89,39 @@ const queryManagement = gql => {
   })
 }
 
+// Implicit env required: PRISMA_URL, PRISMA_API_SECRET
+const deployPrismaService = (name, stage) => {
+  const isForcing = process.argv.includes('--force')
+  run('prisma deploy ' + (isForcing ? '--force' : ''), {
+    PRISMA_URL: process.env.PRISMA_URL + '/' + name + '/' + stage
+  })
+}
+
+// Implicit env required: PRISMA_URL, PRISMA_API_SECRET
+const deployAlgoliaIndex = async (name, stage) => {
+  run('node ../algolia_settings/index.js', {
+    SERVICE_NAME: name,
+    SERVICE_STAGE: stage
+  })
+}
+
+const fromArgs = () => [...process.argv.slice(2), 'default', 'default']
+
 const run = (command, env) =>
   execSync(command, {
     env: {
       ...process.env,
       ...env
-    }
+    },
+    stdio: 'inherit'
   })
 
 module.exports = {
   env,
   run,
   queryService,
-  queryManagement
+  queryManagement,
+  deployPrismaService,
+  deployAlgoliaIndex,
+  fromArgs
 }

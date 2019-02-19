@@ -2,6 +2,7 @@ const { GraphQLServer } = require('graphql-yoga')
 const express = require('express')
 const secure = require('express-force-https')
 const path = require('path')
+const cors = require('cors')
 
 const resolvers = require('./resolvers')
 const directives = require('./directives')
@@ -28,6 +29,8 @@ const server = new GraphQLServer({
 })
 
 /* Register middlewares */
+
+server.express.use(cors())
 
 server.express.post(yogaEndpoint, [
   (req, res, next) => getConfiguration(multiTenant, req, next),
