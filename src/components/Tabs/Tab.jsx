@@ -3,7 +3,7 @@ import React, { useContext } from 'react'
 import { TabsContext } from './Tabs'
 
 const Tab = ({ id, children }) => {
-  const [current] = useContext(TabsContext)
+  const current = useContext(TabsContext)
 
   if (id !== current) return null
 

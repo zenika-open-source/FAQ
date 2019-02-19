@@ -38,7 +38,7 @@ const main = async () => {
   deployPrismaService(serviceName, serviceStage)
 
   // Add a default configuration
-  const conf = await queryService(
+  await queryService(
     serviceName,
     serviceStage,
     `
@@ -50,13 +50,17 @@ const main = async () => {
             auth0ClientId: "${AUTH0_CLIENT_ID}"
             algoliaAppId: "${ALGOLIA_APP_ID || ''}"
             algoliaApiKey: "${ALGOLIA_API_KEY_ALL || ''}"
+            tags: "${JSON.stringify({
+              agencies: ['paris', 'nantes'],
+              theme: ['tutorial', 'meta']
+            }).replace(/"/g, '\\"')}"
           }
         ) {
           id
         }
       }
     `
-  ).then(d => d.createConfiguration)
+  )
 
   // Deploy algolia index
   await deployAlgoliaIndex(serviceName, serviceStage)

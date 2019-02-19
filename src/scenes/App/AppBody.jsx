@@ -16,18 +16,20 @@ const AppBody = () => {
   const conf = useConfiguration()
   const auth = useAuth()
 
-  if (conf.loading || !auth.ready) return <Loading text="Preparing the questions..." />
-
   return (
     <div className="main">
-      <Switch>
-        <PrivateRoute exact path="/" component={Home} />
-        <Route path="/auth" component={Auth} />
-        <PrivateRoute path="/q" component={Question} />
-        <PrivateRoute path="/user-profile" component={UserProfile} />
-        <PrivateRoute path="/settings" component={Settings} admin />
-        <PrivateRoute component={NotFound} />
-      </Switch>
+      {conf.loading || !auth.ready ? (
+        <Loading text="Preparing the questions..." />
+      ) : (
+        <Switch>
+          <PrivateRoute exact path="/" component={Home} />
+          <Route path="/auth" component={Auth} />
+          <PrivateRoute path="/q" component={Question} />
+          <PrivateRoute path="/user-profile" component={UserProfile} />
+          <PrivateRoute path="/settings" component={Settings} admin />
+          <PrivateRoute component={NotFound} />
+        </Switch>
+      )}
     </div>
   )
 }

@@ -8,11 +8,10 @@ export const TabsContext = React.createContext()
 const Tabs = ({ labels, children, className }) => {
   const first = Object.keys(labels)[0]
 
-  const state = useState(first)
-  const [current, setCurrent] = state
+  const [current, setCurrent] = useState(first)
 
   return (
-    <TabsContext.Provider value={state}>
+    <TabsContext.Provider value={current}>
       <div className={cn('tabs', className)}>
         <div className="tabs-list">
           <ul>
