@@ -6,9 +6,9 @@ menu: Advanced
 
 # Configuration
 
-FAQ is a multi-tenancy application with multi services. (Read [this documentation page](/advanced/multi-tenancy) for more information about multi-tenancy in FAQ)
+FAQ is a multi-tenancy application with multi services/organizations. (Read [this documentation page](/advanced/organizations) for more information about multi-tenancy in FAQ)
 
-Each of these service has a configuration in the database.
+Each of these organization has a configuration in the database.
 
 The configuration is in the form of the following `Configuration` graphql type:
 
@@ -17,26 +17,22 @@ type Configuration {
   id: ID! @unique
 
   name: String! @unique
+  title: String!
 
   algoliaAppId: String
   algoliaApiKey: String
-  algoliaSynonyms: Json
 
   auth0Domain: String!
   auth0ClientId: String!
 
   mailgunDomain: String
   mailgunApiKey: String
-
-  slackChannelHook: String
-
-  tags: Json
 }
 ```
 
 > Note: `name`, `auth0Domain` and `auth0ClientId` are required fields
 
-You can have multiple `Configuration` object, but only the one with the name **"default"** will be read by the backend and frontend.
+You can have multiple `Configuration` object, but only the one with the name **"default"** will be used by the backend and frontend.
 
 ## Creating a configuration
 
@@ -93,6 +89,10 @@ mutation {
 
 You can use any name you want, but only the configuration with the name `default` will be used by the application.
 
+**title**
+
+This is the title of the Organization, shown in the navbar.
+
 **algoliaAppId, algoliaApiKey and algoliaSynonyms**
 
 Configuration for Algolia. See [Backing services](/advanced/backing-services) for more information.
@@ -109,46 +109,6 @@ Configuration for Mailgun. See [Backing services](/advanced/backing-services) fo
 
 Configuration for the Slack integration. See [Integrations](/advanced/integrations) for more information.
 
-**tags**
-
-This is a JSON Object representing your tags. It must follow this schema:
-
-```json
-{
-  "categorie1": ["tag1", "tag2", "tag3"],
-  "categorie2": ["tag4", "tag5"]
-}
-```
-
-Example:
-
-```json
-{
-  "services": [
-    "paie",
-    "ops",
-    "recrutement",
-    "marketing",
-    "rh",
-    "dsi",
-    "dt",
-    "compta",
-    "formation",
-    "ce"
-  ],
-  "agency": ["nantes", "paris", "rennes", "lyon", "lille", "bordeaux", "singapour", "montréal"],
-  "theme": [
-    "nouvel arrivant",
-    "formateur",
-    "fin du mois",
-    "mission",
-    "tutoriel",
-    "matériel",
-    "meta"
-  ]
-}
-```
-
 ## Settings page
 
-If a user has the `admin` attribute set to `true`, he will have access to a **Settings page** where he will be able to manually change the `tags` and `algoliaSynonyms` values.
+If a user has the `admin` attribute set to `true`, he will have access to a **Settings page** where he will be able to manually change some of the configuration.
