@@ -1,4 +1,3 @@
-const { ctxUser } = require('../helpers')
 const algoliasearch = require('algoliasearch')
 
 const nodeQuery = `
