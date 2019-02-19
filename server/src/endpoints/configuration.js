@@ -9,17 +9,13 @@ const configurationEndpoint = multiTenant => async (req, res) =>
       return
     }
 
-    const { title, auth0Domain, auth0ClientId, tags, enableWorkplaceSharing } = multiTenant.current(
-      req
-    )._meta.configuration
+    const { title, auth0Domain, auth0ClientId } = multiTenant.current(req)._meta.configuration
 
     // An unauthenticated user can only access this part of the configuration
     res.json({
       title,
       auth0Domain,
-      auth0ClientId,
-      tags,
-      enableWorkplaceSharing
+      auth0ClientId
     })
   })
 

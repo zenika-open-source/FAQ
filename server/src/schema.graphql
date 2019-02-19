@@ -1,6 +1,6 @@
 # import ZNode, Question, Answer, Source, Flag, Tag, HistoryAction, Configuration, Group from './generated/prisma.graphql'
 
-# import ZNodeOrderByInput, ZNodeConnection, ZNodeWhereUniqueInput from './generated/prisma.graphql'
+# import ZNodeOrderByInput, ZNodeConnection, ZNodeWhereUniqueInput, GroupUpdateInput from './generated/prisma.graphql'
 # import HistoryActionWhereInput from './generated/prisma.graphql'
 
 directive @admin on QUERY | FIELD_DEFINITION
@@ -52,12 +52,7 @@ type Mutation {
   addFlag(type: String!, nodeId: ID!): ZNode
   removeFlag(type: String!, nodeId: ID!): ZNode
 
-  updateConfiguration(
-    title: String
-    tags: Json!
-    algoliaSynonyms: Json!
-    enableWorkplaceSharing: Boolean!
-  ): Configuration @admin
+  updateConfiguration(title: String!, groups: [GroupUpdateInput!]!): Configuration @admin
 }
 
 type SearchResult {

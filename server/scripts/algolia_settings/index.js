@@ -18,7 +18,6 @@ const getAlgoliaCredentials = (name, stage) =>
         configuration (where:{name: "default"}) {
           algoliaAppId
           algoliaApiKey
-          algoliaSynonyms
         }
       }
     `

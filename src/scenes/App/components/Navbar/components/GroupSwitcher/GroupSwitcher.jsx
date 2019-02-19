@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import cn from 'classnames'
-import { Query } from 'react-apollo'
 
-import { useUser } from 'contexts'
+import { useUser, useGroups } from 'contexts'
 
 import { Icon } from 'components'
 
@@ -10,7 +9,7 @@ import { useClickOutside } from 'helpers'
 
 import { useMutation } from 'services/apollo'
 
-import { groups, changeCurrentGroup } from './queries'
+import { changeCurrentGroup } from './queries'
 
 import './GroupSwitcher.scss'
 
@@ -21,6 +20,7 @@ const GroupSwitcher = props => {
   const [response, changeGroup] = useMutation(changeCurrentGroup)
 
   const user = useUser()
+  const groups = useGroups()
   const currentGroup = user && user.currentGroup
 
   if (!currentGroup) return null
@@ -36,32 +36,27 @@ const GroupSwitcher = props => {
         <Icon material="autorenew" />
       </span>
       <div className={cn('group-switcher', { active })}>
-        <Query query={groups}>
-          {({ data }) => {
-            if (!(data && data.groups)) return null
+        {groups &&
+          groups.map(g => {
+            const isCurrent = g.id === currentGroup.id
+            const isNext = response.variables && response.variables.group === g.id
 
-            return data.groups.map(g => {
-              const isCurrent = g.id === currentGroup.id
-              const isNext = response.variables && response.variables.group === g.id
-
-              return (
-                <div
-                  key={g.id}
-                  className={cn('group-item', { active: isCurrent })}
-                  onClick={() => {
-                    if (isCurrent) return
-                    changeGroup({ group: g.id }, () => setActive(false))
-                  }}
-                >
-                  <Icon
-                    material={isCurrent ? 'check' : isNext ? 'hourglass_empty' : 'arrow_forward'}
-                  />
-                  {g.name}
-                </div>
-              )
-            })
-          }}
-        </Query>
+            return (
+              <div
+                key={g.id}
+                className={cn('group-item', { active: isCurrent })}
+                onClick={() => {
+                  if (isCurrent) return
+                  changeGroup({ group: g.id }).then(() => setActive(false))
+                }}
+              >
+                <Icon
+                  material={isCurrent ? 'check' : isNext ? 'hourglass_empty' : 'arrow_forward'}
+                />
+                {g.name}
+              </div>
+            )
+          })}
       </div>
     </div>
   )

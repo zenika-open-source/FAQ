@@ -117,8 +117,16 @@ type Group {
   name: String!
   slug: String! @unique
 
+  configuration: Configuration! @relation(name: "ConfigurationGroups")
+
   nodes: [ZNode!]! @relation(name: "GroupNodes", onDelete: CASCADE)
   users: [User!]! @relation(name: "GroupUsers")
+
+  tags: Json
+  workplaceSharing: Boolean @default(value: false)
+
+  algoliaSynonyms: Json
+  slackChannelHook: String
 }
 
 type Configuration {
@@ -128,19 +136,14 @@ type Configuration {
 
   title: String! @default(value: "Demo")
 
+  groups: [Group!]! @relation(name: "ConfigurationGroups", onDelete: CASCADE)
+
   algoliaAppId: String
   algoliaApiKey: String
-  algoliaSynonyms: Json
 
   auth0Domain: String!
   auth0ClientId: String!
 
   mailgunDomain: String
   mailgunApiKey: String
-
-  slackChannelHook: String
-
-  tags: Json
-
-  enableWorkplaceSharing: Boolean! @default(value: false)
 }

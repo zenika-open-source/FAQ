@@ -1,82 +1,50 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { useState, useReducer, useEffect } from 'react'
 
-import { onListChange } from 'helpers'
+import { useConfiguration, useGroups } from 'contexts'
 import { alert } from 'services'
-import { ConfigurationContext } from 'contexts'
+import { useMutation } from 'services/apollo'
 
-import { PairInputList, Button, Input, Checkbox } from 'components'
+import { Input, Checkbox, Button, Tabs, Tab, PairInputList } from 'components'
 import Card, { CardTitle, CardText, CardActions } from 'components/Card'
+
+import { onListChangeActions } from 'helpers/onListChange'
+
+import { groupReducers, listToTags, listToSynonyms } from './helpers'
+
+import { updateConfigurationMutation } from './queries'
 
 import './Settings.css'
 
-class Settings extends Component {
-  static contextType = ConfigurationContext
+const Settings = () => {
+  const conf = useConfiguration()
+  const rawGroups = useGroups()
 
-  constructor(props) {
-    super(props)
+  const [loading, setLoading] = useState(false)
 
-    const { configuration } = props
+  const [title, setTitle] = useState(conf.title)
 
-    this.state = {
-      loading: false,
-      title: configuration.title,
-      tags: this.tagsToList(configuration.tags),
-      synonyms: this.synonymsToList(configuration.algoliaSynonyms),
-      enableWorkplace: configuration.enableWorkplaceSharing
-    }
-  }
+  const [groups, dispatchGroups] = useReducer(groupReducers, null)
 
-  onTitleChange = title => this.setState({ title })
-  onEnableWorkplaceChange = enableWorkplace => this.setState({ enableWorkplace })
+  useEffect(() => {
+    if (rawGroups) dispatchGroups({ type: 'init', data: rawGroups })
+  }, [rawGroups])
 
-  tagsToList(tags) {
-    return Object.entries(tags || {}).map(([key, value], id) => ({
-      id,
-      key,
-      value: value.join(', ')
-    }))
-  }
+  const [, mutate] = useMutation(updateConfigurationMutation)
 
-  listToTags(list) {
-    return list.reduce((acc, item) => {
-      acc[item.key] = item.value.split(',').map(x => x.trim())
-      return acc
-    }, {})
-  }
-
-  synonymsToList(synonyms) {
-    return (synonyms || []).map(({ objectID, synonyms }, id) => ({
-      id,
-      key: objectID,
-      value: synonyms.join(', ')
-    }))
-  }
-
-  listToSynonyms(list) {
-    return list.map(item => ({
-      objectID: item.key,
-      type: 'synonym',
-      synonyms: item.value.split(',').map(x => x.trim())
-    }))
-  }
-
-  onTagsChange = onListChange(this.setState.bind(this), 'tags')
-  onSynonymsChange = onListChange(this.setState.bind(this), 'synonyms')
-
-  onSave = reloadConf => {
-    const { title, tags, synonyms, enableWorkplace } = this.state
-    this.setState({ loading: true })
-    this.props
-      .updateConfiguration({
-        title,
-        tags: this.listToTags(tags),
-        synonyms: this.listToSynonyms(synonyms),
-        enableWorkplace
-      })
+  const onSave = () => {
+    setLoading(true)
+    mutate({
+      title,
+      groups: groups.map(({ slug, tags, synonyms, workplaceSharing }) => ({
+        slug,
+        tags: listToTags(tags),
+        algoliaSynonyms: listToSynonyms(synonyms),
+        workplaceSharing
+      }))
+    })
       .then(() => {
         alert.pushSuccess('The answer was successfully edited!')
-        reloadConf()
+        conf.reload()
       })
       .catch(error => {
         alert.pushError(
@@ -88,82 +56,99 @@ class Settings extends Component {
         )
       })
       .finally(() => {
-        this.setState({ loading: false })
+        setLoading(false)
       })
   }
 
-  render() {
-    const { loading, title, tags, synonyms, enableWorkplace } = this.state
-    const { reload } = this.context
-    return (
-      <div>
-        <Card>
-          <CardTitle>
-            <h1>FAQ Settings</h1>
-          </CardTitle>
-          <CardText>
-            <h2>Title</h2>
-            <br />
-            <div className="title-input">
-              <i className="material-icons">home</i>
-              <Input value={title} onChange={e => this.onTitleChange(e.target.value)} />
-            </div>
-            <br />
-            <hr />
-            <h2>Tags</h2>
-            <br />
-            <PairInputList
-              pairs={tags}
-              options={{
-                icons: { line: 'local_offer', value: 'list' },
-                labels: {
-                  add: 'Add tags',
-                  more: 'More tags',
-                  key: 'Category',
-                  value: 'Tags'
-                }
-              }}
-              actions={this.onTagsChange.actions}
-              disabled={loading}
-            />
-            <hr />
-            <h2>Synonyms</h2>
-            <br />
-            <PairInputList
-              pairs={synonyms}
-              options={{
-                icons: { line: 'loop', value: 'list' },
-                labels: {
-                  add: 'Add a synonym',
-                  more: 'More synonyms',
-                  key: 'ID',
-                  value: 'Synonyms'
-                }
-              }}
-              actions={this.onSynonymsChange.actions}
-              disabled={loading}
-            />
-            <hr />
-            <h2>Integrations</h2>
-            <br />
-            <Checkbox
-              label="Workplace"
-              checked={enableWorkplace}
-              onChange={e => this.onEnableWorkplaceChange(e.target.checked)}
-            />
-          </CardText>
-          <CardActions>
-            <Button primary label="Save" onClick={() => this.onSave(reload)} loading={loading} />
-          </CardActions>
-        </Card>
-      </div>
-    )
-  }
-}
-
-Settings.propTypes = {
-  configuration: PropTypes.object.isRequired,
-  updateConfiguration: PropTypes.func.isRequired
+  return (
+    <div>
+      <Card>
+        <CardTitle>
+          <h1 className="centered" style={{ width: '100%' }}>
+            Organization and Groups Settings
+          </h1>
+        </CardTitle>
+        <CardText>
+          <h2>Organization</h2>
+          <br />
+          <div className="title-input">
+            <i className="material-icons">home</i>
+            <Input value={title} onChange={e => setTitle(e.target.value)} placeholder="Title" />
+          </div>
+          <br />
+          <hr />
+          <h2>Groups</h2>
+          {groups && (
+            <Tabs
+              labels={groups.reduce((acc, { id, name }) => {
+                acc[id] = name
+                return acc
+              }, {})}
+            >
+              {groups.map(group => (
+                <Tab key={group.id} id={group.id}>
+                  <h3>Tags</h3>
+                  <br />
+                  <PairInputList
+                    pairs={group.tags}
+                    options={{
+                      icons: { line: 'local_offer', value: 'list' },
+                      labels: {
+                        add: 'Add tags',
+                        more: 'More tags',
+                        key: 'Category',
+                        value: 'Tags'
+                      }
+                    }}
+                    actions={onListChangeActions('tags', dispatchGroups, { groupId: group.id })}
+                    disabled={loading}
+                  />
+                  <hr />
+                  <h3>Synonyms</h3>
+                  <br />
+                  <PairInputList
+                    pairs={group.synonyms}
+                    options={{
+                      icons: { line: 'loop', value: 'list' },
+                      labels: {
+                        add: 'Add a synonym',
+                        more: 'More synonyms',
+                        key: 'ID',
+                        value: 'Synonyms'
+                      }
+                    }}
+                    actions={onListChangeActions('synonyms', dispatchGroups, { groupId: group.id })}
+                    disabled={loading}
+                  />
+                  <hr />
+                  <h3>Integrations</h3>
+                  <br />
+                  <div style={{ marginLeft: '1rem' }}>
+                    <Checkbox
+                      label="Enable workplace sharing"
+                      checked={group.workplaceSharing}
+                      onChange={e =>
+                        dispatchGroups({
+                          type: 'toggle_workplace',
+                          id: group.id,
+                          data: e.target.checked
+                        })
+                      }
+                      disabled={loading}
+                    />
+                  </div>
+                  <br />
+                </Tab>
+              ))}
+            </Tabs>
+          )}
+        </CardText>
+        <CardActions>
+          <Button primary label="Save" onClick={onSave} loading={loading} />
+        </CardActions>
+      </Card>
+    </div>
+  )
 }
 
 export default Settings

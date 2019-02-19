@@ -117,6 +117,56 @@ type AnswerPreviousValues {
   updatedAt: DateTime!
 }
 
+input AnswerScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  content: String
+  content_not: String
+  content_in: [String!]
+  content_not_in: [String!]
+  content_lt: String
+  content_lte: String
+  content_gt: String
+  content_gte: String
+  content_contains: String
+  content_not_contains: String
+  content_starts_with: String
+  content_not_starts_with: String
+  content_ends_with: String
+  content_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [AnswerScalarWhereInput!]
+  OR: [AnswerScalarWhereInput!]
+  NOT: [AnswerScalarWhereInput!]
+}
+
 type AnswerSubscriptionPayload {
   mutation: MutationType!
   node: Answer
@@ -142,6 +192,10 @@ input AnswerUpdateInput {
   user: UserUpdateOneRequiredWithoutAnswersInput
 }
 
+input AnswerUpdateManyDataInput {
+  content: String
+}
+
 input AnswerUpdateManyMutationInput {
   content: String
 }
@@ -150,9 +204,17 @@ input AnswerUpdateManyWithoutUserInput {
   create: [AnswerCreateWithoutUserInput!]
   delete: [AnswerWhereUniqueInput!]
   connect: [AnswerWhereUniqueInput!]
+  set: [AnswerWhereUniqueInput!]
   disconnect: [AnswerWhereUniqueInput!]
   update: [AnswerUpdateWithWhereUniqueWithoutUserInput!]
   upsert: [AnswerUpsertWithWhereUniqueWithoutUserInput!]
+  deleteMany: [AnswerScalarWhereInput!]
+  updateMany: [AnswerUpdateManyWithWhereNestedInput!]
+}
+
+input AnswerUpdateManyWithWhereNestedInput {
+  where: AnswerScalarWhereInput!
+  data: AnswerUpdateManyDataInput!
 }
 
 input AnswerUpdateOneRequiredWithoutSourcesInput {
@@ -277,16 +339,13 @@ type Configuration {
   id: ID!
   name: String!
   title: String!
+  groups(where: GroupWhereInput, orderBy: GroupOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Group!]
   algoliaAppId: String
   algoliaApiKey: String
-  algoliaSynonyms: Json
   auth0Domain: String!
   auth0ClientId: String!
   mailgunDomain: String
   mailgunApiKey: String
-  slackChannelHook: String
-  tags: Json
-  enableWorkplaceSharing: Boolean!
 }
 
 type ConfigurationConnection {
@@ -298,16 +357,29 @@ type ConfigurationConnection {
 input ConfigurationCreateInput {
   name: String!
   title: String
+  groups: GroupCreateManyWithoutConfigurationInput
   algoliaAppId: String
   algoliaApiKey: String
-  algoliaSynonyms: Json
   auth0Domain: String!
   auth0ClientId: String!
   mailgunDomain: String
   mailgunApiKey: String
-  slackChannelHook: String
-  tags: Json
-  enableWorkplaceSharing: Boolean
+}
+
+input ConfigurationCreateOneWithoutGroupsInput {
+  create: ConfigurationCreateWithoutGroupsInput
+  connect: ConfigurationWhereUniqueInput
+}
+
+input ConfigurationCreateWithoutGroupsInput {
+  name: String!
+  title: String
+  algoliaAppId: String
+  algoliaApiKey: String
+  auth0Domain: String!
+  auth0ClientId: String!
+  mailgunDomain: String
+  mailgunApiKey: String
 }
 
 type ConfigurationEdge {
@@ -326,8 +398,6 @@ enum ConfigurationOrderByInput {
   algoliaAppId_DESC
   algoliaApiKey_ASC
   algoliaApiKey_DESC
-  algoliaSynonyms_ASC
-  algoliaSynonyms_DESC
   auth0Domain_ASC
   auth0Domain_DESC
   auth0ClientId_ASC
@@ -336,12 +406,6 @@ enum ConfigurationOrderByInput {
   mailgunDomain_DESC
   mailgunApiKey_ASC
   mailgunApiKey_DESC
-  slackChannelHook_ASC
-  slackChannelHook_DESC
-  tags_ASC
-  tags_DESC
-  enableWorkplaceSharing_ASC
-  enableWorkplaceSharing_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -354,14 +418,10 @@ type ConfigurationPreviousValues {
   title: String!
   algoliaAppId: String
   algoliaApiKey: String
-  algoliaSynonyms: Json
   auth0Domain: String!
   auth0ClientId: String!
   mailgunDomain: String
   mailgunApiKey: String
-  slackChannelHook: String
-  tags: Json
-  enableWorkplaceSharing: Boolean!
 }
 
 type ConfigurationSubscriptionPayload {
@@ -385,16 +445,13 @@ input ConfigurationSubscriptionWhereInput {
 input ConfigurationUpdateInput {
   name: String
   title: String
+  groups: GroupUpdateManyWithoutConfigurationInput
   algoliaAppId: String
   algoliaApiKey: String
-  algoliaSynonyms: Json
   auth0Domain: String
   auth0ClientId: String
   mailgunDomain: String
   mailgunApiKey: String
-  slackChannelHook: String
-  tags: Json
-  enableWorkplaceSharing: Boolean
 }
 
 input ConfigurationUpdateManyMutationInput {
@@ -402,14 +459,33 @@ input ConfigurationUpdateManyMutationInput {
   title: String
   algoliaAppId: String
   algoliaApiKey: String
-  algoliaSynonyms: Json
   auth0Domain: String
   auth0ClientId: String
   mailgunDomain: String
   mailgunApiKey: String
-  slackChannelHook: String
-  tags: Json
-  enableWorkplaceSharing: Boolean
+}
+
+input ConfigurationUpdateOneRequiredWithoutGroupsInput {
+  create: ConfigurationCreateWithoutGroupsInput
+  update: ConfigurationUpdateWithoutGroupsDataInput
+  upsert: ConfigurationUpsertWithoutGroupsInput
+  connect: ConfigurationWhereUniqueInput
+}
+
+input ConfigurationUpdateWithoutGroupsDataInput {
+  name: String
+  title: String
+  algoliaAppId: String
+  algoliaApiKey: String
+  auth0Domain: String
+  auth0ClientId: String
+  mailgunDomain: String
+  mailgunApiKey: String
+}
+
+input ConfigurationUpsertWithoutGroupsInput {
+  update: ConfigurationUpdateWithoutGroupsDataInput!
+  create: ConfigurationCreateWithoutGroupsInput!
 }
 
 input ConfigurationWhereInput {
@@ -455,6 +531,9 @@ input ConfigurationWhereInput {
   title_not_starts_with: String
   title_ends_with: String
   title_not_ends_with: String
+  groups_every: GroupWhereInput
+  groups_some: GroupWhereInput
+  groups_none: GroupWhereInput
   algoliaAppId: String
   algoliaAppId_not: String
   algoliaAppId_in: [String!]
@@ -539,22 +618,6 @@ input ConfigurationWhereInput {
   mailgunApiKey_not_starts_with: String
   mailgunApiKey_ends_with: String
   mailgunApiKey_not_ends_with: String
-  slackChannelHook: String
-  slackChannelHook_not: String
-  slackChannelHook_in: [String!]
-  slackChannelHook_not_in: [String!]
-  slackChannelHook_lt: String
-  slackChannelHook_lte: String
-  slackChannelHook_gt: String
-  slackChannelHook_gte: String
-  slackChannelHook_contains: String
-  slackChannelHook_not_contains: String
-  slackChannelHook_starts_with: String
-  slackChannelHook_not_starts_with: String
-  slackChannelHook_ends_with: String
-  slackChannelHook_not_ends_with: String
-  enableWorkplaceSharing: Boolean
-  enableWorkplaceSharing_not: Boolean
   AND: [ConfigurationWhereInput!]
   OR: [ConfigurationWhereInput!]
   NOT: [ConfigurationWhereInput!]
@@ -629,6 +692,48 @@ type FlagPreviousValues {
   createdAt: DateTime!
 }
 
+input FlagScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  type: String
+  type_not: String
+  type_in: [String!]
+  type_not_in: [String!]
+  type_lt: String
+  type_lte: String
+  type_gt: String
+  type_gte: String
+  type_contains: String
+  type_not_contains: String
+  type_starts_with: String
+  type_not_starts_with: String
+  type_ends_with: String
+  type_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  AND: [FlagScalarWhereInput!]
+  OR: [FlagScalarWhereInput!]
+  NOT: [FlagScalarWhereInput!]
+}
+
 type FlagSubscriptionPayload {
   mutation: MutationType!
   node: Flag
@@ -653,6 +758,10 @@ input FlagUpdateInput {
   user: UserUpdateOneRequiredWithoutFlagsInput
 }
 
+input FlagUpdateManyDataInput {
+  type: String
+}
+
 input FlagUpdateManyMutationInput {
   type: String
 }
@@ -661,18 +770,29 @@ input FlagUpdateManyWithoutNodeInput {
   create: [FlagCreateWithoutNodeInput!]
   delete: [FlagWhereUniqueInput!]
   connect: [FlagWhereUniqueInput!]
+  set: [FlagWhereUniqueInput!]
   disconnect: [FlagWhereUniqueInput!]
   update: [FlagUpdateWithWhereUniqueWithoutNodeInput!]
   upsert: [FlagUpsertWithWhereUniqueWithoutNodeInput!]
+  deleteMany: [FlagScalarWhereInput!]
+  updateMany: [FlagUpdateManyWithWhereNestedInput!]
 }
 
 input FlagUpdateManyWithoutUserInput {
   create: [FlagCreateWithoutUserInput!]
   delete: [FlagWhereUniqueInput!]
   connect: [FlagWhereUniqueInput!]
+  set: [FlagWhereUniqueInput!]
   disconnect: [FlagWhereUniqueInput!]
   update: [FlagUpdateWithWhereUniqueWithoutUserInput!]
   upsert: [FlagUpsertWithWhereUniqueWithoutUserInput!]
+  deleteMany: [FlagScalarWhereInput!]
+  updateMany: [FlagUpdateManyWithWhereNestedInput!]
+}
+
+input FlagUpdateManyWithWhereNestedInput {
+  where: FlagScalarWhereInput!
+  data: FlagUpdateManyDataInput!
 }
 
 input FlagUpdateWithoutNodeDataInput {
@@ -759,8 +879,13 @@ type Group {
   id: ID!
   name: String!
   slug: String!
+  configuration: Configuration!
   nodes(where: ZNodeWhereInput, orderBy: ZNodeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ZNode!]
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  tags: Json
+  workplaceSharing: Boolean
+  algoliaSynonyms: Json
+  slackChannelHook: String
 }
 
 type GroupConnection {
@@ -772,8 +897,18 @@ type GroupConnection {
 input GroupCreateInput {
   name: String!
   slug: String!
+  configuration: ConfigurationCreateOneWithoutGroupsInput!
   nodes: ZNodeCreateManyWithoutGroupInput
   users: UserCreateManyWithoutCurrentGroupInput
+  tags: Json
+  workplaceSharing: Boolean
+  algoliaSynonyms: Json
+  slackChannelHook: String
+}
+
+input GroupCreateManyWithoutConfigurationInput {
+  create: [GroupCreateWithoutConfigurationInput!]
+  connect: [GroupWhereUniqueInput!]
 }
 
 input GroupCreateOneWithoutNodesInput {
@@ -786,16 +921,37 @@ input GroupCreateOneWithoutUsersInput {
   connect: GroupWhereUniqueInput
 }
 
+input GroupCreateWithoutConfigurationInput {
+  name: String!
+  slug: String!
+  nodes: ZNodeCreateManyWithoutGroupInput
+  users: UserCreateManyWithoutCurrentGroupInput
+  tags: Json
+  workplaceSharing: Boolean
+  algoliaSynonyms: Json
+  slackChannelHook: String
+}
+
 input GroupCreateWithoutNodesInput {
   name: String!
   slug: String!
+  configuration: ConfigurationCreateOneWithoutGroupsInput!
   users: UserCreateManyWithoutCurrentGroupInput
+  tags: Json
+  workplaceSharing: Boolean
+  algoliaSynonyms: Json
+  slackChannelHook: String
 }
 
 input GroupCreateWithoutUsersInput {
   name: String!
   slug: String!
+  configuration: ConfigurationCreateOneWithoutGroupsInput!
   nodes: ZNodeCreateManyWithoutGroupInput
+  tags: Json
+  workplaceSharing: Boolean
+  algoliaSynonyms: Json
+  slackChannelHook: String
 }
 
 type GroupEdge {
@@ -810,6 +966,14 @@ enum GroupOrderByInput {
   name_DESC
   slug_ASC
   slug_DESC
+  tags_ASC
+  tags_DESC
+  workplaceSharing_ASC
+  workplaceSharing_DESC
+  algoliaSynonyms_ASC
+  algoliaSynonyms_DESC
+  slackChannelHook_ASC
+  slackChannelHook_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -820,6 +984,74 @@ type GroupPreviousValues {
   id: ID!
   name: String!
   slug: String!
+  tags: Json
+  workplaceSharing: Boolean
+  algoliaSynonyms: Json
+  slackChannelHook: String
+}
+
+input GroupScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  slug: String
+  slug_not: String
+  slug_in: [String!]
+  slug_not_in: [String!]
+  slug_lt: String
+  slug_lte: String
+  slug_gt: String
+  slug_gte: String
+  slug_contains: String
+  slug_not_contains: String
+  slug_starts_with: String
+  slug_not_starts_with: String
+  slug_ends_with: String
+  slug_not_ends_with: String
+  workplaceSharing: Boolean
+  workplaceSharing_not: Boolean
+  slackChannelHook: String
+  slackChannelHook_not: String
+  slackChannelHook_in: [String!]
+  slackChannelHook_not_in: [String!]
+  slackChannelHook_lt: String
+  slackChannelHook_lte: String
+  slackChannelHook_gt: String
+  slackChannelHook_gte: String
+  slackChannelHook_contains: String
+  slackChannelHook_not_contains: String
+  slackChannelHook_starts_with: String
+  slackChannelHook_not_starts_with: String
+  slackChannelHook_ends_with: String
+  slackChannelHook_not_ends_with: String
+  AND: [GroupScalarWhereInput!]
+  OR: [GroupScalarWhereInput!]
+  NOT: [GroupScalarWhereInput!]
 }
 
 type GroupSubscriptionPayload {
@@ -843,13 +1075,48 @@ input GroupSubscriptionWhereInput {
 input GroupUpdateInput {
   name: String
   slug: String
+  configuration: ConfigurationUpdateOneRequiredWithoutGroupsInput
   nodes: ZNodeUpdateManyWithoutGroupInput
   users: UserUpdateManyWithoutCurrentGroupInput
+  tags: Json
+  workplaceSharing: Boolean
+  algoliaSynonyms: Json
+  slackChannelHook: String
+}
+
+input GroupUpdateManyDataInput {
+  name: String
+  slug: String
+  tags: Json
+  workplaceSharing: Boolean
+  algoliaSynonyms: Json
+  slackChannelHook: String
 }
 
 input GroupUpdateManyMutationInput {
   name: String
   slug: String
+  tags: Json
+  workplaceSharing: Boolean
+  algoliaSynonyms: Json
+  slackChannelHook: String
+}
+
+input GroupUpdateManyWithoutConfigurationInput {
+  create: [GroupCreateWithoutConfigurationInput!]
+  delete: [GroupWhereUniqueInput!]
+  connect: [GroupWhereUniqueInput!]
+  set: [GroupWhereUniqueInput!]
+  disconnect: [GroupWhereUniqueInput!]
+  update: [GroupUpdateWithWhereUniqueWithoutConfigurationInput!]
+  upsert: [GroupUpsertWithWhereUniqueWithoutConfigurationInput!]
+  deleteMany: [GroupScalarWhereInput!]
+  updateMany: [GroupUpdateManyWithWhereNestedInput!]
+}
+
+input GroupUpdateManyWithWhereNestedInput {
+  where: GroupScalarWhereInput!
+  data: GroupUpdateManyDataInput!
 }
 
 input GroupUpdateOneWithoutNodesInput {
@@ -870,16 +1137,42 @@ input GroupUpdateOneWithoutUsersInput {
   connect: GroupWhereUniqueInput
 }
 
+input GroupUpdateWithoutConfigurationDataInput {
+  name: String
+  slug: String
+  nodes: ZNodeUpdateManyWithoutGroupInput
+  users: UserUpdateManyWithoutCurrentGroupInput
+  tags: Json
+  workplaceSharing: Boolean
+  algoliaSynonyms: Json
+  slackChannelHook: String
+}
+
 input GroupUpdateWithoutNodesDataInput {
   name: String
   slug: String
+  configuration: ConfigurationUpdateOneRequiredWithoutGroupsInput
   users: UserUpdateManyWithoutCurrentGroupInput
+  tags: Json
+  workplaceSharing: Boolean
+  algoliaSynonyms: Json
+  slackChannelHook: String
 }
 
 input GroupUpdateWithoutUsersDataInput {
   name: String
   slug: String
+  configuration: ConfigurationUpdateOneRequiredWithoutGroupsInput
   nodes: ZNodeUpdateManyWithoutGroupInput
+  tags: Json
+  workplaceSharing: Boolean
+  algoliaSynonyms: Json
+  slackChannelHook: String
+}
+
+input GroupUpdateWithWhereUniqueWithoutConfigurationInput {
+  where: GroupWhereUniqueInput!
+  data: GroupUpdateWithoutConfigurationDataInput!
 }
 
 input GroupUpsertWithoutNodesInput {
@@ -890,6 +1183,12 @@ input GroupUpsertWithoutNodesInput {
 input GroupUpsertWithoutUsersInput {
   update: GroupUpdateWithoutUsersDataInput!
   create: GroupCreateWithoutUsersInput!
+}
+
+input GroupUpsertWithWhereUniqueWithoutConfigurationInput {
+  where: GroupWhereUniqueInput!
+  update: GroupUpdateWithoutConfigurationDataInput!
+  create: GroupCreateWithoutConfigurationInput!
 }
 
 input GroupWhereInput {
@@ -935,12 +1234,29 @@ input GroupWhereInput {
   slug_not_starts_with: String
   slug_ends_with: String
   slug_not_ends_with: String
+  configuration: ConfigurationWhereInput
   nodes_every: ZNodeWhereInput
   nodes_some: ZNodeWhereInput
   nodes_none: ZNodeWhereInput
   users_every: UserWhereInput
   users_some: UserWhereInput
   users_none: UserWhereInput
+  workplaceSharing: Boolean
+  workplaceSharing_not: Boolean
+  slackChannelHook: String
+  slackChannelHook_not: String
+  slackChannelHook_in: [String!]
+  slackChannelHook_not_in: [String!]
+  slackChannelHook_lt: String
+  slackChannelHook_lte: String
+  slackChannelHook_gt: String
+  slackChannelHook_gte: String
+  slackChannelHook_contains: String
+  slackChannelHook_not_contains: String
+  slackChannelHook_starts_with: String
+  slackChannelHook_not_starts_with: String
+  slackChannelHook_ends_with: String
+  slackChannelHook_not_ends_with: String
   AND: [GroupWhereInput!]
   OR: [GroupWhereInput!]
   NOT: [GroupWhereInput!]
@@ -1027,6 +1343,62 @@ type HistoryActionPreviousValues {
   createdAt: DateTime!
 }
 
+input HistoryActionScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  action: String
+  action_not: String
+  action_in: [String!]
+  action_not_in: [String!]
+  action_lt: String
+  action_lte: String
+  action_gt: String
+  action_gte: String
+  action_contains: String
+  action_not_contains: String
+  action_starts_with: String
+  action_not_starts_with: String
+  action_ends_with: String
+  action_not_ends_with: String
+  model: String
+  model_not: String
+  model_in: [String!]
+  model_not_in: [String!]
+  model_lt: String
+  model_lte: String
+  model_gt: String
+  model_gte: String
+  model_contains: String
+  model_not_contains: String
+  model_starts_with: String
+  model_not_starts_with: String
+  model_ends_with: String
+  model_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  AND: [HistoryActionScalarWhereInput!]
+  OR: [HistoryActionScalarWhereInput!]
+  NOT: [HistoryActionScalarWhereInput!]
+}
+
 type HistoryActionSubscriptionPayload {
   mutation: MutationType!
   node: HistoryAction
@@ -1053,6 +1425,12 @@ input HistoryActionUpdateInput {
   user: UserUpdateOneRequiredWithoutHistoryInput
 }
 
+input HistoryActionUpdateManyDataInput {
+  action: String
+  model: String
+  meta: Json
+}
+
 input HistoryActionUpdateManyMutationInput {
   action: String
   model: String
@@ -1063,18 +1441,29 @@ input HistoryActionUpdateManyWithoutNodeInput {
   create: [HistoryActionCreateWithoutNodeInput!]
   delete: [HistoryActionWhereUniqueInput!]
   connect: [HistoryActionWhereUniqueInput!]
+  set: [HistoryActionWhereUniqueInput!]
   disconnect: [HistoryActionWhereUniqueInput!]
   update: [HistoryActionUpdateWithWhereUniqueWithoutNodeInput!]
   upsert: [HistoryActionUpsertWithWhereUniqueWithoutNodeInput!]
+  deleteMany: [HistoryActionScalarWhereInput!]
+  updateMany: [HistoryActionUpdateManyWithWhereNestedInput!]
 }
 
 input HistoryActionUpdateManyWithoutUserInput {
   create: [HistoryActionCreateWithoutUserInput!]
   delete: [HistoryActionWhereUniqueInput!]
   connect: [HistoryActionWhereUniqueInput!]
+  set: [HistoryActionWhereUniqueInput!]
   disconnect: [HistoryActionWhereUniqueInput!]
   update: [HistoryActionUpdateWithWhereUniqueWithoutUserInput!]
   upsert: [HistoryActionUpsertWithWhereUniqueWithoutUserInput!]
+  deleteMany: [HistoryActionScalarWhereInput!]
+  updateMany: [HistoryActionUpdateManyWithWhereNestedInput!]
+}
+
+input HistoryActionUpdateManyWithWhereNestedInput {
+  where: HistoryActionScalarWhereInput!
+  data: HistoryActionUpdateManyDataInput!
 }
 
 input HistoryActionUpdateWithoutNodeDataInput {
@@ -1364,6 +1753,70 @@ type QuestionPreviousValues {
   updatedAt: DateTime!
 }
 
+input QuestionScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  slug: String
+  slug_not: String
+  slug_in: [String!]
+  slug_not_in: [String!]
+  slug_lt: String
+  slug_lte: String
+  slug_gt: String
+  slug_gte: String
+  slug_contains: String
+  slug_not_contains: String
+  slug_starts_with: String
+  slug_not_starts_with: String
+  slug_ends_with: String
+  slug_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [QuestionScalarWhereInput!]
+  OR: [QuestionScalarWhereInput!]
+  NOT: [QuestionScalarWhereInput!]
+}
+
 type QuestionSubscriptionPayload {
   mutation: MutationType!
   node: Question
@@ -1389,6 +1842,11 @@ input QuestionUpdateInput {
   user: UserUpdateOneRequiredWithoutQuestionsInput
 }
 
+input QuestionUpdateManyDataInput {
+  title: String
+  slug: String
+}
+
 input QuestionUpdateManyMutationInput {
   title: String
   slug: String
@@ -1398,9 +1856,17 @@ input QuestionUpdateManyWithoutUserInput {
   create: [QuestionCreateWithoutUserInput!]
   delete: [QuestionWhereUniqueInput!]
   connect: [QuestionWhereUniqueInput!]
+  set: [QuestionWhereUniqueInput!]
   disconnect: [QuestionWhereUniqueInput!]
   update: [QuestionUpdateWithWhereUniqueWithoutUserInput!]
   upsert: [QuestionUpsertWithWhereUniqueWithoutUserInput!]
+  deleteMany: [QuestionScalarWhereInput!]
+  updateMany: [QuestionUpdateManyWithWhereNestedInput!]
+}
+
+input QuestionUpdateManyWithWhereNestedInput {
+  where: QuestionScalarWhereInput!
+  data: QuestionUpdateManyDataInput!
 }
 
 input QuestionUpdateOneWithoutNodeInput {
@@ -1563,6 +2029,54 @@ type SourcePreviousValues {
   url: String!
 }
 
+input SourceScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  label: String
+  label_not: String
+  label_in: [String!]
+  label_not_in: [String!]
+  label_lt: String
+  label_lte: String
+  label_gt: String
+  label_gte: String
+  label_contains: String
+  label_not_contains: String
+  label_starts_with: String
+  label_not_starts_with: String
+  label_ends_with: String
+  label_not_ends_with: String
+  url: String
+  url_not: String
+  url_in: [String!]
+  url_not_in: [String!]
+  url_lt: String
+  url_lte: String
+  url_gt: String
+  url_gte: String
+  url_contains: String
+  url_not_contains: String
+  url_starts_with: String
+  url_not_starts_with: String
+  url_ends_with: String
+  url_not_ends_with: String
+  AND: [SourceScalarWhereInput!]
+  OR: [SourceScalarWhereInput!]
+  NOT: [SourceScalarWhereInput!]
+}
+
 type SourceSubscriptionPayload {
   mutation: MutationType!
   node: Source
@@ -1587,6 +2101,11 @@ input SourceUpdateInput {
   answer: AnswerUpdateOneRequiredWithoutSourcesInput
 }
 
+input SourceUpdateManyDataInput {
+  label: String
+  url: String
+}
+
 input SourceUpdateManyMutationInput {
   label: String
   url: String
@@ -1596,9 +2115,17 @@ input SourceUpdateManyWithoutAnswerInput {
   create: [SourceCreateWithoutAnswerInput!]
   delete: [SourceWhereUniqueInput!]
   connect: [SourceWhereUniqueInput!]
+  set: [SourceWhereUniqueInput!]
   disconnect: [SourceWhereUniqueInput!]
   update: [SourceUpdateWithWhereUniqueWithoutAnswerInput!]
   upsert: [SourceUpsertWithWhereUniqueWithoutAnswerInput!]
+  deleteMany: [SourceScalarWhereInput!]
+  updateMany: [SourceUpdateManyWithWhereNestedInput!]
+}
+
+input SourceUpdateManyWithWhereNestedInput {
+  where: SourceScalarWhereInput!
+  data: SourceUpdateManyDataInput!
 }
 
 input SourceUpdateWithoutAnswerDataInput {
@@ -1745,6 +2272,48 @@ type TagPreviousValues {
   createdAt: DateTime!
 }
 
+input TagScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  label: String
+  label_not: String
+  label_in: [String!]
+  label_not_in: [String!]
+  label_lt: String
+  label_lte: String
+  label_gt: String
+  label_gte: String
+  label_contains: String
+  label_not_contains: String
+  label_starts_with: String
+  label_not_starts_with: String
+  label_ends_with: String
+  label_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  AND: [TagScalarWhereInput!]
+  OR: [TagScalarWhereInput!]
+  NOT: [TagScalarWhereInput!]
+}
+
 type TagSubscriptionPayload {
   mutation: MutationType!
   node: Tag
@@ -1769,6 +2338,10 @@ input TagUpdateInput {
   user: UserUpdateOneRequiredWithoutTagsInput
 }
 
+input TagUpdateManyDataInput {
+  label: String
+}
+
 input TagUpdateManyMutationInput {
   label: String
 }
@@ -1777,18 +2350,29 @@ input TagUpdateManyWithoutNodeInput {
   create: [TagCreateWithoutNodeInput!]
   delete: [TagWhereUniqueInput!]
   connect: [TagWhereUniqueInput!]
+  set: [TagWhereUniqueInput!]
   disconnect: [TagWhereUniqueInput!]
   update: [TagUpdateWithWhereUniqueWithoutNodeInput!]
   upsert: [TagUpsertWithWhereUniqueWithoutNodeInput!]
+  deleteMany: [TagScalarWhereInput!]
+  updateMany: [TagUpdateManyWithWhereNestedInput!]
 }
 
 input TagUpdateManyWithoutUserInput {
   create: [TagCreateWithoutUserInput!]
   delete: [TagWhereUniqueInput!]
   connect: [TagWhereUniqueInput!]
+  set: [TagWhereUniqueInput!]
   disconnect: [TagWhereUniqueInput!]
   update: [TagUpdateWithWhereUniqueWithoutUserInput!]
   upsert: [TagUpsertWithWhereUniqueWithoutUserInput!]
+  deleteMany: [TagScalarWhereInput!]
+  updateMany: [TagUpdateManyWithWhereNestedInput!]
+}
+
+input TagUpdateManyWithWhereNestedInput {
+  where: TagScalarWhereInput!
+  data: TagUpdateManyDataInput!
 }
 
 input TagUpdateWithoutNodeDataInput {
@@ -2071,6 +2655,120 @@ type UserPreviousValues {
   createdAt: DateTime!
 }
 
+input UserScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  auth0Id: String
+  auth0Id_not: String
+  auth0Id_in: [String!]
+  auth0Id_not_in: [String!]
+  auth0Id_lt: String
+  auth0Id_lte: String
+  auth0Id_gt: String
+  auth0Id_gte: String
+  auth0Id_contains: String
+  auth0Id_not_contains: String
+  auth0Id_starts_with: String
+  auth0Id_not_starts_with: String
+  auth0Id_ends_with: String
+  auth0Id_not_ends_with: String
+  key: String
+  key_not: String
+  key_in: [String!]
+  key_not_in: [String!]
+  key_lt: String
+  key_lte: String
+  key_gt: String
+  key_gte: String
+  key_contains: String
+  key_not_contains: String
+  key_starts_with: String
+  key_not_starts_with: String
+  key_ends_with: String
+  key_not_ends_with: String
+  admin: Boolean
+  admin_not: Boolean
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  email: String
+  email_not: String
+  email_in: [String!]
+  email_not_in: [String!]
+  email_lt: String
+  email_lte: String
+  email_gt: String
+  email_gte: String
+  email_contains: String
+  email_not_contains: String
+  email_starts_with: String
+  email_not_starts_with: String
+  email_ends_with: String
+  email_not_ends_with: String
+  picture: String
+  picture_not: String
+  picture_in: [String!]
+  picture_not_in: [String!]
+  picture_lt: String
+  picture_lte: String
+  picture_gt: String
+  picture_gte: String
+  picture_contains: String
+  picture_not_contains: String
+  picture_starts_with: String
+  picture_not_starts_with: String
+  picture_ends_with: String
+  picture_not_ends_with: String
+  locale: String
+  locale_not: String
+  locale_in: [String!]
+  locale_not_in: [String!]
+  locale_lt: String
+  locale_lte: String
+  locale_gt: String
+  locale_gte: String
+  locale_contains: String
+  locale_not_contains: String
+  locale_starts_with: String
+  locale_not_starts_with: String
+  locale_ends_with: String
+  locale_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  AND: [UserScalarWhereInput!]
+  OR: [UserScalarWhereInput!]
+  NOT: [UserScalarWhereInput!]
+}
+
 type UserSubscriptionPayload {
   mutation: MutationType!
   node: User
@@ -2105,6 +2803,16 @@ input UserUpdateInput {
   history: HistoryActionUpdateManyWithoutUserInput
 }
 
+input UserUpdateManyDataInput {
+  auth0Id: String
+  key: String
+  admin: Boolean
+  name: String
+  email: String
+  picture: String
+  locale: String
+}
+
 input UserUpdateManyMutationInput {
   auth0Id: String
   key: String
@@ -2119,9 +2827,17 @@ input UserUpdateManyWithoutCurrentGroupInput {
   create: [UserCreateWithoutCurrentGroupInput!]
   delete: [UserWhereUniqueInput!]
   connect: [UserWhereUniqueInput!]
+  set: [UserWhereUniqueInput!]
   disconnect: [UserWhereUniqueInput!]
   update: [UserUpdateWithWhereUniqueWithoutCurrentGroupInput!]
   upsert: [UserUpsertWithWhereUniqueWithoutCurrentGroupInput!]
+  deleteMany: [UserScalarWhereInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
+}
+
+input UserUpdateManyWithWhereNestedInput {
+  where: UserScalarWhereInput!
+  data: UserUpdateManyDataInput!
 }
 
 input UserUpdateOneRequiredWithoutAnswersInput {
@@ -2552,6 +3268,26 @@ type ZNodePreviousValues {
   highlights: Json
 }
 
+input ZNodeScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  AND: [ZNodeScalarWhereInput!]
+  OR: [ZNodeScalarWhereInput!]
+  NOT: [ZNodeScalarWhereInput!]
+}
+
 type ZNodeSubscriptionPayload {
   mutation: MutationType!
   node: ZNode
@@ -2580,6 +3316,10 @@ input ZNodeUpdateInput {
   highlights: Json
 }
 
+input ZNodeUpdateManyDataInput {
+  highlights: Json
+}
+
 input ZNodeUpdateManyMutationInput {
   highlights: Json
 }
@@ -2588,9 +3328,17 @@ input ZNodeUpdateManyWithoutGroupInput {
   create: [ZNodeCreateWithoutGroupInput!]
   delete: [ZNodeWhereUniqueInput!]
   connect: [ZNodeWhereUniqueInput!]
+  set: [ZNodeWhereUniqueInput!]
   disconnect: [ZNodeWhereUniqueInput!]
   update: [ZNodeUpdateWithWhereUniqueWithoutGroupInput!]
   upsert: [ZNodeUpsertWithWhereUniqueWithoutGroupInput!]
+  deleteMany: [ZNodeScalarWhereInput!]
+  updateMany: [ZNodeUpdateManyWithWhereNestedInput!]
+}
+
+input ZNodeUpdateManyWithWhereNestedInput {
+  where: ZNodeScalarWhereInput!
+  data: ZNodeUpdateManyDataInput!
 }
 
 input ZNodeUpdateOneRequiredWithoutAnswerInput {

@@ -70,12 +70,18 @@ const useMutation = mutation => {
   const [response, setResponse] = useState({ loading: false, variables: null })
 
   const mutate = (variables, callback) => {
-    setResponse({ ...response, loading: true, variables })
-    apollo.mutate({ mutation, variables }).then(resp => {
-      if (mounted) {
-        setResponse({ ...response, ...resp, loading: false })
-        callback()
-      }
+    return new Promise((resolve, reject) => {
+      setResponse({ ...response, loading: true, variables })
+      apollo
+        .mutate({ mutation, variables })
+        .then(resp => {
+          if (mounted) {
+            const newResponse = { ...response, ...resp, loading: false }
+            setResponse(newResponse)
+            resolve(newResponse)
+          }
+        })
+        .catch(reject)
     })
   }
 

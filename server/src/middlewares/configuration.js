@@ -17,6 +17,12 @@ const refreshConfiguration = async tenant => {
 
   if (!conf.tags) conf.tags = []
 
+  const groups = await tenant.query.groups()
+
+  //console.log(groups)
+
+  conf.groups = groups
+
   tenant._meta.configuration = conf
 }
 

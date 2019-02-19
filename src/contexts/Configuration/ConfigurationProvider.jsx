@@ -34,9 +34,7 @@ const ConfigurationProvider = ({ children }) => {
       })
       .then(conf => {
         localStorage.configuration = JSON.stringify(conf)
-        if (configuration.loading) {
-          setConfiguration(state => ({ ...state, loading: false, ...conf }))
-        }
+        setConfiguration(state => ({ ...state, loading: false, ...conf }))
       })
 
     return () => setConfiguration(state => ({ ...state, loading: false }))

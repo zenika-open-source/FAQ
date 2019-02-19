@@ -24,7 +24,7 @@ class Algolia {
   constructor() {
     this.indices = []
   }
-  getIndex(ctx) {
+  getIndex(ctx, otherGroup = null) {
     const {
       service: { name, stage },
       configuration: conf
@@ -36,7 +36,7 @@ class Algolia {
       return null
     }
 
-    const group = ctxUser(ctx).currentGroup.slug
+    const group = otherGroup || ctxUser(ctx).currentGroup.slug
 
     if (this.indices[name] && this.indices[name][stage] && this.indices[name][stage][group]) {
       return this.indices[name][stage][group]
@@ -125,8 +125,8 @@ class Algolia {
 
     return { ids, highlights, nbHits: content.nbHits }
   }
-  resyncSynonyms(ctx, synonyms) {
-    const index = this.getIndex(ctx)
+  resyncSynonyms(ctx, synonyms, group = null) {
+    const index = this.getIndex(ctx, group)
 
     if (!index) return
 

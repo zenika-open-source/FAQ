@@ -38,6 +38,9 @@ export const searchNodes = gql`
           id
           label
         }
+        group {
+          id
+        }
         highlights
       }
       meta {

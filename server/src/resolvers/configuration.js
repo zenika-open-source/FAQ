@@ -8,13 +8,30 @@ module.exports = {
     groups: (_, args, ctx, info) => ctx.prisma.query.groups(null, info)
   },
   Mutation: {
-    updateConfiguration: async (_, args, ctx, info) => {
+    updateConfiguration: async (_, { title, groups }, ctx, info) => {
       const configuration = await ctx.prisma.mutation.updateConfiguration(
-        { where: { name: 'default' }, data: args },
+        {
+          where: { name: 'default' },
+          data: {
+            title,
+            groups: {
+              updateMany: groups.map(group => ({
+                where: {
+                  slug: group.slug
+                },
+                data: {
+                  tags: group.tags,
+                  algoliaSynonyms: group.algoliaSynonyms,
+                  workplaceSharing: group.workplaceSharing
+                }
+              }))
+            }
+          }
+        },
         info
       )
 
-      algolia.resyncSynonyms(ctx, args.algoliaSynonyms)
+      groups.map(group => algolia.resyncSynonyms(ctx, group.algoliaSynonyms, group.slug))
 
       refreshConfiguration(ctx.prisma)
 

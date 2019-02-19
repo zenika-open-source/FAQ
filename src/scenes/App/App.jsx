@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { ConfigurationProvider, AuthProvider, UserProvider } from 'contexts'
+import { ConfigurationProvider, AuthProvider, UserProvider, GroupsProvider } from 'contexts'
 
 import { AlertStack, AlertProvider } from 'components'
 
@@ -17,9 +17,11 @@ const App = () => (
       <ConfigurationProvider>
         <AuthProvider>
           <UserProvider>
-            <Navbar />
-            <AppBody />
-            <Footer />
+            <GroupsProvider>
+              <Navbar />
+              <AppBody />
+              <Footer />
+            </GroupsProvider>
           </UserProvider>
         </AuthProvider>
       </ConfigurationProvider>

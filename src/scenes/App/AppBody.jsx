@@ -16,7 +16,7 @@ const AppBody = () => {
   const conf = useConfiguration()
   const auth = useAuth()
 
-  if (conf.loading || !auth.ready) return <Loading text="Retrieving configuration..." />
+  if (conf.loading || !auth.ready) return <Loading text="Preparing the questions..." />
 
   return (
     <div className="main">

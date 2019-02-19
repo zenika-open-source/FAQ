@@ -5,6 +5,7 @@ export const zNodeFragment = `
   group {
     id
     name
+    workplaceSharing
   }
   question {
     id
