@@ -5,6 +5,8 @@ import './Tabs.scss'
 
 export const TabsContext = React.createContext()
 
+/* This file is currently unused, but may be useful for later, so we keep it */
+
 const Tabs = ({ labels, children, className }) => {
   const first = Object.keys(labels)[0]
 
