@@ -337,7 +337,7 @@ type Configuration {
   title: String!
   auth0Domain: String!
   auth0ClientId: String!
-  authorizedMails: [String!]!
+  authorizedDomains: [String!]!
   algoliaAppId: String
   algoliaApiKey: String
   algoliaSynonyms: Json
@@ -346,7 +346,6 @@ type Configuration {
   slackChannelHook: String
   tags: Json
   workplaceSharing: Boolean
-  authorizedDomains: [String!]!
 }
 
 type ConfigurationConnection {
@@ -359,16 +358,12 @@ input ConfigurationCreateauthorizedDomainsInput {
   set: [String!]
 }
 
-input ConfigurationCreateauthorizedMailsInput {
-  set: [String!]
-}
-
 input ConfigurationCreateInput {
   name: String!
   title: String
   auth0Domain: String!
   auth0ClientId: String!
-  authorizedMails: ConfigurationCreateauthorizedMailsInput
+  authorizedDomains: ConfigurationCreateauthorizedDomainsInput
   algoliaAppId: String
   algoliaApiKey: String
   algoliaSynonyms: Json
@@ -377,7 +372,6 @@ input ConfigurationCreateInput {
   slackChannelHook: String
   tags: Json
   workplaceSharing: Boolean
-  authorizedDomains: ConfigurationCreateauthorizedDomainsInput
 }
 
 type ConfigurationEdge {
@@ -424,7 +418,7 @@ type ConfigurationPreviousValues {
   title: String!
   auth0Domain: String!
   auth0ClientId: String!
-  authorizedMails: [String!]!
+  authorizedDomains: [String!]!
   algoliaAppId: String
   algoliaApiKey: String
   algoliaSynonyms: Json
@@ -433,7 +427,6 @@ type ConfigurationPreviousValues {
   slackChannelHook: String
   tags: Json
   workplaceSharing: Boolean
-  authorizedDomains: [String!]!
 }
 
 type ConfigurationSubscriptionPayload {
@@ -458,16 +451,12 @@ input ConfigurationUpdateauthorizedDomainsInput {
   set: [String!]
 }
 
-input ConfigurationUpdateauthorizedMailsInput {
-  set: [String!]
-}
-
 input ConfigurationUpdateInput {
   name: String
   title: String
   auth0Domain: String
   auth0ClientId: String
-  authorizedMails: ConfigurationUpdateauthorizedMailsInput
+  authorizedDomains: ConfigurationUpdateauthorizedDomainsInput
   algoliaAppId: String
   algoliaApiKey: String
   algoliaSynonyms: Json
@@ -476,7 +465,6 @@ input ConfigurationUpdateInput {
   slackChannelHook: String
   tags: Json
   workplaceSharing: Boolean
-  authorizedDomains: ConfigurationUpdateauthorizedDomainsInput
 }
 
 input ConfigurationUpdateManyMutationInput {
@@ -484,7 +472,7 @@ input ConfigurationUpdateManyMutationInput {
   title: String
   auth0Domain: String
   auth0ClientId: String
-  authorizedMails: ConfigurationUpdateauthorizedMailsInput
+  authorizedDomains: ConfigurationUpdateauthorizedDomainsInput
   algoliaAppId: String
   algoliaApiKey: String
   algoliaSynonyms: Json
@@ -493,7 +481,6 @@ input ConfigurationUpdateManyMutationInput {
   slackChannelHook: String
   tags: Json
   workplaceSharing: Boolean
-  authorizedDomains: ConfigurationUpdateauthorizedDomainsInput
 }
 
 input ConfigurationWhereInput {

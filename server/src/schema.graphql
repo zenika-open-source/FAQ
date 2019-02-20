@@ -54,7 +54,7 @@ type Mutation {
     tags: Json!
     algoliaSynonyms: Json!
     workplaceSharing: Boolean!
-    authorizedMails: [String!]!
+    authorizedDomains: [String!]!
   ): Configuration @admin
 }
 
@@ -90,6 +90,7 @@ type Configuration {
 
   auth0Domain: String!
   auth0ClientId: String!
+  authorizedDomains: [String!]
 
   algoliaAppId: String @admin
   algoliaApiKey: String @admin

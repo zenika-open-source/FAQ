@@ -96,11 +96,15 @@ const checkJwt = (req, res, next, prisma) => {
 }
 
 const checkDomain = (req, res, next, prisma) => {
-  if (prisma._meta.configuration.authorizedDomains.includes(req.user.email.split('@').pop())) {
-    next()
-  } else {
-    return next(new Error('wrong-domain-mail', 'Wrong domain mail'))
-  }
+  const userDomain = req.user.email.split('@').pop()
+
+  const domains = prisma._meta.configuration.authorizedDomains
+
+  if (!domains || domains.length == 0) return next()
+
+  if (domains.find(d => userDomain.endsWith(d))) return next()
+
+  return next(new UnauthorizedError('wrong-domain-mail', 'Wrong domain mail'))
 }
 
 module.exports = { checkJwt, checkDomain }

@@ -7,7 +7,7 @@ export const getConfiguration = gql`
       tags
       algoliaSynonyms
       workplaceSharing
-      authorizedMails
+      authorizedDomains
     }
   }
 `
@@ -18,14 +18,14 @@ export const updateConfigurationMutation = gql`
     $tags: Json!
     $algoliaSynonyms: Json!
     $workplaceSharing: Boolean!
-    $authorizedMails: [String!]!
+    $authorizedDomains: [String!]!
   ) {
     updateConfiguration(
       title: $title
       tags: $tags
       algoliaSynonyms: $algoliaSynonyms
       workplaceSharing: $workplaceSharing
-      authorizedMails: $authorizedMails
+      authorizedDomains: $authorizedDomains
     ) {
       title
       tags
