@@ -39,11 +39,11 @@ https://[service_stage?].[service_name?].[FAQ_URL]/
 | service_name  | The name of the service. Default: `default` |
 | service_stage | The stage of the service. Default: `prod`   |
 
-Examples with FAQ_URL=faq.zenika.com (`name / stage`):
+Examples with FAQ_URL=faq.team (`name / stage`):
 
-- faq.zenika.com => `default / prod`
-- demo.faq.zenika.com => `demo / prod`
-- dev.demo.faq.zenika.com => `demo / dev`
+- faq.team => `default / prod`
+- demo.faq.team => `demo / prod`
+- dev.demo.faq.team => `demo / dev`
 
 > Note 1: If NODE_ENV!=production or if no FAQ_URL is found in your frontend environment variables, the default routing will return `default/default`
 

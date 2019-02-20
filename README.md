@@ -2,7 +2,7 @@
 
 # FAQ Zenika
 
-Internal Knowledge Database for your organization - https://demo.faq.zenika.com
+Internal Knowledge Database for your organization - https://demo.faq.team
 
 ## What is FAQ?
 

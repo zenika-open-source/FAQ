@@ -1,4 +1,5 @@
 import React from 'react'
+import { Helmet } from 'react-helmet'
 
 import { ConfigurationProvider, AuthProvider, UserProvider } from 'contexts'
 
@@ -13,6 +14,9 @@ import 'styles'
 
 const App = () => (
   <div className="app theme">
+    <Helmet>
+      <title>FAQ</title>
+    </Helmet>
     <AlertProvider>
       <ConfigurationProvider>
         <AuthProvider>
