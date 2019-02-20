@@ -1,165 +1,131 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { useState, useReducer } from 'react'
 
-import { onListChange } from 'helpers'
-import { alert, configuration } from 'services'
+import { alert } from 'services'
+import { useMutation } from 'services/apollo'
 
-import { PairInputList, Button, Input, Checkbox } from 'components'
+import { useConfiguration } from 'contexts'
+
+import { Input, Checkbox, Button, PairInputList } from 'components'
 import Card, { CardTitle, CardText, CardActions } from 'components/Card'
+
+import { onListChangeActions } from 'helpers/onListChange'
+
+import { reducer, tagsToList, listToTags, synonymsToList, listToSynonyms } from './helpers'
+
+import { updateConfigurationMutation } from './queries'
 
 import './Settings.css'
 
-class Settings extends Component {
-  constructor(props) {
-    super(props)
+const Settings = ({ configuration: conf }) => {
+  const configuration = useConfiguration()
 
-    const { configuration } = props
+  const [loading, setLoading] = useState(false)
 
-    this.state = {
-      loading: false,
-      title: configuration.title,
-      tags: this.tagsToList(configuration.tags),
-      synonyms: this.synonymsToList(configuration.algoliaSynonyms),
-      enableWorkplace: configuration.enableWorkplaceSharing
-    }
-  }
+  const [state, dispatch] = useReducer(reducer, {
+    ...conf,
+    tags: tagsToList(conf.tags),
+    synonyms: synonymsToList(conf.algoliaSynonyms)
+  })
 
-  onTitleChange = title => this.setState({ title })
-  onEnableWorkplaceChange = enableWorkplace => this.setState({ enableWorkplace })
+  const [, mutate] = useMutation(updateConfigurationMutation)
 
-  tagsToList(tags) {
-    return Object.entries(tags || {}).map(([key, value], id) => ({
-      id,
-      key,
-      value: value.join(', ')
-    }))
-  }
-
-  listToTags(list) {
-    return list.reduce((acc, item) => {
-      acc[item.key] = item.value.split(',').map(x => x.trim())
-      return acc
-    }, {})
-  }
-
-  synonymsToList(synonyms) {
-    return (synonyms || []).map(({ objectID, synonyms }, id) => ({
-      id,
-      key: objectID,
-      value: synonyms.join(', ')
-    }))
-  }
-
-  listToSynonyms(list) {
-    return list.map(item => ({
-      objectID: item.key,
-      type: 'synonym',
-      synonyms: item.value.split(',').map(x => x.trim())
-    }))
-  }
-
-  onTagsChange = onListChange(this.setState.bind(this), 'tags')
-  onSynonymsChange = onListChange(this.setState.bind(this), 'synonyms')
-
-  onSave = () => {
-    const { title, tags, synonyms, enableWorkplace } = this.state
-    this.setState({ loading: true })
-    this.props
-      .updateConfiguration({
-        title,
-        tags: this.listToTags(tags),
-        synonyms: this.listToSynonyms(synonyms),
-        enableWorkplace
-      })
+  const onSave = () => {
+    setLoading(true)
+    mutate({
+      title: state.title,
+      tags: listToTags(state.tags),
+      algoliaSynonyms: listToSynonyms(state.synonyms),
+      workplaceSharing: state.workplaceSharing
+    })
       .then(() => {
         alert.pushSuccess('The answer was successfully edited!')
-        configuration.load()
+        configuration.reload()
       })
       .catch(error => {
-        alert.pushError(
-          <>
-            <p>{error.message || 'An unknown error occured.'}</p>
-            <p>Please, refresh and try again</p>
-          </>,
-          error
-        )
+        alert.pushDefaultError(error)
       })
       .finally(() => {
-        this.setState({ loading: false })
+        setLoading(false)
       })
   }
 
-  render() {
-    const { loading, title, tags, synonyms, enableWorkplace } = this.state
-    return (
-      <div>
-        <Card>
-          <CardTitle>
-            <h1>FAQ Settings</h1>
-          </CardTitle>
-          <CardText>
-            <h2>Title</h2>
-            <br />
-            <div className="title-input">
-              <i className="material-icons">home</i>
-              <Input value={title} onChange={e => this.onTitleChange(e.target.value)} />
-            </div>
-            <br />
-            <hr />
-            <h2>Tags</h2>
-            <br />
-            <PairInputList
-              pairs={tags}
-              options={{
-                icons: { line: 'local_offer', value: 'list' },
-                labels: {
-                  add: 'Add tags',
-                  more: 'More tags',
-                  key: 'Category',
-                  value: 'Tags'
-                }
-              }}
-              actions={this.onTagsChange.actions}
-              disabled={loading}
+  return (
+    <div>
+      <Card>
+        <CardTitle>
+          <h1 className="centered" style={{ width: '100%' }}>
+            Settings
+          </h1>
+        </CardTitle>
+        <CardText>
+          <h2>Title</h2>
+          <br />
+          <div className="title-input">
+            <i className="material-icons">home</i>
+            <Input
+              value={state.title}
+              onChange={e => dispatch({ type: 'change_title', data: e.target.value })}
+              placeholder="Title"
             />
-            <hr />
-            <h2>Synonyms</h2>
-            <br />
-            <PairInputList
-              pairs={synonyms}
-              options={{
-                icons: { line: 'loop', value: 'list' },
-                labels: {
-                  add: 'Add a synonym',
-                  more: 'More synonyms',
-                  key: 'ID',
-                  value: 'Synonyms'
-                }
-              }}
-              actions={this.onSynonymsChange.actions}
-              disabled={loading}
-            />
-            <hr />
-            <h2>Integrations</h2>
-            <br />
+          </div>
+          <br />
+          <hr />
+          <h2>Tags</h2>
+          <br />
+          <PairInputList
+            pairs={state.tags}
+            options={{
+              icons: { line: 'local_offer', value: 'list' },
+              labels: {
+                add: 'Add tags',
+                more: 'More tags',
+                key: 'Category',
+                value: 'Tags'
+              }
+            }}
+            actions={onListChangeActions('tags', dispatch)}
+            disabled={loading}
+          />
+          <hr />
+          <h2>Synonyms</h2>
+          <br />
+          <PairInputList
+            pairs={state.synonyms}
+            options={{
+              icons: { line: 'loop', value: 'list' },
+              labels: {
+                add: 'Add a synonym',
+                more: 'More synonyms',
+                key: 'ID',
+                value: 'Synonyms'
+              }
+            }}
+            actions={onListChangeActions('synonyms', dispatch)}
+            disabled={loading}
+          />
+          <hr />
+          <h2>Integrations</h2>
+          <br />
+          <div style={{ marginLeft: '1rem' }}>
             <Checkbox
-              label="Workplace"
-              checked={enableWorkplace}
-              onChange={e => this.onEnableWorkplaceChange(e.target.checked)}
+              label="Enable workplace sharing"
+              checked={state.workplaceSharing}
+              onChange={e =>
+                dispatch({
+                  type: 'toggle_workplace',
+                  data: e.target.checked
+                })
+              }
+              disabled={loading}
             />
-          </CardText>
-          <CardActions>
-            <Button primary label="Save" onClick={this.onSave} loading={loading} />
-          </CardActions>
-        </Card>
-      </div>
-    )
-  }
-}
-
-Settings.propTypes = {
-  configuration: PropTypes.object.isRequired,
-  updateConfiguration: PropTypes.func.isRequired
+          </div>
+        </CardText>
+        <CardActions>
+          <Button primary label="Save" onClick={onSave} loading={loading} />
+        </CardActions>
+      </Card>
+    </div>
+  )
 }
 
 export default Settings

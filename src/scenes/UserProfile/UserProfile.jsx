@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
+import { AuthContext } from 'contexts'
+import { alert } from 'services'
+
 import { Avatar, Button } from 'components'
 import Card, { CardText, CardActions } from 'components/Card'
 
@@ -9,6 +12,8 @@ import Logs from './components/Logs'
 import { updateIdentity } from './queries'
 
 class UserProfile extends Component {
+  static contextType = AuthContext
+
   constructor(props) {
     super(props)
     this.state = {
@@ -31,6 +36,12 @@ class UserProfile extends Component {
     this.setState({ savingIdentity: true })
     try {
       await updateIdentity(identity)
+        .then(() => {
+          alert.pushSuccess('Your profile was successfully updated!')
+        })
+        .catch(error => {
+          alert.pushDefaultError(error)
+        })
     } finally {
       this.setState({ savingIdentity: false })
     }
@@ -41,6 +52,8 @@ class UserProfile extends Component {
       savingIdentity,
       identity: { name, email, picture }
     } = this.state
+
+    const auth = this.context
 
     return (
       <div>
@@ -98,7 +111,7 @@ class UserProfile extends Component {
             </CardActions>
           </CardText>
         </Card>
-        <Logs />
+        <Logs userId={auth.user.id} />
         <Card>
           <CardText>
             <h1 style={{ marginBottom: '1rem' }}>GDPR</h1>

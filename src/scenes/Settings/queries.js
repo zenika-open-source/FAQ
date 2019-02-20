@@ -1,39 +1,33 @@
 import gql from 'graphql-tag'
-import { graphql } from 'react-apollo'
 
 export const getConfiguration = gql`
   query {
     configuration {
-      id
       title
-      algoliaSynonyms
       tags
-      enableWorkplaceSharing
+      algoliaSynonyms
+      workplaceSharing
     }
   }
 `
 
 export const updateConfigurationMutation = gql`
   mutation updateConfiguration(
-    $title: String
+    $title: String!
     $tags: Json!
-    $synonyms: Json!
-    $enableWorkplace: Boolean!
+    $algoliaSynonyms: Json!
+    $workplaceSharing: Boolean!
   ) {
     updateConfiguration(
       title: $title
       tags: $tags
-      algoliaSynonyms: $synonyms
-      enableWorkplaceSharing: $enableWorkplace
+      algoliaSynonyms: $algoliaSynonyms
+      workplaceSharing: $workplaceSharing
     ) {
-      id
+      title
+      tags
+      algoliaSynonyms
+      workplaceSharing
     }
   }
 `
-
-export const updateConfiguration = graphql(updateConfigurationMutation, {
-  name: 'updateConfiguration',
-  props: ({ updateConfiguration }) => ({
-    updateConfiguration: variables => updateConfiguration({ variables })
-  })
-})

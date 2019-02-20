@@ -11,7 +11,7 @@ import { alert } from 'services'
 import Card, { CardText, CardActions, PermanentClosableCard } from 'components/Card'
 import { Loading, Button, Input, CtrlEnter, TagPicker } from 'components'
 
-import ActionMenu from '../../components/ActionMenu'
+import { ActionMenu } from '../../components'
 
 import Tips from './components/Tips'
 
@@ -64,13 +64,7 @@ class Edit extends Component {
         alert.pushSuccess('Your question was successfully submitted!')
       })
       .catch(error => {
-        alert.pushError(
-          <>
-            <p>{error.message || 'An unknown error occured.'}</p>
-            <p>Please, try again</p>
-          </>,
-          error
-        )
+        alert.pushDefaultError(error)
         this.setState({
           loadingSubmit: false
         })
@@ -96,13 +90,7 @@ class Edit extends Component {
         alert.pushSuccess('The question was successfully edited!')
       })
       .catch(error => {
-        alert.pushError(
-          <>
-            <p>{error.message || 'An unknown error occured.'}</p>
-            <p>Please, try again</p>
-          </>,
-          error
-        )
+        alert.pushDefaultError(error)
         this.setState({
           loadingSubmit: false
         })

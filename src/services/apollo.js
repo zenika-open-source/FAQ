@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Query } from 'react-apollo'
 
 import { ApolloClient } from 'apollo-client'
@@ -9,12 +9,11 @@ import { onError } from 'apollo-link-error'
 import { ApolloLink } from 'apollo-link'
 import { setContext } from 'apollo-link-context'
 
-import auth from './auth'
 import routing from './routing'
 
 const apollo = new ApolloClient({
   link: ApolloLink.from([
-    onError(({ graphQLErrors, networkError, operation }) => {
+    onError(({ graphQLErrors, networkError }) => {
       if (graphQLErrors) {
         graphQLErrors.map(({ message, locations, path }) =>
           // eslint-disable-next-line no-console
@@ -29,7 +28,7 @@ const apollo = new ApolloClient({
       }
     }),
     setContext((_, { headers }) => {
-      const token = auth.session ? auth.session.idToken : null
+      const token = localStorage.accessToken || null
       return {
         headers: {
           ...headers,
@@ -67,6 +66,35 @@ const query = (query, { variables, skip, parse, ...queryProps } = {}) => Wrapped
   return ApolloQueryWrapper
 }
 
+const useMutation = mutation => {
+  const [response, setResponse] = useState({ loading: false, variables: null })
+
+  const mutate = (variables, callback) => {
+    return new Promise((resolve, reject) => {
+      setResponse({ ...response, loading: true, variables })
+      apollo
+        .mutate({ mutation, variables })
+        .then(resp => {
+          if (mounted) {
+            const newResponse = { ...response, ...resp, loading: false }
+            setResponse(newResponse)
+            resolve(newResponse)
+          }
+        })
+        .catch(reject)
+    })
+  }
+
+  let mounted = true
+  useEffect(() => {
+    return () => {
+      mounted = false
+    }
+  }, [])
+
+  return [response, mutate]
+}
+
 export default apollo
 
-export { query }
+export { query, useMutation }

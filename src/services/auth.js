@@ -1,136 +1,90 @@
 import auth0 from 'auth0-js'
 
-import alert from './alert'
-import configuration from './configuration'
-
 class Auth {
-  constructor() {
-    if (localStorage.auth && localStorage.userId) {
-      this.session = JSON.parse(localStorage.auth)
-    }
-  }
-
-  /* Action methods */
-  login(redirectTo) {
-    sessionStorage.after_login_redirect_url = redirectTo
-    this.getAuth0().authorize()
-  }
-
-  logout() {
-    localStorage.removeItem('auth')
-    localStorage.removeItem('userId')
-    localStorage.removeItem('userProfile')
-    this.session = null
-    this.userId = null
-    if (this.scheduledTimeout) {
-      clearTimeout(this.scheduledTimeout)
-    }
-  }
-
-  parseHash(hash) {
-    return new Promise((resolve, reject) => {
-      this.getAuth0().parseHash({ hash }, (err, authResult) => {
-        if (authResult && authResult.accessToken && authResult.idToken) {
-          resolve(authResult)
-        } else if (err) {
-          reject(err)
-        } else {
-          reject(new Error('Unknown error'))
-        }
-      })
+  init({ auth0Domain, auth0ClientId }) {
+    this.auth0 = new auth0.WebAuth({
+      domain: auth0Domain,
+      clientID: auth0ClientId,
+      redirectUri: window.location.origin + '/auth/callback',
+      audience: `https://${auth0Domain}/userinfo`,
+      responseType: 'token id_token',
+      scope: 'openid profile email'
     })
-  }
-
-  setSession(authResult) {
-    if (!authResult) return this.logout()
-
-    const expiresAt = authResult.expiresIn * 1000 + new Date().getTime()
-
-    this.session = {
-      accessToken: authResult.accessToken,
-      idToken: authResult.idToken,
-      expiresAt
-    }
-
-    localStorage.auth = JSON.stringify(this.session)
-
-    this.scheduleRenew()
-
-    return authResult
-  }
-
-  /* Internal actions methods */
-
-  renewAuth() {
-    return new Promise((resolve, reject) => {
-      this.getAuth0().checkSession({}, (err, authResult) => {
-        if (err) {
-          // "Login required" isn't an error per se
-          if (err.error !== 'login_required') {
-            alert.pushError('Renewing authentication failed: ' + JSON.stringify(err), err)
-          }
-          reject(err)
-          return
-        }
-
-        this.setSession(authResult)
-
-        resolve()
-      })
-    })
-  }
-
-  scheduleRenew() {
-    // Renew session 5min before expiresAt
-    const expiresAt = this.session.expiresAt
-    const fiveMinBefore = expiresAt - new Date().getTime() - 5 * 60 * 1000
-    if (this.scheduledTimeout) {
-      clearTimeout(this.scheduledTimeout)
-    }
-    this.scheduledTimeout = setTimeout(this.renewAuth, fiveMinBefore)
-  }
-
-  /* State getters and setters */
-  getAuth0() {
-    if (!this.auth0) {
-      this.auth0 = new auth0.WebAuth({
-        domain: configuration.auth0Domain,
-        clientID: configuration.auth0ClientId,
-        redirectUri: window.location.origin + '/auth/callback',
-        audience: `https://${configuration.auth0Domain}/userinfo`,
-        responseType: 'token id_token',
-        scope: 'openid profile email'
-      })
-    }
-
     return this.auth0
   }
 
-  isAuthenticated() {
-    return this.session && this.session.expiresAt > new Date().getTime() && localStorage.userId
+  /* AUTH LIFECYCLE */
+
+  login = redirectTo => {
+    if (redirectTo) this.cacheStateBeforeLogin({ redirectTo })
+    this.auth0.authorize()
   }
 
-  wasAuthenticated() {
-    return this.session && this.session.expiresAt < new Date().getTime() && localStorage.userId
+  logout = () => {
+    this.clearLocalStorage()
   }
 
-  popAfterLoginRedirectUrl() {
-    const url = sessionStorage.after_login_redirect_url
-    sessionStorage.removeItem('after_login_redirect_url')
-    return url
+  parseHash = hash =>
+    new Promise((resolve, reject) => {
+      this.auth0.parseHash({ hash }, this.authCheck(resolve, reject))
+    })
+
+  renewAuth = () =>
+    new Promise((resolve, reject) => {
+      this.auth0.checkSession({}, this.authCheck(resolve, reject))
+    })
+
+  /* HELPERS */
+
+  authCheck = (resolve, reject) => (err, authResult) => {
+    if (authResult && authResult.idToken) {
+      localStorage.accessToken = authResult.idToken
+      resolve(authResult)
+    } else {
+      reject(err || null)
+    }
   }
 
-  setUserData(data) {
-    localStorage.userData = JSON.stringify(data)
-    localStorage.userId = data.id
+  scheduleRenew = (session, renewCallback) => {
+    // Renew session 5min before end of token
+    const fiveMinBefore = (session.expiresIn - 5 * 60) * 1000
+
+    if (this.scheduledTimeout) {
+      clearTimeout(this.scheduledTimeout)
+    }
+
+    return setTimeout(renewCallback, fiveMinBefore)
   }
 
-  getUserNodeId() {
-    return localStorage.userId
+  /* LOCAL STORAGE */
+
+  retrieveFromLocalStorage() {
+    return {
+      session: localStorage.session ? JSON.parse(localStorage.session) : null,
+      user: localStorage.user ? JSON.parse(localStorage.user) : null
+    }
   }
 
-  isAdmin() {
-    return this.isAuthenticated() && JSON.parse(localStorage.userData).admin
+  cacheToLocalStorage = ({ session, user }) => {
+    localStorage.session = JSON.stringify(session)
+    localStorage.user = JSON.stringify(user)
+    localStorage.accessToken = session.idToken
+  }
+
+  clearLocalStorage() {
+    localStorage.removeItem('session')
+    localStorage.removeItem('user')
+    localStorage.removeItem('accessToken')
+  }
+
+  cacheStateBeforeLogin(state) {
+    localStorage.state_before_login = JSON.stringify(state)
+  }
+
+  popStateBeforeLogin() {
+    const state = JSON.parse(localStorage.state_before_login || '{}')
+    localStorage.removeItem('state_before_login')
+    return state
   }
 }
 

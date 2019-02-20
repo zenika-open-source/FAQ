@@ -1,0 +1,86 @@
+.navbar {
+  padding-left: 1.5em;
+  padding-right: 1.5em;
+  justify-content: space-between;
+
+  .brand {
+    display: flex;
+    align-items: flex-end;
+
+    img {
+      height: 23px;
+      margin-right: 6px;
+    }
+
+    .title,
+    .subtitle {
+      color: var(--primary-color-font);
+      display: flex;
+    }
+
+    .title {
+      align-items: center;
+      font-size: var(--h1-font-size);
+    }
+
+    .subtitle {
+      position: relative;
+
+      & > span {
+        display: flex;
+        align-items: flex-end;
+        font-size: var(--h3-font-size);
+        margin-left: 10px;
+
+        & > i {
+          font-size: var(--h3-font-size);
+          margin-left: 3px;
+          visibility: hidden;
+        }
+
+        &:hover {
+          & > i {
+            visibility: visible;
+          }
+        }
+      }
+    }
+  }
+
+  .navigation {
+    display: flex;
+    align-items: center;
+
+    & > a {
+      display: flex;
+      align-items: center;
+      color: var(--primary-color-font);
+    }
+
+    & > * + * {
+      margin-left: 20px;
+    }
+
+    & > a svg {
+      margin-right: 0rem;
+      fill: var(--primary-color-font);
+      height: 0.8rem !important;
+    }
+
+    @media screen and (max-width: 480px) {
+      & > *:not(.dropdown) {
+        display: none;
+      }
+    }
+  }
+
+  .btn[primary]:not([active]):hover,
+  .dropdown:hover .btn[primary]:not([active]) {
+    background-color: var(--background-color);
+  }
+
+  .btn[primary] {
+    background-color: var(--secondary-color-light);
+    color: var(--primary-color);
+  }
+}

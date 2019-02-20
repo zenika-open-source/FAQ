@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import debounce from 'lodash/debounce'
 
-import Button from 'components/Button'
+import { Button } from 'components'
 
 import { unserialize, addToQueryString } from 'helpers'
 
