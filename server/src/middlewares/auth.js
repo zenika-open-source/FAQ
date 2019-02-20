@@ -17,14 +17,15 @@ const checkJwt = (req, res, next, prisma) => {
   let options = {}
   let getUser = null
 
-  const userQuery = id =>
+  const userQuery = where =>
     prisma.query.user(
       {
-        where: { auth0Id: req.jwtCheckResult.sub.split('|')[1] }
+        where
       },
       `{
         id
         auth0Id
+        key
         admin
         name
         email
@@ -51,7 +52,7 @@ const checkJwt = (req, res, next, prisma) => {
     getUser = async err => {
       if (err) return next(err)
 
-      const user = await userQuery(req.jwtCheckResult.sub.split('|')[1])
+      const user = await userQuery({ auth0Id: req.jwtCheckResult.sub.split('|')[1] })
       req.user = { token: req.jwtCheckResult, ...user }
       next()
     }
@@ -68,7 +69,7 @@ const checkJwt = (req, res, next, prisma) => {
             )
           )
         }
-        userQuery(payload['userId']).then(user => {
+        userQuery({ id: payload['userId'] }).then(user => {
           req.user = user
           done(null, user.key)
         })
