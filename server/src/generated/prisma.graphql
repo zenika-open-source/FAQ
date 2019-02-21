@@ -335,11 +335,12 @@ type Configuration {
   id: ID!
   name: String!
   title: String!
+  auth0Domain: String!
+  auth0ClientId: String!
+  authorizedDomains: [String!]!
   algoliaAppId: String
   algoliaApiKey: String
   algoliaSynonyms: Json
-  auth0Domain: String!
-  auth0ClientId: String!
   mailgunDomain: String
   mailgunApiKey: String
   slackChannelHook: String
@@ -353,14 +354,19 @@ type ConfigurationConnection {
   aggregate: AggregateConfiguration!
 }
 
+input ConfigurationCreateauthorizedDomainsInput {
+  set: [String!]
+}
+
 input ConfigurationCreateInput {
   name: String!
   title: String
+  auth0Domain: String!
+  auth0ClientId: String!
+  authorizedDomains: ConfigurationCreateauthorizedDomainsInput
   algoliaAppId: String
   algoliaApiKey: String
   algoliaSynonyms: Json
-  auth0Domain: String!
-  auth0ClientId: String!
   mailgunDomain: String
   mailgunApiKey: String
   slackChannelHook: String
@@ -380,16 +386,16 @@ enum ConfigurationOrderByInput {
   name_DESC
   title_ASC
   title_DESC
+  auth0Domain_ASC
+  auth0Domain_DESC
+  auth0ClientId_ASC
+  auth0ClientId_DESC
   algoliaAppId_ASC
   algoliaAppId_DESC
   algoliaApiKey_ASC
   algoliaApiKey_DESC
   algoliaSynonyms_ASC
   algoliaSynonyms_DESC
-  auth0Domain_ASC
-  auth0Domain_DESC
-  auth0ClientId_ASC
-  auth0ClientId_DESC
   mailgunDomain_ASC
   mailgunDomain_DESC
   mailgunApiKey_ASC
@@ -410,11 +416,12 @@ type ConfigurationPreviousValues {
   id: ID!
   name: String!
   title: String!
+  auth0Domain: String!
+  auth0ClientId: String!
+  authorizedDomains: [String!]!
   algoliaAppId: String
   algoliaApiKey: String
   algoliaSynonyms: Json
-  auth0Domain: String!
-  auth0ClientId: String!
   mailgunDomain: String
   mailgunApiKey: String
   slackChannelHook: String
@@ -440,14 +447,19 @@ input ConfigurationSubscriptionWhereInput {
   NOT: [ConfigurationSubscriptionWhereInput!]
 }
 
+input ConfigurationUpdateauthorizedDomainsInput {
+  set: [String!]
+}
+
 input ConfigurationUpdateInput {
   name: String
   title: String
+  auth0Domain: String
+  auth0ClientId: String
+  authorizedDomains: ConfigurationUpdateauthorizedDomainsInput
   algoliaAppId: String
   algoliaApiKey: String
   algoliaSynonyms: Json
-  auth0Domain: String
-  auth0ClientId: String
   mailgunDomain: String
   mailgunApiKey: String
   slackChannelHook: String
@@ -458,11 +470,12 @@ input ConfigurationUpdateInput {
 input ConfigurationUpdateManyMutationInput {
   name: String
   title: String
+  auth0Domain: String
+  auth0ClientId: String
+  authorizedDomains: ConfigurationUpdateauthorizedDomainsInput
   algoliaAppId: String
   algoliaApiKey: String
   algoliaSynonyms: Json
-  auth0Domain: String
-  auth0ClientId: String
   mailgunDomain: String
   mailgunApiKey: String
   slackChannelHook: String
@@ -513,34 +526,6 @@ input ConfigurationWhereInput {
   title_not_starts_with: String
   title_ends_with: String
   title_not_ends_with: String
-  algoliaAppId: String
-  algoliaAppId_not: String
-  algoliaAppId_in: [String!]
-  algoliaAppId_not_in: [String!]
-  algoliaAppId_lt: String
-  algoliaAppId_lte: String
-  algoliaAppId_gt: String
-  algoliaAppId_gte: String
-  algoliaAppId_contains: String
-  algoliaAppId_not_contains: String
-  algoliaAppId_starts_with: String
-  algoliaAppId_not_starts_with: String
-  algoliaAppId_ends_with: String
-  algoliaAppId_not_ends_with: String
-  algoliaApiKey: String
-  algoliaApiKey_not: String
-  algoliaApiKey_in: [String!]
-  algoliaApiKey_not_in: [String!]
-  algoliaApiKey_lt: String
-  algoliaApiKey_lte: String
-  algoliaApiKey_gt: String
-  algoliaApiKey_gte: String
-  algoliaApiKey_contains: String
-  algoliaApiKey_not_contains: String
-  algoliaApiKey_starts_with: String
-  algoliaApiKey_not_starts_with: String
-  algoliaApiKey_ends_with: String
-  algoliaApiKey_not_ends_with: String
   auth0Domain: String
   auth0Domain_not: String
   auth0Domain_in: [String!]
@@ -569,6 +554,34 @@ input ConfigurationWhereInput {
   auth0ClientId_not_starts_with: String
   auth0ClientId_ends_with: String
   auth0ClientId_not_ends_with: String
+  algoliaAppId: String
+  algoliaAppId_not: String
+  algoliaAppId_in: [String!]
+  algoliaAppId_not_in: [String!]
+  algoliaAppId_lt: String
+  algoliaAppId_lte: String
+  algoliaAppId_gt: String
+  algoliaAppId_gte: String
+  algoliaAppId_contains: String
+  algoliaAppId_not_contains: String
+  algoliaAppId_starts_with: String
+  algoliaAppId_not_starts_with: String
+  algoliaAppId_ends_with: String
+  algoliaAppId_not_ends_with: String
+  algoliaApiKey: String
+  algoliaApiKey_not: String
+  algoliaApiKey_in: [String!]
+  algoliaApiKey_not_in: [String!]
+  algoliaApiKey_lt: String
+  algoliaApiKey_lte: String
+  algoliaApiKey_gt: String
+  algoliaApiKey_gte: String
+  algoliaApiKey_contains: String
+  algoliaApiKey_not_contains: String
+  algoliaApiKey_starts_with: String
+  algoliaApiKey_not_starts_with: String
+  algoliaApiKey_ends_with: String
+  algoliaApiKey_not_ends_with: String
   mailgunDomain: String
   mailgunDomain_not: String
   mailgunDomain_in: [String!]

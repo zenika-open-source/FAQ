@@ -5,7 +5,7 @@ import { useMutation } from 'services/apollo'
 
 import { useConfiguration } from 'contexts'
 
-import { Input, Checkbox, Button, PairInputList } from 'components'
+import { Input, Checkbox, Button, PairInputList, Icon } from 'components'
 import Card, { CardTitle, CardText, CardActions } from 'components/Card'
 
 import { onListChangeActions } from 'helpers/onListChange'
@@ -14,7 +14,7 @@ import { reducer, tagsToList, listToTags, synonymsToList, listToSynonyms } from 
 
 import { updateConfigurationMutation } from './queries'
 
-import './Settings.css'
+import './Settings.scss'
 
 const Settings = ({ configuration: conf }) => {
   const configuration = useConfiguration()
@@ -24,7 +24,8 @@ const Settings = ({ configuration: conf }) => {
   const [state, dispatch] = useReducer(reducer, {
     ...conf,
     tags: tagsToList(conf.tags),
-    synonyms: synonymsToList(conf.algoliaSynonyms)
+    synonyms: synonymsToList(conf.algoliaSynonyms),
+    authorizedDomains: conf.authorizedDomains.join(', ')
   })
 
   const [, mutate] = useMutation(updateConfigurationMutation)
@@ -35,7 +36,11 @@ const Settings = ({ configuration: conf }) => {
       title: state.title,
       tags: listToTags(state.tags),
       algoliaSynonyms: listToSynonyms(state.synonyms),
-      workplaceSharing: state.workplaceSharing
+      workplaceSharing: state.workplaceSharing,
+      authorizedDomains: state.authorizedDomains
+        .split(',')
+        .map(x => x.trim())
+        .filter(x => x)
     })
       .then(() => {
         alert.pushSuccess('The answer was successfully edited!')
@@ -60,8 +65,8 @@ const Settings = ({ configuration: conf }) => {
         <CardText>
           <h2>Title</h2>
           <br />
-          <div className="title-input">
-            <i className="material-icons">home</i>
+          <div className="inline-input">
+            <Icon material="home" />
             <Input
               value={state.title}
               onChange={e => dispatch({ type: 'change_title', data: e.target.value })}
@@ -117,6 +122,19 @@ const Settings = ({ configuration: conf }) => {
                 })
               }
               disabled={loading}
+            />
+          </div>
+          <br />
+          <hr />
+          <h2>Authorized domains</h2>
+          <br />
+          <div className="inline-input">
+            <Icon material="domain" />
+            <Input
+              style={{ flex: 1 }}
+              value={state.authorizedDomains}
+              onChange={e => dispatch({ type: 'change_domains', data: e.target.value })}
+              placeholder="Ex: zenika.com, google.com, ..."
             />
           </div>
         </CardText>

@@ -6,6 +6,8 @@ export const reducer = (state, action) => {
       return { ...state, title: action.data }
     case 'toggle_workplace':
       return { ...state, workplaceSharing: action.data }
+    case 'change_domains':
+      return { ...state, authorizedDomains: action.data }
     default:
       return {
         ...state,
