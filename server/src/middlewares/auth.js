@@ -100,7 +100,9 @@ const checkDomain = (req, res, next, prisma) => {
 
   const domains = prisma._meta.configuration.authorizedDomains
 
-  if (!domains || domains.length == 0) return next()
+  if (!domains || domains.length === 0) return next()
+
+  if (req.user.admin) return next()
 
   if (domains.find(d => userDomain.endsWith(d))) return next()
 
