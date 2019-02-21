@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 import { useConfiguration } from 'contexts'
-import { Authenticated, Button } from 'components'
+import { Authenticated, Button, Icon } from 'components'
 
 import { GithubIcon, UserMenu } from './components'
 
@@ -20,14 +20,21 @@ const Navbar = () => {
         </Link>
       </div>
       <div className="navigation">
-        <a
-          href="https://github.com/Zenika/FAQ/issues/new?template=bug_report.md"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <GithubIcon />
-          <span>report a bug</span>
-        </a>
+        {conf.bugReporting === 'GITHUB' ? (
+          <a
+            href="https://github.com/Zenika/FAQ/issues/new?template=bug_report.md"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <GithubIcon />
+            <span>report a bug</span>
+          </a>
+        ) : (
+          <a href={`mailto:bug@${process.env.REACT_APP_FAQ_URL}`}>
+            <Icon material="mail" style={{ fontSize: '14px' }} />
+            <span>report a bug</span>
+          </a>
+        )}
         <Authenticated>
           <UserMenu />
           <Link to="/q/new">

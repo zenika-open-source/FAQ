@@ -5,7 +5,7 @@ import { useMutation } from 'services/apollo'
 
 import { useConfiguration } from 'contexts'
 
-import { Input, Checkbox, Button, PairInputList, Icon } from 'components'
+import { Input, Checkbox, Button, PairInputList, Icon, Radio } from 'components'
 import Card, { CardTitle, CardText, CardActions } from 'components/Card'
 
 import { onListChangeActions } from 'helpers/onListChange'
@@ -25,7 +25,8 @@ const Settings = ({ configuration: conf }) => {
     ...conf,
     tags: tagsToList(conf.tags),
     synonyms: synonymsToList(conf.algoliaSynonyms),
-    authorizedDomains: conf.authorizedDomains.join(', ')
+    authorizedDomains: conf.authorizedDomains.join(', '),
+    bugReporting: conf.bugReporting || 'GITHUB'
   })
 
   const [, mutate] = useMutation(updateConfigurationMutation)
@@ -40,7 +41,8 @@ const Settings = ({ configuration: conf }) => {
       authorizedDomains: state.authorizedDomains
         .split(',')
         .map(x => x.trim())
-        .filter(x => x)
+        .filter(x => x),
+      bugReporting: state.bugReporting
     })
       .then(() => {
         alert.pushSuccess('The answer was successfully edited!')
@@ -71,6 +73,7 @@ const Settings = ({ configuration: conf }) => {
               value={state.title}
               onChange={e => dispatch({ type: 'change_title', data: e.target.value })}
               placeholder="Title"
+              disabled={loading}
             />
           </div>
           <br />
@@ -135,7 +138,22 @@ const Settings = ({ configuration: conf }) => {
               value={state.authorizedDomains}
               onChange={e => dispatch({ type: 'change_domains', data: e.target.value })}
               placeholder="Ex: zenika.com, google.com, ..."
+              disabled={loading}
             />
+          </div>
+          <hr />
+          <h2>Bug reporting</h2>
+          <br />
+          <div style={{ marginLeft: '1rem' }}>
+            <Radio.Group
+              name="bug_reporting"
+              selected={state.bugReporting}
+              onChange={data => dispatch({ type: 'change_bug_reporting', data })}
+              disabled={loading}
+            >
+              <Radio label="By email" value="MAIL" />
+              <Radio label="By Github" value="GITHUB" />
+            </Radio.Group>
           </div>
         </CardText>
         <CardActions>

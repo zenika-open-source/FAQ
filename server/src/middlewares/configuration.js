@@ -16,20 +16,21 @@ const refreshConfiguration = async tenant => {
       where: { name: 'default' }
     },
     `{
-      id,
-      name,
-      title,
-      auth0Domain,
-      auth0ClientId,
-      authorizedDomains,
-      algoliaAppId,
-      algoliaApiKey,
-      algoliaSynonyms,
-      mailgunDomain,
-      mailgunApiKey,
-      slackChannelHook,
-      tags,
+      id
+      name
+      title
+      auth0Domain
+      auth0ClientId
+      authorizedDomains
+      algoliaAppId
+      algoliaApiKey
+      algoliaSynonyms
+      mailgunDomain
+      mailgunApiKey
+      slackChannelHook
+      tags
       workplaceSharing
+      bugReporting
     }`
   )
 

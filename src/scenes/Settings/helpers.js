@@ -8,6 +8,8 @@ export const reducer = (state, action) => {
       return { ...state, workplaceSharing: action.data }
     case 'change_domains':
       return { ...state, authorizedDomains: action.data }
+    case 'change_bug_reporting':
+      return { ...state, bugReporting: action.data }
     default:
       return {
         ...state,

@@ -1,44 +1,58 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 
-const DropdownItem = ({
-  children,
-  icon,
-  rightIcon,
-  disabled,
-  onClick,
-  href,
-  target,
-  ...otherProps
-}) => (
-  <a
-    tabIndex={disabled ? null : 0}
-    onMouseDown={e => {
-      if (disabled) return
-      if (onClick) return onClick()
-      if (href) return window.open(href, target === '_blank' ? target : '_self')
-    }}
-    disabled={disabled}
-    {...otherProps}
-  >
-    <span className="left">
-      {icon &&
-        (typeof icon === 'string' ? <i className="material-icons">{icon}</i> : <i>{icon}</i>)}
-      {children}
-    </span>
-    <span className="right">
-      {rightIcon &&
-        (typeof rightIcon === 'string' ? <i className="material-icons">{rightIcon}</i> : rightIcon)}
-    </span>
-  </a>
-)
+import { DropdownContext } from './Dropdown'
+
+const DropdownItem = ({ children, icon, rightIcon, path, href, target, ...otherProps }) => {
+  const setDropdownActive = useContext(DropdownContext)
+
+  let CustomLink
+
+  if (path) {
+    CustomLink = ({ children }) => (
+      <Link to={path} onClick={() => setDropdownActive(false)}>
+        {children}
+      </Link>
+    )
+  } else {
+    CustomLink = ({ children }) => (
+      <a
+        tabIndex={0}
+        href={href}
+        target={target || '_self'}
+        onClick={() => setDropdownActive(false)}
+        {...otherProps}
+      >
+        {children}
+      </a>
+    )
+  }
+
+  return (
+    <CustomLink>
+      <span className="left">
+        {icon &&
+          (typeof icon === 'string' ? <i className="material-icons">{icon}</i> : <i>{icon}</i>)}
+        {children}
+      </span>
+      <span className="right">
+        {rightIcon &&
+          (typeof rightIcon === 'string' ? (
+            <i className="material-icons">{rightIcon}</i>
+          ) : (
+            rightIcon
+          ))}
+      </span>
+    </CustomLink>
+  )
+}
 
 DropdownItem.propTypes = {
   children: PropTypes.node.isRequired,
   icon: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   rightIcon: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-  disabled: PropTypes.bool,
-  onClick: PropTypes.func,
+  path: PropTypes.string,
   href: PropTypes.string,
   target: PropTypes.string
 }

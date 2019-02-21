@@ -130,4 +130,11 @@ type Configuration {
   tags: Json
 
   workplaceSharing: Boolean @default(value: false)
+
+  bugReporting: BugReporting @default(value: GITHUB)
+}
+
+enum BugReporting {
+  MAIL
+  GITHUB
 }
