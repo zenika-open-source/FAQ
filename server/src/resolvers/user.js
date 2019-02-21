@@ -52,7 +52,7 @@ module.exports = {
         {
           where: { id: ctxUser(ctx).id },
           data: {
-            name: 'anonymous',
+            name: 'Anonymous',
             email: '',
             picture: '/img/portrait_placeholder.png',
             auth0Id: null
