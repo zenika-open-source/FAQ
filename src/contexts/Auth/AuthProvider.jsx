@@ -106,6 +106,7 @@ class AuthProvider extends Component {
       const session = this.setSession(authResult)
 
       this.setState({ session }, () => {
+        auth.cacheToLocalStorage(this.state)
         this.scheduleRenew()
       })
     } catch (err) {
