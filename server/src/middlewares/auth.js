@@ -96,7 +96,9 @@ const checkJwt = (req, res, next, prisma) => {
 }
 
 const checkDomain = (req, res, next, prisma) => {
-  const userDomain = req.user.email.split('@').pop()
+  const email = req.user.email || req.user.token.email
+
+  const userDomain = email.split('@').pop()
 
   const domains = prisma._meta.configuration.authorizedDomains
 

@@ -16,7 +16,8 @@ const Logs = ({ logs, loading, pagesCount, pageCurrent, onPageSelected, meta }) 
   return (
     <Card>
       <CardText className="logs">
-        <h1 style={{ marginBottom: '1rem' }}>Logs</h1>
+        <h2 style={{ marginBottom: '1rem' }}>Logs</h2>
+        <hr />
         {shouldShowLoading && <Loading />}
         {!shouldShowLoading &&
           logs.map(h => {

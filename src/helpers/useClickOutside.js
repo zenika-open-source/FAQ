@@ -16,7 +16,7 @@ const useClickOutside = onClickOutside => {
     }
   })
 
-  return { ref }
+  return ref
 }
 
 export default useClickOutside

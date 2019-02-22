@@ -5,6 +5,7 @@
   max-width: 100%;
   width: 400px;
   min-width: 30vw;
+  z-index: 100;
 }
 
 .alert-stack .alert-wrapper {

@@ -55,7 +55,9 @@ module.exports = {
             name: 'Anonymous',
             email: '',
             picture: '/img/portrait_placeholder.png',
-            auth0Id: null
+            auth0Id: null,
+            key: null,
+            locale: null
           }
         },
         info
