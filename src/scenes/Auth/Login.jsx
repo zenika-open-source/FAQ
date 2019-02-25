@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { withRouter, Redirect } from 'react-router-dom'
 
@@ -7,6 +7,7 @@ import { useAuth, isAuthenticated, wasAuthenticated } from 'contexts'
 import { Loading, Button } from 'components'
 
 const Login = ({ location }) => {
+  const [renewing, setRenewing] = useState(false)
   const redirectedFrom = location.state && location.state.from
 
   const auth = useAuth()
@@ -18,7 +19,10 @@ const Login = ({ location }) => {
   }
 
   if (wasAuth) {
-    auth.actions.renewAuth()
+    if (!renewing) {
+      auth.actions.renewAuth(redirectedFrom)
+      setRenewing(true)
+    }
 
     return <Loading text="Authenticating..." />
   }

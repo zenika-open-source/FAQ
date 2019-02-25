@@ -95,10 +95,10 @@ class AuthProvider extends Component {
     }
   }
 
-  renewAuth = async () => {
+  renewAuth = async redirectedFrom => {
     const { history, location } = this.props
 
-    const redirectTo = location.pathname || '/'
+    const redirectTo = redirectedFrom || location.pathname || '/'
 
     try {
       const authResult = await auth.renewAuth()
