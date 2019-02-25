@@ -61,10 +61,17 @@
       margin-left: 20px;
     }
 
-    & > a svg {
-      margin-right: 0rem;
-      fill: var(--primary-color-font);
-      height: 0.8rem !important;
+    & > a {
+      svg {
+        margin-right: 0rem;
+        fill: var(--primary-color-font);
+        height: 0.8rem !important;
+        width: 0.8rem !important;
+      }
+      span {
+        margin-left: 0.3rem;
+        margin-top: -0.1rem;
+      }
     }
 
     @media screen and (max-width: 480px) {

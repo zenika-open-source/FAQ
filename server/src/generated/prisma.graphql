@@ -331,6 +331,11 @@ type BatchPayload {
   count: Long!
 }
 
+enum BugReporting {
+  MAIL
+  GITHUB
+}
+
 type Configuration {
   id: ID!
   name: String!
@@ -346,6 +351,7 @@ type Configuration {
   slackChannelHook: String
   tags: Json
   workplaceSharing: Boolean
+  bugReporting: BugReporting
 }
 
 type ConfigurationConnection {
@@ -372,6 +378,7 @@ input ConfigurationCreateInput {
   slackChannelHook: String
   tags: Json
   workplaceSharing: Boolean
+  bugReporting: BugReporting
 }
 
 type ConfigurationEdge {
@@ -406,6 +413,8 @@ enum ConfigurationOrderByInput {
   tags_DESC
   workplaceSharing_ASC
   workplaceSharing_DESC
+  bugReporting_ASC
+  bugReporting_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -427,6 +436,7 @@ type ConfigurationPreviousValues {
   slackChannelHook: String
   tags: Json
   workplaceSharing: Boolean
+  bugReporting: BugReporting
 }
 
 type ConfigurationSubscriptionPayload {
@@ -465,6 +475,7 @@ input ConfigurationUpdateInput {
   slackChannelHook: String
   tags: Json
   workplaceSharing: Boolean
+  bugReporting: BugReporting
 }
 
 input ConfigurationUpdateManyMutationInput {
@@ -481,6 +492,7 @@ input ConfigurationUpdateManyMutationInput {
   slackChannelHook: String
   tags: Json
   workplaceSharing: Boolean
+  bugReporting: BugReporting
 }
 
 input ConfigurationWhereInput {
@@ -626,6 +638,10 @@ input ConfigurationWhereInput {
   slackChannelHook_not_ends_with: String
   workplaceSharing: Boolean
   workplaceSharing_not: Boolean
+  bugReporting: BugReporting
+  bugReporting_not: BugReporting
+  bugReporting_in: [BugReporting!]
+  bugReporting_not_in: [BugReporting!]
   AND: [ConfigurationWhereInput!]
   OR: [ConfigurationWhereInput!]
   NOT: [ConfigurationWhereInput!]

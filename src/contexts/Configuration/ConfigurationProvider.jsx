@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 
 import routing from 'services/routing'
 
@@ -7,19 +7,21 @@ export const ConfigurationContext = React.createContext()
 const ConfigurationProvider = ({ children }) => {
   const [reload, setReload] = useState(0)
   const [configuration, setConfiguration] = useState({
-    loading: true,
-    reload: () => setReload(state => state + 1)
+    loading: true
   })
 
+  // Retrieve cached configuration in local storage
   useEffect(() => {
     if (localStorage.configuration) {
-      setConfiguration(conf => ({
-        ...conf,
-        loading: false,
-        ...JSON.parse(localStorage.configuration)
-      }))
+      setConfiguration({
+        ...JSON.parse(localStorage.configuration),
+        loading: false
+      })
     }
+  }, [])
 
+  // Retrieve configuration from server
+  useEffect(() => {
     fetch(process.env.REACT_APP_GRAPHQL_ENDPOINT + '/configuration', {
       headers: { 'prisma-service': routing.getPrismaService() }
     })
@@ -34,15 +36,16 @@ const ConfigurationProvider = ({ children }) => {
       })
       .then(conf => {
         localStorage.configuration = JSON.stringify(conf)
-        setConfiguration(state => ({ ...state, loading: false, ...conf }))
+        setConfiguration({ ...conf, loading: false })
       })
-
-    return () => setConfiguration(state => ({ ...state, loading: false }))
   }, [reload])
 
-  return (
-    <ConfigurationContext.Provider value={configuration}>{children}</ConfigurationContext.Provider>
-  )
+  // Provide reload function when editing configuration
+  const value = useMemo(() => ({ ...configuration, reload: () => setReload(state => state + 1) }), [
+    configuration
+  ])
+
+  return <ConfigurationContext.Provider value={value}>{children}</ConfigurationContext.Provider>
 }
 
 export default ConfigurationProvider
