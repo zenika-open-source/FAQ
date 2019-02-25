@@ -7,14 +7,23 @@ const {
   fromArgs
 } = require('../helpers')
 
-const { AUTH0_DOMAIN, AUTH0_CLIENT_ID, ALGOLIA_APP_ID, ALGOLIA_API_KEY_ALL } = env([
+const {
+  AUTH0_DOMAIN,
+  AUTH0_CLIENT_ID,
+  ALGOLIA_APP_ID,
+  ALGOLIA_API_KEY_ALL,
+  MAILGUN_DOMAIN,
+  MAILGUN_API_KEY
+} = env([
   'PRISMA_URL', // Implicitely required
   'PRISMA_API_SECRET', // Implicitely required
   'PRISMA_MANAGEMENT_API_SECRET', // Implicitely required
   'AUTH0_DOMAIN',
   'AUTH0_CLIENT_ID',
   'ALGOLIA_APP_ID?',
-  'ALGOLIA_API_KEY_ALL?'
+  'ALGOLIA_API_KEY_ALL?',
+  'MAILGUN_DOMAIN?',
+  'MAILGUN_API_KEY?'
 ])
 
 const main = async () => {
@@ -50,6 +59,8 @@ const main = async () => {
             auth0ClientId: "${AUTH0_CLIENT_ID}"
             algoliaAppId: "${ALGOLIA_APP_ID || ''}"
             algoliaApiKey: "${ALGOLIA_API_KEY_ALL || ''}"
+            mailgunDomain: "${MAILGUN_DOMAIN || ''}"
+            mailgunApiKey: "${MAILGUN_API_KEY || ''}"
             tags: "${JSON.stringify({
               agencies: ['paris', 'nantes'],
               theme: ['tutorial', 'meta']

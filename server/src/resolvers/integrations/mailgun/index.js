@@ -27,7 +27,7 @@ class Mailgun {
 
   async sendMail({ from, to, subject, text, html }, conf) {
     const token = Buffer.from(`api:${conf.mailgunApiKey}`).toString('base64')
-    const endpoint = `https://api.mailgun.net/v3/${conf.mailgunDomain}/messages`
+    const endpoint = `https://api.eu.mailgun.net/v3/${conf.mailgunDomain}/messages`
 
     const form = new FormData()
     form.append('from', from)
