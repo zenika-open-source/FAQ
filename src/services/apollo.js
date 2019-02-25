@@ -69,7 +69,7 @@ const query = (query, { variables, skip, parse, ...queryProps } = {}) => Wrapped
 const useMutation = mutation => {
   const [response, setResponse] = useState({ loading: false, variables: null })
 
-  const mutate = (variables, callback) => {
+  const mutate = variables => {
     return new Promise((resolve, reject) => {
       setResponse({ ...response, loading: true, variables })
       apollo

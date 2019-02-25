@@ -12,9 +12,7 @@ class Mailgun {
 
     if (!conf.mailgunDomain || !conf.mailgunApiKey) {
       // eslint-disable-next-line no-console
-      console.warn(
-        `Please provide a mailgun domain and api key for service ${name}/${stage}`
-      )
+      console.warn(`Please provide a mailgun domain and api key for service ${name}/${stage}`)
       return null
     }
 
@@ -22,7 +20,9 @@ class Mailgun {
 
     const mail = answer.generateMail(node, conf, ctx)
 
-    return this.sendMail(mail, conf)
+    return mail.to
+      ? this.sendMail(mail, conf)
+      : Promise.reject(new Error('Email not sent, no address found in user'))
   }
 
   async sendMail({ from, to, subject, text, html }, conf) {

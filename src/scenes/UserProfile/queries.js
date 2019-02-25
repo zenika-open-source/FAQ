@@ -28,3 +28,20 @@ export const updateIdentity = graphql(updateIdentityMutation, {
     }
   })
 })
+
+export const deleteIdentityMutation = gql`
+  mutation deleteIdentity {
+    forgetMe {
+      id
+    }
+  }
+`
+
+export const deleteIdentity = graphql(deleteIdentityMutation, {
+  name: 'deleteIdentity',
+  props: ({ deleteIdentity }) => ({
+    deleteIdentity: identity => {
+      return deleteIdentity({ variables: {} })
+    }
+  })
+})

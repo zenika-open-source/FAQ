@@ -14,7 +14,7 @@ import './TagPicker.css'
 const TagPicker = ({ label, icon, tags, onChange }) => {
   const conf = useConfiguration()
   const [opened, setOpened] = useState(false)
-  const { ref } = useClickOutside(() => setOpened(false))
+  const ref = useClickOutside(() => setOpened(false))
 
   const tagList = conf ? conf.tags : {}
 

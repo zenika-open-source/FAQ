@@ -33,6 +33,7 @@ type Query {
 
 type Mutation {
   updateMe(name: String!, email: String!, picture: String!): User
+  forgetMe: User
   authenticate(idToken: String!): User
 
   createQuestionAndTags(title: String!, tags: [String!]!): Question
