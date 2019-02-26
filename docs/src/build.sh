@@ -1,16 +1,16 @@
 #!/bin/sh
 
 # Remove previously generated files
-rm -rf docs/static/ docs/public/ docs/assets.json docs/index.html docs/index.mdx
+rm -rf static/ public/ assets.json index.html index.mdx
 
 # Create index.mdx based on README.md
-(cat docs/src/index.prefix.txt && cat README.md) > docs/index.mdx
+(cat src/index.prefix.txt && cat ../README.md) > index.mdx
 
 # Generate docz files
 docz build
 
 # Move into docs/
-mv docs/dist/* docs/
+mv dist/* ./
 
 # Delete empty directory
-rmdir docs/dist
+rmdir dist/

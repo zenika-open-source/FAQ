@@ -50,19 +50,20 @@ const playgroundEndpoint = yogaEndpoint + '/playground'
 
 server.start({ port, endpoint: yogaEndpoint, playground: playgroundEndpoint })
 
-/* Serve frontend */
-
-const frontPath = path.join(__dirname, '../front_build')
+/* Serve frontend if env=prod */
 
 if (process.env.NODE_ENV === 'production') {
-  server.express.use(secure)
-}
-server.express.use('/static', express.static(frontPath + '/static'))
-server.express.use('/img', express.static(frontPath + '/img'))
+  const frontPath = path.join(__dirname, '../front_build')
 
-server.express.get('*', (req, res, next) => {
-  res.sendFile(frontPath + '/index.html')
-})
+  server.express.use(secure)
+
+  server.express.use('/static', express.static(frontPath + '/static'))
+  server.express.use('/img', express.static(frontPath + '/img'))
+
+  server.express.get('*', (req, res, next) => {
+    res.sendFile(frontPath + '/index.html')
+  })
+}
 
 // eslint-disable-next-line no-console
 console.log('Server is successfuly running at http://localhost:' + port)

@@ -1,0 +1,15 @@
+{
+  "name": "faq_docs",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "docz": "^0.13.7",
+    "docz-plugin-css": "^0.11.0",
+    "docz-theme-default": "^0.13.7",
+    "webpack": "^4.28.4"
+  },
+  "scripts": {
+    "start": "docz dev",
+    "build": "sh ./src/build.sh"
+  }
+}

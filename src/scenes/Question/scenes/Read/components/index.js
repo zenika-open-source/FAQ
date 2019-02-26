@@ -1,5 +1,0 @@
-export { default as FlagsDropdown } from './FlagsDropdown'
-export { default as History } from './History'
-export { default as Meta } from './Meta'
-export { default as Share } from './Share'
-export { default as Sources } from './Sources'

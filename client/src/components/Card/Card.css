@@ -1,0 +1,84 @@
+.card {
+  width: 100%;
+  border: 1px solid var(--secondary-color);
+  border-radius: 2px;
+  position: relative;
+}
+
+.card + .card {
+  margin-top: 1rem;
+}
+
+.card .card-item {
+  padding: 1rem;
+  background-color: var(--secondary-color-light);
+  color: var(--secondary-color-font);
+}
+
+@media screen and (max-width: 480px) {
+  /* --mobile-breakpoint */
+  .card .card-item {
+    padding: 0.4rem;
+  }
+}
+
+.card .card-title {
+  padding: 0.7rem;
+  position: relative;
+  box-shadow: 0px 3px 4px var(--secondary-color);
+  display: flex;
+  align-items: center;
+}
+
+.card .card-text.collapsed {
+  height: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.card .card-text a:not(.btn-container) {
+  text-decoration: underline;
+}
+
+.card .card-text img {
+  max-width: 100%;
+}
+
+.card .card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-top: 0;
+}
+
+.card .card-actions * + * {
+  margin-left: 0.3rem;
+}
+
+.card .card-form {
+  margin: 1em 0;
+}
+
+.card .card-form .card-input {
+  display: block;
+  width: 100%;
+  margin-top: 0.3em;
+  margin-bottom: 1em;
+  padding: 5px;
+}
+
+.card .card-table {
+  width: 100%;
+  margin: 1em 0;
+  border-collapse: collapse;
+  border-spacing: 0;
+  empty-cells: show;
+}
+
+.card .card-table tr {
+  border-bottom: 1px solid var(--primary-color-font-dark);
+}
+
+.card .card-table td {
+  padding: 0.5em;
+}

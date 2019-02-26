@@ -7,8 +7,8 @@ node_modules
 /coverage
 
 # production
-/build
 .build
+client/build
 server/front_build
 
 # misc

@@ -1,0 +1,45 @@
+.app {
+  display: flex;
+  flex-direction: column;
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: var(--primary-color);
+  color: var(--primary-color-font);
+  height: var(--layout-navbar-height);
+  align-items: center;
+  display: flex;
+  z-index: 10;
+}
+
+.main {
+  margin-top: var(--layout-navbar-height);
+  width: 100%;
+  overflow: auto;
+  padding-bottom: 2rem;
+  flex: 1;
+
+  /* Sizes */
+  --mobile-breakpoint: 480px;
+  --desktop-breakpoint: 1024px;
+}
+
+.main > div {
+  max-width: 820px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 0.5rem;
+  padding-left: 10px;
+  padding-right: 10px;
+  position: relative;
+}
+
+.footer {
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
