@@ -44,12 +44,13 @@ jobs:
       - checkout
 
       - run: |
+          cd client/
           npm ci
 
       - persist_to_workspace:
           root: *workspace_root
           paths:
-            - node_modules/
+            - client/node_modules/
 
   client/lint:
     working_directory: *workspace_root
@@ -60,6 +61,7 @@ jobs:
       - *attach_workspace
 
       - run: |
+          cd client/
           npm run lint
           npm run prettier:check
 
@@ -72,12 +74,13 @@ jobs:
       - *attach_workspace
 
       - run: |
+          cd client/
           npm run build
 
       - persist_to_workspace:
           root: *workspace_root
           paths:
-            - build/
+            - client/build/
 
   prisma_deploy:
     environment:
@@ -130,7 +133,7 @@ jobs:
           ssh-keyscan ${CLEVER_CLOUD_REMOTE_HOST} >> ~/.ssh/known_hosts
           mkdir -p ${DEPLOY_DIR}
           cp -R server/* ${DEPLOY_DIR}/
-          cp -R build/ ${DEPLOY_DIR}/front_build
+          cp -R client/build/ ${DEPLOY_DIR}/front_build
           cd ${DEPLOY_DIR}
           cp prisma/prisma.yml scripts/prisma_deploy_all/
           cp prisma/datamodel.graphql scripts/prisma_deploy_all/

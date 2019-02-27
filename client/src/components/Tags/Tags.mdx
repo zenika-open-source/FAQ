@@ -1,0 +1,31 @@
+---
+name: Tags
+route: /components/tags
+menu: Components
+---
+
+import { Playground, PropsTable } from 'docz'
+import Tags from './Tags'
+
+# Tags
+
+```js
+import { Tags } from 'components'
+```
+
+## Basic usage
+
+<Playground>
+  <Tags
+    tags={[
+      { label: 'nantes' },
+      { label: 'dreamlab' },
+      { label: 'meta' },
+      { label: 'faq' }
+    ]}
+  />
+</Playground>
+
+## Properties
+
+<PropsTable of={Tags} />

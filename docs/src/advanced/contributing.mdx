@@ -24,13 +24,15 @@ The documentation is generated using [docz](https://docz.site).
 Run the development script:
 
 ```bash
-npm run docz:dev
+# Path: ./FAQ/docs
+npm run start
 ```
 
 Build the documentation:
 
 ```bash
-npm run docz:build
+# Path: ./FAQ/docs
+npm run build
 ```
 
 > Remember to rebuild the documentation before pushing
@@ -41,11 +43,11 @@ npm run docz:build
 
 ## Linting
 
-You can use the following commands either in the frontend (`./`) or the backend (`./server`)
+You can use the following commands either in the frontend (`./client`) or the backend (`./server`)
 
 ```bash
-npm run lint #Check with eslint
-npm run lint:fix #Fix with eslint
+npm run lint           #Check with eslint
+npm run lint:fix       #Fix with eslint
 npm run prettier:check #Check with prettier
 npm run prettier:write #Fix with prettier
 ```

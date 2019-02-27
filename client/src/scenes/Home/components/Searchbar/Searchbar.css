@@ -1,0 +1,43 @@
+.searchbar {
+  margin-top: 4rem;
+}
+
+@media screen and (max-width: 480px) {
+  /* --mobile-breakpoint */
+  .searchbar {
+    margin-top: 1rem;
+  }
+}
+
+.searchbar {
+  max-width: 500px;
+  width: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.searchbar .input input {
+  height: 40px;
+  line-height: 40px;
+}
+
+.searchbar .input-icon .icon.hidden {
+  display: none;
+}
+
+.searchbar .input-icon svg {
+  width: 18px;
+  height: 18px;
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
+.searchbar .filters {
+  display: flex;
+  margin-top: 0.5rem;
+  flex-direction: column;
+}
+
+.searchbar .filters .checkbox + .checkbox {
+  margin-left: 1rem;
+}

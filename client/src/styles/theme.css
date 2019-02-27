@@ -1,0 +1,32 @@
+.theme {
+  /* Font */
+  --font-size: 14px;
+  --h1-font-size: 1.3rem;
+  --h2-font-size: 1.1rem;
+  --small-font-size: 0.7rem;
+
+  /* Colors */
+  --primary-color: #af1e3a;
+  --primary-color-light: #e65564;
+  --primary-color-dark: #790015;
+  --primary-color-font: #ffffff;
+  --primary-color-font-dark: #000000;
+
+  --secondary-color: #d0d0d0;
+  --secondary-color-light: #fff;
+  --secondary-color-dark: #9f9f9f;
+  --secondary-color-font: #494949;
+  --secondary-color-font-light: #586069;
+  --secondary-color-font-dark: #000000;
+
+  --background-color: #edf2f5;
+
+  /* Layout */
+  --layout-navbar-height: 64px;
+
+  /* Meta colors */
+  --info-color: #209cee;
+  --success-color: #23d160;
+  --warning-color: #ff9900;
+  --error-color: #ff3860;
+}

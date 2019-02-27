@@ -1,0 +1,69 @@
+@import url('https://fonts.googleapis.com/css?family=Lato:300,400,700');
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Lato', Calibri, Arial, sans-serif;
+  height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+#root {
+  height: 100%;
+}
+
+.app {
+  background: var(--background-color);
+  color: var(--primary-color);
+  font-size: var(--font-size);
+  min-height: 100%;
+  overflow: hidden;
+}
+
+a {
+  text-decoration: none;
+  color: var(--primary-color);
+}
+
+a.discret {
+  text-decoration: none !important;
+  color: var(--secondary-color-font) !important;
+}
+
+h1,
+h2,
+h3 {
+  padding: 0;
+  margin: 0;
+}
+
+h1 {
+  font-size: var(--h1-font-size);
+}
+
+h2 {
+  font-size: var(--h2-font-size);
+}
+
+h3 {
+  font-size: var(--font-size);
+  font-weight: bold;
+}
+
+hr {
+  border: 0;
+  border-top: 1px dotted #8c8b8b;
+}
+
+/* Fix iOS to remove autozooming on input */
+@media screen and (-webkit-min-device-pixel-ratio: 0) and (max-device-width: 1024px) {
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+  }
+}
