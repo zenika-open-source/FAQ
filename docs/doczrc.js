@@ -32,7 +32,7 @@ export default {
       ]
     }
   },
-  repository: 'https://github.com/Zenika/FAQ',
+  repository: 'https://github.com/zenika-open-source/FAQ',
   menu: [
     'Introduction',
     'Getting started',
