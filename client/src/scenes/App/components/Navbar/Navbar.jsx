@@ -22,7 +22,7 @@ const Navbar = () => {
       <div className="navigation">
         {conf.bugReporting === 'GITHUB' ? (
           <a
-            href="https://github.com/Zenika/FAQ/issues/new?template=bug_report.md"
+            href="https://github.com/zenika-open-source/FAQ/issues/new?template=bug_report.md"
             target="_blank"
             rel="noopener noreferrer"
           >

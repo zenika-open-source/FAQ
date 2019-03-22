@@ -28,7 +28,7 @@ const UserMenu = ({ history }) => {
       <DropdownDivider />
       <DropdownItem
         icon={<GithubIcon style={{ width: '20px', height: '20px', margin: '2px' }} />}
-        href="https://github.com/Zenika/FAQ"
+        href="https://github.com/zenika-open-source/FAQ"
         target="_blank"
       >
         Github
@@ -37,7 +37,7 @@ const UserMenu = ({ history }) => {
         icon="bug_report"
         href={
           conf.bugReporting === 'GITHUB'
-            ? 'https://github.com/Zenika/FAQ/issues/new?template=bug_report.md'
+            ? 'https://github.com/zenika-open-source/FAQ/issues/new?template=bug_report.md'
             : `mailto:bug@${process.env.REACT_APP_FAQ_URL}`
         }
         target="_blank"
