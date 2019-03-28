@@ -6,7 +6,7 @@ const cors = require('cors')
 
 const resolvers = require('./resolvers')
 const directives = require('./directives')
-const { auth, error, getConfiguration } = require('./middlewares')
+const { auth, error, getConfiguration, getFirstUserFlag } = require('./middlewares')
 const { configuration } = require('./endpoints')
 
 const multiTenant = require('./multiTenant')
@@ -34,6 +34,7 @@ server.express.use(cors())
 
 server.express.post(yogaEndpoint, [
   (req, res, next) => getConfiguration(multiTenant, req, next),
+  (req, res, next) => getFirstUserFlag(multiTenant, req, next),
   (req, res, next) => auth.checkJwt(req, res, next, multiTenant.current(req)),
   (req, res, next) => auth.checkDomain(req, res, next, multiTenant.current(req)),
   error.handling
