@@ -1,4 +1,5 @@
 const { validateAndParseIdToken, ctxUser } = require('./helpers')
+const { refreshFirstUserFlag } = require('../middlewares/first-user')
 
 module.exports = {
   Query: {
@@ -15,6 +16,7 @@ module.exports = {
   Mutation: {
     authenticate: async (_, { idToken }, ctx, info) => {
       let userToken = null
+      const isFirstUser = ctx.prisma._meta.isFirstUser
       try {
         userToken = await validateAndParseIdToken(idToken, ctx.prisma._meta.configuration)
       } catch (err) {
@@ -22,7 +24,7 @@ module.exports = {
       }
       const auth0Id = userToken.sub.split('|')[1]
 
-      return ctx.prisma.mutation.upsertUser(
+      const user = await ctx.prisma.mutation.upsertUser(
         {
           where: { auth0Id },
           create: {
@@ -30,7 +32,8 @@ module.exports = {
             name: userToken.name,
             email: userToken.email,
             picture: userToken.picture,
-            locale: userToken.locale
+            locale: userToken.locale,
+            admin: isFirstUser
           },
           update: {
             picture: userToken.picture
@@ -38,6 +41,12 @@ module.exports = {
         },
         info
       )
+
+      if (isFirstUser) {
+        await refreshFirstUserFlag(ctx.prisma)
+      }
+
+      return user
     },
     updateMe: (_, { name, email, picture }, ctx, info) =>
       ctx.prisma.mutation.updateUser(
