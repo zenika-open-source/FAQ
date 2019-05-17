@@ -81,10 +81,12 @@ class Auth {
     localStorage.state_before_login = JSON.stringify(state)
   }
 
-  popStateBeforeLogin() {
-    const state = JSON.parse(localStorage.state_before_login || '{}')
+  getStateBeforeLogin() {
+    return JSON.parse(localStorage.state_before_login || '{}')
+  }
+
+  clearStateBeforeLogin() {
     localStorage.removeItem('state_before_login')
-    return state
   }
 }
 

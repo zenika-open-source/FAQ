@@ -70,7 +70,7 @@ class AuthProvider extends Component {
     try {
       const authResult = await auth.parseHash(hash)
 
-      const { redirectTo } = auth.popStateBeforeLogin()
+      const { redirectTo } = auth.getStateBeforeLogin()
 
       const { data } = await authQL(authResult.idToken)
 
@@ -86,6 +86,8 @@ class AuthProvider extends Component {
           this.scheduleRenew()
         }
       )
+
+      auth.clearStateBeforeLogin()
 
       history.push(redirectTo || '')
     } catch (err) {
