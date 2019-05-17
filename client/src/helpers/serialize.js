@@ -15,7 +15,11 @@ const stringifyQueryString = params =>
 export const serialize = ({ q, tags, flags, page }) => {
   const params = {}
 
-  if (q) params.q = q.trim().replace(/\s/g, '+')
+  if (q)
+    params.q = q
+      .trim()
+      .replace(/\s/g, '+')
+      .replace(/%/g, '%25')
   if (tags && tags.length > 0) params.tags = tags.join('+').replace(/\s/g, '-')
   if (flags && flags.length > 0) {
     params.flags = tags.join('+').replace(/\s/g, '-')
