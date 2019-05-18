@@ -30,6 +30,7 @@ const EmojiPicker = () => {
         <div className="emoji-picker">
           <div ref={pickerRef}>
             <Picker
+              native={true}
               title="Pick your emoji…"
               emoji="point_up"
               onSelect={selected => {
