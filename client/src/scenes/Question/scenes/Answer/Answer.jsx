@@ -31,7 +31,7 @@ class Answer extends Component {
     this.state = {
       nodeLoaded: false,
       initialAnswer: initialText,
-      answer: { text: initialText, selection: null },
+      answer: initialText,
       loading: false,
       sources: initialSources,
       initialSources: initialSources,
@@ -77,9 +77,7 @@ class Answer extends Component {
 
     this.setState({ loadingSubmit: true })
 
-    const content = answer.text
-
-    submitAnswer(content, this.keyValuePairsToSources(sources), zNode.id)
+    submitAnswer(answer, this.keyValuePairsToSources(sources), zNode.id)
       .then(() => {
         this.setState({ slug: zNode.question.slug + '-' + zNode.id })
         alert.pushSuccess('Your answer was successfully submitted!')
@@ -100,7 +98,7 @@ class Answer extends Component {
 
     editAnswer(
       typeof answerId === 'string' ? answerId : zNode.answer.id,
-      answer.text,
+      answer,
       this.state.initialAnswer,
       this.keyValuePairsToSources(sources)
     )
@@ -129,8 +127,8 @@ class Answer extends Component {
   canSubmit() {
     const { answer, initialAnswer, sources, initialSources } = this.state
     return !(
-      answer.text.length === 0 ||
-      (answer.text === initialAnswer &&
+      answer.length === 0 ||
+      (answer === initialAnswer &&
         differenceWith(sources, initialSources, isEqual).length === 0 &&
         differenceWith(initialSources, sources, isEqual).length === 0)
     )
