@@ -10,7 +10,9 @@ export const reducer = (state, action) => {
       return { ...state, authorizedDomains: action.data }
     case 'change_bug_reporting':
       return { ...state, bugReporting: action.data }
-    case 'change_slackcommandkey':
+    case 'change_slack_channelhook':
+      return { ...state, slackChannelHook: action.data }
+    case 'change_slack_commandkey':
       return { ...state, slackCommandKey: action.data }
     default:
       return {

@@ -39,7 +39,7 @@ const Settings = ({ configuration: conf }) => {
     mutateSlackCommandKey()
       .then(({ data }) =>
         dispatch({
-          type: 'change_slackcommandkey',
+          type: 'change_slack_commandkey',
           data: data.regenerateSlackCommandKey.slackCommandKey
         })
       )
@@ -58,7 +58,8 @@ const Settings = ({ configuration: conf }) => {
         .split(',')
         .map(x => x.trim())
         .filter(x => x),
-      bugReporting: state.bugReporting
+      bugReporting: state.bugReporting,
+      slackChannelHook: state.slackChannelHook
     })
       .then(() => {
         alert.pushSuccess('The settings were successfully edited!')
@@ -141,6 +142,14 @@ const Settings = ({ configuration: conf }) => {
                 })
               }
               disabled={loading}
+            />
+          </div>
+          <div className="inline-input" style={{ marginTop: '1em' }}>
+            <i style={{ marginLeft: '1em' }}>Slack Channel Hook:</i>
+            <Input
+              value={state.slackChannelHook || ''}
+              style={{ flex: 1, marginRight: '1rem' }}
+              onChange={e => dispatch({ type: 'change_slack_channelhook', data: e.target.value })}
             />
           </div>
           <div className="inline-input" style={{ marginTop: '1em' }}>
