@@ -9,6 +9,7 @@ export const getConfiguration = gql`
       workplaceSharing
       authorizedDomains
       bugReporting
+      slackCommandKey
     }
   }
 `
@@ -31,6 +32,14 @@ export const updateConfigurationMutation = gql`
       bugReporting: $bugReporting
     ) {
       title
+    }
+  }
+`
+
+export const regenerateSlackCommandKeyMutation = gql`
+  mutation regenerateSlackCommandKey {
+    regenerateSlackCommandKey {
+      slackCommandKey
     }
   }
 `

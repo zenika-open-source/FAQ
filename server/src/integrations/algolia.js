@@ -118,7 +118,7 @@ class Algolia {
       return acc
     }, {})
 
-    return { ids, highlights, nbHits: content.nbHits }
+    return { ids, highlights, hits: content.hits, nbHits: content.nbHits }
   }
   resyncSynonyms(ctx, synonyms) {
     const index = this.getIndex(ctx)

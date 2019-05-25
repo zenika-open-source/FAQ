@@ -58,6 +58,7 @@ type Mutation {
     authorizedDomains: [String!]!
     bugReporting: BugReporting!
   ): Configuration @admin
+  regenerateSlackCommandKey: Configuration! @admin
 }
 
 type SearchResult {
@@ -99,6 +100,7 @@ type Configuration {
   algoliaSynonyms: Json
 
   slackChannelHook: String @admin
+  slackCommandKey: String @admin
 
   tags: Json
 

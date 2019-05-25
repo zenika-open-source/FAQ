@@ -349,6 +349,7 @@ type Configuration {
   mailgunDomain: String
   mailgunApiKey: String
   slackChannelHook: String
+  slackCommandKey: String
   tags: Json
   workplaceSharing: Boolean
   bugReporting: BugReporting
@@ -376,6 +377,7 @@ input ConfigurationCreateInput {
   mailgunDomain: String
   mailgunApiKey: String
   slackChannelHook: String
+  slackCommandKey: String
   tags: Json
   workplaceSharing: Boolean
   bugReporting: BugReporting
@@ -409,6 +411,8 @@ enum ConfigurationOrderByInput {
   mailgunApiKey_DESC
   slackChannelHook_ASC
   slackChannelHook_DESC
+  slackCommandKey_ASC
+  slackCommandKey_DESC
   tags_ASC
   tags_DESC
   workplaceSharing_ASC
@@ -434,6 +438,7 @@ type ConfigurationPreviousValues {
   mailgunDomain: String
   mailgunApiKey: String
   slackChannelHook: String
+  slackCommandKey: String
   tags: Json
   workplaceSharing: Boolean
   bugReporting: BugReporting
@@ -473,6 +478,7 @@ input ConfigurationUpdateInput {
   mailgunDomain: String
   mailgunApiKey: String
   slackChannelHook: String
+  slackCommandKey: String
   tags: Json
   workplaceSharing: Boolean
   bugReporting: BugReporting
@@ -490,6 +496,7 @@ input ConfigurationUpdateManyMutationInput {
   mailgunDomain: String
   mailgunApiKey: String
   slackChannelHook: String
+  slackCommandKey: String
   tags: Json
   workplaceSharing: Boolean
   bugReporting: BugReporting
@@ -636,6 +643,20 @@ input ConfigurationWhereInput {
   slackChannelHook_not_starts_with: String
   slackChannelHook_ends_with: String
   slackChannelHook_not_ends_with: String
+  slackCommandKey: String
+  slackCommandKey_not: String
+  slackCommandKey_in: [String!]
+  slackCommandKey_not_in: [String!]
+  slackCommandKey_lt: String
+  slackCommandKey_lte: String
+  slackCommandKey_gt: String
+  slackCommandKey_gte: String
+  slackCommandKey_contains: String
+  slackCommandKey_not_contains: String
+  slackCommandKey_starts_with: String
+  slackCommandKey_not_starts_with: String
+  slackCommandKey_ends_with: String
+  slackCommandKey_not_ends_with: String
   workplaceSharing: Boolean
   workplaceSharing_not: Boolean
   bugReporting: BugReporting

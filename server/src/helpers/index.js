@@ -3,7 +3,8 @@ const slug = require('slugify')
 const validateAndParseIdToken = require('./validateAndParseIdToken')
 const history = require('./history')
 const emojify = require('./emojify')
-const requireText = require('./require-text')
+const requireText = require('./requireText')
+const randomString = require('./randomString')
 
 const ctxUser = ctx => ctx.request.user
 const slugify = s => slug(s).toLowerCase()
@@ -14,5 +15,6 @@ module.exports = {
   ctxUser,
   slugify,
   emojify,
-  requireText
+  requireText,
+  randomString
 }
