@@ -61,12 +61,13 @@ const checkJwt = (req, res, next, prisma) => {
 
     options = {
       secret: (req, payload, done) => {
-        if (!payload || req.headers['prisma-service'] !== payload.prismaService) {
+        if (
+          !payload ||
+          req.headers['faq-tenant'] !== payload.faqTenant || // Prefered header: "faq-tenant"
+          req.headers['prisma-service'] !== payload.prismaService // Alternative header (legacy): prisma-service
+        ) {
           return done(
-            new UnauthorizedError(
-              'wrong-prisma-service',
-              'Wrong prisma-service found in JWT Payload'
-            )
+            new UnauthorizedError('wrong-faq-tenant', 'Wrong faq-tenant found in JWT Payload')
           )
         }
         userQuery({ id: payload['userId'] }).then(user => {
