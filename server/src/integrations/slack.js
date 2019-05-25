@@ -67,6 +67,14 @@ class Slack {
       )
     }
 
+    if (!text) {
+      return res.send(
+        this.buildMessage(
+          'The /faq command must always be followed by the text to search for.\nE.g.: /faq how to report an expense'
+        )
+      )
+    }
+
     try {
       const results = await algolia.search({ prisma }, { text, first: 3, skip: 0 })
 
