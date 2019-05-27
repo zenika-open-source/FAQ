@@ -22,7 +22,7 @@ const multiTenant = new MultiTenant({
     // If no header found, try to guess
     const hostParts = req.hostname.split('.')
 
-    const [tld, main, serviceName, serviceStage] = hostParts.reverse()
+    const [, , serviceName, serviceStage] = hostParts.reverse()
     return [serviceName || 'default', serviceStage || 'prod']
   }
 })
