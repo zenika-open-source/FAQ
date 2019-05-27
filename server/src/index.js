@@ -58,9 +58,9 @@ if (process.env.NODE_ENV === 'production') {
 
   server.express.use(secure)
 
-  server.express.use('/static', express.static(frontPath + '/static'))
-  server.express.use('/img', express.static(frontPath + '/img'))
-  server.express.use('/manifest.json', express.static(frontPath + '/manifest.json'))
+  const staticPaths = ['static', 'img', '.well-known', 'manifest.json', 'robot.txt']
+
+  staticPaths.map(path => server.express.use('/' + path, express.static(frontPath + '/' + path)))
 
   server.express.get('*', (req, res, next) => {
     res.sendFile(frontPath + '/index.html')
