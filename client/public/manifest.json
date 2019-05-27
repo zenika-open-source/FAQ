@@ -1,6 +1,6 @@
 {
   "short_name": "FAQ",
-  "name": "FAQ Zenika",
+  "name": "FAQ",
   "icons": [
     {
       "src": "favicon.ico",
@@ -10,6 +10,6 @@
   ],
   "start_url": "./index.html",
   "display": "standalone",
-  "theme_color": "#000000",
+  "theme_color": "#af1e3a",
   "background_color": "#ffffff"
 }

@@ -1,0 +1,2 @@
+Contact: thibaud.courtoison@zenika.com
+Preferred-Languages: en, fr
