@@ -1,4 +1,4 @@
-const { validateAndParseIdToken, ctxUser } = require('./helpers')
+const { validateAndParseIdToken, ctxUser } = require('../helpers')
 const { refreshFirstUserFlag } = require('../middlewares/first-user')
 
 module.exports = {

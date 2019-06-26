@@ -24,6 +24,11 @@
   line-height: 2.7em;
 }
 
+.input.small input {
+  height: 27px;
+  line-height: 27px;
+}
+
 .input:focus-within input::placeholder {
   color: transparent;
 }

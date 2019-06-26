@@ -1,5 +1,6 @@
-const { algolia } = require('./integrations')
+const { algolia } = require('../integrations')
 const { refreshConfiguration } = require('../middlewares/configuration')
+const { randomString } = require('../helpers')
 
 module.exports = {
   Query: {
@@ -21,6 +22,17 @@ module.exports = {
       refreshConfiguration(ctx.prisma)
 
       return configuration
+    },
+    regenerateSlackCommandKey: (_, args, ctx, info) => {
+      return ctx.prisma.mutation.updateConfiguration(
+        {
+          where: { name: 'default' },
+          data: {
+            slackCommandKey: randomString(20)
+          }
+        },
+        info
+      )
     }
   }
 }

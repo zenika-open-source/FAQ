@@ -7,13 +7,14 @@ const cors = require('cors')
 const resolvers = require('./resolvers')
 const directives = require('./directives')
 const { auth, error, getConfiguration, getFirstUserFlag } = require('./middlewares')
-const { configuration } = require('./endpoints')
+const { configuration, integrations } = require('./endpoints')
 
 const multiTenant = require('./multiTenant')
 
 /* Create server */
 
-const yogaEndpoint = '/gql'
+const gqlEndpoint = '/gql'
+const restEndpoint = '/rest'
 
 const server = new GraphQLServer({
   typeDefs: 'src/schema.graphql',
@@ -31,8 +32,9 @@ const server = new GraphQLServer({
 /* Register middlewares */
 
 server.express.use(cors())
+server.express.use(express.urlencoded({ extended: true }))
 
-server.express.post(yogaEndpoint, [
+server.express.post(gqlEndpoint, [
   (req, res, next) => getConfiguration(multiTenant, req, next),
   (req, res, next) => getFirstUserFlag(multiTenant, req, next),
   (req, res, next) => auth.checkJwt(req, res, next, multiTenant.current(req)),
@@ -40,16 +42,20 @@ server.express.post(yogaEndpoint, [
   error.handling
 ])
 
-/* Register configuration endpoint */
+/* Register rest endpoints */
 
-server.express.get(yogaEndpoint + '/configuration', configuration(multiTenant))
+server.express.get(restEndpoint + '/configuration', configuration(multiTenant))
+server.express.post(restEndpoint + '/integration/:name*', [
+  (req, res, next) => getConfiguration(multiTenant, req, next),
+  integrations(multiTenant)
+])
 
 /* Start server */
 
 const port = process.env.PORT || 4000
-const playgroundEndpoint = yogaEndpoint + '/playground'
+const playgroundEndpoint = gqlEndpoint + '/playground'
 
-server.start({ port, endpoint: yogaEndpoint, playground: playgroundEndpoint })
+server.start({ port, endpoint: gqlEndpoint, playground: playgroundEndpoint })
 
 /* Serve frontend if env=prod */
 

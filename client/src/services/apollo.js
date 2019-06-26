@@ -33,7 +33,7 @@ const apollo = new ApolloClient({
         headers: {
           ...headers,
           Authorization: token ? `Bearer ${token}` : '',
-          'prisma-service': routing.getPrismaService()
+          'faq-tenant': routing.getPrismaService()
         }
       }
     }),

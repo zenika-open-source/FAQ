@@ -16,19 +16,21 @@ This project has the following integrations:
 
 Slack is a collaboration chat tool often used in and out of organizations to help team communicate and coordinate in a more effective manner.
 
-FAQ has the following integration with slack:
+FAQ has the following integrations with slack:
 
 - Sends new questions into a dedicated slack channel
+- Use the `/faq` command to query the FAQ
 
 ### Create Slack application
 
-In order to integrate with Slack, you will need to create an application. It can be done using the [Slack "Build" dashboard](https://api.slack.com/). Follow the instructions from Slack to create your app. See below for your configuration variables.
+In order to integrate with Slack, you will need to create an application. It can be done using the [Slack "Build" dashboard](https://api.slack.com/). Follow the instructions from Slack to create your app. See below for your settings variables.
 
-### Configuration variables
+### Settings variables
 
-| Name               | Notes                                                                                                                                                                                                                                                                                                                                                                                                      |
-| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `slackChannelHook` | This variable is a hook URI which is called by the backend in order to send the message to the channel. You can configure a hook on the [Slack "Build" dashboard](https://api.slack.com/). Choose your app, then go to "Features > Incoming Webhooks". Active the feature and create a hook for the dedicated channel you wish to send questions to. The generated url is what you need for this variable. |
+| Name               | Notes                                                                                                                                                                                                                                                                                                                                                                                             |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `slackChannelHook` | This is a hook URI which is called by the backend in order to send the message to the channel. You can configure a hook on the [Slack "Build" dashboard](https://api.slack.com/). Choose your app, then go to "Features > Incoming Webhooks". Active the feature and create a hook for the dedicated channel you wish to send questions to. The generated url is what you need for this variable. |
+| `slackCommandHook` | This is a hook URI which is called by Slack in order to query the FAQ using the command `/faq`. You can configure a command on the [Slack "Build" dashboard](https://api.slack.com/). Choose your app, then go to "Features > Slash Commands". Create a new command and use the URI provided in the FAQ Settings here.                                                                            |
 
 ## Workplace
 
@@ -66,7 +68,7 @@ FAQ has a public API in order to query its data.
    ```
    {
      "userId": "[user_id]",
-     "prismaService": "[name]/[stage]",
+     "faqTenant": "[name]/[stage]",
      "iat": [timestamp_generated],
      "exp": [timestamp_expiration]
    }
@@ -74,7 +76,7 @@ FAQ has a public API in order to query its data.
 
    > `userId` is the id of the user created in step 1
 
-   > `prismaService` is the service you want to access (See [Multi-tenancy](/advanced/multi-tenancy) for more information)
+   > `faqTenant` is the service you want to access (See [Multi-tenancy](/advanced/multi-tenancy) for more information)
 
    > `iat` is the current timestamp
 
@@ -85,7 +87,7 @@ FAQ has a public API in order to query its data.
    ```js
    {
      "userId": "cjmymlydx01780b30irsmi203",
-     "prismaService": "demo/prod",
+     "faqTenant": "demo/prod",
      "iat": 1538908112,
      "exp": 1538910112
    }
@@ -97,5 +99,5 @@ FAQ has a public API in order to query its data.
 
    ```
    Authorization: API [your_jwt_token]
-   prisma-service: [name]/[state]
+   faq-tenant: [name]/[state]
    ```

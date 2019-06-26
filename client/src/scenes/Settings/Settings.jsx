@@ -12,7 +12,7 @@ import { onListChangeActions } from 'helpers/onListChange'
 
 import { reducer, tagsToList, listToTags, synonymsToList, listToSynonyms } from './helpers'
 
-import { updateConfigurationMutation } from './queries'
+import { regenerateSlackCommandKeyMutation, updateConfigurationMutation } from './queries'
 
 import './Settings.scss'
 
@@ -20,6 +20,7 @@ const Settings = ({ configuration: conf }) => {
   const configuration = useConfiguration()
 
   const [loading, setLoading] = useState(false)
+  const [slackHookLoading, setSlackHookLoading] = useState(false)
 
   const [state, dispatch] = useReducer(reducer, {
     ...conf,
@@ -29,7 +30,22 @@ const Settings = ({ configuration: conf }) => {
     bugReporting: conf.bugReporting || 'GITHUB'
   })
 
+  const [, mutateSlackCommandKey] = useMutation(regenerateSlackCommandKeyMutation)
   const [, mutate] = useMutation(updateConfigurationMutation)
+
+  const generateSlackHook = () => {
+    setSlackHookLoading(true)
+
+    mutateSlackCommandKey()
+      .then(({ data }) =>
+        dispatch({
+          type: 'change_slack_commandkey',
+          data: data.regenerateSlackCommandKey.slackCommandKey
+        })
+      )
+      .catch(alert.pushDefaultError)
+      .finally(() => setSlackHookLoading(false))
+  }
 
   const onSave = () => {
     setLoading(true)
@@ -42,10 +58,11 @@ const Settings = ({ configuration: conf }) => {
         .split(',')
         .map(x => x.trim())
         .filter(x => x),
-      bugReporting: state.bugReporting
+      bugReporting: state.bugReporting,
+      slackChannelHook: state.slackChannelHook
     })
       .then(() => {
-        alert.pushSuccess('The answer was successfully edited!')
+        alert.pushSuccess('The settings were successfully edited!')
         configuration.reload()
       })
       .catch(error => {
@@ -125,6 +142,35 @@ const Settings = ({ configuration: conf }) => {
                 })
               }
               disabled={loading}
+            />
+          </div>
+          <div className="inline-input" style={{ marginTop: '1em' }}>
+            <i style={{ marginLeft: '1em' }}>Slack Channel Hook:</i>
+            <Input
+              value={state.slackChannelHook || ''}
+              style={{ flex: 1, marginRight: '1rem' }}
+              onChange={e => dispatch({ type: 'change_slack_channelhook', data: e.target.value })}
+            />
+          </div>
+          <div className="inline-input" style={{ marginTop: '1em' }}>
+            <i style={{ marginLeft: '1em' }}>Slack Command Hook:</i>
+            <Input
+              value={
+                state.slackCommandKey
+                  ? `https://${window.location.host}/rest/integration/slack/${
+                      state.slackCommandKey
+                    }`
+                  : ''
+              }
+              disabled
+              small
+              style={{ flex: 1, marginLeft: '1rem', marginRight: '1rem' }}
+            />
+            <Button
+              label={(state.slackCommandKey ? 'Regenerate' : 'Generate') + ' URL'}
+              link
+              loading={slackHookLoading}
+              onClick={generateSlackHook}
             />
           </div>
           <br />

@@ -126,6 +126,7 @@ type Configuration {
   mailgunApiKey: String
 
   slackChannelHook: String
+  slackCommandKey: String
 
   tags: Json
 

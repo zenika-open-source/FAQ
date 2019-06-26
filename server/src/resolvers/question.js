@@ -1,5 +1,5 @@
-const { history, ctxUser, slugify } = require('./helpers')
-const { algolia, slack } = require('./integrations')
+const { history, ctxUser, slugify } = require('../helpers')
+const { algolia, slack } = require('../integrations')
 
 const confTagList = ctx =>
   Object.values(ctx.prisma._meta.configuration.tags).reduce((acc, x) => acc.concat(x), [])

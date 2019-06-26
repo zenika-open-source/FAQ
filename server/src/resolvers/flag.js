@@ -1,5 +1,5 @@
-const { history, ctxUser } = require('./helpers')
-const { algolia } = require('./integrations')
+const { history, ctxUser } = require('../helpers')
+const { algolia } = require('../integrations')
 
 module.exports = {
   Mutation: {

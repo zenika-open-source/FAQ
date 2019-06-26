@@ -12,10 +12,10 @@ class Input extends Component {
   }
 
   render() {
-    const { className, value, limit, icon, style, onClear, ...otherProps } = this.props
+    const { className, value, limit, icon, style, onClear, small, ...otherProps } = this.props
     return (
       <div
-        className={cn('input', className)}
+        className={cn('input', className, { small })}
         style={style}
         onClick={() => this.input.current && this.input.current.focus()}
       >
@@ -47,7 +47,8 @@ Input.propTypes = {
   icon: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   style: PropTypes.object,
   autoFocus: PropTypes.bool,
-  onClear: PropTypes.func
+  onClear: PropTypes.func,
+  small: PropTypes.bool
 }
 
 export default Input

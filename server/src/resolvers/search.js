@@ -1,4 +1,4 @@
-const { algolia } = require('./integrations')
+const { algolia } = require('../integrations')
 
 module.exports = {
   Query: {

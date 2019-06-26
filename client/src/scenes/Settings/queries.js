@@ -9,6 +9,8 @@ export const getConfiguration = gql`
       workplaceSharing
       authorizedDomains
       bugReporting
+      slackChannelHook
+      slackCommandKey
     }
   }
 `
@@ -21,6 +23,7 @@ export const updateConfigurationMutation = gql`
     $workplaceSharing: Boolean!
     $authorizedDomains: [String!]!
     $bugReporting: BugReporting!
+    $slackChannelHook: String!
   ) {
     updateConfiguration(
       title: $title
@@ -29,8 +32,17 @@ export const updateConfigurationMutation = gql`
       workplaceSharing: $workplaceSharing
       authorizedDomains: $authorizedDomains
       bugReporting: $bugReporting
+      slackChannelHook: $slackChannelHook
     ) {
       title
+    }
+  }
+`
+
+export const regenerateSlackCommandKeyMutation = gql`
+  mutation regenerateSlackCommandKey {
+    regenerateSlackCommandKey {
+      slackCommandKey
     }
   }
 `

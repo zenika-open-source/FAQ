@@ -22,7 +22,7 @@ const ConfigurationProvider = ({ children }) => {
 
   // Retrieve configuration from server
   useEffect(() => {
-    fetch(process.env.REACT_APP_GRAPHQL_ENDPOINT + '/configuration', {
+    fetch(process.env.REACT_APP_REST_ENDPOINT + '/configuration', {
       headers: { 'prisma-service': routing.getPrismaService() }
     })
       .then(response => {

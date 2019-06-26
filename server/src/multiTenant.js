@@ -9,13 +9,21 @@ const multiTenant = new MultiTenant({
       secret: process.env.PRISMA_API_SECRET
     }),
   nameStageFromReq: req => {
-    const service = req.headers['prisma-service']
-
-    if (!service) {
-      throw Error("No 'prisma-service' header found, please provide one")
+    // Prefered header: faq-tenant
+    if (req.headers['faq-tenant']) {
+      return req.headers['faq-tenant'].match(/([^/]+)\/([^/]+)/).splice(1, 2)
     }
 
-    return service.match(/([^/]+)\/([^/]+)/).splice(1, 2)
+    // Alternative header (legacy): prisma-service
+    if (req.headers['prisma-service']) {
+      return req.headers['prisma-service'].match(/([^/]+)\/([^/]+)/).splice(1, 2)
+    }
+
+    // If no header found, try to guess
+    const hostParts = req.hostname.split('.')
+
+    const [, , serviceName, serviceStage] = hostParts.reverse()
+    return [serviceName || 'default', serviceStage || 'prod']
   }
 })
 
