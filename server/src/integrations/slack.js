@@ -100,12 +100,13 @@ class Slack {
     return text.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]))
   }
 
-  buildMessage(text, attachements, origin) {
-    if (!attachements) return { text }
+  buildMessage(text, attachments, origin) {
+    if (!attachments) return { text }
 
     return {
+      response_type: 'in_channel',
       text,
-      attachements: attachements.map(item => ({
+      attachments: attachments.map(item => ({
         color: '#af1e3a',
         footer: origin,
         footer_icon: `${origin}/img/favicon/favicon-64.png`,
