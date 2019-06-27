@@ -5,12 +5,16 @@ import find from 'lodash/find'
 import map from 'lodash/map'
 import format from 'date-fns/format'
 
+import { useIntl } from 'services'
+
 import Flag, { flagMeta } from './Flag'
 
 import './Flags.css'
 
 const Flags = ({ node, withLabels }) => {
-  let flags = clone(node.flags)
+  const intl = useIntl(Flags)
+
+  const flags = clone(node.flags)
 
   if (flags.length === 0) return ''
 
@@ -24,7 +28,7 @@ const Flags = ({ node, withLabels }) => {
         let tooltip
 
         if (withLabels && flag.user) {
-          tooltip = 'By ' + flag.user.name + ' on ' + format(flag.createdAt, 'D MMM YYYY')
+          tooltip = intl('tooltip')(flag.user.name, format(flag.createdAt, 'D MMM YYYY'))
         } else {
           tooltip = flag.type.toUpperCase()
         }
@@ -38,6 +42,11 @@ const Flags = ({ node, withLabels }) => {
 Flags.propTypes = {
   node: PropTypes.object.isRequired,
   withLabels: PropTypes.bool
+}
+
+Flags.translations = {
+  en: { tooltip: (name, date) => `By ${name} on ${date}` },
+  fr: { tooltip: (name, date) => `Par ${name} le ${date}` }
 }
 
 export default Flags

@@ -1,2 +1,2 @@
 export { default } from './Flags'
-export { flagMeta } from './Flag'
+export { default as Flag, flagMeta } from './Flag'

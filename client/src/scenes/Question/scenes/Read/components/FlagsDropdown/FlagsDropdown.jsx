@@ -1,13 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { flagMeta } from 'components/Flags'
+import { useIntl } from 'services'
+
+import { Flag, flagMeta } from 'components/Flags'
 import Dropdown, { DropdownItem } from 'components/Dropdown'
 import Button from 'components/Button'
 
 import './FlagsDropdown.css'
 
 const FlagsDropdown = ({ flags, onSelect, onRemove }) => {
+  const intl = useIntl(FlagsDropdown)
+  const flagIntl = useIntl(Flag)
+
   const flagTypes = ['incomplete', 'outdated', 'duplicate']
 
   const items = flagTypes.map(type => {
@@ -26,18 +31,23 @@ const FlagsDropdown = ({ flags, onSelect, onRemove }) => {
         disabled={isSelected}
         onClick={() => !isSelected && onSelect(type)}
       >
-        {type}
+        {flagIntl(type)}
       </DropdownItem>
     )
   })
 
-  return <Dropdown button={<Button icon="flag" label="Flag as ..." link />}>{items}</Dropdown>
+  return <Dropdown button={<Button icon="flag" label={intl('button')} link />}>{items}</Dropdown>
 }
 
 FlagsDropdown.propTypes = {
   flags: PropTypes.array.isRequired,
   onSelect: PropTypes.func.isRequired,
   onRemove: PropTypes.func.isRequired
+}
+
+FlagsDropdown.translations = {
+  en: { button: 'Flag as ...' },
+  fr: { button: 'Signaler ...' }
 }
 
 export default FlagsDropdown

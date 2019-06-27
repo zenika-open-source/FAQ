@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import copy from 'copy-to-clipboard'
 
 import { useConfiguration } from 'contexts'
-import { routing } from 'services'
+import { routing, useIntl } from 'services'
 
 import Dropdown, { DropdownItem } from 'components/Dropdown'
 
@@ -12,6 +12,8 @@ import Button from 'components/Button'
 import './Share.css'
 
 const Share = ({ node }) => {
+  const intl = useIntl(Share)
+
   const conf = useConfiguration()
   const shareUrl = routing.getShareUrl(node.id)
 
@@ -35,7 +37,7 @@ const Share = ({ node }) => {
           </DropdownItem>
         ) : null}
         <DropdownItem icon="link" onClick={() => copy(shareUrl)}>
-          Copy link
+          {intl('copy')}
         </DropdownItem>
       </Dropdown>
     </div>
@@ -44,6 +46,11 @@ const Share = ({ node }) => {
 
 Share.propTypes = {
   node: PropTypes.object.isRequired
+}
+
+Share.translations = {
+  en: { copy: 'Copy link' },
+  fr: { copy: 'Copier lien' }
 }
 
 export default Share

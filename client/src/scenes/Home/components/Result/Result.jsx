@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
-import { markdown } from 'services'
+import { markdown, useIntl } from 'services'
 
 // import Avatar from 'components/Avatar'
 import Card, { CardTitle, CardText } from 'components/Card'
@@ -21,6 +21,8 @@ class Result extends Component {
   }
 
   render() {
+    const intl = useIntl(Result)
+
     const { node } = this.props
     const { collapsed } = this.state
 
@@ -55,7 +57,7 @@ class Result extends Component {
             markdown.html(node.highlights ? node.highlights.answer : node.answer.content)
           ) : (
             <p style={{ textAlign: 'center' }}>
-              <i>No answer yet...</i>
+              <i>{intl('no_answer')}</i>
             </p>
           )}
         </CardText>
@@ -67,6 +69,11 @@ class Result extends Component {
 Result.propTypes = {
   node: PropTypes.object.isRequired,
   collapsed: PropTypes.bool
+}
+
+Result.translations = {
+  en: { no_answer: 'No answer yet...' },
+  fr: { no_answer: 'Pas encore de réponse...' }
 }
 
 export default Result

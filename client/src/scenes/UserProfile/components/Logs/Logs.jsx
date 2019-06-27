@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
+import { useIntl } from 'services'
 import { formatHistoryAction, nodeUrl } from 'helpers'
 
 import { Loading } from 'components'
@@ -11,12 +12,14 @@ import { DefaultPagination } from 'components/Pagination'
 import './Logs.css'
 
 const Logs = ({ logs, loading, pagesCount, pageCurrent, onPageSelected, meta }) => {
+  const intl = useIntl(Logs)
+
   const shouldShowLoading = loading && (meta ? meta.pageCurrent !== pageCurrent : true)
 
   return (
     <Card>
       <CardText className="logs">
-        <h2 style={{ marginBottom: '1rem' }}>Logs</h2>
+        <h2 style={{ marginBottom: '1rem' }}>{intl('title')}</h2>
         <hr />
         {shouldShowLoading && <Loading />}
         {!shouldShowLoading &&
@@ -59,6 +62,11 @@ Logs.propTypes = {
   pageCurrent: PropTypes.number,
   onPageSelected: PropTypes.func,
   meta: PropTypes.object
+}
+
+Logs.translations = {
+  en: { title: 'Logs' },
+  fr: { title: 'Logs' }
 }
 
 export default Logs

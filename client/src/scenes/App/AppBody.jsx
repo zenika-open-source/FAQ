@@ -10,16 +10,19 @@ import NotFound from 'scenes/NotFound'
 
 import { PrivateRoute, Loading } from 'components'
 
+import { useIntl } from 'services'
 import { useConfiguration, useAuth } from 'contexts'
 
 const AppBody = () => {
+  const intl = useIntl(AppBody)
+
   const conf = useConfiguration()
   const auth = useAuth()
 
   return (
     <div className="main">
       {conf.loading || !auth.ready ? (
-        <Loading text="Preparing the questions..." />
+        <Loading text={intl('loading')} />
       ) : (
         <Switch>
           <PrivateRoute exact path="/" component={Home} />
@@ -32,6 +35,11 @@ const AppBody = () => {
       )}
     </div>
   )
+}
+
+AppBody.translations = {
+  en: { loading: 'Preparing the questions...' },
+  fr: { loading: 'Préparation des questions...' }
 }
 
 export default AppBody

@@ -4,14 +4,29 @@ import { Link } from 'react-router-dom'
 
 import { DropdownContext } from './Dropdown'
 
-const DropdownItem = ({ children, icon, rightIcon, path, href, target, ...otherProps }) => {
+const DropdownItem = ({
+  children,
+  icon,
+  rightIcon,
+  path,
+  href,
+  target,
+  onClick,
+  ...otherProps
+}) => {
   const setDropdownActive = useContext(DropdownContext)
 
   let CustomLink
 
   if (path) {
     CustomLink = ({ children }) => (
-      <Link to={path} onClick={() => setDropdownActive(false)}>
+      <Link
+        to={path}
+        onClick={evt => {
+          if (onClick) onClick(evt)
+          setDropdownActive(false)
+        }}
+      >
         {children}
       </Link>
     )
@@ -21,7 +36,10 @@ const DropdownItem = ({ children, icon, rightIcon, path, href, target, ...otherP
         tabIndex={0}
         href={href}
         target={target || '_self'}
-        onClick={() => setDropdownActive(false)}
+        onClick={evt => {
+          if (onClick) onClick(evt)
+          setDropdownActive(false)
+        }}
         {...otherProps}
       >
         {children}

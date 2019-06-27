@@ -1,88 +1,123 @@
 import React from 'react'
 
+import { useIntl } from 'services'
+
 import TipsComponent from 'components/Tips'
 
-const Tips = props => (
-  <TipsComponent {...props} uid="tips_question">
-    <h3>Tips to write great questions on the FAQ</h3>
-    <div style={{ textAlign: 'center' }}>
-      <ul style={{ textAlign: 'left' }}>
-        <li>
-          Search the FAQ before you add your question to make sure it doesn&#39;t already exist.
-        </li>
-        <li>You don&#39;t have to strike for the perfect wording. Others can improve it.</li>
-        <li>
-          <span>
-            Privilege questions responding to the <b>how</b> rather than the <b>why</b>.
-          </span>
-        </li>
-        <li>Stay objective and factual.</li>
-      </ul>
-    </div>
-    <div className="row-on-mobile">
-      <div>
-        <h3>
-          <i className="material-icons" style={{ color: 'green' }}>
-            check
-          </i>
-          Great questions
-        </h3>
-        <ul>
-          <li>Where can I get the ElasticSearch training material?</li>
-          <li>How can I use Alibeez API?</li>
-          <li>How to reach the Nantes office from the train station?</li>
-          <li>What&#39;s the difference between pay with and without variable?</li>
+const Tips = props => {
+  const intl = useIntl(Tips)
+
+  return (
+    <TipsComponent {...props} uid="tips_question">
+      <h3>{intl('title')}</h3>
+      <div style={{ textAlign: 'center' }}>
+        <ul style={{ textAlign: 'left' }}>
+          {intl('tips').map((tip, i) => (
+            <li key={i}>{tip}</li>
+          ))}
         </ul>
       </div>
-      <div>
-        <h3>
-          <i className="material-icons" style={{ color: 'red' }}>
-            close
-          </i>
-          Misplaced questions
-        </h3>
-        <table className="misplaced-questions">
-          <tbody>
-            <tr>
-              <td>▸</td>
-              <td>
-                <b>Technical:</b>
-              </td>
-              <td>What are the differences between mocks and stubs?</td>
-            </tr>
-            <tr>
-              <td>▸</td>
-              <td>
-                <b>Debating:</b>
-              </td>
-              <td>Shouldn&#39;t we change the collective agreement?</td>
-            </tr>
-            <tr>
-              <td>▸</td>
-              <td>
-                <b>Open:</b>
-              </td>
-              <td>What are the books to read when you are an architect?</td>
-            </tr>
-            <tr>
-              <td>▸</td>
-              <td>
-                <b>Temporal:</b>
-              </td>
-              <td>What are the 2018 results for the Nantes&apos; offices?</td>
-            </tr>
-            <tr>
-              <td>▸</td>
-              <td>
-                <b>Vague:</b>
-              </td>
-              <td>How does recruitment works?</td>
-            </tr>
-          </tbody>
-        </table>
+      <div className="row-on-mobile">
+        <div>
+          <h3>
+            <i className="material-icons" style={{ color: 'green' }}>
+              check
+            </i>
+            {intl('good.title')}
+          </h3>
+          <ul>
+            {intl('good.examples').map((example, i) => (
+              <li key={i}>{example}</li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h3>
+            <i className="material-icons" style={{ color: 'red' }}>
+              close
+            </i>
+            {intl('bad.title')}
+          </h3>
+          <table className="misplaced-questions">
+            <tbody>
+              {intl('bad.examples').map(([type, example], i) => (
+                <tr key={i}>
+                  <td>▸</td>
+                  <td>
+                    <b>{type}</b>
+                  </td>
+                  <td>{example}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
-  </TipsComponent>
-)
+    </TipsComponent>
+  )
+}
+
+Tips.translations = {
+  en: {
+    title: 'Tips to write great questions on the FAQ',
+    tips: [
+      "Search the FAQ before you add your question to make sure it doesn't already exist.",
+      "You don't have to strike for the perfect wording. Others can improve it.",
+      <span>
+        Privilege questions responding to the <b>"how"</b> rather than the <b>"why"</b>.
+      </span>,
+      'Stay objective and factual.'
+    ],
+    good: {
+      title: 'Great questions',
+      examples: [
+        'Where can I get the ElasticSearch training material',
+        'How can I use Alibeez API?',
+        'How to reach the Nantes office from the train station?',
+        "What's the difference between pay with and without variable?"
+      ]
+    },
+    bad: {
+      title: 'Misplaced questions',
+      examples: [
+        ['Technical:', 'What are the differences between mocks and stubs?'],
+        ['Debating:', "Shouldn't we change the collective agreement?"],
+        ['Open:', 'What are the books to read when you are an architect?'],
+        ['Temporal:', "What are the 2018 results for the Nantes' offices?"],
+        ['Vague:', 'How does recruitment works?']
+      ]
+    }
+  },
+  fr: {
+    title: 'Conseils pour écrire de super questions sur la FAQ',
+    tips: [
+      "Cherchez la FAQ avant d'ajouter votre question pour vous assurer qu'elle n'existe pas déjà.",
+      "Vous n'avez pas besoin d'avoir la formulation parfaite. D'autres pourront l'améliorer.",
+      <span>
+        Privilégiez les question qui répondent au <b>"comment"</b> plutôt qu'au <b>"pourquoi"</b>.
+      </span>,
+      'Restez objectif et factuel.'
+    ],
+    good: {
+      title: 'Super questions',
+      examples: [
+        'Où puis-je trouver le matériel de formation ElasticSearch ?',
+        "Comment utiliser l'API Alibeez ?",
+        "Comment rejoindre l'agence de Nante depuis la gare ?",
+        'Quelle est la différence entre un salaire avec et sans variable ?'
+      ]
+    },
+    bad: {
+      title: 'Questions mal placées',
+      examples: [
+        ['Technique:', 'Quelles sont les différences entre les mocks et les stubs ?'],
+        ['Polémique:', 'Ne devrions-nous pas changer notre convention collective ?'],
+        ['Ouverte:', 'Quels sont les livres à lire quand on est architecte logiciel ?'],
+        ['Temporelle:', "Quels sont les résultats 2018 de l'agence Nantaises ?"],
+        ['Vague:', 'Comment fonctionne le recrutement ?']
+      ]
+    }
+  }
+}
 
 export default Tips

@@ -6,7 +6,7 @@ import { Helmet } from 'react-helmet'
 import { compose } from 'react-apollo'
 import { createFlag, removeFlag } from './queries'
 
-import { markdown } from 'services'
+import { markdown, useIntl } from 'services'
 
 import NotFound from 'scenes/NotFound'
 
@@ -18,6 +18,8 @@ import { ActionMenu } from '../../components'
 import { FlagsDropdown, Sources, Meta, Share, History } from './components'
 
 const Read = ({ history, match, zNode, createFlag, removeFlag }) => {
+  const intl = useIntl(Read)
+
   if (zNode === null) {
     return <NotFound />
   }
@@ -33,21 +35,21 @@ const Read = ({ history, match, zNode, createFlag, removeFlag }) => {
       <Helmet>
         <title>FAQ - {markdown.title(zNode.question.title)}</title>
       </Helmet>
-      <ActionMenu backLink="/" backLabel="Home" goBack>
+      <ActionMenu backLink="/" backLabel={intl('menu.home')} goBack>
         <FlagsDropdown
           flags={zNode.flags}
           onSelect={type => createFlag(type, zNode.id)}
           onRemove={type => removeFlag(type, zNode.id)}
         />
-        <Dropdown button={<Button icon="edit" label="Edit ..." link />}>
+        <Dropdown button={<Button icon="edit" label={intl('menu.edit.label')} link />}>
           <DropdownItem icon="edit" onClick={() => history.push(`/q/${match.params.slug}/edit`)}>
-            Question
+            {intl('menu.edit.question')}
           </DropdownItem>
           <DropdownItem
             icon="question_answer"
             onClick={() => history.push(`/q/${match.params.slug}/answer`)}
           >
-            Answer
+            {intl('menu.edit.answer')}
           </DropdownItem>
         </Dropdown>
       </ActionMenu>
@@ -76,12 +78,12 @@ const Read = ({ history, match, zNode, createFlag, removeFlag }) => {
                 marginBottom: '2rem'
               }}
             >
-              <b>No answer yet...</b>
+              <b>{intl('no_answer')}</b>
               <br />
               <br />
               <Link to={`/q/${match.params.slug}/answer`} className="btn-container">
                 <Button icon="question_answer" primary>
-                  Answer the question
+                  {intl('answer')}
                 </Button>
               </Link>
             </div>
@@ -101,6 +103,33 @@ Read.propTypes = {
   zNode: PropTypes.object.isRequired,
   createFlag: PropTypes.func.isRequired,
   removeFlag: PropTypes.func.isRequired
+}
+
+Read.translations = {
+  en: {
+    menu: {
+      home: 'Home',
+      edit: {
+        label: 'Edit ...',
+        question: 'Question',
+        answer: 'Answer'
+      }
+    },
+    no_answer: 'No answer yet...',
+    answer: 'Answer the question'
+  },
+  fr: {
+    menu: {
+      home: 'Accueil',
+      edit: {
+        label: 'Modifier ...',
+        question: 'Question',
+        answer: 'Réponse'
+      }
+    },
+    no_answer: 'Pas encore de réponse...',
+    answer: 'Répondre à la question'
+  }
 }
 
 export default compose(
