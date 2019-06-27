@@ -65,6 +65,11 @@ class Markdown {
       return `[${name}](${url})`
     })
 
+    text = text.replace(/https?:\/\/\S*/gim, link => {
+      const sanitized = link.replace('<em>', '').replace('</em>', '')
+      return `<a href="${sanitized}" target="_blank" rel="noopener noreferrer">${link}</a>`
+    })
+
     return text
   }
 }
