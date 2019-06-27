@@ -23,7 +23,7 @@ export const updateConfigurationMutation = gql`
     $workplaceSharing: Boolean!
     $authorizedDomains: [String!]!
     $bugReporting: BugReporting!
-    $slackChannelHook: String!
+    $slackChannelHook: String
   ) {
     updateConfiguration(
       title: $title
