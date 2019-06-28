@@ -99,7 +99,7 @@ Tips.translations = {
       'Restez objectif et factuel.'
     ],
     good: {
-      title: 'Super questions',
+      title: 'Supers questions',
       examples: [
         'Où puis-je trouver le matériel de formation ElasticSearch ?',
         "Comment utiliser l'API Alibeez ?",
