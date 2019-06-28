@@ -22,7 +22,13 @@ const Share = ({ node }) => {
       <Dropdown button={<Button icon="share" link style={{ padding: '0.2rem' }} />}>
         {conf.workplaceSharing ? (
           <DropdownItem
-            icon={<i className="fab fa-facebook" />}
+            icon={
+              <img
+                src="/img/brands/workplace.png"
+                alt="workplace logo"
+                style={{ height: '20px', width: '20px', margin: '0 2px' }}
+              />
+            }
             onClick={() => {
               let url =
                 'https://work.facebook.com/sharer.php?display=popup&u=' +
