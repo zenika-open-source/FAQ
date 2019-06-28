@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
+import { useIntl } from 'services'
+
 import Button from 'components/Button'
 
 import Card from './Card'
@@ -19,6 +21,8 @@ class PermanentClosableCard extends Component {
   }
 
   render() {
+    const intl = useIntl(PermanentClosableCard)
+
     const { open, close, children, ...otherProps } = this.props
 
     return (
@@ -38,7 +42,7 @@ class PermanentClosableCard extends Component {
             </span>
             {children}
             <CardActions>
-              <Button secondary raised label="Understood!" onClick={close} />
+              <Button secondary raised label={intl('understood')} onClick={close} />
             </CardActions>
           </Card>
         )}
@@ -51,6 +55,11 @@ PermanentClosableCard.propTypes = {
   open: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired
+}
+
+PermanentClosableCard.translations = {
+  en: { understood: 'Understood!' },
+  fr: { understood: 'Compris !' }
 }
 
 export default PermanentClosableCard

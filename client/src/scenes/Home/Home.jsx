@@ -5,6 +5,7 @@ import debounce from 'lodash/debounce'
 
 import { Button } from 'components'
 
+import { useIntl } from 'services'
 import { unserialize, addToQueryString } from 'helpers'
 
 import { Searchbar, ResultList } from './components'
@@ -51,6 +52,8 @@ class Home extends Component {
   }
 
   render() {
+    const intl = useIntl(Home)
+
     return (
       <div>
         <Searchbar
@@ -67,7 +70,7 @@ class Home extends Component {
         <Link to="/q/new">
           <Button
             icon="record_voice_over"
-            data-tooltip="New question"
+            data-tooltip={intl('new_question')}
             style={{ position: 'fixed', bottom: '1rem', right: '1rem' }}
             primary
             round
@@ -83,6 +86,11 @@ class Home extends Component {
 Home.propTypes = {
   location: PropTypes.object,
   history: PropTypes.object
+}
+
+Home.translations = {
+  en: { new_question: 'New question' },
+  fr: { new_question: 'Nouvelle question' }
 }
 
 export default Home

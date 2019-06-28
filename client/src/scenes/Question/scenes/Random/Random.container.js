@@ -1,5 +1,6 @@
 import { compose } from 'helpers'
 import { withLoading, withError } from 'components'
+import { useIntl } from 'services'
 import { query } from 'services/apollo'
 
 import { getRandomNode } from './queries'
@@ -12,6 +13,6 @@ export default compose(
       tag: props.match.params.tag
     })
   }),
-  withLoading('Unleashing the randomizator...'),
+  withLoading(useIntl(Random)('loading')),
   withError()
 )(Random)

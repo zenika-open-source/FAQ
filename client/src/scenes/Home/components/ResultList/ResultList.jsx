@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Pluralize from 'react-pluralize'
 
+import { useIntl } from 'services'
 import { Loading } from 'components'
 import { DefaultPagination } from 'components/Pagination'
 
@@ -18,6 +19,8 @@ const ResultList = ({
   onPageSelected,
   meta
 }) => {
+  const intl = useIntl(ResultList)
+
   const shouldShowLoading = loading && (meta ? meta.pageCurrent !== pageCurrent : true)
 
   if (!loading && nodes.length === 0) {
@@ -46,16 +49,8 @@ const ResultList = ({
             padding: '0 1rem'
           }}
         >
-          <i>
-            {searchText ? (
-              <span>
-                <Pluralize singular="result" count={entriesCount} /> found
-              </span>
-            ) : (
-              'Latest questions'
-            )}
-          </i>
-          <i>Page {pageCurrent}</i>
+          <i>{searchText ? <span>{intl('count')(entriesCount)}</span> : intl('latest')}</i>
+          <i>{intl('page')(pageCurrent)}</i>
         </p>
       )}
       {!shouldShowLoading ? Results : <Loading />}
@@ -81,6 +76,27 @@ ResultList.propTypes = {
   pageCurrent: PropTypes.number,
   onPageSelected: PropTypes.func,
   meta: PropTypes.object
+}
+
+ResultList.translations = {
+  en: {
+    latest: 'Latest questions',
+    count: count => (
+      <>
+        <Pluralize singular="result" count={count} /> found
+      </>
+    ),
+    page: current => <>Page {current}</>
+  },
+  fr: {
+    latest: 'Dernières questions',
+    count: count => (
+      <>
+        <Pluralize singular="résultat" count={count} /> trouvés
+      </>
+    ),
+    page: current => <>Page {current}</>
+  }
 }
 
 export default ResultList

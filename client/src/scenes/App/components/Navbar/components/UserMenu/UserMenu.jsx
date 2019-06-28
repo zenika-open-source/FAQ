@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
 
+import { useIntl } from 'services'
 import { useUser, useConfiguration } from 'contexts'
 
 import { Authenticated, Avatar } from 'components'
@@ -10,6 +11,8 @@ import Dropdown, { DropdownItem, DropdownDivider } from 'components/Dropdown'
 import GithubIcon from '../GithubIcon'
 
 const UserMenu = ({ history }) => {
+  const intl = useIntl(UserMenu)
+
   const me = useUser()
   const conf = useConfiguration()
 
@@ -18,11 +21,11 @@ const UserMenu = ({ history }) => {
   return (
     <Dropdown button={<Avatar image={me.picture} style={{ width: '30px', display: 'block' }} />}>
       <DropdownItem icon="account_box" path="/user-profile">
-        Profile
+        {intl('profile')}
       </DropdownItem>
       <Authenticated admin>
         <DropdownItem icon="settings" path="/settings">
-          Settings
+          {intl('settings')}
         </DropdownItem>
       </Authenticated>
       <DropdownDivider />
@@ -31,7 +34,7 @@ const UserMenu = ({ history }) => {
         href="https://github.com/zenika-open-source/FAQ"
         target="_blank"
       >
-        Github
+        {intl('github')}
       </DropdownItem>
       <DropdownItem
         icon="bug_report"
@@ -42,11 +45,11 @@ const UserMenu = ({ history }) => {
         }
         target="_blank"
       >
-        Bug report
+        {intl('bug_report')}
       </DropdownItem>
       <DropdownDivider />
       <DropdownItem icon="exit_to_app" path="/auth/logout">
-        Sign out
+        {intl('sign_out')}
       </DropdownItem>
     </Dropdown>
   )
@@ -54,6 +57,23 @@ const UserMenu = ({ history }) => {
 
 UserMenu.propTypes = {
   history: PropTypes.object.isRequired
+}
+
+UserMenu.translations = {
+  en: {
+    profile: 'Profile',
+    settings: 'Settings',
+    github: 'Github',
+    bug_report: 'Bug report',
+    sign_out: 'Sign out'
+  },
+  fr: {
+    profile: 'Profil',
+    settings: 'Paramètres',
+    github: 'Github',
+    bug_report: 'Signaler un bug',
+    sign_out: 'Deconnexion'
+  }
 }
 
 export default withRouter(UserMenu)

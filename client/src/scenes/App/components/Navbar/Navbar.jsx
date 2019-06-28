@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
+import { useIntl } from 'services'
 import { useConfiguration } from 'contexts'
 import { Authenticated, Button, Icon } from 'components'
 
@@ -9,6 +10,8 @@ import { GithubIcon, UserMenu } from './components'
 import './Navbar.scss'
 
 const Navbar = () => {
+  const intl = useIntl(Navbar)
+
   const conf = useConfiguration()
 
   return (
@@ -27,23 +30,28 @@ const Navbar = () => {
             rel="noopener noreferrer"
           >
             <GithubIcon />
-            <span>report a bug</span>
+            <span>{intl('report_bug')}</span>
           </a>
         ) : (
           <a href={`mailto:bug@${process.env.REACT_APP_FAQ_URL}`}>
             <Icon material="mail" style={{ fontSize: '14px' }} />
-            <span>report a bug</span>
+            <span>{intl('report_bug')}</span>
           </a>
         )}
         <Authenticated>
           <UserMenu />
           <Link to="/q/new">
-            <Button label={<b>New question</b>} primary fixed />
+            <Button label={<b>{intl('new_question')}</b>} primary fixed />
           </Link>
         </Authenticated>
       </div>
     </div>
   )
+}
+
+Navbar.translations = {
+  en: { report_bug: 'report a bug', new_question: 'New question' },
+  fr: { report_bug: 'signaler un bug', new_question: 'Nouvelle question' }
 }
 
 export default Navbar

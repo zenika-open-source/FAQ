@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import ReactMde, { commands } from 'react-mde'
 
-import { markdown } from 'services'
+import { markdown, useIntl } from 'services'
 
 import { emojiPickerCommand } from './EmojiPicker'
 
@@ -17,6 +17,7 @@ const listCommands = [
 ]
 
 const MarkdownEditor = ({ content, onChange }) => {
+  const intl = useIntl(MarkdownEditor)
   const [tab, setTab] = useState('write')
   return (
     <ReactMde
@@ -27,6 +28,7 @@ const MarkdownEditor = ({ content, onChange }) => {
       generateMarkdownPreview={md => Promise.resolve(markdown.showdown.makeHtml(md))}
       onChange={onChange}
       commands={listCommands}
+      l18n={intl('l18n')}
     />
   )
 }
@@ -34,6 +36,21 @@ const MarkdownEditor = ({ content, onChange }) => {
 MarkdownEditor.propTypes = {
   content: PropTypes.string,
   onChange: PropTypes.func
+}
+
+MarkdownEditor.translations = {
+  en: {
+    l18n: {
+      write: 'Write',
+      preview: 'Preview'
+    }
+  },
+  fr: {
+    l18n: {
+      write: 'Ecrire',
+      preview: 'Prévisualiser'
+    }
+  }
 }
 
 export default MarkdownEditor

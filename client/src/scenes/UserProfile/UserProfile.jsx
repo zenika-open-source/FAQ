@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
 import { useUser } from 'contexts'
-import { alert, useMutation } from 'services'
+import { alert, useMutation, useIntl } from 'services'
 
 import { Avatar, Button, Card, Modal, Loading, Input } from 'components'
 
@@ -10,6 +10,8 @@ import Logs from './components/Logs'
 import { updateIdentityMutation, deleteIdentityMutation } from './queries'
 
 const UserProfile = ({ history }) => {
+  const intl = useIntl(UserProfile)
+
   const [loading, setLoading] = useState(false)
 
   const user = useUser() || {}
@@ -38,7 +40,7 @@ const UserProfile = ({ history }) => {
         email,
         picture
       })
-      alert.pushSuccess('Your profile was successfully updated!')
+      alert.pushSuccess(intl('alert.update_success'))
     } catch (err) {
       alert.pushDefaultError(err)
     } finally {
@@ -50,7 +52,7 @@ const UserProfile = ({ history }) => {
     try {
       setLoading(true)
       await deleteIdentity()
-      alert.pushSuccess('Your personal data was succesfully deleted!')
+      alert.pushSuccess(intl('alert.delete.success'))
       history.push('/auth/logout')
     } catch (err) {
       alert.pushDefaultError(err)
@@ -66,15 +68,15 @@ const UserProfile = ({ history }) => {
     <div>
       <Card>
         <Card.Text>
-          <h1 className="centered">Profile</h1>
+          <h1 className="centered">{intl('title')}</h1>
         </Card.Text>
       </Card>
       <Card>
         <Card.Text>
-          <h2>Identity</h2>
+          <h2>{intl('identity.title')}</h2>
           <hr />
           <div className="card-form">
-            <label htmlFor="name">Name</label>
+            <label htmlFor="name">{intl('identity.name')}</label>
             <input
               id="name"
               className="card-input"
@@ -82,14 +84,14 @@ const UserProfile = ({ history }) => {
               onChange={e => setName(e.target.value)}
               autoComplete="off"
             />
-            <label htmlFor="email">Email address</label>
+            <label htmlFor="email">{intl('identity.email')}</label>
             <input
               id="email"
               className="card-input"
               value={email}
               onChange={e => setEmail(e.target.value)}
             />
-            <label htmlFor="picture">Picture url</label>
+            <label htmlFor="picture">{intl('identity.picture')}</label>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <Avatar
                 image={picture}
@@ -110,53 +112,43 @@ const UserProfile = ({ history }) => {
         </Card.Text>
         <Card.Actions>
           <Button primary type="button" disabled={loading} onClick={save}>
-            Save
+            {intl('identity.save')}
           </Button>
         </Card.Actions>
       </Card>
       <Logs userId={user.id} />
       <Card>
         <Card.Text>
-          <h2 style={{ marginBottom: '1rem' }}>GDPR</h2>
+          <h2 style={{ marginBottom: '1rem' }}>{intl('gdpr.title')}</h2>
           <hr />
           <p>
-            <span style={{ marginRight: '5px' }}>
-              You can contact us about any GDPR-related issue at:
-            </span>
+            <span style={{ marginRight: '5px' }}>{intl('gdpr.contact')}</span>
             <a href="mailto:mydata@zenika.com">mydata@zenika.com</a>
           </p>
           <hr />
           <p>
-            Erase all your personal data:
+            {intl('gdpr.erase.label')}
             <Button
               secondary
               disabled={loading}
-              data-tooltip="This will erase all your personal data from FAQ"
+              data-tooltip={intl('gdpr.erase.tooltip')}
               style={{ marginLeft: '1rem' }}
               onClick={() => setModalActive(true)}
             >
-              Delete your data
+              {intl('gdpr.erase.button')}
             </Button>
           </p>
         </Card.Text>
       </Card>
       <Modal active={modalActive} setActive={setModalActive} loading={loading}>
         <Modal.Title>
-          <h2>Are you absolutely sure?</h2>
+          <h2>{intl('modal.title')}</h2>
         </Modal.Title>
-        <Modal.Alert>Unexpected bad things will happen if you don’t read this!</Modal.Alert>
+        <Modal.Alert>{intl('modal.alert')}</Modal.Alert>
         <Modal.Text>
-          <p>
-            This action cannot be undone. This will <b>permanently delete</b> all your personal
-            data.
-          </p>
-          <p>
-            Your personal data will be erased, which means your actions will become anonymous. The
-            content you have written and edited will remain.
-          </p>
-          <p>
-            Please type in <b>"goodbye"</b> to confirm.
-          </p>
+          {intl('modal.text').map((text, i) => (
+            <p key={i}>{text}</p>
+          ))}
           <Input value={goodbye} onChange={e => setGoodbye(e.target.value)} />
           <br />
           <Button
@@ -166,12 +158,89 @@ const UserProfile = ({ history }) => {
             onClick={deleteData}
             loading={loading}
           >
-            I understand the consequences, delete my data
+            {intl('modal.button')}
           </Button>
         </Modal.Text>
       </Modal>
     </div>
   )
+}
+
+UserProfile.translations = {
+  fr: {
+    alert: {
+      update_success: 'Your profile was successfully updated!',
+      delete_success: 'Your personal data was succesfully deleted!'
+    },
+    title: 'Profile',
+    identity: {
+      title: 'Identity',
+      name: 'Name',
+      email: 'Email address',
+      picture: 'Picture url',
+      save: 'Save'
+    },
+    gdpr: {
+      title: 'GDPR',
+      contact: 'You can contact us about any GDPR-related issue at:',
+      erase: {
+        label: 'Erase all your personal data:',
+        tooltip: 'This will erase all your personal data from FAQ',
+        button: 'Delete my data'
+      }
+    },
+    modal: {
+      title: 'Are you absolutely sure?',
+      alert: 'Unexpected bad things will happen if you don’t read this!',
+      text: [
+        <>
+          This action cannot be undone. This will <b>permanently delete</b> all your personal data.
+        </>,
+        'Your personal data will be erased, which means your actions will become anonymous. The content you have written and edited will remain.',
+        <>
+          Please type in <b>"goodbye"</b> to confirm.
+        </>
+      ],
+      button: 'I understand the consequences, delete my data'
+    }
+  },
+  en: {
+    alert: {
+      update_success: 'Votre profil a été modifié avec succès !',
+      delete_success: 'Vos données personnelles ont été supprimées avec succès !'
+    },
+    title: 'Profil',
+    identity: {
+      title: 'Identité',
+      name: 'Nom',
+      email: 'Adresse email',
+      picture: 'Image URL',
+      save: 'Enregistrer'
+    },
+    gdpr: {
+      title: 'RGPD',
+      contact:
+        "Vous pouvez nous contacter pour toute question relative à la RGPD à l'adresse suivante :",
+      erase: {
+        label: 'Supprimez toutes vos données personnelles',
+        tooltip: 'Cela va supprimer toutes vos données personnelles de la FAQ',
+        button: 'Effacer mes données'
+      }
+    },
+    modal: {
+      title: 'En êtes-vous absolument sûr ?',
+      alert: 'De mauvaises choses imprévisibles se produiront si vous ne lisez pas ceci !',
+      text: [
+        <>
+          Cette action ne peut être annulée. Cela <b>effacera définitivement</b> toutes vos données
+          personnelles.
+        </>,
+        'Vos données personnelles seront effacées, ce qui signifie que vos actions deviendront anonymes. Le contenu que vous avez écrit et édité sera conservé.',
+        <>Veuillez saisir "goodbye" pour confirmer.</>
+      ],
+      button: 'Je comprends les conséquences, effacer mes données'
+    }
+  }
 }
 
 export default UserProfile

@@ -1,9 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import { useIntl } from 'services'
+
 import List, { ListItem } from 'components/List'
 
 const Sources = ({ sources }) => {
+  const intl = useIntl(Sources)
+
   if (sources.length === 0) return ''
 
   return (
@@ -15,7 +19,7 @@ const Sources = ({ sources }) => {
           marginBottom: '0'
         }}
       >
-        Sources:
+        {intl('sources')}
       </h3>
       <List
         style={{
@@ -33,6 +37,11 @@ const Sources = ({ sources }) => {
 
 Sources.propTypes = {
   sources: PropTypes.array.isRequired
+}
+
+Sources.translations = {
+  en: { sources: 'Sources:' },
+  fr: { sources: 'Sources:' }
 }
 
 export default Sources

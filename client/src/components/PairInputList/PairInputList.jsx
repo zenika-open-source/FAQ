@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import cn from 'classnames'
 import merge from 'lodash/merge'
 
+import { useIntl } from 'services'
+
 import { Button } from 'components'
 
 import PairInput from './PairInput'
@@ -10,12 +12,10 @@ import PairInput from './PairInput'
 const noop = () => {}
 
 const PairInputList = ({ pairs, options, actions, disabled, className, ...rest }) => {
+  const intl = useIntl(PairInputList)
+
   const defaultOptions = {
-    labels: {
-      more: 'More pairs',
-      key: 'Key',
-      value: 'Value'
-    },
+    labels: intl('labels'),
     icons: {
       more: 'add',
       line: 'info_outline',
@@ -75,6 +75,23 @@ PairInputList.propTypes = {
   actions: PropTypes.object,
   disabled: PropTypes.bool,
   className: PropTypes.string
+}
+
+PairInputList.translations = {
+  en: {
+    labels: {
+      more: 'More pairs',
+      key: 'Key',
+      value: 'Value'
+    }
+  },
+  fr: {
+    labels: {
+      more: 'Plus de paires',
+      key: 'Clef',
+      value: 'Valeur'
+    }
+  }
 }
 
 export default PairInputList

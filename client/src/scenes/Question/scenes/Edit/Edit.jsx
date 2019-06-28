@@ -6,7 +6,7 @@ import difference from 'lodash/difference'
 import { compose } from 'react-apollo'
 import { submitQuestion, editQuestion } from './queries'
 
-import { alert } from 'services'
+import { alert, useIntl } from 'services'
 
 import Card, { CardText, CardActions, PermanentClosableCard } from 'components/Card'
 import { Loading, Button, Input, CtrlEnter, TagPicker } from 'components'
@@ -52,6 +52,8 @@ class Edit extends Component {
   }
 
   submitQuestion = () => {
+    const intl = useIntl(Edit)
+
     const { submitQuestion } = this.props
 
     this.setState({ loadingSubmit: true })
@@ -61,7 +63,7 @@ class Edit extends Component {
         this.setState({
           slug: data.createQuestionAndTags.slug + '-' + data.createQuestionAndTags.node.id
         })
-        alert.pushSuccess('Your question was successfully submitted!')
+        alert.pushSuccess(intl('alert.submit_success'))
       })
       .catch(error => {
         alert.pushDefaultError(error)
@@ -72,6 +74,8 @@ class Edit extends Component {
   }
 
   editQuestion = () => {
+    const intl = useIntl(Edit)
+
     const { editQuestion, zNode } = this.props
 
     this.setState({ loadingSubmit: true })
@@ -87,7 +91,7 @@ class Edit extends Component {
         this.setState({
           slug: data.updateQuestionAndTags.slug + '-' + zNode.id
         })
-        alert.pushSuccess('The question was successfully edited!')
+        alert.pushSuccess(intl('alert.edit_success'))
       })
       .catch(error => {
         alert.pushDefaultError(error)
@@ -116,6 +120,8 @@ class Edit extends Component {
   }
 
   render() {
+    const intl = useIntl(Edit)
+
     const { match, zNode } = this.props
     const { isEditing, loadingSubmit, slug, question, tags, showTips } = this.state
 
@@ -133,19 +139,17 @@ class Edit extends Component {
 
     return (
       <div className="Edit">
-        {this.canSubmit() && (
-          <Prompt message="Are you sure you want to leave this page with an unsaved question?" />
-        )}
+        {this.canSubmit() && <Prompt message={intl('prompt_warning')} />}
         <ActionMenu
-          backLabel={isEditing ? 'Back' : 'Home'}
+          backLabel={!isEditing ? intl('home') : null}
           backLink={isEditing ? `/q/${match.params.slug}` : '/'}
-          title={isEditing ? 'Edit question' : 'Ask a new question'}
+          title={isEditing ? intl('title.edit') : intl('title.submit')}
         >
           {!showTips && (
             <Button
               link
               icon="lightbulb_outline"
-              label="Show tips"
+              label={intl('show_tips')}
               onClick={this.toggleTips(true)}
             />
           )}
@@ -157,7 +161,7 @@ class Edit extends Component {
               <Input
                 autoFocus
                 icon="help"
-                placeholder="Ex: Comment remplir une note de frais ?"
+                placeholder={intl('placeholder')}
                 limit={100}
                 value={question}
                 onChange={this.onTextChange}
@@ -169,7 +173,7 @@ class Edit extends Component {
           </CardText>
           <CardActions>
             <Button
-              label={isEditing ? 'Edit' : 'Submit'}
+              label={isEditing ? intl('validate.edit') : intl('validate.submit')}
               disabled={!this.canSubmit()}
               primary
               raised
@@ -188,6 +192,45 @@ Edit.propTypes = {
   editQuestion: PropTypes.func.isRequired,
   location: PropTypes.object.isRequired,
   zNode: PropTypes.object
+}
+
+Edit.translations = {
+  en: {
+    title: {
+      submit: 'Ask a new question',
+      edit: 'Edit question'
+    },
+    alert: {
+      submit_success: 'Your question was successfully submitted!',
+      edit_success: 'The question was successfully edited!'
+    },
+    prompt_warning: 'Are you sure you want to leave this page with an unsaved question?',
+    home: 'Home',
+    show_tips: 'Show tips',
+    placeholder: 'E.g.: How to fill an expense report?',
+    validate: {
+      submit: 'Submit',
+      edit: 'Edit'
+    }
+  },
+  fr: {
+    title: {
+      submit: 'Poser une nouvelle question',
+      edit: 'Modifier une question'
+    },
+    alert: {
+      submit_success: 'Votre question a bien été envoyée !',
+      edit_success: 'La question a bien été modifiée !'
+    },
+    prompt_warning: 'Êtes-vous sûr de vouloir quitter cette page sans enregistrer la question ?',
+    home: 'Accueil',
+    show_tips: 'Voir conseils',
+    placeholder: 'Ex: Comment remplir une note de frais ?',
+    validate: {
+      submit: 'Envoyer la question',
+      edit: 'Enregistrer la question'
+    }
+  }
 }
 
 export default compose(

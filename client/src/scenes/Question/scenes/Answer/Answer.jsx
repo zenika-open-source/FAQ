@@ -7,7 +7,7 @@ import isEqual from 'lodash/isEqual'
 import { compose } from 'react-apollo'
 import { submitAnswer, editAnswer } from './queries'
 
-import { alert, markdown } from 'services'
+import { alert, markdown, useIntl } from 'services'
 import { isUuidV4, onListChange } from 'helpers'
 
 import NotFound from 'scenes/NotFound'
@@ -71,6 +71,8 @@ class Answer extends Component {
   }
 
   submitAnswer = () => {
+    const intl = useIntl(Answer)
+
     const { submitAnswer } = this.props
     const { zNode } = this.props
     const { answer, sources } = this.state
@@ -80,7 +82,7 @@ class Answer extends Component {
     submitAnswer(answer, this.keyValuePairsToSources(sources), zNode.id)
       .then(() => {
         this.setState({ slug: zNode.question.slug + '-' + zNode.id })
-        alert.pushSuccess('Your answer was successfully submitted!')
+        alert.pushSuccess(intl('alert.submit_success'))
       })
       .catch(error => {
         alert.pushDefaultError(error)
@@ -91,6 +93,8 @@ class Answer extends Component {
   }
 
   editAnswer = (nodeId, answerId) => {
+    const intl = useIntl(Answer)
+
     const { editAnswer, zNode } = this.props
     const { answer, sources } = this.state
 
@@ -104,7 +108,7 @@ class Answer extends Component {
     )
       .then(() => {
         this.setState({ slug: zNode.question.slug + '-' + zNode.id })
-        alert.pushSuccess('The answer was successfully edited!')
+        alert.pushSuccess(intl('alert.edit_success'))
       })
       .catch(error => {
         alert.pushDefaultError(error)
@@ -135,6 +139,8 @@ class Answer extends Component {
   }
 
   render() {
+    const intl = useIntl(Answer)
+
     const { loadingSubmit, slug, showTips, sources } = this.state
     const { zNode } = this.props
 
@@ -152,12 +158,15 @@ class Answer extends Component {
 
     return (
       <div>
-        {this.canSubmit() && (
-          <Prompt message="Are you sure you want to leave this page with an unsaved answer?" />
-        )}
+        {this.canSubmit() && <Prompt message={intl('prompt_warning')} />}
         <ActionMenu backLink={`/q/${zNode.question.slug}-${zNode.id}`}>
           {!showTips && (
-            <Button link icon="lightbulb_outline" label="Show tips" onClick={this.openTips} />
+            <Button
+              link
+              icon="lightbulb_outline"
+              label={intl('show_tips')}
+              onClick={this.openTips}
+            />
           )}
         </ActionMenu>
         <Tips close={this.closeTips} open={showTips} />
@@ -178,21 +187,16 @@ class Answer extends Component {
               style={{ borderTop: '1px dashed var(--secondary-color)' }}
               pairs={sources}
               options={{
-                title: 'Sources:',
+                title: intl('sources.title'),
                 icons: { line: 'info_outline', value: 'link' },
-                labels: {
-                  add: 'Add a source link',
-                  more: 'More sources',
-                  key: 'Label',
-                  value: 'URL'
-                }
+                labels: intl('sources.labels')
               }}
               actions={this.onSourcesChange.actions}
             />
           </CardText>
           <CardActions>
             <Button
-              label={zNode.answer ? 'Save answer' : 'Submit answer'}
+              label={zNode.answer ? intl('validate.edit') : intl('validate.submit')}
               primary
               raised
               disabled={!this.canSubmit()}
@@ -210,6 +214,51 @@ Answer.propTypes = {
   submitAnswer: PropTypes.func.isRequired,
   editAnswer: PropTypes.func.isRequired,
   zNode: PropTypes.object
+}
+
+Answer.translations = {
+  en: {
+    alert: {
+      submit_success: 'Your answer was successfully submitted!',
+      edit_success: 'The answer was successfully edited!'
+    },
+    prompt_warning: 'Are you sure you want to leave this page with an unsaved answer?',
+    show_tips: 'Show tips',
+    sources: {
+      title: 'Sources:',
+      labels: {
+        add: 'Add a source link',
+        more: 'More sources',
+        key: 'Label',
+        value: 'URL'
+      }
+    },
+    validate: {
+      submit: 'Submit answer',
+      edit: 'Save answer'
+    }
+  },
+  fr: {
+    alert: {
+      submit_success: 'Votre réponse a bien été envoyée !',
+      edit_success: 'La réponse a bien été modifiée !'
+    },
+    prompt_warning: 'Êtes-vous sûr de vouloir quitter cette page sans enregistrer la réponse ?',
+    show_tips: 'Voir conseils',
+    sources: {
+      title: 'Sources:',
+      labels: {
+        add: 'Ajouter une source',
+        more: 'Plus de sources',
+        key: 'Label',
+        value: 'URL'
+      }
+    },
+    validate: {
+      submit: 'Envoyer la réponse',
+      edit: 'Enregistrer la réponse'
+    }
+  }
 }
 
 export default compose(
