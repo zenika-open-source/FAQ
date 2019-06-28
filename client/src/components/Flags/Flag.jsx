@@ -56,8 +56,8 @@ Flag.translations = {
   },
   fr: {
     duplicate: 'doublon',
-    outdated: 'obsolete',
-    incomplete: 'incomplete',
+    outdated: 'obsolète',
+    incomplete: 'incomplète',
     unanswered: 'sans réponse'
   }
 }

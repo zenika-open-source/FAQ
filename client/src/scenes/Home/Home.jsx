@@ -89,8 +89,8 @@ Home.propTypes = {
 }
 
 Home.translations = {
-  fr: { new_question: 'New question' },
-  en: { new_question: 'Nouvelle question' }
+  en: { new_question: 'New question' },
+  fr: { new_question: 'Nouvelle question' }
 }
 
 export default Home

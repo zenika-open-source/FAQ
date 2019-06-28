@@ -13,6 +13,7 @@ import './Flags.css'
 
 const Flags = ({ node, withLabels }) => {
   const intl = useIntl(Flags)
+  const flagIntl = useIntl(Flag)
 
   const flags = clone(node.flags)
 
@@ -30,7 +31,7 @@ const Flags = ({ node, withLabels }) => {
         if (withLabels && flag.user) {
           tooltip = intl('tooltip')(flag.user.name, format(flag.createdAt, 'D MMM YYYY'))
         } else {
-          tooltip = flag.type.toUpperCase()
+          tooltip = flagIntl(flag.type).toUpperCase()
         }
 
         return <Flag key={flag.id} withlabel={withLabels} data-tooltip={tooltip} flag={flag} />
