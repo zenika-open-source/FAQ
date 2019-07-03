@@ -60,14 +60,15 @@ class Markdown {
   }
 
   removeEmTagInLink(text) {
-    text = text.replace(/\[(.*)\]\((.*)\)/g, (link, name, url) => {
-      url = url.replace(/<em>/g, '').replace(/<\/em>/g, '')
-      return `[${name}](${url})`
-    })
+    const sanitize = txt => txt.replace(/<em>/g, '').replace(/<\/em>/g, '')
 
-    text = text.replace(/https?:\/\/\S*/gim, link => {
-      const sanitized = link.replace('<em>', '').replace('</em>', '')
-      return `<a href="${sanitized}" target="_blank" rel="noopener noreferrer">${link}</a>`
+    text = text.replace(/(\[.*\]\()?(https?:\/\/\S*)/gim, (link, a, b) => {
+      if (a && b[b.length - 1] === ')') {
+        // Means it's a markdown link
+        return a + sanitize(b)
+      }
+
+      return `<a href="${sanitize(link)}" target="_blank" rel="noopener noreferrer">${link}</a>`
     })
 
     return text
