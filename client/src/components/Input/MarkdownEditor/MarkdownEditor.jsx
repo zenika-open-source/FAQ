@@ -25,7 +25,7 @@ const MarkdownEditor = ({ content, onChange }) => {
       value={content}
       onTabChange={setTab}
       selectedTab={tab}
-      generateMarkdownPreview={md => Promise.resolve(markdown.showdown.makeHtml(md))}
+      generateMarkdownPreview={md => Promise.resolve(markdown.text(md))}
       onChange={onChange}
       commands={listCommands}
       l18n={intl('l18n')}
