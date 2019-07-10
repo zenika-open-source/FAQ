@@ -4,6 +4,8 @@
 
 Internal Knowledge Database for your organization - https://demo.faq.team
 
+**:sparkles: Interested in having a hosted version of the FAQ for your organization? [Contact us!](mailto://thibaud.courtoison@zenika.com)**
+
 ## What is FAQ?
 
 **FAQ** is an **internal knowledge database** for your organization's members. It aims to be the **"single source of truth"** for most of your company-oriented information: _"How does the variable part of the salary work?"_, _"Can the client ask me to stay late at work?"_, ...
