@@ -28,6 +28,7 @@
   box-shadow: 0px 3px 4px var(--secondary-color);
   display: flex;
   align-items: center;
+  word-break: break-word;
 }
 
 .card .card-text.collapsed {

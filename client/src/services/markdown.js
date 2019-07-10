@@ -33,7 +33,8 @@ class Markdown {
           style={{
             marginTop: '0',
             padding: '0',
-            border: '0'
+            border: '0',
+            wordBreak: 'break-word'
           }}
           dangerouslySetInnerHTML={{
             __html: this.text(text)
