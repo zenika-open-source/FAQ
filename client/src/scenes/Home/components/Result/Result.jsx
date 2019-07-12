@@ -54,7 +54,11 @@ class Result extends Component {
         </CardTitle>
         <CardText collapsed={collapsed}>
           {node.answer ? (
-            markdown.html(node.highlights ? node.highlights.answer : node.answer.content)
+            markdown.html(
+              node.highlights && node.highlights.answer
+                ? node.highlights.answer
+                : node.answer.content
+            )
           ) : (
             <p style={{ textAlign: 'center' }}>
               <i>{intl('no_answer')}</i>
