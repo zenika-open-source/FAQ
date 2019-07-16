@@ -1,4 +1,4 @@
-const mjml2html = require('mjml').default
+const mjml2html = require('mjml')
 const Converter = require('showdown').Converter
 const XSSFilter = require('showdown-xss-filter')
 const { requireText, emojify } = require('../../../helpers')
