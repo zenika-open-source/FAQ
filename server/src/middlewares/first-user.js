@@ -12,7 +12,8 @@ const getFirstUserFlag = async (multiTenant, req, next) => {
 }
 
 const refreshFirstUserFlag = async tenant => {
-  const count = (await tenant.query.usersConnection({}, '{ aggregate { count } }')).aggregate.count
+  // TODO: Use aggregation instead (See Notes.md)
+  const count = (await tenant.users.findMany({ select: { id: true } })).length
   tenant._meta.isFirstUser = count === 0
 }
 

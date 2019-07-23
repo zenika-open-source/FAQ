@@ -1,0 +1,123 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:default$default.db"
+  default  = true
+}
+
+generator photon {
+  provider = "photonjs"
+}
+
+model Node {
+  id        String          @default(cuid()) @id @unique
+  question  Question?       @relation("NodeQuestion")
+  answer    Answer?         @relation("NodeAnswer")
+  flags     Flag[]          @relation("NodeFlags")
+  tags      Tag[]           @relation("NodeTags")
+  history   HistoryAction[] @relation("NodeHistoryActions")
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  dummy     Boolean
+}
+
+model Question {
+  id        String   @default(cuid()) @id @unique
+  title     String
+  slug      String
+  node      Node?    @relation("NodeQuestion")
+  user      User     @relation("UserQuestions")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Answer {
+  id        String   @default(cuid()) @id @unique
+  content   String
+  sources   Source[] @relation("AnswerSources")
+  node      Node?    @relation("NodeAnswer")
+  user      User     @relation("UserAnswers")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Source {
+  id     String @default(cuid()) @id @unique
+  label  String
+  url    String
+  answer Answer @relation("AnswerSources")
+}
+
+model Flag {
+  id        String   @default(cuid()) @id @unique
+  type      String
+  node      Node     @relation("NodeFlags")
+  user      User     @relation("UserFlags")
+  createdAt DateTime @default(now())
+}
+
+model Tag {
+  id        String   @default(cuid()) @id @unique
+  label     String
+  node      Node     @relation("NodeTags")
+  user      User     @relation("UserTags")
+  createdAt DateTime @default(now())
+}
+
+model HistoryAction {
+  id        String   @default(cuid()) @id @unique
+  action    String
+  model     String
+  meta      String?
+  node      Node     @relation("NodeHistoryActions")
+  user      User     @relation("UserHistoryActions")
+  createdAt DateTime @default(now())
+}
+
+model User {
+  id        String          @default(cuid()) @id @unique
+  auth0Id   String?         @unique
+  key       String?
+  admin     Boolean         @default(false)
+  name      String?
+  email     String?
+  picture   String?
+  locale    String?
+  questions Question[]      @relation("UserQuestions")
+  answers   Answer[]        @relation("UserAnswers")
+  flags     Flag[]          @relation("UserFlags")
+  tags      Tag[]           @relation("UserTags")
+  history   HistoryAction[] @relation("UserHistoryActions")
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+}
+
+model Configuration {
+  id String @default(cuid()) @id @unique
+
+  name  String @unique
+  title String @default("Demo")
+
+  auth0Domain       String
+  auth0ClientId     String
+  authorizedDomains String[]
+
+  algoliaAppId    String?
+  algoliaApiKey   String?
+  algoliaSynonyms String?
+
+  mailgunDomain String?
+  mailgunApiKey String?
+
+  slackChannelHook String?
+  slackCommandKey  String?
+
+  tags String?
+
+  workplaceSharing Boolean?      @default(false)
+  bugReporting     BugReporting? @default(GITHUB)
+}
+
+enum BugReporting {
+  MAIL
+  GITHUB
+}

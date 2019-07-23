@@ -4,35 +4,45 @@ const { randomString } = require('../helpers')
 
 module.exports = {
   Query: {
-    configuration: (_, args, ctx, info) =>
-      ctx.prisma.query.configuration({ where: { name: 'default' } }, info)
+    configuration: async (_, args, ctx) => {
+      const configuration = await ctx.photon.configurations.findOne({ where: { name: 'default' } })
+
+      // TODO: Don't manually deserialize JSON (See Notes.md)
+      configuration.tags = JSON.parse(configuration.tags)
+      configuration.algoliaSynonyms = JSON.parse(configuration.algoliaSynonyms)
+
+      return configuration
+    }
   },
   Mutation: {
-    updateConfiguration: async (_, { authorizedDomains, ...args }, ctx, info) => {
-      const configuration = await ctx.prisma.mutation.updateConfiguration(
-        {
-          where: { name: 'default' },
-          data: { authorizedDomains: { set: authorizedDomains }, ...args }
-        },
-        info
-      )
+    updateConfiguration: async (_, { authorizedDomains, tags, algoliaSynonyms, ...args }, ctx) => {
+      // TODO: Don't manually serialize JSON (See Notes.md)
+      const configuration = await ctx.photon.configurations.update({
+        where: { name: 'default' },
+        data: {
+          authorizedDomains: { set: authorizedDomains },
+          tags: JSON.stringify(tags),
+          algoliaSynonyms: JSON.stringify(algoliaSynonyms),
+          ...args
+        }
+      })
 
       algolia.resyncSynonyms(ctx, args.algoliaSynonyms)
 
-      refreshConfiguration(ctx.prisma)
+      refreshConfiguration(ctx.photon)
+
+      // TODO: Don't manually deserialize JSON (See Notes.md)
+      configuration.tags = JSON.parse(configuration.tags)
+      configuration.algoliaSynonyms = JSON.parse(configuration.algoliaSynonyms)
 
       return configuration
     },
-    regenerateSlackCommandKey: (_, args, ctx, info) => {
-      return ctx.prisma.mutation.updateConfiguration(
-        {
-          where: { name: 'default' },
-          data: {
-            slackCommandKey: randomString(20)
-          }
-        },
-        info
-      )
-    }
+    regenerateSlackCommandKey: (_, args, ctx) =>
+      ctx.photon.configurations.update({
+        where: { name: 'default' },
+        data: {
+          slackCommandKey: randomString(20)
+        }
+      })
   }
 }

@@ -25,7 +25,7 @@ const server = new GraphQLServer({
   },
   context: ctx => ({
     ...ctx,
-    prisma: multiTenant.current(ctx.request)
+    photon: multiTenant.current(ctx.request)
   })
 })
 

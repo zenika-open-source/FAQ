@@ -1,24 +1,5 @@
 const algoliasearch = require('algoliasearch')
 
-const nodeQuery = `
-{
-  objectID: id
-  question {
-    title
-    slug
-  }
-  answer {
-    content
-  }
-  tags {
-    label
-  }
-  flags {
-    type
-  }
-}
-`
-
 class Algolia {
   constructor() {
     this.indices = []
@@ -27,7 +8,7 @@ class Algolia {
     const {
       service: { name, stage },
       configuration: conf
-    } = ctx.prisma._meta
+    } = ctx.photon._meta
 
     if (!conf.algoliaAppId || !conf.algoliaApiKey) {
       // eslint-disable-next-line no-console
@@ -48,9 +29,13 @@ class Algolia {
     return this.indices[name][stage]
   }
   async getNode(ctx, id) {
-    const { tags, flags, ...node } = await ctx.prisma.query.zNode({ where: { id } }, nodeQuery)
+    const { tags, flags, ...node } = await ctx.photon.nodes.findOne({
+      where: { id },
+      include: { question: true, answer: true, tags: true, flags: true }
+    })
 
     return {
+      objectID: id,
       ...node,
       tag: tags.map(t => t.label),
       flag: flags.map(f => f.type)

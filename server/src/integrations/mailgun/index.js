@@ -8,7 +8,7 @@ class Mailgun {
     const {
       service: { name, stage },
       configuration: conf
-    } = ctx.prisma._meta
+    } = ctx.photon._meta
 
     if (!conf.mailgunDomain || !conf.mailgunApiKey) {
       // eslint-disable-next-line no-console
@@ -48,28 +48,10 @@ class Mailgun {
   }
 
   getNode(ctx, nodeId) {
-    return ctx.prisma.query.zNode(
-      { where: { id: nodeId } },
-      `
-      {
-        id
-        question {
-          title
-          slug
-          user {
-            name
-            email
-          }
-        }
-        answer {
-          content
-          user {
-            name
-          }
-        }
-      }
-      `
-    )
+    return ctx.photon.nodes.findOne({
+      where: { id: nodeId },
+      include: { question: { include: { user: true } }, answer: { include: { user: true } } }
+    })
   }
 }
 

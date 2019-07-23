@@ -2,7 +2,7 @@ const { algolia } = require('../integrations')
 
 module.exports = {
   Query: {
-    search: async (_, args, ctx, info) => {
+    search: async (_, args, ctx) => {
       const { text, tags = [], flags = [], skip, first, ...params } = args
 
       let results = {
@@ -15,8 +15,8 @@ module.exports = {
       }
 
       if (!text && tags.length === 0 && flags.length === 0) {
-        const count = (await ctx.prisma.query.zNodesConnection(params, '{ aggregate { count } }'))
-          .aggregate.count
+        // TODO: Use aggregation instead (See Notes.md)
+        const count = (await ctx.photon.nodes.findMany({ select: { id: true } })).length
 
         results = {
           ...results,
@@ -45,19 +45,24 @@ module.exports = {
     }
   },
   SearchResult: {
-    nodes: async ({ ids, highlights, ...params }, args, ctx, info) => {
+    nodes: async ({ ids, highlights, first, skip }, args, ctx, info) => {
       if (!ids) {
-        return ctx.prisma.query.zNodes({ orderBy: 'createdAt_DESC', ...params }, info)
+        return ctx.photon.nodes.findMany({
+          orderBy: { createdAt: 'desc' },
+          first,
+          skip,
+          include: { question: true, answer: true, flags: true, tags: true }
+        })
       }
 
-      let nodes = await ctx.prisma.query.zNodes(
-        {
-          where: {
-            id_in: ids
+      let nodes = await ctx.photon.zNodes.findMany({
+        where: {
+          id: {
+            in: ids
           }
         },
-        info
-      )
+        include: { question: true, answer: true, flags: true, tags: true }
+      })
 
       nodes = nodes
         .map(node => ({ ...node, highlights: highlights[node.id] }))

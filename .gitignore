@@ -10,6 +10,7 @@ node_modules
 .build
 client/build
 server/front_build
+*.db
 
 # misc
 .DS_Store

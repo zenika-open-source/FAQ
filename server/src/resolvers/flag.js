@@ -3,11 +3,11 @@ const { algolia } = require('../integrations')
 
 module.exports = {
   Mutation: {
-    addFlag: async (_, { type, nodeId }, ctx, info) => {
-      const flag = await ctx.prisma.exists.Flag({ node: { id: nodeId }, type })
+    addFlag: async (_, { type, nodeId }, ctx) => {
+      const flags = await ctx.photon.flags.findMany({ where: { node: { id: nodeId }, type } })
 
-      if (!flag) {
-        await ctx.prisma.mutation.createFlag({
+      if (flags.length === 0) {
+        await ctx.photon.flags.create({
           data: {
             type,
             node: { connect: { id: nodeId } },
@@ -27,18 +27,20 @@ module.exports = {
         algolia.updateNode(ctx, nodeId)
       }
 
-      return ctx.prisma.query.zNode({ where: { id: nodeId } }, info)
+      return ctx.photon.nodes.findOne({
+        where: { id: nodeId },
+        include: {
+          flags: { include: { user: true } }
+        }
+      })
     },
-    removeFlag: async (_, { type, nodeId }, ctx, info) => {
-      const flags = await ctx.prisma.query.flags(
-        {
-          where: { node: { id: nodeId }, type }
-        },
-        '{ id }'
-      )
+    removeFlag: async (_, { type, nodeId }, ctx) => {
+      const flags = await ctx.photon.flags.findMany({
+        where: { node: { id: nodeId }, type }
+      })
 
-      if (flags) {
-        await ctx.prisma.mutation.deleteFlag({
+      if (flags.length > 0) {
+        await ctx.photon.flags.delete({
           where: { id: flags[0].id }
         })
 
@@ -54,7 +56,12 @@ module.exports = {
         algolia.updateNode(ctx, nodeId)
       }
 
-      return ctx.prisma.query.zNode({ where: { id: nodeId } }, info)
+      return ctx.photon.nodes.findOne({
+        where: { id: nodeId },
+        include: {
+          flags: { include: { user: true } }
+        }
+      })
     }
   }
 }

@@ -33,7 +33,7 @@
     "prettier": "prettier src/**/*",
     "prettier:write": "npm run prettier -- --write",
     "prettier:check": "npm run prettier -- --check",
-    "local_containers": "cd prisma/ && dotenv -e ../.env.local docker-compose up",
+    "local_containers": "cd prisma_old/ && dotenv -e ../.env.local docker-compose up",
     "token": "dotenv -e .env.local bash scripts/prisma_token/token.sh"
   },
   "husky": {

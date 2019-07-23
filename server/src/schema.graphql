@@ -1,7 +1,8 @@
-# import ZNode, Question, Answer, Source, Flag, Tag, HistoryAction, BugReporting from './generated/prisma.graphql'
+# import Question, Answer, Source, Flag, Tag, HistoryAction, BugReporting from './generated/prisma.graphql'
 
 # import ZNodeOrderByInput, ZNodeConnection, ZNodeWhereUniqueInput from './generated/prisma.graphql'
-# import HistoryActionWhereInput from './generated/prisma.graphql'
+
+# TODO: Delete generated/prisma.graphql and copy needed types
 
 directive @admin on QUERY | FIELD_DEFINITION
 
@@ -10,12 +11,7 @@ type Query {
 
   zNode(where: ZNodeWhereUniqueInput): ZNode
 
-  history(
-    where: HistoryActionWhereInput
-    orderBy: HistoryActionOrderByInput
-    first: Int!
-    skip: Int!
-  ): History
+  history(where: HistoryActionWhereInput, orderBy: Json, first: Int!, skip: Int!): History
 
   search(
     text: String
@@ -61,6 +57,20 @@ type Mutation {
     slackChannelHook: String
   ): Configuration @admin
   regenerateSlackCommandKey: Configuration! @admin
+}
+
+type ZNode {
+  id: ID!
+
+  question: Question
+  answer: Answer
+
+  flags: [Flag!]!
+  tags: [Tag!]!
+
+  history: [HistoryAction!]!
+
+  highlights: Json
 }
 
 type SearchResult {

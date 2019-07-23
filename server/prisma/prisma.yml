@@ -1,8 +1,0 @@
-endpoint: ${env:PRISMA_URL}
-datamodel: datamodel.graphql
-
-secret: ${env:PRISMA_API_SECRET}
-
-generate:
-  - generator: graphql-schema
-    output: ../src/generated/

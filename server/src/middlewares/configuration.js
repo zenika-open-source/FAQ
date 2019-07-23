@@ -11,30 +11,11 @@ const getConfiguration = async (multiTenant, req, next) => {
 }
 
 const refreshConfiguration = async tenant => {
-  const conf = await tenant.query.configuration(
-    {
-      where: { name: 'default' }
-    },
-    `{
-      id
-      name
-      title
-      auth0Domain
-      auth0ClientId
-      authorizedDomains
-      algoliaAppId
-      algoliaApiKey
-      algoliaSynonyms
-      mailgunDomain
-      mailgunApiKey
-      slackChannelHook
-      tags
-      workplaceSharing
-      bugReporting
-    }`
-  )
+  const conf = await tenant.configurations.findOne({ where: { name: 'default' } })
 
-  if (!conf.tags) conf.tags = []
+  // TODO: Use JSON deserializer instead (See Notes.md)
+  // if (!conf.tags) conf.tags = {}
+  conf.tags = conf.tags ? JSON.parse(conf.tags) : {}
 
   tenant._meta.configuration = conf
 }

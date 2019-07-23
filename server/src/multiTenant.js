@@ -1,12 +1,15 @@
-const { Prisma } = require('prisma-binding')
+const Photon = require('@generated/photon')
 const { MultiTenant } = require('prisma-multi-tenant')
 
 const multiTenant = new MultiTenant({
   instanciate: (name, stage) =>
-    new Prisma({
-      typeDefs: 'src/generated/prisma.graphql',
-      endpoint: process.env.PRISMA_URL + '/' + name + '/' + stage,
-      secret: process.env.PRISMA_API_SECRET
+    new Photon({
+      datasources: {
+        db: {
+          url:
+            'file:/Users/errorname/Documents/Work/FAQ/server/prisma/' + name + '$' + stage + '.db'
+        }
+      }
     }),
   nameStageFromReq: req => {
     // Prefered header: faq-tenant

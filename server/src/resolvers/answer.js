@@ -3,51 +3,38 @@ const { algolia, mailgun } = require('../integrations')
 
 module.exports = {
   Mutation: {
-    createAnswerAndSources: async (_, { content, sources, nodeId }, ctx, info) => {
+    createAnswerAndSources: async (_, { content, sources, nodeId }, ctx) => {
       sources = JSON.parse(sources)
 
-      let answer
+      const node = await ctx.photon.nodes.findOne({
+        where: { id: nodeId },
+        include: { answer: true }
+      })
 
-      try {
-        answer = await ctx.prisma.mutation.createAnswer(
-          {
-            data: {
-              content,
-              node: {
-                connect: {
-                  id: nodeId
-                }
-              },
-              user: {
-                connect: {
-                  id: ctxUser(ctx).id
-                }
-              },
-              sources: {
-                create: sources
-              }
-            }
-          },
-          `
-        {
-          id
-          node {
-            flags(where:{type:"unanswered"}) {
-              id
-            }
-          }
-        }
-        `
-        )
-      } catch (e) {
-        // The error doesn't includes the error code, so we use the message
-        if (e.message.includes('NodeAnswer') && e.message.includes('violate')) {
-          throw new Error('Someone already answered this question! Refresh this page.')
-        }
-        throw e
+      if (node.answer) {
+        throw new Error('Someone already answered this question! Refresh this page.')
       }
 
-      await ctx.prisma.mutation.deleteManyFlags({
+      let answer = await ctx.photon.answers.create({
+        data: {
+          content,
+          node: {
+            connect: {
+              id: nodeId
+            }
+          },
+          user: {
+            connect: {
+              id: ctxUser(ctx).id
+            }
+          },
+          sources: {
+            create: sources
+          }
+        }
+      })
+
+      await ctx.photon.flags.deleteMany({
         where: { node: { id: nodeId }, type: 'unanswered' }
       })
 
@@ -64,34 +51,30 @@ module.exports = {
       algolia.updateNode(ctx, nodeId)
       mailgun.sendNewAnswer(ctx, nodeId)
 
-      return ctx.prisma.query.answer(
-        {
-          where: { id: answer.id }
-        },
-        info
-      )
+      return ctx.photon.answers.findOne({
+        where: { id: answer.id },
+        include: {
+          node: {
+            include: {
+              question: { include: { user: true } },
+              flags: { include: { user: true } },
+              tags: { include: { user: true } }
+            }
+          },
+          sources: true,
+          user: true
+        }
+      })
     },
     updateAnswerAndSources: async (_, { id, content, previousContent, sources }, ctx, info) => {
-      const answer = await ctx.prisma.query.answer(
-        { where: { id } },
-        `
-        {
-          id
-          content
-          sources {
-            id
-            label
-            url
-          }
-          node {
-            id
-          }
-        }
-        `
-      )
+      const answer = await ctx.photon.answers.findOne({
+        where: { id },
+        include: { node: true, sources: true }
+      })
+
       if (previousContent !== answer.content) {
         throw new Error(
-          "Another user edited the answer before you, copy your version and refresh the page. If you don't copy your version, It will be lost"
+          "Another user edited the answer before you, copy your version and refresh the page. If you don't copy your version, it will be lost"
         )
       }
 
@@ -114,7 +97,7 @@ module.exports = {
       )
 
       const mutationsToAdd = sourcesToAdd.map(({ label, url }) =>
-        ctx.prisma.mutation.createSource({
+        ctx.photon.sources.create({
           data: {
             label,
             url,
@@ -124,7 +107,7 @@ module.exports = {
       )
 
       const mutationsToUpdate = sourcesToUpdate.map(({ id, label, url }) =>
-        ctx.prisma.mutation.updateSource({
+        ctx.photon.sources.update({
           where: { id },
           data: {
             label,
@@ -134,7 +117,7 @@ module.exports = {
       )
 
       const mutationsToRemove = sourcesToRemove.map(source =>
-        ctx.prisma.mutation.deleteSource({ where: { id: source.id } })
+        ctx.photon.sources.delete({ where: { id: source.id } })
       )
 
       await Promise.all([...mutationsToAdd, ...mutationsToUpdate, ...mutationsToRemove])
@@ -153,7 +136,7 @@ module.exports = {
         meta.content = content
       }
 
-      await ctx.prisma.mutation.updateAnswer({
+      await ctx.photon.answers.update({
         where: { id },
         data: {
           content
@@ -169,12 +152,20 @@ module.exports = {
 
       algolia.updateNode(ctx, answer.node.id)
 
-      return ctx.prisma.query.answer(
-        {
-          where: { id }
-        },
-        info
-      )
+      return ctx.photon.answers.findOne({
+        where: { id: answer.id },
+        include: {
+          node: {
+            include: {
+              question: { include: { user: true } },
+              flags: { include: { user: true } },
+              tags: { include: { user: true } }
+            }
+          },
+          sources: true,
+          user: true
+        }
+      })
     }
   }
 }
