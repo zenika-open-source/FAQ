@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 
-import { zNodeFragment } from '../../queries'
+import { nodeFragment } from '../../queries'
 
 export const submitAnswerMutation = gql`
   mutation($content: String!, $sources: String!, $nodeId: ID!) {
@@ -17,7 +17,7 @@ export const submitAnswerMutation = gql`
         url
       }
       node {
-        ${zNodeFragment}
+        ${nodeFragment}
       }
       user {
         id

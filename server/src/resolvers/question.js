@@ -6,7 +6,7 @@ const confTagList = ctx =>
 
 module.exports = {
   Query: {
-    zNode: async (_, args, ctx) =>
+    node: async (_, args, ctx) =>
       ctx.photon.nodes.findOne({
         ...args,
         include: {
@@ -108,7 +108,7 @@ module.exports = {
         }
       })
     },
-    updateQuestionAndTags: async (_, { id, title, previousTitle, tags }, ctx, info) => {
+    updateQuestionAndTags: async (_, { id, title, previousTitle, tags }, ctx) => {
       const tagList = confTagList(ctx)
 
       const node = (await ctx.photon.questions.findOne({

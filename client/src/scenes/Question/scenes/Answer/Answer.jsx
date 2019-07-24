@@ -31,7 +31,7 @@ class Answer extends Component {
   constructor(props) {
     super(props)
 
-    const answer = props.zNode && props.zNode.answer
+    const answer = props.node && props.node.answer
 
     const initialText = answer ? answer.content : ''
     const initialSources = this.sourcesToKeyValuePairs(answer ? answer.sources : [])
@@ -73,8 +73,8 @@ class Answer extends Component {
 
   submitForm = () => {
     if (this.canSubmit()) {
-      const { zNode } = this.props
-      zNode.answer ? this.editAnswer() : this.submitAnswer()
+      const { node } = this.props
+      node.answer ? this.editAnswer() : this.submitAnswer()
     }
   }
 
@@ -82,14 +82,14 @@ class Answer extends Component {
     const intl = useIntl(Answer)
 
     const { submitAnswer } = this.props
-    const { zNode } = this.props
+    const { node } = this.props
     const { answer, sources } = this.state
 
     this.setState({ loadingSubmit: true })
 
-    submitAnswer(answer, this.keyValuePairsToSources(sources), zNode.id)
+    submitAnswer(answer, this.keyValuePairsToSources(sources), node.id)
       .then(() => {
-        this.setState({ slug: zNode.question.slug + '-' + zNode.id })
+        this.setState({ slug: node.question.slug + '-' + node.id })
         alert.pushSuccess(intl('alert.submit_success'))
       })
       .catch(error => {
@@ -103,19 +103,19 @@ class Answer extends Component {
   editAnswer = (nodeId, answerId) => {
     const intl = useIntl(Answer)
 
-    const { editAnswer, zNode } = this.props
+    const { editAnswer, node } = this.props
     const { answer, sources } = this.state
 
     this.setState({ loadingSubmit: true })
 
     editAnswer(
-      typeof answerId === 'string' ? answerId : zNode.answer.id,
+      typeof answerId === 'string' ? answerId : node.answer.id,
       answer,
       this.state.initialAnswer,
       this.keyValuePairsToSources(sources)
     )
       .then(() => {
-        this.setState({ slug: zNode.question.slug + '-' + zNode.id })
+        this.setState({ slug: node.question.slug + '-' + node.id })
         alert.pushSuccess(intl('alert.edit_success'))
       })
       .catch(error => {
@@ -150,7 +150,7 @@ class Answer extends Component {
     const intl = useIntl(Answer)
 
     const { loadingSubmit, slug, showTips, sources } = this.state
-    const { zNode } = this.props
+    const { node } = this.props
 
     if (slug) {
       return <Redirect to={`/q/${slug}`} />
@@ -160,14 +160,14 @@ class Answer extends Component {
       return <Loading />
     }
 
-    if (zNode === null) {
+    if (node === null) {
       return <NotFound />
     }
 
     return (
       <div>
         {this.canSubmit() && <Prompt message={intl('prompt_warning')} />}
-        <ActionMenu backLink={`/q/${zNode.question.slug}-${zNode.id}`}>
+        <ActionMenu backLink={`/q/${node.question.slug}-${node.id}`}>
           {!showTips && (
             <Button
               link
@@ -181,9 +181,9 @@ class Answer extends Component {
         <Card style={{ marginTop: '0.3rem' }}>
           <CardTitle style={{ padding: '1.2rem' }}>
             <div className="grow">
-              <h1>{markdown.title(zNode.question.title)}</h1>
+              <h1>{markdown.title(node.question.title)}</h1>
             </div>
-            <Flags node={zNode} withLabels={true} />
+            <Flags node={node} withLabels={true} />
           </CardTitle>
           <CardText>
             <CtrlEnter onCtrlEnterCallback={this.submitForm}>
@@ -204,7 +204,7 @@ class Answer extends Component {
           </CardText>
           <CardActions>
             <Button
-              label={zNode.answer ? intl('validate.edit') : intl('validate.submit')}
+              label={node.answer ? intl('validate.edit') : intl('validate.submit')}
               primary
               raised
               disabled={!this.canSubmit()}
@@ -221,7 +221,7 @@ Answer.propTypes = {
   match: PropTypes.object.isRequired,
   submitAnswer: PropTypes.func.isRequired,
   editAnswer: PropTypes.func.isRequired,
-  zNode: PropTypes.object
+  node: PropTypes.object
 }
 
 Answer.translations = {

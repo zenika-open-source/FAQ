@@ -66,7 +66,7 @@ module.exports = {
         }
       })
     },
-    updateAnswerAndSources: async (_, { id, content, previousContent, sources }, ctx, info) => {
+    updateAnswerAndSources: async (_, { id, content, previousContent, sources }, ctx) => {
       const answer = await ctx.photon.answers.findOne({
         where: { id },
         include: { node: true, sources: true }

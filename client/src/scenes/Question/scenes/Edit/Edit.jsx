@@ -21,11 +21,11 @@ class Edit extends Component {
   constructor(props) {
     super(props)
 
-    const { location, zNode } = this.props
+    const { location, node } = this.props
 
     const passedQuestionText = location.state ? location.state.question : ''
-    const initialQuestion = zNode ? zNode.question.title : passedQuestionText
-    const initialTags = zNode ? zNode.tags.map(x => x.label) : []
+    const initialQuestion = node ? node.question.title : passedQuestionText
+    const initialTags = node ? node.tags.map(x => x.label) : []
 
     this.state = {
       nodeLoaded: false,
@@ -76,20 +76,20 @@ class Edit extends Component {
   editQuestion = () => {
     const intl = useIntl(Edit)
 
-    const { editQuestion, zNode } = this.props
+    const { editQuestion, node } = this.props
 
     this.setState({ loadingSubmit: true })
 
     editQuestion(
-      zNode.question.id,
+      node.question.id,
       this.state.question,
       this.state.initialQuestion,
       this.state.tags,
-      zNode.id
+      node.id
     )
       .then(({ data }) => {
         this.setState({
-          slug: data.updateQuestionAndTags.slug + '-' + zNode.id
+          slug: data.updateQuestionAndTags.slug + '-' + node.id
         })
         alert.pushSuccess(intl('alert.edit_success'))
       })
@@ -122,7 +122,7 @@ class Edit extends Component {
   render() {
     const intl = useIntl(Edit)
 
-    const { match, zNode } = this.props
+    const { match, node } = this.props
     const { isEditing, loadingSubmit, slug, question, tags, showTips } = this.state
 
     if (slug) {
@@ -133,7 +133,7 @@ class Edit extends Component {
       return <Loading />
     }
 
-    if (isEditing && zNode === null) {
+    if (isEditing && node === null) {
       return <Redirect to={'/'} />
     }
 
@@ -191,7 +191,7 @@ Edit.propTypes = {
   submitQuestion: PropTypes.func.isRequired,
   editQuestion: PropTypes.func.isRequired,
   location: PropTypes.object.isRequired,
-  zNode: PropTypes.object
+  node: PropTypes.object
 }
 
 Edit.translations = {

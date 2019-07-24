@@ -21,7 +21,7 @@ module.exports = {
         skip,
         first,
         include: {
-          node: true,
+          node: { include: { question: true } },
           user: true
         }
       })

@@ -8,7 +8,7 @@ export const searchNodes = gql`
       flags: $flags
       first: $first
       skip: $skip
-      orderBy: createdAt_DESC
+      orderBy: { createdAt: desc }
     ) {
       nodes {
         id

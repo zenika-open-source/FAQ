@@ -1,28 +1,33 @@
-# import Question, Answer, Source, Flag, Tag, HistoryAction, BugReporting from './generated/prisma.graphql'
+# DIRECTIVES AND SCALARS
 
-# import ZNodeOrderByInput, ZNodeConnection, ZNodeWhereUniqueInput from './generated/prisma.graphql'
-
-# TODO: Delete generated/prisma.graphql and copy needed types
-
+scalar Json
+scalar DateTime
 directive @admin on QUERY | FIELD_DEFINITION
+
+# QUERIES AND MUTATIONS
 
 type Query {
   me: User
 
-  zNode(where: ZNodeWhereUniqueInput): ZNode
+  node(where: NodeWhereUniqueInput): Node
 
-  history(where: HistoryActionWhereInput, orderBy: Json, first: Int!, skip: Int!): History
+  history(
+    where: HistoryActionWhereInput
+    orderBy: HistoryActionOrderByInput
+    first: Int!
+    skip: Int!
+  ): History
 
   search(
     text: String
     tags: [String!]
     flags: [String!]
-    orderBy: ZNodeOrderByInput
+    orderBy: NodeOrderByInput
     first: Int!
     skip: Int!
   ): SearchResult!
 
-  randomNode(tag: String): ZNode
+  randomNode(tag: String): Node
 
   configuration: Configuration @admin
 }
@@ -44,8 +49,8 @@ type Mutation {
     sources: String!
   ): Answer
 
-  addFlag(type: String!, nodeId: ID!): ZNode
-  removeFlag(type: String!, nodeId: ID!): ZNode
+  addFlag(type: String!, nodeId: ID!): Node
+  removeFlag(type: String!, nodeId: ID!): Node
 
   updateConfiguration(
     title: String!
@@ -59,7 +64,9 @@ type Mutation {
   regenerateSlackCommandKey: Configuration! @admin
 }
 
-type ZNode {
+# BASE TYPES
+
+type Node {
   id: ID!
 
   question: Question
@@ -73,20 +80,57 @@ type ZNode {
   highlights: Json
 }
 
-type SearchResult {
-  nodes: [ZNode!]!
-  meta: PaginationMeta!
+type Question {
+  id: ID!
+  title: String!
+  slug: String!
+  node: Node!
+  user: User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
-type History {
-  historyActions: [HistoryAction!]!
-  meta: PaginationMeta!
+type Answer {
+  id: ID!
+  content: String!
+  sources: [Source!]
+  node: Node!
+  user: User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
-type PaginationMeta {
-  entriesCount: Int!
-  pageCurrent: Int!
-  pagesCount: Int!
+type Source {
+  id: ID!
+  label: String!
+  url: String!
+  answer: Answer!
+}
+
+type Flag {
+  id: ID!
+  type: String!
+  node: Node!
+  user: User!
+  createdAt: DateTime!
+}
+
+type Tag {
+  id: ID!
+  label: String!
+  node: Node!
+  user: User!
+  createdAt: DateTime!
+}
+
+type HistoryAction {
+  id: ID!
+  action: String!
+  model: String!
+  meta: Json
+  node: Node!
+  user: User!
+  createdAt: DateTime!
 }
 
 type User {
@@ -117,6 +161,54 @@ type Configuration {
   tags: Json
 
   workplaceSharing: Boolean
-
   bugReporting: BugReporting
+}
+
+enum BugReporting {
+  MAIL
+  GITHUB
+}
+
+# INPUT/OUTPUT TYPES
+
+type SearchResult {
+  nodes: [Node!]!
+  meta: PaginationMeta!
+}
+
+type History {
+  historyActions: [HistoryAction!]!
+  meta: PaginationMeta!
+}
+
+type PaginationMeta {
+  entriesCount: Int!
+  pageCurrent: Int!
+  pagesCount: Int!
+}
+
+input NodeWhereUniqueInput {
+  id: ID!
+}
+
+input NodeOrderByInput {
+  createdAt: OrderByArg
+}
+
+input UserWhereUniqueInput {
+  id: ID!
+}
+
+input HistoryActionWhereInput {
+  user: UserWhereUniqueInput
+  node: NodeWhereUniqueInput
+}
+
+input HistoryActionOrderByInput {
+  createdAt: OrderByArg
+}
+
+enum OrderByArg {
+  asc
+  desc
 }

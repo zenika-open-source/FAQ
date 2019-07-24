@@ -45,7 +45,7 @@ module.exports = {
     }
   },
   SearchResult: {
-    nodes: async ({ ids, highlights, first, skip }, args, ctx, info) => {
+    nodes: async ({ ids, highlights, first, skip }, args, ctx) => {
       if (!ids) {
         return ctx.photon.nodes.findMany({
           orderBy: { createdAt: 'desc' },
@@ -55,7 +55,7 @@ module.exports = {
         })
       }
 
-      let nodes = await ctx.photon.zNodes.findMany({
+      let nodes = await ctx.photon.nodes.findMany({
         where: {
           id: {
             in: ids

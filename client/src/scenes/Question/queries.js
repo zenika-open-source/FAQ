@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-export const zNodeFragment = `
+export const nodeFragment = `
   id
   question {
     id
@@ -46,8 +46,8 @@ export const zNodeFragment = `
 
 export const getNode = gql`
   query($id: ID!) {
-    zNode(where: { id: $id }) {
-      ${zNodeFragment}
+    node(where: { id: $id }) {
+      ${nodeFragment}
     }
   }
 `
