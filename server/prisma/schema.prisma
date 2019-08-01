@@ -2,8 +2,8 @@
 // PLEASE DO NOT REMOVE THEM
 
 datasource db {
-  provider = env("PMT-PROVIDER")
-  url      = env("PMT-URL")
+  provider = env("PMT_PROVIDER")
+  url      = env("PMT_URL")
 }
 
 datasource management {
