@@ -1,6 +1,2 @@
 User-Agent: * 
-
-
-
-
 Allow: / 
