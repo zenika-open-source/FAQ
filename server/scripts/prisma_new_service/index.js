@@ -1,4 +1,4 @@
-const prompt = require('prisma-multi-tenant/build/cli/utils/prompt').default
+const { prompt } = require('prisma-multi-tenant')
 
 const { env, run, deployAlgoliaIndex } = require('../helpers')
 

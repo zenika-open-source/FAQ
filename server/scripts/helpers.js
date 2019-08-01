@@ -1,6 +1,5 @@
-const fetch = require('node-fetch')
 const { execSync } = require('child_process')
-const management = require('prisma-multi-tenant/build/cli/management').default
+const { Management } = require('prisma-multi-tenant')
 
 const env = names => {
   const variables = {}
@@ -37,6 +36,7 @@ const run = (command, env) =>
   })
 
 const getTenants = async () => {
+  const management = new Management()
   await management.connect()
   const tenants = await management.getAll()
   await management.disconnect()
