@@ -1,4 +1,3 @@
-const Photon = require('@generated/photon')
 const { MultiTenant } = require('prisma-multi-tenant')
 
 const multiTenant = new MultiTenant()

@@ -55,7 +55,7 @@ module.exports = {
         })
       }
 
-      if (ids.length == 0) return []
+      if (ids.length === 0) return []
 
       let nodes = await ctx.photon.nodes.findMany({
         where: {
