@@ -1,5 +1,5 @@
 const getFirstUserFlag = async (multiTenant, req, next) => {
-  const tenant = multiTenant.current(req)
+  const tenant = await multiTenant.current(req)
 
   if (tenant._meta.isFirstUser) {
     next()

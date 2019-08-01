@@ -5,14 +5,11 @@ const answer = require('./answer')
 
 class Mailgun {
   async sendNewAnswer(ctx, nodeId) {
-    const {
-      service: { name, stage },
-      configuration: conf
-    } = ctx.photon._meta
+    const { name, configuration: conf } = ctx.photon._meta
 
     if (!conf.mailgunDomain || !conf.mailgunApiKey) {
       // eslint-disable-next-line no-console
-      console.warn(`Please provide a mailgun domain and api key for service ${name}/${stage}`)
+      console.warn(`Please provide a mailgun domain and api key for service ${name}`)
       return null
     }
 

@@ -1,83 +1,28 @@
-const {
-  env,
-  queryManagement,
-  queryService,
-  deployPrismaService,
-  deployAlgoliaIndex,
-  fromArgs
-} = require('../helpers')
+const prompt = require('prisma-multi-tenant/build/cli/utils/prompt').default
 
-const {
-  AUTH0_DOMAIN,
-  AUTH0_CLIENT_ID,
-  ALGOLIA_APP_ID,
-  ALGOLIA_API_KEY_ALL,
-  MAILGUN_DOMAIN,
-  MAILGUN_API_KEY
-} = env([
-  'PRISMA_URL', // Implicitely required
-  'PRISMA_API_SECRET', // Implicitely required
-  'PRISMA_MANAGEMENT_API_SECRET', // Implicitely required
-  'AUTH0_DOMAIN',
-  'AUTH0_CLIENT_ID',
-  'ALGOLIA_APP_ID?',
-  'ALGOLIA_API_KEY_ALL?',
-  'MAILGUN_DOMAIN?',
-  'MAILGUN_API_KEY?'
+const { env, run, deployAlgoliaIndex } = require('../helpers')
+
+env([
+  'AUTH0_DOMAIN', // Implicitely required
+  'AUTH0_CLIENT_ID' // Implicitely required
 ])
 
 const main = async () => {
-  const [serviceName, serviceStage] = fromArgs()
+  const { name, provider, url } = await prompt.tenantConf(process.argv.slice(2))
 
-  // Check if service already exists
-  const service = await queryManagement(`
-    {
-      project(name: "${serviceName}", stage: "${serviceStage}") {
-        name
-        stage
-      }
-    }  
-  `)
-  if (service) {
-    console.error(`Service ${serviceName}/${serviceStage} already exists`)
+  if (name.split('$').length != 2) {
+    console.error('An FAQ tenant name should be formatted like: [name]$[stage]')
     process.exit(1)
   }
 
-  // Deploy the service
-  deployPrismaService(serviceName, serviceStage)
-
-  // Add a default configuration
-  await queryService(
-    serviceName,
-    serviceStage,
-    `
-      mutation {
-        createConfiguration(
-          data: {
-            name: "default"
-            auth0Domain: "${AUTH0_DOMAIN}"
-            auth0ClientId: "${AUTH0_CLIENT_ID}"
-            algoliaAppId: "${ALGOLIA_APP_ID || ''}"
-            algoliaApiKey: "${ALGOLIA_API_KEY_ALL || ''}"
-            mailgunDomain: "${MAILGUN_DOMAIN || ''}"
-            mailgunApiKey: "${MAILGUN_API_KEY || ''}"
-            tags: "${JSON.stringify({
-              agencies: ['paris', 'nantes'],
-              theme: ['tutorial', 'meta']
-            }).replace(/"/g, '\\"')}"
-          }
-        ) {
-          id
-        }
-      }
-    `
-  )
+  // Create new tenant
+  await run(`prisma-multi-tenant new '--name=${name}' '--provider=${provider}' '--url=${url}'`)
 
   // Deploy algolia index
-  await deployAlgoliaIndex(serviceName, serviceStage)
+  await deployAlgoliaIndex(name)
 
   // Log success
-  console.log(`Successfully deployed a new service (${serviceName}/${serviceStage})!`)
+  console.log(`Successfully deployed a new service (${name})!`)
 }
 
 main()

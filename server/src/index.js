@@ -23,10 +23,13 @@ const server = new GraphQLServer({
   resolverValidationOptions: {
     requireResolversForResolveType: false
   },
-  context: ctx => ({
-    ...ctx,
-    photon: multiTenant.current(ctx.request)
-  })
+  context: async ctx => {
+    const photon = await multiTenant.current(ctx.request)
+    return {
+      ...ctx,
+      photon
+    }
+  }
 })
 
 /* Register middlewares */
@@ -37,8 +40,8 @@ server.express.use(express.urlencoded({ extended: true }))
 server.express.post(gqlEndpoint, [
   (req, res, next) => getConfiguration(multiTenant, req, next),
   (req, res, next) => getFirstUserFlag(multiTenant, req, next),
-  (req, res, next) => auth.checkJwt(req, res, next, multiTenant.current(req)),
-  (req, res, next) => auth.checkDomain(req, res, next, multiTenant.current(req)),
+  (req, res, next) => auth.checkJwt(req, res, next, multiTenant),
+  (req, res, next) => auth.checkDomain(req, res, next, multiTenant),
   error.handling
 ])
 

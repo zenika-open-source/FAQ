@@ -6,15 +6,12 @@ const { emojify } = require('../helpers')
 
 class Slack {
   async sendToChannel(ctx, nodeId) {
-    const {
-      service: { name, stage },
-      configuration: conf
-    } = ctx.photon._meta
+    const { name, configuration: conf } = ctx.photon._meta
     const origin = `${ctx.request.protocol}://${ctx.request.hostname}`
 
     if (!conf.slackChannelHook) {
       // eslint-disable-next-line no-console
-      console.warn(`Please provide a slack channel hook for service ${name}/${stage}`)
+      console.warn(`Please provide a slack channel hook for service ${name}`)
       return
     }
 

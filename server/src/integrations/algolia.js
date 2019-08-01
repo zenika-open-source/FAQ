@@ -5,28 +5,23 @@ class Algolia {
     this.indices = []
   }
   getIndex(ctx) {
-    const {
-      service: { name, stage },
-      configuration: conf
-    } = ctx.photon._meta
+    const { name, configuration: conf } = ctx.photon._meta
 
     if (!conf.algoliaAppId || !conf.algoliaApiKey) {
       // eslint-disable-next-line no-console
-      console.warn(`Please provide an algolia app id and an api key for service ${name}/${stage}`)
+      console.warn(`Please provide an algolia app id and an api key for service ${name}`)
       return null
     }
 
-    if (this.indices[name] && this.indices[name][stage]) {
-      return this.indices[name][stage]
+    if (this.indices[name]) {
+      return this.indices[name]
     }
 
-    if (!this.indices[name]) this.indices[name] = []
-
-    this.indices[name][stage] = algoliasearch(conf.algoliaAppId, conf.algoliaApiKey).initIndex(
-      name + '_' + stage
+    this.indices[name] = algoliasearch(conf.algoliaAppId, conf.algoliaApiKey).initIndex(
+      name.replace(/\$/g, '_')
     )
 
-    return this.indices[name][stage]
+    return this.indices[name]
   }
   async getNode(ctx, id) {
     const { tags, flags, ...node } = await ctx.photon.nodes.findOne({

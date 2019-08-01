@@ -1,8 +1,16 @@
-const Photon = require('@generated/photon')
+const { MultiTenant } = require('prisma-multi-tenant')
 
-const photon = new Photon()
+const name = process.argv[2]
+if (!name) {
+  console.error('No tenant name given as argument')
+  process.exit(0)
+}
+
+const multiTenant = new MultiTenant()
 
 async function main() {
+  const photon = await multiTenant.get(name)
+
   const configuration = await photon.configurations.create({
     data: {
       name: 'default',
@@ -78,5 +86,5 @@ async function main() {
 main()
   .catch(e => console.error(e))
   .finally(async () => {
-    await photon.disconnect()
+    await multiTenant.disconnect()
   })

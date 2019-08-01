@@ -1,27 +1,12 @@
-const { env, deployPrismaService, deployAlgoliaIndex, queryManagement } = require('../helpers')
-
-env([
-  'PRISMA_URL', // Implicitely required
-  'PRISMA_API_SECRET', // Implicitely required
-  'PRISMA_MANAGEMENT_API_SECRET' // Implicitely required
-])
-
-const getServices = () =>
-  queryManagement(`
-    {
-      listProjects {
-        name
-        stage
-      }
-    }
-  `).then(d => d.listProjects)
+const { deployAlgoliaIndex, getTenants, run } = require('../helpers')
 
 const main = async () => {
-  const services = await getServices()
+  await run(`prisma-multi-tenant lift up`)
 
-  services.map(({ name, stage }) => {
-    deployPrismaService(name, stage)
-    deployAlgoliaIndex(name, stage)
+  const services = await getTenants()
+
+  services.map(({ name }) => {
+    deployAlgoliaIndex(name)
   })
 }
 

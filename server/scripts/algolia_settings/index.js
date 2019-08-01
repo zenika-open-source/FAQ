@@ -1,26 +1,17 @@
 const algoliasearch = require('algoliasearch')
-const { env, queryService } = require('../helpers')
+const { env } = require('../helpers')
 
-const { SERVICE_NAME, SERVICE_STAGE } = env([
-  'PRISMA_URL', // Implicitely required
-  'PRISMA_API_SECRET', // Implicitely required
-  'SERVICE_NAME',
-  'SERVICE_STAGE'
-])
+const { MultiTenant } = require('prisma-multi-tenant')
 
-const getAlgoliaCredentials = (name, stage) =>
-  queryService(
-    name,
-    stage,
-    `
-      {
-        configuration (where:{name: "default"}) {
-          algoliaAppId
-          algoliaApiKey
-        }
-      }
-    `
-  ).then(data => (data ? data.configuration : null))
+const { TENANT_NAME } = env(['TENANT_NAME'])
+
+const getAlgoliaCredentials = async name => {
+  const multiTenant = new MultiTenant()
+  const photon = await multiTenant.get(name)
+  const configuration = await photon.configurations.findOne({ where: { name: 'default' } })
+  await multiTenant.disconnect()
+  return configuration
+}
 
 const updateSynonyms = (index, synonyms) => {
   return new Promise((resolve, reject) => {
@@ -54,24 +45,22 @@ const updateSettings = index => {
 }
 
 const main = async () => {
-  const credentials = await getAlgoliaCredentials(SERVICE_NAME, SERVICE_STAGE)
+  const credentials = await getAlgoliaCredentials(TENANT_NAME)
 
   if (!credentials || !credentials.algoliaAppId || !credentials.algoliaApiKey) {
-    console.warn(
-      `No algolia credentials found in configuration for ${SERVICE_NAME}/${SERVICE_STAGE}`
-    )
+    console.warn(`No algolia credentials found in configuration for ${TENANT_NAME}`)
     return
   }
 
   const client = algoliasearch(credentials.algoliaAppId, credentials.algoliaApiKey)
 
-  const index = client.initIndex(SERVICE_NAME + '_' + SERVICE_STAGE)
+  const index = client.initIndex(TENANT_NAME.replace(/\$/g, '_'))
 
   await updateSynonyms(index, credentials.algoliaSynonyms || [])
 
   await updateSettings(index)
 
-  console.log(`Deployed algolia settings for ${SERVICE_NAME}/${SERVICE_STAGE}`)
+  console.log(`Deployed algolia settings for ${TENANT_NAME}`)
 }
 
 main()

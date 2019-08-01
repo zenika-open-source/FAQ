@@ -1,40 +1,6 @@
 const fetch = require('node-fetch')
-const jwt = require('jsonwebtoken')
 const { execSync } = require('child_process')
-
-const generateToken = (payload, secret) => {
-  const fullPayload = {
-    ...payload,
-    iat: (Date.now() / 1000) | 0,
-    exp: ((Date.now() / 1000) | 0) + 10
-  }
-
-  return jwt.sign(fullPayload, secret)
-}
-
-const generateManagementToken = secret =>
-  generateToken(
-    {
-      grants: [
-        {
-          target: '*/*',
-          action: '*'
-        }
-      ]
-    },
-    secret
-  )
-
-const generateServiceToken = (name, stage, secret) =>
-  generateToken(
-    {
-      data: {
-        service: name + '@' + stage,
-        roles: ['admin']
-      }
-    },
-    secret
-  )
+const management = require('prisma-multi-tenant/build/cli/management').default
 
 const env = names => {
   const variables = {}
@@ -55,60 +21,14 @@ const env = names => {
   return variables
 }
 
-const gqlQuery = ({ url, token, gql }) =>
-  fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
-    },
-    body: JSON.stringify({
-      query: gql
-    })
+const deployAlgoliaIndex = name =>
+  run('node ./scripts/algolia_settings/index.js', {
+    TENANT_NAME: name
   })
-    .then(res => res.json())
-    .then(d => d.data)
-
-// Implicit env required: PRISMA_URL, PRISMA_API_SECRET
-const queryService = (name, stage, gql) => {
-  const token = generateServiceToken(name, stage, process.env.PRISMA_API_SECRET)
-  return gqlQuery({
-    url: process.env.PRISMA_URL + '/' + name + '/' + stage,
-    token,
-    gql
-  })
-}
-
-// Implicit env required: PRISMA_URL, PRISMA_MANAGEMENT_API_SECRET
-const queryManagement = gql => {
-  const token = generateManagementToken(process.env.PRISMA_MANAGEMENT_API_SECRET)
-  return gqlQuery({
-    url: process.env.PRISMA_URL + '/management',
-    token,
-    gql
-  })
-}
-
-// Implicit env required: PRISMA_URL, PRISMA_API_SECRET
-const deployPrismaService = (name, stage) => {
-  const isForcing = process.argv.includes('--force')
-  run('prisma deploy ' + (isForcing ? '--force' : ''), {
-    PRISMA_URL: process.env.PRISMA_URL + '/' + name + '/' + stage
-  })
-}
-
-// Implicit env required: PRISMA_URL, PRISMA_API_SECRET
-const deployAlgoliaIndex = async (name, stage) => {
-  run('node ../algolia_settings/index.js', {
-    SERVICE_NAME: name,
-    SERVICE_STAGE: stage
-  })
-}
-
-const fromArgs = () => [...process.argv.slice(2), 'default', 'default']
 
 const run = (command, env) =>
   execSync(command, {
+    cwd: process.cwd(),
     env: {
       ...process.env,
       ...env
@@ -116,12 +36,16 @@ const run = (command, env) =>
     stdio: 'inherit'
   })
 
+const getTenants = async () => {
+  await management.connect()
+  const tenants = await management.getAll()
+  await management.disconnect()
+  return tenants
+}
+
 module.exports = {
   env,
   run,
-  queryService,
-  queryManagement,
-  deployPrismaService,
   deployAlgoliaIndex,
-  fromArgs
+  getTenants
 }

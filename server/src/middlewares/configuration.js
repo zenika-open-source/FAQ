@@ -1,12 +1,12 @@
 const getConfiguration = async (multiTenant, req, next) => {
-  const tenant = multiTenant.current(req)
+  const tenant = await multiTenant.current(req)
 
   if (tenant._meta.configuration) {
     next()
     return
   }
 
-  await refreshConfiguration(tenant).catch(next)
+  await refreshConfiguration(tenant).catch(err => console.log(err) || next(err))
   next()
 }
 

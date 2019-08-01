@@ -1,8 +1,17 @@
+// The two following datasources (db and management) are REQUIRED for prisma-multi-tenant.
+// PLEASE DO NOT REMOVE THEM
+
 datasource db {
-  provider = "sqlite"
-  url      = "file:default$default.db"
-  default  = true
+  provider = env("PMT-PROVIDER")
+  url      = env("PMT-URL")
 }
+
+datasource management {
+  provider = "sqlite"
+  url      = "file:management.db"
+}
+
+// If there is datasources below this line, they will not be used by prisma2
 
 generator photon {
   provider = "photonjs"

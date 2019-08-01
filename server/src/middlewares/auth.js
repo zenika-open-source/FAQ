@@ -2,14 +2,12 @@ const jwt = require('express-jwt')
 const jwksRsa = require('jwks-rsa')
 const { UnauthorizedError } = jwt
 
-const checkJwt = (req, res, next, photon) => {
-  const {
-    service: { name, stage },
-    configuration: conf
-  } = photon._meta
+const checkJwt = async (req, res, next, multiTenant) => {
+  const photon = await multiTenant.current(req)
+  const { name, configuration: conf } = photon._meta
 
   if (!conf.auth0Domain || !conf.auth0ClientId) {
-    throw new Error(`No auth0 configuration found for service ${name}/${stage}!`)
+    throw new Error(`No auth0 configuration found for tenant ${name}!`)
   }
 
   const [authType, token] = (req.headers.authorization || '').split(' ')
@@ -88,7 +86,9 @@ const checkJwt = (req, res, next, photon) => {
   })(req, res, getUser)
 }
 
-const checkDomain = (req, res, next, photon) => {
+const checkDomain = async (req, res, next, multiTenant) => {
+  const photon = await multiTenant.current(req)
+
   const email = req.user.email || req.user.token.email
 
   const userDomain = email.split('@').pop()
