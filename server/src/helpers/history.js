@@ -1,6 +1,5 @@
 const history = {
   push: (ctx, { action, model, meta, nodeId }) =>
-    // TODO: Remove createdAt assignation (See Notes.md)
     ctx.photon.historyActions.create({
       data: {
         action,

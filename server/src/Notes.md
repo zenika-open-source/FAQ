@@ -5,4 +5,3 @@ Limitations:
 - JSON is not supported yet, so we manually serialize/deserialize it for now
 - We cannot create a nested create/connect, so we make multiple small operations
 - We cannot create with empty data && createdAt, so we use a dummy attribute
-- We cannot update with null values, so we use 'null' strings

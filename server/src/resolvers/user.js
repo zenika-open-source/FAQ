@@ -49,16 +49,15 @@ module.exports = {
         data: { name, email, picture }
       }),
     forgetMe: (_, args, ctx) =>
-      // TODO: Use real null value (See Notes.md)
       ctx.photon.users.update({
         where: { id: ctxUser(ctx).id },
         data: {
           name: 'Anonymous',
-          email: '',
+          email: null,
           picture: '/img/portrait_placeholder.png',
-          auth0Id: 'null',
-          key: 'null',
-          locale: 'null'
+          auth0Id: null,
+          key: null,
+          locale: null
         }
       })
   }
