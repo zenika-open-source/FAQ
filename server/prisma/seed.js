@@ -11,7 +11,7 @@ const multiTenant = new MultiTenant()
 async function main() {
   const photon = await multiTenant.get(name)
 
-  const configuration = await photon.configurations.create({
+  await photon.configurations.create({
     data: {
       name: 'default',
       title: 'Dev',
@@ -22,61 +22,6 @@ async function main() {
       mailgunDomain: process.env.MAILGUN_DOMAIN,
       mailgunApiKey: process.env.MAILGUN_API_KEY,
       tags: `{"agencies": ["paris", "nantes"], "theme": ["tutorial", "meta"]}`
-    }
-  })
-
-  // TODO: If we create a first user, then the dev will not be promoted admin the first time he logins
-  // Workable solution: Create the first question on the first login to the tenant
-  const user = await photon.users.create({
-    data: {
-      email: 'thibaud.courtoison@gmail.com',
-      name: 'Thibaud Courtoison',
-      picture:
-        'https://lh3.googleusercontent.com/-dbxgoH-NtyE/AAAAAAAAAAI/AAAAAAAAAAc/ylO4YtIzICE/photo.jpg'
-    }
-  })
-
-  const user2 = await photon.users.create({
-    data: {
-      email: 'the-dev@localhost',
-      name: 'The Dev',
-      key: 'secret-42',
-      picture: '/img/portrait_placeholder.png'
-    }
-  })
-
-  const node = await photon.nodes.create({
-    data: {
-      dummy: true
-    }
-  })
-
-  const question = await photon.questions.create({
-    data: {
-      title: "Welcome to the FAQ! What's next?",
-      slug: 'welcome-to-the-faq-whats-next',
-      user: {
-        connect: {
-          id: user.id
-        }
-      },
-      node: {
-        connect: { id: node.id }
-      }
-    }
-  })
-
-  const answer = await photon.answers.create({
-    data: {
-      content: 'TODO',
-      user: {
-        connect: {
-          id: user.id
-        }
-      },
-      node: {
-        connect: { id: node.id }
-      }
     }
   })
 

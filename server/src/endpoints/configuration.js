@@ -13,8 +13,6 @@ const configurationEndpoint = multiTenant => async (req, res) =>
       res.sendStatus(500)
     })
 
-    console.log(photon)
-
     const {
       title,
       auth0Domain,

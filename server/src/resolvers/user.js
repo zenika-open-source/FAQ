@@ -1,5 +1,5 @@
 const { validateAndParseIdToken, ctxUser } = require('../helpers')
-const { refreshFirstUserFlag } = require('../middlewares/first-user')
+const { refreshFirstUserFlag, createFirstQuestion } = require('../middlewares/first-user')
 
 module.exports = {
   Query: {
@@ -37,6 +37,7 @@ module.exports = {
       })
 
       if (isFirstUser) {
+        await createFirstQuestion(ctx.photon, user)
         await refreshFirstUserFlag(ctx.photon)
       }
 

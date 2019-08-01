@@ -32,7 +32,8 @@
     "prettier:check": "npm run prettier -- --check",
     "new_service": "dotenv -e .env.local node scripts/prisma_new_service/index.js",
     "delete_service": "dotenv -e .env.local prisma-multi-tenant delete",
-    "deploy": "dotenv -e .env.local node scripts/prisma_deploy_all/index.js"
+    "deploy": "dotenv -e .env.local node scripts/prisma_deploy_all/index.js",
+    "bootstrap": "npm run new_service -- -- --name=default\\\\\\$default --provider=sqlite --url=file:tenants/default\\\\\\$default.db"
   },
   "husky": {
     "hooks": {

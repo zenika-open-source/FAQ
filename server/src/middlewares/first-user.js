@@ -17,4 +17,41 @@ const refreshFirstUserFlag = async tenant => {
   tenant._meta.isFirstUser = count === 0
 }
 
-module.exports = { getFirstUserFlag, refreshFirstUserFlag }
+const createFirstQuestion = async (photon, user) => {
+  const node = await photon.nodes.create({
+    data: {
+      dummy: true
+    }
+  })
+
+  await photon.questions.create({
+    data: {
+      title: "Welcome to the FAQ! What's next?",
+      slug: 'welcome-to-the-faq-whats-next',
+      user: {
+        connect: {
+          id: user.id
+        }
+      },
+      node: {
+        connect: { id: node.id }
+      }
+    }
+  })
+
+  await photon.answers.create({
+    data: {
+      content: 'TODO',
+      user: {
+        connect: {
+          id: user.id
+        }
+      },
+      node: {
+        connect: { id: node.id }
+      }
+    }
+  })
+}
+
+module.exports = { getFirstUserFlag, refreshFirstUserFlag, createFirstQuestion }
