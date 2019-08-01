@@ -47,6 +47,11 @@
     "prettier:check": "npm run prettier -- --check",
     "stats": "NODE_ENV=production webpack --config node_modules/react-scripts/config/webpack.config.prod.js --json > stats.json"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
   "devDependencies": {
     "dotenv": "^5.0.0",
     "dotenv-cli": "^1.4.0",
