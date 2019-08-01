@@ -35,6 +35,17 @@ export const removeFlagMutation = gql`
   }
 `
 
+export const incrementViewsCounterMutation = gql`
+  mutation($questionId: ID!) {
+    incrementQuestionViewsCounter(
+      id: $questionId
+    ) {
+      id
+      views
+    }
+  }
+`
+
 export const createFlag = graphql(createFlagMutation, {
   name: 'createFlag',
   props: ({ createFlag }) => ({
@@ -57,6 +68,19 @@ export const removeFlag = graphql(removeFlagMutation, {
         variables: {
           type,
           nodeId
+        }
+      })
+    }
+  })
+})
+
+export const incrementViewsCounter = graphql(incrementViewsCounterMutation, {
+  name: 'incrementViewsCounter',
+  props: ({ incrementViewsCounter }) => ({
+    incrementViewsCounter: questionId => {
+      return incrementViewsCounter({
+        variables: {
+          questionId,
         }
       })
     }

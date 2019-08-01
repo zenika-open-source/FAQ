@@ -6,6 +6,7 @@ export const zNodeFragment = `
     id
     title
     slug
+    views
     user {
       id
       name

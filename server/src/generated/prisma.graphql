@@ -1330,6 +1330,7 @@ type Question {
   id: ID!
   title: String!
   slug: String!
+  views: Int
   node: ZNode!
   user: User!
   createdAt: DateTime!
@@ -1345,6 +1346,7 @@ type QuestionConnection {
 input QuestionCreateInput {
   title: String!
   slug: String!
+  views: Int
   node: ZNodeCreateOneWithoutQuestionInput!
   user: UserCreateOneWithoutQuestionsInput!
 }
@@ -1362,12 +1364,14 @@ input QuestionCreateOneWithoutNodeInput {
 input QuestionCreateWithoutNodeInput {
   title: String!
   slug: String!
+  views: Int
   user: UserCreateOneWithoutQuestionsInput!
 }
 
 input QuestionCreateWithoutUserInput {
   title: String!
   slug: String!
+  views: Int
   node: ZNodeCreateOneWithoutQuestionInput!
 }
 
@@ -1383,6 +1387,8 @@ enum QuestionOrderByInput {
   title_DESC
   slug_ASC
   slug_DESC
+  views_ASC
+  views_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -1393,6 +1399,7 @@ type QuestionPreviousValues {
   id: ID!
   title: String!
   slug: String!
+  views: Int
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -1440,6 +1447,14 @@ input QuestionScalarWhereInput {
   slug_not_starts_with: String
   slug_ends_with: String
   slug_not_ends_with: String
+  views: Int
+  views_not: Int
+  views_in: [Int!]
+  views_not_in: [Int!]
+  views_lt: Int
+  views_lte: Int
+  views_gt: Int
+  views_gte: Int
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -1482,6 +1497,7 @@ input QuestionSubscriptionWhereInput {
 input QuestionUpdateInput {
   title: String
   slug: String
+  views: Int
   node: ZNodeUpdateOneRequiredWithoutQuestionInput
   user: UserUpdateOneRequiredWithoutQuestionsInput
 }
@@ -1489,11 +1505,13 @@ input QuestionUpdateInput {
 input QuestionUpdateManyDataInput {
   title: String
   slug: String
+  views: Int
 }
 
 input QuestionUpdateManyMutationInput {
   title: String
   slug: String
+  views: Int
 }
 
 input QuestionUpdateManyWithoutUserInput {
@@ -1525,12 +1543,14 @@ input QuestionUpdateOneWithoutNodeInput {
 input QuestionUpdateWithoutNodeDataInput {
   title: String
   slug: String
+  views: Int
   user: UserUpdateOneRequiredWithoutQuestionsInput
 }
 
 input QuestionUpdateWithoutUserDataInput {
   title: String
   slug: String
+  views: Int
   node: ZNodeUpdateOneRequiredWithoutQuestionInput
 }
 
@@ -1593,6 +1613,14 @@ input QuestionWhereInput {
   slug_not_starts_with: String
   slug_ends_with: String
   slug_not_ends_with: String
+  views: Int
+  views_not: Int
+  views_in: [Int!]
+  views_not_in: [Int!]
+  views_lt: Int
+  views_lte: Int
+  views_gt: Int
+  views_gte: Int
   node: ZNodeWhereInput
   user: UserWhereInput
   createdAt: DateTime

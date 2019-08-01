@@ -60,6 +60,43 @@ module.exports = {
 
       return ctx.prisma.query.question({ where: { id: node.question.id } }, info)
     },
+    incrementQuestionViewsCounter: async (_, { id }, ctx, info) => {
+      const { node } = (await ctx.prisma.query.question(
+        { where: { id } },
+        `
+        {
+          node {
+            id
+            question {
+              views
+            }
+          }
+        }
+        `
+      ))
+
+      await ctx.prisma.mutation.updateQuestion({
+        where: { id },
+        data: {
+          views: node.question.views + 1, 
+        }
+      })
+
+      await history.push(ctx, {
+        action: 'UPDATED',
+        model: 'Question',
+        nodeId: node.id
+      })
+
+      algolia.updateNode(ctx, node.id)
+
+      return ctx.prisma.query.question(
+        {
+          where: { id }
+        },
+        info
+      )
+    },
     updateQuestionAndTags: async (_, { id, title, previousTitle, tags }, ctx, info) => {
       const tagList = confTagList(ctx)
 
