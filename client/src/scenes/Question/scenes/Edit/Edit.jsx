@@ -9,7 +9,7 @@ import { submitQuestion, editQuestion } from './queries'
 import { alert, useIntl } from 'services'
 
 import Card, { CardText, CardActions, PermanentClosableCard } from 'components/Card'
-import { Loading, Button, Input, CtrlEnter, TagPicker } from 'components'
+import { withLoading, Loading, Button, Input, CtrlEnter, TagPicker } from 'components'
 
 import { ActionMenu } from '../../components'
 
@@ -235,5 +235,6 @@ Edit.translations = {
 
 export default compose(
   submitQuestion,
-  editQuestion
+  editQuestion,
+  withLoading()
 )(Edit)

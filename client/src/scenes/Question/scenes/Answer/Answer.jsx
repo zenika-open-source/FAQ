@@ -12,7 +12,15 @@ import { isUuidV4, onListChange } from 'helpers'
 
 import NotFound from 'scenes/NotFound'
 
-import { Loading, Flags, Button, MarkdownEditor, CtrlEnter, PairInputList } from 'components'
+import {
+  withLoading,
+  Loading,
+  Flags,
+  Button,
+  MarkdownEditor,
+  CtrlEnter,
+  PairInputList
+} from 'components'
 import Card, { CardTitle, CardText, CardActions, PermanentClosableCard } from 'components/Card'
 
 import { ActionMenu } from '../../components'
@@ -263,5 +271,6 @@ Answer.translations = {
 
 export default compose(
   submitAnswer,
-  editAnswer
+  editAnswer,
+  withLoading()
 )(Answer)

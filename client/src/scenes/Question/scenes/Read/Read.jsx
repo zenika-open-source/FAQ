@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Link, Redirect } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
@@ -10,18 +10,34 @@ import { markdown, useIntl } from 'services'
 
 import NotFound from 'scenes/NotFound'
 
-import { Button, Flags, Tags } from 'components'
+import { Loading, Button, Flags, Tags } from 'components'
 import Card, { CardTitle, CardText } from 'components/Card'
 import Dropdown, { DropdownItem } from 'components/Dropdown'
 
 import { ActionMenu } from '../../components'
 import { Views, FlagsDropdown, Sources, Meta, Share, History } from './components'
 
-const Read = ({ history, match, zNode, createFlag, removeFlag, incrementViewsCounter }) => {
+const Read = ({
+  history,
+  match,
+  zNode,
+  loading,
+  createFlag,
+  removeFlag,
+  incrementViewsCounter
+}) => {
+  const [loaded, setLoaded] = useState(false)
   useEffect(() => {
+    if (!loaded) return
     incrementViewsCounter(zNode.question.id)
-  }, [])
+  }, [loaded])
+
+  useEffect(() => {
+    if (!loaded && zNode) setLoaded(true)
+  }, [zNode])
   const intl = useIntl(Read)
+
+  if (loading) return <Loading />
 
   if (zNode === null) {
     return <NotFound />
@@ -104,7 +120,8 @@ const Read = ({ history, match, zNode, createFlag, removeFlag, incrementViewsCou
 Read.propTypes = {
   history: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
-  zNode: PropTypes.object.isRequired,
+  zNode: PropTypes.object,
+  loading: PropTypes.bool.isRequired,
   createFlag: PropTypes.func.isRequired,
   removeFlag: PropTypes.func.isRequired
 }
