@@ -17,6 +17,7 @@ type Question {
 
   title: String!
   slug: String!
+  views: Int
 
   node: ZNode! @relation(name: "NodeQuestion")
   user: User! @relation(name: "UserQuestions")

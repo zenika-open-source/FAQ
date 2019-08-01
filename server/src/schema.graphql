@@ -38,6 +38,7 @@ type Mutation {
 
   createQuestionAndTags(title: String!, tags: [String!]!): Question
   updateQuestionAndTags(id: ID!, title: String!, previousTitle: String!, tags: [String!]!): Question
+  incrementQuestionViewsCounter(id: ID!): Question
 
   createAnswerAndSources(content: String, sources: String!, nodeId: ID!): Answer
   updateAnswerAndSources(

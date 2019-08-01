@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Link, Redirect } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 
 import { compose } from 'react-apollo'
-import { createFlag, removeFlag } from './queries'
+import { createFlag, removeFlag, incrementViewsCounter } from './queries'
 
 import { markdown, useIntl } from 'services'
 
@@ -15,9 +15,12 @@ import Card, { CardTitle, CardText } from 'components/Card'
 import Dropdown, { DropdownItem } from 'components/Dropdown'
 
 import { ActionMenu } from '../../components'
-import { FlagsDropdown, Sources, Meta, Share, History } from './components'
+import { Views, FlagsDropdown, Sources, Meta, Share, History } from './components'
 
-const Read = ({ history, match, zNode, createFlag, removeFlag }) => {
+const Read = ({ history, match, zNode, createFlag, removeFlag, incrementViewsCounter }) => {
+  useEffect(() => {
+    incrementViewsCounter(zNode.question.id)
+  }, [])
   const intl = useIntl(Read)
 
   if (zNode === null) {
@@ -60,6 +63,7 @@ const Read = ({ history, match, zNode, createFlag, removeFlag }) => {
             {zNode.tags.length > 0 && <Tags tags={zNode.tags} />}
           </div>
           <Flags node={zNode} withLabels={true} />
+          <Views value={zNode.question.views} />
           <Share node={zNode} />
         </CardTitle>
         <CardText>
@@ -134,5 +138,6 @@ Read.translations = {
 
 export default compose(
   createFlag,
-  removeFlag
+  removeFlag,
+  incrementViewsCounter
 )(Read)
