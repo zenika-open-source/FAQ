@@ -75,12 +75,15 @@ module.exports = {
         `
       )
 
-      return ctx.prisma.mutation.updateQuestion({
-        where: { id },
-        data: {
-          views: node.question.views + 1
-        }
-      }, info)
+      return ctx.prisma.mutation.updateQuestion(
+        {
+          where: { id },
+          data: {
+            views: node.question.views + 1
+          }
+        },
+        info
+      )
     },
     updateQuestionAndTags: async (_, { id, title, previousTitle, tags }, ctx, info) => {
       const tagList = confTagList(ctx)
