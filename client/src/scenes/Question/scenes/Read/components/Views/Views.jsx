@@ -11,22 +11,26 @@ const Views = ({ value }) => {
   if (value > 1000) {
     const locale = window.navigator.language
     const formatter = new Intl.NumberFormat(locale, { maximumSignificantDigits: 2 })
-    formattedValue = `${formatter.format(value / 1000)}k` 
+    formattedValue = `${formatter.format(value / 1000)}k`
   }
 
-  return (<span className="views">{formattedValue} {intl('views')}</span>)
+  return (
+    <span className="views">
+      {formattedValue} {intl('views')}
+    </span>
+  )
 }
 
 Views.propTypes = {
-  value: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired
 }
 
 Views.translations = {
   en: {
-    views: 'views',
+    views: 'views'
   },
   fr: {
-    views: 'vues',
+    views: 'vues'
   }
 }
 

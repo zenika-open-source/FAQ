@@ -139,5 +139,5 @@ Read.translations = {
 export default compose(
   createFlag,
   removeFlag,
-  incrementViewsCounter,
+  incrementViewsCounter
 )(Read)

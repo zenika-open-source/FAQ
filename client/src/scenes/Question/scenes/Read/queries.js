@@ -37,9 +37,7 @@ export const removeFlagMutation = gql`
 
 export const incrementViewsCounterMutation = gql`
   mutation($questionId: ID!) {
-    incrementQuestionViewsCounter(
-      id: $questionId
-    ) {
+    incrementQuestionViewsCounter(id: $questionId) {
       id
       views
     }
@@ -80,7 +78,7 @@ export const incrementViewsCounter = graphql(incrementViewsCounterMutation, {
     incrementViewsCounter: questionId => {
       return incrementViewsCounter({
         variables: {
-          questionId,
+          questionId
         }
       })
     }

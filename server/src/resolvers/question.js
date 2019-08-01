@@ -61,7 +61,7 @@ module.exports = {
       return ctx.prisma.query.question({ where: { id: node.question.id } }, info)
     },
     incrementQuestionViewsCounter: async (_, { id }, ctx, info) => {
-      const { node } = (await ctx.prisma.query.question(
+      const { node } = await ctx.prisma.query.question(
         { where: { id } },
         `
         {
@@ -73,12 +73,12 @@ module.exports = {
           }
         }
         `
-      ))
+      )
 
       await ctx.prisma.mutation.updateQuestion({
         where: { id },
         data: {
-          views: node.question.views + 1, 
+          views: node.question.views + 1
         }
       })
 
