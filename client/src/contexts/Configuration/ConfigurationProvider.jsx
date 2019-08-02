@@ -28,9 +28,7 @@ const ConfigurationProvider = ({ children }) => {
       .then(response => {
         if (!response.ok)
           throw new Error(
-            `Error response from server while retrieving configuration: HTTP status ${
-              response.status
-            }`
+            `Error response from server while retrieving configuration: HTTP status ${response.status}`
           )
         return response.json()
       })
