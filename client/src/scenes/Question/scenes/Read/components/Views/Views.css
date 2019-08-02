@@ -2,4 +2,5 @@
   color: var(--secondary-color-font);
   margin-left: 0.8rem;
   font-size: var(--small-font-size);
+  flex-shrink: 0;
 }
