@@ -149,9 +149,7 @@ const Settings = ({ configuration: conf }) => {
             <Input
               value={
                 state.slackCommandKey
-                  ? `https://${window.location.host}/rest/integration/slack/${
-                      state.slackCommandKey
-                    }`
+                  ? `https://${window.location.host}/rest/integration/slack/${state.slackCommandKey}`
                   : ''
               }
               disabled
