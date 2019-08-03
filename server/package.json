@@ -22,7 +22,7 @@
     "slugify": "^1.3.1"
   },
   "scripts": {
-    "postinstall": "PMT_PROVIDER=sqlite PMT_URL=file:not-a-real-file.db prisma2 generate",
+    "postinstall": "prisma-multi-tenant generate",
     "start": "dotenv -e .env.local node src/index.js",
     "dev": "dotenv -e .env.local nodemon src/index.js",
     "lint": "eslint src --ext js",
