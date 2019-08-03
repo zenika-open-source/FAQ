@@ -35,6 +35,7 @@ const checkJwt = async (req, res, next, multiTenant) => {
       algorithms: ['RS256']
     }
 
+    // TODO: Lazily get the user instead of at every requests
     getUser = async err => {
       if (err) return next(err)
 

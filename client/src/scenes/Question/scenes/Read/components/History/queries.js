@@ -6,7 +6,7 @@ export const loadHistoryQuery = gql`
       where: { node: { id: $nodeId } }
       first: $first
       skip: $skip
-      orderBy: { createdAt: "desc" }
+      orderBy: { createdAt: desc }
     ) {
       historyActions {
         id

@@ -1,12 +1,9 @@
 const getFirstUserFlag = async (multiTenant, req, next) => {
   const tenant = await multiTenant.current(req)
 
-  if (tenant._meta.isFirstUser) {
-    next()
-    return
+  if (tenant._meta.isFirstUser === undefined) {
+    await refreshFirstUserFlag(tenant).catch(next)
   }
-
-  await refreshFirstUserFlag(tenant).catch(next)
 
   next()
 }
