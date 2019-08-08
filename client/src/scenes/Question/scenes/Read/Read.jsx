@@ -32,12 +32,12 @@ const Read = ({
     incrementViewsCounter(zNode.question.id)
     // This code will soon be replaced using @apollo/react-hooks
     // This is currently working, so I won't try to change this
-    //eslint-disable-next-line
+    // eslint-disable-next-line
   }, [loaded])
 
   useEffect(() => {
     if (!loaded && zNode) setLoaded(true)
-    //eslint-disable-next-line
+    // eslint-disable-next-line
   }, [zNode])
   const intl = useIntl(Read)
 
