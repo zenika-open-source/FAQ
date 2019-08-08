@@ -6,7 +6,7 @@ import { Redirect } from 'react-router-dom'
 import { useAuth } from 'contexts'
 
 const Authenticated = ({ location, reverse, redirect, children, admin }) => {
-  const [, { isAuth, isAdmin }] = useAuth()
+  const { isAuth, isAdmin } = useAuth()
   const currentURL = location.pathname + location.search
 
   if (admin) {

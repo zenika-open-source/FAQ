@@ -39,7 +39,13 @@ class Auth {
   authCheck = (resolve, reject) => (err, authResult) => {
     if (authResult && authResult.idToken) {
       localStorage.accessToken = authResult.idToken
-      resolve(authResult)
+
+      const expiresAt = authResult.expiresIn * 1000 + new Date().getTime()
+
+      resolve({
+        ...authResult,
+        expiresAt
+      })
     } else {
       reject(err || null)
     }

@@ -13,7 +13,7 @@ const Login = ({ location }) => {
   const [renewing, setRenewing] = useState(false)
   const redirectedFrom = location.state && location.state.from
 
-  const [auth, { isAuth, wasAuth }] = useAuth()
+  const { login, renewAuth, isAuth, wasAuth } = useAuth()
 
   if (isAuth) {
     return <Redirect to="/" />
@@ -21,7 +21,7 @@ const Login = ({ location }) => {
 
   if (wasAuth) {
     if (!renewing) {
-      auth.actions.renewAuth(redirectedFrom)
+      renewAuth(redirectedFrom)
       setRenewing(true)
     }
 
@@ -35,7 +35,7 @@ const Login = ({ location }) => {
       <Button
         icon="fingerprint"
         label={intl('sign_in')}
-        onClick={() => auth.actions.login(redirectedFrom)}
+        onClick={() => login(redirectedFrom)}
         primary
         raised
       />

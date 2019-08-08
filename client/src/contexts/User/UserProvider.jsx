@@ -8,7 +8,7 @@ import { me } from './queries'
 export const UserContext = React.createContext()
 
 const UserProvider = ({ children }) => {
-  const [, { isAuth }] = useAuth()
+  const { isAuth } = useAuth()
 
   return (
     <Query query={me} skip={!isAuth}>
