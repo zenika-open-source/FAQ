@@ -4,12 +4,12 @@ import { useAuth } from 'contexts'
 
 import { Loading } from 'components'
 
-const Logout = ({ history }) => {
-  const [auth] = useAuth()
+const Logout = () => {
+  const { logout } = useAuth()
 
   useEffect(() => {
-    auth.actions.logout().then(() => history.push('/'))
-  }, [auth.actions, history])
+    logout()
+  }, [logout])
 
   return <Loading />
 }

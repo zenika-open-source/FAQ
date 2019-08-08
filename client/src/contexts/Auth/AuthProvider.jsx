@@ -1,145 +1,157 @@
-import React, { Component } from 'react'
+import React, { createContext, useReducer, useEffect, useMemo } from 'react'
 import { withRouter } from 'react-router'
 
-import { ConfigurationContext } from '../Configuration'
 import { alert, auth } from 'services'
 
 import { authUser } from './queries'
 
-export const AuthContext = React.createContext()
+import { useConfiguration } from '../Configuration'
 
-class AuthProvider extends Component {
-  static contextType = ConfigurationContext
+const AuthContext = createContext()
 
-  constructor(props) {
-    super(props)
-
-    const { session, user } = auth.retrieveFromLocalStorage()
-
-    this.state = {
-      session,
-      user,
-      actions: {
-        login: this.login,
-        logout: this.logout,
-        parseHash: this.parseHash,
-        renewAuth: this.renewAuth
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'ready':
+      return {
+        ...state,
+        ready: true
       }
-    }
-  }
-
-  componentDidMount() {
-    const { session, user } = this.state
-    if (session && user) this.scheduleRenew()
-  }
-
-  componentDidUpdate() {
-    const conf = this.context
-
-    if (!conf.loading && !this.state.ready) {
-      auth.init(conf)
-      this.setState({ ready: true })
-    }
-  }
-
-  render() {
-    return <AuthContext.Provider value={this.state}>{this.props.children}</AuthContext.Provider>
-  }
-
-  /* Auth lifecyle */
-
-  login = auth.login
-
-  logout = () => {
-    auth.logout()
-
-    return new Promise(resolve =>
-      this.setState(
-        {
-          session: null,
-          user: null
-        },
-        resolve
-      )
-    )
-  }
-
-  parseHash = async hash => {
-    const { history, authQL } = this.props
-
-    try {
-      const authResult = await auth.parseHash(hash)
-
-      const { redirectTo } = auth.getStateBeforeLogin()
-
-      const { data } = await authQL(authResult.idToken)
-
-      const session = this.setSession(authResult)
-
-      this.setState(
-        {
-          session,
-          user: data.authenticate
-        },
-        () => {
-          auth.cacheToLocalStorage(this.state)
-          this.scheduleRenew()
-        }
-      )
-
-      auth.clearStateBeforeLogin()
-
-      history.push(redirectTo || '')
-    } catch (err) {
-      alert.pushError('Authentication failed: ' + JSON.stringify(err.message), err)
-      this.logout()
-      history.push('/auth/login')
-    }
-  }
-
-  renewAuth = async redirectedFrom => {
-    const { history, location } = this.props
-
-    const redirectTo = redirectedFrom || location.pathname || '/'
-
-    try {
-      const authResult = await auth.renewAuth()
-
-      const session = this.setSession(authResult)
-
-      this.setState({ session }, () => {
-        auth.cacheToLocalStorage(this.state)
-        this.scheduleRenew()
-      })
-    } catch (err) {
-      // "Login required" isn't an error per se
-      if (err.error !== 'login_required') {
-        alert.pushError('Renewing authentication failed: ' + JSON.stringify(err), err)
+    case 'login':
+      return {
+        ...state,
+        ...action.data,
+        previousState: state.state,
+        state: 'signed_in'
       }
-      this.logout()
-      auth.cacheStateBeforeLogin({ redirectTo })
-      history.push('/auth/login')
-    }
-  }
-
-  /* Accessors */
-
-  setSession(authResult) {
-    if (!authResult) return this.logout()
-
-    const expiresAt = authResult.expiresIn * 1000 + new Date().getTime()
-
-    const session = {
-      ...authResult,
-      expiresAt
-    }
-
-    return session
-  }
-
-  scheduleRenew() {
-    auth.scheduleRenew(this.state.session, this.renewAuth)
+    case 'renew':
+      return {
+        ...state,
+        ...action.data,
+        previousState: state.state,
+        state: 'renewed_in'
+      }
+    case 'logout':
+      return {
+        ...state,
+        session: null,
+        user: null,
+        previousState: state.state,
+        state: 'signed_out'
+      }
+    default:
+      return state
   }
 }
 
+const AuthProvider = ({ history, authQL, children }) => {
+  const conf = useConfiguration()
+
+  const init = () => {
+    const { session, user } = auth.retrieveFromLocalStorage()
+
+    if (!conf.loading) {
+      auth.init(conf)
+    }
+
+    return {
+      previousState: null,
+      state: session && user ? 'signed_in' : 'init',
+      session,
+      user,
+      ready: !conf.loading
+    }
+  }
+
+  const [state, dispatch] = useReducer(reducer, null, init)
+
+  // If conf is not loaded, wait for it then set ready
+  useEffect(() => {
+    if (!conf.loading && !state.ready) {
+      auth.init(conf)
+      dispatch({ type: 'ready' })
+    }
+  }, [conf, state])
+
+  const logout = useMemo(
+    () => () => {
+      auth.logout()
+      dispatch({ type: 'logout' })
+      history.push('/auth/login')
+    },
+    [history]
+  )
+
+  const parseHash = useMemo(
+    () => async hash => {
+      try {
+        const session = await auth.parseHash(hash)
+
+        const { redirectTo } = auth.getStateBeforeLogin()
+
+        const {
+          data: { authenticate }
+        } = await authQL(session.idToken)
+
+        dispatch({ type: 'login', data: { session, user: authenticate } })
+
+        auth.clearStateBeforeLogin()
+
+        history.push(redirectTo || '')
+      } catch (err) {
+        alert.pushError('Authentication failed: ' + JSON.stringify(err.message), err)
+        auth.logout()
+        dispatch({ type: 'logout' })
+        history.push('/auth/login')
+      }
+    },
+    [authQL, history]
+  )
+
+  const renewAuth = useMemo(() => {
+    return async redirectedFrom => {
+      const redirectTo = redirectedFrom || window.location.pathname || '/'
+
+      try {
+        const session = await auth.renewAuth()
+
+        if (!session) throw new Error('Unknown error')
+
+        dispatch({ type: 'renew', data: { session } })
+      } catch (err) {
+        // "Login required" isn't an error per se
+        if (err.error !== 'login_required') {
+          alert.pushError('Renewing authentication failed: ' + JSON.stringify(err), err)
+        }
+        auth.logout()
+        dispatch({ type: 'logout' })
+        auth.cacheStateBeforeLogin({ redirectTo })
+        history.push('/auth/login')
+      }
+    }
+  }, [history])
+
+  // Effect after state change
+  useEffect(() => {
+    switch (state.state) {
+      case 'signed_in':
+      case 'renewed_in':
+        auth.cacheToLocalStorage(state)
+        auth.scheduleRenew(state.session, renewAuth)
+        break
+      default:
+        break
+    }
+  }, [state, renewAuth])
+
+  const value = useMemo(() => [state, { login: auth.login, logout, parseHash, renewAuth }], [
+    state,
+    logout,
+    parseHash,
+    renewAuth
+  ])
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+}
+
 export default withRouter(authUser(AuthProvider))
+export { AuthContext }

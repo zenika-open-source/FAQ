@@ -1,41 +1,30 @@
 import React, { useState, useEffect, useMemo } from 'react'
 
-import routing from 'services/routing'
+import { safeFetch } from 'helpers'
 
 export const ConfigurationContext = React.createContext()
 
 const ConfigurationProvider = ({ children }) => {
   const [reload, setReload] = useState(0)
-  const [configuration, setConfiguration] = useState({
-    loading: true
-  })
-
-  // Retrieve cached configuration in local storage
-  useEffect(() => {
+  const [configuration, setConfiguration] = useState(() => {
+    // Retrieve cached configuration in local storage
     if (localStorage.configuration) {
-      setConfiguration({
+      return {
         ...JSON.parse(localStorage.configuration),
         loading: false
-      })
+      }
     }
-  }, [])
+    return {
+      loading: true
+    }
+  })
 
   // Retrieve configuration from server
   useEffect(() => {
-    fetch(process.env.REACT_APP_REST_ENDPOINT + '/configuration', {
-      headers: { 'prisma-service': routing.getPrismaService() }
+    safeFetch('configuration').then(conf => {
+      localStorage.configuration = JSON.stringify(conf)
+      setConfiguration({ ...conf, loading: false })
     })
-      .then(response => {
-        if (!response.ok)
-          throw new Error(
-            `Error response from server while retrieving configuration: HTTP status ${response.status}`
-          )
-        return response.json()
-      })
-      .then(conf => {
-        localStorage.configuration = JSON.stringify(conf)
-        setConfiguration({ ...conf, loading: false })
-      })
   }, [reload])
 
   // Provide reload function when editing configuration
