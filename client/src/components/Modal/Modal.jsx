@@ -28,7 +28,7 @@ const Modal = ({ active, setActive, loading, children }) => {
   )
 }
 
-Modal.Title = ({ children }) => {
+const Title = ({ children }) => {
   const closeModal = useContext(ModalContext)
   return (
     <div className="modal-title">
@@ -38,8 +38,12 @@ Modal.Title = ({ children }) => {
   )
 }
 
-Modal.Text = ({ children }) => <div className="modal-text">{children}</div>
+const Text = ({ children }) => <div className="modal-text">{children}</div>
 
-Modal.Alert = ({ children }) => <div className="modal-alert">{children}</div>
+const Alert = ({ children }) => <div className="modal-alert">{children}</div>
+
+Modal.Title = Title
+Modal.Text = Text
+Modal.Alert = Alert
 
 export default Modal

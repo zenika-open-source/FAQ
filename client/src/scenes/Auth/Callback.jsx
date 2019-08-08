@@ -9,11 +9,11 @@ import { Loading } from 'components'
 const Callback = ({ location }) => {
   const intl = useIntl(Callback)
 
-  const auth = useAuth()
+  const [auth] = useAuth()
 
   useEffect(() => {
     auth.actions.parseHash(location.hash)
-  }, [])
+  }, [auth.actions, location.hash])
 
   return <Loading text={intl('loading')} />
 }

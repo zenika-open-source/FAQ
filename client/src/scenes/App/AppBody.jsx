@@ -17,7 +17,7 @@ const AppBody = () => {
   const intl = useIntl(AppBody)
 
   const conf = useConfiguration()
-  const auth = useAuth()
+  const [auth] = useAuth()
 
   return (
     <div className="main">

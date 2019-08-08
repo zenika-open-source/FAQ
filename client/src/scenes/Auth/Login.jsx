@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { withRouter, Redirect } from 'react-router-dom'
 
 import { useIntl } from 'services'
-import { useAuth, isAuthenticated, wasAuthenticated } from 'contexts'
+import { useAuth } from 'contexts'
 
 import { Loading, Button } from 'components'
 
@@ -13,9 +13,7 @@ const Login = ({ location }) => {
   const [renewing, setRenewing] = useState(false)
   const redirectedFrom = location.state && location.state.from
 
-  const auth = useAuth()
-  const isAuth = isAuthenticated()
-  const wasAuth = wasAuthenticated()
+  const [auth, { isAuth, wasAuth }] = useAuth()
 
   if (isAuth) {
     return <Redirect to="/" />

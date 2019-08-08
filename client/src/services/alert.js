@@ -1,7 +1,7 @@
 import React from 'react'
 import { AlertProvider } from 'components'
 
-import { useIntl } from './intl'
+import { useIntl as intl } from './intl'
 
 const alert = {
   push: alert => AlertProvider.pushAlert(alert),
@@ -15,8 +15,8 @@ const alert = {
     alert.push({
       message: (
         <>
-          <p>{err.message || useIntl(alert)('unknown')}</p>
-          <p>{useIntl(alert)('try_again')}</p>
+          <p>{err.message || intl(alert)('unknown')}</p>
+          <p>{intl(alert)('try_again')}</p>
         </>
       ),
       type: 'error',
