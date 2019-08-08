@@ -52,7 +52,7 @@ const UserProfile = ({ history }) => {
     try {
       setLoading(true)
       await deleteIdentity()
-      alert.pushSuccess(intl('alert.delete.success'))
+      alert.pushSuccess(intl('alert.delete_success'))
       history.push('/auth/logout')
     } catch (err) {
       alert.pushDefaultError(err)
