@@ -3,11 +3,10 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
 import { Redirect } from 'react-router-dom'
 
-import { isAuthenticated, isAdmin as isAdministrator } from 'contexts'
+import { useAuth } from 'contexts'
 
 const Authenticated = ({ location, reverse, redirect, children, admin }) => {
-  const isAuth = isAuthenticated()
-  const isAdmin = isAdministrator()
+  const [, { isAuth, isAdmin }] = useAuth()
   const currentURL = location.pathname + location.search
 
   if (admin) {

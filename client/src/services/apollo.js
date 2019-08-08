@@ -88,6 +88,9 @@ const useMutation = mutation => {
   let mounted = true
   useEffect(() => {
     return () => {
+      // This file will soon be replaced using @apollo/react-hooks
+      // This is currently working, so I won't try to change this
+      // eslint-disable-next-line
       mounted = false
     }
   }, [])
