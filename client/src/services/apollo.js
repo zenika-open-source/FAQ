@@ -62,7 +62,12 @@ const query = (query, { variables, skip, parse, ...queryProps } = {}) => Wrapped
 
     let parsedData = parse && data ? parse(data) : data
 
-    return <Wrapped {...props} {...{ loading: loading && !data, error, ...parsedData }} />
+    return (
+      <Wrapped
+        {...props}
+        {...{ loading: loading && Object.values(data).length === 0, error, ...parsedData }}
+      />
+    )
   }
   return ApolloQueryWrapper
 }
