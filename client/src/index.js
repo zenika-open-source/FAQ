@@ -2,18 +2,24 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 import { ApolloProvider } from 'react-apollo'
+import { persistCache } from 'apollo-cache-persist'
 
-import { apollo } from 'services'
+import { apollo, apolloCache } from 'services'
 
 import 'normalize.css'
 
 import App from './scenes/App'
 
-ReactDOM.render(
-  <ApolloProvider client={apollo}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </ApolloProvider>,
-  document.getElementById('root')
-)
+persistCache({
+  cache: apolloCache,
+  storage: window.localStorage
+}).then(() => {
+  ReactDOM.render(
+    <ApolloProvider client={apollo}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </ApolloProvider>,
+    document.getElementById('root')
+  )
+})
