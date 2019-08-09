@@ -9,7 +9,9 @@ const Footer = () => (
     </a>
     <span className="contact">
       <i className="material-icons">mail</i>
-      <a href="mailto:contact@faq.team">contact@faq.team</a>
+      <a href={`mailto:contact@${process.env.REACT_APP_FAQ_URL}`}>
+        contact@{process.env.REACT_APP_FAQ_URL}
+      </a>
     </span>
   </div>
 )

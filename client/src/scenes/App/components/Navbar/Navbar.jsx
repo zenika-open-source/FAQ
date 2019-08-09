@@ -33,12 +33,7 @@ const Navbar = () => {
             <span>{intl('report_bug')}</span>
           </a>
         ) : (
-          <a
-            href={
-              'mailto:thibaud.courtoison@zenika.com' // Using this address until bug@faq.team works again
-              /* `mailto:bug@${process.env.REACT_APP_FAQ_URL}` */
-            }
-          >
+          <a href={`mailto:bug@${process.env.REACT_APP_FAQ_URL}`}>
             <Icon material="mail" style={{ fontSize: '14px' }} />
             <span>{intl('report_bug')}</span>
           </a>
