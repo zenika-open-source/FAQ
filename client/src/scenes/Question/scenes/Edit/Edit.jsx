@@ -1,36 +1,33 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Redirect, Prompt } from 'react-router-dom'
-import difference from 'lodash/difference'
+import { useApolloClient } from '@apollo/react-hooks'
 
-import { compose } from 'react-apollo'
-import { submitQuestion, editQuestion } from './queries'
+import { SUBMIT_QUESTION, EDIT_QUESTION } from './queries'
 
 import { alert, useIntl } from 'services'
 
 import Card, { CardText, CardActions, PermanentClosableCard } from 'components/Card'
-import { withLoading, Loading, Button, Input, CtrlEnter, TagPicker } from 'components'
+import { Loading, Button, Input, CtrlEnter, TagPicker } from 'components'
 
 import { ActionMenu } from '../../components'
+
+import { canSubmit } from './helpers'
 
 import Tips from './components/Tips'
 
 import './Edit.css'
 
-class Edit extends Component {
-  constructor(props) {
-    super(props)
-
-    const { location, zNode } = this.props
-
+const Edit = ({ location, match, zNode }) => {
+  const [state, setState] = useState(() => {
     const passedQuestionText = location.state ? location.state.question : ''
     const initialQuestion = zNode ? zNode.question.title : passedQuestionText
     const initialTags = zNode ? zNode.tags.map(x => x.label) : []
 
-    this.state = {
+    return {
       nodeLoaded: false,
       initialQuestion: initialQuestion,
-      isEditing: !!this.props.match.params.slug,
+      isEditing: !!match.params.slug,
       question: initialQuestion,
       loadingSubmit: false,
       slug: null,
@@ -38,158 +35,150 @@ class Edit extends Component {
       tags: initialTags,
       showTips: PermanentClosableCard.isOpen('tips_question')
     }
+  })
+
+  const intl = useIntl(Edit)
+
+  const apollo = useApolloClient()
+
+  const { isEditing, loadingSubmit, slug, question, tags, showTips } = state
+
+  const toggleTips = value => () => {
+    setState(state => ({ ...state, showTips: value }))
+    PermanentClosableCard.setValue('tips_question', value)
   }
 
-  onTextChange = e => {
-    this.setState({ question: e.target.value })
-  }
+  const submitQuestion = () => {
+    setState(state => ({ ...state, loadingSubmit: true }))
 
-  submitForm = () => {
-    if (this.canSubmit()) {
-      const { isEditing } = this.state
-      isEditing ? this.editQuestion() : this.submitQuestion()
-    }
-  }
-
-  submitQuestion = () => {
-    const intl = useIntl(Edit)
-
-    const { submitQuestion } = this.props
-
-    this.setState({ loadingSubmit: true })
-
-    submitQuestion(this.state.question, this.state.tags)
+    apollo
+      .mutate({
+        mutation: SUBMIT_QUESTION,
+        variables: {
+          title: state.question,
+          tags: state.tags
+        }
+      })
       .then(({ data }) => {
-        this.setState({
+        setState(state => ({
+          ...state,
           slug: data.createQuestionAndTags.slug + '-' + data.createQuestionAndTags.node.id
-        })
+        }))
         alert.pushSuccess(intl('alert.submit_success'))
       })
       .catch(error => {
         alert.pushDefaultError(error)
-        this.setState({
+        setState(state => ({
+          ...state,
           loadingSubmit: false
-        })
+        }))
       })
   }
 
-  editQuestion = () => {
-    const intl = useIntl(Edit)
+  const editQuestion = () => {
+    setState(state => ({ ...state, loadingSubmit: true }))
 
-    const { editQuestion, zNode } = this.props
-
-    this.setState({ loadingSubmit: true })
-
-    editQuestion(
-      zNode.question.id,
-      this.state.question,
-      this.state.initialQuestion,
-      this.state.tags,
-      zNode.id
-    )
+    apollo
+      .mutate({
+        mutation: EDIT_QUESTION,
+        variables: {
+          questionId: zNode.question.id,
+          title: state.question,
+          previousTitle: state.initialQuestion,
+          tags: state.tags
+        }
+      })
       .then(({ data }) => {
-        this.setState({
+        setState(state => ({
+          ...state,
           slug: data.updateQuestionAndTags.slug + '-' + zNode.id
-        })
+        }))
         alert.pushSuccess(intl('alert.edit_success'))
       })
       .catch(error => {
         alert.pushDefaultError(error)
-        this.setState({
+        setState(state => ({
+          ...state,
           loadingSubmit: false
-        })
+        }))
       })
   }
 
-  toggleTips = value => () => {
-    this.setState({ showTips: value })
-    PermanentClosableCard.setValue('tips_question', value)
+  const submitForm = () => {
+    if (canSubmit(state)) {
+      const { isEditing } = state
+      isEditing ? editQuestion() : submitQuestion()
+    }
   }
 
-  onTagsChange = tags => this.setState({ tags })
+  const onTextChange = e => {
+    const question = e.target.value
+    setState(state => ({ ...state, question }))
+  }
+  const onTagsChange = tags => setState(state => ({ ...state, tags }))
 
-  canSubmit() {
-    const { question, initialQuestion, tags, initialTags } = this.state
-
-    return !(
-      question.length === 0 ||
-      (question === initialQuestion &&
-        difference(tags, initialTags).length === 0 &&
-        difference(initialTags, tags).length === 0)
-    )
+  if (slug) {
+    return <Redirect to={`/q/${slug}`} />
   }
 
-  render() {
-    const intl = useIntl(Edit)
+  if (loadingSubmit) {
+    return <Loading />
+  }
 
-    const { match, zNode } = this.props
-    const { isEditing, loadingSubmit, slug, question, tags, showTips } = this.state
+  if (isEditing && zNode === null) {
+    return <Redirect to={'/'} />
+  }
 
-    if (slug) {
-      return <Redirect to={`/q/${slug}`} />
-    }
-
-    if (loadingSubmit) {
-      return <Loading />
-    }
-
-    if (isEditing && zNode === null) {
-      return <Redirect to={'/'} />
-    }
-
-    return (
-      <div className="Edit">
-        {this.canSubmit() && <Prompt message={intl('prompt_warning')} />}
-        <ActionMenu
-          backLabel={!isEditing ? intl('home') : null}
-          backLink={isEditing ? `/q/${match.params.slug}` : '/'}
-          title={isEditing ? intl('title.edit') : intl('title.submit')}
-        >
-          {!showTips && (
-            <Button
-              link
-              icon="lightbulb_outline"
-              label={intl('show_tips')}
-              onClick={this.toggleTips(true)}
+  return (
+    <div className="Edit">
+      {canSubmit(state) && <Prompt message={intl('prompt_warning')} />}
+      <ActionMenu
+        backLabel={!isEditing ? intl('home') : null}
+        backLink={isEditing ? `/q/${match.params.slug}` : '/'}
+        title={isEditing ? intl('title.edit') : intl('title.submit')}
+      >
+        {!showTips && (
+          <Button
+            link
+            icon="lightbulb_outline"
+            label={intl('show_tips')}
+            onClick={toggleTips(true)}
+          />
+        )}
+      </ActionMenu>
+      <Tips close={toggleTips(false)} open={showTips} />
+      <Card>
+        <CardText style={{ display: 'flex', paddingBottom: 0 }}>
+          <CtrlEnter onCtrlEnterCallback={submitForm} style={{ width: '100%' }}>
+            <Input
+              autoFocus
+              icon="help"
+              placeholder={intl('placeholder')}
+              limit={100}
+              value={question}
+              onChange={onTextChange}
             />
-          )}
-        </ActionMenu>
-        <Tips close={this.toggleTips(false)} open={showTips} />
-        <Card>
-          <CardText style={{ display: 'flex', paddingBottom: 0 }}>
-            <CtrlEnter onCtrlEnterCallback={this.submitForm} style={{ width: '100%' }}>
-              <Input
-                autoFocus
-                icon="help"
-                placeholder={intl('placeholder')}
-                limit={100}
-                value={question}
-                onChange={this.onTextChange}
-              />
-            </CtrlEnter>
-          </CardText>
-          <CardText style={{ paddingBottom: '0.5rem' }}>
-            <TagPicker tags={tags} onChange={this.onTagsChange} />
-          </CardText>
-          <CardActions>
-            <Button
-              label={isEditing ? intl('validate.edit') : intl('validate.submit')}
-              disabled={!this.canSubmit()}
-              primary
-              raised
-              onClick={this.submitForm}
-            />
-          </CardActions>
-        </Card>
-      </div>
-    )
-  }
+          </CtrlEnter>
+        </CardText>
+        <CardText style={{ paddingBottom: '0.5rem' }}>
+          <TagPicker tags={tags} onChange={onTagsChange} />
+        </CardText>
+        <CardActions>
+          <Button
+            label={isEditing ? intl('validate.edit') : intl('validate.submit')}
+            disabled={!canSubmit(state)}
+            primary
+            raised
+            onClick={submitForm}
+          />
+        </CardActions>
+      </Card>
+    </div>
+  )
 }
 
 Edit.propTypes = {
   match: PropTypes.object.isRequired,
-  submitQuestion: PropTypes.func.isRequired,
-  editQuestion: PropTypes.func.isRequired,
   location: PropTypes.object.isRequired,
   zNode: PropTypes.object
 }
@@ -233,8 +222,4 @@ Edit.translations = {
   }
 }
 
-export default compose(
-  submitQuestion,
-  editQuestion,
-  withLoading()
-)(Edit)
+export default Edit

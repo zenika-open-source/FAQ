@@ -7,7 +7,7 @@ import './Views.css'
 
 const Views = ({ value }) => {
   const intl = useIntl(Views)
-  let formattedValue = value
+  let formattedValue = value || 0
   if (value > 1000) {
     const locale = window.navigator.language
     const formatter = new Intl.NumberFormat(locale, { maximumSignificantDigits: 2 })
@@ -22,7 +22,7 @@ const Views = ({ value }) => {
 }
 
 Views.propTypes = {
-  value: PropTypes.number.isRequired
+  value: PropTypes.number
 }
 
 Views.translations = {

@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Link, Redirect } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
+import { useMutation } from '@apollo/react-hooks'
 
-import { compose } from 'react-apollo'
-import { createFlag, removeFlag, incrementViewsCounter } from './queries'
+import { CREATE_FLAG, REMOVE_FLAG, INCREMENT_VIEWS_COUNTER } from './queries'
 
 import { markdown, useIntl } from 'services'
 
@@ -17,28 +17,24 @@ import Dropdown, { DropdownItem } from 'components/Dropdown'
 import { ActionMenu } from '../../components'
 import { Views, FlagsDropdown, Sources, Meta, Share, History } from './components'
 
-const Read = ({
-  history,
-  match,
-  zNode,
-  loading,
-  createFlag,
-  removeFlag,
-  incrementViewsCounter
-}) => {
+const Read = ({ history, match, zNode, loading }) => {
   const [loaded, setLoaded] = useState(false)
+  const [incremented, setIncremented] = useState(false)
+
+  const [createFlag] = useMutation(CREATE_FLAG)
+  const [removeFlag] = useMutation(REMOVE_FLAG)
+  const [incrementViewsCounter] = useMutation(INCREMENT_VIEWS_COUNTER)
+
   useEffect(() => {
-    if (!loaded) return
-    incrementViewsCounter(zNode.question.id)
-    // This code will soon be replaced using @apollo/react-hooks
-    // This is currently working, so I won't try to change this
-    // eslint-disable-next-line
-  }, [loaded])
+    if (!loaded || incremented) return
+    incrementViewsCounter({ variables: { questionId: zNode.question.id } })
+    setIncremented(true)
+  }, [loaded, incremented, incrementViewsCounter, zNode])
 
   useEffect(() => {
     if (!loaded && zNode) setLoaded(true)
-    // eslint-disable-next-line
-  }, [zNode])
+  }, [zNode, loaded])
+
   const intl = useIntl(Read)
 
   if (loading) return <Loading />
@@ -61,8 +57,8 @@ const Read = ({
       <ActionMenu backLink="/" backLabel={intl('menu.home')} goBack>
         <FlagsDropdown
           flags={zNode.flags}
-          onSelect={type => createFlag(type, zNode.id)}
-          onRemove={type => removeFlag(type, zNode.id)}
+          onSelect={type => createFlag({ variables: { type, nodeId: zNode.id } })}
+          onRemove={type => removeFlag({ variables: { type, nodeId: zNode.id } })}
         />
         <Dropdown button={<Button icon="edit" label={intl('menu.edit.label')} link />}>
           <DropdownItem icon="edit" onClick={() => history.push(`/q/${match.params.slug}/edit`)}>
@@ -125,9 +121,7 @@ Read.propTypes = {
   history: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
   zNode: PropTypes.object,
-  loading: PropTypes.bool.isRequired,
-  createFlag: PropTypes.func.isRequired,
-  removeFlag: PropTypes.func.isRequired
+  loading: PropTypes.bool.isRequired
 }
 
 Read.translations = {
@@ -157,8 +151,4 @@ Read.translations = {
   }
 }
 
-export default compose(
-  createFlag,
-  removeFlag,
-  incrementViewsCounter
-)(Read)
+export default Read

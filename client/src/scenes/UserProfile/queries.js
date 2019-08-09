@@ -1,7 +1,6 @@
 import gql from 'graphql-tag'
-import { graphql } from 'react-apollo'
 
-export const me = gql`
+export const GET_ME = gql`
   query {
     me {
       id
@@ -12,7 +11,7 @@ export const me = gql`
   }
 `
 
-export const updateIdentityMutation = gql`
+export const UPDATE_INDENTITY = gql`
   mutation updateIdentity($name: String!, $email: String!, $picture: String!) {
     updateMe(name: $name, email: $email, picture: $picture) {
       id
@@ -20,28 +19,10 @@ export const updateIdentityMutation = gql`
   }
 `
 
-export const updateIdentity = graphql(updateIdentityMutation, {
-  name: 'updateIdentity',
-  props: ({ updateIdentity }) => ({
-    updateIdentity: identity => {
-      return updateIdentity({ variables: identity })
-    }
-  })
-})
-
-export const deleteIdentityMutation = gql`
+export const DELETE_IDENTITY = gql`
   mutation deleteIdentity {
     forgetMe {
       id
     }
   }
 `
-
-export const deleteIdentity = graphql(deleteIdentityMutation, {
-  name: 'deleteIdentity',
-  props: ({ deleteIdentity }) => ({
-    deleteIdentity: identity => {
-      return deleteIdentity({ variables: {} })
-    }
-  })
-})
