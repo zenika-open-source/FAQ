@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Redirect, Prompt } from 'react-router-dom'
-import difference from 'lodash/difference'
 import { useApolloClient } from '@apollo/react-hooks'
 
 import { SUBMIT_QUESTION, EDIT_QUESTION } from './queries'

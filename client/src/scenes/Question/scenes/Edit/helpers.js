@@ -1,3 +1,5 @@
+import difference from 'lodash/difference'
+
 export const canSubmit = ({ question, initialQuestion, tags, initialTags }) =>
   !(
     question.length === 0 ||
