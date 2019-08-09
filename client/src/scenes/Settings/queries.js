@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-export const getConfiguration = gql`
+export const GET_CONFIGURATION = gql`
   query {
     configuration {
       title
@@ -15,7 +15,7 @@ export const getConfiguration = gql`
   }
 `
 
-export const updateConfigurationMutation = gql`
+export const UPDATE_CONFIGURATION = gql`
   mutation updateConfiguration(
     $title: String!
     $tags: Json!
@@ -39,7 +39,7 @@ export const updateConfigurationMutation = gql`
   }
 `
 
-export const regenerateSlackCommandKeyMutation = gql`
+export const REGENERATE_SLACK_COMMAND_KEY = gql`
   mutation regenerateSlackCommandKey {
     regenerateSlackCommandKey {
       slackCommandKey

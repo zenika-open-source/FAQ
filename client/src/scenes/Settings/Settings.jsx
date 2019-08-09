@@ -1,7 +1,7 @@
 import React, { useState, useReducer } from 'react'
+import { useMutation } from '@apollo/react-hooks'
 
 import { alert, useIntl } from 'services'
-import { useMutation } from 'services/apollo'
 
 import { useConfiguration } from 'contexts'
 
@@ -12,7 +12,7 @@ import { onListChangeActions } from 'helpers/onListChange'
 
 import { reducer, tagsToList, listToTags, synonymsToList, listToSynonyms } from './helpers'
 
-import { regenerateSlackCommandKeyMutation, updateConfigurationMutation } from './queries'
+import { REGENERATE_SLACK_COMMAND_KEY, UPDATE_CONFIGURATION } from './queries'
 
 import './Settings.scss'
 
@@ -32,8 +32,8 @@ const Settings = ({ configuration: conf }) => {
     bugReporting: conf.bugReporting || 'GITHUB'
   })
 
-  const [, mutateSlackCommandKey] = useMutation(regenerateSlackCommandKeyMutation)
-  const [, mutate] = useMutation(updateConfigurationMutation)
+  const [mutateSlackCommandKey] = useMutation(REGENERATE_SLACK_COMMAND_KEY)
+  const [mutate] = useMutation(UPDATE_CONFIGURATION)
 
   const generateSlackHook = () => {
     setSlackHookLoading(true)
@@ -52,16 +52,18 @@ const Settings = ({ configuration: conf }) => {
   const onSave = () => {
     setLoading(true)
     mutate({
-      title: state.title,
-      tags: listToTags(state.tags),
-      algoliaSynonyms: listToSynonyms(state.synonyms),
-      workplaceSharing: state.workplaceSharing,
-      authorizedDomains: state.authorizedDomains
-        .split(',')
-        .map(x => x.trim())
-        .filter(x => x),
-      bugReporting: state.bugReporting,
-      slackChannelHook: state.slackChannelHook
+      variables: {
+        title: state.title,
+        tags: listToTags(state.tags),
+        algoliaSynonyms: listToSynonyms(state.synonyms),
+        workplaceSharing: state.workplaceSharing,
+        authorizedDomains: state.authorizedDomains
+          .split(',')
+          .map(x => x.trim())
+          .filter(x => x),
+        bugReporting: state.bugReporting,
+        slackChannelHook: state.slackChannelHook
+      }
     })
       .then(() => {
         alert.pushSuccess(intl('alert_success'))

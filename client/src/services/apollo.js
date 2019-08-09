@@ -1,6 +1,6 @@
 /* eslint-disable react/display-name */
-import React, { useState, useEffect } from 'react'
-import { Query } from 'react-apollo'
+import React from 'react'
+import { useQuery } from '@apollo/react-hooks'
 
 import { ApolloClient } from 'apollo-client'
 import { InMemoryCache } from 'apollo-cache-inmemory'
@@ -52,54 +52,20 @@ const apollo = new ApolloClient({
 })
 
 const query = (query, { variables, skip, parse, ...queryProps } = {}) => Wrapped => {
-  const ApolloQueryWrapper = props => (
-    <Query
-      query={query}
-      skip={skip ? skip(props) : false}
-      variables={variables ? variables(props) : {}}
-      {...queryProps}
-    >
-      {({ loading, error, data }) => {
-        data = parse && data ? parse(data) : data
-        return <Wrapped {...props} {...{ loading, error, ...data }} />
-      }}
-    </Query>
-  )
+  const ApolloQueryWrapper = props => {
+    const { loading, error, data } = useQuery(query, {
+      variables: variables ? variables(props) : {},
+      skip: skip ? skip(props) : false,
+      pollInterval: 60 * 1000, // Poll every min
+      ...queryProps
+    })
+
+    let parsedData = parse && data ? parse(data) : data
+
+    return <Wrapped {...props} {...{ loading: loading && !data, error, ...parsedData }} />
+  }
   return ApolloQueryWrapper
 }
 
-const useMutation = mutation => {
-  const [response, setResponse] = useState({ loading: false, variables: null })
-
-  const mutate = variables => {
-    return new Promise((resolve, reject) => {
-      setResponse({ ...response, loading: true, variables })
-      apollo
-        .mutate({ mutation, variables })
-        .then(resp => {
-          if (mounted) {
-            const newResponse = { ...response, ...resp, loading: false }
-            setResponse(newResponse)
-            resolve(newResponse)
-          }
-        })
-        .catch(reject)
-    })
-  }
-
-  let mounted = true
-  useEffect(() => {
-    return () => {
-      // This file will soon be replaced using @apollo/react-hooks
-      // This is currently working, so I won't try to change this
-      // eslint-disable-next-line
-      mounted = false
-    }
-  }, [])
-
-  return [response, mutate]
-}
-
 export default apollo
-
-export { query, useMutation, apolloCache }
+export { query, apolloCache }

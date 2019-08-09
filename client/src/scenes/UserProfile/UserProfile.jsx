@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react'
+import { useMutation } from '@apollo/react-hooks'
 
 import { useUser } from 'contexts'
-import { alert, useMutation, useIntl } from 'services'
+import { alert, useIntl } from 'services'
 
 import { Avatar, Button, Card, Modal, Loading, Input } from 'components'
 
 import Logs from './components/Logs'
 
-import { updateIdentityMutation, deleteIdentityMutation } from './queries'
+import { UPDATE_INDENTITY, DELETE_IDENTITY } from './queries'
 
 const UserProfile = ({ history }) => {
   const intl = useIntl(UserProfile)
@@ -18,11 +19,11 @@ const UserProfile = ({ history }) => {
   const [name, setName] = useState(user.name)
   const [email, setEmail] = useState(user.email)
   const [picture, setPicture] = useState(user.picture)
-  const [, updateIdentity] = useMutation(updateIdentityMutation)
+  const [updateIdentity] = useMutation(UPDATE_INDENTITY)
 
   const [goodbye, setGoodbye] = useState('')
   const [modalActive, setModalActive] = useState(false)
-  const [, deleteIdentity] = useMutation(deleteIdentityMutation)
+  const [deleteIdentity] = useMutation(DELETE_IDENTITY)
 
   useEffect(() => {
     if (user && user.name) {
@@ -36,9 +37,7 @@ const UserProfile = ({ history }) => {
     try {
       setLoading(true)
       await updateIdentity({
-        name,
-        email,
-        picture
+        variables: { name, email, picture }
       })
       alert.pushSuccess(intl('alert.update_success'))
     } catch (err) {
@@ -56,7 +55,6 @@ const UserProfile = ({ history }) => {
       history.push('/auth/logout')
     } catch (err) {
       alert.pushDefaultError(err)
-    } finally {
       setModalActive(false)
       setLoading(false)
     }
@@ -123,7 +121,9 @@ const UserProfile = ({ history }) => {
           <hr />
           <p>
             <span style={{ marginRight: '5px' }}>{intl('gdpr.contact')}</span>
-            <a href="mailto:mydata@zenika.com">mydata@zenika.com</a>
+            <a href={`mailto:contact@${process.env.REACT_APP_FAQ_URL}`}>
+              contact@{process.env.REACT_APP_FAQ_URL}
+            </a>
           </p>
           <hr />
           <p>

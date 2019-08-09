@@ -1,7 +1,6 @@
 import gql from 'graphql-tag'
-import { graphql } from 'react-apollo'
 
-export const createFlagMutation = gql`
+export const CREATE_FLAG = gql`
   mutation($type: String!, $nodeId: ID!) {
     addFlag(type: $type, nodeId: $nodeId) {
       id
@@ -18,7 +17,7 @@ export const createFlagMutation = gql`
   }
 `
 
-export const removeFlagMutation = gql`
+export const REMOVE_FLAG = gql`
   mutation($type: String!, $nodeId: ID!) {
     removeFlag(type: $type, nodeId: $nodeId) {
       id
@@ -35,7 +34,7 @@ export const removeFlagMutation = gql`
   }
 `
 
-export const incrementViewsCounterMutation = gql`
+export const INCREMENT_VIEWS_COUNTER = gql`
   mutation($questionId: ID!) {
     incrementQuestionViewsCounter(id: $questionId) {
       id
@@ -43,44 +42,3 @@ export const incrementViewsCounterMutation = gql`
     }
   }
 `
-
-export const createFlag = graphql(createFlagMutation, {
-  name: 'createFlag',
-  props: ({ createFlag }) => ({
-    createFlag: (type, nodeId) => {
-      return createFlag({
-        variables: {
-          type,
-          nodeId
-        }
-      })
-    }
-  })
-})
-
-export const removeFlag = graphql(removeFlagMutation, {
-  name: 'removeFlag',
-  props: ({ removeFlag }) => ({
-    removeFlag: (type, nodeId) => {
-      return removeFlag({
-        variables: {
-          type,
-          nodeId
-        }
-      })
-    }
-  })
-})
-
-export const incrementViewsCounter = graphql(incrementViewsCounterMutation, {
-  name: 'incrementViewsCounter',
-  props: ({ incrementViewsCounter }) => ({
-    incrementViewsCounter: questionId => {
-      return incrementViewsCounter({
-        variables: {
-          questionId
-        }
-      })
-    }
-  })
-})

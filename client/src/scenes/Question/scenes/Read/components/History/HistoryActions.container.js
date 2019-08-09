@@ -4,7 +4,7 @@ import { routing } from 'services'
 import { query } from 'services/apollo'
 import { withError, withPagination } from 'components'
 
-import { loadHistoryQuery } from './queries'
+import { LOAD_HISTORY } from './queries'
 
 import HistoryActions from './HistoryActions'
 
@@ -12,7 +12,7 @@ const ENTRIES_PER_PAGE = 10
 
 export default compose(
   withRouter,
-  query(loadHistoryQuery, {
+  query(LOAD_HISTORY, {
     variables: props => {
       const { page } = unserialize(props.location.search)
       return {

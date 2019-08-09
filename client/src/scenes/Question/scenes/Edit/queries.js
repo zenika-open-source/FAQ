@@ -1,9 +1,8 @@
 import gql from 'graphql-tag'
-import { graphql } from 'react-apollo'
 
 import { zNodeFragment } from '../../queries'
 
-export const submitQuestionMutation = gql`
+export const SUBMIT_QUESTION = gql`
   mutation($title: String!, $tags: [String!]!) {
     createQuestionAndTags(title: $title, tags: $tags) {
       id
@@ -20,7 +19,7 @@ export const submitQuestionMutation = gql`
   }
 `
 
-export const editQuestionMutation = gql`
+export const EDIT_QUESTION = gql`
   mutation($questionId: ID!, $title: String!, $previousTitle: String!, $tags: [String!]!) {
     updateQuestionAndTags(
       id: $questionId
@@ -44,33 +43,3 @@ export const editQuestionMutation = gql`
     }
   }
 `
-
-export const submitQuestion = graphql(submitQuestionMutation, {
-  name: 'submitQuestion',
-  props: ({ submitQuestion }) => ({
-    submitQuestion: (title, tags) => {
-      return submitQuestion({
-        variables: {
-          title,
-          tags
-        }
-      })
-    }
-  })
-})
-
-export const editQuestion = graphql(editQuestionMutation, {
-  name: 'editQuestion',
-  props: ({ editQuestion }) => ({
-    editQuestion: (questionId, title, previousTitle, tags) => {
-      return editQuestion({
-        variables: {
-          questionId,
-          title,
-          previousTitle,
-          tags
-        }
-      })
-    }
-  })
-})

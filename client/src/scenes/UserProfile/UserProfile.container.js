@@ -2,12 +2,12 @@ import { compose } from 'helpers'
 import { query } from 'services/apollo'
 import { withLoading, withError } from 'components'
 
-import { me } from './queries'
+import { GET_ME } from './queries'
 
 import UserProfile from './UserProfile'
 
 export default compose(
-  query(me),
+  query(GET_ME),
   withLoading(),
   withError()
 )(UserProfile)

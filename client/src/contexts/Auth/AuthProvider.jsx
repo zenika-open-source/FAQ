@@ -1,9 +1,10 @@
 import React, { createContext, useReducer, useEffect, useMemo } from 'react'
 import { withRouter } from 'react-router'
+import { useApolloClient } from '@apollo/react-hooks'
 
 import { alert, auth } from 'services'
 
-import { authUser } from './queries'
+import { AUTHENTICATE_MUTATION } from './queries'
 
 import { useConfiguration } from '../Configuration'
 
@@ -43,7 +44,7 @@ const reducer = (state, action) => {
   }
 }
 
-const AuthProvider = ({ history, authQL, children }) => {
+const AuthProvider = ({ history, children }) => {
   const conf = useConfiguration()
 
   const init = () => {
@@ -81,16 +82,20 @@ const AuthProvider = ({ history, authQL, children }) => {
     [history]
   )
 
+  const apollo = useApolloClient()
+
   const parseHash = useMemo(
     () => async hash => {
       try {
         const session = await auth.parseHash(hash)
 
         const { redirectTo } = auth.getStateBeforeLogin()
-
         const {
           data: { authenticate }
-        } = await authQL(session.idToken)
+        } = await apollo.mutate({
+          mutation: AUTHENTICATE_MUTATION,
+          variables: { idToken: session.idToken }
+        })
 
         dispatch({ type: 'login', data: { session, user: authenticate } })
 
@@ -104,7 +109,7 @@ const AuthProvider = ({ history, authQL, children }) => {
         history.push('/auth/login')
       }
     },
-    [authQL, history]
+    [apollo, history]
   )
 
   const renewAuth = useMemo(() => {
@@ -153,5 +158,5 @@ const AuthProvider = ({ history, authQL, children }) => {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
-export default withRouter(authUser(AuthProvider))
+export default withRouter(AuthProvider)
 export { AuthContext }
