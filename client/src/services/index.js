@@ -1,5 +1,5 @@
 export { default as alert } from './alert'
-export { default as apollo, useMutation } from './apollo'
+export { default as apollo, apolloCache, useMutation } from './apollo'
 export { default as auth } from './auth'
 export * from './intl'
 export { default as markdown } from './markdown'

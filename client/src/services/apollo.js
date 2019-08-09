@@ -11,6 +11,8 @@ import { setContext } from 'apollo-link-context'
 
 import routing from './routing'
 
+const apolloCache = new InMemoryCache()
+
 const apollo = new ApolloClient({
   link: ApolloLink.from([
     onError(({ graphQLErrors, networkError }) => {
@@ -41,7 +43,7 @@ const apollo = new ApolloClient({
       uri: process.env.REACT_APP_GRAPHQL_ENDPOINT
     })
   ]),
-  cache: new InMemoryCache(),
+  cache: apolloCache,
   defaultOptions: {
     watchQuery: {
       fetchPolicy: 'cache-and-network'
@@ -100,4 +102,4 @@ const useMutation = mutation => {
 
 export default apollo
 
-export { query, useMutation }
+export { query, useMutation, apolloCache }
