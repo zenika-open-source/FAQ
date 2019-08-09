@@ -8,7 +8,7 @@ import UserProfile from 'scenes/UserProfile'
 import Settings from 'scenes/Settings'
 import NotFound from 'scenes/NotFound'
 
-import { PrivateRoute, Loading } from 'components'
+import { PrivateRoute, Loading, ErrorBoundary } from 'components'
 
 import { useIntl } from 'services'
 import { useConfiguration, useAuth } from 'contexts'
@@ -24,14 +24,16 @@ const AppBody = () => {
       {conf.loading || !auth.ready ? (
         <Loading text={intl('loading')} />
       ) : (
-        <Switch>
-          <PrivateRoute exact path="/" component={Home} />
-          <Route path="/auth" component={Auth} />
-          <PrivateRoute path="/q" component={Question} />
-          <PrivateRoute path="/user-profile" component={UserProfile} />
-          <PrivateRoute path="/settings" component={Settings} admin />
-          <PrivateRoute component={NotFound} />
-        </Switch>
+        <ErrorBoundary>
+          <Switch>
+            <PrivateRoute exact path="/" component={Home} />
+            <Route path="/auth" component={Auth} />
+            <PrivateRoute path="/q" component={Question} />
+            <PrivateRoute path="/user-profile" component={UserProfile} />
+            <PrivateRoute path="/settings" component={Settings} admin />
+            <PrivateRoute component={NotFound} />
+          </Switch>
+        </ErrorBoundary>
       )}
     </div>
   )
