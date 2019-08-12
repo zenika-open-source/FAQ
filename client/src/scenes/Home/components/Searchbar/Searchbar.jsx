@@ -5,10 +5,23 @@ import cn from 'classnames'
 import { useIntl } from 'services'
 import { Input, TagPicker } from 'components'
 
+import { useConfiguration } from 'contexts'
+
 import './Searchbar.css'
+
+// TMP_TAGS
 
 const Searchbar = ({ text, tags, loading, onTextChange, onTagsChange }) => {
   const intl = useIntl(Searchbar)
+  const conf = useConfiguration()
+
+  const tagLabels = tags
+    .map(tag =>
+      conf.tagCategories
+        .reduce((acc, cat) => acc.concat(cat.labels), [])
+        .find(label => label.name === tag)
+    )
+    .filter(l => l)
 
   return (
     <div className="searchbar">
@@ -34,7 +47,7 @@ const Searchbar = ({ text, tags, loading, onTextChange, onTagsChange }) => {
         <TagPicker
           label={intl('filter.tags')}
           icon="local_offer"
-          tags={tags}
+          tags={tagLabels}
           onChange={onTagsChange}
         />
       </div>

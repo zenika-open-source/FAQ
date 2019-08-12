@@ -17,6 +17,7 @@ export { default as Pagination, DefaultPagination, withPagination } from './Pagi
 export { default as PairInputList } from './PairInputList'
 export { default as PrivateRoute } from './PrivateRoute'
 export { default as Radio } from './Radio'
+export { default as Tabs, Tab } from './Tabs'
 export { default as TagPicker } from './TagPicker'
 export { default as Tags } from './Tags'
 export { default as Tips } from './Tips'

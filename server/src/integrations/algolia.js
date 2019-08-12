@@ -1,5 +1,7 @@
 const algoliasearch = require('algoliasearch')
 
+// TMP_TAGS
+
 const nodeQuery = `
 {
   objectID: id
@@ -12,6 +14,9 @@ const nodeQuery = `
   }
   tags {
     label
+    tagLabel {
+      name
+    }
   }
   flags {
     type
@@ -52,7 +57,7 @@ class Algolia {
 
     return {
       ...node,
-      tag: tags.map(t => t.label),
+      tag: tags.map(t => t.tagLabel.name),
       flag: flags.map(f => f.type)
     }
   }

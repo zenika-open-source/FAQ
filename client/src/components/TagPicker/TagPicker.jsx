@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import cn from 'classnames'
 import PropTypes from 'prop-types'
-import map from 'lodash/map'
+import sortBy from 'lodash/sortBy'
 
 import { useConfiguration } from 'contexts'
 
@@ -11,21 +11,26 @@ import { Button } from 'components'
 
 import './TagPicker.css'
 
+// TMP_TAGS
+
 const TagPicker = ({ label, icon, tags, onChange }) => {
   const conf = useConfiguration()
   const [opened, setOpened] = useState(false)
   const ref = useClickOutside(() => setOpened(false))
 
-  const tagList = conf ? conf.tags : {}
+  const tagCategories = conf ? conf.tagCategories : []
 
   return (
     <div className="tagpicker">
       <h3>{label || 'Tags:'}</h3>
       <div className="tags-list">
         {tags.map(tag => (
-          <div key={tag} className="tag">
-            <span style={{ fontVariant: 'small-caps', paddingBottom: '1px' }}>{tag}</span>
-            <i className="material-icons" onClick={() => onChange(tags.filter(t => t !== tag))}>
+          <div key={tag.id} className="tag">
+            <span style={{ fontVariant: 'small-caps', paddingBottom: '1px' }}>{tag.name}</span>
+            <i
+              className="material-icons"
+              onClick={() => onChange(tags.filter(t => t.id !== tag.id))}
+            >
               close
             </i>
           </div>
@@ -40,21 +45,23 @@ const TagPicker = ({ label, icon, tags, onChange }) => {
         />
         <div ref={ref} className="picker" style={{ display: opened ? 'flex' : 'none' }}>
           <div className="picker-body">
-            {map(tagList, (category, name) => (
-              <div key={name} className="category">
-                {category.map(tag => {
-                  const isSelected = tags.includes(tag)
+            {sortBy(tagCategories, ['order']).map(category => (
+              <div key={category.name} className="category">
+                {sortBy(category.labels, ['order']).map(label => {
+                  const isSelected = !!tags.find(t => t.id === label.id)
                   return (
                     <div
-                      key={tag}
+                      key={label.name}
                       className={cn('category-item', {
                         selected: isSelected
                       })}
                       onClick={() =>
-                        onChange(isSelected ? tags.filter(t => t !== tag) : [...tags, tag])
+                        onChange(
+                          isSelected ? tags.filter(t => t.id !== label.id) : [...tags, label]
+                        )
                       }
                     >
-                      {tag}
+                      {label.name}
                     </div>
                   )
                 })}

@@ -1,8 +1,9 @@
 const { history, ctxUser, slugify } = require('../helpers')
 const { algolia, slack } = require('../integrations')
 
-const confTagList = ctx =>
-  Object.values(ctx.prisma._meta.configuration.tags).reduce((acc, x) => acc.concat(x), [])
+// TMP_TAGS
+const confTagLabels = ctx =>
+  ctx.prisma._meta.configuration.tagCategories.reduce((acc, cat) => acc.concat(cat.labels), [])
 
 module.exports = {
   Query: {
@@ -10,7 +11,7 @@ module.exports = {
   },
   Mutation: {
     createQuestionAndTags: async (_, { title, tags }, ctx, info) => {
-      const tagList = confTagList(ctx)
+      const tagLabels = confTagLabels(ctx)
 
       const node = await ctx.prisma.mutation.createZNode(
         {
@@ -24,9 +25,9 @@ module.exports = {
             },
             tags: {
               create: tags
-                .filter(label => tagList.includes(label))
-                .map(label => ({
-                  label,
+                .filter(tagLabelId => !!tagLabels.find(label => label.id === tagLabelId))
+                .map(tagLabelId => ({
+                  tagLabel: { connect: { id: tagLabelId } },
                   user: { connect: { id: ctxUser(ctx).id } }
                 }))
             },
@@ -51,7 +52,10 @@ module.exports = {
       await history.push(ctx, {
         action: 'CREATED',
         model: 'Question',
-        meta: { title, tags },
+        meta: {
+          title,
+          tags: tags.map(id => tagLabels.find(label => label.id === id).name)
+        },
         nodeId: node.id
       })
 
@@ -60,33 +64,8 @@ module.exports = {
 
       return ctx.prisma.query.question({ where: { id: node.question.id } }, info)
     },
-    incrementQuestionViewsCounter: async (_, { id }, ctx, info) => {
-      const { node } = await ctx.prisma.query.question(
-        { where: { id } },
-        `
-        {
-          node {
-            id
-            question {
-              views
-            }
-          }
-        }
-        `
-      )
-
-      return ctx.prisma.mutation.updateQuestion(
-        {
-          where: { id },
-          data: {
-            views: node.question.views + 1
-          }
-        },
-        info
-      )
-    },
     updateQuestionAndTags: async (_, { id, title, previousTitle, tags }, ctx, info) => {
-      const tagList = confTagList(ctx)
+      const tagLabels = confTagLabels(ctx)
 
       const node = (await ctx.prisma.query.question(
         { where: { id } },
@@ -99,7 +78,10 @@ module.exports = {
             }
             tags {
               id
-              label
+              tagLabel {
+                id
+                name
+              }
             }
           }
         }
@@ -111,34 +93,39 @@ module.exports = {
         )
       }
 
-      const oldTags = node.tags
-      const newTags = tags
+      const oldLabels = node.tags.map(tag => tag.tagLabel.id)
+      const newLabels = tags
 
-      const tagsToAdd = newTags.filter(newTag => !oldTags.map(t => t.label).includes(newTag))
-      const tagsToRemove = oldTags.filter(oldTag => !newTags.includes(oldTag.label))
+      const tagsToAdd = newLabels.filter(newLabel => !oldLabels.includes(newLabel))
+      const tagsToRemove = oldLabels.filter(oldLabel => !newLabels.includes(oldLabel))
 
       const mutationsToAdd = tagsToAdd
-        .filter(label => tagList.includes(label))
-        .map(label =>
+        .filter(labelId => tagLabels.find(label => label.id === labelId))
+        .map(labelId =>
           ctx.prisma.mutation.createTag({
             data: {
-              label,
+              tagLabel: { connect: { id: labelId } },
               node: { connect: { id: node.id } },
               user: { connect: { id: ctxUser(ctx).id } }
             }
           })
         )
 
-      const mutationsToRemove = tagsToRemove.map(tag =>
-        ctx.prisma.mutation.deleteTag({ where: { id: tag.id } })
+      const mutationsToRemove = tagsToRemove.map(labelId =>
+        ctx.prisma.mutation.deleteManyTags({
+          where: {
+            node: { id: node.id },
+            tagLabel: { id: labelId }
+          }
+        })
       )
 
       await Promise.all([...mutationsToAdd, ...mutationsToRemove])
 
       const meta = {
         tagsChanges: {
-          added: tagsToAdd,
-          removed: tagsToRemove.map(t => t.label)
+          added: tagsToAdd.map(id => tagLabels.find(label => label.id === id).name),
+          removed: tagsToRemove.map(id => tagLabels.find(label => label.id === id).name)
         }
       }
 
@@ -166,6 +153,31 @@ module.exports = {
       return ctx.prisma.query.question(
         {
           where: { id }
+        },
+        info
+      )
+    },
+    incrementQuestionViewsCounter: async (_, { id }, ctx, info) => {
+      const { node } = await ctx.prisma.query.question(
+        { where: { id } },
+        `
+        {
+          node {
+            id
+            question {
+              views
+            }
+          }
+        }
+        `
+      )
+
+      return ctx.prisma.mutation.updateQuestion(
+        {
+          where: { id },
+          data: {
+            views: node.question.views + 1
+          }
         },
         info
       )

@@ -4,6 +4,8 @@ const algolia = require('./algolia')
 
 const { emojify } = require('../helpers')
 
+// TMP_TAGS
+
 class Slack {
   async sendToChannel(ctx, nodeId) {
     const {
@@ -28,14 +30,16 @@ class Slack {
           slug
         }
         tags {
-          label
+          tagLabel {
+            name
+          }
         }
       }
       `
     )
 
     const url = origin + `/q/${node.question.slug}-${node.id}`
-    const tags = node.tags.map(tag => `#${tag.label}`).join(', ')
+    const tags = node.tags.map(tag => `#${tag.tagLabel.name}`).join(', ')
 
     const title = emojify(this.escapeText(node.question.title))
 

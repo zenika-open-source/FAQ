@@ -1,6 +1,6 @@
 const { algolia } = require('../integrations')
 const { refreshConfiguration } = require('../middlewares/configuration')
-const { randomString } = require('../helpers')
+const { randomString, diffTags } = require('../helpers')
 
 module.exports = {
   Query: {
@@ -8,7 +8,30 @@ module.exports = {
       ctx.prisma.query.configuration({ where: { name: 'default' } }, info)
   },
   Mutation: {
-    updateConfiguration: async (_, { authorizedDomains, ...args }, ctx, info) => {
+    updateConfiguration: async (_, { authorizedDomains, tagCategories, ...args }, ctx, info) => {
+      const oldTagCategories = await ctx.prisma.query.tagCategories(
+        null,
+        `
+        {
+          id
+          name
+          order
+          labels {
+            id
+            name
+            order
+          }
+        }
+        `
+      )
+
+      await diffTags(
+        ctx,
+        oldTagCategories,
+        JSON.parse(tagCategories),
+        ctx.prisma._meta.configuration.id
+      )
+
       const configuration = await ctx.prisma.mutation.updateConfiguration(
         {
           where: { name: 'default' },

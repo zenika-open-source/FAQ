@@ -59,6 +59,11 @@
       padding: 1rem;
       border: 1px solid #dbdbdb;
       border-top: 0;
+      display: none;
+
+      &.is-active {
+        display: block;
+      }
     }
   }
 }

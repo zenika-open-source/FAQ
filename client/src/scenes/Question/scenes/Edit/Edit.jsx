@@ -18,11 +18,13 @@ import Tips from './components/Tips'
 
 import './Edit.css'
 
+// TMP_TAGS
+
 const Edit = ({ location, match, zNode }) => {
   const [state, setState] = useState(() => {
     const passedQuestionText = location.state ? location.state.question : ''
     const initialQuestion = zNode ? zNode.question.title : passedQuestionText
-    const initialTags = zNode ? zNode.tags.map(x => x.label) : []
+    const initialTags = zNode ? zNode.tags.map(tag => tag.tagLabel) : []
 
     return {
       nodeLoaded: false,
@@ -56,7 +58,7 @@ const Edit = ({ location, match, zNode }) => {
         mutation: SUBMIT_QUESTION,
         variables: {
           title: state.question,
-          tags: state.tags
+          tags: state.tags.map(tag => tag.id)
         }
       })
       .then(({ data }) => {
@@ -85,7 +87,7 @@ const Edit = ({ location, match, zNode }) => {
           questionId: zNode.question.id,
           title: state.question,
           previousTitle: state.initialQuestion,
-          tags: state.tags
+          tags: state.tags.map(tag => tag.id)
         }
       })
       .then(({ data }) => {

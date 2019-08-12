@@ -1,4 +1,4 @@
-# import ZNode, Question, Answer, Source, Flag, Tag, HistoryAction, BugReporting from './generated/prisma.graphql'
+# import ZNode, Question, Answer, Source, Flag, Tag, TagCategory, HistoryAction, BugReporting from './generated/prisma.graphql'
 
 # import ZNodeOrderByInput, ZNodeConnection, ZNodeWhereUniqueInput from './generated/prisma.graphql'
 # import HistoryActionWhereInput from './generated/prisma.graphql'
@@ -36,8 +36,8 @@ type Mutation {
   forgetMe: User
   authenticate(idToken: String!): User
 
-  createQuestionAndTags(title: String!, tags: [String!]!): Question
-  updateQuestionAndTags(id: ID!, title: String!, previousTitle: String!, tags: [String!]!): Question
+  createQuestionAndTags(title: String!, tags: [ID!]!): Question
+  updateQuestionAndTags(id: ID!, title: String!, previousTitle: String!, tags: [ID!]!): Question
   incrementQuestionViewsCounter(id: ID!): Question
 
   createAnswerAndSources(content: String, sources: String!, nodeId: ID!): Answer
@@ -53,7 +53,7 @@ type Mutation {
 
   updateConfiguration(
     title: String!
-    tags: Json!
+    tagCategories: Json!
     algoliaSynonyms: Json!
     workplaceSharing: Boolean!
     authorizedDomains: [String!]!
@@ -91,6 +91,8 @@ type User {
 }
 
 type Configuration {
+  id: ID!
+
   title: String!
 
   auth0Domain: String!
@@ -105,6 +107,8 @@ type Configuration {
   slackCommandKey: String @admin
 
   tags: Json
+  tagCategories: [TagCategory!]!
+  # TMP_TAGS
 
   workplaceSharing: Boolean
 

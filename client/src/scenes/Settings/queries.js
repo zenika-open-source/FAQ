@@ -1,16 +1,30 @@
 import gql from 'graphql-tag'
 
+const CONFIGURATION_FRAGMENT = `
+  id
+  title
+  tagCategories {
+    id
+    order
+    name
+    labels {
+      id
+      order
+      name
+    }
+  }
+  algoliaSynonyms
+  workplaceSharing
+  authorizedDomains
+  bugReporting
+  slackChannelHook
+  slackCommandKey
+`
+
 export const GET_CONFIGURATION = gql`
   query {
     configuration {
-      title
-      tags
-      algoliaSynonyms
-      workplaceSharing
-      authorizedDomains
-      bugReporting
-      slackChannelHook
-      slackCommandKey
+      ${CONFIGURATION_FRAGMENT}
     }
   }
 `
@@ -18,7 +32,7 @@ export const GET_CONFIGURATION = gql`
 export const UPDATE_CONFIGURATION = gql`
   mutation updateConfiguration(
     $title: String!
-    $tags: Json!
+    $tagCategories: Json!
     $algoliaSynonyms: Json!
     $workplaceSharing: Boolean!
     $authorizedDomains: [String!]!
@@ -27,14 +41,14 @@ export const UPDATE_CONFIGURATION = gql`
   ) {
     updateConfiguration(
       title: $title
-      tags: $tags
+      tagCategories: $tagCategories
       algoliaSynonyms: $algoliaSynonyms
       workplaceSharing: $workplaceSharing
       authorizedDomains: $authorizedDomains
       bugReporting: $bugReporting
       slackChannelHook: $slackChannelHook
     ) {
-      title
+      ${CONFIGURATION_FRAGMENT}
     }
   }
 `

@@ -5,12 +5,14 @@ import { alert, useIntl } from 'services'
 
 import { useConfiguration } from 'contexts'
 
-import { Input, Checkbox, Button, PairInputList, Icon, Radio } from 'components'
+import { Tabs, Tab, Input, Checkbox, Button, PairInputList, Icon, Radio } from 'components'
 import Card, { CardTitle, CardText, CardActions } from 'components/Card'
 
 import { onListChangeActions } from 'helpers/onListChange'
 
-import { reducer, tagsToList, listToTags, synonymsToList, listToSynonyms } from './helpers'
+import { TagsEditor } from './components'
+
+import { reducer, serializeTags, synonymsToList, listToSynonyms } from './helpers'
 
 import { REGENERATE_SLACK_COMMAND_KEY, UPDATE_CONFIGURATION } from './queries'
 
@@ -26,7 +28,6 @@ const Settings = ({ configuration: conf }) => {
 
   const [state, dispatch] = useReducer(reducer, {
     ...conf,
-    tags: tagsToList(conf.tags),
     synonyms: synonymsToList(conf.algoliaSynonyms),
     authorizedDomains: conf.authorizedDomains.join(', '),
     bugReporting: conf.bugReporting || 'GITHUB'
@@ -54,7 +55,7 @@ const Settings = ({ configuration: conf }) => {
     mutate({
       variables: {
         title: state.title,
-        tags: listToTags(state.tags),
+        tagCategories: serializeTags(state.tagCategories),
         algoliaSynonyms: listToSynonyms(state.synonyms),
         workplaceSharing: state.workplaceSharing,
         authorizedDomains: state.authorizedDomains
@@ -77,6 +78,8 @@ const Settings = ({ configuration: conf }) => {
       })
   }
 
+  const onTagsChange = tags => dispatch({ type: 'change_tags', data: tags })
+
   return (
     <div>
       <Card>
@@ -86,117 +89,118 @@ const Settings = ({ configuration: conf }) => {
           </h1>
         </CardTitle>
         <CardText>
-          <h2>{intl('settings.title.title')}</h2>
-          <br />
-          <div className="inline-input">
-            <Icon material="home" />
-            <Input
-              value={state.title}
-              onChange={e => dispatch({ type: 'change_title', data: e.target.value })}
-              placeholder={intl('settings.title.placeholder')}
-              disabled={loading}
-            />
-          </div>
-          <br />
-          <hr />
-          <h2>{intl('settings.tags.title')}</h2>
-          <br />
-          <PairInputList
-            pairs={state.tags}
-            options={{
-              icons: { line: 'local_offer', value: 'list' },
-              labels: intl('settings.tags.labels')
-            }}
-            actions={onListChangeActions('tags', dispatch)}
-            disabled={loading}
-          />
-          <hr />
-          <h2>{intl('settings.synonyms.title')}</h2>
-          <br />
-          <PairInputList
-            pairs={state.synonyms}
-            options={{
-              icons: { line: 'loop', value: 'list' },
-              labels: intl('settings.synonyms.labels')
-            }}
-            actions={onListChangeActions('synonyms', dispatch)}
-            disabled={loading}
-          />
-          <hr />
-          <h2>{intl('settings.integrations.title')}</h2>
-          <br />
-          <div style={{ marginLeft: '1rem' }}>
-            <Checkbox
-              label={intl('settings.integrations.workplace.label')}
-              checked={state.workplaceSharing}
-              onChange={e =>
-                dispatch({
-                  type: 'toggle_workplace',
-                  data: e.target.checked
-                })
-              }
-              disabled={loading}
-            />
-          </div>
-          <div className="inline-input" style={{ marginTop: '1em' }}>
-            <i style={{ marginLeft: '1em' }}>{intl('settings.integrations.slack.channel')}</i>
-            <Input
-              value={state.slackChannelHook || ''}
-              style={{ flex: 1, marginRight: '1rem' }}
-              onChange={e => dispatch({ type: 'change_slack_channelhook', data: e.target.value })}
-            />
-          </div>
-          <div className="inline-input" style={{ marginTop: '1em' }}>
-            <i style={{ marginLeft: '1em' }}>{intl('settings.integrations.slack.command')}</i>
-            <Input
-              value={
-                state.slackCommandKey
-                  ? `https://${window.location.host}/rest/integration/slack/${state.slackCommandKey}`
-                  : ''
-              }
-              disabled
-              small
-              style={{ flex: 1, marginLeft: '1rem', marginRight: '1rem' }}
-            />
-            <Button
-              label={
-                (state.slackCommandKey
-                  ? intl('settings.integrations.slack.regenerate')
-                  : intl('settings.integrations.slack.generate')) + ' URL'
-              }
-              link
-              loading={slackHookLoading}
-              onClick={generateSlackHook}
-            />
-          </div>
-          <br />
-          <hr />
-          <h2>{intl('settings.domains.title')}</h2>
-          <br />
-          <div className="inline-input">
-            <Icon material="domain" />
-            <Input
-              style={{ flex: 1 }}
-              value={state.authorizedDomains}
-              onChange={e => dispatch({ type: 'change_domains', data: e.target.value })}
-              placeholder={intl('settings.domains.placeholder')}
-              disabled={loading}
-            />
-          </div>
-          <hr />
-          <h2>{intl('settings.bug_reporting.title')}</h2>
-          <br />
-          <div style={{ marginLeft: '1rem' }}>
-            <Radio.Group
-              name="bug_reporting"
-              selected={state.bugReporting}
-              onChange={data => dispatch({ type: 'change_bug_reporting', data })}
-              disabled={loading}
-            >
-              <Radio label={intl('settings.bug_reporting.mail')} value="MAIL" />
-              <Radio label={intl('settings.bug_reporting.github')} value="GITHUB" />
-            </Radio.Group>
-          </div>
+          <Tabs>
+            <Tab label={intl('settings.general.tab')}>
+              <h2>{intl('settings.general.title.title')}</h2>
+              <br />
+              <div className="inline-input">
+                <Icon material="home" />
+                <Input
+                  value={state.title}
+                  onChange={e => dispatch({ type: 'change_title', data: e.target.value })}
+                  placeholder={intl('settings.general.title.placeholder')}
+                  disabled={loading}
+                />
+              </div>
+              <br />
+              <hr />
+              <h2>{intl('settings.general.domains.title')}</h2>
+              <br />
+              <div className="inline-input">
+                <Icon material="domain" />
+                <Input
+                  style={{ flex: 1 }}
+                  value={state.authorizedDomains}
+                  onChange={e => dispatch({ type: 'change_domains', data: e.target.value })}
+                  placeholder={intl('settings.general.domains.placeholder')}
+                  disabled={loading}
+                />
+              </div>
+              <br />
+              <hr />
+              <h2>{intl('settings.general.bug_reporting.title')}</h2>
+              <br />
+              <div style={{ marginLeft: '1rem' }}>
+                <Radio.Group
+                  name="bug_reporting"
+                  selected={state.bugReporting}
+                  onChange={data => dispatch({ type: 'change_bug_reporting', data })}
+                  disabled={loading}
+                >
+                  <Radio label={intl('settings.general.bug_reporting.mail')} value="MAIL" />
+                  <Radio label={intl('settings.general.bug_reporting.github')} value="GITHUB" />
+                </Radio.Group>
+              </div>
+            </Tab>
+            <Tab label={intl('settings.tags.tab')}>
+              <TagsEditor categories={state.tagCategories} onChange={onTagsChange} />
+            </Tab>
+            <Tab label={intl('settings.synonyms.tab')}>
+              <PairInputList
+                pairs={state.synonyms}
+                options={{
+                  icons: { line: 'loop', value: 'list' },
+                  labels: intl('settings.synonyms.labels')
+                }}
+                actions={onListChangeActions('synonyms', dispatch)}
+                disabled={loading}
+              />
+            </Tab>
+            <Tab label={intl('settings.integrations.tab')}>
+              <h2>{intl('settings.integrations.workplace.title')}</h2>
+              <br />
+              <div style={{ marginLeft: '1rem' }}>
+                <Checkbox
+                  label={intl('settings.integrations.workplace.label')}
+                  checked={state.workplaceSharing}
+                  onChange={e =>
+                    dispatch({
+                      type: 'toggle_workplace',
+                      data: e.target.checked
+                    })
+                  }
+                  disabled={loading}
+                />
+              </div>
+              <br />
+              <hr />
+              <h2>{intl('settings.integrations.slack.title')}</h2>
+              <br />
+              <div className="inline-input" style={{ marginTop: '1em' }}>
+                <i style={{ marginLeft: '1em' }}>{intl('settings.integrations.slack.channel')}</i>
+                <Input
+                  value={state.slackChannelHook || ''}
+                  style={{ flex: 1, marginRight: '1rem' }}
+                  onChange={e =>
+                    dispatch({ type: 'change_slack_channelhook', data: e.target.value })
+                  }
+                />
+              </div>
+              <div className="inline-input" style={{ marginTop: '1em' }}>
+                <i style={{ marginLeft: '1em' }}>{intl('settings.integrations.slack.command')}</i>
+                <Input
+                  value={
+                    state.slackCommandKey
+                      ? `https://${window.location.host}/rest/integration/slack/${state.slackCommandKey}`
+                      : ''
+                  }
+                  disabled
+                  small
+                  style={{ flex: 1, marginLeft: '1rem', marginRight: '1rem' }}
+                />
+                <Button
+                  label={
+                    (state.slackCommandKey
+                      ? intl('settings.integrations.slack.regenerate')
+                      : intl('settings.integrations.slack.generate')) + ' URL'
+                  }
+                  link
+                  loading={slackHookLoading}
+                  onClick={generateSlackHook}
+                />
+              </div>
+            </Tab>
+          </Tabs>
         </CardText>
         <CardActions>
           <Button primary label={intl('validate')} onClick={onSave} loading={loading} />
@@ -211,12 +215,24 @@ Settings.translations = {
     alert_success: 'The settings were successfully edited!',
     title: 'Settings',
     settings: {
-      title: {
-        title: 'Title',
-        placeholder: 'Title'
+      general: {
+        tab: 'General',
+        title: {
+          title: 'Title',
+          placeholder: 'Title'
+        },
+        domains: {
+          title: 'Authorized domains',
+          placeholder: 'E.g.: zenika.com, google.com, ...'
+        },
+        bug_reporting: {
+          title: 'Bug reporting',
+          mail: 'By email',
+          github: 'By Github'
+        }
       },
       tags: {
-        title: 'Tags',
+        tab: 'Tags',
         labels: {
           add: 'Add tags',
           more: 'More tags',
@@ -225,7 +241,7 @@ Settings.translations = {
         }
       },
       synonyms: {
-        title: 'Synonyms',
+        tab: 'Synonyms',
         labels: {
           add: 'Add a synonym',
           more: 'More synonyms',
@@ -234,25 +250,18 @@ Settings.translations = {
         }
       },
       integrations: {
-        title: 'Integrations',
+        tab: 'Integrations',
         workplace: {
+          title: 'Workplace',
           label: 'Enable Workplace sharing'
         },
         slack: {
+          title: 'Slack',
           channel: 'Slack Channel Hook:',
           command: 'Slack Command Hook:',
           generate: 'Generate',
           regenerate: 'Regenerate'
         }
-      },
-      domains: {
-        title: 'Authorized domains',
-        placeholder: 'E.g.: zenika.com, google.com, ...'
-      },
-      bug_reporting: {
-        title: 'Bug reporting',
-        mail: 'By email',
-        github: 'By Github'
       }
     },
     validate: 'Save'
@@ -261,12 +270,24 @@ Settings.translations = {
     alert_success: 'Les paramètres ont été modifiés avec succès !',
     title: 'Paramètres',
     settings: {
-      title: {
-        title: 'Titre',
-        placeholder: 'Titre'
+      general: {
+        tab: 'Général',
+        title: {
+          title: 'Titre',
+          placeholder: 'Titre'
+        },
+        domains: {
+          title: 'Domaines autorisés',
+          placeholder: 'Ex: zenika.com, google.com, ...'
+        },
+        bug_reporting: {
+          title: 'Signalement de bug',
+          mail: 'Par email',
+          github: 'Par Github'
+        }
       },
       tags: {
-        title: 'Tags',
+        tab: 'Tags',
         labels: {
           add: 'Ajouter un tags',
           more: 'Plus de tags',
@@ -275,7 +296,7 @@ Settings.translations = {
         }
       },
       synonyms: {
-        title: 'Synonymes',
+        tab: 'Synonymes',
         labels: {
           add: 'Ajouter un synonyme',
           more: 'Plus de synonymes',
@@ -284,25 +305,18 @@ Settings.translations = {
         }
       },
       integrations: {
-        title: 'Intégrations',
+        tab: 'Intégrations',
         workplace: {
+          title: 'Workplace',
           label: 'Activer le partage par Workplace'
         },
         slack: {
+          title: 'Slack',
           channel: 'Slack Channel Hook:',
           command: 'Slack Command Hook:',
           generate: 'Générer',
           regenerate: 'Régénérer'
         }
-      },
-      domains: {
-        title: 'Domaines autorisés',
-        placeholder: 'Ex: zenika.com, google.com, ...'
-      },
-      bug_reporting: {
-        title: 'Signalement de bug',
-        mail: 'Par email',
-        github: 'Par Github'
       }
     },
     validate: 'Enregistrer'

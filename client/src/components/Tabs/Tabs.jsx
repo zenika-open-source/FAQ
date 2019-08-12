@@ -1,27 +1,35 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import cn from 'classnames'
 
 import './Tabs.scss'
 
 export const TabsContext = React.createContext()
 
-/* This file is currently unused, but may be useful for later, so we keep it */
+const Tabs = ({ children, className, ...rest }) => {
+  const [current, setCurrent] = useState(null)
+  const [tabs, setTabs] = useState([])
 
-const Tabs = ({ labels, children, className }) => {
-  const first = Object.keys(labels)[0]
+  const register = useMemo(
+    () => tab => {
+      setTabs(tabs => [...tabs, tab])
+    },
+    [setTabs]
+  )
 
-  const [current, setCurrent] = useState(first)
+  const active = current || tabs[0]
+
+  const value = useMemo(() => [active, register], [active, register])
 
   return (
-    <TabsContext.Provider value={current}>
+    <TabsContext.Provider value={value}>
       <div className={cn('tabs', className)}>
         <div className="tabs-list">
           <ul>
-            {Object.entries(labels).map(([id, label]) => (
+            {tabs.map(label => (
               <li
-                key={id}
-                onClick={() => setCurrent(id)}
-                className={cn({ 'is-active': id === current })}
+                key={label}
+                onClick={() => setCurrent(label)}
+                className={cn({ 'is-active': label === active })}
               >
                 <span>{label}</span>
               </li>
