@@ -125,19 +125,6 @@ const diffTags = (ctx, oldCats, newCats, confId) => {
     )
   )
 
-  /*{
-    categories: {
-      create: catsToCreate,
-      update: catsToUpdate,
-      delete: catsToDelete
-    },
-    labels: {
-      create: labelsToCreate,
-      update: labelsToUpdate,
-      delete: labelsToDelete
-    }
-  }*/
-
   return Promise.all(promises)
 }
 

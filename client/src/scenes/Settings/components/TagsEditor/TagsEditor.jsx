@@ -218,39 +218,6 @@ const TagsEditor = ({ categories, onChange }) => {
       ))}
     </div>
   )
-
-  /*return (
-    <div className="tags-editor">
-      {sortBy(categories, ['order']).map(category => (
-        <div className="category" key={category.id}>
-          <div className="category-name">
-            <TagInput
-              changeOrder={changeCategoryOrder(category)}
-              value={category.name}
-              onChange={changeCategoryName(category)}
-            />
-          </div>
-          <div className="category-labels">
-            {sortBy(category.labels, ['order']).map(label => (
-              <div className="label" key={label.id}>
-                <TagInput
-                  changeOrder={changeLabelOrder(category, label)}
-                  value={label.name}
-                  onChange={changeLabelName(category, label)}
-                />
-              </div>
-            ))}
-            <div className="add-tag">
-              <Button link raised small icon="add" label={<>Add a tag </>} />
-            </div>
-          </div>
-        </div>
-      ))}
-      <div className="add-category">
-        <Button link secondary raised small icon="add" label={<>Add a category </>} />
-      </div>
-    </div>
-  )*/
 }
 
 export default TagsEditor
