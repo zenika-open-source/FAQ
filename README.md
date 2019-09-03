@@ -54,4 +54,4 @@ The full documentation is available here:
 
 ## License
 
-This project is under the MIT License - See the [LICENSE.md](https://github.com/zenika-open-source/FAQ/blob/master/LICENSE.md) file for details
+This project is under the Apache License 2.0 - See the [LICENSE.md](https://github.com/zenika-open-source/FAQ/blob/master/LICENSE.md) file for details
