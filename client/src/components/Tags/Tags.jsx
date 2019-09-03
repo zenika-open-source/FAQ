@@ -8,7 +8,7 @@ import './Tags.css'
 const Tags = ({ tags, ...rest }) => (
   <div className="tags" {...rest}>
     <i className="material-icons">local_offer</i>
-    <div className="tags-list">{tags.map(tag => tag.tagLabel.name).join(', ')}</div>
+    <div className="tags-list">{tags.map(tag => tag.tagLabel.name.toLowerCase()).join(', ')}</div>
   </div>
 )
 

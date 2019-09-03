@@ -1,7 +1,14 @@
 const differenceBy = require('lodash/differenceBy')
 
+const algolia = require('../integrations/algolia')
+
 const diffTags = (ctx, oldCats, newCats, confId) => {
   const promises = []
+
+  const algoliaChanges = {
+    updated: [],
+    deleted: []
+  }
 
   // Categories (and labels) to create
   // Note: we do a batch create for the labels
@@ -52,6 +59,9 @@ const diffTags = (ctx, oldCats, newCats, confId) => {
   // Categories (and labels) to delete
   // Note: the associated labels will be deleted because of "onDelete: CASCADE"
   const catsToDelete = differenceBy(oldCats, newCats, 'id')
+  algoliaChanges.deleted.push(
+    ...catsToDelete.reduce((acc, cat) => acc.concat(cat.labels.map(l => l.name)), [])
+  )
   promises.push(
     Promise.all(
       catsToDelete.map(cat =>
@@ -101,6 +111,15 @@ const diffTags = (ctx, oldCats, newCats, confId) => {
         ),
       []
     )
+  algoliaChanges.updated = labelsToUpdate
+    .map(newLabel => {
+      const oldLabel = oldCats
+        .reduce((acc, cat) => acc.concat(cat.labels), [])
+        .find(l => l.id === newLabel.id)
+      return [oldLabel.name, newLabel.name]
+    })
+    .filter(([a, b]) => a !== b)
+
   promises.push(
     Promise.all(
       labelsToUpdate.map(label =>
@@ -119,11 +138,14 @@ const diffTags = (ctx, oldCats, newCats, confId) => {
     newCats.reduce((acc, cat) => acc.concat(cat.labels), []),
     'id'
   )
+  algoliaChanges.deleted.push(...labelsToDelete.map(l => l.name))
   promises.push(
     Promise.all(
       labelsToDelete.map(label => ctx.prisma.mutation.deleteTagLabel({ where: { id: label.id } }))
     )
   )
+
+  algolia.refreshTags(ctx, algoliaChanges)
 
   return Promise.all(promises)
 }

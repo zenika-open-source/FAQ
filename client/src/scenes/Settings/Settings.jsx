@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from 'react'
+import React, { useState, useReducer, useEffect } from 'react'
 import { useMutation } from '@apollo/react-hooks'
 
 import { alert, useIntl } from 'services'
@@ -18,6 +18,13 @@ import { REGENERATE_SLACK_COMMAND_KEY, UPDATE_CONFIGURATION } from './queries'
 
 import './Settings.scss'
 
+const initState = conf => ({
+  ...conf,
+  synonyms: synonymsToList(conf.algoliaSynonyms),
+  authorizedDomains: conf.authorizedDomains.join(', '),
+  bugReporting: conf.bugReporting || 'GITHUB'
+})
+
 const Settings = ({ configuration: conf }) => {
   const intl = useIntl(Settings)
 
@@ -26,15 +33,17 @@ const Settings = ({ configuration: conf }) => {
   const [loading, setLoading] = useState(false)
   const [slackHookLoading, setSlackHookLoading] = useState(false)
 
-  const [state, dispatch] = useReducer(reducer, {
-    ...conf,
-    synonyms: synonymsToList(conf.algoliaSynonyms),
-    authorizedDomains: conf.authorizedDomains.join(', '),
-    bugReporting: conf.bugReporting || 'GITHUB'
-  })
+  const [state, dispatch] = useReducer(reducer, initState(conf))
 
   const [mutateSlackCommandKey] = useMutation(REGENERATE_SLACK_COMMAND_KEY)
   const [mutate] = useMutation(UPDATE_CONFIGURATION)
+
+  useEffect(() => {
+    dispatch({
+      type: 'reset',
+      data: initState(conf)
+    })
+  }, [conf])
 
   const generateSlackHook = () => {
     setSlackHookLoading(true)

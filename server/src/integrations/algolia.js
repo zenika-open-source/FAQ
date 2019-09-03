@@ -144,6 +144,53 @@ class Algolia {
       )
     })
   }
+  async refreshTags(ctx, { updated, deleted }) {
+    const index = this.getIndex(ctx)
+
+    const tagsToQuery = deleted.concat(updated.map(([old]) => old))
+
+    const hits = await this.browse(ctx, '', {
+      filters: tagsToQuery.map(t => `tag:"${t}"`).join(' OR ')
+    })
+
+    const partialUpdates = hits.map(({ objectID, tag }) => {
+      const newTags = tag
+        .map(t => {
+          if (!tagsToQuery.includes(t)) return t
+          if (deleted.includes(t)) return null
+          return updated.find(([old]) => old === t)[1]
+        })
+        .filter(t => t)
+
+      return {
+        objectID,
+        tag: newTags
+      }
+    })
+
+    return new Promise((resolve, reject) => {
+      index.partialUpdateObjects(partialUpdates, (err, content) => {
+        if (err) reject(err)
+        resolve(content)
+      })
+    })
+  }
+  browse(ctx, query, options) {
+    const index = this.getIndex(ctx)
+
+    return new Promise((resolve, reject) => {
+      const browser = index.browseAll(query, options)
+      let hits = []
+
+      browser.on('result', content => {
+        hits = hits.concat(content.hits)
+      })
+
+      browser.on('end', () => resolve(hits))
+
+      browser.on('error', reject)
+    })
+  }
 }
 
 const algolia = new Algolia()

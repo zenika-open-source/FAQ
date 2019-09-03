@@ -3,6 +3,8 @@ import { onListChangeReducer } from 'helpers/onListChange'
 
 export const reducer = (state, action) => {
   switch (action.type) {
+    case 'reset':
+      return action.data
     case 'change_title':
       return { ...state, title: action.data }
     case 'toggle_workplace':

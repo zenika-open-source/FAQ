@@ -26,7 +26,9 @@ const TagPicker = ({ label, icon, tags, onChange }) => {
       <div className="tags-list">
         {tags.map(tag => (
           <div key={tag.id} className="tag">
-            <span style={{ fontVariant: 'small-caps', paddingBottom: '1px' }}>{tag.name}</span>
+            <span style={{ fontVariant: 'small-caps', paddingBottom: '1px' }}>
+              {tag.name.toLowerCase()}
+            </span>
             <i
               className="material-icons"
               onClick={() => onChange(tags.filter(t => t.id !== tag.id))}
@@ -61,7 +63,7 @@ const TagPicker = ({ label, icon, tags, onChange }) => {
                         )
                       }
                     >
-                      {label.name}
+                      {label.name.toLowerCase()}
                     </div>
                   )
                 })}
