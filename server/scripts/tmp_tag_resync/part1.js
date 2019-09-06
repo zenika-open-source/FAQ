@@ -1,12 +1,20 @@
+const { env, queryManagement } = require('../helpers')
+
+env([
+  'PRISMA_URL', // Implicitely required
+  'PRISMA_API_SECRET', // Implicitely required
+  'PRISMA_MANAGEMENT_API_SECRET' // Implicitely required
+])
+
 const { Prisma } = require('prisma-binding')
 
-const prisma = new Prisma({
-  typeDefs: 'src/generated/prisma.graphql',
-  endpoint: process.env.PRISMA_URL,
-  secret: process.env.PRISMA_API_SECRET
-})
+const resync = async (name, stage) => {
+  const prisma = new Prisma({
+    typeDefs: 'src/generated/prisma.graphql',
+    endpoint: process.env.PRISMA_URL + '/' + name + '/' + stage,
+    secret: process.env.PRISMA_API_SECRET
+  })
 
-const main = async () => {
   const conf = await prisma.query.configuration({ where: { name: 'default' } })
 
   console.log(conf.tags)
@@ -56,7 +64,7 @@ const main = async () => {
     `
   )
 
-  await Promise.all(
+  return Promise.all(
     tags.map(tag => {
       const tagLabel = tagLabels.find(label => label.name === tag.label)
       if (!tagLabel) {
@@ -72,6 +80,22 @@ const main = async () => {
       })
     })
   )
+}
+
+const getServices = () =>
+  queryManagement(`
+    {
+      listProjects {
+        name
+        stage
+      }
+    }
+  `).then(d => d.listProjects)
+
+const main = async () => {
+  const services = await getServices()
+
+  return Promise.all(services.map(({ name, stage }) => resync(name, stage)))
 }
 
 main()
