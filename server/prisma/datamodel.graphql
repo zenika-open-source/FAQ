@@ -63,7 +63,6 @@ type Flag {
 type Tag {
   id: ID! @unique
 
-  label: String
   tagLabel: TagLabel @relation(name: "TagsLabel")
 
   node: ZNode! @relation(name: "NodeTags")
