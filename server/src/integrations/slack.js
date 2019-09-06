@@ -30,7 +30,7 @@ class Slack {
           slug
         }
         tags {
-          tagLabel {
+          label {
             name
           }
         }
@@ -39,7 +39,7 @@ class Slack {
     )
 
     const url = origin + `/q/${node.question.slug}-${node.id}`
-    const tags = node.tags.map(tag => `#${tag.tagLabel.name}`).join(', ')
+    const tags = node.tags.map(tag => `#${tag.label.name}`).join(', ')
 
     const title = emojify(this.escapeText(node.question.title))
 

@@ -28,7 +28,7 @@ export const SEARCH_NODES = gql`
         }
         tags {
           id
-          tagLabel {
+          label {
             id
             name
           }
@@ -43,5 +43,3 @@ export const SEARCH_NODES = gql`
     }
   }
 `
-
-// TMP_TAGS

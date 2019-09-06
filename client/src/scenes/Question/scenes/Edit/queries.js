@@ -2,8 +2,6 @@ import gql from 'graphql-tag'
 
 import { zNodeFragment } from '../../queries'
 
-// TMP_TAGS
-
 export const SUBMIT_QUESTION = gql`
   mutation($title: String!, $tags: [ID!]!) {
     createQuestionAndTags(title: $title, tags: $tags) {
@@ -39,7 +37,7 @@ export const EDIT_QUESTION = gql`
         id
         tags {
           id
-          tagLabel {
+          label {
             id
             name
           }

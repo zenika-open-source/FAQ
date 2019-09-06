@@ -27,7 +27,7 @@ module.exports = {
               create: tags
                 .filter(tagLabelId => !!tagLabels.find(label => label.id === tagLabelId))
                 .map(tagLabelId => ({
-                  tagLabel: { connect: { id: tagLabelId } },
+                  label: { connect: { id: tagLabelId } },
                   user: { connect: { id: ctxUser(ctx).id } }
                 }))
             },
@@ -78,7 +78,7 @@ module.exports = {
             }
             tags {
               id
-              tagLabel {
+              label {
                 id
                 name
               }
@@ -93,7 +93,7 @@ module.exports = {
         )
       }
 
-      const oldLabels = node.tags.map(tag => tag.tagLabel.id)
+      const oldLabels = node.tags.map(tag => tag.label.id)
       const newLabels = tags
 
       const tagsToAdd = newLabels.filter(newLabel => !oldLabels.includes(newLabel))
@@ -104,7 +104,7 @@ module.exports = {
         .map(labelId =>
           ctx.prisma.mutation.createTag({
             data: {
-              tagLabel: { connect: { id: labelId } },
+              label: { connect: { id: labelId } },
               node: { connect: { id: node.id } },
               user: { connect: { id: ctxUser(ctx).id } }
             }
@@ -115,7 +115,7 @@ module.exports = {
         ctx.prisma.mutation.deleteManyTags({
           where: {
             node: { id: node.id },
-            tagLabel: { id: labelId }
+            label: { id: labelId }
           }
         })
       )

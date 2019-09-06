@@ -10,8 +10,6 @@ import { unserialize, addToQueryString } from 'helpers'
 
 import { Searchbar, ResultList } from './components'
 
-// TMP_TAGS
-
 class Home extends Component {
   constructor(props) {
     super(props)

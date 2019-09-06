@@ -11,8 +11,6 @@ import { Button } from 'components'
 
 import './TagPicker.css'
 
-// TMP_TAGS
-
 const TagPicker = ({ label, icon, tags, onChange }) => {
   const conf = useConfiguration()
   const [opened, setOpened] = useState(false)

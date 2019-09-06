@@ -9,8 +9,6 @@ import { useConfiguration } from 'contexts'
 
 import './Searchbar.css'
 
-// TMP_TAGS
-
 const Searchbar = ({ text, tags, loading, onTextChange, onTagsChange }) => {
   const intl = useIntl(Searchbar)
   const conf = useConfiguration()

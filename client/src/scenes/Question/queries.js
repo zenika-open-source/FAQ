@@ -40,14 +40,12 @@ export const zNodeFragment = `
   }
   tags {
     id
-    tagLabel {
+    label {
       id
       name
     }
   }
 `
-
-// TMP_TAGS
 
 export const getNode = gql`
   query($id: ID!) {

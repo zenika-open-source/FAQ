@@ -13,8 +13,7 @@ const nodeQuery = `
     content
   }
   tags {
-    label
-    tagLabel {
+    label {
       name
     }
   }
@@ -57,7 +56,7 @@ class Algolia {
 
     return {
       ...node,
-      tag: tags.map(t => t.tagLabel.name),
+      tag: tags.map(t => t.label.name),
       flag: flags.map(f => f.type)
     }
   }
