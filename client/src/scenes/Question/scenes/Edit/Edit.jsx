@@ -18,13 +18,11 @@ import Tips from './components/Tips'
 
 import './Edit.css'
 
-// TMP_TAGS
-
 const Edit = ({ location, match, zNode }) => {
   const [state, setState] = useState(() => {
     const passedQuestionText = location.state ? location.state.question : ''
     const initialQuestion = zNode ? zNode.question.title : passedQuestionText
-    const initialTags = zNode ? zNode.tags.map(tag => tag.tagLabel) : []
+    const initialTags = zNode ? zNode.tags.map(tag => tag.label) : []
 
     return {
       nodeLoaded: false,

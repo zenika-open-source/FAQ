@@ -8,7 +8,7 @@ module.exports = {
       if (tag) {
         const { count } = (await ctx.prisma.query.tagsConnection(
           {
-            where: { tagLabel: { name: tag } }
+            where: { label: { name: tag } }
           },
           `
           {
@@ -22,7 +22,7 @@ module.exports = {
         const randomIndex = Math.floor(Math.random() * count)
 
         const randomTag = (await ctx.prisma.query.tags(
-          { skip: randomIndex, take: 1, where: { tagLabel: { name: tag } } },
+          { skip: randomIndex, take: 1, where: { label: { name: tag } } },
           '{ node { id } }'
         ))[0]
 

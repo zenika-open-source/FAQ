@@ -2222,7 +2222,7 @@ type Subscription {
 
 type Tag {
   id: ID!
-  tagLabel: TagLabel
+  label: TagLabel
   node: ZNode!
   user: User!
   createdAt: DateTime!
@@ -2489,18 +2489,18 @@ type TagConnection {
 }
 
 input TagCreateInput {
-  tagLabel: TagLabelCreateOneWithoutTagsInput
+  label: TagLabelCreateOneWithoutTagsInput
   node: ZNodeCreateOneWithoutTagsInput!
   user: UserCreateOneWithoutTagsInput!
 }
 
-input TagCreateManyWithoutNodeInput {
-  create: [TagCreateWithoutNodeInput!]
+input TagCreateManyWithoutLabelInput {
+  create: [TagCreateWithoutLabelInput!]
   connect: [TagWhereUniqueInput!]
 }
 
-input TagCreateManyWithoutTagLabelInput {
-  create: [TagCreateWithoutTagLabelInput!]
+input TagCreateManyWithoutNodeInput {
+  create: [TagCreateWithoutNodeInput!]
   connect: [TagWhereUniqueInput!]
 }
 
@@ -2509,18 +2509,18 @@ input TagCreateManyWithoutUserInput {
   connect: [TagWhereUniqueInput!]
 }
 
-input TagCreateWithoutNodeInput {
-  tagLabel: TagLabelCreateOneWithoutTagsInput
-  user: UserCreateOneWithoutTagsInput!
-}
-
-input TagCreateWithoutTagLabelInput {
+input TagCreateWithoutLabelInput {
   node: ZNodeCreateOneWithoutTagsInput!
   user: UserCreateOneWithoutTagsInput!
 }
 
+input TagCreateWithoutNodeInput {
+  label: TagLabelCreateOneWithoutTagsInput
+  user: UserCreateOneWithoutTagsInput!
+}
+
 input TagCreateWithoutUserInput {
-  tagLabel: TagLabelCreateOneWithoutTagsInput
+  label: TagLabelCreateOneWithoutTagsInput
   node: ZNodeCreateOneWithoutTagsInput!
 }
 
@@ -2553,7 +2553,7 @@ type TagLabelConnection {
 
 input TagLabelCreateInput {
   name: String!
-  tags: TagCreateManyWithoutTagLabelInput
+  tags: TagCreateManyWithoutLabelInput
   order: Int!
   category: TagCategoryCreateOneWithoutLabelsInput!
 }
@@ -2570,7 +2570,7 @@ input TagLabelCreateOneWithoutTagsInput {
 
 input TagLabelCreateWithoutCategoryInput {
   name: String!
-  tags: TagCreateManyWithoutTagLabelInput
+  tags: TagCreateManyWithoutLabelInput
   order: Int!
 }
 
@@ -2666,7 +2666,7 @@ input TagLabelSubscriptionWhereInput {
 
 input TagLabelUpdateInput {
   name: String
-  tags: TagUpdateManyWithoutTagLabelInput
+  tags: TagUpdateManyWithoutLabelInput
   order: Int
   category: TagCategoryUpdateOneRequiredWithoutLabelsInput
 }
@@ -2709,7 +2709,7 @@ input TagLabelUpdateOneWithoutTagsInput {
 
 input TagLabelUpdateWithoutCategoryDataInput {
   name: String
-  tags: TagUpdateManyWithoutTagLabelInput
+  tags: TagUpdateManyWithoutLabelInput
   order: Int
 }
 
@@ -2846,9 +2846,20 @@ input TagSubscriptionWhereInput {
 }
 
 input TagUpdateInput {
-  tagLabel: TagLabelUpdateOneWithoutTagsInput
+  label: TagLabelUpdateOneWithoutTagsInput
   node: ZNodeUpdateOneRequiredWithoutTagsInput
   user: UserUpdateOneRequiredWithoutTagsInput
+}
+
+input TagUpdateManyWithoutLabelInput {
+  create: [TagCreateWithoutLabelInput!]
+  delete: [TagWhereUniqueInput!]
+  connect: [TagWhereUniqueInput!]
+  set: [TagWhereUniqueInput!]
+  disconnect: [TagWhereUniqueInput!]
+  update: [TagUpdateWithWhereUniqueWithoutLabelInput!]
+  upsert: [TagUpsertWithWhereUniqueWithoutLabelInput!]
+  deleteMany: [TagScalarWhereInput!]
 }
 
 input TagUpdateManyWithoutNodeInput {
@@ -2859,17 +2870,6 @@ input TagUpdateManyWithoutNodeInput {
   disconnect: [TagWhereUniqueInput!]
   update: [TagUpdateWithWhereUniqueWithoutNodeInput!]
   upsert: [TagUpsertWithWhereUniqueWithoutNodeInput!]
-  deleteMany: [TagScalarWhereInput!]
-}
-
-input TagUpdateManyWithoutTagLabelInput {
-  create: [TagCreateWithoutTagLabelInput!]
-  delete: [TagWhereUniqueInput!]
-  connect: [TagWhereUniqueInput!]
-  set: [TagWhereUniqueInput!]
-  disconnect: [TagWhereUniqueInput!]
-  update: [TagUpdateWithWhereUniqueWithoutTagLabelInput!]
-  upsert: [TagUpsertWithWhereUniqueWithoutTagLabelInput!]
   deleteMany: [TagScalarWhereInput!]
 }
 
@@ -2884,19 +2884,24 @@ input TagUpdateManyWithoutUserInput {
   deleteMany: [TagScalarWhereInput!]
 }
 
-input TagUpdateWithoutNodeDataInput {
-  tagLabel: TagLabelUpdateOneWithoutTagsInput
+input TagUpdateWithoutLabelDataInput {
+  node: ZNodeUpdateOneRequiredWithoutTagsInput
   user: UserUpdateOneRequiredWithoutTagsInput
 }
 
-input TagUpdateWithoutTagLabelDataInput {
-  node: ZNodeUpdateOneRequiredWithoutTagsInput
+input TagUpdateWithoutNodeDataInput {
+  label: TagLabelUpdateOneWithoutTagsInput
   user: UserUpdateOneRequiredWithoutTagsInput
 }
 
 input TagUpdateWithoutUserDataInput {
-  tagLabel: TagLabelUpdateOneWithoutTagsInput
+  label: TagLabelUpdateOneWithoutTagsInput
   node: ZNodeUpdateOneRequiredWithoutTagsInput
+}
+
+input TagUpdateWithWhereUniqueWithoutLabelInput {
+  where: TagWhereUniqueInput!
+  data: TagUpdateWithoutLabelDataInput!
 }
 
 input TagUpdateWithWhereUniqueWithoutNodeInput {
@@ -2904,26 +2909,21 @@ input TagUpdateWithWhereUniqueWithoutNodeInput {
   data: TagUpdateWithoutNodeDataInput!
 }
 
-input TagUpdateWithWhereUniqueWithoutTagLabelInput {
-  where: TagWhereUniqueInput!
-  data: TagUpdateWithoutTagLabelDataInput!
-}
-
 input TagUpdateWithWhereUniqueWithoutUserInput {
   where: TagWhereUniqueInput!
   data: TagUpdateWithoutUserDataInput!
+}
+
+input TagUpsertWithWhereUniqueWithoutLabelInput {
+  where: TagWhereUniqueInput!
+  update: TagUpdateWithoutLabelDataInput!
+  create: TagCreateWithoutLabelInput!
 }
 
 input TagUpsertWithWhereUniqueWithoutNodeInput {
   where: TagWhereUniqueInput!
   update: TagUpdateWithoutNodeDataInput!
   create: TagCreateWithoutNodeInput!
-}
-
-input TagUpsertWithWhereUniqueWithoutTagLabelInput {
-  where: TagWhereUniqueInput!
-  update: TagUpdateWithoutTagLabelDataInput!
-  create: TagCreateWithoutTagLabelInput!
 }
 
 input TagUpsertWithWhereUniqueWithoutUserInput {
@@ -2947,7 +2947,7 @@ input TagWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  tagLabel: TagLabelWhereInput
+  label: TagLabelWhereInput
   node: ZNodeWhereInput
   user: UserWhereInput
   createdAt: DateTime
