@@ -2,7 +2,7 @@ const { algolia } = require('../integrations')
 
 module.exports = {
   Query: {
-    search: async (_, args, ctx, info) => {
+    search: async (_, args, ctx) => {
       const { text, tags = [], flags = [], skip, first, ...params } = args
 
       let results = {

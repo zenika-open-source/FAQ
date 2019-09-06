@@ -1,13 +1,20 @@
-import React, { useContext } from 'react'
+import React, { useEffect, useContext } from 'react'
+import cn from 'classnames'
 
 import { TabsContext } from './Tabs'
 
-const Tab = ({ id, children }) => {
-  const current = useContext(TabsContext)
+const Tab = ({ label, children, className, ...rest }) => {
+  const [current, register] = useContext(TabsContext)
 
-  if (id !== current) return null
+  useEffect(() => {
+    register(label)
+  }, [label, register])
 
-  return <div className="tab">{children}</div>
+  return (
+    <div className={cn('tab', className, { 'is-active': label === current })} {...rest}>
+      {children}
+    </div>
+  )
 }
 
 export default Tab

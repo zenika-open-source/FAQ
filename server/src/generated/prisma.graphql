@@ -26,6 +26,14 @@ type AggregateTag {
   count: Int!
 }
 
+type AggregateTagCategory {
+  count: Int!
+}
+
+type AggregateTagLabel {
+  count: Int!
+}
+
 type AggregateUser {
   count: Int!
 }
@@ -37,7 +45,15 @@ type AggregateZNode {
 type Answer {
   id: ID!
   content: String!
-  sources(where: SourceWhereInput, orderBy: SourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Source!]
+  sources(
+    where: SourceWhereInput
+    orderBy: SourceOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Source!]
   node: ZNode!
   user: User!
   createdAt: DateTime!
@@ -351,6 +367,15 @@ type Configuration {
   slackChannelHook: String
   slackCommandKey: String
   tags: Json
+  tagCategories(
+    where: TagCategoryWhereInput
+    orderBy: TagCategoryOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [TagCategory!]
   workplaceSharing: Boolean
   bugReporting: BugReporting
 }
@@ -366,6 +391,30 @@ input ConfigurationCreateauthorizedDomainsInput {
 }
 
 input ConfigurationCreateInput {
+  name: String!
+  title: String
+  auth0Domain: String!
+  auth0ClientId: String!
+  authorizedDomains: ConfigurationCreateauthorizedDomainsInput
+  algoliaAppId: String
+  algoliaApiKey: String
+  algoliaSynonyms: Json
+  mailgunDomain: String
+  mailgunApiKey: String
+  slackChannelHook: String
+  slackCommandKey: String
+  tags: Json
+  tagCategories: TagCategoryCreateManyWithoutConfigurationInput
+  workplaceSharing: Boolean
+  bugReporting: BugReporting
+}
+
+input ConfigurationCreateOneWithoutTagCategoriesInput {
+  create: ConfigurationCreateWithoutTagCategoriesInput
+  connect: ConfigurationWhereUniqueInput
+}
+
+input ConfigurationCreateWithoutTagCategoriesInput {
   name: String!
   title: String
   auth0Domain: String!
@@ -480,6 +529,7 @@ input ConfigurationUpdateInput {
   slackChannelHook: String
   slackCommandKey: String
   tags: Json
+  tagCategories: TagCategoryUpdateManyWithoutConfigurationInput
   workplaceSharing: Boolean
   bugReporting: BugReporting
 }
@@ -500,6 +550,36 @@ input ConfigurationUpdateManyMutationInput {
   tags: Json
   workplaceSharing: Boolean
   bugReporting: BugReporting
+}
+
+input ConfigurationUpdateOneRequiredWithoutTagCategoriesInput {
+  create: ConfigurationCreateWithoutTagCategoriesInput
+  update: ConfigurationUpdateWithoutTagCategoriesDataInput
+  upsert: ConfigurationUpsertWithoutTagCategoriesInput
+  connect: ConfigurationWhereUniqueInput
+}
+
+input ConfigurationUpdateWithoutTagCategoriesDataInput {
+  name: String
+  title: String
+  auth0Domain: String
+  auth0ClientId: String
+  authorizedDomains: ConfigurationUpdateauthorizedDomainsInput
+  algoliaAppId: String
+  algoliaApiKey: String
+  algoliaSynonyms: Json
+  mailgunDomain: String
+  mailgunApiKey: String
+  slackChannelHook: String
+  slackCommandKey: String
+  tags: Json
+  workplaceSharing: Boolean
+  bugReporting: BugReporting
+}
+
+input ConfigurationUpsertWithoutTagCategoriesInput {
+  update: ConfigurationUpdateWithoutTagCategoriesDataInput!
+  create: ConfigurationCreateWithoutTagCategoriesInput!
 }
 
 input ConfigurationWhereInput {
@@ -657,6 +737,9 @@ input ConfigurationWhereInput {
   slackCommandKey_not_starts_with: String
   slackCommandKey_ends_with: String
   slackCommandKey_not_ends_with: String
+  tagCategories_every: TagCategoryWhereInput
+  tagCategories_some: TagCategoryWhereInput
+  tagCategories_none: TagCategoryWhereInput
   workplaceSharing: Boolean
   workplaceSharing_not: Boolean
   bugReporting: BugReporting
@@ -1225,37 +1308,76 @@ type Mutation {
   createAnswer(data: AnswerCreateInput!): Answer!
   updateAnswer(data: AnswerUpdateInput!, where: AnswerWhereUniqueInput!): Answer
   updateManyAnswers(data: AnswerUpdateManyMutationInput!, where: AnswerWhereInput): BatchPayload!
-  upsertAnswer(where: AnswerWhereUniqueInput!, create: AnswerCreateInput!, update: AnswerUpdateInput!): Answer!
+  upsertAnswer(
+    where: AnswerWhereUniqueInput!
+    create: AnswerCreateInput!
+    update: AnswerUpdateInput!
+  ): Answer!
   deleteAnswer(where: AnswerWhereUniqueInput!): Answer
   deleteManyAnswers(where: AnswerWhereInput): BatchPayload!
   createConfiguration(data: ConfigurationCreateInput!): Configuration!
-  updateConfiguration(data: ConfigurationUpdateInput!, where: ConfigurationWhereUniqueInput!): Configuration
-  updateManyConfigurations(data: ConfigurationUpdateManyMutationInput!, where: ConfigurationWhereInput): BatchPayload!
-  upsertConfiguration(where: ConfigurationWhereUniqueInput!, create: ConfigurationCreateInput!, update: ConfigurationUpdateInput!): Configuration!
+  updateConfiguration(
+    data: ConfigurationUpdateInput!
+    where: ConfigurationWhereUniqueInput!
+  ): Configuration
+  updateManyConfigurations(
+    data: ConfigurationUpdateManyMutationInput!
+    where: ConfigurationWhereInput
+  ): BatchPayload!
+  upsertConfiguration(
+    where: ConfigurationWhereUniqueInput!
+    create: ConfigurationCreateInput!
+    update: ConfigurationUpdateInput!
+  ): Configuration!
   deleteConfiguration(where: ConfigurationWhereUniqueInput!): Configuration
   deleteManyConfigurations(where: ConfigurationWhereInput): BatchPayload!
   createFlag(data: FlagCreateInput!): Flag!
   updateFlag(data: FlagUpdateInput!, where: FlagWhereUniqueInput!): Flag
   updateManyFlags(data: FlagUpdateManyMutationInput!, where: FlagWhereInput): BatchPayload!
-  upsertFlag(where: FlagWhereUniqueInput!, create: FlagCreateInput!, update: FlagUpdateInput!): Flag!
+  upsertFlag(
+    where: FlagWhereUniqueInput!
+    create: FlagCreateInput!
+    update: FlagUpdateInput!
+  ): Flag!
   deleteFlag(where: FlagWhereUniqueInput!): Flag
   deleteManyFlags(where: FlagWhereInput): BatchPayload!
   createHistoryAction(data: HistoryActionCreateInput!): HistoryAction!
-  updateHistoryAction(data: HistoryActionUpdateInput!, where: HistoryActionWhereUniqueInput!): HistoryAction
-  updateManyHistoryActions(data: HistoryActionUpdateManyMutationInput!, where: HistoryActionWhereInput): BatchPayload!
-  upsertHistoryAction(where: HistoryActionWhereUniqueInput!, create: HistoryActionCreateInput!, update: HistoryActionUpdateInput!): HistoryAction!
+  updateHistoryAction(
+    data: HistoryActionUpdateInput!
+    where: HistoryActionWhereUniqueInput!
+  ): HistoryAction
+  updateManyHistoryActions(
+    data: HistoryActionUpdateManyMutationInput!
+    where: HistoryActionWhereInput
+  ): BatchPayload!
+  upsertHistoryAction(
+    where: HistoryActionWhereUniqueInput!
+    create: HistoryActionCreateInput!
+    update: HistoryActionUpdateInput!
+  ): HistoryAction!
   deleteHistoryAction(where: HistoryActionWhereUniqueInput!): HistoryAction
   deleteManyHistoryActions(where: HistoryActionWhereInput): BatchPayload!
   createQuestion(data: QuestionCreateInput!): Question!
   updateQuestion(data: QuestionUpdateInput!, where: QuestionWhereUniqueInput!): Question
-  updateManyQuestions(data: QuestionUpdateManyMutationInput!, where: QuestionWhereInput): BatchPayload!
-  upsertQuestion(where: QuestionWhereUniqueInput!, create: QuestionCreateInput!, update: QuestionUpdateInput!): Question!
+  updateManyQuestions(
+    data: QuestionUpdateManyMutationInput!
+    where: QuestionWhereInput
+  ): BatchPayload!
+  upsertQuestion(
+    where: QuestionWhereUniqueInput!
+    create: QuestionCreateInput!
+    update: QuestionUpdateInput!
+  ): Question!
   deleteQuestion(where: QuestionWhereUniqueInput!): Question
   deleteManyQuestions(where: QuestionWhereInput): BatchPayload!
   createSource(data: SourceCreateInput!): Source!
   updateSource(data: SourceUpdateInput!, where: SourceWhereUniqueInput!): Source
   updateManySources(data: SourceUpdateManyMutationInput!, where: SourceWhereInput): BatchPayload!
-  upsertSource(where: SourceWhereUniqueInput!, create: SourceCreateInput!, update: SourceUpdateInput!): Source!
+  upsertSource(
+    where: SourceWhereUniqueInput!
+    create: SourceCreateInput!
+    update: SourceUpdateInput!
+  ): Source!
   deleteSource(where: SourceWhereUniqueInput!): Source
   deleteManySources(where: SourceWhereInput): BatchPayload!
   createTag(data: TagCreateInput!): Tag!
@@ -1264,16 +1386,50 @@ type Mutation {
   upsertTag(where: TagWhereUniqueInput!, create: TagCreateInput!, update: TagUpdateInput!): Tag!
   deleteTag(where: TagWhereUniqueInput!): Tag
   deleteManyTags(where: TagWhereInput): BatchPayload!
+  createTagCategory(data: TagCategoryCreateInput!): TagCategory!
+  updateTagCategory(data: TagCategoryUpdateInput!, where: TagCategoryWhereUniqueInput!): TagCategory
+  updateManyTagCategories(
+    data: TagCategoryUpdateManyMutationInput!
+    where: TagCategoryWhereInput
+  ): BatchPayload!
+  upsertTagCategory(
+    where: TagCategoryWhereUniqueInput!
+    create: TagCategoryCreateInput!
+    update: TagCategoryUpdateInput!
+  ): TagCategory!
+  deleteTagCategory(where: TagCategoryWhereUniqueInput!): TagCategory
+  deleteManyTagCategories(where: TagCategoryWhereInput): BatchPayload!
+  createTagLabel(data: TagLabelCreateInput!): TagLabel!
+  updateTagLabel(data: TagLabelUpdateInput!, where: TagLabelWhereUniqueInput!): TagLabel
+  updateManyTagLabels(
+    data: TagLabelUpdateManyMutationInput!
+    where: TagLabelWhereInput
+  ): BatchPayload!
+  upsertTagLabel(
+    where: TagLabelWhereUniqueInput!
+    create: TagLabelCreateInput!
+    update: TagLabelUpdateInput!
+  ): TagLabel!
+  deleteTagLabel(where: TagLabelWhereUniqueInput!): TagLabel
+  deleteManyTagLabels(where: TagLabelWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
-  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  upsertUser(
+    where: UserWhereUniqueInput!
+    create: UserCreateInput!
+    update: UserUpdateInput!
+  ): User!
   deleteUser(where: UserWhereUniqueInput!): User
   deleteManyUsers(where: UserWhereInput): BatchPayload!
   createZNode(data: ZNodeCreateInput!): ZNode!
   updateZNode(data: ZNodeUpdateInput!, where: ZNodeWhereUniqueInput!): ZNode
   updateManyZNodes(data: ZNodeUpdateManyMutationInput!, where: ZNodeWhereInput): BatchPayload!
-  upsertZNode(where: ZNodeWhereUniqueInput!, create: ZNodeCreateInput!, update: ZNodeUpdateInput!): ZNode!
+  upsertZNode(
+    where: ZNodeWhereUniqueInput!
+    create: ZNodeCreateInput!
+    update: ZNodeUpdateInput!
+  ): ZNode!
   deleteZNode(where: ZNodeWhereUniqueInput!): ZNode
   deleteManyZNodes(where: ZNodeWhereInput): BatchPayload!
 }
@@ -1297,32 +1453,214 @@ type PageInfo {
 
 type Query {
   answer(where: AnswerWhereUniqueInput!): Answer
-  answers(where: AnswerWhereInput, orderBy: AnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Answer]!
-  answersConnection(where: AnswerWhereInput, orderBy: AnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AnswerConnection!
+  answers(
+    where: AnswerWhereInput
+    orderBy: AnswerOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Answer]!
+  answersConnection(
+    where: AnswerWhereInput
+    orderBy: AnswerOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): AnswerConnection!
   configuration(where: ConfigurationWhereUniqueInput!): Configuration
-  configurations(where: ConfigurationWhereInput, orderBy: ConfigurationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Configuration]!
-  configurationsConnection(where: ConfigurationWhereInput, orderBy: ConfigurationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ConfigurationConnection!
+  configurations(
+    where: ConfigurationWhereInput
+    orderBy: ConfigurationOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Configuration]!
+  configurationsConnection(
+    where: ConfigurationWhereInput
+    orderBy: ConfigurationOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): ConfigurationConnection!
   flag(where: FlagWhereUniqueInput!): Flag
-  flags(where: FlagWhereInput, orderBy: FlagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Flag]!
-  flagsConnection(where: FlagWhereInput, orderBy: FlagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FlagConnection!
+  flags(
+    where: FlagWhereInput
+    orderBy: FlagOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Flag]!
+  flagsConnection(
+    where: FlagWhereInput
+    orderBy: FlagOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): FlagConnection!
   historyAction(where: HistoryActionWhereUniqueInput!): HistoryAction
-  historyActions(where: HistoryActionWhereInput, orderBy: HistoryActionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [HistoryAction]!
-  historyActionsConnection(where: HistoryActionWhereInput, orderBy: HistoryActionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): HistoryActionConnection!
+  historyActions(
+    where: HistoryActionWhereInput
+    orderBy: HistoryActionOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [HistoryAction]!
+  historyActionsConnection(
+    where: HistoryActionWhereInput
+    orderBy: HistoryActionOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): HistoryActionConnection!
   question(where: QuestionWhereUniqueInput!): Question
-  questions(where: QuestionWhereInput, orderBy: QuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Question]!
-  questionsConnection(where: QuestionWhereInput, orderBy: QuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): QuestionConnection!
+  questions(
+    where: QuestionWhereInput
+    orderBy: QuestionOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Question]!
+  questionsConnection(
+    where: QuestionWhereInput
+    orderBy: QuestionOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): QuestionConnection!
   source(where: SourceWhereUniqueInput!): Source
-  sources(where: SourceWhereInput, orderBy: SourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Source]!
-  sourcesConnection(where: SourceWhereInput, orderBy: SourceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SourceConnection!
+  sources(
+    where: SourceWhereInput
+    orderBy: SourceOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Source]!
+  sourcesConnection(
+    where: SourceWhereInput
+    orderBy: SourceOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): SourceConnection!
   tag(where: TagWhereUniqueInput!): Tag
-  tags(where: TagWhereInput, orderBy: TagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Tag]!
-  tagsConnection(where: TagWhereInput, orderBy: TagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TagConnection!
+  tags(
+    where: TagWhereInput
+    orderBy: TagOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Tag]!
+  tagsConnection(
+    where: TagWhereInput
+    orderBy: TagOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): TagConnection!
+  tagCategory(where: TagCategoryWhereUniqueInput!): TagCategory
+  tagCategories(
+    where: TagCategoryWhereInput
+    orderBy: TagCategoryOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [TagCategory]!
+  tagCategoriesConnection(
+    where: TagCategoryWhereInput
+    orderBy: TagCategoryOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): TagCategoryConnection!
+  tagLabel(where: TagLabelWhereUniqueInput!): TagLabel
+  tagLabels(
+    where: TagLabelWhereInput
+    orderBy: TagLabelOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [TagLabel]!
+  tagLabelsConnection(
+    where: TagLabelWhereInput
+    orderBy: TagLabelOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): TagLabelConnection!
   user(where: UserWhereUniqueInput!): User
-  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
-  usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  users(
+    where: UserWhereInput
+    orderBy: UserOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [User]!
+  usersConnection(
+    where: UserWhereInput
+    orderBy: UserOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): UserConnection!
   zNode(where: ZNodeWhereUniqueInput!): ZNode
-  zNodes(where: ZNodeWhereInput, orderBy: ZNodeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ZNode]!
-  zNodesConnection(where: ZNodeWhereInput, orderBy: ZNodeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ZNodeConnection!
+  zNodes(
+    where: ZNodeWhereInput
+    orderBy: ZNodeOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [ZNode]!
+  zNodesConnection(
+    where: ZNodeWhereInput
+    orderBy: ZNodeOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): ZNodeConnection!
   node(id: ID!): Node
 }
 
@@ -1877,16 +2215,273 @@ type Subscription {
   question(where: QuestionSubscriptionWhereInput): QuestionSubscriptionPayload
   source(where: SourceSubscriptionWhereInput): SourceSubscriptionPayload
   tag(where: TagSubscriptionWhereInput): TagSubscriptionPayload
+  tagCategory(where: TagCategorySubscriptionWhereInput): TagCategorySubscriptionPayload
+  tagLabel(where: TagLabelSubscriptionWhereInput): TagLabelSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
   zNode(where: ZNodeSubscriptionWhereInput): ZNodeSubscriptionPayload
 }
 
 type Tag {
   id: ID!
-  label: String!
+  label: String
+  tagLabel: TagLabel
   node: ZNode!
   user: User!
   createdAt: DateTime!
+}
+
+type TagCategory {
+  id: ID!
+  name: String!
+  labels(
+    where: TagLabelWhereInput
+    orderBy: TagLabelOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [TagLabel!]
+  order: Int!
+  configuration: Configuration!
+}
+
+type TagCategoryConnection {
+  pageInfo: PageInfo!
+  edges: [TagCategoryEdge]!
+  aggregate: AggregateTagCategory!
+}
+
+input TagCategoryCreateInput {
+  name: String!
+  labels: TagLabelCreateManyWithoutCategoryInput
+  order: Int!
+  configuration: ConfigurationCreateOneWithoutTagCategoriesInput!
+}
+
+input TagCategoryCreateManyWithoutConfigurationInput {
+  create: [TagCategoryCreateWithoutConfigurationInput!]
+  connect: [TagCategoryWhereUniqueInput!]
+}
+
+input TagCategoryCreateOneWithoutLabelsInput {
+  create: TagCategoryCreateWithoutLabelsInput
+  connect: TagCategoryWhereUniqueInput
+}
+
+input TagCategoryCreateWithoutConfigurationInput {
+  name: String!
+  labels: TagLabelCreateManyWithoutCategoryInput
+  order: Int!
+}
+
+input TagCategoryCreateWithoutLabelsInput {
+  name: String!
+  order: Int!
+  configuration: ConfigurationCreateOneWithoutTagCategoriesInput!
+}
+
+type TagCategoryEdge {
+  node: TagCategory!
+  cursor: String!
+}
+
+enum TagCategoryOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  order_ASC
+  order_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type TagCategoryPreviousValues {
+  id: ID!
+  name: String!
+  order: Int!
+}
+
+input TagCategoryScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  order: Int
+  order_not: Int
+  order_in: [Int!]
+  order_not_in: [Int!]
+  order_lt: Int
+  order_lte: Int
+  order_gt: Int
+  order_gte: Int
+  AND: [TagCategoryScalarWhereInput!]
+  OR: [TagCategoryScalarWhereInput!]
+  NOT: [TagCategoryScalarWhereInput!]
+}
+
+type TagCategorySubscriptionPayload {
+  mutation: MutationType!
+  node: TagCategory
+  updatedFields: [String!]
+  previousValues: TagCategoryPreviousValues
+}
+
+input TagCategorySubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: TagCategoryWhereInput
+  AND: [TagCategorySubscriptionWhereInput!]
+  OR: [TagCategorySubscriptionWhereInput!]
+  NOT: [TagCategorySubscriptionWhereInput!]
+}
+
+input TagCategoryUpdateInput {
+  name: String
+  labels: TagLabelUpdateManyWithoutCategoryInput
+  order: Int
+  configuration: ConfigurationUpdateOneRequiredWithoutTagCategoriesInput
+}
+
+input TagCategoryUpdateManyDataInput {
+  name: String
+  order: Int
+}
+
+input TagCategoryUpdateManyMutationInput {
+  name: String
+  order: Int
+}
+
+input TagCategoryUpdateManyWithoutConfigurationInput {
+  create: [TagCategoryCreateWithoutConfigurationInput!]
+  delete: [TagCategoryWhereUniqueInput!]
+  connect: [TagCategoryWhereUniqueInput!]
+  set: [TagCategoryWhereUniqueInput!]
+  disconnect: [TagCategoryWhereUniqueInput!]
+  update: [TagCategoryUpdateWithWhereUniqueWithoutConfigurationInput!]
+  upsert: [TagCategoryUpsertWithWhereUniqueWithoutConfigurationInput!]
+  deleteMany: [TagCategoryScalarWhereInput!]
+  updateMany: [TagCategoryUpdateManyWithWhereNestedInput!]
+}
+
+input TagCategoryUpdateManyWithWhereNestedInput {
+  where: TagCategoryScalarWhereInput!
+  data: TagCategoryUpdateManyDataInput!
+}
+
+input TagCategoryUpdateOneRequiredWithoutLabelsInput {
+  create: TagCategoryCreateWithoutLabelsInput
+  update: TagCategoryUpdateWithoutLabelsDataInput
+  upsert: TagCategoryUpsertWithoutLabelsInput
+  connect: TagCategoryWhereUniqueInput
+}
+
+input TagCategoryUpdateWithoutConfigurationDataInput {
+  name: String
+  labels: TagLabelUpdateManyWithoutCategoryInput
+  order: Int
+}
+
+input TagCategoryUpdateWithoutLabelsDataInput {
+  name: String
+  order: Int
+  configuration: ConfigurationUpdateOneRequiredWithoutTagCategoriesInput
+}
+
+input TagCategoryUpdateWithWhereUniqueWithoutConfigurationInput {
+  where: TagCategoryWhereUniqueInput!
+  data: TagCategoryUpdateWithoutConfigurationDataInput!
+}
+
+input TagCategoryUpsertWithoutLabelsInput {
+  update: TagCategoryUpdateWithoutLabelsDataInput!
+  create: TagCategoryCreateWithoutLabelsInput!
+}
+
+input TagCategoryUpsertWithWhereUniqueWithoutConfigurationInput {
+  where: TagCategoryWhereUniqueInput!
+  update: TagCategoryUpdateWithoutConfigurationDataInput!
+  create: TagCategoryCreateWithoutConfigurationInput!
+}
+
+input TagCategoryWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  labels_every: TagLabelWhereInput
+  labels_some: TagLabelWhereInput
+  labels_none: TagLabelWhereInput
+  order: Int
+  order_not: Int
+  order_in: [Int!]
+  order_not_in: [Int!]
+  order_lt: Int
+  order_lte: Int
+  order_gt: Int
+  order_gte: Int
+  configuration: ConfigurationWhereInput
+  AND: [TagCategoryWhereInput!]
+  OR: [TagCategoryWhereInput!]
+  NOT: [TagCategoryWhereInput!]
+}
+
+input TagCategoryWhereUniqueInput {
+  id: ID
 }
 
 type TagConnection {
@@ -1896,7 +2491,8 @@ type TagConnection {
 }
 
 input TagCreateInput {
-  label: String!
+  label: String
+  tagLabel: TagLabelCreateOneWithoutTagsInput
   node: ZNodeCreateOneWithoutTagsInput!
   user: UserCreateOneWithoutTagsInput!
 }
@@ -1906,24 +2502,293 @@ input TagCreateManyWithoutNodeInput {
   connect: [TagWhereUniqueInput!]
 }
 
+input TagCreateManyWithoutTagLabelInput {
+  create: [TagCreateWithoutTagLabelInput!]
+  connect: [TagWhereUniqueInput!]
+}
+
 input TagCreateManyWithoutUserInput {
   create: [TagCreateWithoutUserInput!]
   connect: [TagWhereUniqueInput!]
 }
 
 input TagCreateWithoutNodeInput {
-  label: String!
+  label: String
+  tagLabel: TagLabelCreateOneWithoutTagsInput
+  user: UserCreateOneWithoutTagsInput!
+}
+
+input TagCreateWithoutTagLabelInput {
+  label: String
+  node: ZNodeCreateOneWithoutTagsInput!
   user: UserCreateOneWithoutTagsInput!
 }
 
 input TagCreateWithoutUserInput {
-  label: String!
+  label: String
+  tagLabel: TagLabelCreateOneWithoutTagsInput
   node: ZNodeCreateOneWithoutTagsInput!
 }
 
 type TagEdge {
   node: Tag!
   cursor: String!
+}
+
+type TagLabel {
+  id: ID!
+  name: String!
+  tags(
+    where: TagWhereInput
+    orderBy: TagOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Tag!]
+  order: Int!
+  category: TagCategory!
+}
+
+type TagLabelConnection {
+  pageInfo: PageInfo!
+  edges: [TagLabelEdge]!
+  aggregate: AggregateTagLabel!
+}
+
+input TagLabelCreateInput {
+  name: String!
+  tags: TagCreateManyWithoutTagLabelInput
+  order: Int!
+  category: TagCategoryCreateOneWithoutLabelsInput!
+}
+
+input TagLabelCreateManyWithoutCategoryInput {
+  create: [TagLabelCreateWithoutCategoryInput!]
+  connect: [TagLabelWhereUniqueInput!]
+}
+
+input TagLabelCreateOneWithoutTagsInput {
+  create: TagLabelCreateWithoutTagsInput
+  connect: TagLabelWhereUniqueInput
+}
+
+input TagLabelCreateWithoutCategoryInput {
+  name: String!
+  tags: TagCreateManyWithoutTagLabelInput
+  order: Int!
+}
+
+input TagLabelCreateWithoutTagsInput {
+  name: String!
+  order: Int!
+  category: TagCategoryCreateOneWithoutLabelsInput!
+}
+
+type TagLabelEdge {
+  node: TagLabel!
+  cursor: String!
+}
+
+enum TagLabelOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  order_ASC
+  order_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type TagLabelPreviousValues {
+  id: ID!
+  name: String!
+  order: Int!
+}
+
+input TagLabelScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  order: Int
+  order_not: Int
+  order_in: [Int!]
+  order_not_in: [Int!]
+  order_lt: Int
+  order_lte: Int
+  order_gt: Int
+  order_gte: Int
+  AND: [TagLabelScalarWhereInput!]
+  OR: [TagLabelScalarWhereInput!]
+  NOT: [TagLabelScalarWhereInput!]
+}
+
+type TagLabelSubscriptionPayload {
+  mutation: MutationType!
+  node: TagLabel
+  updatedFields: [String!]
+  previousValues: TagLabelPreviousValues
+}
+
+input TagLabelSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: TagLabelWhereInput
+  AND: [TagLabelSubscriptionWhereInput!]
+  OR: [TagLabelSubscriptionWhereInput!]
+  NOT: [TagLabelSubscriptionWhereInput!]
+}
+
+input TagLabelUpdateInput {
+  name: String
+  tags: TagUpdateManyWithoutTagLabelInput
+  order: Int
+  category: TagCategoryUpdateOneRequiredWithoutLabelsInput
+}
+
+input TagLabelUpdateManyDataInput {
+  name: String
+  order: Int
+}
+
+input TagLabelUpdateManyMutationInput {
+  name: String
+  order: Int
+}
+
+input TagLabelUpdateManyWithoutCategoryInput {
+  create: [TagLabelCreateWithoutCategoryInput!]
+  delete: [TagLabelWhereUniqueInput!]
+  connect: [TagLabelWhereUniqueInput!]
+  set: [TagLabelWhereUniqueInput!]
+  disconnect: [TagLabelWhereUniqueInput!]
+  update: [TagLabelUpdateWithWhereUniqueWithoutCategoryInput!]
+  upsert: [TagLabelUpsertWithWhereUniqueWithoutCategoryInput!]
+  deleteMany: [TagLabelScalarWhereInput!]
+  updateMany: [TagLabelUpdateManyWithWhereNestedInput!]
+}
+
+input TagLabelUpdateManyWithWhereNestedInput {
+  where: TagLabelScalarWhereInput!
+  data: TagLabelUpdateManyDataInput!
+}
+
+input TagLabelUpdateOneWithoutTagsInput {
+  create: TagLabelCreateWithoutTagsInput
+  update: TagLabelUpdateWithoutTagsDataInput
+  upsert: TagLabelUpsertWithoutTagsInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: TagLabelWhereUniqueInput
+}
+
+input TagLabelUpdateWithoutCategoryDataInput {
+  name: String
+  tags: TagUpdateManyWithoutTagLabelInput
+  order: Int
+}
+
+input TagLabelUpdateWithoutTagsDataInput {
+  name: String
+  order: Int
+  category: TagCategoryUpdateOneRequiredWithoutLabelsInput
+}
+
+input TagLabelUpdateWithWhereUniqueWithoutCategoryInput {
+  where: TagLabelWhereUniqueInput!
+  data: TagLabelUpdateWithoutCategoryDataInput!
+}
+
+input TagLabelUpsertWithoutTagsInput {
+  update: TagLabelUpdateWithoutTagsDataInput!
+  create: TagLabelCreateWithoutTagsInput!
+}
+
+input TagLabelUpsertWithWhereUniqueWithoutCategoryInput {
+  where: TagLabelWhereUniqueInput!
+  update: TagLabelUpdateWithoutCategoryDataInput!
+  create: TagLabelCreateWithoutCategoryInput!
+}
+
+input TagLabelWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  tags_every: TagWhereInput
+  tags_some: TagWhereInput
+  tags_none: TagWhereInput
+  order: Int
+  order_not: Int
+  order_in: [Int!]
+  order_not_in: [Int!]
+  order_lt: Int
+  order_lte: Int
+  order_gt: Int
+  order_gte: Int
+  category: TagCategoryWhereInput
+  AND: [TagLabelWhereInput!]
+  OR: [TagLabelWhereInput!]
+  NOT: [TagLabelWhereInput!]
+}
+
+input TagLabelWhereUniqueInput {
+  id: ID
 }
 
 enum TagOrderByInput {
@@ -1939,7 +2804,7 @@ enum TagOrderByInput {
 
 type TagPreviousValues {
   id: ID!
-  label: String!
+  label: String
   createdAt: DateTime!
 }
 
@@ -2005,6 +2870,7 @@ input TagSubscriptionWhereInput {
 
 input TagUpdateInput {
   label: String
+  tagLabel: TagLabelUpdateOneWithoutTagsInput
   node: ZNodeUpdateOneRequiredWithoutTagsInput
   user: UserUpdateOneRequiredWithoutTagsInput
 }
@@ -2029,6 +2895,18 @@ input TagUpdateManyWithoutNodeInput {
   updateMany: [TagUpdateManyWithWhereNestedInput!]
 }
 
+input TagUpdateManyWithoutTagLabelInput {
+  create: [TagCreateWithoutTagLabelInput!]
+  delete: [TagWhereUniqueInput!]
+  connect: [TagWhereUniqueInput!]
+  set: [TagWhereUniqueInput!]
+  disconnect: [TagWhereUniqueInput!]
+  update: [TagUpdateWithWhereUniqueWithoutTagLabelInput!]
+  upsert: [TagUpsertWithWhereUniqueWithoutTagLabelInput!]
+  deleteMany: [TagScalarWhereInput!]
+  updateMany: [TagUpdateManyWithWhereNestedInput!]
+}
+
 input TagUpdateManyWithoutUserInput {
   create: [TagCreateWithoutUserInput!]
   delete: [TagWhereUniqueInput!]
@@ -2048,17 +2926,30 @@ input TagUpdateManyWithWhereNestedInput {
 
 input TagUpdateWithoutNodeDataInput {
   label: String
+  tagLabel: TagLabelUpdateOneWithoutTagsInput
+  user: UserUpdateOneRequiredWithoutTagsInput
+}
+
+input TagUpdateWithoutTagLabelDataInput {
+  label: String
+  node: ZNodeUpdateOneRequiredWithoutTagsInput
   user: UserUpdateOneRequiredWithoutTagsInput
 }
 
 input TagUpdateWithoutUserDataInput {
   label: String
+  tagLabel: TagLabelUpdateOneWithoutTagsInput
   node: ZNodeUpdateOneRequiredWithoutTagsInput
 }
 
 input TagUpdateWithWhereUniqueWithoutNodeInput {
   where: TagWhereUniqueInput!
   data: TagUpdateWithoutNodeDataInput!
+}
+
+input TagUpdateWithWhereUniqueWithoutTagLabelInput {
+  where: TagWhereUniqueInput!
+  data: TagUpdateWithoutTagLabelDataInput!
 }
 
 input TagUpdateWithWhereUniqueWithoutUserInput {
@@ -2070,6 +2961,12 @@ input TagUpsertWithWhereUniqueWithoutNodeInput {
   where: TagWhereUniqueInput!
   update: TagUpdateWithoutNodeDataInput!
   create: TagCreateWithoutNodeInput!
+}
+
+input TagUpsertWithWhereUniqueWithoutTagLabelInput {
+  where: TagWhereUniqueInput!
+  update: TagUpdateWithoutTagLabelDataInput!
+  create: TagCreateWithoutTagLabelInput!
 }
 
 input TagUpsertWithWhereUniqueWithoutUserInput {
@@ -2107,6 +3004,7 @@ input TagWhereInput {
   label_not_starts_with: String
   label_ends_with: String
   label_not_ends_with: String
+  tagLabel: TagLabelWhereInput
   node: ZNodeWhereInput
   user: UserWhereInput
   createdAt: DateTime
@@ -2135,11 +3033,51 @@ type User {
   email: String
   picture: String
   locale: String
-  questions(where: QuestionWhereInput, orderBy: QuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Question!]
-  answers(where: AnswerWhereInput, orderBy: AnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Answer!]
-  flags(where: FlagWhereInput, orderBy: FlagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Flag!]
-  tags(where: TagWhereInput, orderBy: TagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Tag!]
-  history(where: HistoryActionWhereInput, orderBy: HistoryActionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [HistoryAction!]
+  questions(
+    where: QuestionWhereInput
+    orderBy: QuestionOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Question!]
+  answers(
+    where: AnswerWhereInput
+    orderBy: AnswerOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Answer!]
+  flags(
+    where: FlagWhereInput
+    orderBy: FlagOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Flag!]
+  tags(
+    where: TagWhereInput
+    orderBy: TagOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Tag!]
+  history(
+    where: HistoryActionWhereInput
+    orderBy: HistoryActionOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [HistoryAction!]
   createdAt: DateTime!
 }
 
@@ -2610,9 +3548,33 @@ type ZNode {
   id: ID!
   question: Question
   answer: Answer
-  flags(where: FlagWhereInput, orderBy: FlagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Flag!]
-  tags(where: TagWhereInput, orderBy: TagOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Tag!]
-  history(where: HistoryActionWhereInput, orderBy: HistoryActionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [HistoryAction!]
+  flags(
+    where: FlagWhereInput
+    orderBy: FlagOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Flag!]
+  tags(
+    where: TagWhereInput
+    orderBy: TagOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Tag!]
+  history(
+    where: HistoryActionWhereInput
+    orderBy: HistoryActionOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [HistoryAction!]
   highlights: Json
 }
 

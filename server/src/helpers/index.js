@@ -1,20 +1,22 @@
 const slug = require('slugify')
 
-const validateAndParseIdToken = require('./validateAndParseIdToken')
-const history = require('./history')
+const diffTags = require('./diffTags')
 const emojify = require('./emojify')
-const requireText = require('./requireText')
+const history = require('./history')
 const randomString = require('./randomString')
+const requireText = require('./requireText')
+const validateAndParseIdToken = require('./validateAndParseIdToken')
 
 const ctxUser = ctx => ctx.request.user
 const slugify = s => slug(s).toLowerCase()
 
 module.exports = {
-  validateAndParseIdToken,
-  history,
   ctxUser,
-  slugify,
+  diffTags,
   emojify,
+  history,
+  randomString,
   requireText,
-  randomString
+  slugify,
+  validateAndParseIdToken
 }

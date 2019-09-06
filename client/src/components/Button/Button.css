@@ -14,6 +14,11 @@
   cursor: pointer;
 }
 
+.btn[small],
+.btn[small][link] {
+  padding: 0.2rem;
+}
+
 .btn > i {
   font-size: 1.1rem;
 }

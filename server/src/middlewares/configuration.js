@@ -28,13 +28,20 @@ const refreshConfiguration = async tenant => {
       mailgunDomain
       mailgunApiKey
       slackChannelHook
-      tags
+      tagCategories {
+        order
+        name
+        labels {
+          id
+          order
+          name
+        }
+      }
       workplaceSharing
       bugReporting
     }`
   )
-
-  if (!conf.tags) conf.tags = []
+  // TMP_TAGS
 
   tenant._meta.configuration = conf
 }

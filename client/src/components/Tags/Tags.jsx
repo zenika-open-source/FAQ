@@ -3,16 +3,14 @@ import PropTypes from 'prop-types'
 
 import './Tags.css'
 
-const Tags = props => {
-  const { tags, ...otherProps } = props
+// TMP_TAGS
 
-  return (
-    <div className="tags" {...otherProps}>
-      <i className="material-icons">local_offer</i>
-      <div className="tags-list">{tags.map(tag => tag.label).join(', ')}</div>
-    </div>
-  )
-}
+const Tags = ({ tags, ...rest }) => (
+  <div className="tags" {...rest}>
+    <i className="material-icons">local_offer</i>
+    <div className="tags-list">{tags.map(tag => tag.tagLabel.name.toLowerCase()).join(', ')}</div>
+  </div>
+)
 
 Tags.propTypes = {
   tags: PropTypes.array.isRequired

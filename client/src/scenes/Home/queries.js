@@ -28,7 +28,10 @@ export const SEARCH_NODES = gql`
         }
         tags {
           id
-          label
+          tagLabel {
+            id
+            name
+          }
         }
         highlights
       }
@@ -40,3 +43,5 @@ export const SEARCH_NODES = gql`
     }
   }
 `
+
+// TMP_TAGS

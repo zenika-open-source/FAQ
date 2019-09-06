@@ -1,5 +1,7 @@
 const algoliasearch = require('algoliasearch')
 
+// TMP_TAGS
+
 const nodeQuery = `
 {
   objectID: id
@@ -12,6 +14,9 @@ const nodeQuery = `
   }
   tags {
     label
+    tagLabel {
+      name
+    }
   }
   flags {
     type
@@ -52,7 +57,7 @@ class Algolia {
 
     return {
       ...node,
-      tag: tags.map(t => t.label),
+      tag: tags.map(t => t.tagLabel.name),
       flag: flags.map(f => f.type)
     }
   }
@@ -137,6 +142,53 @@ class Algolia {
           resolve(content)
         }
       )
+    })
+  }
+  async refreshTags(ctx, { updated, deleted }) {
+    const index = this.getIndex(ctx)
+
+    const tagsToQuery = deleted.concat(updated.map(([old]) => old))
+
+    const hits = await this.browse(ctx, '', {
+      filters: tagsToQuery.map(t => `tag:"${t}"`).join(' OR ')
+    })
+
+    const partialUpdates = hits.map(({ objectID, tag }) => {
+      const newTags = tag
+        .map(t => {
+          if (!tagsToQuery.includes(t)) return t
+          if (deleted.includes(t)) return null
+          return updated.find(([old]) => old === t)[1]
+        })
+        .filter(t => t)
+
+      return {
+        objectID,
+        tag: newTags
+      }
+    })
+
+    return new Promise((resolve, reject) => {
+      index.partialUpdateObjects(partialUpdates, (err, content) => {
+        if (err) reject(err)
+        resolve(content)
+      })
+    })
+  }
+  browse(ctx, query, options) {
+    const index = this.getIndex(ctx)
+
+    return new Promise((resolve, reject) => {
+      const browser = index.browseAll(query, options)
+      let hits = []
+
+      browser.on('result', content => {
+        hits = hits.concat(content.hits)
+      })
+
+      browser.on('end', () => resolve(hits))
+
+      browser.on('error', reject)
     })
   }
 }

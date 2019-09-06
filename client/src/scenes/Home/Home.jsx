@@ -10,6 +10,8 @@ import { unserialize, addToQueryString } from 'helpers'
 
 import { Searchbar, ResultList } from './components'
 
+// TMP_TAGS
+
 class Home extends Component {
   constructor(props) {
     super(props)
@@ -46,9 +48,11 @@ class Home extends Component {
   onTagsChange = tags => {
     const { history, location } = this.props
 
-    this.setState({ tags })
+    const labels = tags.map(tag => tag.name)
 
-    addToQueryString(history, location, { tags })
+    this.setState({ tags: labels })
+
+    addToQueryString(history, location, { tags: labels })
   }
 
   render() {

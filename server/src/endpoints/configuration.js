@@ -9,11 +9,12 @@ const configurationEndpoint = multiTenant => async (req, res) =>
       return
     }
 
+    // TMP_TAGS
     const {
       title,
       auth0Domain,
       auth0ClientId,
-      tags,
+      tagCategories,
       workplaceSharing,
       bugReporting
     } = multiTenant.current(req)._meta.configuration
@@ -23,7 +24,7 @@ const configurationEndpoint = multiTenant => async (req, res) =>
       title,
       auth0Domain,
       auth0ClientId,
-      tags,
+      tagCategories,
       workplaceSharing,
       bugReporting
     })

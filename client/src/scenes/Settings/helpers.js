@@ -1,7 +1,10 @@
+import { isUuidV4 } from 'helpers'
 import { onListChangeReducer } from 'helpers/onListChange'
 
 export const reducer = (state, action) => {
   switch (action.type) {
+    case 'reset':
+      return action.data
     case 'change_title':
       return { ...state, title: action.data }
     case 'toggle_workplace':
@@ -14,27 +17,15 @@ export const reducer = (state, action) => {
       return { ...state, slackChannelHook: action.data }
     case 'change_slack_commandkey':
       return { ...state, slackCommandKey: action.data }
+    case 'change_tags':
+      return { ...state, tagCategories: action.data }
     default:
       return {
         ...state,
-        tags: onListChangeReducer('tags')(state.tags, action),
         synonyms: onListChangeReducer('synonyms')(state.synonyms, action)
       }
   }
 }
-
-export const tagsToList = tags =>
-  Object.entries(tags || {}).map(([key, value], id) => ({
-    id,
-    key,
-    value: value.join(', ')
-  }))
-
-export const listToTags = list =>
-  list.reduce((acc, item) => {
-    acc[item.key] = item.value.split(',').map(x => x.trim())
-    return acc
-  }, {})
 
 export const synonymsToList = synonyms =>
   (synonyms || []).map(({ objectID, synonyms }, id) => ({
@@ -49,3 +40,22 @@ export const listToSynonyms = list =>
     type: 'synonym',
     synonyms: item.value.split(',').map(x => x.trim())
   }))
+
+export const serializeTags = categories =>
+  JSON.stringify(
+    categories.map(({ id, name, order, labels }) => {
+      const serializedLabels = labels.map(({ id, name, order }) => {
+        if (isUuidV4(id)) {
+          return { name, order }
+        } else {
+          return { id, name, order }
+        }
+      })
+
+      if (isUuidV4(id)) {
+        return { name, order, labels: serializedLabels }
+      } else {
+        return { id, name, order, labels: serializedLabels }
+      }
+    })
+  )
