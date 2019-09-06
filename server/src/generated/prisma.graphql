@@ -1382,7 +1382,6 @@ type Mutation {
   deleteManySources(where: SourceWhereInput): BatchPayload!
   createTag(data: TagCreateInput!): Tag!
   updateTag(data: TagUpdateInput!, where: TagWhereUniqueInput!): Tag
-  updateManyTags(data: TagUpdateManyMutationInput!, where: TagWhereInput): BatchPayload!
   upsertTag(where: TagWhereUniqueInput!, create: TagCreateInput!, update: TagUpdateInput!): Tag!
   deleteTag(where: TagWhereUniqueInput!): Tag
   deleteManyTags(where: TagWhereInput): BatchPayload!
@@ -2223,7 +2222,6 @@ type Subscription {
 
 type Tag {
   id: ID!
-  label: String
   tagLabel: TagLabel
   node: ZNode!
   user: User!
@@ -2491,7 +2489,6 @@ type TagConnection {
 }
 
 input TagCreateInput {
-  label: String
   tagLabel: TagLabelCreateOneWithoutTagsInput
   node: ZNodeCreateOneWithoutTagsInput!
   user: UserCreateOneWithoutTagsInput!
@@ -2513,19 +2510,16 @@ input TagCreateManyWithoutUserInput {
 }
 
 input TagCreateWithoutNodeInput {
-  label: String
   tagLabel: TagLabelCreateOneWithoutTagsInput
   user: UserCreateOneWithoutTagsInput!
 }
 
 input TagCreateWithoutTagLabelInput {
-  label: String
   node: ZNodeCreateOneWithoutTagsInput!
   user: UserCreateOneWithoutTagsInput!
 }
 
 input TagCreateWithoutUserInput {
-  label: String
   tagLabel: TagLabelCreateOneWithoutTagsInput
   node: ZNodeCreateOneWithoutTagsInput!
 }
@@ -2794,8 +2788,6 @@ input TagLabelWhereUniqueInput {
 enum TagOrderByInput {
   id_ASC
   id_DESC
-  label_ASC
-  label_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -2804,7 +2796,6 @@ enum TagOrderByInput {
 
 type TagPreviousValues {
   id: ID!
-  label: String
   createdAt: DateTime!
 }
 
@@ -2823,20 +2814,6 @@ input TagScalarWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  label: String
-  label_not: String
-  label_in: [String!]
-  label_not_in: [String!]
-  label_lt: String
-  label_lte: String
-  label_gt: String
-  label_gte: String
-  label_contains: String
-  label_not_contains: String
-  label_starts_with: String
-  label_not_starts_with: String
-  label_ends_with: String
-  label_not_ends_with: String
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -2869,18 +2846,9 @@ input TagSubscriptionWhereInput {
 }
 
 input TagUpdateInput {
-  label: String
   tagLabel: TagLabelUpdateOneWithoutTagsInput
   node: ZNodeUpdateOneRequiredWithoutTagsInput
   user: UserUpdateOneRequiredWithoutTagsInput
-}
-
-input TagUpdateManyDataInput {
-  label: String
-}
-
-input TagUpdateManyMutationInput {
-  label: String
 }
 
 input TagUpdateManyWithoutNodeInput {
@@ -2892,7 +2860,6 @@ input TagUpdateManyWithoutNodeInput {
   update: [TagUpdateWithWhereUniqueWithoutNodeInput!]
   upsert: [TagUpsertWithWhereUniqueWithoutNodeInput!]
   deleteMany: [TagScalarWhereInput!]
-  updateMany: [TagUpdateManyWithWhereNestedInput!]
 }
 
 input TagUpdateManyWithoutTagLabelInput {
@@ -2904,7 +2871,6 @@ input TagUpdateManyWithoutTagLabelInput {
   update: [TagUpdateWithWhereUniqueWithoutTagLabelInput!]
   upsert: [TagUpsertWithWhereUniqueWithoutTagLabelInput!]
   deleteMany: [TagScalarWhereInput!]
-  updateMany: [TagUpdateManyWithWhereNestedInput!]
 }
 
 input TagUpdateManyWithoutUserInput {
@@ -2916,28 +2882,19 @@ input TagUpdateManyWithoutUserInput {
   update: [TagUpdateWithWhereUniqueWithoutUserInput!]
   upsert: [TagUpsertWithWhereUniqueWithoutUserInput!]
   deleteMany: [TagScalarWhereInput!]
-  updateMany: [TagUpdateManyWithWhereNestedInput!]
-}
-
-input TagUpdateManyWithWhereNestedInput {
-  where: TagScalarWhereInput!
-  data: TagUpdateManyDataInput!
 }
 
 input TagUpdateWithoutNodeDataInput {
-  label: String
   tagLabel: TagLabelUpdateOneWithoutTagsInput
   user: UserUpdateOneRequiredWithoutTagsInput
 }
 
 input TagUpdateWithoutTagLabelDataInput {
-  label: String
   node: ZNodeUpdateOneRequiredWithoutTagsInput
   user: UserUpdateOneRequiredWithoutTagsInput
 }
 
 input TagUpdateWithoutUserDataInput {
-  label: String
   tagLabel: TagLabelUpdateOneWithoutTagsInput
   node: ZNodeUpdateOneRequiredWithoutTagsInput
 }
@@ -2990,20 +2947,6 @@ input TagWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  label: String
-  label_not: String
-  label_in: [String!]
-  label_not_in: [String!]
-  label_lt: String
-  label_lte: String
-  label_gt: String
-  label_gte: String
-  label_contains: String
-  label_not_contains: String
-  label_starts_with: String
-  label_not_starts_with: String
-  label_ends_with: String
-  label_not_ends_with: String
   tagLabel: TagLabelWhereInput
   node: ZNodeWhereInput
   user: UserWhereInput
