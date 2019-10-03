@@ -16,7 +16,7 @@ const Views = ({ value }) => {
 
   return (
     <span className="views">
-      {formattedValue} {intl('view')} {formattedValue > 1 && 's'}
+      {formattedValue} {formattedValue > 1 ? intl('views') : intl('view')}
     </span>
   )
 }
@@ -27,10 +27,12 @@ Views.propTypes = {
 
 Views.translations = {
   en: {
-    view: 'view'
+    view: 'view',
+    views: 'views'
   },
   fr: {
-    view: 'vue'
+    view: 'vue',
+    views: 'vues'
   }
 }
 
