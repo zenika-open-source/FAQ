@@ -71,7 +71,7 @@ Tips.translations = {
     good: {
       title: 'Great questions',
       examples: [
-        'Where can I get the ElasticSearch training material',
+        'Where can I get the ElasticSearch training material?',
         'How can I use Alibeez API?',
         'How to reach the Nantes office from the train station?',
         "What's the difference between pay with and without variable?"
@@ -82,39 +82,39 @@ Tips.translations = {
       examples: [
         ['Technical:', 'What are the differences between mocks and stubs?'],
         ['Debating:', "Shouldn't we change the collective agreement?"],
-        ['Open:', 'What are the books to read when you are an architect?'],
-        ['Temporal:', "What are the 2018 results for the Nantes' offices?"],
-        ['Vague:', 'How does recruitment works?']
+        ['Open:', 'What are the best books to read for an architect?'],
+        ['Temporal:', "What are the 2018 figures for the Nantes' office?"],
+        ['Vague:', 'How does recruitment work?']
       ]
     }
   },
   fr: {
     title: 'Conseils pour écrire de super questions sur la FAQ',
     tips: [
-      "Cherchez la FAQ avant d'ajouter votre question pour vous assurer qu'elle n'existe pas déjà.",
-      "Vous n'avez pas besoin d'avoir la formulation parfaite. D'autres pourront l'améliorer.",
+      "Cherchez la FAQ avant d'ajouter votre question pour vous assurer que celle-ci n'existe pas déjà.",
+      "Vous n'avez pas besoin de trouver la formulation parfaite. D'autres pourront l'améliorer.",
       <span>
-        Privilégiez les question qui répondent au <b>"comment"</b> plutôt qu'au <b>"pourquoi"</b>.
+        Privilégiez les question qui répondent au <b>comment</b> plutôt qu'au <b>pourquoi</b>.
       </span>,
       'Restez objectif et factuel.'
     ],
     good: {
-      title: 'Supers questions',
+      title: 'Super questions',
       examples: [
-        'Où puis-je trouver le matériel de formation ElasticSearch ?',
-        "Comment utiliser l'API Alibeez ?",
-        "Comment rejoindre l'agence de Nante depuis la gare ?",
-        'Quelle est la différence entre un salaire avec et sans variable ?'
+        'Où puis-je trouver le matériel de formation ElasticSearch&nbsp;?',
+        "Comment utiliser l'API Alibeez&nbsp;?",
+        "Comment rejoindre l'agence de Nantes depuis la gare&nbsp;?",
+        'Quelle est la différence entre un salaire avec et sans variable&nbsp;?'
       ]
     },
     bad: {
       title: 'Questions mal placées',
       examples: [
-        ['Technique:', 'Quelles sont les différences entre les mocks et les stubs ?'],
-        ['Polémique:', 'Ne devrions-nous pas changer notre convention collective ?'],
-        ['Ouverte:', 'Quels sont les livres à lire quand on est architecte logiciel ?'],
-        ['Temporelle:', "Quels sont les résultats 2018 de l'agence Nantaises ?"],
-        ['Vague:', 'Comment fonctionne le recrutement ?']
+        ['Technique:', 'Quelles sont les différences entre les mocks et les stubs&nbsp;?'],
+        ['Polémique:', 'Ne devrions-nous pas changer notre convention collective&nbsp;?'],
+        ['Ouverte:', 'Quels sont les livres à lire quand on est architecte logiciel&nbsp;?'],
+        ['Temporelle:', "Quels sont les résultats 2018 de l'agence nantaise&nbsp;?"],
+        ['Vague:', 'Comment fonctionne le recrutement&nbsp;?']
       ]
     }
   }
