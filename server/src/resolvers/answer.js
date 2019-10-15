@@ -41,7 +41,12 @@ module.exports = {
         )
       } catch (e) {
         // The error doesn't includes the error code, so we use the message
-        if (e.message.includes('NodeAnswer') && e.message.includes('violate')) {
+        if (
+          e.message &&
+          e.message.includes &&
+          e.message.includes('NodeAnswer') &&
+          e.message.includes('violate')
+        ) {
           throw new Error('Someone already answered this question! Refresh this page.')
         }
         throw e
