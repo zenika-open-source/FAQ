@@ -31,9 +31,17 @@ module.exports = {
           `
         {
           id
+          user {
+            id
+          }
           node {
             flags(where:{type:"unanswered"}) {
               id
+            }
+            question {
+              user {
+                id
+              }
             }
           }
         }
@@ -67,7 +75,12 @@ module.exports = {
       })
 
       algolia.updateNode(ctx, nodeId)
-      mailgun.sendNewAnswer(ctx, nodeId)
+
+      // Let's notify the user who asked the question, but only if they did not answer the
+      // question them-selves.
+      if (answer.node.question.user.id !== answer.user.id) {
+        mailgun.sendNewAnswer(ctx, nodeId)
+      }
 
       return ctx.prisma.query.answer(
         {
