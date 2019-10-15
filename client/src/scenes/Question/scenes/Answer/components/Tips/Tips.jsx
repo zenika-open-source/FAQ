@@ -34,13 +34,13 @@ Tips.translations = {
     ]
   },
   fr: {
-    title: 'Conseils pour écrire de supers réponses sur la FAQ',
+    title: 'Conseils pour écrire de super réponses sur la FAQ',
     tips: [
       'Une réponse partielle vaut mieux que pas de réponse.',
       'Soyez précis et factuel.',
       'Les meilleures réponses sont agréables à lire et bien formatées.',
       "Restez impersonnel, une réponse n'est ni une discussion ni un rapport.",
-      "FAQ est conçu pour ressembler à une encyclopédie plutôt qu'à un forum. Vous pouvez omettre les formules de politesse",
+      "FAQ est conçu pour ressembler à une encyclopédie plutôt qu'à un forum. Vous pouvez omettre les formules de politesse.",
       'Précisez les sources de vos informations (wiki interne, Workplace ou autres).',
       'Mentionnez des questions similaires pour compléter votre réponse.'
     ]
