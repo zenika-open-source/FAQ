@@ -31,9 +31,17 @@ module.exports = {
           `
         {
           id
+          user {
+            id
+          }
           node {
             flags(where:{type:"unanswered"}) {
               id
+            }
+            question {
+              user {
+                id
+              }
             }
           }
         }
@@ -62,7 +70,10 @@ module.exports = {
       })
 
       algolia.updateNode(ctx, nodeId)
-      mailgun.sendNewAnswer(ctx, nodeId)
+
+      if (answer.node.question.user.id !== answer.user.id) {
+        mailgun.sendNewAnswer(ctx, nodeId)
+      }
 
       return ctx.prisma.query.answer(
         {
