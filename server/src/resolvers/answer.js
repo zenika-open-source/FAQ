@@ -71,6 +71,8 @@ module.exports = {
 
       algolia.updateNode(ctx, nodeId)
 
+      // Let's notify the user who asked the question, but only if they did not answer the
+      // question them-selves.
       if (answer.node.question.user.id !== answer.user.id) {
         mailgun.sendNewAnswer(ctx, nodeId)
       }
