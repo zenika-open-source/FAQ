@@ -61,10 +61,30 @@ const main = async () => {
             algoliaApiKey: "${ALGOLIA_API_KEY_ALL || ''}"
             mailgunDomain: "${MAILGUN_DOMAIN || ''}"
             mailgunApiKey: "${MAILGUN_API_KEY || ''}"
-            tags: "${JSON.stringify({
-              agencies: ['paris', 'nantes'],
-              theme: ['tutorial', 'meta']
-            }).replace(/"/g, '\\"')}"
+            tagCategories: {
+              create: [
+                {
+                  name: "agencies"
+                  order: 1
+                  labels: {
+                    create: [
+                      { name: "paris", order: 1 }
+                      { name: "nantes", order: 2 }
+                    ]
+                  }
+                },
+                {
+                  name: "theme",
+                  order: 2,
+                  labels: {
+                    create: [
+                      { name: "tutorial", order: 1 },
+                      { name: "meta", order: 2 }
+                    ]
+                  }
+                }
+              ]
+            }
           }
         ) {
           id

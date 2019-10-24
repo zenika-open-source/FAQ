@@ -5,16 +5,14 @@ import { alert, useIntl } from 'services'
 
 import { useConfiguration } from 'contexts'
 
-import { Tabs, Tab, Input, Checkbox, Button, PairInputList, Icon, Radio } from 'components'
+import { Tabs, Button } from 'components'
 import Card, { CardTitle, CardText, CardActions } from 'components/Card'
-
-import { onListChangeActions } from 'helpers/onListChange'
-
-import { TagsEditor } from './components'
 
 import { reducer, serializeTags, synonymsToList, listToSynonyms } from './helpers'
 
-import { REGENERATE_SLACK_COMMAND_KEY, UPDATE_CONFIGURATION } from './queries'
+import { UPDATE_CONFIGURATION } from './queries'
+
+import { General, Tags, Synonyms, Integrations } from './scenes'
 
 import './Settings.scss'
 
@@ -31,11 +29,9 @@ const Settings = ({ configuration: conf }) => {
   const configuration = useConfiguration()
 
   const [loading, setLoading] = useState(false)
-  const [slackHookLoading, setSlackHookLoading] = useState(false)
 
   const [state, dispatch] = useReducer(reducer, initState(conf))
 
-  const [mutateSlackCommandKey] = useMutation(REGENERATE_SLACK_COMMAND_KEY)
   const [mutate] = useMutation(UPDATE_CONFIGURATION)
 
   useEffect(() => {
@@ -44,20 +40,6 @@ const Settings = ({ configuration: conf }) => {
       data: initState(conf)
     })
   }, [conf])
-
-  const generateSlackHook = () => {
-    setSlackHookLoading(true)
-
-    mutateSlackCommandKey()
-      .then(({ data }) =>
-        dispatch({
-          type: 'change_slack_commandkey',
-          data: data.regenerateSlackCommandKey.slackCommandKey
-        })
-      )
-      .catch(alert.pushDefaultError)
-      .finally(() => setSlackHookLoading(false))
-  }
 
   const onSave = () => {
     setLoading(true)
@@ -99,116 +81,10 @@ const Settings = ({ configuration: conf }) => {
         </CardTitle>
         <CardText>
           <Tabs>
-            <Tab label={intl('settings.general.tab')}>
-              <h2>{intl('settings.general.title.title')}</h2>
-              <br />
-              <div className="inline-input">
-                <Icon material="home" />
-                <Input
-                  value={state.title}
-                  onChange={e => dispatch({ type: 'change_title', data: e.target.value })}
-                  placeholder={intl('settings.general.title.placeholder')}
-                  disabled={loading}
-                />
-              </div>
-              <br />
-              <hr />
-              <h2>{intl('settings.general.domains.title')}</h2>
-              <br />
-              <div className="inline-input">
-                <Icon material="domain" />
-                <Input
-                  style={{ flex: 1 }}
-                  value={state.authorizedDomains}
-                  onChange={e => dispatch({ type: 'change_domains', data: e.target.value })}
-                  placeholder={intl('settings.general.domains.placeholder')}
-                  disabled={loading}
-                />
-              </div>
-              <br />
-              <hr />
-              <h2>{intl('settings.general.bug_reporting.title')}</h2>
-              <br />
-              <div style={{ marginLeft: '1rem' }}>
-                <Radio.Group
-                  name="bug_reporting"
-                  selected={state.bugReporting}
-                  onChange={data => dispatch({ type: 'change_bug_reporting', data })}
-                  disabled={loading}
-                >
-                  <Radio label={intl('settings.general.bug_reporting.mail')} value="MAIL" />
-                  <Radio label={intl('settings.general.bug_reporting.github')} value="GITHUB" />
-                </Radio.Group>
-              </div>
-            </Tab>
-            <Tab label={intl('settings.tags.tab')}>
-              <TagsEditor categories={state.tagCategories} onChange={onTagsChange} />
-            </Tab>
-            <Tab label={intl('settings.synonyms.tab')}>
-              <PairInputList
-                pairs={state.synonyms}
-                options={{
-                  icons: { line: 'loop', value: 'list' },
-                  labels: intl('settings.synonyms.labels')
-                }}
-                actions={onListChangeActions('synonyms', dispatch)}
-                disabled={loading}
-              />
-            </Tab>
-            <Tab label={intl('settings.integrations.tab')}>
-              <h2>{intl('settings.integrations.workplace.title')}</h2>
-              <br />
-              <div style={{ marginLeft: '1rem' }}>
-                <Checkbox
-                  label={intl('settings.integrations.workplace.label')}
-                  checked={state.workplaceSharing}
-                  onChange={e =>
-                    dispatch({
-                      type: 'toggle_workplace',
-                      data: e.target.checked
-                    })
-                  }
-                  disabled={loading}
-                />
-              </div>
-              <br />
-              <hr />
-              <h2>{intl('settings.integrations.slack.title')}</h2>
-              <br />
-              <div className="inline-input" style={{ marginTop: '1em' }}>
-                <i style={{ marginLeft: '1em' }}>{intl('settings.integrations.slack.channel')}</i>
-                <Input
-                  value={state.slackChannelHook || ''}
-                  style={{ flex: 1, marginRight: '1rem' }}
-                  onChange={e =>
-                    dispatch({ type: 'change_slack_channelhook', data: e.target.value })
-                  }
-                />
-              </div>
-              <div className="inline-input" style={{ marginTop: '1em' }}>
-                <i style={{ marginLeft: '1em' }}>{intl('settings.integrations.slack.command')}</i>
-                <Input
-                  value={
-                    state.slackCommandKey
-                      ? `https://${window.location.host}/rest/integration/slack/${state.slackCommandKey}`
-                      : ''
-                  }
-                  disabled
-                  small
-                  style={{ flex: 1, marginLeft: '1rem', marginRight: '1rem' }}
-                />
-                <Button
-                  label={
-                    (state.slackCommandKey
-                      ? intl('settings.integrations.slack.regenerate')
-                      : intl('settings.integrations.slack.generate')) + ' URL'
-                  }
-                  link
-                  loading={slackHookLoading}
-                  onClick={generateSlackHook}
-                />
-              </div>
-            </Tab>
+            <General state={state} dispatch={dispatch} loading={loading} />
+            <Tags state={state} onTagsChange={onTagsChange} />
+            <Synonyms state={state} dispatch={dispatch} loading={loading} />
+            <Integrations state={state} dispatch={dispatch} loading={loading} />
           </Tabs>
         </CardText>
         <CardActions>
