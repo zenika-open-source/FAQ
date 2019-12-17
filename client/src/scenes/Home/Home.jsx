@@ -36,10 +36,11 @@ class Home extends Component {
     this.querySearchProvider()
   }
 
-  querySearchProvider = debounce(
-    () => this.setState(state => ({ debouncedSearchText: state.searchText })),
-    200
-  )
+  setDebounceTextSearch = () => {
+    this.setState(state => ({ debouncedSearchText: state.searchText }))
+  }
+
+  querySearchProvider = debounce(this.setDebounceTextSearch, 200)
 
   setSearchLoading = loading => this.setState({ searchLoading: loading })
 
