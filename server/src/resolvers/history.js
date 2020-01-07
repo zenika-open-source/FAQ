@@ -1,10 +1,9 @@
 module.exports = {
   Query: {
     history: async (_, { first, skip, ...args }, ctx, info) => {
-      const entriesCount = (await ctx.prisma.query.historyActionsConnection(
-        args,
-        '{ aggregate { count } }'
-      )).aggregate.count
+      const entriesCount = (
+        await ctx.prisma.query.historyActionsConnection(args, '{ aggregate { count } }')
+      ).aggregate.count
 
       const meta = {
         entriesCount,
