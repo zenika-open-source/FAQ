@@ -82,6 +82,52 @@ jobs:
           paths:
             - client/build/
 
+  landing/install:
+    working_directory: *workspace_root
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+
+      - run: |
+          cd landing/
+          npm ci
+
+      - persist_to_workspace:
+          root: *workspace_root
+          paths:
+            - landing/node_modules/
+
+  landing/lint:
+    working_directory: *workspace_root
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - *attach_workspace
+
+      - run: |
+          cd landing/
+          npm run lint
+          npm run prettier:check
+
+  landing/build:
+    working_directory: *workspace_root
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - *attach_workspace
+
+      - run: |
+          cd landing/
+          npm run build
+
+      - persist_to_workspace:
+          root: *workspace_root
+          paths:
+            - landing/build/
+
   prisma_deploy:
     environment:
       DEPLOY_DIR: ~/prisma_deploy
@@ -96,7 +142,7 @@ jobs:
 
       - add_ssh_keys:
           fingerprints:
-            - "6f:f2:b4:c2:e5:13:28:f8:02:2d:da:48:34:0c:14:7f"
+            - '6f:f2:b4:c2:e5:13:28:f8:02:2d:da:48:34:0c:14:7f'
 
       - run: |
           mkdir -p ~/.ssh
@@ -126,7 +172,7 @@ jobs:
 
       - add_ssh_keys:
           fingerprints:
-            - "6f:f2:b4:c2:e5:13:28:f8:02:2d:da:48:34:0c:14:7f"
+            - '6f:f2:b4:c2:e5:13:28:f8:02:2d:da:48:34:0c:14:7f'
 
       - run: |
           mkdir -p ~/.ssh
@@ -163,6 +209,13 @@ workflows:
       - client/build:
           requires:
             - client/install
+      - landing/install
+      - landing/lint:
+          requires:
+            - landing/install
+      - landing/build:
+          requires:
+            - landing/install
       - deploy:
           requires:
             - server/lint
