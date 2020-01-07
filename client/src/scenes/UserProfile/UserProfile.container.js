@@ -6,8 +6,4 @@ import { GET_ME } from './queries'
 
 import UserProfile from './UserProfile'
 
-export default compose(
-  query(GET_ME),
-  withLoading(),
-  withError()
-)(UserProfile)
+export default compose(query(GET_ME), withLoading(), withError())(UserProfile)

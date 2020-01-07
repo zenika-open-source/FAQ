@@ -65,7 +65,7 @@ const query = (query, { variables, skip, parse, ...queryProps } = {}) => Wrapped
     return (
       <Wrapped
         {...props}
-        {...{ loading: loading && Object.values(data).length === 0, error, ...parsedData }}
+        {...{ loading: loading && Object.values(data || {}).length === 0, error, ...parsedData }}
       />
     )
   }

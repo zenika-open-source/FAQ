@@ -8,7 +8,4 @@ import { GET_CONFIGURATION } from './queries'
 
 import Settings from './Settings'
 
-export default compose(
-  query(GET_CONFIGURATION),
-  withLoading()
-)(Settings)
+export default compose(query(GET_CONFIGURATION), withLoading())(Settings)
