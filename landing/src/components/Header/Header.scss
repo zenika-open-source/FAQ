@@ -1,0 +1,31 @@
+#sticky-header {
+  .title {
+    display: flex;
+
+    & > div {
+      display: flex;
+      align-items: baseline;
+    }
+
+    img {
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    h1,
+    h2 {
+      color: var(--red-faq);
+      font-family: Lato, Calibri, Arial, sans-serif;
+      white-space: nowrap;
+    }
+
+    h1 {
+      font-size: 30px;
+    }
+
+    h2 {
+      font-size: 14px;
+      margin-left: 5px;
+    }
+  }
+}

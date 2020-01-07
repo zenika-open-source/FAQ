@@ -1,0 +1,48 @@
+.own-carousel {
+  position: relative;
+  overflow: hidden;
+
+  .own-prev,
+  .own-next {
+    border: 1px solid #918dfe;
+    background-color: #605cfd;
+    color: white;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    line-height: 50px;
+    cursor: pointer;
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+
+    &:hover {
+      background-color: #918dfe;
+    }
+
+    @media screen and (max-width: 992px) {
+      top: 80%;
+    }
+  }
+
+  .own-prev {
+    left: 0;
+  }
+
+  .own-next {
+    right: 0;
+  }
+
+  .own-carousel-stage {
+    transition: all 0.5s ease 0s;
+    display: flex;
+    width: 10000px;
+
+    .single_carousel {
+      width: var(--carousel-width);
+    }
+  }
+}

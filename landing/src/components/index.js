@@ -1,0 +1,8 @@
+export { default as Header } from './Header'
+export { default as Slider } from './Slider'
+export { default as Features } from './Features'
+export { default as Users } from './Users'
+export { default as Pricing } from './Pricing'
+export { default as Company } from './Company'
+export { default as Testimonials } from './Testimonials'
+export { default as Footer } from './Footer'
