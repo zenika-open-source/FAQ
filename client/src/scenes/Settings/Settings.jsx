@@ -1,95 +1,38 @@
-import React, { useState, useReducer, useEffect } from 'react'
-import { useMutation } from '@apollo/react-hooks'
+import React, { useEffect } from 'react'
 
-import { alert, useIntl } from 'services'
-
-import { useConfiguration } from 'contexts'
-
-import { Tabs, Button } from 'components'
-import Card, { CardTitle, CardText, CardActions } from 'components/Card'
-
-import { reducer, serializeTags, synonymsToList, listToSynonyms } from './helpers'
-
-import { UPDATE_CONFIGURATION } from './queries'
+import { Card, Tabs, Loading } from 'components'
+import { useIntl } from 'services'
 
 import { General, Tags, Synonyms, Integrations } from './scenes'
+import { useFullConfiguration } from './queries'
 
 import './Settings.scss'
 
-const initState = conf => ({
-  ...conf,
-  synonyms: synonymsToList(conf.algoliaSynonyms),
-  authorizedDomains: conf.authorizedDomains.join(', '),
-  bugReporting: conf.bugReporting || 'GITHUB'
-})
-
-const Settings = ({ configuration: conf }) => {
+const Settings = ({ match }) => {
   const intl = useIntl(Settings)
 
-  const configuration = useConfiguration()
-
-  const [loading, setLoading] = useState(false)
-
-  const [state, dispatch] = useReducer(reducer, initState(conf))
-
-  const [mutate] = useMutation(UPDATE_CONFIGURATION)
+  const [query, { loading, data }] = useFullConfiguration()
 
   useEffect(() => {
-    dispatch({
-      type: 'reset',
-      data: initState(conf)
-    })
-  }, [conf])
+    query()
+  }, [query])
 
-  const onSave = () => {
-    setLoading(true)
-    mutate({
-      variables: {
-        title: state.title,
-        tagCategories: serializeTags(state.tagCategories),
-        algoliaSynonyms: listToSynonyms(state.synonyms),
-        workplaceSharing: state.workplaceSharing,
-        authorizedDomains: state.authorizedDomains
-          .split(',')
-          .map(x => x.trim())
-          .filter(x => x),
-        bugReporting: state.bugReporting,
-        slackChannelHook: state.slackChannelHook
-      }
-    })
-      .then(() => {
-        alert.pushSuccess(intl('alert_success'))
-        configuration.reload()
-      })
-      .catch(error => {
-        alert.pushDefaultError(error)
-      })
-      .finally(() => {
-        setLoading(false)
-      })
-  }
-
-  const onTagsChange = tags => dispatch({ type: 'change_tags', data: tags })
+  if (loading || !data) return <Loading />
 
   return (
     <div>
       <Card>
-        <CardTitle>
-          <h1 className="centered" style={{ width: '100%' }}>
-            {intl('title')}
-          </h1>
-        </CardTitle>
-        <CardText>
-          <Tabs>
-            <General state={state} dispatch={dispatch} loading={loading} />
-            <Tags state={state} onTagsChange={onTagsChange} />
-            <Synonyms state={state} dispatch={dispatch} loading={loading} />
-            <Integrations state={state} dispatch={dispatch} loading={loading} />
+        <Card.Title>
+          <h1>{intl('title')}</h1>
+        </Card.Title>
+        <Card.Text>
+          <Tabs path={match.path}>
+            <General />
+            <Tags />
+            <Synonyms />
+            <Integrations />
           </Tabs>
-        </CardText>
-        <CardActions>
-          <Button primary label={intl('validate')} onClick={onSave} loading={loading} />
-        </CardActions>
+        </Card.Text>
       </Card>
     </div>
   )

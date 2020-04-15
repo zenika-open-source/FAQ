@@ -1,5 +1,11 @@
-export { default } from './Card'
-export { default as CardText } from './CardText'
-export { default as CardTitle } from './CardTitle'
-export { default as CardActions } from './CardActions'
+import Card from './Card'
+import CardTitle from './CardTitle'
+import CardText from './CardText'
+import CardActions from './CardActions'
+
+Card.Title = CardTitle
+Card.Text = CardText
+Card.Actions = CardActions
+
+export default Card
 export { default as PermanentClosableCard } from './PermanentClosableCard'

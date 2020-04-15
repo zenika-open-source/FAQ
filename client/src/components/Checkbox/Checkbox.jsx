@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import cn from 'classnames'
 
 import './Checkbox.scss'
@@ -11,12 +10,5 @@ const Checkbox = ({ label, checked, onChange, disabled, ...props }) => (
     <span className="checkmark" />
   </label>
 )
-
-Checkbox.propTypes = {
-  label: PropTypes.node.isRequired,
-  checked: PropTypes.bool.isRequired,
-  onChange: PropTypes.func.isRequired,
-  disabled: PropTypes.bool
-}
 
 export default Checkbox

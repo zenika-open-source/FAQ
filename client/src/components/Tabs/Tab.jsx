@@ -1,19 +1,26 @@
 import React, { useEffect, useContext } from 'react'
 import cn from 'classnames'
+import { Route } from 'react-router-dom'
 
 import { TabsContext } from './Tabs'
 
-const Tab = ({ label, children, className, ...rest }) => {
-  const [current, register] = useContext(TabsContext)
+const Tab = ({ path, label, children, className, ...rest }) => {
+  const [basePath, register] = useContext(TabsContext)
 
   useEffect(() => {
-    register(label)
-  }, [label, register])
+    register({ label, path })
+  }, [label, path, register])
 
   return (
-    <div className={cn('tab', className, { 'is-active': label === current })} {...rest}>
-      {children}
-    </div>
+    <Route
+      path={`${basePath}/${path}`}
+      exact
+      render={() => (
+        <div className={cn('tab', className)} {...rest}>
+          {children}
+        </div>
+      )}
+    />
   )
 }
 

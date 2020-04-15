@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import clone from 'lodash/clone'
+//import clone from 'lodash/clone'
 import find from 'lodash/find'
 import map from 'lodash/map'
 import format from 'date-fns/format'
@@ -15,7 +15,7 @@ const Flags = ({ node, withLabels }) => {
   const intl = useIntl(Flags)
   const flagIntl = useIntl(Flag)
 
-  const flags = clone(node.flags)
+  const flags = node?.flags || [] //clone(node.flags)
 
   if (flags.length === 0) return ''
 

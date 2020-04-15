@@ -1,0 +1,47 @@
+.sources {
+  border-top: 1px dashed var(--secondary-color);
+
+  h3 {
+    color: var(--primary-color);
+    margin: 0.7rem;
+    margin-bottom: 0;
+  }
+
+  .list {
+    font-size: var(--small-font-size);
+    color: var(--secondary-color-font-light);
+    padding: 0.6rem;
+    width: auto;
+    display: inline-flex;
+
+    @media screen and (max-width: 480px) {
+      flex-direction: column;
+
+      & > * + * {
+        margin-left: 0 !important;
+        margin-top: 0.3rem !important;
+      }
+    }
+
+    & > * + * {
+      margin-left: 0.3rem;
+      margin-top: 0;
+    }
+
+    .list-item {
+      padding: 0.4rem 0.6rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+
+      .material-icons {
+        font-size: 18px;
+        margin-right: 0.5rem;
+      }
+
+      &:hover {
+        background-color: var(--secondary-color);
+      }
+    }
+  }
+}

@@ -1,22 +1,16 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
-import { CardText, PermanentClosableCard } from 'components/Card'
+import Card, { PermanentClosableCard } from 'components/Card'
 
-import './Tips.css'
+import './Tips.scss'
 
 const Tips = props => {
   const { uid, children, ...otherProps } = props
   return (
     <PermanentClosableCard {...otherProps} className="Tips" uid={uid}>
-      <CardText>{props.children}</CardText>
+      <Card.Text>{props.children}</Card.Text>
     </PermanentClosableCard>
   )
-}
-
-Tips.propTypes = {
-  uid: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired
 }
 
 export default Tips

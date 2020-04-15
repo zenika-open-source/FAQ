@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import cn from 'classnames'
 
 import './Button.css'
+import { Link } from 'react-router-dom'
 
 class Button extends Component {
   render() {
@@ -20,6 +21,7 @@ class Button extends Component {
       fixed,
       loading,
       small,
+      path,
       ...otherProps
     } = this.props
 
@@ -43,7 +45,7 @@ class Button extends Component {
       buttonModifiers['disabled'] = true
     }
 
-    return (
+    const render = (
       <button className={cn('btn', className)} {...buttonModifiers} {...otherProps}>
         {loading ? (
           <span>
@@ -58,6 +60,12 @@ class Button extends Component {
         )}
       </button>
     )
+
+    if (path) {
+      return <Link to={path}>{render}</Link>
+    }
+
+    return render
   }
 }
 

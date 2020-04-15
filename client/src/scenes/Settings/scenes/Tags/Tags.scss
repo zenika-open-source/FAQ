@@ -1,0 +1,113 @@
+.tags-editor {
+  display: flex;
+  flex-wrap: wrap;
+
+  .card {
+    flex: 1;
+    min-width: 220px;
+    margin: 0.5rem 1%;
+    display: flex;
+    flex-direction: column;
+
+    .card-text {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+
+      .label {
+        border-bottom: 1px dotted grey;
+      }
+    }
+
+    .card-actions {
+      justify-content: center;
+      flex-wrap: wrap;
+
+      .btn {
+        margin: 5px;
+      }
+    }
+
+    .tag-input {
+      display: flex;
+      flex: 1;
+      flex-direction: row;
+      align-items: center;
+      margin: 0.2rem 0;
+      min-height: 1.2rem;
+      justify-content: space-between;
+
+      &.active {
+        margin: 0 0 0 -10px;
+      }
+
+      .tag-input-left {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        flex: 1;
+      }
+
+      .order-buttons {
+        display: flex;
+        flex-direction: column;
+        margin: 0 5px;
+
+        &.hidden {
+          display: none;
+          height: 10px;
+        }
+      }
+
+      .value-wrapper {
+        display: flex;
+        align-items: center;
+        margin-left: 12px;
+        cursor: pointer;
+
+        flex: 1;
+        justify-content: space-between;
+
+        .edit-action {
+          font-size: 1.1rem;
+        }
+      }
+
+      .input-wrapper input {
+        width: 80px;
+      }
+
+      &:not(.with-delete) .input-wrapper input {
+        width: 100px;
+      }
+
+      .actions {
+        margin-left: 0.5rem;
+        margin-bottom: -2px;
+        display: flex;
+        flex-wrap: nowrap;
+
+        i {
+          font-size: 1.2rem;
+        }
+
+        .btn + .btn {
+          margin-left: 10px;
+        }
+      }
+    }
+
+    &.empty-card {
+      border-style: dashed;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 150px;
+    }
+
+    &.filler-card {
+      border: none;
+    }
+  }
+}

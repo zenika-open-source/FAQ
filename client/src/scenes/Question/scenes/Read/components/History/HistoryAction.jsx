@@ -1,11 +1,10 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
 import { formatHistoryAction } from 'helpers'
 
-import Avatar from 'components/Avatar'
+import { Avatar } from 'components'
 
-import './History.css'
+import './History.scss'
 
 const HistoryAction = ({ action }) => {
   action = formatHistoryAction(action)
@@ -28,10 +27,6 @@ const HistoryAction = ({ action }) => {
       </div>
     </div>
   )
-}
-
-HistoryAction.propTypes = {
-  action: PropTypes.object.isRequired
 }
 
 export default HistoryAction

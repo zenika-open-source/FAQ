@@ -1,14 +1,10 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import cn from 'classnames'
 
-const CardAction = ({ children, ...otherProps }) => (
-  <div className="card-item card-actions" {...otherProps}>
+const CardAction = ({ children, className, ...otherProps }) => (
+  <div className={cn('card-item card-actions', className)} {...otherProps}>
     {children}
   </div>
 )
-
-CardAction.propTypes = {
-  children: PropTypes.node.isRequired
-}
 
 export default CardAction

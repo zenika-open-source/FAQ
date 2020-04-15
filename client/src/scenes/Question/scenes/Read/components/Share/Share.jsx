@@ -2,12 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import copy from 'copy-to-clipboard'
 
-import { useConfiguration } from 'contexts'
-import { routing, useIntl } from 'services'
+import { useIntl, useConfiguration } from 'services'
 
-import Dropdown, { DropdownItem } from 'components/Dropdown'
-
-import Button from 'components/Button'
+import { Dropdown, Button } from 'components'
 
 import './Share.css'
 
@@ -15,13 +12,13 @@ const Share = ({ node }) => {
   const intl = useIntl(Share)
 
   const conf = useConfiguration()
-  const shareUrl = routing.getShareUrl(node.id)
+  const shareUrl = `${window.location.origin}/q/${node.id}`
 
   return (
     <div className="share">
       <Dropdown button={<Button icon="share" link style={{ padding: '0.2rem' }} />}>
         {conf.workplaceSharing ? (
-          <DropdownItem
+          <Dropdown.Item
             icon={
               <img
                 src="/img/brands/workplace.png"
@@ -40,11 +37,11 @@ const Share = ({ node }) => {
             }}
           >
             Workplace
-          </DropdownItem>
+          </Dropdown.Item>
         ) : null}
-        <DropdownItem icon="link" onClick={() => copy(shareUrl)}>
+        <Dropdown.Item icon="link" onClick={() => copy(shareUrl)}>
           {intl('copy')}
-        </DropdownItem>
+        </Dropdown.Item>
       </Dropdown>
     </div>
   )

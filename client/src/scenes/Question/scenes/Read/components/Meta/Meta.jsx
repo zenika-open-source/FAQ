@@ -1,12 +1,11 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import format from 'date-fns/format'
 
 import { useIntl } from 'services'
 
 import Avatar from 'components/Avatar'
 
-import './Meta.css'
+import './Meta.scss'
 
 const Meta = ({ node }) => {
   const intl = useIntl(Meta)
@@ -39,10 +38,6 @@ const Meta = ({ node }) => {
       )}
     </div>
   )
-}
-
-Meta.propTypes = {
-  node: PropTypes.object.isRequired
 }
 
 Meta.translations = {

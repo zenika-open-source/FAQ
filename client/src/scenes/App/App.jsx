@@ -1,35 +1,28 @@
 import React from 'react'
-import { Helmet } from 'react-helmet'
+import { Helmet } from 'react-helmet-async'
 
-import { ConfigurationProvider, AuthProvider, UserProvider } from 'contexts'
+import { useConfiguration } from 'services'
+import { AlertStack } from 'components'
 
-import { AlertStack, AlertProvider } from 'components'
-
-import Navbar from './components/Navbar'
-import Footer from './components/Footer'
+import { Navbar } from './components'
 
 import AppBody from './AppBody'
 
 import 'styles'
 
-const App = () => (
-  <div className="app theme">
-    <Helmet>
-      <title>FAQ</title>
-    </Helmet>
-    <AlertProvider>
-      <ConfigurationProvider>
-        <AuthProvider>
-          <UserProvider>
-            <Navbar />
-            <AppBody />
-            <Footer />
-          </UserProvider>
-        </AuthProvider>
-      </ConfigurationProvider>
+const App = () => {
+  const conf = useConfiguration()
+
+  return (
+    <div className="app theme">
+      <Helmet>
+        <title>FAQ {conf?.title || ''}</title>
+      </Helmet>
+      <Navbar />
+      <AppBody />
       <AlertStack />
-    </AlertProvider>
-  </div>
-)
+    </div>
+  )
+}
 
 export default App

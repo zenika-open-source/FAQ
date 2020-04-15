@@ -1,9 +1,9 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import cn from 'classnames'
 
-const CardTitle = ({ children, style, onClick, ...otherProps }) => (
+const CardTitle = ({ children, className, style, onClick, ...otherProps }) => (
   <div
-    className="card-item card-title"
+    className={cn('card-item card-title', className)}
     style={{ ...style, cursor: onClick ? 'pointer' : 'initial' }}
     onClick={onClick}
     {...otherProps}
@@ -11,11 +11,5 @@ const CardTitle = ({ children, style, onClick, ...otherProps }) => (
     {children}
   </div>
 )
-
-CardTitle.propTypes = {
-  children: PropTypes.node.isRequired,
-  style: PropTypes.object,
-  onClick: PropTypes.func
-}
 
 export default CardTitle

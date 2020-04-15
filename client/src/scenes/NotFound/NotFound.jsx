@@ -1,12 +1,12 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { withRouter } from 'react-router'
+import { useHistory } from 'react-router-dom'
 
 import { useIntl } from 'services'
-import Button from 'components/Button'
+import { Button } from 'components'
 
-const NotFound = ({ history }) => {
+const NotFound = () => {
   const intl = useIntl(NotFound)
+  const history = useHistory()
 
   return (
     <div>
@@ -24,10 +24,6 @@ const NotFound = ({ history }) => {
   )
 }
 
-NotFound.propTypes = {
-  history: PropTypes.object.isRequired
-}
-
 NotFound.translations = {
   en: { title: 'Ooops! 404', subtitle: "Looks like we couldn't find what you were looking for..." },
   fr: {
@@ -36,4 +32,4 @@ NotFound.translations = {
   }
 }
 
-export default withRouter(NotFound)
+export default NotFound

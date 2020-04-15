@@ -1,42 +1,37 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { withRouter } from 'react-router'
 
-import { useIntl } from 'services'
-import { useUser, useConfiguration } from 'contexts'
+import { useUser, useConfiguration, useIntl, signOut } from 'services'
+import { Authenticated, Avatar, Dropdown } from 'components'
 
-import { Authenticated, Avatar } from 'components'
-import Dropdown, { DropdownItem, DropdownDivider } from 'components/Dropdown'
+import GithubIcon from '../BugReporting/GithubIcon'
 
-import GithubIcon from '../GithubIcon'
-
-const UserMenu = ({ history }) => {
+const UserMenu = () => {
   const intl = useIntl(UserMenu)
 
-  const me = useUser()
+  const user = useUser()
   const conf = useConfiguration()
 
-  if (!me) return null
+  if (!user) return null
 
   return (
-    <Dropdown button={<Avatar image={me.picture} style={{ width: '30px', display: 'block' }} />}>
-      <DropdownItem icon="account_box" path="/user-profile">
+    <Dropdown button={<Avatar image={user?.picture} style={{ width: '30px', display: 'block' }} />}>
+      <Dropdown.Item icon="account_box" path="/user/me">
         {intl('profile')}
-      </DropdownItem>
+      </Dropdown.Item>
       <Authenticated admin>
-        <DropdownItem icon="settings" path="/settings">
+        <Dropdown.Item icon="settings" path="/settings">
           {intl('settings')}
-        </DropdownItem>
+        </Dropdown.Item>
       </Authenticated>
-      <DropdownDivider />
-      <DropdownItem
+      <Dropdown.Divider />
+      <Dropdown.Item
         icon={<GithubIcon style={{ width: '20px', height: '20px', margin: '2px' }} />}
         href="https://github.com/zenika-open-source/FAQ"
         target="_blank"
       >
         {intl('github')}
-      </DropdownItem>
-      <DropdownItem
+      </Dropdown.Item>
+      <Dropdown.Item
         icon="bug_report"
         href={
           conf.bugReporting === 'GITHUB'
@@ -44,19 +39,16 @@ const UserMenu = ({ history }) => {
             : `mailto:bug@${process.env.REACT_APP_FAQ_URL}`
         }
         target="_blank"
+        disabled={!conf}
       >
         {intl('bug_report')}
-      </DropdownItem>
-      <DropdownDivider />
-      <DropdownItem icon="exit_to_app" path="/auth/logout">
+      </Dropdown.Item>
+      <Dropdown.Divider />
+      <Dropdown.Item icon="exit_to_app" onClick={signOut}>
         {intl('sign_out')}
-      </DropdownItem>
+      </Dropdown.Item>
     </Dropdown>
   )
-}
-
-UserMenu.propTypes = {
-  history: PropTypes.object.isRequired
 }
 
 UserMenu.translations = {
@@ -76,4 +68,4 @@ UserMenu.translations = {
   }
 }
 
-export default withRouter(UserMenu)
+export default UserMenu

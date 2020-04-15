@@ -1,3 +1,8 @@
-export { default } from './Dropdown'
-export { default as DropdownItem } from './DropdownItem'
-export { default as DropdownDivider } from './DropdownDivider'
+import Dropdown from './Dropdown'
+import DropdownItem from './DropdownItem'
+import DropdownDivider from './DropdownDivider'
+
+Dropdown.Item = DropdownItem
+Dropdown.Divider = DropdownDivider
+
+export default Dropdown

@@ -1,94 +1,66 @@
-import React, { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
-import { Link, Redirect } from 'react-router-dom'
-import { Helmet } from 'react-helmet'
-import { useMutation } from '@apollo/react-hooks'
+import React from 'react'
+import { Redirect, Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 
-import { CREATE_FLAG, REMOVE_FLAG, INCREMENT_VIEWS_COUNTER } from './queries'
-
-import { markdown, useIntl } from 'services'
-
+import { Loading, Card, Button, Dropdown, Tags, Flags } from 'components'
+import { markdown, useConfiguration, useIntl } from 'services'
 import NotFound from 'scenes/NotFound'
 
-import { Loading, Button, Flags, Tags } from 'components'
-import Card, { CardTitle, CardText } from 'components/Card'
-import Dropdown, { DropdownItem } from 'components/Dropdown'
-
+import { useNode } from '../../queries'
 import { ActionMenu } from '../../components'
-import { Views, FlagsDropdown, Sources, Meta, Share, History } from './components'
+import { FlagsDropdown, Share, Views, Meta, Sources, History } from './components'
 
-const Read = ({ history, match, zNode, loading }) => {
-  const [loaded, setLoaded] = useState(false)
-  const [incremented, setIncremented] = useState(false)
-
-  const [createFlag] = useMutation(CREATE_FLAG)
-  const [removeFlag] = useMutation(REMOVE_FLAG)
-  const [incrementViewsCounter] = useMutation(INCREMENT_VIEWS_COUNTER)
-
-  useEffect(() => {
-    if (!loaded || incremented) return
-    incrementViewsCounter({ variables: { questionId: zNode.question.id } })
-    setIncremented(true)
-  }, [loaded, incremented, incrementViewsCounter, zNode])
-
-  useEffect(() => {
-    if (!loaded && zNode) setLoaded(true)
-  }, [zNode, loaded])
-
+const Read = ({ match }) => {
   const intl = useIntl(Read)
+  const conf = useConfiguration({ cacheOnly: true })
+  const { loading, data } = useNode(match.params.slugid, { pollInterval: 60 * 1000 })
+  const node = data?.node
 
-  if (loading) return <Loading />
+  if (loading && !node) return <Loading />
 
-  if (zNode === null) {
-    return <NotFound />
-  }
+  if (!node) return <NotFound />
 
-  /* Redirect to correct URL if old slug used */
-  const correctSlug = zNode.question.slug + '-' + zNode.id
-  if (match.params.slug !== correctSlug) {
+  /* Redirect to correct URL if incorrect slug */
+  const correctSlug = node.question.slug + '-' + node.id
+  if (match.params.slugid !== correctSlug) {
     return <Redirect to={'/q/' + correctSlug} />
   }
 
   return (
     <div>
       <Helmet>
-        <title>FAQ - {markdown.title(zNode.question.title)}</title>
+        <title>
+          FAQ {conf.title} - {markdown.title(node.question.title)}
+        </title>
       </Helmet>
-      <ActionMenu backLink="/" backLabel={intl('menu.home')} goBack>
-        <FlagsDropdown
-          flags={zNode.flags}
-          onSelect={type => createFlag({ variables: { type, nodeId: zNode.id } })}
-          onRemove={type => removeFlag({ variables: { type, nodeId: zNode.id } })}
-        />
+      <ActionMenu home>
+        <FlagsDropdown nodeId={node.id} flags={node.flags} />
         <Dropdown button={<Button icon="edit" label={intl('menu.edit.label')} link />}>
-          <DropdownItem icon="edit" onClick={() => history.push(`/q/${match.params.slug}/edit`)}>
+          <Dropdown.Item icon="edit" path={`/q/${match.params.slugid}/edit`}>
             {intl('menu.edit.question')}
-          </DropdownItem>
-          <DropdownItem
-            icon="question_answer"
-            onClick={() => history.push(`/q/${match.params.slug}/answer`)}
-          >
+          </Dropdown.Item>
+          <Dropdown.Item icon="question_answer" path={`/q/${match.params.slugid}/answer`}>
             {intl('menu.edit.answer')}
-          </DropdownItem>
+          </Dropdown.Item>
         </Dropdown>
       </ActionMenu>
       <Card>
-        <CardTitle style={{ padding: '1.2rem' }}>
+        <Card.Title style={{ padding: '1.2rem' }}>
           <div className="grow">
-            <h1>{markdown.title(zNode.question.title)}</h1>
-            {zNode.tags.length > 0 && <Tags tags={zNode.tags} />}
+            <h1>{markdown.title(node.question.title)}</h1>
+            {node.tags.length > 0 && <Tags tags={node.tags} />}
           </div>
-          <Flags node={zNode} withLabels={true} />
-          <Views value={zNode.question.views} />
-          <Share node={zNode} />
-        </CardTitle>
-        <CardText>
-          {zNode.answer ? (
+          <Flags node={node} withLabels={true} />
+          <Views questionId={node.question.id} value={node.question.views} />
+          <Share node={node} />
+        </Card.Title>
+        <Card.Text>
+          {node.answer ? (
             <>
               <div style={{ padding: '0.5rem', marginBottom: '0.5rem' }}>
-                {markdown.html(zNode.answer.content)}
+                {markdown.html(node.answer.content)}
               </div>
-              <Sources sources={zNode.answer.sources} />
+              <Sources sources={node.answer.sources} />
             </>
           ) : (
             <div
@@ -101,7 +73,7 @@ const Read = ({ history, match, zNode, loading }) => {
               <b>{intl('no_answer')}</b>
               <br />
               <br />
-              <Link to={`/q/${match.params.slug}/answer`} className="btn-container">
+              <Link to={`/q/${match.params.slugid}/answer`} className="btn-container">
                 <Button icon="question_answer" primary>
                   {intl('answer')}
                 </Button>
@@ -109,25 +81,17 @@ const Read = ({ history, match, zNode, loading }) => {
             </div>
           )}
           <hr />
-          <Meta node={zNode} />
-          <History />
-        </CardText>
+          <Meta node={node} />
+          <History node={node} />
+        </Card.Text>
       </Card>
     </div>
   )
 }
 
-Read.propTypes = {
-  history: PropTypes.object.isRequired,
-  match: PropTypes.object.isRequired,
-  zNode: PropTypes.object,
-  loading: PropTypes.bool.isRequired
-}
-
 Read.translations = {
   en: {
     menu: {
-      home: 'Home',
       edit: {
         label: 'Edit ...',
         question: 'Question',
@@ -139,7 +103,6 @@ Read.translations = {
   },
   fr: {
     menu: {
-      home: 'Accueil',
       edit: {
         label: 'Modifier ...',
         question: 'Question',

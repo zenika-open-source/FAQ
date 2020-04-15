@@ -1,12 +1,9 @@
 import React, { useState } from 'react'
 import cn from 'classnames'
-import PropTypes from 'prop-types'
 import sortBy from 'lodash/sortBy'
 
-import { useConfiguration } from 'contexts'
-
+import { useConfiguration } from 'services'
 import { useClickOutside } from 'helpers'
-
 import { Button } from 'components'
 
 import './TagPicker.css'
@@ -72,13 +69,6 @@ const TagPicker = ({ label, icon, tags, onChange }) => {
       </div>
     </div>
   )
-}
-
-TagPicker.propTypes = {
-  label: PropTypes.string,
-  icon: PropTypes.string,
-  tags: PropTypes.array.isRequired,
-  onChange: PropTypes.func.isRequired
 }
 
 export default TagPicker

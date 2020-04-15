@@ -1,94 +1,127 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
-import debounce from 'lodash/debounce'
+import React, { useEffect, useState } from 'react'
+import { Link, useHistory, useLocation } from 'react-router-dom'
 
 import { Button } from 'components'
-
 import { useIntl } from 'services'
-import { unserialize, addToQueryString } from 'helpers'
+import { unserialize, addToQueryString, useDebouncedText } from 'helpers'
 
 import { Searchbar, ResultList } from './components'
+import { useSearch } from './queries'
 
-class Home extends Component {
-  constructor(props) {
-    super(props)
+const NODES_PER_PAGE = 10
 
-    const params = unserialize(props.location.search)
+const Home = () => {
+  const location = useLocation()
+  const history = useHistory()
+  const intl = useIntl(Home)
 
-    this.state = {
-      searchText: params.q,
-      debouncedSearchText: params.q,
-      searchLoading: false,
-      tags: params.tags
+  const { q, page, tags } = unserialize(location.search)
+
+  const [searchText, debouncedSearchText, setSearchText, setDebouncedSearchText] = useDebouncedText(
+    q
+  )
+  const [currentPage, setCurrentPage] = useState(page)
+  const [filterTags, setTags] = useState(tags)
+
+  const [search, { loading: searchLoading, data: searchData }] = useSearch()
+  const [searchMeta, setSearchMeta] = useState(searchData?.meta)
+  const [preSearch] = useSearch()
+
+  // Cache searchMeta for pagination in resultList
+  useEffect(() => {
+    if (searchData?.search?.meta) {
+      setSearchMeta(searchData?.search?.meta)
     }
-  }
+  }, [searchData])
 
-  onSearchChange = text => {
-    const { history, location } = this.props
+  // Update state on url change
+  useEffect(() => {
+    const { q, page, tags } = unserialize(location.search)
+    setSearchText(q)
+    setDebouncedSearchText(q)
+    setCurrentPage(page)
+    setTags(prev => (prev.join('+') !== tags.join('+') ? tags : prev))
+  }, [location, setSearchText, setDebouncedSearchText])
 
-    this.setState({ searchText: text })
-
-    addToQueryString(history, location, {
-      q: text
+  // Update url on state change
+  useEffect(() => {
+    addToQueryString(history, {
+      q: debouncedSearchText,
+      tags: filterTags,
+      page: 1
     })
+  }, [history, debouncedSearchText, filterTags])
 
-    this.querySearchProvider()
-  }
+  // Update url on page change
+  useEffect(() => {
+    addToQueryString(history, {
+      page: currentPage
+    })
+  }, [history, currentPage])
 
-  setDebounceTextSearch = () => {
-    this.setState(state => ({ debouncedSearchText: state.searchText }))
-  }
+  // Search query
+  useEffect(() => {
+    search({
+      variables: {
+        text: debouncedSearchText,
+        tags: filterTags,
+        first: NODES_PER_PAGE,
+        skip: NODES_PER_PAGE * (currentPage - 1)
+      }
+    })
+  }, [search, debouncedSearchText, filterTags, currentPage])
 
-  querySearchProvider = debounce(this.setDebounceTextSearch, 200)
+  // Presearch query
+  useEffect(() => {
+    // Prefetch the second page after 5s
+    if (currentPage === 1) {
+      const timeout = setTimeout(
+        () =>
+          preSearch({
+            variables: {
+              text: debouncedSearchText,
+              tags: filterTags,
+              first: NODES_PER_PAGE,
+              skip: NODES_PER_PAGE * currentPage
+            }
+          }),
+        5 * 1000
+      )
 
-  setSearchLoading = loading => this.setState({ searchLoading: loading })
+      return () => clearTimeout(timeout)
+    }
+  }, [preSearch, debouncedSearchText, filterTags, currentPage])
 
-  onTagsChange = tags => {
-    const { history, location } = this.props
-
-    const labels = tags.map(tag => tag.name)
-
-    this.setState({ tags: labels })
-
-    addToQueryString(history, location, { tags: labels })
-  }
-
-  render() {
-    const intl = useIntl(Home)
-
-    return (
-      <div>
-        <Searchbar
-          text={this.state.searchText}
-          tags={this.state.tags}
-          loading={this.state.searchLoading}
-          onTextChange={this.onSearchChange}
-          onTagsChange={this.onTagsChange}
+  return (
+    <div>
+      <Searchbar
+        text={searchText}
+        onTextChange={setSearchText}
+        tags={filterTags}
+        onTagsChange={setTags}
+        loading={searchLoading}
+      />
+      <ResultList
+        searchText={searchText}
+        searchData={searchData?.search}
+        searchLoading={searchLoading}
+        searchMeta={searchMeta}
+        onPageSelected={setCurrentPage}
+        opened={debouncedSearchText || filterTags.length > 0}
+      />
+      <Link to="/q/new">
+        <Button
+          icon="record_voice_over"
+          data-tooltip={intl('new_question')}
+          style={{ position: 'fixed', bottom: '1rem', right: '1rem' }}
+          primary
+          round
+          raised
+          fixed
         />
-        <ResultList
-          searchText={this.state.debouncedSearchText}
-          setSearchLoading={this.setSearchLoading}
-        />
-        <Link to="/q/new">
-          <Button
-            icon="record_voice_over"
-            data-tooltip={intl('new_question')}
-            style={{ position: 'fixed', bottom: '1rem', right: '1rem' }}
-            primary
-            round
-            raised
-            fixed
-          />
-        </Link>
-      </div>
-    )
-  }
-}
-
-Home.propTypes = {
-  location: PropTypes.object,
-  history: PropTypes.object
+      </Link>
+    </div>
+  )
 }
 
 Home.translations = {

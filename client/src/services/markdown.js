@@ -45,7 +45,7 @@ class Markdown {
   }
 
   emoji(text) {
-    let emoticons = {
+    const emoticons = {
       ':)': ':slightly_smiling_face:',
       ':(': ':slightly_frowning_face:',
       ':/': ':confused:',
@@ -88,6 +88,4 @@ class Markdown {
   }
 }
 
-const markdown = new Markdown()
-
-export default markdown
+export const markdown = new Markdown()

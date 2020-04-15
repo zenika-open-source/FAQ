@@ -1,0 +1,159 @@
+// The two following datasources (tenant and management) are REQUIRED for prisma-multi-tenant
+
+datasource tenant {
+  provider = "postgresql"
+  url = "***"
+}
+
+datasource management {
+  provider = "sqlite"
+  url = "***"
+  enabled  = false
+}
+
+// End of prisma-multi-tenant
+
+generator photon {
+  provider = "prisma-client-js"
+}
+
+model Node {
+  id String @default(cuid()) @id
+
+  question Question @relation(name: "NodeQuestion") // , onDelete: CASCADE)
+  answer   Answer?  @relation(name: "NodeAnswer") // , onDelete: CASCADE)
+
+  flags Flag[] @relation(name: "NodeFlags") // , onDelete: CASCADE)
+  tags  Tag[]  @relation(name: "NodeTags") // , onDelete: CASCADE)
+
+  history HistoryAction[] @relation(name: "NodeHistoryActions") // , onDelete: CASCADE)
+
+  createdAt DateTime @default(now())
+}
+
+model Question {
+  id String @default(cuid()) @id
+
+  title String
+  slug  String
+  views Int
+
+  node Node @relation(name: "NodeQuestion")
+  user User @relation(name: "UserQuestions")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Answer {
+  id String @default(cuid()) @id
+
+  content String
+
+  sources String @default("[]")
+
+  node Node @relation(name: "NodeAnswer")
+  user User @relation(name: "UserAnswers")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Flag {
+  id String @default(cuid()) @id
+
+  type String
+
+  node Node @relation(name: "NodeFlags")
+  user User @relation(name: "UserFlags")
+
+  createdAt DateTime @default(now())
+}
+
+model Tag {
+  id String @default(cuid()) @id
+
+  label TagLabel @relation(name: "TagsLabel")
+
+  node Node @relation(name: "NodeTags")
+  user User @relation(name: "UserTags")
+
+  createdAt DateTime @default(now())
+}
+
+model TagLabel {
+  id String @default(cuid()) @id
+
+  name String
+  tags Tag[]  @relation(name: "TagsLabel") // , onDelete: CASCADE)
+
+  order    Int
+  category TagCategory @relation(name: "TagLabelsCategory")
+}
+
+model TagCategory {
+  id String @default(cuid()) @id
+
+  name   String
+  labels TagLabel[] @relation(name: "TagLabelsCategory") // , onDelete: CASCADE)
+
+  order         Int
+  configuration Configuration @relation(name: "ConfigurationTags")
+}
+
+model HistoryAction {
+  id String @default(cuid()) @id
+
+  action String
+  model  String
+  meta   String?
+
+  node Node @relation(name: "NodeHistoryActions")
+  user User @relation(name: "UserHistoryActions")
+
+  createdAt DateTime @default(now())
+}
+
+model User {
+  id    String  @id
+  email String  @unique
+  key   String?
+
+  admin Boolean @default(false)
+
+  name    String?
+  picture String?
+  locale  String?
+
+  questions Question[] @relation(name: "UserQuestions")
+  answers   Answer[]   @relation(name: "UserAnswers")
+
+  flags Flag[] @relation(name: "UserFlags")
+  tags  Tag[]  @relation(name: "UserTags")
+
+  history HistoryAction[] @relation(name: "UserHistoryActions")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Configuration {
+  id   String @default(cuid()) @id
+  name String @unique
+
+  title String @default("Dev")
+
+  authorizedDomains String       @default("[]")
+  algoliaSynonyms   String       @default("[]")
+  slackChannelHook  String?
+  slackCommandKey   String?
+  workplaceSharing  Boolean      @default(false)
+  bugReporting      BugReporting @default(GITHUB)
+
+  tagCategories TagCategory[] @relation(name: "ConfigurationTags") // , onDelete: CASCADE)
+}
+
+enum BugReporting {
+  MAIL
+  GITHUB
+}

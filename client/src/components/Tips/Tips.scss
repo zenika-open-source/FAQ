@@ -1,0 +1,49 @@
+.Tips {
+  h3 {
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: inline-block;
+  }
+
+  li {
+    padding-top: 0.1rem;
+    padding-bottom: 0.1rem;
+    display: flex;
+    align-items: center;
+    line-height: 1.2rem;
+
+    &::before {
+      content: '▸';
+      padding-right: 5px;
+      color: var(--primary-color);
+    }
+  }
+
+  .misplaced-questions {
+    border-spacing: 0;
+    margin-top: 1rem;
+    line-height: 1.2rem;
+
+    tr {
+      margin-top: 0.1rem;
+      margin-bottom: 0.1rem;
+
+      td:first-child {
+        color: var(--primary-color);
+      }
+
+      td:nth-child(2) {
+        padding-right: 0.5rem;
+      }
+    }
+  }
+}

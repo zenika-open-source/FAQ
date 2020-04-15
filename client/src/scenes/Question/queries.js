@@ -1,6 +1,6 @@
-import gql from 'graphql-tag'
+import { useQuery, gql } from '@apollo/client'
 
-export const zNodeFragment = `
+export const nodeFragment = `
   id
   question {
     id
@@ -18,7 +18,6 @@ export const zNodeFragment = `
     id
     content
     sources {
-      id
       label
       url
     }
@@ -26,6 +25,18 @@ export const zNodeFragment = `
       id
       name
       picture
+    }
+    createdAt
+  }
+  tags {
+    id
+    label {
+      id
+      name
+    }
+    user {
+      id
+      name
     }
     createdAt
   }
@@ -38,19 +49,23 @@ export const zNodeFragment = `
     }
     createdAt
   }
-  tags {
-    id
-    label {
-      id
-      name
-    }
-  }
 `
 
-export const getNode = gql`
-  query($id: ID!) {
-    zNode(where: { id: $id }) {
-      ${zNodeFragment}
+export const useNode = (slugid, options) => {
+  const id = slugid.split('-').pop()
+
+  return useQuery(
+    gql`
+  query ($id: String!) {
+    node (id: $id) {
+      ${nodeFragment}
     }
   }
-`
+`,
+    {
+      variables: { id },
+      returnPartialData: true,
+      ...options
+    }
+  )
+}

@@ -1,1 +1,1 @@
-export { default } from './Read'
+export { default } from './Read.jsx'

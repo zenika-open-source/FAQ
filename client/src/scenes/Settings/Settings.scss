@@ -6,3 +6,9 @@
     margin-right: 0.5rem;
   }
 }
+
+.settings-actions {
+  display: flex;
+  flex-direction: row-reverse;
+  padding-top: 1rem;
+}

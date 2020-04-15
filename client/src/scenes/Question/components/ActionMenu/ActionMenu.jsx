@@ -1,54 +1,43 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { withRouter } from 'react-router'
-import { Link } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 
+import { Button } from 'components'
 import { useIntl } from 'services'
-import Button from 'components/Button'
 
-import './ActionMenu.css'
+import './ActionMenu.scss'
 
-const ActionMenu = ({ backLabel, backLink, goBack, title, children, history, location }) => {
+const ActionMenu = ({ home, title, children }) => {
   const intl = useIntl(ActionMenu)
+  const history = useHistory()
+  const location = useLocation()
+
+  const fromHome = location?.state?.from === 'home'
 
   return (
     <div className="action-menu">
       <div className="back-btn">
-        {goBack && location.state && location.state.from === 'home' ? (
-          <Button
-            icon="chevron_left"
-            label={backLabel || intl('back')}
-            link
-            raised
-            onClick={() => history.goBack()}
-          />
-        ) : (
-          <Link to={backLink}>
-            <Button icon="chevron_left" label={backLabel || intl('back')} link raised />
-          </Link>
-        )}
+        <Button
+          icon={home ? 'home' : 'chevron_left'}
+          label={home ? intl('home') : intl('back')}
+          link
+          raised
+          path={home && !fromHome ? '/' : undefined}
+          onClick={home && !fromHome ? undefined : () => history.goBack()}
+        />
       </div>
-      <div className="title">
-        <h2>{title}</h2>
-      </div>
+      {title && (
+        <div className="title">
+          <h2>{title}</h2>
+        </div>
+      )}
       <div className="actions">{children}</div>
     </div>
   )
 }
 
-ActionMenu.propTypes = {
-  backLink: PropTypes.string.isRequired,
-  backLabel: PropTypes.string,
-  goBack: PropTypes.bool,
-  title: PropTypes.string,
-  children: PropTypes.node,
-  history: PropTypes.object,
-  location: PropTypes.object
-}
-
 ActionMenu.translations = {
-  en: { back: 'Back' },
-  fr: { back: 'Retour' }
+  en: { home: 'Home', back: 'Back' },
+  fr: { home: 'Accueil', back: 'Retour' }
 }
 
-export default withRouter(ActionMenu)
+export default ActionMenu

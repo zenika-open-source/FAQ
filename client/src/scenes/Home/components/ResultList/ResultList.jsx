@@ -1,43 +1,44 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { useMemo } from 'react'
+import { useLocation } from 'react-router-dom'
 import Pluralize from 'react-pluralize'
 
+import { DefaultPagination, Loading } from 'components'
 import { useIntl } from 'services'
-import { Loading } from 'components'
-import { DefaultPagination } from 'components/Pagination'
-
 import NoResults from '../NoResults'
 import Result from '../Result'
+import { unserialize } from 'helpers'
 
 const ResultList = ({
   searchText,
-  nodes = [],
-  loading,
-  entriesCount,
-  pagesCount,
-  pageCurrent,
+  searchData,
+  searchLoading,
+  searchMeta,
   onPageSelected,
-  meta
+  opened
 }) => {
   const intl = useIntl(ResultList)
+  const location = useLocation()
 
-  const shouldShowLoading = loading && (meta ? meta.pageCurrent !== pageCurrent : true)
+  const { entriesCount, pagesCount } = searchMeta || {}
 
-  if (!loading && nodes.length === 0) {
+  const pageCurrent = useMemo(() => unserialize(location.search).page, [location])
+
+  const nodes = searchData?.nodes || []
+
+  const shouldShowLoading = searchLoading && !searchData
+
+  if (!shouldShowLoading && nodes.length === 0) {
     return <NoResults prefill={searchText} />
   }
 
-  const Results = nodes.map(node => {
-    const opened = !searchText
-    return (
-      <Result
-        key={node.id + (opened ? '-opened' : '')}
-        collapsed={opened}
-        node={node}
-        style={{ marginBottom: '1rem' }}
-      />
-    )
-  })
+  const Results = nodes.map(node => (
+    <Result
+      key={node.id + (opened ? '-opened' : '')}
+      collapsed={!opened}
+      node={node}
+      style={{ marginBottom: '1rem' }}
+    />
+  ))
 
   return (
     <div style={{ marginTop: '1rem' }}>
@@ -53,11 +54,11 @@ const ResultList = ({
           <i>{intl('page')(pageCurrent)}</i>
         </p>
       )}
-      {!shouldShowLoading ? Results : <Loading />}
+      {!shouldShowLoading ? Results : <Loading delay={0} />}
       <br />
       <DefaultPagination
-        nbPages={pagesCount}
-        current={pageCurrent}
+        nbPages={pagesCount || 1}
+        current={pageCurrent || 0}
         onPageSelected={index => {
           onPageSelected(index)
           window.scrollTo(0, 0)
@@ -65,17 +66,6 @@ const ResultList = ({
       />
     </div>
   )
-}
-
-ResultList.propTypes = {
-  searchText: PropTypes.string,
-  nodes: PropTypes.array,
-  loading: PropTypes.bool,
-  entriesCount: PropTypes.number,
-  pagesCount: PropTypes.number,
-  pageCurrent: PropTypes.number,
-  onPageSelected: PropTypes.func,
-  meta: PropTypes.object
 }
 
 ResultList.translations = {

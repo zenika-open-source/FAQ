@@ -1,0 +1,24 @@
+.logs {
+  .action {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+
+    .left,
+    .right {
+      display: flex;
+      align-items: center;
+      flex-direction: row;
+    }
+
+    .right {
+      min-width: 185px;
+      text-align: right;
+    }
+  }
+
+  .action + .action {
+    border-top: 1px solid grey;
+  }
+}

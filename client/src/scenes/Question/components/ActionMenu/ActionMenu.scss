@@ -1,0 +1,23 @@
+.action-menu {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.3rem;
+
+  .back-btn,
+  .actions {
+    flex: 1;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+
+    & > div + div {
+      margin-left: 0.5rem;
+    }
+
+    .dropdown-content {
+      text-transform: capitalize;
+    }
+  }
+}

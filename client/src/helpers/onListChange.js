@@ -1,6 +1,6 @@
 import uuid from 'uuid/v4'
 
-const onListChange = (setState, name) => {
+export const onListChange = (setState, name) => {
   const actionBuilder = action => item =>
     setState(state => {
       let list = state[name]
@@ -47,5 +47,3 @@ export const onListChangeActions = (prefix, dispatch) => ({
   update: data => dispatch({ type: `${prefix}_update`, data }),
   delete: data => dispatch({ type: `${prefix}_delete`, data })
 })
-
-export default onListChange

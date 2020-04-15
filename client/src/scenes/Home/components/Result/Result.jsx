@@ -1,78 +1,54 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-import { markdown, useIntl } from 'services'
+import { Card, Tags, Flags } from 'components'
+import { useIntl, markdown } from 'services'
 
-// import Avatar from 'components/Avatar'
-import Card, { CardTitle, CardText } from 'components/Card'
-import Flags from 'components/Flags'
-import Tags from 'components/Tags'
+import './Result.scss'
 
-import './Result.css'
+const Result = ({ collapsed: inheritedCollapsed, node }) => {
+  const intl = useIntl(Result)
+  const [collapsed, setCollapsed] = useState(inheritedCollapsed)
 
-class Result extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      collapsed: props.collapsed || false
-    }
-  }
-
-  render() {
-    const intl = useIntl(Result)
-
-    const { node } = this.props
-    const { collapsed } = this.state
-
-    return (
-      <Card className="result">
-        <CardTitle onClick={() => this.setState({ collapsed: !collapsed })}>
-          <div className="grow">
-            {!node.highlights ? (
-              <h1>{markdown.title(node.question.title)}</h1>
-            ) : (
-              <h1
-                dangerouslySetInnerHTML={{
-                  __html: markdown.title(node.highlights.question)
-                }}
-              />
-            )}
-            {node.tags.length > 0 && <Tags tags={node.tags} />}
-          </div>
-          <Flags node={node} withLabels={false} />
-          <Link
-            to={{
-              pathname: `/q/${node.question.slug}-${node.id}`,
-              state: { from: 'home' }
-            }}
-            className="open-card"
-          >
-            <i className="material-icons">keyboard_arrow_right</i>
-          </Link>
-        </CardTitle>
-        <CardText collapsed={collapsed}>
-          {node.answer ? (
-            markdown.html(
-              node.highlights && node.highlights.answer
-                ? node.highlights.answer
-                : node.answer.content
-            )
+  return (
+    <Card className="result">
+      <Card.Title onClick={() => setCollapsed(cl => !cl)}>
+        <div className="grow">
+          {!node.highlights ? (
+            <h1>{markdown.title(node.question.title)}</h1>
           ) : (
-            <p style={{ textAlign: 'center' }}>
-              <i>{intl('no_answer')}</i>
-            </p>
+            <h1
+              dangerouslySetInnerHTML={{
+                __html: markdown.title(node.highlights.question)
+              }}
+            />
           )}
-        </CardText>
-      </Card>
-    )
-  }
-}
-
-Result.propTypes = {
-  node: PropTypes.object.isRequired,
-  collapsed: PropTypes.bool
+          {node.tags.length > 0 && <Tags tags={node.tags} />}
+        </div>
+        <Flags node={node} withLabels={false} />
+        <Link
+          to={{
+            pathname: `/q/${node.question.slug}-${node.id}`,
+            state: { from: 'home' }
+          }}
+          className="open-card"
+        >
+          <i className="material-icons">keyboard_arrow_right</i>
+        </Link>
+      </Card.Title>
+      <Card.Text collapsed={collapsed}>
+        {node.answer ? (
+          markdown.html(
+            node.highlights && node.highlights.answer ? node.highlights.answer : node.answer.content
+          )
+        ) : (
+          <p style={{ textAlign: 'center' }}>
+            <i>{intl('no_answer')}</i>
+          </p>
+        )}
+      </Card.Text>
+    </Card>
+  )
 }
 
 Result.translations = {

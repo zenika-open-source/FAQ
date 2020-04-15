@@ -1,15 +1,12 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import cn from 'classnames'
 
-import { useIntl } from 'services'
 import { Input, TagPicker } from 'components'
-
-import { useConfiguration } from 'contexts'
+import { useIntl, useConfiguration } from 'services'
 
 import './Searchbar.css'
 
-const Searchbar = ({ text, tags, loading, onTextChange, onTagsChange }) => {
+const Searchbar = ({ text, onTextChange, tags, onTagsChange, loading }) => {
   const intl = useIntl(Searchbar)
   const conf = useConfiguration()
 
@@ -26,13 +23,10 @@ const Searchbar = ({ text, tags, loading, onTextChange, onTagsChange }) => {
       <Input
         icon={
           <>
-            <span
-              className={cn('icon', { hidden: loading && text !== '' })}
-              onClick={() => this.input.focus()}
-            >
+            <span className={cn('icon', { hidden: loading })}>
               <i className="material-icons">search</i>
             </span>
-            <span className={cn('icon', { hidden: !(loading && text !== '') })}>
+            <span className={cn('icon', { hidden: !loading })}>
               <i className="fas fa-spinner fa-pulse" />
             </span>
           </>
@@ -46,19 +40,11 @@ const Searchbar = ({ text, tags, loading, onTextChange, onTagsChange }) => {
           label={intl('filter.tags')}
           icon="local_offer"
           tags={tagLabels}
-          onChange={onTagsChange}
+          onChange={labels => onTagsChange(labels.map(l => l.name))}
         />
       </div>
     </div>
   )
-}
-
-Searchbar.propTypes = {
-  text: PropTypes.string,
-  tags: PropTypes.array,
-  loading: PropTypes.bool,
-  onTextChange: PropTypes.func,
-  onTagsChange: PropTypes.func
 }
 
 Searchbar.translations = {

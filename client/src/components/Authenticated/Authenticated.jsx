@@ -1,39 +1,12 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { withRouter } from 'react-router'
-import { Redirect } from 'react-router-dom'
+import { useAuth, useUser } from 'services'
 
-import { useAuth } from 'contexts'
+const Authenticated = ({ admin, children }) => {
+  const auth = useAuth()
+  const user = useUser()
 
-const Authenticated = ({ location, reverse, redirect, children, admin }) => {
-  const { isAuth, isAdmin } = useAuth()
-  const currentURL = location.pathname + location.search
+  const hasAccess = auth.ready && user && (!admin || (admin && user?.admin))
 
-  if (admin) {
-    if (!isAdmin) {
-      return redirect ? <Redirect to="/" /> : ''
-    } else {
-      return children
-    }
-  }
-
-  if ((isAuth && !reverse) || (!isAuth && reverse)) {
-    return children
-  }
-
-  if (redirect) {
-    return <Redirect to={{ pathname: redirect, state: { from: currentURL } }} />
-  }
-
-  return ''
+  return hasAccess ? children : null
 }
 
-Authenticated.propTypes = {
-  location: PropTypes.object.isRequired,
-  reverse: PropTypes.bool,
-  redirect: PropTypes.string,
-  children: PropTypes.node,
-  admin: PropTypes.bool
-}
-
-export default withRouter(Authenticated)
+export default Authenticated

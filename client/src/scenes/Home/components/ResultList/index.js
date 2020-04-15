@@ -1,1 +1,1 @@
-export { default } from './ResultList.container'
+export { default } from './ResultList'

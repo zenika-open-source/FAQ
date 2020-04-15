@@ -1,38 +1,60 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { useState, useEffect } from 'react'
 
 import { useIntl } from 'services'
 
-import './Views.css'
+import { isSessionSeen, setSessionSeen } from './helpers'
 
-const Views = ({ value }) => {
+import './Views.scss'
+import { useMutation, gql } from '@apollo/client'
+
+const Views = ({ questionId, value }) => {
   const intl = useIntl(Views)
-  let formattedValue = value || 0
-  if (value > 1000) {
-    const locale = window.navigator.language
-    const formatter = new Intl.NumberFormat(locale, { maximumSignificantDigits: 2 })
-    formattedValue = `${formatter.format(value / 1000)}k`
-  }
+
+  const [seen, setSeen] = useState(() => isSessionSeen(questionId))
+
+  const [incrementViews] = useMutation(gql`
+    mutation($questionId: String!) {
+      incrementQuestionViewsCounter(questionId: $questionId) {
+        id
+        views
+      }
+    }
+  `)
+
+  useEffect(() => {
+    if (!seen) {
+      // Less than 5s on the question isn't enough to be considered as a view
+      const timeout = setTimeout(() => {
+        incrementViews({ variables: { questionId } }).then(() => {
+          setSeen(true)
+          setSessionSeen(questionId)
+        })
+      }, 5000)
+
+      return () => clearTimeout(timeout)
+    }
+  }, [seen, questionId, incrementViews])
+
+  const formattedValue =
+    value >= 1000
+      ? `${(value / 1000).toLocaleString(window.navigator.language, {
+          maximumSignificantDigits: 2
+        })}k`
+      : value
 
   return (
     <span className="views">
-      {formattedValue} {formattedValue > 1 ? intl('views') : intl('view')}
+      {formattedValue} {intl('views')(value)}
     </span>
   )
 }
 
-Views.propTypes = {
-  value: PropTypes.number
-}
-
 Views.translations = {
   en: {
-    view: 'view',
-    views: 'views'
+    views: x => (x === 1 ? 'view' : 'views')
   },
   fr: {
-    view: 'vue',
-    views: 'vues'
+    views: x => (x === 1 ? 'vue' : 'vues')
   }
 }
 

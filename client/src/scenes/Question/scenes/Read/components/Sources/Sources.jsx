@@ -1,9 +1,8 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
 import { useIntl } from 'services'
 
-import List, { ListItem } from 'components/List'
+import './Sources.scss'
 
 const Sources = ({ sources }) => {
   const intl = useIntl(Sources)
@@ -11,32 +10,26 @@ const Sources = ({ sources }) => {
   if (sources.length === 0) return ''
 
   return (
-    <div style={{ borderTop: '1px dashed var(--secondary-color)' }}>
-      <h3
-        style={{
-          color: 'var(--primary-color)',
-          margin: '0.7rem',
-          marginBottom: '0'
-        }}
-      >
-        {intl('sources')}
-      </h3>
-      <List
-        style={{
-          fontSize: 'var(--small-font-size)',
-          color: 'var(--secondary-color-font-light)'
-        }}
-      >
+    <div className="sources">
+      <h3>{intl('sources')}</h3>
+      <div className="list">
         {sources.map(source => (
-          <ListItem key={source.id} caption={source.label} icon="library_books" href={source.url} />
+          <a
+            key={`${source.label}+${source.url}`}
+            className="discret"
+            href={source.url}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <div className="list-item">
+              <i className="material-icons">library_books</i>
+              {source.label}
+            </div>
+          </a>
         ))}
-      </List>
+      </div>
     </div>
   )
-}
-
-Sources.propTypes = {
-  sources: PropTypes.array.isRequired
 }
 
 Sources.translations = {

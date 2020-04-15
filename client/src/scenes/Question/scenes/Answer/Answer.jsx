@@ -1,153 +1,165 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
-import { Redirect, Prompt } from 'react-router-dom'
-import { useApolloClient } from '@apollo/react-hooks'
+import React, { useState, useEffect } from 'react'
+import { useMutation, gql } from '@apollo/client'
 
-import { SUBMIT_ANSWER, EDIT_ANSWER } from './queries'
-
-import { alert, markdown, useIntl } from 'services'
+import {
+  Card,
+  CtrlEnter,
+  Button,
+  Loading,
+  PairInputList,
+  PermanentClosableCard,
+  MarkdownEditor,
+  Flags
+} from 'components'
+import { markdown, useIntl, alert } from 'services'
 import { onListChange } from 'helpers'
-
 import NotFound from 'scenes/NotFound'
 
-import { Loading, Flags, Button, MarkdownEditor, CtrlEnter, PairInputList } from 'components'
-import Card, { CardTitle, CardText, CardActions, PermanentClosableCard } from 'components/Card'
-
-import { ActionMenu } from '../../components'
+import { useNode } from '../../queries'
+import { ActionMenu, AnswerTips } from '../../components'
 
 import { sourcesToKeyValuePairs, keyValuePairsToSources, canSubmit } from './helpers'
 
-import Tips from './components/Tips'
-
-const Answer = ({ zNode }) => {
-  const [state, setState] = useState(() => {
-    const answer = zNode && zNode.answer
-
-    const initialText = answer ? answer.content : ''
-    const initialSources = sourcesToKeyValuePairs(answer ? answer.sources : [])
-
-    return {
-      nodeLoaded: false,
-      initialAnswer: initialText,
-      answer: initialText,
-      loading: false,
-      sources: initialSources,
-      initialSources: initialSources,
-      slug: null,
-      showTips: PermanentClosableCard.isOpen('tips_answer')
-    }
-  })
-
+const Answer = ({ match, history }) => {
   const intl = useIntl(Answer)
+  const [loading, setLoading] = useState(false)
+  const [answer, setAnswer] = useState('')
+  const [sources, setSources] = useState([])
+  const [showTips, setShowTips] = useState(() => PermanentClosableCard.isOpened('tips_answer'))
 
-  const apollo = useApolloClient()
+  const { loading: nodeLoading, data } = useNode(match.params.slugid)
+  const node = data?.node
 
-  const { loadingSubmit, slug, showTips, sources } = state
+  useEffect(() => {
+    if (node) {
+      setAnswer(node.answer?.content || '')
+      setSources(sourcesToKeyValuePairs(node.answer?.sources || []))
+    }
+  }, [node])
 
-  const onTextChange = value => setState(state => ({ ...state, answer: value }))
-  const onSourcesChange = onListChange(
-    changes => setState(state => ({ ...state, ...changes(state) })),
-    'sources'
-  )
+  const [submitAnswer] = useMutation(gql`
+    mutation($content: String!, $sources: String!, $nodeId: String!) {
+      createAnswerAndSources(content: $content, sources: $sources, nodeId: $nodeId) {
+        id
+        content
+        sources {
+          label
+          url
+        }
+        node {
+          id
+          answer {
+            id
+          }
+        }
+        user {
+          id
+        }
+        createdAt
+      }
+    }
+  `)
+
+  const [editAnswer] = useMutation(gql`
+    mutation(
+      $id: String!
+      $content: String!
+      $previousContent: String!
+      $sources: String!
+      $previousSources: String!
+    ) {
+      updateAnswerAndSources(
+        id: $id
+        content: $content
+        previousContent: $previousContent
+        sources: $sources
+        previousSources: $previousSources
+      ) {
+        id
+        content
+        sources {
+          label
+          url
+        }
+      }
+    }
+  `)
 
   const toggleTips = value => () => {
-    setState(state => ({ ...state, showTips: value }))
-    PermanentClosableCard.setValue('tips_answer', value)
-  }
-
-  const submitAnswer = () => {
-    setState(state => ({ ...state, loadingSubmit: true }))
-
-    apollo
-      .mutate({
-        mutation: SUBMIT_ANSWER,
-        variables: {
-          nodeId: zNode.id,
-          content: state.answer,
-          sources: JSON.stringify(keyValuePairsToSources(state.sources))
-        }
-      })
-      .then(() => {
-        setState(state => ({ ...state, slug: zNode.question.slug + '-' + zNode.id }))
-        alert.pushSuccess(intl('alert.submit_success'))
-      })
-      .catch(error => {
-        alert.pushDefaultError(error)
-        setState(state => ({ ...state, loadingSubmit: false }))
-      })
-  }
-
-  const editAnswer = () => {
-    setState(state => ({ ...state, loadingSubmit: true }))
-
-    apollo
-      .mutate({
-        mutation: EDIT_ANSWER,
-        variables: {
-          id: zNode.answer.id,
-          content: state.answer,
-          previousContent: state.initialAnswer,
-          sources: JSON.stringify(keyValuePairsToSources(state.sources))
-        }
-      })
-      .then(() => {
-        setState(state => ({ ...state, slug: zNode.question.slug + '-' + zNode.id }))
-        alert.pushSuccess(intl('alert.edit_success'))
-      })
-      .catch(error => {
-        alert.pushDefaultError(error)
-        setState(state => ({
-          ...state,
-          loadingSubmit: false
-        }))
-      })
+    setShowTips(value)
+    PermanentClosableCard.setOpened('tips_answer', value)
   }
 
   const submitForm = () => {
-    if (canSubmit(state)) {
-      zNode.answer ? editAnswer() : submitAnswer()
+    const nextSources = JSON.stringify(keyValuePairsToSources(sources))
+
+    setLoading(true)
+    let mutation
+
+    if (!node.answer) {
+      mutation = submitAnswer({
+        variables: {
+          nodeId: node.id,
+          content: answer,
+          sources: nextSources
+        }
+      })
+    } else {
+      mutation = editAnswer({
+        variables: {
+          id: node.answer.id,
+          content: answer,
+          previousContent: node.answer.content,
+          sources: nextSources,
+          previousSources: JSON.stringify(node.answer.sources)
+        }
+      })
     }
+
+    mutation
+      .then(() => {
+        history.push(`/q/${node.question.slug}-${node.id}`)
+        alert.pushSuccess(intl(node.answer ? 'alert.edit_success' : 'alert.submit_success'))
+      })
+      .catch(error => {
+        alert.pushDefaultError(error)
+        setLoading(false)
+      })
   }
 
-  if (slug) {
-    return <Redirect to={`/q/${slug}`} />
-  }
+  const onSourcesChange = onListChange(
+    changes => setSources(sources => changes({ sources }).sources),
+    'sources'
+  )
 
-  if (loadingSubmit) {
-    return <Loading />
-  }
+  if (nodeLoading && !node) return <Loading />
 
-  if (zNode === null) {
-    return <NotFound />
-  }
+  if (!node) return <NotFound />
 
   return (
-    <div>
-      {canSubmit(state) && <Prompt message={intl('prompt_warning')} />}
-      <ActionMenu backLink={`/q/${zNode.question.slug}-${zNode.id}`}>
-        {!showTips && (
-          <Button
-            link
-            icon="lightbulb_outline"
-            label={intl('show_tips')}
-            onClick={toggleTips(true)}
-          />
-        )}
+    <div className="answer">
+      <ActionMenu>
+        <Button
+          link
+          icon="lightbulb_outline"
+          label={intl('show-tips')}
+          onClick={toggleTips(!showTips)}
+        />
       </ActionMenu>
-      <Tips close={toggleTips(false)} open={showTips} />
-      <Card style={{ marginTop: '0.3rem' }}>
-        <CardTitle style={{ padding: '1.2rem' }}>
+      <AnswerTips opened={showTips} onClose={toggleTips(false)} />
+      <Card>
+        <Card.Title>
           <div className="grow">
-            <h1>{markdown.title(zNode.question.title)}</h1>
+            <h1>{markdown.title(node.question.title)}</h1>
           </div>
-          <Flags node={zNode} withLabels={true} />
-        </CardTitle>
-        <CardText>
-          <CtrlEnter onCtrlEnterCallback={submitForm}>
-            <MarkdownEditor content={state.answer} onChange={onTextChange} />
+          <Flags node={node} withLabels={true} />
+        </Card.Title>
+        <Card.Text>
+          <CtrlEnter onCtrlEnter={submitForm}>
+            <MarkdownEditor content={answer} onChange={setAnswer} />
           </CtrlEnter>
-        </CardText>
-        <CardText>
+        </Card.Text>
+        <Card.Text>
           <PairInputList
             style={{ borderTop: '1px dashed var(--secondary-color)' }}
             pairs={sources}
@@ -158,24 +170,25 @@ const Answer = ({ zNode }) => {
             }}
             actions={onSourcesChange.actions}
           />
-        </CardText>
-        <CardActions>
+        </Card.Text>
+        <Card.Actions>
           <Button
-            label={zNode.answer ? intl('validate.edit') : intl('validate.submit')}
+            label={node.answer ? intl('validate.edit') : intl('validate.submit')}
             primary
             raised
-            disabled={!canSubmit(state)}
+            disabled={
+              !canSubmit(node, {
+                answer,
+                sources: JSON.stringify(keyValuePairsToSources(sources))
+              }) || loading
+            }
+            loading={loading}
             onClick={submitForm}
           />
-        </CardActions>
+        </Card.Actions>
       </Card>
     </div>
   )
-}
-
-Answer.propTypes = {
-  match: PropTypes.object.isRequired,
-  zNode: PropTypes.object
 }
 
 Answer.translations = {

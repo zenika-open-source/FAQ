@@ -1,31 +1,17 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { Switch, Route, Redirect } from 'react-router-dom'
 
-import { withNode } from './Question.container'
-
-import Edit from './scenes/Edit'
-import Read from './scenes/Read'
-import Answer from './scenes/Answer'
-import Random from './scenes/Random'
-
-const withNodeRead = withNode(Read)
-const withNodeEdit = withNode(Edit)
-const withNodeAnswer = withNode(Answer)
+import { Answer, Create, Read, Update, Random } from './scenes'
 
 const Question = ({ match }) => (
   <Switch>
-    <Route path={`${match.path}/new`} component={Edit} />
-    <Route path={`${match.path}/random/:tag?`} component={Random} />
-    <Route path={`${match.path}/:slug`} exact component={withNodeRead} />
-    <Route path={`${match.path}/:slug/edit`} component={withNodeEdit} />
-    <Route path={`${match.path}/:slug/answer`} component={withNodeAnswer} />
+    <Route path={`${match.path}/new`} component={Create} />
+    <Route path={`${match.path}/random`} component={Random} />
+    <Route path={`${match.path}/:slugid`} exact component={Read} />
+    <Route path={`${match.path}/:slugid/edit`} component={Update} />
+    <Route path={`${match.path}/:slugid/answer`} component={Answer} />
     <Route render={() => <Redirect to="/" />} />
   </Switch>
 )
-
-Question.propTypes = {
-  match: PropTypes.object.isRequired
-}
 
 export default Question

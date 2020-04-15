@@ -1,0 +1,17 @@
+.read-meta {
+  padding: 0.4rem;
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--small-font-size);
+  color: var(--secondary-color-font-light);
+
+  .asked,
+  .answered {
+    max-width: 45%;
+    display: flex;
+  }
+
+  .answered {
+    text-align: right;
+  }
+}

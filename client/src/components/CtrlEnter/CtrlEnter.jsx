@@ -1,44 +1,27 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { useEffect, useRef } from 'react'
 
-class CtrlEnter extends Component {
-  constructor(props) {
-    super(props)
+const CtrlEnter = ({ children, onCtrlEnter, onlyEnter, ...rest }) => {
+  const ref = useRef()
 
-    this.ref = React.createRef()
-  }
-
-  componentDidMount() {
-    if (this.ref.current) {
-      this.ref.current.addEventListener('keydown', this.keydownHandler)
+  useEffect(() => {
+    const onKeyDown = e => {
+      if (e.keyCode === 13 && (onlyEnter || e.ctrlKey)) {
+        onCtrlEnter()
+      }
     }
-  }
 
-  componentWillUnmount() {
-    if (this.ref.current) {
-      this.ref.current.removeEventListener('keydown', this.keydownHandler)
+    if (ref.current) {
+      const current = ref.current
+      current.addEventListener('keydown', onKeyDown)
+      return () => current.removeEventListener('keydown', onKeyDown)
     }
-  }
+  }, [onCtrlEnter, onlyEnter])
 
-  keydownHandler = e => {
-    if (e.keyCode === 13 && e.ctrlKey) {
-      this.props.onCtrlEnterCallback()
-    }
-  }
-
-  render() {
-    const { children, onCtrlEnterCallback, ...rest } = this.props
-    return (
-      <div ref={this.ref} {...rest}>
-        {this.props.children}
-      </div>
-    )
-  }
-}
-
-CtrlEnter.propTypes = {
-  onCtrlEnterCallback: PropTypes.func.isRequired,
-  children: PropTypes.node.isRequired
+  return (
+    <div ref={ref} {...rest}>
+      {children}
+    </div>
+  )
 }
 
 export default CtrlEnter

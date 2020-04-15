@@ -1,45 +1,46 @@
-import gql from 'graphql-tag'
+import { useLazyQuery, gql } from '@apollo/client'
 
-export const SEARCH_NODES = gql`
-  query($text: String, $tags: [String!], $flags: [String!], $first: Int!, $skip: Int!) {
-    search(
-      text: $text
-      tags: $tags
-      flags: $flags
-      first: $first
-      skip: $skip
-      orderBy: createdAt_DESC
-    ) {
-      nodes {
-        id
-        question {
-          id
-          title
-          slug
-          createdAt
-        }
-        answer {
-          id
-          content
-        }
-        flags {
-          id
-          type
-        }
-        tags {
-          id
-          label {
+export const useSearch = () =>
+  useLazyQuery(
+    gql`
+      query($text: String, $tags: [String!], $first: Int!, $skip: Int!) {
+        search(text: $text, tags: $tags, first: $first, skip: $skip) {
+          nodes {
             id
-            name
+            question {
+              id
+              title
+              slug
+            }
+            answer {
+              id
+              content
+            }
+            tags {
+              id
+              label {
+                id
+                name
+              }
+            }
+            flags {
+              id
+              type
+            }
+            highlights {
+              question
+              answer
+            }
+          }
+          meta {
+            entriesCount
+            pagesCount
+            pageCurrent
           }
         }
-        highlights
       }
-      meta {
-        entriesCount
-        pagesCount
-        pageCurrent
-      }
+    `,
+    {
+      fetchPolicy: 'no-cache'
     }
-  }
-`
+  )

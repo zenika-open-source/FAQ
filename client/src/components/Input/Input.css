@@ -7,6 +7,14 @@
   align-items: center;
 }
 
+.input.disabled {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.input.disabled input {
+  background-color: rgba(0, 0, 0, 0);
+}
+
 .input:hover {
   border-color: #a0a0a0 #b9b9b9 #b9b9b9 #b9b9b9;
 }

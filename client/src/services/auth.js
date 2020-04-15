@@ -1,101 +1,110 @@
-import auth0 from 'auth0-js'
+import React, { useContext, useState, useEffect } from 'react'
+import { gql, useLazyQuery, useMutation } from '@apollo/client'
 
-class Auth {
-  init({ auth0Domain, auth0ClientId }) {
-    this.auth0 = new auth0.WebAuth({
-      domain: auth0Domain,
-      clientID: auth0ClientId,
-      redirectUri: window.location.origin + '/auth/callback',
-      audience: `https://${auth0Domain}/userinfo`,
-      responseType: 'token id_token',
-      scope: 'openid profile email'
-    })
-    return this.auth0
-  }
+import firebase, { googleProvider } from './firebase'
+import { apollo } from './apollo'
+import { alert } from './alert'
 
-  /* AUTH LIFECYCLE */
+export const useUser = () => {
+  const auth = useAuth()
 
-  login = redirectTo => {
-    if (redirectTo) this.cacheStateBeforeLogin({ redirectTo })
-    this.auth0.authorize()
-  }
-
-  logout = () => {
-    this.clearLocalStorage()
-  }
-
-  parseHash = hash =>
-    new Promise((resolve, reject) => {
-      this.auth0.parseHash({ hash }, this.authCheck(resolve, reject))
-    })
-
-  renewAuth = () =>
-    new Promise((resolve, reject) => {
-      this.auth0.checkSession({}, this.authCheck(resolve, reject))
-    })
-
-  /* HELPERS */
-
-  authCheck = (resolve, reject) => (err, authResult) => {
-    if (authResult && authResult.idToken) {
-      localStorage.accessToken = authResult.idToken
-
-      const expiresAt = authResult.expiresIn * 1000 + new Date().getTime()
-
-      resolve({
-        ...authResult,
-        expiresAt
-      })
-    } else {
-      reject(err || null)
+  const [query, { data }] = useLazyQuery(gql`
+    query {
+      me {
+        id
+        name
+        admin
+        email
+        picture
+      }
     }
-  }
+  `)
 
-  scheduleRenew = (session, renewCallback) => {
-    // Renew session 5min before end of token
-    const fiveMinBefore = (session.expiresIn - 5 * 60) * 1000
-
-    if (this.scheduledTimeout) {
-      clearTimeout(this.scheduledTimeout)
+  useEffect(() => {
+    if (auth.ready && (auth.user || auth.wasAuth)) {
+      query()
     }
+  }, [query, auth])
 
-    return setTimeout(renewCallback, fiveMinBefore)
-  }
-
-  /* LOCAL STORAGE */
-
-  retrieveFromLocalStorage() {
-    return {
-      session: localStorage.session ? JSON.parse(localStorage.session) : null,
-      user: localStorage.user ? JSON.parse(localStorage.user) : null
-    }
-  }
-
-  cacheToLocalStorage = ({ session, user }) => {
-    localStorage.session = JSON.stringify(session)
-    localStorage.user = JSON.stringify(user)
-    localStorage.accessToken = session.idToken
-  }
-
-  clearLocalStorage() {
-    localStorage.removeItem('session')
-    localStorage.removeItem('user')
-    localStorage.removeItem('accessToken')
-  }
-
-  cacheStateBeforeLogin(state) {
-    localStorage.state_before_login = JSON.stringify(state)
-  }
-
-  getStateBeforeLogin() {
-    return JSON.parse(localStorage.state_before_login || '{}')
-  }
-
-  clearStateBeforeLogin() {
-    localStorage.removeItem('state_before_login')
-  }
+  return data?.me
 }
 
-const auth = new Auth()
+const AuthContext = React.createContext()
 
-export default auth
+export const AuthProvider = ({ children }) => {
+  const [auth, setState] = useState({ ready: false, user: null, wasAuth: false })
+  const [mutate] = useMutation(gql`
+    mutation($idToken: String!) {
+      authenticate(idToken: $idToken) {
+        id
+        name
+        admin
+        email
+        picture
+      }
+    }
+  `)
+
+  // TODO: Use custom flow for multi-tenancy
+  // login on [tenant].faq.team redirects to faq.team/auth
+  // faq.team/auth does classical firebase auth
+  // faq.team/auth redirects to [tenant].faq.team with the id & refresh tokens
+  // [tenant].faq.team refreshes id token indefinitely by asking the backend
+  useEffect(() => {
+    const unsubscribe = firebase.auth().onAuthStateChanged(async user => {
+      if (user) {
+        const idToken = await user.getIdToken()
+        localStorage.idToken = idToken
+        try {
+          // Only authenticate if signin in, not for refreshing
+          if (!localStorage.getItem('configuration')) {
+            await mutate({ variables: { idToken } })
+          }
+          setState(prev => ({ ready: true, user, wasAuth: !!prev.user }))
+        } catch (err) {
+          if (err.networkError) {
+            alert.pushDefaultError(err.networkError)
+          } else {
+            alert.pushError('Authentication failed: ' + JSON.stringify(err.message), err)
+          }
+          signOut()
+        }
+      } else {
+        setState(prev => ({ ready: true, user, wasAuth: !!prev.user }))
+      }
+    })
+
+    return unsubscribe
+  }, [mutate])
+
+  // Refresh token every 50min
+  /*useEffect(() => {
+    // TODO: Bug if opening app 1min before expiration
+    const interval = setInterval(async () => {
+      const idToken = await firebase.auth().currentUser.getIdToken(true)
+      localStorage.idToken = idToken
+    }, 50 * 60 * 1000)
+    return () => clearInterval(interval)
+  }, [])*/
+
+  return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>
+}
+
+export const useAuth = () => useContext(AuthContext)
+
+export const signIn = () => {
+  firebase
+    .auth()
+    .signInWithPopup(googleProvider)
+    .catch(error => {
+      console.log(error)
+    })
+}
+
+export const signOut = async () => {
+  await apollo.clearStore()
+  localStorage.removeItem('apollo-cache-persist')
+  localStorage.removeItem('idToken')
+  localStorage.removeItem('configuration')
+  await firebase.auth().signOut()
+}

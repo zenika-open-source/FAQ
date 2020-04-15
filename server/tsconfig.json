@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "declaration": true,
+    "outDir": "build",
+    "strict": true,
+    "lib": ["esnext", "dom"],
+    "removeComments": true,
+    "esModuleInterop": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["src/**/*.spec.*"]
+}

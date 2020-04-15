@@ -1,48 +1,71 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { useMutation, gql } from '@apollo/client'
 
 import { useIntl } from 'services'
 
-import { Flag, flagMeta } from 'components/Flags'
-import Dropdown, { DropdownItem } from 'components/Dropdown'
-import Button from 'components/Button'
+import { Flag, flagMeta, Dropdown, Button } from 'components'
 
 import './FlagsDropdown.css'
 
-const FlagsDropdown = ({ flags, onSelect, onRemove }) => {
+const FlagsDropdown = ({ nodeId, flags }) => {
   const intl = useIntl(FlagsDropdown)
   const flagIntl = useIntl(Flag)
+
+  const [addFlag] = useMutation(gql`
+    mutation($nodeId: String!, $flag: String!) {
+      addFlag(nodeId: $nodeId, flag: $flag) {
+        id
+        flags {
+          id
+          type
+          user {
+            id
+            name
+          }
+          createdAt
+        }
+      }
+    }
+  `)
+
+  const [removeFlag] = useMutation(gql`
+    mutation($nodeId: String!, $flag: String!) {
+      removeFlag(nodeId: $nodeId, flag: $flag) {
+        id
+        flags {
+          id
+        }
+      }
+    }
+  `)
 
   const flagTypes = ['incomplete', 'outdated', 'duplicate']
 
   const items = flagTypes.map(type => {
     const isSelected = flags.filter(f => f.type === type).length > 0
     return (
-      <DropdownItem
+      <Dropdown.Item
         key={type}
         icon={flagMeta[type].icon}
         rightIcon={
           isSelected ? (
-            <i className="material-icons close-icon" onClick={() => isSelected && onRemove(type)}>
+            <i
+              className="material-icons close-icon"
+              onClick={() => isSelected && removeFlag({ variables: { nodeId, flag: type } })}
+            >
               close
             </i>
           ) : null
         }
         disabled={isSelected}
-        onClick={() => !isSelected && onSelect(type)}
+        onClick={() => !isSelected && addFlag({ variables: { nodeId, flag: type } })}
       >
         {flagIntl(type)}
-      </DropdownItem>
+      </Dropdown.Item>
     )
   })
 
   return <Dropdown button={<Button icon="flag" label={intl('button')} link />}>{items}</Dropdown>
-}
-
-FlagsDropdown.propTypes = {
-  flags: PropTypes.array.isRequired,
-  onSelect: PropTypes.func.isRequired,
-  onRemove: PropTypes.func.isRequired
 }
 
 FlagsDropdown.translations = {

@@ -27,7 +27,8 @@ const sentencer = (array, action, label, details) => {
 }
 
 export const formatHistoryAction = (historyAction, options = { relative: true }) => {
-  const { action, model, meta, user, createdAt, node } = historyAction
+  let { action, model, meta, user, createdAt, node } = historyAction
+  meta = JSON.parse(meta)
 
   const what = options.relative
     ? 'this question'
@@ -59,7 +60,7 @@ export const formatHistoryAction = (historyAction, options = { relative: true })
         s.push(sentencer(meta.sourcesChanges.updated, 'updated', 'source'))
         s.push(sentencer(meta.sourcesChanges.removed, 'removed', 'source'))
 
-        return join(s)
+        return join(s) + (meta.content ? '' : ` from ${what}`)
       }
     },
     DELETED: {
