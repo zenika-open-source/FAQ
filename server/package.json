@@ -20,7 +20,7 @@
     "express-jwt": "^5.3.1",
     "firebase-admin": "^8.9.0",
     "graphql-yoga": "^1.18.3",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "nexus": "^0.12.0-rc.9",
     "nexus-prisma": "^0.9.1",
     "prisma-multi-tenant": "^2.0.0-alpha20",
