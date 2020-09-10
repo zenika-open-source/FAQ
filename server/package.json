@@ -14,7 +14,7 @@
     "jwks-rsa": "^1.6.0",
     "lodash": "^4.17.15",
     "mjml": "^4.5.1",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "path": "^0.12.7",
     "prisma": "^1.34.10",
     "prisma-binding": "^2.3.16",
