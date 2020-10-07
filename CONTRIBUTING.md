@@ -1,6 +1,6 @@
 # Contributing
 
-Contributions, issues and feature requests are very welcome. If you are using this app and fixed a bug or improve it, please consider submitting a PR!
+Contributions, issues and feature requests are very welcome. If you are using this app and improved it or fixed a bug, please consider submitting a PR!
 
 ## Guidelines
 
