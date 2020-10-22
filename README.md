@@ -55,3 +55,5 @@ The full documentation is available here:
 ## License
 
 This project is under the Apache License 2.0 - See the [LICENSE.md](https://github.com/zenika-open-source/FAQ/blob/master/LICENSE.md) file for details
+
+![with love by zenika](https://img.shields.io/badge/With%20%E2%9D%A4%EF%B8%8F%20by-Zenika-b51432.svg?link=https://oss.zenika.com)
