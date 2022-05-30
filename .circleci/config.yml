@@ -16,7 +16,7 @@ executors:
       - image: cimg/node:10.24.1
 
 jobs:
-  server/install:
+  server-install:
     working_directory: *workspace_root
     executor: app-builder
     steps:
@@ -31,7 +31,7 @@ jobs:
           paths:
             - server/node_modules/
 
-  server/lint:
+  server-lint:
     working_directory: *workspace_root
     executor: app-builder
     steps:
@@ -43,7 +43,7 @@ jobs:
           npm run lint
           npm run prettier:check
 
-  client/install:
+  client-install:
     working_directory: *workspace_root
     executor: app-builder
     steps:
@@ -58,7 +58,7 @@ jobs:
           paths:
             - client/node_modules/
 
-  client/lint:
+  client-lint:
     working_directory: *workspace_root
     executor: app-builder
     steps:
@@ -70,7 +70,7 @@ jobs:
           npm run lint
           npm run prettier:check
 
-  client/build:
+  client-build:
     working_directory: *workspace_root
     executor: app-builder
     steps:
@@ -86,7 +86,7 @@ jobs:
           paths:
             - client/build/
 
-  prisma_deploy:
+  prisma-deploy:
     environment:
       DEPLOY_DIR: ~/prisma_deploy
       CLEVER_CLOUD_REMOTE_HOST: push-par-clevercloud-customers.services.clever-cloud.com
@@ -115,7 +115,7 @@ jobs:
           git remote add clever git+ssh://git@${CLEVER_CLOUD_REMOTE_HOST}/${CLEVER_CLOUD_REMOTE_APP_ID}.git
           git push --force clever master
 
-  deploy:
+  app-deploy:
     environment:
       DEPLOY_DIR: ~/deploy
       CLEVER_CLOUD_REMOTE_HOST: push-par-clevercloud-customers.services.clever-cloud.com
@@ -154,26 +154,26 @@ workflows:
   version: 2
   build-deploy:
     jobs:
-      - server/install
-      - server/lint:
+      - server-install
+      - server-lint:
           requires:
-            - server/install
-      - client/install
-      - client/lint:
+            - server-install
+      - client-install
+      - client-lint:
           requires:
-            - client/install
+            - client-install
       - client/build:
           requires:
-            - client/install
-      - deploy:
+            - client-install
+      - app-deploy:
           requires:
-            - server/lint
-            - client/lint
-            - client/build
+            - server-lint
+            - client-lint
+            - client-build
           filters:
             branches:
               only: master
-      - prisma_deploy:
+      - prisma-deploy:
           requires:
             - deploy
           filters:
