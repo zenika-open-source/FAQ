@@ -135,7 +135,7 @@ workflows:
             - client-build
           filters:
             branches:
-              only: master
+              only: upgrade_ci
       - prisma-deploy:
           clever-app-id: app_f9c5c1cb-fe9c-41f9-a6c0-793e8326e95b
           context: clever-cloud2-zenika-dev
