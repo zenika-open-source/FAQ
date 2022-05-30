@@ -141,6 +141,3 @@ workflows:
           context: clever-cloud2-zenika-dev
           requires:
             - app-deploy
-          filters:
-            branches:
-              only: master
