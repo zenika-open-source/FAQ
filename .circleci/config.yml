@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 
 references:
   workspace_root: &workspace_root /home/circleci/my-workspace
