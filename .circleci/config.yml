@@ -92,7 +92,7 @@ jobs:
       CLEVER_CLOUD_REMOTE_HOST: push-par-clevercloud-customers.services.clever-cloud.com
       CLEVER_CLOUD_REMOTE_APP_ID: app_f9c5c1cb-fe9c-41f9-a6c0-793e8326e95b
     working_directory: *workspace_root
-    executor: clever-cloud-builder
+    executor: clever-cloud-deployer
     steps:
       - checkout
       - *attach_workspace
@@ -121,7 +121,7 @@ jobs:
       CLEVER_CLOUD_REMOTE_HOST: push-par-clevercloud-customers.services.clever-cloud.com
       CLEVER_CLOUD_REMOTE_APP_ID: app_c61407ae-b417-4406-86ed-cfd1acf84466
     working_directory: *workspace_root
-    executor: clever-cloud-builder
+    executor: clever-cloud-deployer
     steps:
       - checkout
       - *attach_workspace
