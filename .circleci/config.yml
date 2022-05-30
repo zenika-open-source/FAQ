@@ -162,7 +162,7 @@ workflows:
       - client-lint:
           requires:
             - client-install
-      - client/build:
+      - client-build:
           requires:
             - client-install
       - app-deploy:
