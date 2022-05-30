@@ -1,179 +1,143 @@
-references:
-  workspace_root: &workspace_root /home/circleci/my-workspace
+version: 2.1
 
-  attach_workspace: &attach_workspace
-    attach_workspace:
-      at: *workspace_root
+orbs:
+  node: circleci/node@5.0.2
 
-version: 2
+executors:
+  clever-cloud-deployer:
+    docker:
+      - image: cimg/node:lts
+  app-builder:
+    docker:
+      - image: cimg/node:10.24.1
+
 jobs:
-  server/install:
-    working_directory: *workspace_root
-    docker:
-      - image: circleci/node:10
+  server-lint:
+    executor: app-builder
     steps:
       - checkout
+      - node/install-packages:
+          app-dir: server
+      - run:
+          command: npm run lint
+          working_directory: server
+      - run:
+          command: npm run prettier:check
+          working_directory: server
 
-      - run: |
-          cd server/
-          npm ci
+  client-lint:
+    executor: app-builder
+    steps:
+      - checkout
+      - node/install-packages:
+          app-dir: client
+      - run:
+          command: npm run lint
+          working_directory: client
+      - run:
+          command: npm run prettier:check
+          working_directory: client
 
+  client-build:
+    executor: app-builder
+    steps:
+      - checkout
+      - node/install-packages:
+          app-dir: client
+      - run:
+          command: npm run build
+          working_directory: client
       - persist_to_workspace:
-          root: *workspace_root
-          paths:
-            - server/node_modules/
-
-  server/lint:
-    working_directory: *workspace_root
-    docker:
-      - image: circleci/node:10
-    steps:
-      - checkout
-      - *attach_workspace
-
-      - run: |
-          cd server/
-          npm run lint
-          npm run prettier:check
-
-  client/install:
-    working_directory: *workspace_root
-    docker:
-      - image: circleci/node:10
-    steps:
-      - checkout
-
-      - run: |
-          cd client/
-          npm ci
-
-      - persist_to_workspace:
-          root: *workspace_root
-          paths:
-            - client/node_modules/
-
-  client/lint:
-    working_directory: *workspace_root
-    docker:
-      - image: circleci/node:10
-    steps:
-      - checkout
-      - *attach_workspace
-
-      - run: |
-          cd client/
-          npm run lint
-          npm run prettier:check
-
-  client/build:
-    working_directory: *workspace_root
-    docker:
-      - image: circleci/node:10
-    steps:
-      - checkout
-      - *attach_workspace
-
-      - run: |
-          cd client/
-          npm run build
-
-      - persist_to_workspace:
-          root: *workspace_root
+          root: .
           paths:
             - client/build/
 
-  prisma_deploy:
-    environment:
-      DEPLOY_DIR: ~/prisma_deploy
-      CLEVER_CLOUD_REMOTE_HOST: push-par-clevercloud-customers.services.clever-cloud.com
-      CLEVER_CLOUD_REMOTE_APP_ID: app_f9c5c1cb-fe9c-41f9-a6c0-793e8326e95b
-    working_directory: *workspace_root
-    docker:
-      - image: circleci/node:10
+  prisma-deploy:
+    parameters:
+      clever-app-id:
+        type: string
+      deploy-dir:
+        type: string
+        default: ~/prisma_deploy
+    executor: clever-cloud-deployer
     steps:
       - checkout
-      - *attach_workspace
+      - attach_workspace:
+          at: .
+      - run:
+          name: Package application
+          command: |
+            mkdir -p << parameters.deploy-dir >>
+            cp server/prisma/Dockerfile.clever-cloud << parameters.deploy-dir >>/Dockerfile
+            cd << parameters.deploy-dir >>
+            git config --global user.email "dsi-ext@zenika.com"
+            git config --global user.name "Zenika"
+            git init
+            git add .
+            git commit -m "deploy!"
+      - run:
+          name: Deploy to Clever Cloud
+          working_directory: << parameters.deploy-dir >>
+          command: |
+            npm install --global clever-tools
+            clever login --secret=$CLEVER_SECRET --token=$CLEVER_TOKEN
+            clever link << parameters.clever-app-id >>
+            clever deploy --force
 
-      - add_ssh_keys:
-          fingerprints:
-            - "6f:f2:b4:c2:e5:13:28:f8:02:2d:da:48:34:0c:14:7f"
-
-      - run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan ${CLEVER_CLOUD_REMOTE_HOST} >> ~/.ssh/known_hosts
-          mkdir -p ${DEPLOY_DIR}
-          cp server/prisma/Dockerfile.clever-cloud ${DEPLOY_DIR}/Dockerfile
-          cd ${DEPLOY_DIR}
-          git init
-          git config user.email "dsi-ext@zenika"
-          git config user.name "DSI Ext"
-          git add .
-          git commit -m "Deploy"
-          git remote add clever git+ssh://git@${CLEVER_CLOUD_REMOTE_HOST}/${CLEVER_CLOUD_REMOTE_APP_ID}.git
-          git push --force clever master
-
-  deploy:
-    environment:
-      DEPLOY_DIR: ~/deploy
-      CLEVER_CLOUD_REMOTE_HOST: push-par-clevercloud-customers.services.clever-cloud.com
-      CLEVER_CLOUD_REMOTE_APP_ID: app_c61407ae-b417-4406-86ed-cfd1acf84466
-    working_directory: *workspace_root
-    docker:
-      - image: circleci/node:10
+  app-deploy:
+    parameters:
+      clever-app-id:
+        type: string
+      deploy-dir:
+        type: string
+        default: ~/deploy
+    executor: clever-cloud-deployer
     steps:
       - checkout
-      - *attach_workspace
-
-      - add_ssh_keys:
-          fingerprints:
-            - "6f:f2:b4:c2:e5:13:28:f8:02:2d:da:48:34:0c:14:7f"
-
-      - run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan ${CLEVER_CLOUD_REMOTE_HOST} >> ~/.ssh/known_hosts
-          mkdir -p ${DEPLOY_DIR}
-          cp -R server/* ${DEPLOY_DIR}/
-          cp -R client/build/ ${DEPLOY_DIR}/front_build
-          cd ${DEPLOY_DIR}
-          cp prisma/prisma.yml scripts/prisma_deploy_all/
-          cp prisma/datamodel.graphql scripts/prisma_deploy_all/
-          git init
-          git config user.email "dsi-ext@zenika.com"
-          git config user.name "DSI Ext"
-          echo "node_modules/" > .gitignore
-          git add .gitignore
-          git add -A
-          git commit -m "Deploy"
-          git remote add clever git+ssh://git@${CLEVER_CLOUD_REMOTE_HOST}/${CLEVER_CLOUD_REMOTE_APP_ID}.git
-          git push --force clever master
-          npm run deploy
+      - attach_workspace:
+          at: .
+      - run:
+          name: Package application
+          command: |
+            mkdir -p << parameters.deploy-dir >>
+            cp -R server/* << parameters.deploy-dir >>/
+            cp -R client/build/ << parameters.deploy-dir >>/front_build
+            cd << parameters.deploy-dir >>
+            cp prisma/prisma.yml scripts/prisma_deploy_all/
+            cp prisma/datamodel.graphql scripts/prisma_deploy_all/
+            git config --global user.email "dsi-ext@zenika.com"
+            git config --global user.name "Zenika"
+            git init
+            git add .
+            git commit -m "deploy!"
+      - run:
+          name: Deploy to Clever Cloud
+          working_directory: << parameters.deploy-dir >>
+          command: |
+            npm install --global clever-tools
+            clever login --secret=$CLEVER_SECRET --token=$CLEVER_TOKEN
+            clever link << parameters.clever-app-id >>
+            clever deploy --force
 
 workflows:
   version: 2
   build-deploy:
     jobs:
-      - server/install
-      - server/lint:
+      - server-lint
+      - client-lint
+      - client-build
+      - app-deploy:
+          clever-app-id: app_c61407ae-b417-4406-86ed-cfd1acf84466
+          context: clever-cloud-deployment
           requires:
-            - server/install
-      - client/install
-      - client/lint:
-          requires:
-            - client/install
-      - client/build:
-          requires:
-            - client/install
-      - deploy:
-          requires:
-            - server/lint
-            - client/lint
-            - client/build
+            - server-lint
+            - client-lint
+            - client-build
           filters:
             branches:
               only: master
-      - prisma_deploy:
+      - prisma-deploy:
+          clever-app-id: app_f9c5c1cb-fe9c-41f9-a6c0-793e8326e95b
+          context: clever-cloud-deployment
           requires:
-            - deploy
-          filters:
-            branches:
-              only: master
+            - app-deploy
