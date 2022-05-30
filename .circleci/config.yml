@@ -175,7 +175,7 @@ workflows:
               only: master
       - prisma-deploy:
           requires:
-            - deploy
+            - app-deploy
           filters:
             branches:
               only: master
