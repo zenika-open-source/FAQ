@@ -53,68 +53,71 @@ jobs:
             - client/build/
 
   prisma-deploy:
-    environment:
-      DEPLOY_DIR: ~/prisma_deploy
-      CLEVER_CLOUD_REMOTE_HOST: push-par-clevercloud-customers.services.clever-cloud.com
-      CLEVER_CLOUD_REMOTE_APP_ID: app_f9c5c1cb-fe9c-41f9-a6c0-793e8326e95b
+    parameters:
+      clever-app-id:
+        type: string
+      deploy-dir:
+        type: string
+        default: ~/prisma_deploy
     executor: clever-cloud-deployer
     steps:
       - checkout
       - attach_workspace:
           at: .
-
-      - add_ssh_keys:
-          fingerprints:
-            - "6f:f2:b4:c2:e5:13:28:f8:02:2d:da:48:34:0c:14:7f"
-
-      - run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan ${CLEVER_CLOUD_REMOTE_HOST} >> ~/.ssh/known_hosts
-          mkdir -p ${DEPLOY_DIR}
-          cp server/prisma/Dockerfile.clever-cloud ${DEPLOY_DIR}/Dockerfile
-          cd ${DEPLOY_DIR}
-          git init
-          git config user.email "dsi-ext@zenika"
-          git config user.name "DSI Ext"
-          git add .
-          git commit -m "Deploy"
-          git remote add clever git+ssh://git@${CLEVER_CLOUD_REMOTE_HOST}/${CLEVER_CLOUD_REMOTE_APP_ID}.git
-          git push --force clever master
+      - run:
+          name: Package application
+          command: |
+            mkdir -p << parameters.deploy-dir >>
+            cp server/prisma/Dockerfile.clever-cloud << parameters.deploy-dir >>/Dockerfile
+            cd << parameters.deploy-dir >>
+            git config --global user.email "dsi-ext@zenika.com"
+            git config --global user.name "Zenika"
+            git init
+            git add .
+            git commit -m "deploy!"
+      - run:
+          name: Deploy to Clever Cloud
+          working_directory: << parameters.deploy-dir >>
+          command: |
+            npm install --global clever-tools
+            clever login --secret=$CLEVER_SECRET --token=$CLEVER_TOKEN
+            clever link << parameters.clever-app-id >>
+            clever deploy --force
 
   app-deploy:
-    environment:
-      DEPLOY_DIR: ~/deploy
-      CLEVER_CLOUD_REMOTE_HOST: push-par-clevercloud-customers.services.clever-cloud.com
-      CLEVER_CLOUD_REMOTE_APP_ID: app_c61407ae-b417-4406-86ed-cfd1acf84466
+    parameters:
+      clever-app-id:
+        type: string
+      deploy-dir:
+        type: string
+        default: ~/deploy
     executor: clever-cloud-deployer
     steps:
       - checkout
       - attach_workspace:
           at: .
-
-      - add_ssh_keys:
-          fingerprints:
-            - "6f:f2:b4:c2:e5:13:28:f8:02:2d:da:48:34:0c:14:7f"
-
-      - run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan ${CLEVER_CLOUD_REMOTE_HOST} >> ~/.ssh/known_hosts
-          mkdir -p ${DEPLOY_DIR}
-          cp -R server/* ${DEPLOY_DIR}/
-          cp -R client/build/ ${DEPLOY_DIR}/front_build
-          cd ${DEPLOY_DIR}
-          cp prisma/prisma.yml scripts/prisma_deploy_all/
-          cp prisma/datamodel.graphql scripts/prisma_deploy_all/
-          git init
-          git config user.email "dsi-ext@zenika.com"
-          git config user.name "DSI Ext"
-          echo "node_modules/" > .gitignore
-          git add .gitignore
-          git add -A
-          git commit -m "Deploy"
-          git remote add clever git+ssh://git@${CLEVER_CLOUD_REMOTE_HOST}/${CLEVER_CLOUD_REMOTE_APP_ID}.git
-          git push --force clever master
-          npm run deploy
+      - run:
+          name: Package application
+          command: |
+            mkdir -p << parameters.deploy-dir >>
+            cp -R server/* << parameters.deploy-dir >>/
+            cp -R client/build/ << parameters.deploy-dir >>/front_build
+            cd << parameters.deploy-dir >>
+            cp prisma/prisma.yml scripts/prisma_deploy_all/
+            cp prisma/datamodel.graphql scripts/prisma_deploy_all/
+            git config --global user.email "dsi-ext@zenika.com"
+            git config --global user.name "Zenika"
+            git init
+            git add .
+            git commit -m "deploy!"
+      - run:
+          name: Deploy to Clever Cloud
+          working_directory: << parameters.deploy-dir >>
+          command: |
+            npm install --global clever-tools
+            clever login --secret=$CLEVER_SECRET --token=$CLEVER_TOKEN
+            clever link << parameters.clever-app-id >>
+            clever deploy --force
 
 workflows:
   version: 2
@@ -124,6 +127,8 @@ workflows:
       - client-lint
       - client-build
       - app-deploy:
+          clever-app-id: app_c61407ae-b417-4406-86ed-cfd1acf84466
+          context: clever-cloud2-zenika-dev
           requires:
             - server-lint
             - client-lint
@@ -132,6 +137,8 @@ workflows:
             branches:
               only: master
       - prisma-deploy:
+          clever-app-id: app_f9c5c1cb-fe9c-41f9-a6c0-793e8326e95b
+          context: clever-cloud2-zenika-dev
           requires:
             - app-deploy
           filters:
