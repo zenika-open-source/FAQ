@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Pluralize from 'react-pluralize'
 
-import { useIntl } from 'services'
+import { getIntl } from 'services'
 import { Loading } from 'components'
 import { DefaultPagination } from 'components/Pagination'
 
@@ -19,7 +19,7 @@ const ResultList = ({
   onPageSelected,
   meta
 }) => {
-  const intl = useIntl(ResultList)
+  const intl = getIntl(ResultList)
 
   const shouldShowLoading = loading && (meta ? meta.pageCurrent !== pageCurrent : true)
 

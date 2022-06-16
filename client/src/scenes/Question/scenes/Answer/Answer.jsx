@@ -5,7 +5,7 @@ import { useApolloClient } from '@apollo/react-hooks'
 
 import { SUBMIT_ANSWER, EDIT_ANSWER } from './queries'
 
-import { alert, markdown, useIntl } from 'services'
+import { alert, markdown, getIntl } from 'services'
 import { onListChange } from 'helpers'
 
 import NotFound from 'scenes/NotFound'
@@ -38,7 +38,7 @@ const Answer = ({ zNode }) => {
     }
   })
 
-  const intl = useIntl(Answer)
+  const intl = getIntl(Answer)
 
   const apollo = useApolloClient()
 

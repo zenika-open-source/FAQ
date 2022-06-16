@@ -1,11 +1,11 @@
 import React from 'react'
 
-import { useIntl } from 'services'
+import { getIntl } from 'services'
 
 import { Tab, Input, Icon, Radio } from 'components'
 
 const General = ({ state, dispatch, loading }) => {
-  const intl = useIntl(General)
+  const intl = getIntl(General)
 
   return (
     <Tab label={intl('tab')}>

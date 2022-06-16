@@ -2,14 +2,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import format from 'date-fns/format'
 
-import { useIntl } from 'services'
+import { getIntl } from 'services'
 
 import Avatar from 'components/Avatar'
 
 import './Meta.css'
 
 const Meta = ({ node }) => {
-  const intl = useIntl(Meta)
+  const intl = getIntl(Meta)
 
   return (
     <div className="read-meta">

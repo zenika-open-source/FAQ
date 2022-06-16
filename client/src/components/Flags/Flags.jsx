@@ -5,15 +5,15 @@ import find from 'lodash/find'
 import map from 'lodash/map'
 import format from 'date-fns/format'
 
-import { useIntl } from 'services'
+import { getIntl } from 'services'
 
 import Flag, { flagMeta } from './Flag'
 
 import './Flags.css'
 
 const Flags = ({ node, withLabels }) => {
-  const intl = useIntl(Flags)
-  const flagIntl = useIntl(Flag)
+  const intl = getIntl(Flags)
+  const flagIntl = getIntl(Flag)
 
   const flags = clone(node.flags)
 

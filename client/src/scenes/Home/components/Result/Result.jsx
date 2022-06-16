@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
-import { markdown, useIntl } from 'services'
+import { markdown, getIntl } from 'services'
 
 // import Avatar from 'components/Avatar'
 import Card, { CardTitle, CardText } from 'components/Card'
@@ -21,7 +21,7 @@ class Result extends Component {
   }
 
   render() {
-    const intl = useIntl(Result)
+    const intl = getIntl(Result)
 
     const { node } = this.props
     const { collapsed } = this.state

@@ -2,11 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
-import { useIntl } from 'services'
+import { getIntl } from 'services'
 import Button from 'components/Button'
 
 const NoResults = ({ prefill }) => {
-  const intl = useIntl(NoResults)
+  const intl = getIntl(NoResults)
 
   return (
     <div style={{ textAlign: 'center', marginTop: '4rem' }}>

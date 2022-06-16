@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import { useIntl } from 'services'
+import { getIntl } from 'services'
 
 import Button from 'components/Button'
 
@@ -21,7 +21,7 @@ class PermanentClosableCard extends Component {
   }
 
   render() {
-    const intl = useIntl(PermanentClosableCard)
+    const intl = getIntl(PermanentClosableCard)
 
     const { open, close, children, ...otherProps } = this.props
 

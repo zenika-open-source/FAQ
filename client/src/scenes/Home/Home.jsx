@@ -5,7 +5,7 @@ import debounce from 'lodash/debounce'
 
 import { Button } from 'components'
 
-import { useIntl } from 'services'
+import { getIntl } from 'services'
 import { unserialize, addToQueryString } from 'helpers'
 
 import { Searchbar, ResultList } from './components'
@@ -55,7 +55,7 @@ class Home extends Component {
   }
 
   render() {
-    const intl = useIntl(Home)
+    const intl = getIntl(Home)
 
     return (
       <div>

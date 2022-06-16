@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useMutation } from '@apollo/react-hooks'
 
 import { useUser } from 'contexts'
-import { alert, useIntl } from 'services'
+import { alert, getIntl } from 'services'
 
 import { Avatar, Button, Card, Modal, Loading, Input } from 'components'
 
@@ -11,7 +11,7 @@ import Logs from './components/Logs'
 import { UPDATE_INDENTITY, DELETE_IDENTITY } from './queries'
 
 const UserProfile = ({ history }) => {
-  const intl = useIntl(UserProfile)
+  const intl = getIntl(UserProfile)
 
   const [loading, setLoading] = useState(false)
 
