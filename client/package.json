@@ -66,6 +66,9 @@
     "sass": "^1.52.3",
     "webpack-cli": "^3.3.10"
   },
+  "overrides": {
+    "react-error-overlay": "6.0.9"
+  },
   "browserslist": [
     ">0.2%",
     "not dead",
