@@ -15,7 +15,7 @@ const UserProfile = ({ history }) => {
 
   const [loading, setLoading] = useState(false)
 
-  const user = useUser() || {}
+  const user = useUser()
   const [name, setName] = useState(user.name)
   const [email, setEmail] = useState(user.email)
   const [picture, setPicture] = useState(user.picture)
