@@ -1,8 +1,8 @@
 type ZNode {
-  id: ID! @unique
+  id: ID! @id @unique
 
-  question: Question @relation(name: "NodeQuestion", onDelete: CASCADE)
-  answer: Answer @relation(name: "NodeAnswer", onDelete: CASCADE)
+  question: Question @relation(name: "NodeQuestion", onDelete: CASCADE, link: TABLE)
+  answer: Answer @relation(name: "NodeAnswer", onDelete: CASCADE, link: TABLE)
 
   flags: [Flag!]! @relation(name: "NodeFlags", onDelete: CASCADE)
   tags: [Tag!]! @relation(name: "NodeTags", onDelete: CASCADE)
@@ -13,7 +13,7 @@ type ZNode {
 }
 
 type Question {
-  id: ID! @unique
+  id: ID! @id @unique
 
   title: String!
   slug: String!
@@ -22,12 +22,12 @@ type Question {
   node: ZNode! @relation(name: "NodeQuestion")
   user: User! @relation(name: "UserQuestions")
 
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type Answer {
-  id: ID! @unique
+  id: ID! @id @unique
 
   content: String!
 
@@ -36,12 +36,12 @@ type Answer {
   node: ZNode! @relation(name: "NodeAnswer")
   user: User! @relation(name: "UserAnswers")
 
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type Source {
-  id: ID! @unique
+  id: ID! @id @unique
 
   label: String!
   url: String!
@@ -50,29 +50,29 @@ type Source {
 }
 
 type Flag {
-  id: ID! @unique
+  id: ID! @id @unique
 
   type: String!
 
   node: ZNode! @relation(name: "NodeFlags")
   user: User! @relation(name: "UserFlags")
 
-  createdAt: DateTime!
+  createdAt: DateTime! @createdAt
 }
 
 type Tag {
-  id: ID! @unique
+  id: ID! @id @unique
 
   label: TagLabel @relation(name: "TagsLabel")
 
   node: ZNode! @relation(name: "NodeTags")
   user: User! @relation(name: "UserTags")
 
-  createdAt: DateTime!
+  createdAt: DateTime! @createdAt
 }
 
 type TagLabel {
-  id: ID! @unique
+  id: ID! @id @unique
 
   name: String!
   tags: [Tag!]! @relation(name: "TagsLabel", onDelete: CASCADE)
@@ -82,7 +82,7 @@ type TagLabel {
 }
 
 type TagCategory {
-  id: ID! @unique
+  id: ID! @id @unique
 
   name: String!
   labels: [TagLabel!]! @relation(name: "TagLabelsCategory", onDelete: CASCADE)
@@ -92,7 +92,7 @@ type TagCategory {
 }
 
 type HistoryAction {
-  id: ID! @unique
+  id: ID! @id @unique
 
   action: String!
   model: String!
@@ -101,15 +101,15 @@ type HistoryAction {
   node: ZNode! @relation(name: "NodeHistoryActions")
   user: User! @relation(name: "UserHistoryActions")
 
-  createdAt: DateTime!
+  createdAt: DateTime! @createdAt
 }
 
 type User {
-  id: ID! @unique
+  id: ID! @id @unique
   auth0Id: String @unique
   key: String
 
-  admin: Boolean! @default(value: "false")
+  admin: Boolean! @default(value: false)
 
   name: String
   email: String
@@ -125,11 +125,11 @@ type User {
 
   history: [HistoryAction!]! @relation(name: "UserHistoryActions")
 
-  createdAt: DateTime!
+  createdAt: DateTime! @createdAt
 }
 
 type Configuration {
-  id: ID! @unique
+  id: ID! @id @unique
 
   name: String! @unique
 
@@ -137,7 +137,7 @@ type Configuration {
 
   auth0Domain: String!
   auth0ClientId: String!
-  authorizedDomains: [String!] @default(value: [])
+  authorizedDomains: [String!] @scalarList(strategy: RELATION)
 
   algoliaAppId: String
   algoliaApiKey: String

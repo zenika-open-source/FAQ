@@ -5,4 +5,4 @@ secret: ${env:PRISMA_API_SECRET}
 
 generate:
   - generator: graphql-schema
-    output: ../src/generated/
+    output: ../src/generated/prisma.graphql
