@@ -5,7 +5,7 @@ import { useAuth } from '../Auth'
 
 import { GET_ME } from './queries'
 
-export const UserContext = React.createContext()
+export const UserContext = React.createContext({})
 
 const UserProvider = ({ children }) => {
   const { isAuth } = useAuth()

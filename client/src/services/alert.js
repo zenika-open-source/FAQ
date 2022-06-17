@@ -1,7 +1,7 @@
 import React from 'react'
 import { AlertProvider } from 'components'
 
-import { useIntl as intl } from './intl'
+import { getIntl as intl } from './intl'
 
 const alert = {
   push: alert => AlertProvider.pushAlert(alert),

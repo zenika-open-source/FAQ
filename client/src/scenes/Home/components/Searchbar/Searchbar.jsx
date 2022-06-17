@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
 
-import { useIntl } from 'services'
+import { getIntl } from 'services'
 import { Input, TagPicker } from 'components'
 
 import { useConfiguration } from 'contexts'
@@ -10,7 +10,7 @@ import { useConfiguration } from 'contexts'
 import './Searchbar.css'
 
 const Searchbar = ({ text, tags, loading, onTextChange, onTagsChange }) => {
-  const intl = useIntl(Searchbar)
+  const intl = getIntl(Searchbar)
   const conf = useConfiguration()
 
   const tagLabels = tags

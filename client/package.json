@@ -30,7 +30,7 @@
     "react-pluralize": "^1.6.3",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
-    "react-scripts": "^3.3.0",
+    "react-scripts": "^4.0.3",
     "showdown": "^1.9.1",
     "showdown-xss-filter": "^0.2.0",
     "subscriptions-transport-ws": "^0.9.16",
@@ -67,7 +67,7 @@
     "webpack-cli": "^3.3.10"
   },
   "overrides": {
-    "webpack": "4.42.0"
+    "react-error-overlay": "6.0.9"
   },
   "browserslist": [
     ">0.2%",
@@ -78,6 +78,7 @@
   "prettier": {
     "semi": false,
     "printWidth": 100,
-    "singleQuote": true
+    "singleQuote": true,
+    "endOfLine": "lf"
   }
 }

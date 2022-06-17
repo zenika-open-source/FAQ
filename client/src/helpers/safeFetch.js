@@ -1,6 +1,6 @@
 import routing from 'services/routing'
 
-export default async path => {
+export default async function safeFetch(path) {
   const response = await fetch(process.env.REACT_APP_REST_ENDPOINT + '/' + path, {
     headers: { 'prisma-service': routing.getPrismaService() }
   })

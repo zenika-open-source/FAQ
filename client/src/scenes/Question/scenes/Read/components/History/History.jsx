@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import cn from 'classnames'
 
-import { useIntl } from 'services'
+import { getIntl } from 'services'
 import HistoryActions from './HistoryActions.container'
 
 import './History.css'
 
 const History = () => {
-  const intl = useIntl(History)
+  const intl = getIntl(History)
   const [open, setOpen] = useState(false)
 
   return (

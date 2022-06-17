@@ -2,11 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
 
-import { useIntl } from 'services'
+import { getIntl } from 'services'
 import Button from 'components/Button'
 
 const NotFound = ({ history }) => {
-  const intl = useIntl(NotFound)
+  const intl = getIntl(NotFound)
 
   return (
     <div>

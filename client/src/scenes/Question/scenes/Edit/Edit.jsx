@@ -5,7 +5,7 @@ import { useApolloClient } from '@apollo/react-hooks'
 
 import { SUBMIT_QUESTION, EDIT_QUESTION } from './queries'
 
-import { alert, useIntl } from 'services'
+import { alert, getIntl } from 'services'
 
 import Card, { CardText, CardActions, PermanentClosableCard } from 'components/Card'
 import { Loading, Button, Input, CtrlEnter, TagPicker } from 'components'
@@ -37,7 +37,7 @@ const Edit = ({ location, match, zNode }) => {
     }
   })
 
-  const intl = useIntl(Edit)
+  const intl = getIntl(Edit)
 
   const apollo = useApolloClient()
 

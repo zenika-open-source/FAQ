@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import cn from 'classnames'
 import merge from 'lodash/merge'
 
-import { useIntl } from 'services'
+import { getIntl } from 'services'
 
 import { Button } from 'components'
 
@@ -12,7 +12,7 @@ import PairInput from './PairInput'
 const noop = () => {}
 
 const PairInputList = ({ pairs, options, actions, disabled, className, ...rest }) => {
-  const intl = useIntl(PairInputList)
+  const intl = getIntl(PairInputList)
 
   const defaultOptions = {
     labels: intl('labels'),

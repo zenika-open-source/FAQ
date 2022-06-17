@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { useIntl } from 'services'
+import { getIntl } from 'services'
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -13,7 +13,7 @@ class ErrorBoundary extends React.Component {
   }
 
   render() {
-    const intl = useIntl(ErrorBoundary)
+    const intl = getIntl(ErrorBoundary)
 
     if (this.state.hasError) {
       return <h1 style={{ textAlign: 'center', marginTop: '3rem' }}>{intl('message')}</h1>

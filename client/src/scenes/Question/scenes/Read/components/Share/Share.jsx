@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import copy from 'copy-to-clipboard'
 
 import { useConfiguration } from 'contexts'
-import { routing, useIntl } from 'services'
+import { routing, getIntl } from 'services'
 
 import Dropdown, { DropdownItem } from 'components/Dropdown'
 
@@ -12,7 +12,7 @@ import Button from 'components/Button'
 import './Share.css'
 
 const Share = ({ node }) => {
-  const intl = useIntl(Share)
+  const intl = getIntl(Share)
 
   const conf = useConfiguration()
   const shareUrl = routing.getShareUrl(node.id)

@@ -10,11 +10,11 @@ import NotFound from 'scenes/NotFound'
 
 import { PrivateRoute, Loading, ErrorBoundary } from 'components'
 
-import { useIntl } from 'services'
+import { getIntl } from 'services'
 import { useConfiguration, useAuth } from 'contexts'
 
 const AppBody = () => {
-  const intl = useIntl(AppBody)
+  const intl = getIntl(AppBody)
 
   const conf = useConfiguration()
   const auth = useAuth()

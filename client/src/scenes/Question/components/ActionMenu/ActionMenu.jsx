@@ -3,13 +3,13 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
 import { Link } from 'react-router-dom'
 
-import { useIntl } from 'services'
+import { getIntl } from 'services'
 import Button from 'components/Button'
 
 import './ActionMenu.css'
 
 const ActionMenu = ({ backLabel, backLink, goBack, title, children, history, location }) => {
-  const intl = useIntl(ActionMenu)
+  const intl = getIntl(ActionMenu)
 
   return (
     <div className="action-menu">

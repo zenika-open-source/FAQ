@@ -1,12 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { useIntl } from 'services'
+import { getIntl } from 'services'
 
 import List, { ListItem } from 'components/List'
 
 const Sources = ({ sources }) => {
-  const intl = useIntl(Sources)
+  const intl = getIntl(Sources)
 
   if (sources.length === 0) return ''
 

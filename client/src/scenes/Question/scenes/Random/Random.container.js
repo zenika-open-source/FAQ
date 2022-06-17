@@ -1,6 +1,6 @@
 import { compose } from 'helpers'
 import { withLoading, withError } from 'components'
-import { useIntl } from 'services'
+import { getIntl } from 'services'
 import { query } from 'services/apollo'
 
 import { GET_RANDOM } from './queries'
@@ -14,6 +14,6 @@ export default compose(
     }),
     fetchPolicy: 'network-only'
   }),
-  withLoading(useIntl(Random)('loading')),
+  withLoading(getIntl(Random)('loading')),
   withError()
 )(Random)

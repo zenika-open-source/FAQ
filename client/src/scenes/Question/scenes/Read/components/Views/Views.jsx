@@ -1,12 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { useIntl } from 'services'
+import { getIntl } from 'services'
 
 import './Views.css'
 
 const Views = ({ value }) => {
-  const intl = useIntl(Views)
+  const intl = getIntl(Views)
   let formattedValue = value || 0
   if (value > 1000) {
     const locale = window.navigator.language

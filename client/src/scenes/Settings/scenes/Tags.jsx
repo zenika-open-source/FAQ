@@ -1,13 +1,13 @@
 import React from 'react'
 
-import { useIntl } from 'services'
+import { getIntl } from 'services'
 
 import { Tab } from 'components'
 
 import { TagsEditor } from '../components'
 
 const Tags = ({ state, onTagsChange }) => {
-  const intl = useIntl(Tags)
+  const intl = getIntl(Tags)
 
   return (
     <Tab label={intl('tab')}>

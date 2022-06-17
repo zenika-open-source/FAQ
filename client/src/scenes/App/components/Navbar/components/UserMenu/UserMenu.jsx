@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
 
-import { useIntl } from 'services'
+import { getIntl } from 'services'
 import { useUser, useConfiguration } from 'contexts'
 
 import { Authenticated, Avatar } from 'components'
@@ -11,7 +11,7 @@ import Dropdown, { DropdownItem, DropdownDivider } from 'components/Dropdown'
 import GithubIcon from '../GithubIcon'
 
 const UserMenu = ({ history }) => {
-  const intl = useIntl(UserMenu)
+  const intl = getIntl(UserMenu)
 
   const me = useUser()
   const conf = useConfiguration()

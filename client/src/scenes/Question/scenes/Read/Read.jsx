@@ -6,7 +6,7 @@ import { useMutation } from '@apollo/react-hooks'
 
 import { CREATE_FLAG, REMOVE_FLAG, INCREMENT_VIEWS_COUNTER } from './queries'
 
-import { markdown, useIntl } from 'services'
+import { markdown, getIntl } from 'services'
 
 import NotFound from 'scenes/NotFound'
 
@@ -35,7 +35,7 @@ const Read = ({ history, match, zNode, loading }) => {
     if (!loaded && zNode) setLoaded(true)
   }, [zNode, loaded])
 
-  const intl = useIntl(Read)
+  const intl = getIntl(Read)
 
   if (loading) return <Loading />
 

@@ -2,12 +2,12 @@ import React from 'react'
 
 import { Tab, PairInputList } from 'components'
 
-import { useIntl } from 'services'
+import { getIntl } from 'services'
 
 import { onListChangeActions } from 'helpers/onListChange'
 
 const Synonyms = ({ state, dispatch, loading }) => {
-  const intl = useIntl(Synonyms)
+  const intl = getIntl(Synonyms)
 
   return (
     <Tab label={intl('tab')}>

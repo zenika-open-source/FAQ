@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import { useMutation } from '@apollo/react-hooks'
 
-import { alert, useIntl } from 'services'
+import { alert, getIntl } from 'services'
 
 import { Tab, Input, Checkbox, Button } from 'components'
 
 import { REGENERATE_SLACK_COMMAND_KEY } from '../queries'
 
 const Integrations = ({ state, dispatch, loading }) => {
-  const intl = useIntl(Integrations)
+  const intl = getIntl(Integrations)
 
   const [slackHookLoading, setSlackHookLoading] = useState(false)
   const [mutateSlackCommandKey] = useMutation(REGENERATE_SLACK_COMMAND_KEY)

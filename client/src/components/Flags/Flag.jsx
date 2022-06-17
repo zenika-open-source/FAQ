@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import capitalize from 'lodash/capitalize'
 import cn from 'classnames'
 
-import { useIntl } from 'services'
+import { getIntl } from 'services'
 
 const flagMeta = {
   duplicate: {
@@ -25,7 +25,7 @@ const flagMeta = {
 }
 
 const Flag = ({ flag, withlabel, style, ...otherProps }) => {
-  const intl = useIntl(Flag)
+  const intl = getIntl(Flag)
 
   return (
     <div

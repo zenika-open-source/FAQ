@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 
-import { useIntl } from 'services'
+import { getIntl } from 'services'
 import { useAuth } from 'contexts'
 
 import { Loading } from 'components'
 
 const Callback = ({ location }) => {
-  const intl = useIntl(Callback)
+  const intl = getIntl(Callback)
 
   const { parseHash } = useAuth()
 

@@ -1,11 +1,11 @@
 import React from 'react'
 
-import { useIntl } from 'services'
+import { getIntl } from 'services'
 
 import TipsComponent from 'components/Tips'
 
 const Tips = props => {
-  const intl = useIntl(Tips)
+  const intl = getIntl(Tips)
 
   return (
     <TipsComponent {...props} uid="tips_question">

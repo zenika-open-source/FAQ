@@ -2,10 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Redirect } from 'react-router'
 
-import { useIntl } from 'services'
+import { getIntl } from 'services'
 
 const Random = ({ randomNode }) => {
-  const intl = useIntl(Random)
+  const intl = getIntl(Random)
 
   if (randomNode.id) {
     return <Redirect to={`/q/${randomNode.question.slug}-${randomNode.id}`} />

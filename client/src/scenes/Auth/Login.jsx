@@ -2,13 +2,13 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { withRouter, Redirect } from 'react-router-dom'
 
-import { useIntl } from 'services'
+import { getIntl } from 'services'
 import { useAuth } from 'contexts'
 
 import { Loading, Button } from 'components'
 
 const Login = ({ location }) => {
-  const intl = useIntl(Login)
+  const intl = getIntl(Login)
 
   const [renewing, setRenewing] = useState(false)
   const redirectedFrom = location.state && location.state.from

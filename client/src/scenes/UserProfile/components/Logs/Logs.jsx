@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
-import { useIntl } from 'services'
+import { getIntl } from 'services'
 import { formatHistoryAction, nodeUrl } from 'helpers'
 
 import { Loading } from 'components'
@@ -12,7 +12,7 @@ import { DefaultPagination } from 'components/Pagination'
 import './Logs.css'
 
 const Logs = ({ logs, loading, pagesCount, pageCurrent, onPageSelected, meta }) => {
-  const intl = useIntl(Logs)
+  const intl = getIntl(Logs)
 
   const shouldShowLoading = loading && (meta ? meta.pageCurrent !== pageCurrent : true)
 

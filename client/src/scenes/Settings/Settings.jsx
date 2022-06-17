@@ -1,7 +1,7 @@
 import React, { useState, useReducer, useEffect } from 'react'
 import { useMutation } from '@apollo/react-hooks'
 
-import { alert, useIntl } from 'services'
+import { alert, getIntl } from 'services'
 
 import { useConfiguration } from 'contexts'
 
@@ -24,7 +24,7 @@ const initState = conf => ({
 })
 
 const Settings = ({ configuration: conf }) => {
-  const intl = useIntl(Settings)
+  const intl = getIntl(Settings)
 
   const configuration = useConfiguration()
 

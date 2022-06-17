@@ -1,12 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { useIntl } from 'services'
+import { getIntl } from 'services'
 
 import './Loading.css'
 
 const Loading = ({ text }) => {
-  const intl = useIntl(Loading)
+  const intl = getIntl(Loading)
 
   return (
     <div style={{ textAlign: 'center', marginTop: '3rem' }}>

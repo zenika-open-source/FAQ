@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { useIntl } from 'services'
+import { getIntl } from 'services'
 
 import { Flag, flagMeta } from 'components/Flags'
 import Dropdown, { DropdownItem } from 'components/Dropdown'
@@ -10,8 +10,8 @@ import Button from 'components/Button'
 import './FlagsDropdown.css'
 
 const FlagsDropdown = ({ flags, onSelect, onRemove }) => {
-  const intl = useIntl(FlagsDropdown)
-  const flagIntl = useIntl(Flag)
+  const intl = getIntl(FlagsDropdown)
+  const flagIntl = getIntl(Flag)
 
   const flagTypes = ['incomplete', 'outdated', 'duplicate']
 
