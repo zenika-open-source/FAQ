@@ -26,7 +26,7 @@ const apollo = new ApolloClient({
       }
       if (networkError) {
         // eslint-disable-next-line no-console
-        console.error(`[Network error]: ${networkError}. Please refresh the page.`)
+        console.error(`[Network error] Please refresh the page.`, networkError)
       }
     }),
     setContext((_, { headers }) => {
