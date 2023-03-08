@@ -79,7 +79,7 @@ jobs:
           name: Deploy to Clever Cloud
           working_directory: << parameters.deploy-dir >>
           command: |
-            npm install --global clever-tools
+            sudo npm install --global clever-tools
             clever login --secret=$CLEVER_SECRET --token=$CLEVER_TOKEN
             clever link << parameters.clever-app-id >>
             clever deploy --force
@@ -114,7 +114,7 @@ jobs:
           name: Deploy to Clever Cloud
           working_directory: << parameters.deploy-dir >>
           command: |
-            npm install --global clever-tools
+            sudo npm install --global clever-tools
             clever login --secret=$CLEVER_SECRET --token=$CLEVER_TOKEN
             clever link << parameters.clever-app-id >>
             clever deploy --force
