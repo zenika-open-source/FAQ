@@ -5,7 +5,7 @@ const configurationEndpoint = multiTenant => async (req, res) =>
     res.header('Access-Control-Allow-Origin', '*')
 
     if (err) {
-      res.sendStatus(500)
+      res.status(500).send(`Avez-vous bien fait la commande 'npm run new_service' ?`)
       return
     }
 

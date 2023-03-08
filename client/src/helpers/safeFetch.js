@@ -7,7 +7,7 @@ export default async function safeFetch(path) {
 
   if (!response.ok) {
     throw new Error(
-      `Error response from server while retrieving ${path}: HTTP status ${response.status}`
+      `Error response from server while retrieving ${path}: HTTP status ${response.status} : ${await response.text()}`
     )
   }
 
