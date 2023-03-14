@@ -45,7 +45,8 @@
     "prettier": "prettier \"src/**/*.{jsx,css,js}\"",
     "prettier:write": "npm run prettier -- --write",
     "prettier:check": "npm run prettier -- --check",
-    "stats": "NODE_ENV=production webpack --config node_modules/react-scripts/config/webpack.config.prod.js --json > stats.json"
+    "stats": "NODE_ENV=production webpack --config node_modules/react-scripts/config/webpack.config.prod.js --json > stats.json",
+    "token": "dotenv -e ../server/.env.local bash ../server/scripts/prisma_token/token.sh"
   },
   "husky": {
     "hooks": {
@@ -53,6 +54,7 @@
     }
   },
   "devDependencies": {
+    "@playwright/test": "^1.31.2",
     "dotenv": "^5.0.0",
     "dotenv-cli": "^1.4.0",
     "eslint-config-prettier": "^4.3.0",
