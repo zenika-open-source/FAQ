@@ -1,7 +1,7 @@
 import differenceWith from 'lodash/differenceWith'
 import isEqual from 'lodash/isEqual'
 
-import { isUuidV4 } from 'helpers'
+import { isUuidV4 } from '@helpers'
 
 export const sourcesToKeyValuePairs = sources => {
   return sources.map(({ id, label, url }) => ({

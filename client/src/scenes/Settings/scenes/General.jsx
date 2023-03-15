@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { getIntl } from 'services'
+import { getIntl } from '@services'
 
-import { Tab, Input, Icon, Radio } from 'components'
+import { Tab, Input, Icon, Radio } from '@components'
 
 const General = ({ state, dispatch, loading }) => {
   const intl = getIntl(General)

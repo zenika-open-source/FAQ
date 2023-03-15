@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { CardText, PermanentClosableCard } from 'components/Card'
+import { CardText, PermanentClosableCard } from '@components/Card'
 
 import './Tips.css'
 

@@ -13,6 +13,7 @@
     "apollo-link-error": "^1.1.12",
     "apollo-link-http": "^1.5.16",
     "auth0-js": "^9.12.1",
+    "babel-runtime": "^6.26.0",
     "classnames": "^2.2.5",
     "copy-to-clipboard": "^3.2.0",
     "date-fns": "^1.29.0",
@@ -30,22 +31,21 @@
     "react-pluralize": "^1.6.3",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
-    "react-scripts": "^4.0.3",
     "showdown": "^1.9.1",
     "showdown-xss-filter": "^0.2.0",
     "subscriptions-transport-ws": "^0.9.16",
     "uuid": "^3.3.3"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "start": "vite",
+    "build": "vite build",
+    "test": "vite test --env=jsdom",
     "lint": "eslint src --ext js,jsx",
     "lint:fix": "npm run lint -- --fix",
     "prettier": "prettier \"src/**/*.{jsx,css,js}\"",
     "prettier:write": "npm run prettier -- --write",
     "prettier:check": "npm run prettier -- --check",
-    "stats": "NODE_ENV=production webpack --config node_modules/react-scripts/config/webpack.config.prod.js --json > stats.json"
+    "stats": "NODE_ENV=production webpack --config node_modules/vite/config/webpack.config.prod.js --json > stats.json"
   },
   "husky": {
     "hooks": {
@@ -53,6 +53,7 @@
     }
   },
   "devDependencies": {
+    "@vitejs/plugin-react": "^3.1.0",
     "dotenv": "^5.0.0",
     "dotenv-cli": "^1.4.0",
     "eslint-config-prettier": "^4.3.0",
@@ -64,6 +65,7 @@
     "prettier": "^1.19.1",
     "pretty-quick": "^1.11.1",
     "sass": "^1.52.3",
+    "vite": "^4.1.4",
     "webpack-cli": "^3.3.10"
   },
   "overrides": {

@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { getIntl } from 'services'
+import { getIntl } from '@services'
 
-import List, { ListItem } from 'components/List'
+import List, { ListItem } from '@components/List'
 
 const Sources = ({ sources }) => {
   const intl = getIntl(Sources)

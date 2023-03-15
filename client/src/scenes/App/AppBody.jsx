@@ -1,17 +1,17 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 
-import Auth from 'scenes/Auth'
-import Home from 'scenes/Home'
-import Question from 'scenes/Question'
-import UserProfile from 'scenes/UserProfile'
-import Settings from 'scenes/Settings'
-import NotFound from 'scenes/NotFound'
+import Auth from '@scenes/Auth'
+import Home from '@scenes/Home'
+import Question from '@scenes/Question'
+import UserProfile from '@scenes/UserProfile'
+import Settings from '@scenes/Settings'
+import NotFound from '@scenes/NotFound'
 
-import { PrivateRoute, Loading, ErrorBoundary } from 'components'
+import { PrivateRoute, Loading, ErrorBoundary } from '@components'
 
-import { getIntl } from 'services'
-import { useConfiguration, useAuth } from 'contexts'
+import { getIntl } from '@services'
+import { useConfiguration, useAuth } from '@contexts'
 
 const AppBody = () => {
   const intl = getIntl(AppBody)

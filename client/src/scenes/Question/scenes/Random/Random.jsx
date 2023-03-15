@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Redirect } from 'react-router'
 
-import { getIntl } from 'services'
+import { getIntl } from '@services'
 
 const Random = ({ randomNode }) => {
   const intl = getIntl(Random)

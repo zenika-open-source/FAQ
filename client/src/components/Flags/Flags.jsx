@@ -5,7 +5,7 @@ import find from 'lodash/find'
 import map from 'lodash/map'
 import format from 'date-fns/format'
 
-import { getIntl } from 'services'
+import { getIntl } from '@services'
 
 import Flag, { flagMeta } from './Flag'
 

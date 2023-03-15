@@ -1,9 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { getIntl } from 'services'
-import { useConfiguration } from 'contexts'
-import { Authenticated, Button, Icon } from 'components'
+import { getIntl } from '@services'
+import { useConfiguration } from '@contexts'
+import { Authenticated, Button, Icon } from '@components'
 
 import { GithubIcon, UserMenu } from './components'
 
@@ -33,7 +33,7 @@ const Navbar = () => {
             <span>{intl('report_bug')}</span>
           </a>
         ) : (
-          <a href={`mailto:bug@${process.env.REACT_APP_FAQ_URL}`}>
+          <a href={`mailto:bug@${import.meta.env.VITE_FAQ_URL}`}>
             <Icon material="mail" style={{ fontSize: '14px' }} />
             <span>{intl('report_bug')}</span>
           </a>

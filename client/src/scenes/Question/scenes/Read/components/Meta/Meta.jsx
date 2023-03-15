@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import format from 'date-fns/format'
 
-import { getIntl } from 'services'
+import { getIntl } from '@services'
 
-import Avatar from 'components/Avatar'
+import Avatar from '@components/Avatar'
 
 import './Meta.css'
 

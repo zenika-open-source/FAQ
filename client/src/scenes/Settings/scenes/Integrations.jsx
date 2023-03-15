@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { useMutation } from '@apollo/react-hooks'
 
-import { alert, getIntl } from 'services'
+import { alert, getIntl } from '@services'
 
-import { Tab, Input, Checkbox, Button } from 'components'
+import { Tab, Input, Checkbox, Button } from '@components'
 
 import { REGENERATE_SLACK_COMMAND_KEY } from '../queries'
 

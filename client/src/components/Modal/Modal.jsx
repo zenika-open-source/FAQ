@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import cn from 'classnames'
 
-import { useClickOutside } from 'helpers'
+import { useClickOutside } from '@helpers'
 
 import './Modal.scss'
 

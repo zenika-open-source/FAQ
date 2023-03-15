@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Pluralize from 'react-pluralize'
 
-import { getIntl } from 'services'
-import { Loading } from 'components'
-import { DefaultPagination } from 'components/Pagination'
+import { getIntl } from '@services'
+import { Loading } from '@components'
+import { DefaultPagination } from '@components/Pagination'
 
 import NoResults from '../NoResults'
 import Result from '../Result'

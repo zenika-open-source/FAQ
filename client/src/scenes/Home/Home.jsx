@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import debounce from 'lodash/debounce'
 
-import { Button } from 'components'
+import { Button } from '@components'
 
-import { getIntl } from 'services'
-import { unserialize, addToQueryString } from 'helpers'
+import { getIntl } from '@services'
+import { unserialize, addToQueryString } from '@helpers'
 
 import { Searchbar, ResultList } from './components'
 

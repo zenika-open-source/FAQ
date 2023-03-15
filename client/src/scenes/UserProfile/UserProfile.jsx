@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { useMutation } from '@apollo/react-hooks'
 
-import { useUser } from 'contexts'
-import { alert, getIntl } from 'services'
+import { useUser } from '@contexts'
+import { alert, getIntl } from '@services'
 
-import { Avatar, Button, Card, Modal, Loading, Input } from 'components'
+import { Avatar, Button, Card, Modal, Loading, Input } from '@components'
 
 import Logs from './components/Logs'
 
@@ -124,8 +124,8 @@ const UserProfile = ({ history }) => {
           <hr />
           <p>
             <span style={{ marginRight: '5px' }}>{intl('gdpr.contact')}</span>
-            <a href={`mailto:contact@${process.env.REACT_APP_FAQ_URL}`}>
-              contact@{process.env.REACT_APP_FAQ_URL}
+            <a href={`mailto:contact@${import.meta.env.VITE_FAQ_URL}`}>
+              contact@{import.meta.env.VITE_FAQ_URL}
             </a>
           </p>
           <hr />

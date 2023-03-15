@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import capitalize from 'lodash/capitalize'
 import cn from 'classnames'
 
-import { getIntl } from 'services'
+import { getIntl } from '@services'
 
 const flagMeta = {
   duplicate: {

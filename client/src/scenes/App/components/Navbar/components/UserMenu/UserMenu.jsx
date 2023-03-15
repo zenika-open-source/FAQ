@@ -2,11 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
 
-import { getIntl } from 'services'
-import { useUser, useConfiguration } from 'contexts'
+import { getIntl } from '@services'
+import { useUser, useConfiguration } from '@contexts'
 
-import { Authenticated, Avatar } from 'components'
-import Dropdown, { DropdownItem, DropdownDivider } from 'components/Dropdown'
+import { Authenticated, Avatar } from '@components'
+import Dropdown, { DropdownItem, DropdownDivider } from '@components/Dropdown'
 
 import GithubIcon from '../GithubIcon'
 
@@ -41,7 +41,7 @@ const UserMenu = ({ history }) => {
         href={
           conf.bugReporting === 'GITHUB'
             ? 'https://github.com/zenika-open-source/FAQ/issues/new?template=bug_report.md'
-            : `mailto:bug@${process.env.REACT_APP_FAQ_URL}`
+            : `mailto:bug@${import.meta.env.VITE_FAQ_URL}`
         }
         target="_blank"
       >

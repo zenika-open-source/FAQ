@@ -2,12 +2,12 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
-import { markdown, getIntl } from 'services'
+import { markdown, getIntl } from '@services'
 
 // import Avatar from 'components/Avatar'
-import Card, { CardTitle, CardText } from 'components/Card'
-import Flags from 'components/Flags'
-import Tags from 'components/Tags'
+import Card, { CardTitle, CardText } from '@components/Card'
+import Flags from '@components/Flags'
+import Tags from '@components/Tags'
 
 import './Result.css'
 

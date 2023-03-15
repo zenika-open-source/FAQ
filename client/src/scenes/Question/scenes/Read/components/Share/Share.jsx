@@ -2,12 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import copy from 'copy-to-clipboard'
 
-import { useConfiguration } from 'contexts'
-import { routing, getIntl } from 'services'
+import { useConfiguration } from '@contexts'
+import { routing, getIntl } from '@services'
 
-import Dropdown, { DropdownItem } from 'components/Dropdown'
+import Dropdown, { DropdownItem } from '@components/Dropdown'
 
-import Button from 'components/Button'
+import Button from '@components/Button'
 
 import './Share.css'
 

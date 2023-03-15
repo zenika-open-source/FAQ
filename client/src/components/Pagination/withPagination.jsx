@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 
-import { unserialize, addToQueryString } from 'helpers'
+import { unserialize, addToQueryString } from '@helpers'
 
 const withPagination = (options = { push: true }) => Component => {
   class withPaginationWrapper extends PureComponent {

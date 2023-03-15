@@ -2,10 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
 
-import { getIntl } from 'services'
-import { Input, TagPicker } from 'components'
+import { getIntl } from '@services'
+import { Input, TagPicker } from '@components'
 
-import { useConfiguration } from 'contexts'
+import { useConfiguration } from '@contexts'
 
 import './Searchbar.css'
 

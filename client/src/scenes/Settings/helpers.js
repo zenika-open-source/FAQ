@@ -1,5 +1,5 @@
-import { isUuidV4 } from 'helpers'
-import { onListChangeReducer } from 'helpers/onListChange'
+import { isUuidV4 } from '@helpers'
+import { onListChangeReducer } from '@helpers/onListChange'
 
 export const reducer = (state, action) => {
   switch (action.type) {

@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { getIntl } from 'services'
+import { getIntl } from '@services'
 
-import { Tab } from 'components'
+import { Tab } from '@components'
 
 import { TagsEditor } from '../components'
 

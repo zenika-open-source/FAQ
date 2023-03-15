@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import ReactMde, { commands } from 'react-mde'
 
-import { markdown, getIntl } from 'services'
+import { markdown, getIntl } from '@services'
 
 import { emojiPickerCommand } from './EmojiPicker'
 

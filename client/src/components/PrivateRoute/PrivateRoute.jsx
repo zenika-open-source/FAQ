@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Route } from 'react-router-dom'
 
-import Authenticated from 'components/Authenticated'
+import Authenticated from '@components/Authenticated'
 
 const PrivateRoute = ({ component: Component, render, admin, ...otherProps }) => (
   <Route

@@ -5,13 +5,13 @@ import { Prompt, Redirect } from 'react-router-dom'
 
 import { EDIT_ANSWER, SUBMIT_ANSWER } from './queries'
 
-import { onListChange } from 'helpers'
-import { alert, getIntl, markdown } from 'services'
+import { alert, markdown, getIntl } from '@services'
+import { onListChange } from '@helpers'
 
-import NotFound from 'scenes/NotFound'
+import NotFound from '@scenes/NotFound'
 
-import { Button, CtrlEnter, Flags, Loading, MarkdownEditor, PairInputList } from 'components'
-import Card, { CardActions, CardText, CardTitle, PermanentClosableCard } from 'components/Card'
+import { Loading, Flags, Button, MarkdownEditor, CtrlEnter, PairInputList } from '@components'
+import Card, { CardTitle, CardText, CardActions, PermanentClosableCard } from '@components/Card'
 
 import { ActionMenu } from '../../components'
 

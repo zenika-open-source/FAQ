@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { getIntl } from 'services'
+import { getIntl } from '@services'
 
 class ErrorBoundary extends React.Component {
   constructor(props) {

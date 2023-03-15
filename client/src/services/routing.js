@@ -22,16 +22,16 @@ const routing = {
     return `${window.location.origin}/q/${UID}`
   },
   getPrismaService() {
-    const { REACT_APP_PRISMA_SERVICE, NODE_ENV, REACT_APP_FAQ_URL } = process.env
+    const { VITE_PRISMA_SERVICE, NODE_ENV, VITE_FAQ_URL } = import.meta.env
 
-    // You can override the service with REACT_APP_PRISMA_SERVICE
-    if (REACT_APP_PRISMA_SERVICE) return REACT_APP_PRISMA_SERVICE
+    // You can override the service with VITE_PRISMA_SERVICE
+    if (VITE_PRISMA_SERVICE) return VITE_PRISMA_SERVICE
 
     // If you are in production, we retrieve the prisma service from the url
-    if (NODE_ENV === 'production' && !!REACT_APP_FAQ_URL) {
+    if (NODE_ENV === 'production' && !!VITE_FAQ_URL) {
       const url = new URL(window.location.href).hostname
-      if (url.endsWith(REACT_APP_FAQ_URL)) {
-        const match = url.replace(REACT_APP_FAQ_URL, '').match(/(?:(?:([^.]*)\.)?([^.]*)\.)?/)
+      if (url.endsWith(VITE_FAQ_URL)) {
+        const match = url.replace(VITE_FAQ_URL, '').match(/(?:(?:([^.]*)\.)?([^.]*)\.)?/)
         const name = match[2] || 'default'
         const stage = match[1] || 'prod'
         return name + '/' + stage
