@@ -79,6 +79,14 @@ const checkJwt = (req, res, next, prisma) => {
     }
 
     getUser = next
+  } else if (process.env.AUTH_SKIP === 'skipAuth') {
+    req.user = {
+      email: 'test.playwright@zenika.com',
+      token: {
+        email: 'test.playwright@zenika.com'
+      }
+    }
+    return next()
   } else {
     return next(
       new UnauthorizedError(

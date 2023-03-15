@@ -114,7 +114,7 @@ test.beforeEach(async ({ page }) => {
   await page.pause()
 })
 
-test('Should go to home page', async ({ page }) => {
+test('Shoud be able to create a question', async ({ page }) => {
   await page.getByText('Latest questions').click()
 })
 
