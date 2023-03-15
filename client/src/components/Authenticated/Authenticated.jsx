@@ -17,7 +17,11 @@ const Authenticated = ({ location, reverse, redirect, children, admin }) => {
     }
   }
 
-  if ((isAuth && !reverse) || (!isAuth && reverse) || process.env.AUTH_SKIP === 'skipAuth') {
+  if (
+    (isAuth && !reverse) ||
+    (!isAuth && reverse) ||
+    process.env.REACT_APP_AUTH_SKIP === 'skipAuth'
+  ) {
     return children
   }
 

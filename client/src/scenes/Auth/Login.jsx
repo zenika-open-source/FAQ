@@ -15,6 +15,7 @@ const Login = ({ location }) => {
 
   const { login, renewAuth, isAuth, wasAuth } = useAuth()
 
+  console.log(process.env.REACT_APP_AUTH_SKIP)
   if (isAuth || process.env.REACT_APP_AUTH_SKIP === 'skipAuth') {
     return <Redirect to="/" />
   }
