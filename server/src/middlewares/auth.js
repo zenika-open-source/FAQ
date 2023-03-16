@@ -81,6 +81,7 @@ const checkJwt = (req, res, next, prisma) => {
     getUser = next
   } else if (process.env.AUTH_SKIP === 'skipAuth') {
     req.user = {
+      id: 'clf9tpozq020u0870xl5bqw97',
       email: 'test.playwright@zenika.com',
       token: {
         email: 'test.playwright@zenika.com'
