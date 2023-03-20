@@ -1,8 +1,5 @@
 import { expect, test } from '@playwright/test'
 const path = require('path')
-import gql from 'graphql-tag'
-
-/* A LANCER DANS BASH POUR OBTENIR LE TOKEN */
 
 const key = 'playwrightTestKey'
 
@@ -95,26 +92,28 @@ do {
 
 let apiContext
 
+/* A LANCER DANS BASH POUR OBTENIR LE TOKEN */
+
 test.beforeAll(async ({ playwright }) => {
   const PATH = path.resolve(process.cwd(), '..')
   const execSync = require('child_process').execSync
-  const prismaToken = execSync('npm run token default/default', {
+  const token = execSync('npm run --silent token default/default', {
     cwd: `${PATH}/server`
-  }).toString()
+  })
+    .toString()
+    .trim()
   apiContext = await playwright.request.newContext({
     baseURL: 'http://localhost:4466',
     extraHTTPHeaders: {
-      Authorization: `${prismaToken}`,
+      Authorization: token,
       'faq-tenant': 'default/default'
     }
   })
-  const res = await apiContext.post('/', {
+  await apiContext.post('/', {
     data: {
       query: deleteAnswers
     }
   })
-  const resJson = res.json()
-  console.log(await resJson)
   await apiContext.post('/', {
     data: {
       query: deleteQuestions
@@ -150,6 +149,7 @@ test.beforeEach(async ({ page }) => {
   await page.goto('http://localhost:3000')
 })
 
+// Pass
 test('Shoud be able to create a question', async ({ page }) => {
   await page
     .locator('button', { hasText: 'Nouvelle question' })
@@ -163,23 +163,24 @@ test('Shoud be able to create a question', async ({ page }) => {
   await expect(page.getByRole('heading', { name: questionsText[randomQuestion] })).toBeVisible()
 })
 
-// test('Should be able to create a question and answer it', async ({ page }) => {
-//   await page
-//     .locator('button', { hasText: 'Nouvelle question' })
-//     .first()
-//     .click()
-//   await page.locator('input[type=text]').click()
-//   await page.locator('input[type=text]').fill(questionsText[randomQuestion])
-//   await page.getByRole('button', { name: 'add' }).click()
-//   await page.getByText(tagsText[randomTag], { exact: true }).click()
-//   await page.locator('button', { hasText: 'Envoyer la question' }).click()
-//   await expect(page.getByRole('heading', { name: questionsText[randomQuestion] })).toBeVisible()
-//   await page.locator('button', { hasText: 'Répondre à la question' }).click()
-//   await page.locator('textarea').click()
-//   await page.locator('textarea').fill(answersText[randomAnswer])
-//   await page.locator('button', { hasText: 'Envoyer la réponse' }).click()
-//   await expect(page.getByText(answersText[randomAnswer], { exact: true })).toBeVisible()
-// })
+// Pass
+test('Should be able to create a question and answer it', async ({ page }) => {
+  await page
+    .locator('button', { hasText: 'Nouvelle question' })
+    .first()
+    .click()
+  await page.locator('input[type=text]').click()
+  await page.locator('input[type=text]').fill(questionsText[randomQuestion])
+  await page.getByRole('button', { name: 'add' }).click()
+  await page.getByText(tagsText[randomTag], { exact: true }).click()
+  await page.locator('button', { hasText: 'Envoyer la question' }).click()
+  await expect(page.getByRole('heading', { name: questionsText[randomQuestion] })).toBeVisible()
+  await page.locator('button', { hasText: 'Répondre à la question' }).click()
+  await page.locator('textarea').click()
+  await page.locator('textarea').fill(answersText[randomAnswer])
+  await page.locator('button', { hasText: 'Envoyer la réponse' }).click()
+  await expect(page.getByText(answersText[randomAnswer], { exact: true })).toBeVisible()
+})
 
 // test('Should return a search result', async ({ page }) => {
 //   await page.locator('input[type=text]').click()
@@ -196,69 +197,81 @@ test('Shoud be able to create a question', async ({ page }) => {
 //   ).toBeVisible()
 // })
 
-// test('Should not return results', async ({ page }) => {
-//   await page.locator('input[type=text]').click()
-//   await page.locator('input[type=text]').fill('test')
-//   await expect(page.getByText('Aucune question trouvée')).toBeVisible()
-// })
+// Pass
+test('Should not return results', async ({ page }) => {
+  await page.locator('input[type=text]').click()
+  await page.locator('input[type=text]').fill('test')
+  await expect(page.getByText('Aucune question trouvée')).toBeVisible()
+})
 
-// test('Should be able to signal a question', async ({ page }) => {
-//   await page.getByRole('button', { name: 'local_offer' }).click()
-//   // await page.locator('.category-item', { hasText: tagsText[randomTag] }).click()
-//   // check good tag
-//   await page
-//     .locator('.open-card')
-//     .first()
-//     .click()
-//   await page.getByRole('button', { name: 'Signaler' }).hover()
-//   await page.locator('a').filter({ hasText: 'historyobsolète' }).click()
-//   await expect(page.locator('span.label', { hasText: 'Obsolète' })).toBeVisible()
-// })
+// Pass but missing search functionality
+test('Should be able to signal a question', async ({ page }) => {
+  await page.getByRole('button', { name: 'local_offer' }).click()
+  // await page.locator('.category-item', { hasText: tagsText[randomTag] }).click()
+  // check good tag
+  await page
+    .locator('.open-card')
+    .first()
+    .click()
+  await page.getByRole('button', { name: 'Signaler' }).hover()
+  await page
+    .locator('a')
+    .filter({ hasText: 'historyobsolète' })
+    .click()
+  await expect(page.locator('span.label', { hasText: 'Obsolète' })).toBeVisible()
+})
 
-// test('Should be able to add a tag to a question', async ({ page }) => {
-//   // await page.locator('input[type=text]').click()
-//   // await page.locator('input[type=text]').fill(questionsText[randomQuestion])
-//   await page
-//     .locator('.open-card')
-//     .first()
-//     .click()
-//   await page.getByRole('button', { name: 'Modifier' }).hover()
-//   await page.locator('a').filter({ hasText: 'editQuestion' }).click()
-//   await page.getByRole('button', { name: 'add' }).click()
-//   await page.getByText(tagsText[randomAddTag], { exact: true }).click()
-//   await page.locator('button', { hasText: 'Enregistrer la question' }).click()
-//   await page.pause()
-//   await expect(page.getByText(tagsText[randomTag], tagsText[randomAddTag])).toBeVisible()
-// })
+// Pass but missing search functionality
+test('Should be able to add a tag to a question', async ({ page }) => {
+  // await page.locator('input[type=text]').click()
+  // await page.locator('input[type=text]').fill(questionsText[randomQuestion])
+  await page
+    .locator('.open-card')
+    .first()
+    .click()
+  await page.getByRole('button', { name: 'Modifier' }).hover()
+  await page
+    .locator('a')
+    .filter({ hasText: 'editQuestion' })
+    .click()
+  await page.getByRole('button', { name: 'add' }).click()
+  await page.getByText(tagsText[randomAddTag], { exact: true }).click()
+  await page.locator('button', { hasText: 'Enregistrer la question' }).click()
+  await expect(page.getByText(tagsText[randomTag], tagsText[randomAddTag])).toBeVisible()
+})
 
-// test('Should be able to modify an answer for an already answered question', async ({ page }) => {
-//   // await page.locator('input[type=text]').click()
-//   // await page.locator('input[type=text]').fill(questionsText[randomQuestion])
-//   await page
-//     .locator('.open-card')
-//     .first()
-//     .click()
-//   await page.getByRole('button', { name: 'Modifier' }).hover()
-//   await page
-//     .locator('a')
-//     .filter({ hasText: 'Réponse' })
-//     .click()
-//   await page.locator('textarea').click()
-//   await page.locator('textarea').fill(answersText[randomEditAnswer])
-//   await page.locator('button', { hasText: 'Enregistrer la réponse' }).click()
-//   await expect(page.getByText(answersText[randomEditAnswer])).toBeVisible()
-// })
+// Pass but missing search functionality
+test('Should be able to modify an answer for an already answered question', async ({ page }) => {
+  // await page.locator('input[type=text]').click()
+  // await page.locator('input[type=text]').fill(questionsText[randomQuestion])
+  await page
+    .locator('.open-card')
+    .first()
+    .click()
+  await page.getByRole('button', { name: 'Modifier' }).hover()
+  await page
+    .locator('a')
+    .filter({ hasText: 'Réponse' })
+    .click()
+  await page.locator('textarea').click()
+  await page.locator('textarea').fill(answersText[randomEditAnswer])
+  await page.locator('button', { hasText: 'Enregistrer la réponse' }).click()
+  await expect(page.getByText(answersText[randomEditAnswer], { exact: true })).toBeVisible()
+})
 
-// test('Should be able to answer a question than has no answer', async ({ page }) => {
-//   await page.locator('div:has(i:text("help_outline")) + a.open-card').first().click()
-//   await expect(page.getByText('Pas encore de réponse...')).toBeVisible()
-//   await page.locator('button', { hasText: 'Répondre à la question' }).click()
-//   await page.locator('textarea').click()
-//   await page.locator('textarea').fill(answersText[randomAnswer])
-//   await page.locator('button', { hasText: 'Envoyer la réponse' }).click()
-//   await page.pause()
-//   await expect(page.locator(`text=${answersText[randomAnswer]}`)).toBeVisible()
-// })
+// Pass
+test('Should be able to answer a question than has no answer', async ({ page }) => {
+  await page
+    .locator('div:has(i:text("help_outline")) + a.open-card')
+    .first()
+    .click()
+  await expect(page.getByText('Pas encore de réponse...')).toBeVisible()
+  await page.locator('button', { hasText: 'Répondre à la question' }).click()
+  await page.locator('textarea').click()
+  await page.locator('textarea').fill(answersText[randomAnswer])
+  await page.locator('button', { hasText: 'Envoyer la réponse' }).click()
+  await expect(page.getByText(answersText[randomAnswer], { exact: true })).toBeVisible()
+})
 
 // test('Should be able to search by text and tag', async ({ page }) => {
 //   await page.locator('input[type=text]').click()
