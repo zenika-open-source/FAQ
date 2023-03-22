@@ -17,8 +17,6 @@ const resync = async (name, stage) => {
 
   const conf = await prisma.query.configuration({ where: { name: 'default' } })
 
-  console.log(conf.tags)
-
   const categories = Object.entries(conf.tags)
 
   const tagsCategories = await Promise.all(

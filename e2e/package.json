@@ -1,7 +1,7 @@
 {
   "scripts": {
-    "e2e": "dotenv -e ../server/.env.local npx playwright test",
-    "e2e:watch": "dotenv -e ../server/.env.local npx playwright test -headed"
+    "test": "dotenv -e ../server/.env.local npx playwright test",
+    "test:headed": "dotenv -e ../server/.env.local npx playwright test --headed"
   },
   "devDependencies": {
     "@playwright/test": "^1.31.2",
