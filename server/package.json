@@ -28,7 +28,7 @@
     "dev": "dotenv -e .env.local nodemon src/index.js",
     "deploy": "cd scripts/prisma_deploy_all && dotenv -e ../../.env.local node index.js",
     "new_service": "cd scripts/prisma_new_service && dotenv -e ../../.env.local node index.js",
-    "generate_schema": "prisma generate",
+    "generate_schema": "prisma generate -e .env.local",
     "lint": "eslint src --ext js",
     "lint:fix": "npm run lint -- --fix",
     "prettier": "prettier src/**/*",

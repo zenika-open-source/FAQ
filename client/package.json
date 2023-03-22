@@ -40,6 +40,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
+    "e2e": "dotenv -e ../server/.env.local npx playwright test",
+    "e2e:watch": "dotenv -e server/.env.local npx playwright test -headed",
     "lint": "eslint src --ext js,jsx",
     "lint:fix": "npm run lint -- --fix",
     "prettier": "prettier \"src/**/*.{jsx,css,js}\"",

@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test'
 const path = require('path')
+const multiTenant = require('../server/src/multiTenant')
+const algolia = require('../server/src/integrations/algolia')
 
 const key = 'playwrightTestKey'
 
@@ -90,7 +92,10 @@ do {
   randomAddTag = Math.floor(Math.random() * tagsText.length)
 } while (randomTag === randomAddTag)
 
+const ZNodeParams = { data: { question: questionsText[randomQuestion] } }
+
 let apiContext
+let prisma
 
 /* A LANCER DANS BASH POUR OBTENIR LE TOKEN */
 
@@ -109,6 +114,22 @@ test.beforeAll(async ({ playwright }) => {
       'faq-tenant': 'default/default'
     }
   })
+  prisma = multiTenant.current({
+    headers: {
+      'faq-tenant': 'default/default'
+    }
+  })
+  console.log(prisma)
+})
+
+// multiTenant.current
+// nettoyer moteur de recherche avant chaque test (deleteIndex)
+// create question avec ZNode, récupérer l'id et l'envoyer a algolia.addNode
+// addNode pour algolia
+// rendre tests indépendants
+
+test.beforeEach(async ({ page }) => {
+  algolia.deleteIndex({ prisma })
   await apiContext.post('/', {
     data: {
       query: deleteAnswers
@@ -139,9 +160,6 @@ test.beforeAll(async ({ playwright }) => {
       query: deleteZNodes
     }
   })
-})
-
-test.beforeEach(async ({ page }) => {
   await page.goto('http://localhost:3000/auth/login')
   await page.evaluate(userData => {
     window.localStorage.setItem('user', JSON.stringify(userData))
@@ -149,7 +167,6 @@ test.beforeEach(async ({ page }) => {
   await page.goto('http://localhost:3000')
 })
 
-// Pass
 test('Shoud be able to create a question', async ({ page }) => {
   await page
     .locator('button', { hasText: 'Nouvelle question' })
@@ -163,7 +180,6 @@ test('Shoud be able to create a question', async ({ page }) => {
   await expect(page.getByRole('heading', { name: questionsText[randomQuestion] })).toBeVisible()
 })
 
-// Pass
 test('Should be able to create a question and answer it', async ({ page }) => {
   await page
     .locator('button', { hasText: 'Nouvelle question' })
@@ -182,30 +198,30 @@ test('Should be able to create a question and answer it', async ({ page }) => {
   await expect(page.getByText(answersText[randomAnswer], { exact: true })).toBeVisible()
 })
 
-// test('Should return a search result', async ({ page }) => {
-//   await page.locator('input[type=text]').click()
-//   await page.locator('input[type=text]').fill(questionsText[randomQuestion])
-//   await expect(
-//     page.getByRole('heading', { name: questionsText[randomQuestion] }).first()
-//   ).toBeVisible()
-//   await page
-//     .locator('.open-card')
-//     .first()
-//     .click()
-//   await expect(
-//     page.getByRole('heading', { name: questionsText[randomQuestion] }).click()
-//   ).toBeVisible()
-// })
+test('Should return a search result', async ({ page }) => {
+  await page.locator('input[type=text]').click()
+  await page.locator('input[type=text]').fill(questionsText[randomQuestion])
+  await expect(
+    page.getByRole('heading', { name: questionsText[randomQuestion] }).first()
+  ).toBeVisible()
+  await page
+    .locator('.open-card')
+    .first()
+    .click()
+  await expect(
+    page.getByRole('heading', { name: questionsText[randomQuestion] }).click()
+  ).toBeVisible()
+})
 
-// Pass
 test('Should not return results', async ({ page }) => {
   await page.locator('input[type=text]').click()
   await page.locator('input[type=text]').fill('test')
   await expect(page.getByText('Aucune question trouvée')).toBeVisible()
 })
 
-// Pass but missing search functionality
 test('Should be able to signal a question', async ({ page }) => {
+  const zNode = await prisma.mutation.createZNode(ZNodeParams)
+  algolia.addNode({ prisma }, zNode.id)
   await page.getByRole('button', { name: 'local_offer' }).click()
   // await page.locator('.category-item', { hasText: tagsText[randomTag] }).click()
   // check good tag
@@ -221,7 +237,6 @@ test('Should be able to signal a question', async ({ page }) => {
   await expect(page.locator('span.label', { hasText: 'Obsolète' })).toBeVisible()
 })
 
-// Pass but missing search functionality
 test('Should be able to add a tag to a question', async ({ page }) => {
   // await page.locator('input[type=text]').click()
   // await page.locator('input[type=text]').fill(questionsText[randomQuestion])
@@ -240,7 +255,6 @@ test('Should be able to add a tag to a question', async ({ page }) => {
   await expect(page.getByText(tagsText[randomTag], tagsText[randomAddTag])).toBeVisible()
 })
 
-// Pass but missing search functionality
 test('Should be able to modify an answer for an already answered question', async ({ page }) => {
   // await page.locator('input[type=text]').click()
   // await page.locator('input[type=text]').fill(questionsText[randomQuestion])
@@ -259,7 +273,6 @@ test('Should be able to modify an answer for an already answered question', asyn
   await expect(page.getByText(answersText[randomEditAnswer], { exact: true })).toBeVisible()
 })
 
-// Pass
 test('Should be able to answer a question than has no answer', async ({ page }) => {
   await page
     .locator('div:has(i:text("help_outline")) + a.open-card')
@@ -273,25 +286,25 @@ test('Should be able to answer a question than has no answer', async ({ page }) 
   await expect(page.getByText(answersText[randomAnswer], { exact: true })).toBeVisible()
 })
 
-// test('Should be able to search by text and tag', async ({ page }) => {
-//   await page.locator('input[type=text]').click()
-//   await page.locator('input[type=text]').fill(questionsText[randomQuestion])
-//   await expect(page.getByText('Aucune question trouvée')).not.toBeVisible()
-//   await expect(page.getByRole('heading', { name: questionsText[randomQuestion] })).toBeVisible()
-//   await page.getByRole('button', { name: 'local_offer' }).click()
-//   await page.locator('.category-item', { hasText: tagsText[randomTag] }).click()
-//   await expect(page.getByText('Aucune question trouvée')).not.toBeVisible()
-//   // check for good tag
-//   await page.getByRole('link', { name: 'keyboard_arrow_right' }).click()
-//   await page
-//     .locator('a')
-//     .filter({ hasText: 'Réponse' })
-//     .click()
-//   await page.locator('textarea').click()
-//   await page.locator('textarea').fill(questionsText[randomEditQuestion])
-//   await page.locator('button', { hasText: 'Enregistrer la question' }).click()
-//   await expect(page.getByText(questionsText[randomEditQuestion])).toBeVisible()
-// })
+test('Should be able to search by text and tag', async ({ page }) => {
+  await page.locator('input[type=text]').click()
+  await page.locator('input[type=text]').fill(questionsText[randomQuestion])
+  await expect(page.getByText('Aucune question trouvée')).not.toBeVisible()
+  await expect(page.getByRole('heading', { name: questionsText[randomQuestion] })).toBeVisible()
+  await page.getByRole('button', { name: 'local_offer' }).click()
+  await page.locator('.category-item', { hasText: tagsText[randomTag] }).click()
+  await expect(page.getByText('Aucune question trouvée')).not.toBeVisible()
+  // check for good tag
+  await page.getByRole('link', { name: 'keyboard_arrow_right' }).click()
+  await page
+    .locator('a')
+    .filter({ hasText: 'Réponse' })
+    .click()
+  await page.locator('textarea').click()
+  await page.locator('textarea').fill(questionsText[randomEditQuestion])
+  await page.locator('button', { hasText: 'Enregistrer la question' }).click()
+  await expect(page.getByText(questionsText[randomEditQuestion])).toBeVisible()
+})
 
 test.afterAll(async () => {
   await apiContext.dispose()

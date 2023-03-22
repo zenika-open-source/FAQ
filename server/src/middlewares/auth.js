@@ -56,7 +56,7 @@ const checkJwt = (req, res, next, prisma) => {
       req.user = { token: req.jwtCheckResult, ...user }
       next()
     }
-  } else if (authType === 'API' && process.env.AUTH_SKIP !== 'skipAuth') {
+  } else if (authType === 'API') {
     // API Authentication
 
     options = {
@@ -80,12 +80,11 @@ const checkJwt = (req, res, next, prisma) => {
 
     getUser = next
   } else if (process.env.AUTH_SKIP === 'skipAuth') {
-    console.log(authType)
     req.user = {
-      id: 'clfav2l8e006g0848hl89mvpi',
-      email: 'test.playwright@zenika.com',
+      id: process.env.USER_ID,
+      email: process.env.USER_EMAIL,
       token: {
-        email: 'test.playwright@zenika.com'
+        email: process.env.USER_EMAIL
       }
     }
     return next()

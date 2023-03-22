@@ -1,0 +1,32 @@
+{
+    "root": true,
+    "parser": "babel-eslint",
+    "env": {
+        "node": true
+    },
+    "extends": [
+        "standard",
+        "prettier",
+        "prettier/standard",
+        "plugin:playwright/playwright-test"
+    ],
+    "parserOptions": {
+        "ecmaVersion": 2019,
+        "sourceType": "module"
+    },
+    "rules": {
+        "no-console": 1,
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "space-before-function-paren": [
+            "error",
+            {
+                "anonymous": "never",
+                "named": "never",
+                "asyncArrow": "always"
+            }
+        ]
+    }
+}

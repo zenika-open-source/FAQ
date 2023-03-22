@@ -1,0 +1,32 @@
+{
+  "scripts": {
+    "e2e": "dotenv -e ../server/.env.local npx playwright test",
+    "e2e:watch": "dotenv -e ../server/.env.local npx playwright test -headed"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.31.2",
+    "dotenv": "^16.0.3",
+    "dotenv-cli": "^7.1.0",
+    "eslint": "^8.36.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-playwright": "^0.12.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-standard": "^5.0.0",
+    "husky": "^8.0.3",
+    "prettier": "^2.8.6",
+    "pretty-quick": "^3.1.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
+  "prettier": {
+    "semi": false,
+    "printWidth": 100,
+    "singleQuote": true,
+    "endOfLine": "lf"
+  }
+}
