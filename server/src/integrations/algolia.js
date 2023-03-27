@@ -191,8 +191,11 @@ class Algolia {
     })
   }
   deleteIndex(ctx) {
-    const index = this.getIndex(ctx)
-    index.delete()
+    const {
+      service: { name, stage },
+      configuration: conf
+    } = ctx.prisma._meta
+    algoliasearch(conf.algoliaAppId, conf.algoliaApiKey).deleteIndex(name + '_' + stage)
   }
 }
 
