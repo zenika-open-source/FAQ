@@ -190,12 +190,9 @@ class Algolia {
       browser.on('error', reject)
     })
   }
-  deleteIndex(ctx) {
-    const {
-      service: { name, stage },
-      configuration: conf
-    } = ctx.prisma._meta
-    algoliasearch(conf.algoliaAppId, conf.algoliaApiKey).deleteIndex(name + '_' + stage)
+  clearIndex(ctx) {
+    const index = this.getIndex(ctx)
+    index.clearIndex()
   }
 }
 

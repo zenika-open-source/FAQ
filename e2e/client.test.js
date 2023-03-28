@@ -4,7 +4,9 @@ const path = require('path')
 const multiTenant = require('../server/src/multiTenant')
 const algolia = require('../server/src/integrations/algolia')
 
-/* key is 'playwrightTestKey' */
+const userKey = 'playwrightTestKey'
+const userName = 'playwrightTest'
+const userEmail = 'playwright.test@zenika.com'
 const userId = 'clfkyo0we00a60848u4vohuk3'
 
 const userData = {
@@ -17,11 +19,47 @@ const userData = {
   __typename: 'User'
 }
 
-const tagsId = {
-  paris: 'clf6jx0u4000t0848f28opuo9',
-  nantes: 'clf6jx0u9000v0848uj3tn2x4',
-  tutorial: 'clf6jx0uf000z0848bhpa2put',
-  meta: 'clf6jx0ui00110848bhhnl3bq'
+const createUser = `mutation CreateUser{
+  createUser(data: {key: ${userKey}, name: ${userName}, email: ${userEmail}}) {
+    id
+  }
+}`
+
+const createUserMutation = async apiContext => {
+  const res = await apiContext.post('/', {
+    data: {
+      query: createUser
+    }
+  })
+  const jsonRes = await res.json()
+  return jsonRes
+}
+
+const tagsId = `query GetAllTags{
+  tagLabels {
+    id
+    name
+  }
+}`
+
+const tagsIdQuery = async apiContext => {
+  const res = await apiContext.post('/', {
+    data: {
+      query: tagsId
+    }
+  })
+  const jsonRes = await res.json()
+  const results = await jsonRes.data.tagLabels
+  const randomNumber = Math.floor(Math.random() * results.length)
+  let randomAddNumber = Math.floor(Math.random() * results.length)
+  do {
+    randomAddNumber = Math.floor(Math.random() * results.length)
+  } while (randomNumber === randomAddNumber)
+  const tagLabel = await results[randomNumber]
+  const tagAddLabel = await results[randomAddNumber]
+  const { id: tagId, name: tagName } = await tagLabel
+  const { id: tagAddId, name: tagAddName } = await tagAddLabel
+  return { tagId, tagName, tagAddId, tagAddName }
 }
 
 const deleteAll = field => {
@@ -52,18 +90,10 @@ const answersText = [
 
 const uniqueRandom = (obj, ...compareNumbers) => {
   let uniqueNumber
-  if (obj === tagsId) {
-    do {
-      uniqueNumber = Math.floor(Math.random() * Object.keys(obj).length)
-    } while (compareNumbers.includes(uniqueNumber))
-    const keys = Object.keys(obj)
-    return obj[keys[Math.floor(keys.length * Math.random())]]
-  } else {
-    do {
-      uniqueNumber = Math.floor(Math.random() * obj.length)
-    } while (compareNumbers.includes(uniqueNumber))
-    return uniqueNumber
-  }
+  do {
+    uniqueNumber = Math.floor(Math.random() * obj.length)
+  } while (compareNumbers.includes(uniqueNumber))
+  return uniqueNumber
 }
 
 const randomQuestion = uniqueRandom(questionsText)
@@ -72,46 +102,41 @@ const randomEditQuestion = uniqueRandom(questionsText, randomQuestion)
 const randomAnswer = uniqueRandom(answersText)
 const randomEditAnswer = uniqueRandom(answersText, randomAnswer)
 
-const randomTag = uniqueRandom(tagsId)
-const randomAddTag = uniqueRandom(tagsId, randomTag)
-
-const getObjectKey = (obj, value) => {
-  return Object.keys(obj).find(key => obj[key] === value)
-}
-
-const createZNodeParams = {
-  data: {
-    question: {
-      create: {
-        title: questionsText[randomQuestion],
-        slug: 'slug.' + questionsText[randomQuestion],
-        user: {
-          connect: {
-            id: userId
+const createZNodeParams = tagId => {
+  return {
+    data: {
+      question: {
+        create: {
+          title: questionsText[randomQuestion],
+          slug: 'slug.' + questionsText[randomQuestion],
+          user: {
+            connect: {
+              id: userId
+            }
           }
         }
-      }
-    },
-    answer: {
-      create: {
-        content: answersText[randomAnswer],
-        user: {
-          connect: {
-            id: userId
+      },
+      answer: {
+        create: {
+          content: answersText[randomAnswer],
+          user: {
+            connect: {
+              id: userId
+            }
           }
         }
-      }
-    },
-    tags: {
-      create: {
-        label: {
-          connect: {
-            id: randomTag
-          }
-        },
-        user: {
-          connect: {
-            id: userId
+      },
+      tags: {
+        create: {
+          label: {
+            connect: {
+              id: tagId
+            }
+          },
+          user: {
+            connect: {
+              id: userId
+            }
           }
         }
       }
@@ -119,29 +144,31 @@ const createZNodeParams = {
   }
 }
 
-const createZNodeWithoutAnswerParams = {
-  data: {
-    question: {
-      create: {
-        title: questionsText[randomQuestion],
-        slug: 'slug.' + questionsText[randomQuestion],
-        user: {
-          connect: {
-            id: userId
+const createZNodeWithoutAnswerParams = tagId => {
+  return {
+    data: {
+      question: {
+        create: {
+          title: questionsText[randomQuestion],
+          slug: 'slug.' + questionsText[randomQuestion],
+          user: {
+            connect: {
+              id: userId
+            }
           }
         }
-      }
-    },
-    tags: {
-      create: {
-        label: {
-          connect: {
-            id: randomTag
-          }
-        },
-        user: {
-          connect: {
-            id: userId
+      },
+      tags: {
+        create: {
+          label: {
+            connect: {
+              id: tagId
+            }
+          },
+          user: {
+            connect: {
+              id: userId
+            }
           }
         }
       }
@@ -151,6 +178,8 @@ const createZNodeWithoutAnswerParams = {
 
 let apiContext
 let prisma
+let tags
+let user
 
 /* A LANCER DANS BASH POUR OBTENIR LE TOKEN */
 
@@ -175,6 +204,9 @@ test.beforeAll(async ({ playwright }) => {
     }
   })
   refreshConfiguration(prisma)
+  user = await createUserMutation(apiContext)
+  console.log(user)
+  tags = await tagsIdQuery(apiContext)
 })
 
 test.beforeEach(async ({ page }) => {
@@ -223,7 +255,7 @@ test.beforeEach(async ({ page }) => {
 //   await page.locator('input').click()
 //   await page.locator('input').fill(questionsText[randomQuestion])
 //   await page.getByRole('button', { name: 'add' }).click()
-//   await page.getByText(getObjectKey(tagsId, randomTag), { exact: true }).click()
+//   await page.getByText(tags.tagName, { exact: true }).click()
 //   await page.locator('button', { hasText: 'Envoyer la question' }).click()
 //   await expect(page.getByRole('heading', { name: questionsText[randomQuestion] })).toBeVisible()
 // })
@@ -237,7 +269,7 @@ test.beforeEach(async ({ page }) => {
 //   await page.locator('input[type=text]').click()
 //   await page.locator('input[type=text]').fill(questionsText[randomQuestion])
 //   await page.getByRole('button', { name: 'add' }).click()
-//   await page.getByText(getObjectKey(tagsId, randomTag), { exact: true }).click()
+//   await page.getByText(tags.tagName, { exact: true }).click()
 //   await page.locator('button', { hasText: 'Envoyer la question' }).click()
 //   await expect(page.getByRole('heading', { name: questionsText[randomQuestion] })).toBeVisible()
 //   await page.locator('button', { hasText: 'Répondre à la question' }).click()
@@ -247,22 +279,22 @@ test.beforeEach(async ({ page }) => {
 //   await expect(page.getByText(answersText[randomAnswer], { exact: true })).toBeVisible()
 // })
 
-// test('Should return a search result', async ({ page }) => {
-//   const zNode = await prisma.mutation.createZNode(createZNodeParams)
-//   await algolia.addNode({ prisma }, zNode.id)
-//   await page.goto('http://localhost:3000')
-//   await page.locator('input[type=text]').click()
-//   const slicedQuestion = questionsText[randomQuestion].slice(0, 4)
-//   await page.locator('input[type=text]').fill(slicedQuestion)
-//   await expect(
-//     page.getByRole('heading', { name: questionsText[randomQuestion] }).first()
-//   ).toBeVisible()
-//   await page
-//     .locator('.open-card')
-//     .first()
-//     .click()
-//   await expect(page.getByRole('heading', { name: questionsText[randomQuestion] })).toBeVisible()
-// })
+test('Should return a search result', async ({ page }) => {
+  const zNode = await prisma.mutation.createZNode(createZNodeParams(tags.tagId))
+  await algolia.addNode({ prisma }, zNode.id)
+  await page.goto('http://localhost:3000')
+  await page.locator('input[type=text]').click()
+  const slicedQuestion = questionsText[randomQuestion].slice(0, 4)
+  await page.locator('input[type=text]').fill(slicedQuestion)
+  await expect(
+    page.getByRole('heading', { name: questionsText[randomQuestion] }).first()
+  ).toBeVisible()
+  await page
+    .locator('.open-card')
+    .first()
+    .click()
+  await expect(page.getByRole('heading', { name: questionsText[randomQuestion] })).toBeVisible()
+})
 
 // test('Should not return results', async ({ page }) => {
 //   await page.locator('input[type=text]').click()
@@ -271,11 +303,12 @@ test.beforeEach(async ({ page }) => {
 // })
 
 // test('Should be able to signal a question', async ({ page }) => {
-//   const zNode = await prisma.mutation.createZNode(createZNodeParams)
+//   const zNode = await prisma.mutation.createZNode(createZNodeParams(tags.tagId))
 //   await algolia.addNode({ prisma }, zNode.id)
 //   await page.goto('http://localhost:3000')
 //   await page.getByRole('button', { name: 'local_offer' }).click()
-//   await page.locator('.category-item', { hasText: getObjectKey(tagsId, randomTag) }).click()
+//   await page.locator('.category-item', { hasText: tags.tagName }).click()
+//   await page.waitForSelector('.open-card')
 //   await page
 //     .locator('.open-card')
 //     .first()
@@ -289,7 +322,7 @@ test.beforeEach(async ({ page }) => {
 // })
 
 // test('Should be able to add a tag to a question', async ({ page }) => {
-//   const zNode = await prisma.mutation.createZNode(createZNodeParams)
+//   const zNode = await prisma.mutation.createZNode(createZNodeParams(tags.tagId))
 //   await algolia.addNode({ prisma }, zNode.id)
 //   await page.goto('http://localhost:3000')
 //   await page.locator('input[type=text]').click()
@@ -298,24 +331,24 @@ test.beforeEach(async ({ page }) => {
 //   await expect(
 //     page.getByRole('heading', { name: questionsText[randomQuestion] }).first()
 //   ).toBeVisible()
+//   await page.waitForSelector('.open-card')
 //   await page
 //     .locator('.open-card')
 //     .first()
 //     .click()
-//   // await page.getByRole('link', { name: 'keyboard_arrow_right' }).click()
 //   await page.getByRole('button', { name: 'Modifier' }).hover()
 //   await page
 //     .locator('a')
 //     .filter({ hasText: 'editQuestion' })
 //     .click()
 //   await page.getByRole('button', { name: 'add' }).click()
-//   await page.getByText(getObjectKey(tagsId, randomAddTag), { exact: true }).click()
+//   await page.getByText(tags.tagAddName, { exact: true }).click()
 //   await page.locator('button', { hasText: 'Enregistrer la question' }).click()
-//   await expect(page.getByText(getObjectKey(tagsId, randomTag), getObjectKey(tagsId, randomAddTag))).toBeVisible()
+//   await expect(page.getByText(tags.tagName, tags.tagAddName)).toBeVisible()
 // })
 
 // test('Should be able to modify an answer for an already answered question', async ({ page }) => {
-//   const zNode = await prisma.mutation.createZNode(createZNodeParams)
+//   const zNode = await prisma.mutation.createZNode(createZNodeParams(tags.tagId))
 //   await algolia.addNode({ prisma }, zNode.id)
 //   await page.goto('http://localhost:3000')
 //   await page.locator('input[type=text]').click()
@@ -323,6 +356,7 @@ test.beforeEach(async ({ page }) => {
 //   await expect(
 //     page.getByRole('heading', { name: questionsText[randomQuestion] }).first()
 //   ).toBeVisible()
+//   await page.waitForSelector('.open-card')
 //   await page
 //     .locator('.open-card')
 //     .first()
@@ -339,7 +373,7 @@ test.beforeEach(async ({ page }) => {
 // })
 
 // test('Should be able to answer a question that has no answer', async ({ page }) => {
-//   const zNode = await prisma.mutation.createZNode(createZNodeWithoutAnswerParams)
+//   const zNode = await prisma.mutation.createZNode(createZNodeWithoutAnswerParams(tags.tagId))
 //   await algolia.addNode({ prisma }, zNode.id)
 //   await page.goto('http://localhost:3000')
 //   // await page
@@ -358,37 +392,37 @@ test.beforeEach(async ({ page }) => {
 //   await expect(page.getByText(answersText[randomAnswer], { exact: true })).toBeVisible()
 // })
 
-test('Should be able to search by text and tag', async ({ page }) => {
-  const zNode = await prisma.mutation.createZNode(createZNodeParams)
-  await algolia.addNode({ prisma }, zNode.id)
-  await page.goto('http://localhost:3000')
-  await page.locator('input[type=text]').click()
-  await page.locator('input[type=text]').fill(questionsText[randomQuestion])
-  await expect(page.getByText('Aucune question trouvée')).not.toBeVisible()
-  await page.pause()
-  await expect(
-    page.getByRole('heading', { name: questionsText[randomQuestion] }).first()
-  ).toBeVisible()
-  await page.pause()
-  await page.getByRole('button', { name: 'local_offer' }).click()
-  await page.locator('.category-item', { hasText: getObjectKey(tagsId, randomTag) }).click()
-  await expect(page.getByText('Aucune question trouvée')).not.toBeVisible()
-  await page
-    .locator('.open-card')
-    .first()
-    .click()
-  await page
-    .locator('a')
-    .filter({ hasText: 'Réponse' })
-    .click()
-  await page.locator('textarea').click()
-  await page.locator('textarea').fill(questionsText[randomEditQuestion])
-  await page.locator('button', { hasText: 'Enregistrer la question' }).click()
-  await expect(page.getByText(questionsText[randomEditQuestion])).toBeVisible()
-})
+// test('Should be able to search by text and tag', async ({ page }) => {
+//   const zNode = await prisma.mutation.createZNode(createZNodeParams(tags.tagId))
+//   await algolia.addNode({ prisma }, zNode.id)
+//   await page.goto('http://localhost:3000')
+//   await page.locator('input[type=text]').click()
+//   await page.locator('input[type=text]').fill(questionsText[randomQuestion])
+//   await expect(page.getByText('Aucune question trouvée')).not.toBeVisible()
+//   await expect(
+//     page.getByRole('heading', { name: questionsText[randomQuestion] }).first()
+//   ).toBeVisible()
+//   await page.getByRole('button', { name: 'local_offer' }).click()
+//   await page.locator('.category-item', { hasText: tags.tagName }).click()
+//   await expect(page.getByText('Aucune question trouvée')).not.toBeVisible()
+//   await page.waitForSelector('.open-card')
+//   await page
+//     .locator('.open-card')
+//     .first()
+//     .click()
+//   await page.getByRole('button', { name: 'Modifier' }).hover()
+//   await page
+//     .locator('a')
+//     .filter({ hasText: 'Réponse' })
+//     .click()
+//   await page.locator('textarea').click()
+//   await page.locator('textarea').fill(questionsText[randomEditQuestion])
+//   await page.locator('button', { hasText: 'Enregistrer la réponse' }).click()
+//   await expect(page.getByText(questionsText[randomEditQuestion])).toBeVisible()
+// })
 
 test.afterEach(async () => {
-  algolia.deleteIndex({ prisma })
+  algolia.clearIndex({ prisma })
 })
 
 test.afterAll(async () => {
