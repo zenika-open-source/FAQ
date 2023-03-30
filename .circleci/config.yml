@@ -44,7 +44,11 @@ jobs:
       - checkout
       - setup_remote_docker
       - node/install-packages:
-          app-dir: e2e && server && client
+          app-dir: e2e
+      - node/install-packages:
+          app-dir: server
+      - node/install-packages:
+          app-dir: client
       - run:
           command: npm start
           working_directory: client
