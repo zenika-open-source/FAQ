@@ -5,6 +5,7 @@ node_modules
 
 # testing
 /coverage
+/e2e/test-results
 
 # production
 .build

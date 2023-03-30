@@ -1,7 +1,9 @@
 {
   "scripts": {
     "test": "dotenv -e ../server/.env.local playwright test",
-    "test:headed": "dotenv -e ../server/.env.local -- playwright test --headed"
+    "test:headed": "dotenv -e ../server/.env.local -- playwright test --headed",
+    "test:debug": "dotenv -e ../server/.env.local -- playwright test --debug",
+    "test:trace": "dotenv -e ../server/.env.local -- playwright test --trace on"
   },
   "devDependencies": {
     "@playwright/test": "^1.31.2",

@@ -4,23 +4,8 @@ const path = require('path')
 const multiTenant = require('../server/src/multiTenant')
 const algolia = require('../server/src/integrations/algolia')
 
-const userKey = 'playwrightTestKey'
-const userName = 'playwrightTest'
-const userEmail = 'playwright.test@zenika.com'
-const userId = 'clfkyo0we00a60848u4vohuk3'
-
-const userData = {
-  id: userId,
-  admin: false,
-  name: 'playwrightTest',
-  email: 'playwright.test@zenika.com',
-  picture:
-    'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg',
-  __typename: 'User'
-}
-
 const createUser = `mutation CreateUser{
-  createUser(data: {key: ${userKey}, name: ${userName}, email: ${userEmail}}) {
+  createUser(data: {key: "playwrightTest", name: "playwrightTest", email: "playwright.test@zenika.com"}) {
     id
   }
 }`
@@ -32,7 +17,9 @@ const createUserMutation = async apiContext => {
     }
   })
   const jsonRes = await res.json()
-  return jsonRes
+  const results = await jsonRes.data.createUser
+  const { id: userId } = await results
+  return { userId }
 }
 
 const tagsId = `query GetAllTags{
@@ -102,7 +89,7 @@ const randomEditQuestion = uniqueRandom(questionsText, randomQuestion)
 const randomAnswer = uniqueRandom(answersText)
 const randomEditAnswer = uniqueRandom(answersText, randomAnswer)
 
-const createZNodeParams = tagId => {
+const createZNodeParams = (tagId, userId) => {
   return {
     data: {
       question: {
@@ -144,7 +131,7 @@ const createZNodeParams = tagId => {
   }
 }
 
-const createZNodeWithoutAnswerParams = tagId => {
+const createZNodeWithoutAnswerParams = (tagId, userId) => {
   return {
     data: {
       question: {
@@ -205,7 +192,6 @@ test.beforeAll(async ({ playwright }) => {
   })
   refreshConfiguration(prisma)
   user = await createUserMutation(apiContext)
-  console.log(user)
   tags = await tagsIdQuery(apiContext)
 })
 
@@ -241,46 +227,55 @@ test.beforeEach(async ({ page }) => {
     }
   })
   await page.goto('http://localhost:3000/auth/login')
-  await page.evaluate(userData => {
+  await page.evaluate(user => {
+    const userData = {
+      id: user.userId,
+      admin: false,
+      name: 'playwrightTest',
+      email: 'playwright.test@zenika.com',
+      picture:
+        'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg',
+      __typename: 'User'
+    }
     window.localStorage.setItem('user', JSON.stringify(userData))
-  }, userData)
+  }, user)
 })
 
-// test('Shoud be able to create a question', async ({ page }) => {
-//   await page.goto('http://localhost:3000')
-//   await page
-//     .locator('button', { hasText: 'Nouvelle question' })
-//     .first()
-//     .click()
-//   await page.locator('input').click()
-//   await page.locator('input').fill(questionsText[randomQuestion])
-//   await page.getByRole('button', { name: 'add' }).click()
-//   await page.getByText(tags.tagName, { exact: true }).click()
-//   await page.locator('button', { hasText: 'Envoyer la question' }).click()
-//   await expect(page.getByRole('heading', { name: questionsText[randomQuestion] })).toBeVisible()
-// })
+test('Shoud be able to create a question', async ({ page }) => {
+  await page.goto('http://localhost:3000')
+  await page
+    .locator('button', { hasText: 'Nouvelle question' })
+    .first()
+    .click()
+  await page.locator('input').click()
+  await page.locator('input').fill(questionsText[randomQuestion])
+  await page.getByRole('button', { name: 'add' }).click()
+  await page.getByText(tags.tagName, { exact: true }).click()
+  await page.locator('button', { hasText: 'Envoyer la question' }).click()
+  await expect(page.getByRole('heading', { name: questionsText[randomQuestion] })).toBeVisible()
+})
 
-// test('Should be able to create a question and answer it', async ({ page }) => {
-//   await page.goto('http://localhost:3000')
-//   await page
-//     .locator('button', { hasText: 'Nouvelle question' })
-//     .first()
-//     .click()
-//   await page.locator('input[type=text]').click()
-//   await page.locator('input[type=text]').fill(questionsText[randomQuestion])
-//   await page.getByRole('button', { name: 'add' }).click()
-//   await page.getByText(tags.tagName, { exact: true }).click()
-//   await page.locator('button', { hasText: 'Envoyer la question' }).click()
-//   await expect(page.getByRole('heading', { name: questionsText[randomQuestion] })).toBeVisible()
-//   await page.locator('button', { hasText: 'Répondre à la question' }).click()
-//   await page.locator('textarea').click()
-//   await page.locator('textarea').fill(answersText[randomAnswer])
-//   await page.locator('button', { hasText: 'Envoyer la réponse' }).click()
-//   await expect(page.getByText(answersText[randomAnswer], { exact: true })).toBeVisible()
-// })
+test('Should be able to create a question and answer it', async ({ page }) => {
+  await page.goto('http://localhost:3000')
+  await page
+    .locator('button', { hasText: 'Nouvelle question' })
+    .first()
+    .click()
+  await page.locator('input[type=text]').click()
+  await page.locator('input[type=text]').fill(questionsText[randomQuestion])
+  await page.getByRole('button', { name: 'add' }).click()
+  await page.getByText(tags.tagName, { exact: true }).click()
+  await page.locator('button', { hasText: 'Envoyer la question' }).click()
+  await expect(page.getByRole('heading', { name: questionsText[randomQuestion] })).toBeVisible()
+  await page.locator('button', { hasText: 'Répondre à la question' }).click()
+  await page.locator('textarea').click()
+  await page.locator('textarea').fill(answersText[randomAnswer])
+  await page.locator('button', { hasText: 'Envoyer la réponse' }).click()
+  await expect(page.getByText(answersText[randomAnswer], { exact: true })).toBeVisible()
+})
 
 test('Should return a search result', async ({ page }) => {
-  const zNode = await prisma.mutation.createZNode(createZNodeParams(tags.tagId))
+  const zNode = await prisma.mutation.createZNode(createZNodeParams(tags.tagId, user.userId))
   await algolia.addNode({ prisma }, zNode.id)
   await page.goto('http://localhost:3000')
   await page.locator('input[type=text]').click()
@@ -289,137 +284,134 @@ test('Should return a search result', async ({ page }) => {
   await expect(
     page.getByRole('heading', { name: questionsText[randomQuestion] }).first()
   ).toBeVisible()
-  await page
-    .locator('.open-card')
-    .first()
-    .click()
+  const openCard = page.getByRole('link', { name: 'keyboard_arrow_right' }).first()
+  await openCard.waitFor('visible')
+  await openCard.click()
   await expect(page.getByRole('heading', { name: questionsText[randomQuestion] })).toBeVisible()
 })
 
-// test('Should not return results', async ({ page }) => {
-//   await page.locator('input[type=text]').click()
-//   await page.locator('input[type=text]').fill('test')
-//   await expect(page.getByText('Aucune question trouvée')).toBeVisible()
-// })
+test('Should not return results', async ({ page }) => {
+  await page.locator('input[type=text]').click()
+  await page.locator('input[type=text]').fill('test')
+  await expect(page.getByText('Aucune question trouvée')).toBeVisible()
+})
 
-// test('Should be able to signal a question', async ({ page }) => {
-//   const zNode = await prisma.mutation.createZNode(createZNodeParams(tags.tagId))
-//   await algolia.addNode({ prisma }, zNode.id)
-//   await page.goto('http://localhost:3000')
-//   await page.getByRole('button', { name: 'local_offer' }).click()
-//   await page.locator('.category-item', { hasText: tags.tagName }).click()
-//   await page.waitForSelector('.open-card')
-//   await page
-//     .locator('.open-card')
-//     .first()
-//     .click()
-//   await page.getByRole('button', { name: 'Signaler' }).hover()
-//   await page
-//     .locator('a')
-//     .filter({ hasText: 'historyobsolète' })
-//     .click()
-//   await expect(page.locator('span.label', { hasText: 'Obsolète' })).toBeVisible()
-// })
+test('Should be able to signal a question', async ({ page }) => {
+  const zNode = await prisma.mutation.createZNode(createZNodeParams(tags.tagId, user.userId))
+  await algolia.addNode({ prisma }, zNode.id)
+  await page.goto('http://localhost:3000')
+  await page.getByRole('button', { name: 'local_offer' }).click()
+  await page.locator('.category-item', { hasText: tags.tagName }).click()
+  const openCard = page.getByRole('link', { name: 'keyboard_arrow_right' }).first()
+  await openCard.waitFor('visible')
+  await openCard.click()
+  // await page.waitForSelector('.open-card')
+  // await page
+  //   .locator('.open-card')
+  //   .first()
+  //   .click()
+  await page.getByRole('button', { name: 'Signaler' }).hover()
+  await page
+    .locator('a')
+    .filter({ hasText: 'historyobsolète' })
+    .click()
+  await expect(page.locator('span.label', { hasText: 'Obsolète' })).toBeVisible()
+})
 
-// test('Should be able to add a tag to a question', async ({ page }) => {
-//   const zNode = await prisma.mutation.createZNode(createZNodeParams(tags.tagId))
-//   await algolia.addNode({ prisma }, zNode.id)
-//   await page.goto('http://localhost:3000')
-//   await page.locator('input[type=text]').click()
-//   const slicedQuestion = questionsText[randomQuestion].slice(0, 6)
-//   await page.locator('input[type=text]').fill(slicedQuestion)
-//   await expect(
-//     page.getByRole('heading', { name: questionsText[randomQuestion] }).first()
-//   ).toBeVisible()
-//   await page.waitForSelector('.open-card')
-//   await page
-//     .locator('.open-card')
-//     .first()
-//     .click()
-//   await page.getByRole('button', { name: 'Modifier' }).hover()
-//   await page
-//     .locator('a')
-//     .filter({ hasText: 'editQuestion' })
-//     .click()
-//   await page.getByRole('button', { name: 'add' }).click()
-//   await page.getByText(tags.tagAddName, { exact: true }).click()
-//   await page.locator('button', { hasText: 'Enregistrer la question' }).click()
-//   await expect(page.getByText(tags.tagName, tags.tagAddName)).toBeVisible()
-// })
+test('Should be able to add a tag to a question', async ({ page }) => {
+  const zNode = await prisma.mutation.createZNode(createZNodeParams(tags.tagId, user.userId))
+  await algolia.addNode({ prisma }, zNode.id)
+  await page.goto('http://localhost:3000')
+  await page.locator('input[type=text]').click()
+  const slicedQuestion = questionsText[randomQuestion].slice(0, 6)
+  await page.locator('input[type=text]').fill(slicedQuestion)
+  await expect(
+    page.getByRole('heading', { name: questionsText[randomQuestion] }).first()
+  ).toBeVisible()
+  const openCard = page.getByRole('link', { name: 'keyboard_arrow_right' }).first()
+  await openCard.waitFor('visible')
+  await openCard.click()
+  await page.getByRole('button', { name: 'Modifier' }).hover()
+  await page
+    .locator('a')
+    .filter({ hasText: 'editQuestion' })
+    .click()
+  await page.getByRole('button', { name: 'add' }).click()
+  await page.getByText(tags.tagAddName, { exact: true }).click()
+  await page.locator('button', { hasText: 'Enregistrer la question' }).click()
+  await expect(page.getByText(tags.tagName, tags.tagAddName)).toBeVisible()
+})
 
-// test('Should be able to modify an answer for an already answered question', async ({ page }) => {
-//   const zNode = await prisma.mutation.createZNode(createZNodeParams(tags.tagId))
-//   await algolia.addNode({ prisma }, zNode.id)
-//   await page.goto('http://localhost:3000')
-//   await page.locator('input[type=text]').click()
-//   await page.locator('input[type=text]').fill(questionsText[randomQuestion])
-//   await expect(
-//     page.getByRole('heading', { name: questionsText[randomQuestion] }).first()
-//   ).toBeVisible()
-//   await page.waitForSelector('.open-card')
-//   await page
-//     .locator('.open-card')
-//     .first()
-//     .click()
-//   await page.getByRole('button', { name: 'Modifier' }).hover()
-//   await page
-//     .locator('a')
-//     .filter({ hasText: 'Réponse' })
-//     .click()
-//   await page.locator('textarea').click()
-//   await page.locator('textarea').fill(answersText[randomEditAnswer])
-//   await page.locator('button', { hasText: 'Enregistrer la réponse' }).click()
-//   await expect(page.getByText(answersText[randomEditAnswer], { exact: true })).toBeVisible()
-// })
+test('Should be able to modify an answer for an already answered question', async ({ page }) => {
+  const zNode = await prisma.mutation.createZNode(createZNodeParams(tags.tagId, user.userId))
+  await algolia.addNode({ prisma }, zNode.id)
+  await page.goto('http://localhost:3000')
+  await page.locator('input[type=text]').click()
+  await page.locator('input[type=text]').fill(questionsText[randomQuestion])
+  await expect(
+    page.getByRole('heading', { name: questionsText[randomQuestion] }).first()
+  ).toBeVisible()
+  const openCard = page.getByRole('link', { name: 'keyboard_arrow_right' }).first()
+  await openCard.waitFor('visible')
+  await openCard.click()
+  await page.getByRole('button', { name: 'Modifier' }).hover()
+  await page
+    .locator('a')
+    .filter({ hasText: 'Réponse' })
+    .click()
+  await page.locator('textarea').click()
+  await page.locator('textarea').fill(answersText[randomEditAnswer])
+  await page.locator('button', { hasText: 'Enregistrer la réponse' }).click()
+  await expect(page.getByText(answersText[randomEditAnswer], { exact: true })).toBeVisible()
+})
 
-// test('Should be able to answer a question that has no answer', async ({ page }) => {
-//   const zNode = await prisma.mutation.createZNode(createZNodeWithoutAnswerParams(tags.tagId))
-//   await algolia.addNode({ prisma }, zNode.id)
-//   await page.goto('http://localhost:3000')
-//   // await page
-//   //   .locator('div:has(i:text("help_outline")) + a.open-card')
-//   //   .first()
-//   //   .click()
-//   await expect(page.getByText('Pas encore de réponse...')).toBeVisible()
-//   await page
-//     .locator('.open-card')
-//     .first()
-//     .click()
-//   await page.locator('button', { hasText: 'Répondre à la question' }).click()
-//   await page.locator('textarea').click()
-//   await page.locator('textarea').fill(answersText[randomAnswer])
-//   await page.locator('button', { hasText: 'Envoyer la réponse' }).click()
-//   await expect(page.getByText(answersText[randomAnswer], { exact: true })).toBeVisible()
-// })
+test('Should be able to answer a question that has no answer', async ({ page }) => {
+  const zNode = await prisma.mutation.createZNode(
+    createZNodeWithoutAnswerParams(tags.tagId, user.userId)
+  )
+  await algolia.addNode({ prisma }, zNode.id)
+  await page.goto('http://localhost:3000')
+  // await page
+  //   .locator('div:has(i:text("help_outline")) + a.open-card')
+  //   .first()
+  //   .click()
+  await expect(page.getByText('Pas encore de réponse...')).toBeVisible()
+  const openCard = page.getByRole('link', { name: 'keyboard_arrow_right' }).first()
+  await openCard.waitFor('visible')
+  await openCard.click()
+  await page.locator('button', { hasText: 'Répondre à la question' }).click()
+  await page.locator('textarea').click()
+  await page.locator('textarea').fill(answersText[randomAnswer])
+  await page.locator('button', { hasText: 'Envoyer la réponse' }).click()
+  await expect(page.getByText(answersText[randomAnswer], { exact: true })).toBeVisible()
+})
 
-// test('Should be able to search by text and tag', async ({ page }) => {
-//   const zNode = await prisma.mutation.createZNode(createZNodeParams(tags.tagId))
-//   await algolia.addNode({ prisma }, zNode.id)
-//   await page.goto('http://localhost:3000')
-//   await page.locator('input[type=text]').click()
-//   await page.locator('input[type=text]').fill(questionsText[randomQuestion])
-//   await expect(page.getByText('Aucune question trouvée')).not.toBeVisible()
-//   await expect(
-//     page.getByRole('heading', { name: questionsText[randomQuestion] }).first()
-//   ).toBeVisible()
-//   await page.getByRole('button', { name: 'local_offer' }).click()
-//   await page.locator('.category-item', { hasText: tags.tagName }).click()
-//   await expect(page.getByText('Aucune question trouvée')).not.toBeVisible()
-//   await page.waitForSelector('.open-card')
-//   await page
-//     .locator('.open-card')
-//     .first()
-//     .click()
-//   await page.getByRole('button', { name: 'Modifier' }).hover()
-//   await page
-//     .locator('a')
-//     .filter({ hasText: 'Réponse' })
-//     .click()
-//   await page.locator('textarea').click()
-//   await page.locator('textarea').fill(questionsText[randomEditQuestion])
-//   await page.locator('button', { hasText: 'Enregistrer la réponse' }).click()
-//   await expect(page.getByText(questionsText[randomEditQuestion])).toBeVisible()
-// })
+test('Should be able to search by text and tag', async ({ page }) => {
+  const zNode = await prisma.mutation.createZNode(createZNodeParams(tags.tagId, user.userId))
+  await algolia.addNode({ prisma }, zNode.id)
+  await page.goto('http://localhost:3000')
+  await page.locator('input[type=text]').click()
+  await page.locator('input[type=text]').fill(questionsText[randomQuestion])
+  await expect(page.getByText('Aucune question trouvée')).not.toBeVisible()
+  await expect(
+    page.getByRole('heading', { name: questionsText[randomQuestion] }).first()
+  ).toBeVisible()
+  await page.getByRole('button', { name: 'local_offer' }).click()
+  await page.locator('.category-item', { hasText: tags.tagName }).click()
+  await expect(page.getByText('Aucune question trouvée')).not.toBeVisible()
+  const openCard = page.getByRole('link', { name: 'keyboard_arrow_right' }).first()
+  await expect(openCard).toBeVisible()
+  await openCard.click()
+  await page.getByRole('button', { name: 'Modifier' }).hover()
+  await page
+    .locator('a')
+    .filter({ hasText: 'Réponse' })
+    .click()
+  await page.locator('textarea').click()
+  await page.locator('textarea').fill(answersText[randomEditAnswer])
+  await page.locator('button', { hasText: 'Enregistrer la réponse' }).click()
+  await expect(page.getByText(answersText[randomAnswer], { exact: true })).toBeVisible()
+})
 
 test.afterEach(async () => {
   algolia.clearIndex({ prisma })

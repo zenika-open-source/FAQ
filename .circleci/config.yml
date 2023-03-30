@@ -38,6 +38,28 @@ jobs:
           command: npm run prettier:check
           working_directory: client
 
+  test:
+    executor: app-builder
+    steps:
+      - checkout
+      - node/install-packages:
+          app-dir: e2e
+      - run:
+          background: true
+          command: npm start
+          working_directory: client
+      - run:
+          backgound: true
+          command: npm start
+          working_directory: server
+      - run:
+          background: true
+          command: npm run local_containers
+          working_directory: server
+      - run:
+          command: npm run test
+          working_directory: e2e
+
   client-build:
     executor: app-builder
     steps:
