@@ -44,23 +44,19 @@ jobs:
       - checkout
       - setup_remote_docker
       - node/install-packages:
-          app-dir: e2e
-      - node/install-packages:
-          app-dir: server
-      - node/install-packages:
-          app-dir: client
+          app-dir: e2e && server && client
       - run:
-          background: true
           command: npm start
           working_directory: client
+          background: true
       - run:
-          backgound: true
           command: npm start
           working_directory: server
-      - run:
           background: true
+      - run:
           command: npm run local_containers
           working_directory: server
+          background: true
       - run:
           command: npx wait-on http://localhost:3000 && npm run test
           working_directory: e2e
