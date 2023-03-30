@@ -410,7 +410,7 @@ test('Should be able to search by text and tag', async ({ page }) => {
   await page.locator('textarea').click()
   await page.locator('textarea').fill(answersText[randomEditAnswer])
   await page.locator('button', { hasText: 'Enregistrer la réponse' }).click()
-  await expect(page.getByText(answersText[randomAnswer], { exact: true })).toBeVisible()
+  await expect(page.getByText(answersText[randomEditAnswer], { exact: true })).toBeVisible()
 })
 
 test.afterEach(async () => {
