@@ -1,0 +1,63 @@
+---
+name: Testing
+route: /advanced/testing
+menu: Advanced
+---
+
+# Testing
+
+The project uses Playwright to run end-to-end tests.  
+Here are the steps to make the tests work.
+
+## 1/ Install the dependencies
+
+```bash
+# Path: ./FAQ/e2e
+npm install
+```
+
+## 2/ Update your environment files
+
+- In the `.env.local` of the `client` folder add
+
+```bash
+REACT_APP_AUTH_SKIP=skipAuth
+```
+
+- In the `.env.local` of the `server` folder add
+
+```bash
+AUTH_SKIP=skipAuth
+
+USER_ID=
+USER_EMAIL=
+```
+
+These will make Playwright skip the auth0 authentification and avoid the redirection
+
+### How to get USER_ID and USER_EMAIL values ?
+
+You need to create a new user in the Prisma Playground at http://localhost:4466
+
+```graphql
+mutation {
+  createUser(
+    data: { key: "awesome-key", name: "API", email: "awesome-api@zenika.com" }
+  ) {
+    id
+    email
+  }
+}
+```
+
+Use the values returned as your USER_ID and USER_EMAIL
+
+**⚠️ The email MUST end with @zenika.com ⚠️**
+
+## 3/ Launch the tests
+
+- In your terminal, go in the `e2e` folder
+- Use `npm run test` to start the tests
+  - Use `npm run test:headed` to start the tests with a browser opening and closing for each tests
+  - Use `npm run test:trace` to start the tests with the trace on. The trace is a record of every action done by Playwright in a test.  
+    Docs here: https://playwright.dev/docs/trace-viewer

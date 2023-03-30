@@ -168,8 +168,6 @@ let prisma
 let tags
 let user
 
-/* A LANCER DANS BASH POUR OBTENIR LE TOKEN */
-
 test.beforeAll(async ({ playwright }) => {
   const PATH = path.resolve(process.cwd(), '..')
   const execSync = require('child_process').execSync
@@ -305,11 +303,6 @@ test('Should be able to signal a question', async ({ page }) => {
   const openCard = page.getByRole('link', { name: 'keyboard_arrow_right' }).first()
   await openCard.waitFor('visible')
   await openCard.click()
-  // await page.waitForSelector('.open-card')
-  // await page
-  //   .locator('.open-card')
-  //   .first()
-  //   .click()
   await page.getByRole('button', { name: 'Signaler' }).hover()
   await page
     .locator('a')
