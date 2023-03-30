@@ -42,6 +42,7 @@ jobs:
     executor: app-builder
     steps:
       - checkout
+      - setup_remote_docker
       - node/install-packages:
           app-dir: e2e
       - run:
@@ -57,7 +58,7 @@ jobs:
           command: npm run local_containers
           working_directory: server
       - run:
-          command: npm run test
+          command: npx wait-on http://localhost:3000 && npm run test
           working_directory: e2e
 
   client-build:
@@ -147,6 +148,7 @@ workflows:
     jobs:
       - server-lint
       - client-lint
+      - test
       - client-build
       - app-deploy:
           clever-app-id: app_c61407ae-b417-4406-86ed-cfd1acf84466
