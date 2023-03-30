@@ -62,6 +62,9 @@ jobs:
           working_directory: server
           background: true
       - run:
+          command: npm run new_service default/default
+          working_directory: server
+      - run:
           command: npx wait-on http://localhost:3000 && npm run test
           working_directory: e2e
 
