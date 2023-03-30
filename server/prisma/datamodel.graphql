@@ -1,5 +1,5 @@
 type ZNode {
-  id: ID! @unique
+  id: ID! @unique @id
 
   question: Question @relation(name: "NodeQuestion", onDelete: CASCADE)
   answer: Answer @relation(name: "NodeAnswer", onDelete: CASCADE)
@@ -13,7 +13,7 @@ type ZNode {
 }
 
 type Question {
-  id: ID! @unique
+  id: ID! @unique @id
 
   title: String!
   slug: String!
@@ -27,7 +27,7 @@ type Question {
 }
 
 type Answer {
-  id: ID! @unique
+  id: ID! @unique @id
 
   content: String!
 
@@ -41,7 +41,7 @@ type Answer {
 }
 
 type Source {
-  id: ID! @unique
+  id: ID! @unique @id
 
   label: String!
   url: String!
@@ -50,7 +50,7 @@ type Source {
 }
 
 type Flag {
-  id: ID! @unique
+  id: ID! @unique @id
 
   type: String!
 
@@ -61,7 +61,7 @@ type Flag {
 }
 
 type Tag {
-  id: ID! @unique
+  id: ID! @unique @id
 
   label: TagLabel @relation(name: "TagsLabel")
 
@@ -72,7 +72,7 @@ type Tag {
 }
 
 type TagLabel {
-  id: ID! @unique
+  id: ID! @unique @id
 
   name: String!
   tags: [Tag!]! @relation(name: "TagsLabel", onDelete: CASCADE)
@@ -82,7 +82,7 @@ type TagLabel {
 }
 
 type TagCategory {
-  id: ID! @unique
+  id: ID! @unique @id
 
   name: String!
   labels: [TagLabel!]! @relation(name: "TagLabelsCategory", onDelete: CASCADE)
@@ -92,7 +92,7 @@ type TagCategory {
 }
 
 type HistoryAction {
-  id: ID! @unique
+  id: ID! @unique @id
 
   action: String!
   model: String!
@@ -105,11 +105,11 @@ type HistoryAction {
 }
 
 type User {
-  id: ID! @unique
+  id: ID! @unique @id
   auth0Id: String @unique
   key: String
 
-  admin: Boolean! @default(value: "false")
+  admin: Boolean! @default(value: false)
 
   name: String
   email: String
@@ -129,7 +129,7 @@ type User {
 }
 
 type Configuration {
-  id: ID! @unique
+  id: ID! @unique @id
 
   name: String! @unique
 
@@ -137,7 +137,7 @@ type Configuration {
 
   auth0Domain: String!
   auth0ClientId: String!
-  authorizedDomains: [String!] @default(value: [])
+  authorizedDomains: [String!]
 
   algoliaAppId: String
   algoliaApiKey: String
