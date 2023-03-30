@@ -50,6 +50,9 @@ jobs:
       - node/install-packages:
           app-dir: client
       - run:
+          command: npx prisma --version
+          working_directory: server
+      - run:
           command: npm start
           working_directory: client
           background: true
