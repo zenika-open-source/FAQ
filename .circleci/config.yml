@@ -77,6 +77,10 @@ jobs:
       - run:
           command: npx wait-on http://localhost:3000 && npm run test
           working_directory: e2e
+          environment:
+            PRISMA_URL: http://localhost:4466
+            PRISMA_API_SECRET: secret-42
+            PRISMA_MANAGEMENT_API_SECRET: my-secret-42
 
   client-build:
     executor: app-builder
