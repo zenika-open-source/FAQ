@@ -67,6 +67,7 @@ type AnswerConnection {
 }
 
 input AnswerCreateInput {
+  id: ID
   content: String!
   sources: SourceCreateManyWithoutAnswerInput
   node: ZNodeCreateOneWithoutAnswerInput!
@@ -89,18 +90,21 @@ input AnswerCreateOneWithoutSourcesInput {
 }
 
 input AnswerCreateWithoutNodeInput {
+  id: ID
   content: String!
   sources: SourceCreateManyWithoutAnswerInput
   user: UserCreateOneWithoutAnswersInput!
 }
 
 input AnswerCreateWithoutSourcesInput {
+  id: ID
   content: String!
   node: ZNodeCreateOneWithoutAnswerInput!
   user: UserCreateOneWithoutAnswersInput!
 }
 
 input AnswerCreateWithoutUserInput {
+  id: ID
   content: String!
   sources: SourceCreateManyWithoutAnswerInput
   node: ZNodeCreateOneWithoutAnswerInput!
@@ -378,6 +382,8 @@ type Configuration {
   ): [TagCategory!]
   workplaceSharing: Boolean
   bugReporting: BugReporting
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type ConfigurationConnection {
@@ -391,6 +397,7 @@ input ConfigurationCreateauthorizedDomainsInput {
 }
 
 input ConfigurationCreateInput {
+  id: ID
   name: String!
   title: String
   auth0Domain: String!
@@ -415,6 +422,7 @@ input ConfigurationCreateOneWithoutTagCategoriesInput {
 }
 
 input ConfigurationCreateWithoutTagCategoriesInput {
+  id: ID
   name: String!
   title: String
   auth0Domain: String!
@@ -468,6 +476,10 @@ enum ConfigurationOrderByInput {
   workplaceSharing_DESC
   bugReporting_ASC
   bugReporting_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
 }
 
 type ConfigurationPreviousValues {
@@ -487,6 +499,8 @@ type ConfigurationPreviousValues {
   tags: Json
   workplaceSharing: Boolean
   bugReporting: BugReporting
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type ConfigurationSubscriptionPayload {
@@ -742,6 +756,22 @@ input ConfigurationWhereInput {
   bugReporting_not: BugReporting
   bugReporting_in: [BugReporting!]
   bugReporting_not_in: [BugReporting!]
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   AND: [ConfigurationWhereInput!]
   OR: [ConfigurationWhereInput!]
   NOT: [ConfigurationWhereInput!]
@@ -760,6 +790,7 @@ type Flag {
   node: ZNode!
   user: User!
   createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type FlagConnection {
@@ -769,6 +800,7 @@ type FlagConnection {
 }
 
 input FlagCreateInput {
+  id: ID
   type: String!
   node: ZNodeCreateOneWithoutFlagsInput!
   user: UserCreateOneWithoutFlagsInput!
@@ -785,11 +817,13 @@ input FlagCreateManyWithoutUserInput {
 }
 
 input FlagCreateWithoutNodeInput {
+  id: ID
   type: String!
   user: UserCreateOneWithoutFlagsInput!
 }
 
 input FlagCreateWithoutUserInput {
+  id: ID
   type: String!
   node: ZNodeCreateOneWithoutFlagsInput!
 }
@@ -806,12 +840,15 @@ enum FlagOrderByInput {
   type_DESC
   createdAt_ASC
   createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
 }
 
 type FlagPreviousValues {
   id: ID!
   type: String!
   createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 input FlagScalarWhereInput {
@@ -851,6 +888,14 @@ input FlagScalarWhereInput {
   createdAt_lte: DateTime
   createdAt_gt: DateTime
   createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   AND: [FlagScalarWhereInput!]
   OR: [FlagScalarWhereInput!]
   NOT: [FlagScalarWhereInput!]
@@ -988,6 +1033,14 @@ input FlagWhereInput {
   createdAt_lte: DateTime
   createdAt_gt: DateTime
   createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   AND: [FlagWhereInput!]
   OR: [FlagWhereInput!]
   NOT: [FlagWhereInput!]
@@ -1005,6 +1058,7 @@ type HistoryAction {
   node: ZNode!
   user: User!
   createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type HistoryActionConnection {
@@ -1014,6 +1068,7 @@ type HistoryActionConnection {
 }
 
 input HistoryActionCreateInput {
+  id: ID
   action: String!
   model: String!
   meta: Json
@@ -1032,6 +1087,7 @@ input HistoryActionCreateManyWithoutUserInput {
 }
 
 input HistoryActionCreateWithoutNodeInput {
+  id: ID
   action: String!
   model: String!
   meta: Json
@@ -1039,6 +1095,7 @@ input HistoryActionCreateWithoutNodeInput {
 }
 
 input HistoryActionCreateWithoutUserInput {
+  id: ID
   action: String!
   model: String!
   meta: Json
@@ -1061,6 +1118,8 @@ enum HistoryActionOrderByInput {
   meta_DESC
   createdAt_ASC
   createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
 }
 
 type HistoryActionPreviousValues {
@@ -1069,6 +1128,7 @@ type HistoryActionPreviousValues {
   model: String!
   meta: Json
   createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 input HistoryActionScalarWhereInput {
@@ -1122,6 +1182,14 @@ input HistoryActionScalarWhereInput {
   createdAt_lte: DateTime
   createdAt_gt: DateTime
   createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   AND: [HistoryActionScalarWhereInput!]
   OR: [HistoryActionScalarWhereInput!]
   NOT: [HistoryActionScalarWhereInput!]
@@ -1283,6 +1351,14 @@ input HistoryActionWhereInput {
   createdAt_lte: DateTime
   createdAt_gt: DateTime
   createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   AND: [HistoryActionWhereInput!]
   OR: [HistoryActionWhereInput!]
   NOT: [HistoryActionWhereInput!]
@@ -1673,6 +1749,7 @@ type QuestionConnection {
 }
 
 input QuestionCreateInput {
+  id: ID
   title: String!
   slug: String!
   views: Int
@@ -1691,6 +1768,7 @@ input QuestionCreateOneWithoutNodeInput {
 }
 
 input QuestionCreateWithoutNodeInput {
+  id: ID
   title: String!
   slug: String!
   views: Int
@@ -1698,6 +1776,7 @@ input QuestionCreateWithoutNodeInput {
 }
 
 input QuestionCreateWithoutUserInput {
+  id: ID
   title: String!
   slug: String!
   views: Int
@@ -1982,6 +2061,8 @@ type Source {
   label: String!
   url: String!
   answer: Answer!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type SourceConnection {
@@ -1991,6 +2072,7 @@ type SourceConnection {
 }
 
 input SourceCreateInput {
+  id: ID
   label: String!
   url: String!
   answer: AnswerCreateOneWithoutSourcesInput!
@@ -2002,6 +2084,7 @@ input SourceCreateManyWithoutAnswerInput {
 }
 
 input SourceCreateWithoutAnswerInput {
+  id: ID
   label: String!
   url: String!
 }
@@ -2018,12 +2101,18 @@ enum SourceOrderByInput {
   label_DESC
   url_ASC
   url_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
 }
 
 type SourcePreviousValues {
   id: ID!
   label: String!
   url: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 input SourceScalarWhereInput {
@@ -2069,6 +2158,22 @@ input SourceScalarWhereInput {
   url_not_starts_with: String
   url_ends_with: String
   url_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   AND: [SourceScalarWhereInput!]
   OR: [SourceScalarWhereInput!]
   NOT: [SourceScalarWhereInput!]
@@ -2185,6 +2290,22 @@ input SourceWhereInput {
   url_ends_with: String
   url_not_ends_with: String
   answer: AnswerWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   AND: [SourceWhereInput!]
   OR: [SourceWhereInput!]
   NOT: [SourceWhereInput!]
@@ -2214,6 +2335,7 @@ type Tag {
   node: ZNode!
   user: User!
   createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type TagCategory {
@@ -2230,6 +2352,8 @@ type TagCategory {
   ): [TagLabel!]
   order: Int!
   configuration: Configuration!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type TagCategoryConnection {
@@ -2239,6 +2363,7 @@ type TagCategoryConnection {
 }
 
 input TagCategoryCreateInput {
+  id: ID
   name: String!
   labels: TagLabelCreateManyWithoutCategoryInput
   order: Int!
@@ -2256,12 +2381,14 @@ input TagCategoryCreateOneWithoutLabelsInput {
 }
 
 input TagCategoryCreateWithoutConfigurationInput {
+  id: ID
   name: String!
   labels: TagLabelCreateManyWithoutCategoryInput
   order: Int!
 }
 
 input TagCategoryCreateWithoutLabelsInput {
+  id: ID
   name: String!
   order: Int!
   configuration: ConfigurationCreateOneWithoutTagCategoriesInput!
@@ -2279,12 +2406,18 @@ enum TagCategoryOrderByInput {
   name_DESC
   order_ASC
   order_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
 }
 
 type TagCategoryPreviousValues {
   id: ID!
   name: String!
   order: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 input TagCategoryScalarWhereInput {
@@ -2324,6 +2457,22 @@ input TagCategoryScalarWhereInput {
   order_lte: Int
   order_gt: Int
   order_gte: Int
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   AND: [TagCategoryScalarWhereInput!]
   OR: [TagCategoryScalarWhereInput!]
   NOT: [TagCategoryScalarWhereInput!]
@@ -2457,6 +2606,22 @@ input TagCategoryWhereInput {
   order_gt: Int
   order_gte: Int
   configuration: ConfigurationWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   AND: [TagCategoryWhereInput!]
   OR: [TagCategoryWhereInput!]
   NOT: [TagCategoryWhereInput!]
@@ -2473,6 +2638,7 @@ type TagConnection {
 }
 
 input TagCreateInput {
+  id: ID
   label: TagLabelCreateOneWithoutTagsInput
   node: ZNodeCreateOneWithoutTagsInput!
   user: UserCreateOneWithoutTagsInput!
@@ -2494,16 +2660,19 @@ input TagCreateManyWithoutUserInput {
 }
 
 input TagCreateWithoutLabelInput {
+  id: ID
   node: ZNodeCreateOneWithoutTagsInput!
   user: UserCreateOneWithoutTagsInput!
 }
 
 input TagCreateWithoutNodeInput {
+  id: ID
   label: TagLabelCreateOneWithoutTagsInput
   user: UserCreateOneWithoutTagsInput!
 }
 
 input TagCreateWithoutUserInput {
+  id: ID
   label: TagLabelCreateOneWithoutTagsInput
   node: ZNodeCreateOneWithoutTagsInput!
 }
@@ -2527,6 +2696,8 @@ type TagLabel {
   ): [Tag!]
   order: Int!
   category: TagCategory!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type TagLabelConnection {
@@ -2536,6 +2707,7 @@ type TagLabelConnection {
 }
 
 input TagLabelCreateInput {
+  id: ID
   name: String!
   tags: TagCreateManyWithoutLabelInput
   order: Int!
@@ -2553,12 +2725,14 @@ input TagLabelCreateOneWithoutTagsInput {
 }
 
 input TagLabelCreateWithoutCategoryInput {
+  id: ID
   name: String!
   tags: TagCreateManyWithoutLabelInput
   order: Int!
 }
 
 input TagLabelCreateWithoutTagsInput {
+  id: ID
   name: String!
   order: Int!
   category: TagCategoryCreateOneWithoutLabelsInput!
@@ -2576,12 +2750,18 @@ enum TagLabelOrderByInput {
   name_DESC
   order_ASC
   order_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
 }
 
 type TagLabelPreviousValues {
   id: ID!
   name: String!
   order: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 input TagLabelScalarWhereInput {
@@ -2621,6 +2801,22 @@ input TagLabelScalarWhereInput {
   order_lte: Int
   order_gt: Int
   order_gte: Int
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   AND: [TagLabelScalarWhereInput!]
   OR: [TagLabelScalarWhereInput!]
   NOT: [TagLabelScalarWhereInput!]
@@ -2756,6 +2952,22 @@ input TagLabelWhereInput {
   order_gt: Int
   order_gte: Int
   category: TagCategoryWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   AND: [TagLabelWhereInput!]
   OR: [TagLabelWhereInput!]
   NOT: [TagLabelWhereInput!]
@@ -2770,11 +2982,14 @@ enum TagOrderByInput {
   id_DESC
   createdAt_ASC
   createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
 }
 
 type TagPreviousValues {
   id: ID!
   createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 input TagScalarWhereInput {
@@ -2800,6 +3015,14 @@ input TagScalarWhereInput {
   createdAt_lte: DateTime
   createdAt_gt: DateTime
   createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   AND: [TagScalarWhereInput!]
   OR: [TagScalarWhereInput!]
   NOT: [TagScalarWhereInput!]
@@ -2936,6 +3159,14 @@ input TagWhereInput {
   createdAt_lte: DateTime
   createdAt_gt: DateTime
   createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   AND: [TagWhereInput!]
   OR: [TagWhereInput!]
   NOT: [TagWhereInput!]
@@ -3000,6 +3231,7 @@ type User {
     last: Int
   ): [HistoryAction!]
   createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type UserConnection {
@@ -3009,6 +3241,7 @@ type UserConnection {
 }
 
 input UserCreateInput {
+  id: ID
   auth0Id: String
   key: String
   admin: Boolean
@@ -3049,6 +3282,7 @@ input UserCreateOneWithoutTagsInput {
 }
 
 input UserCreateWithoutAnswersInput {
+  id: ID
   auth0Id: String
   key: String
   admin: Boolean
@@ -3063,6 +3297,7 @@ input UserCreateWithoutAnswersInput {
 }
 
 input UserCreateWithoutFlagsInput {
+  id: ID
   auth0Id: String
   key: String
   admin: Boolean
@@ -3077,6 +3312,7 @@ input UserCreateWithoutFlagsInput {
 }
 
 input UserCreateWithoutHistoryInput {
+  id: ID
   auth0Id: String
   key: String
   admin: Boolean
@@ -3091,6 +3327,7 @@ input UserCreateWithoutHistoryInput {
 }
 
 input UserCreateWithoutQuestionsInput {
+  id: ID
   auth0Id: String
   key: String
   admin: Boolean
@@ -3105,6 +3342,7 @@ input UserCreateWithoutQuestionsInput {
 }
 
 input UserCreateWithoutTagsInput {
+  id: ID
   auth0Id: String
   key: String
   admin: Boolean
@@ -3142,6 +3380,8 @@ enum UserOrderByInput {
   locale_DESC
   createdAt_ASC
   createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
 }
 
 type UserPreviousValues {
@@ -3154,6 +3394,7 @@ type UserPreviousValues {
   picture: String
   locale: String
   createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type UserSubscriptionPayload {
@@ -3453,6 +3694,14 @@ input UserWhereInput {
   createdAt_lte: DateTime
   createdAt_gt: DateTime
   createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]
@@ -3495,6 +3744,8 @@ type ZNode {
     last: Int
   ): [HistoryAction!]
   highlights: Json
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type ZNodeConnection {
@@ -3504,6 +3755,7 @@ type ZNodeConnection {
 }
 
 input ZNodeCreateInput {
+  id: ID
   question: QuestionCreateOneWithoutNodeInput
   answer: AnswerCreateOneWithoutNodeInput
   flags: FlagCreateManyWithoutNodeInput
@@ -3538,6 +3790,7 @@ input ZNodeCreateOneWithoutTagsInput {
 }
 
 input ZNodeCreateWithoutAnswerInput {
+  id: ID
   question: QuestionCreateOneWithoutNodeInput
   flags: FlagCreateManyWithoutNodeInput
   tags: TagCreateManyWithoutNodeInput
@@ -3546,6 +3799,7 @@ input ZNodeCreateWithoutAnswerInput {
 }
 
 input ZNodeCreateWithoutFlagsInput {
+  id: ID
   question: QuestionCreateOneWithoutNodeInput
   answer: AnswerCreateOneWithoutNodeInput
   tags: TagCreateManyWithoutNodeInput
@@ -3554,6 +3808,7 @@ input ZNodeCreateWithoutFlagsInput {
 }
 
 input ZNodeCreateWithoutHistoryInput {
+  id: ID
   question: QuestionCreateOneWithoutNodeInput
   answer: AnswerCreateOneWithoutNodeInput
   flags: FlagCreateManyWithoutNodeInput
@@ -3562,6 +3817,7 @@ input ZNodeCreateWithoutHistoryInput {
 }
 
 input ZNodeCreateWithoutQuestionInput {
+  id: ID
   answer: AnswerCreateOneWithoutNodeInput
   flags: FlagCreateManyWithoutNodeInput
   tags: TagCreateManyWithoutNodeInput
@@ -3570,6 +3826,7 @@ input ZNodeCreateWithoutQuestionInput {
 }
 
 input ZNodeCreateWithoutTagsInput {
+  id: ID
   question: QuestionCreateOneWithoutNodeInput
   answer: AnswerCreateOneWithoutNodeInput
   flags: FlagCreateManyWithoutNodeInput
@@ -3596,6 +3853,8 @@ enum ZNodeOrderByInput {
 type ZNodePreviousValues {
   id: ID!
   highlights: Json
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type ZNodeSubscriptionPayload {
@@ -3755,6 +4014,22 @@ input ZNodeWhereInput {
   history_every: HistoryActionWhereInput
   history_some: HistoryActionWhereInput
   history_none: HistoryActionWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   AND: [ZNodeWhereInput!]
   OR: [ZNodeWhereInput!]
   NOT: [ZNodeWhereInput!]

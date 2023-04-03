@@ -1,15 +1,17 @@
 type ZNode {
   id: ID! @unique @id
 
-  question: Question @relation(name: "NodeQuestion", onDelete: CASCADE)
-  answer: Answer @relation(name: "NodeAnswer", onDelete: CASCADE)
+  question: Question @relation(name: "NodeQuestion", onDelete: CASCADE, link: TABLE)
+  answer: Answer @relation(name: "NodeAnswer", onDelete: CASCADE, link: TABLE)
 
-  flags: [Flag!]! @relation(name: "NodeFlags", onDelete: CASCADE)
-  tags: [Tag!]! @relation(name: "NodeTags", onDelete: CASCADE)
+  flags: [Flag!]! @relation(name: "NodeFlags", onDelete: CASCADE, link: TABLE)
+  tags: [Tag!]! @relation(name: "NodeTags", onDelete: CASCADE, link: TABLE)
 
-  history: [HistoryAction!]! @relation(name: "NodeHistoryActions", onDelete: CASCADE)
+  history: [HistoryAction!]! @relation(name: "NodeHistoryActions", onDelete: CASCADE, link: TABLE)
 
   highlights: Json
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type Question {
@@ -20,10 +22,10 @@ type Question {
   views: Int
 
   node: ZNode! @relation(name: "NodeQuestion", onDelete: CASCADE)
-  user: User! @relation(name: "UserQuestions")
+  user: User! @relation(name: "UserQuestions", link: TABLE)
 
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type Answer {
@@ -31,13 +33,13 @@ type Answer {
 
   content: String!
 
-  sources: [Source!]! @relation(name: "AnswerSources", onDelete: CASCADE)
+  sources: [Source!]! @relation(name: "AnswerSources", onDelete: CASCADE, link: TABLE)
 
   node: ZNode! @relation(name: "NodeAnswer", onDelete: CASCADE)
-  user: User! @relation(name: "UserAnswers")
+  user: User! @relation(name: "UserAnswers", link: TABLE)
 
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type Source {
@@ -47,6 +49,8 @@ type Source {
   url: String!
 
   answer: Answer! @relation(name: "AnswerSources")
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type Flag {
@@ -55,20 +59,22 @@ type Flag {
   type: String!
 
   node: ZNode! @relation(name: "NodeFlags")
-  user: User! @relation(name: "UserFlags")
+  user: User! @relation(name: "UserFlags", link: TABLE)
 
-  createdAt: DateTime!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type Tag {
   id: ID! @unique @id
 
-  label: TagLabel @relation(name: "TagsLabel")
+  label: TagLabel @relation(name: "TagsLabel", link: TABLE)
 
   node: ZNode! @relation(name: "NodeTags")
-  user: User! @relation(name: "UserTags")
+  user: User! @relation(name: "UserTags", link: TABLE)
 
-  createdAt: DateTime!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type TagLabel {
@@ -78,7 +84,10 @@ type TagLabel {
   tags: [Tag!]! @relation(name: "TagsLabel", onDelete: CASCADE)
 
   order: Int!
-  category: TagCategory! @relation(name: "TagLabelsCategory")
+  category: TagCategory! @relation(name: "TagLabelsCategory", link: TABLE)
+
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type TagCategory {
@@ -88,7 +97,10 @@ type TagCategory {
   labels: [TagLabel!]! @relation(name: "TagLabelsCategory", onDelete: CASCADE)
 
   order: Int!
-  configuration: Configuration! @relation(name: "ConfigurationTags")
+  configuration: Configuration! @relation(name: "ConfigurationTags", link: TABLE)
+
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type HistoryAction {
@@ -99,9 +111,10 @@ type HistoryAction {
   meta: Json
 
   node: ZNode! @relation(name: "NodeHistoryActions")
-  user: User! @relation(name: "UserHistoryActions")
+  user: User! @relation(name: "UserHistoryActions", link: TABLE)
 
-  createdAt: DateTime!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type User {
@@ -125,7 +138,8 @@ type User {
 
   history: [HistoryAction!]! @relation(name: "UserHistoryActions")
 
-  createdAt: DateTime!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type Configuration {
@@ -137,7 +151,7 @@ type Configuration {
 
   auth0Domain: String!
   auth0ClientId: String!
-  authorizedDomains: [String!]
+  authorizedDomains: [String!] @scalarList(strategy: RELATION)
 
   algoliaAppId: String
   algoliaApiKey: String
@@ -155,6 +169,8 @@ type Configuration {
   workplaceSharing: Boolean @default(value: false)
 
   bugReporting: BugReporting @default(value: GITHUB)
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 enum BugReporting {
