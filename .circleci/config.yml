@@ -68,8 +68,11 @@ jobs:
           command: npm run new_service default/default
           working_directory: server
           environment:
-            AUTH0_DOMAIN: zenika.eu.auth0.com
-            AUTH0_CLIENT_ID: wq8LU1f5iXQ4HWL0F6Z07QDcSMgWPd1p
+            PRISMA_URL: http://localhost:4466
+            PRISMA_API_SECRET: secret-42
+            PRISMA_MANAGEMENT_API_SECRET: my-secret-42
+            AUTH0_DOMAIN: auth0Domain
+            AUTH0_CLIENT_ID: auth0ClientId
       - run:
           command: npx wait-on http://localhost:3000 && npm run test
           working_directory: e2e
