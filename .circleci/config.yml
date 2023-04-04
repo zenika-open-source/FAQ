@@ -64,6 +64,8 @@ jobs:
           command: npm run local_containers
           working_directory: server
           background: true
+          environment:
+            PRISMA_MANAGEMENT_API_SECRET: my-secret-42
       - run:
           command: npx wait-on http://localhost:4466 && npm run new_service default/default
           working_directory: server
