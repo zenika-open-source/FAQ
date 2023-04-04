@@ -298,6 +298,7 @@ test('Should be able to signal a question', async ({ page }) => {
   const zNode = await prisma.mutation.createZNode(createZNodeParams(tags.tagId, user.userId))
   await algolia.addNode({ prisma }, zNode.id)
   await page.goto('http://localhost:3000')
+  await page.waitForTimeout(1000)
   await page.getByRole('button', { name: 'local_offer' }).click()
   await page.locator('.category-item', { hasText: tags.tagName }).click()
   const openCard = page.getByRole('link', { name: 'keyboard_arrow_right' }).first()
