@@ -64,8 +64,6 @@ jobs:
           command: npm run local_containers
           working_directory: server
           background: true
-          environment:
-            PRISMA_MANAGEMENT_API_SECRET: my-secret-42
       - run:
           command: npm i -g wait-on
       - run:
