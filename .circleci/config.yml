@@ -79,7 +79,7 @@ jobs:
             AUTH0_CLIENT_ID: auth0ClientId
       - run:
           name: Run tests
-          command: npx wait-on http://localhost:3000 && npm run test
+          command: npx wait-on http://localhost:3000 && npx wait-on http://localhost:4466 && npm run test
           working_directory: e2e
           environment:
             PRISMA_URL: http://localhost:4466
