@@ -52,18 +52,17 @@ jobs:
       - run:
           command: npm install -g wait-on
       - run:
-          command: npm start
+          command: npm start &
           working_directory: client
           background: true
       - run:
-          command: npm start
+          command: npm start &
           working_directory: server
           background: true
       - run:
-          command: npm run local_containers
+          command: npm run local_containers &
           working_directory: server
           background: true
-      - run: wait-for-background
       - run:
           command: npm run new_service default/default
           working_directory: server
