@@ -63,7 +63,15 @@ jobs:
           command: npm run local_containers
           working_directory: server
           background: true
-      - run: ./server/scripts/wait-for-it/wait-for-it.sh -t 60 localhost:4466
+      - run:
+          name: Download wait-for-it.sh script
+          command: |
+            curl -o wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
+            chmod +x wait-for-it.sh
+      - run:
+          name: Wait for services to start
+          command: |
+            bash ./wait-for-it.sh -t 60 localhost:4466
       - run:
           command: npm run new_service default/default
           working_directory: server
