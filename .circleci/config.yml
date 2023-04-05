@@ -76,7 +76,6 @@ jobs:
       - run:
           command: npx wait-on http://127.0.0.1:3000 http://127.0.0.1:4466 && npm run test
           working_directory: e2e
-          when: on_success
           environment:
             PRISMA_URL: http://127.0.0.1:4466
             PRISMA_API_SECRET: secret-42
