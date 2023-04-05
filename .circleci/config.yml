@@ -64,7 +64,7 @@ jobs:
           working_directory: server
           background: true
       - run:
-          command: npm run new_service default/default
+          command: npx wait-on http://localhost:4466 npm run new_service default/default
           working_directory: server
           environment:
             PRISMA_URL: http://localhost:4466
