@@ -63,10 +63,10 @@ jobs:
           command: npm run local_containers
           working_directory: server
           background: true
+      - run: ./server/scripts/wait-for-it/wait-for-it.sh -t 60 localhost:4466
       - run:
           command: npm run new_service default/default
           working_directory: server
-          when: on_success
           environment:
             PRISMA_URL: http://localhost:4466
             PRISMA_API_SECRET: secret-42
