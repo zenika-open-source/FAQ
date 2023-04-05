@@ -59,7 +59,7 @@
   height: 240px;
   border-radius: 3px;
   padding: 0.1rem 0;
-  z-index: 10;
+  z-index: 9;
 }
 
 .tagpicker .picker::after,

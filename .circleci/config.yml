@@ -63,8 +63,9 @@ jobs:
           command: npm run local_containers
           working_directory: server
           background: true
+      - run: wait-on http://localhost:4466
       - run:
-          command: npx wait-on http://localhost:4466 && npm run new_service default/default
+          command: npm run new_service default/default
           working_directory: server
           environment:
             PRISMA_URL: http://localhost:4466
@@ -72,8 +73,10 @@ jobs:
             PRISMA_MANAGEMENT_API_SECRET: my-secret-42
             AUTH0_DOMAIN: auth0Domain
             AUTH0_CLIENT_ID: auth0ClientId
+      - run: wait-on http://localhost:3000
+      - run: wait-on http://localhost:4466
       - run:
-          command: npx wait-on http://localhost:4466 && npm run test
+          command: npm run test
           working_directory: e2e
           when: on_success
           environment:

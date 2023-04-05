@@ -50,8 +50,8 @@ const Navbar = () => {
 }
 
 Navbar.translations = {
-  en: { report_bug: 'report a bug', new_question: 'New question' },
-  fr: { report_bug: 'signaler un bug', new_question: 'Nouvelle question' }
+  en: { report_bug: 'Report a bug', new_question: 'New question' },
+  fr: { report_bug: 'Signaler un bug', new_question: 'Nouvelle question' }
 }
 
 export default Navbar
