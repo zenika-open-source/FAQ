@@ -68,7 +68,7 @@ jobs:
           working_directory: server
           background: true
           environment:
-            PRISMA_URL: http://127.0.0.1:4466
+            PRISMA_URL: http://localhost:4466
             PRISMA_API_SECRET: secret-42
             PRISMA_MANAGEMENT_API_SECRET: my-secret-42
             AUTH0_DOMAIN: auth0Domain
@@ -77,7 +77,7 @@ jobs:
           command: npx wait-on http://127.0.0.1:3000 http://127.0.0.1:4466 && npm run test
           working_directory: e2e
           environment:
-            PRISMA_URL: http://127.0.0.1:4466
+            PRISMA_URL: http://localhost:4466
             PRISMA_API_SECRET: secret-42
             PRISMA_MANAGEMENT_API_SECRET: my-secret-42
             SERVICE_NAME: default
