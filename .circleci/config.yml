@@ -50,6 +50,8 @@ jobs:
       - node/install-packages:
           app-dir: client
       - run:
+          command: npm install -g wait-on
+      - run:
           command: npm start
           working_directory: client
           background: true
@@ -61,10 +63,9 @@ jobs:
           command: npm run local_containers
           working_directory: server
           background: true
+      - run: wait-for-background
       - run:
-          command: npm install -g wait-on
-      - run:
-          command: npx wait-on http://localhost:4466 && npm run new_service default/default
+          command: npm run new_service default/default
           working_directory: server
           environment:
             PRISMA_URL: http://localhost:4466
@@ -73,8 +74,9 @@ jobs:
             AUTH0_DOMAIN: auth0Domain
             AUTH0_CLIENT_ID: auth0ClientId
       - run:
-          command: npx wait-on http://localhost:4466 && npm run test
+          command: npm run test
           working_directory: e2e
+          when: on_success
           environment:
             PRISMA_URL: http://localhost:4466
             PRISMA_API_SECRET: secret-42
