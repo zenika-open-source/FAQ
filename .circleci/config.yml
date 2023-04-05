@@ -60,13 +60,14 @@ jobs:
           working_directory: server
           background: true
       - run:
+          command: npm run local_containers
+          working_directory: server
+          background: true
+      - run:
           command: |
-            npm run local_containers
             curl -o wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
             chmod +x wait-for-it.sh
             bash ./wait-for-it.sh -t 60 localhost:4466
-          working_directory: server
-          background: true
       - run:
           command: npm run new_service default/default
           working_directory: server
