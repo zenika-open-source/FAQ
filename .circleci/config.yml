@@ -63,9 +63,11 @@ jobs:
           command: npm run local_containers
           working_directory: server
           background: true
+          environment:
+            PRISMA_MANAGEMENT_API_SECRET: my-secret-42
       - run:
           command: |
-            wait-port http://localhost:4466
+            wait-port localhost:4466
             npm run new_service default/default
           working_directory: server
           environment:
@@ -76,8 +78,8 @@ jobs:
             AUTH0_CLIENT_ID: auth0ClientId
       - run:
           command: |
-            wait-port http://localhost:3000
-            wait-port http://localhost:4466
+            wait-port localhost:3000
+            wait-port localhost:4466
             npm run test
           working_directory: e2e
           environment:
