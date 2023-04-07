@@ -85,7 +85,6 @@ const uniqueRandom = (obj, ...compareNumbers) => {
 }
 
 const randomQuestion = uniqueRandom(questionsText)
-const randomEditQuestion = uniqueRandom(questionsText, randomQuestion)
 
 const randomAnswer = uniqueRandom(answersText)
 const randomEditAnswer = uniqueRandom(answersText, randomAnswer)
