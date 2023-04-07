@@ -66,6 +66,7 @@ jobs:
       - run:
           command: wait-on http://localhost:4466 && npm run new_service default/default
           working_directory: server
+          background: true
           environment:
             PRISMA_URL: http://localhost:4466
             PRISMA_API_SECRET: secret-42
