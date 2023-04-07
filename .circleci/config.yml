@@ -53,7 +53,7 @@ jobs:
           command: npm install -g wait-on
       - run:
           command: npm start
-          working_directory: client
+          working_directory: client²
           background: true
       - run:
           command: npm start
@@ -64,12 +64,7 @@ jobs:
           working_directory: server
           background: true
       - run:
-          command: |
-            curl -o wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
-            chmod +x wait-for-it.sh
-            bash ./wait-for-it.sh -t 60 localhost:4466
-      - run:
-          command: npm run new_service default/default
+          command: wait-on http://localhost:4466 && npm run new_service default/default
           working_directory: server
           environment:
             PRISMA_URL: http://localhost:4466
@@ -77,9 +72,8 @@ jobs:
             PRISMA_MANAGEMENT_API_SECRET: my-secret-42
             AUTH0_DOMAIN: auth0Domain
             AUTH0_CLIENT_ID: auth0ClientId
-      - run: wait-on http://localhost:3000
       - run:
-          command: npm run test
+          command: wait-on http://localhost:3000 && npm run test
           working_directory: e2e
           when: on_success
           environment:
