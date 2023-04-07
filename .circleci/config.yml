@@ -53,7 +53,7 @@ jobs:
           command: npm install -g wait-on
       - run:
           command: npm start
-          working_directory: client²
+          working_directory: client
           background: true
       - run:
           command: npm start
