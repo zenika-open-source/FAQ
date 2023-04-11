@@ -23,6 +23,29 @@ const createUserMutation = async apiContext => {
   return { userId }
 }
 
+const createConfig = `mutation CreateConfig{
+  createConfiguration(
+    data: {
+      name: "default"
+      algoliaAppId: "M0NJ0PGAH1"
+      algoliaApiKey: "512b7a54729ce1a9a33565346332d26d"
+      auth0Domain: "zenika.eu.auth0.com"
+      auth0ClientId: "wq8LU1f5iXQ4HWL0F6Z07QDcSMgWPd1p"
+      tagCategories: {create: [{name: "agencies", order: 1, labels: {create: [{ name: "paris", order: 1 }, { name: "nantes", order: 2 }]}}, {name: "theme", order: 2, labels: {create: [{name: "tutorial", order: 1}, {name: "meta", order: 2}]}}]}
+    }
+  ) {
+    id
+  }
+}`
+
+const createConfigMutation = async apiContext => {
+  await apiContext.post('/', {
+    data: {
+      query: createConfig
+    }
+  })
+}
+
 const getConfig = `query GetConfig{
   configuration(where: {name: "default"}) {
     algoliaAppId
@@ -48,6 +71,20 @@ const getConfigQuery = async apiContext => {
   const results = await jsonRes.data
   console.log(await results)
   return { results }
+}
+
+const deleteConfig = `mutation DeleteConfig{
+  deleteConfiguration(where: {name: "default"} ) {
+    id
+  }
+}`
+
+const deleteConfigMutation = async apiContext => {
+  await apiContext.post('/', {
+    data: {
+      query: deleteConfig
+    }
+  })
 }
 
 const tagsId = `query GetAllTags{
@@ -222,6 +259,8 @@ test.beforeAll(async ({ playwright }) => {
     }
   })
   await refreshConfiguration(prisma)
+  console.log(prisma)
+  // await createConfigMutation(apiContext)
   algoliaSettings
   user = await createUserMutation(apiContext)
   await getConfigQuery(apiContext)
@@ -443,5 +482,6 @@ test.afterEach(async () => {
 })
 
 test.afterAll(async () => {
+  // await deleteConfigMutation(apiContext)
   await apiContext.dispose()
 })
