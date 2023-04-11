@@ -90,6 +90,8 @@ jobs:
             PRISMA_MANAGEMENT_API_SECRET: my-secret-42
             AUTH0_DOMAIN: auth0Domain
             AUTH0_CLIENT_ID: auth0ClientId
+            ALGOLIA_APP_ID: M0NJ0PGAH1
+            ALGOLIA_API_KEY_ALL: 512b7a54729ce1a9a33565346332d26d
       - run:
           command: |
             wait-on http://localhost:3000
