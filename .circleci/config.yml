@@ -62,15 +62,13 @@ jobs:
       - run:
           command: |
             npm run local_containers
+            wait-on http://localhost:4466
           working_directory: server
           background: true
           environment:
             PRISMA_MANAGEMENT_API_SECRET: my-secret-42
       - run:
           command: |
-            echo "Waiting for server to start"
-            wait-on tcp:localhost:4466
-            echo "Server is ready"
             npm run new_service default/default
           working_directory: server
           environment:
@@ -81,8 +79,8 @@ jobs:
             AUTH0_CLIENT_ID: auth0ClientId
       - run:
           command: |
-            wait-on tcp:localhost:3000
-            wait-on tcp:localhost:4466
+            wait-on http://localhost:3000
+            wait-on http://localhost:4466
             npm run test
           working_directory: e2e
           environment:
