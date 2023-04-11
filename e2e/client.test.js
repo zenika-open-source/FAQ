@@ -169,7 +169,7 @@ let tags
 let user
 
 test.beforeAll(async ({ playwright }) => {
-  console.log('test')
+  console.log('first')
   const PATH = path.resolve(process.cwd(), '..')
   const execSync = require('child_process').execSync
   const token = execSync('npm run --silent token default/default', {
@@ -177,6 +177,7 @@ test.beforeAll(async ({ playwright }) => {
   })
     .toString()
     .trim()
+  console.log('second')
   apiContext = await playwright.request.newContext({
     baseURL: 'http://localhost:4466',
     extraHTTPHeaders: {
