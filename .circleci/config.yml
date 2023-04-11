@@ -96,6 +96,7 @@ jobs:
           command: |
             wait-on http://localhost:3000
             wait-on http://localhost:4466
+            npx playwright install chrome
             npm run test
           working_directory: e2e
           environment:
@@ -104,6 +105,8 @@ jobs:
             PRISMA_MANAGEMENT_API_SECRET: my-secret-42
             SERVICE_NAME: default
             SERVICE_STAGE: default
+            ALGOLIA_APP_ID: M0NJ0PGAH1
+            ALGOLIA_API_KEY_ALL: 512b7a54729ce1a9a33565346332d26d
 
   client-build:
     executor: app-builder
