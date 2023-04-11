@@ -64,7 +64,7 @@ jobs:
           environment:
             PRISMA_MANAGEMENT_API_SECRET: my-secret-42
       - run:
-          command: sleep 30
+          command: sleep 50
       - run:
           command: |
             npm run new_service default/default
