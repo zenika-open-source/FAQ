@@ -67,7 +67,9 @@ jobs:
             PRISMA_MANAGEMENT_API_SECRET: my-secret-42
       - run:
           command: |
+            echo "Waiting for server to start"
             wait-on tcp:localhost:4466
+            echo "Server is ready"
             npm run new_service default/default
           working_directory: server
           environment:
