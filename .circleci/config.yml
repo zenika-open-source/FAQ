@@ -62,7 +62,6 @@ jobs:
       - run:
           command: |
             npm run local_containers
-            echo "Docker ready"
           working_directory: server
           background: true
           environment:
