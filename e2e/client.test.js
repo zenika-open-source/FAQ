@@ -183,7 +183,6 @@ test.beforeAll(async ({ playwright }) => {
       'faq-tenant': 'default/default'
     }
   })
-  console.log('first')
   prisma = multiTenant.current({
     headers: {
       'faq-tenant': 'default/default'
@@ -191,9 +190,10 @@ test.beforeAll(async ({ playwright }) => {
   })
   refreshConfiguration(prisma)
   algoliaSettings
-  console.log('second')
+  console.log('first')
   user = await createUserMutation(apiContext)
   tags = await tagsIdQuery(apiContext)
+  console.log('second')
 })
 
 test.beforeEach(async ({ page }) => {
