@@ -38,6 +38,7 @@ const tagsIdQuery = async apiContext => {
   })
   const jsonRes = await res.json()
   const results = await jsonRes.data.tagLabels
+  console.log(await results)
   const randomNumber = Math.floor(Math.random() * results.length)
   let randomAddNumber = Math.floor(Math.random() * results.length)
   do {
