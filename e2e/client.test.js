@@ -169,6 +169,7 @@ let tags
 let user
 
 test.beforeAll(async ({ playwright }) => {
+  console.log('test')
   const PATH = path.resolve(process.cwd(), '..')
   const execSync = require('child_process').execSync
   const token = execSync('npm run --silent token default/default', {
