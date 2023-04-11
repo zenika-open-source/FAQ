@@ -190,8 +190,8 @@ test.beforeAll(async ({ playwright }) => {
   })
   refreshConfiguration(prisma)
   algoliaSettings
-  console.log('first')
   user = await createUserMutation(apiContext)
+  console.log('first')
   tags = await tagsIdQuery(apiContext)
   console.log('second')
 })
