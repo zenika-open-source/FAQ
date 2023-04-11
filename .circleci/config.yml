@@ -60,7 +60,9 @@ jobs:
           working_directory: server
           background: true
       - run:
-          command: npm run local_containers
+          command: |
+            npm run local_containers
+            echo "Docker ready"
           working_directory: server
           background: true
           environment:
@@ -68,7 +70,7 @@ jobs:
       - run:
           command: |
             echo "Waiting for server to start"
-            wait-on tcp:localhost:4466 -t 60000
+            wait-on tcp:localhost:4466
             echo "Server is ready"
             npm run new_service default/default
           working_directory: server
