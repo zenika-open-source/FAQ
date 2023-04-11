@@ -50,6 +50,8 @@ jobs:
       - node/install-packages:
           app-dir: client
       - run:
+          command: npm install -g wait-on
+      - run:
           command: npm start
           working_directory: client
           background: true
@@ -64,9 +66,8 @@ jobs:
           environment:
             PRISMA_MANAGEMENT_API_SECRET: my-secret-42
       - run:
-          command: sleep 50
-      - run:
           command: |
+            wait-on tcp:localhost:4466
             npm run new_service default/default
           working_directory: server
           environment:
@@ -77,6 +78,8 @@ jobs:
             AUTH0_CLIENT_ID: auth0ClientId
       - run:
           command: |
+            wait-on tcp:localhost:3000
+            wait-on tcp:localhost:4466
             npm run test
           working_directory: e2e
           environment:
