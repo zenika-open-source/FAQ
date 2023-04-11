@@ -23,44 +23,6 @@ const createUserMutation = async apiContext => {
   return { userId }
 }
 
-const updateConfig = `mutation UpdateConfig{
-  updateConfiguration(
-    where: {name: "default"}
-    data: {
-      tagCategories: {
-        create: [
-          {
-            name: "agencies", order: 1, labels: {
-              create: [
-                { name: "paris", order: 1 },
-                { name: "nantes", order: 2 }
-              ]
-            }
-          },
-          {
-            name: "theme", order: 2, labels: {
-              create: [
-                {name: "tutorial", order: 1},
-                {name: "meta", order: 2}
-              ]
-            }
-          }
-        ]
-      }
-    }
-  ) {
-    id
-  }
-}`
-
-const updateConfigMutation = async apiContext => {
-  await apiContext.post('/', {
-    data: {
-      query: updateConfig
-    }
-  })
-}
-
 const tagsId = `query GetAllTags{
   tagLabels {
     id
@@ -227,10 +189,11 @@ test.beforeAll(async ({ playwright }) => {
     }
   })
   refreshConfiguration(prisma)
-  updateConfigMutation(apiContext)
   algoliaSettings
   user = await createUserMutation(apiContext)
+  console.log('first')
   tags = await tagsIdQuery(apiContext)
+  console.log('second')
 })
 
 test.beforeEach(async ({ page }) => {
