@@ -68,7 +68,7 @@ jobs:
       - run:
           command: |
             echo "Waiting for server to start"
-            wait-on tcp:localhost:4466
+            wait-on tcp:localhost:4466 -t 60000
             echo "Server is ready"
             npm run new_service default/default
           working_directory: server
