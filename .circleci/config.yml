@@ -10,6 +10,26 @@ executors:
   app-builder:
     docker:
       - image: cimg/node:16.15
+  e2e-runner:
+    docker:
+      - image: cimg/node:16.15
+      - image: postgres
+        environment:
+          POSTGRES_USER: prisma
+          POSTGRES_PASSWORD: prisma
+      - image: prismagraphql/prisma:1.34.10
+        environment:
+          PRISMA_CONFIG: |
+            port: 4466
+            managementApiSecret: my-secret-42
+            databases:
+              default:
+                connector: postgres
+                host: localhost
+                port: 5432
+                user: prisma
+                password: prisma
+                migrations: true
 
 jobs:
   server-lint:
@@ -39,7 +59,7 @@ jobs:
           working_directory: client
 
   test:
-    executor: app-builder
+    executor: e2e-runner
     steps:
       - checkout
       - setup_remote_docker
@@ -59,13 +79,6 @@ jobs:
           command: npm start
           working_directory: server
           background: true
-      - run:
-          command: |
-            npm run local_containers
-          working_directory: server
-          background: true
-          environment:
-            PRISMA_MANAGEMENT_API_SECRET: my-secret-42
       - run:
           command: |
             wait-on http://localhost:4466
