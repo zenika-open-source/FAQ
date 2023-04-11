@@ -23,6 +23,32 @@ const createUserMutation = async apiContext => {
   return { userId }
 }
 
+const getConfig = `query GetConfig{
+  configuration(where: {name: "default"}) {
+    algoliaAppId
+    algoliaApiKey
+    name
+    auth0Domain
+    auth0ClientId
+    tagCategories {
+      labels {
+        name
+      }
+    }
+  }
+}`
+
+const getConfigQuery = async apiContext => {
+  const res = await apiContext.post('/', {
+    data: {
+      query: getConfig
+    }
+  })
+  const jsonRes = await res.json()
+  const results = await jsonRes.data
+  return { results }
+}
+
 const tagsId = `query GetAllTags{
   tagLabels {
     id
@@ -37,8 +63,13 @@ const tagsIdQuery = async apiContext => {
     }
   })
   const jsonRes = await res.json()
-  const results = await jsonRes.data.tagLabels
-  console.log(await results)
+  const rawResults = await jsonRes.data.tagLabels
+  const results = await rawResults.reduce((accumulator, current) => {
+    if (!accumulator.find(item => item.name === current.name)) {
+      accumulator.push(current)
+    }
+    return accumulator
+  }, [])
   const randomNumber = Math.floor(Math.random() * results.length)
   let randomAddNumber = Math.floor(Math.random() * results.length)
   do {
@@ -189,12 +220,11 @@ test.beforeAll(async ({ playwright }) => {
       'faq-tenant': 'default/default'
     }
   })
-  refreshConfiguration(prisma)
+  await refreshConfiguration(prisma)
   algoliaSettings
   user = await createUserMutation(apiContext)
-  console.log('first')
+  await getConfigQuery(apiContext)
   tags = await tagsIdQuery(apiContext)
-  console.log('second')
 })
 
 test.beforeEach(async ({ page }) => {
