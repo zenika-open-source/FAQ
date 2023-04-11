@@ -46,6 +46,7 @@ const getConfigQuery = async apiContext => {
   })
   const jsonRes = await res.json()
   const results = await jsonRes.data
+  console.log(await results)
   return { results }
 }
 
