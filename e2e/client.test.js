@@ -169,7 +169,6 @@ let tags
 let user
 
 test.beforeAll(async ({ playwright }) => {
-  console.log('first')
   const PATH = path.resolve(process.cwd(), '..')
   const execSync = require('child_process').execSync
   const token = execSync('npm run --silent token default/default', {
@@ -177,7 +176,6 @@ test.beforeAll(async ({ playwright }) => {
   })
     .toString()
     .trim()
-  console.log('second')
   apiContext = await playwright.request.newContext({
     baseURL: 'http://localhost:4466',
     extraHTTPHeaders: {
@@ -185,6 +183,7 @@ test.beforeAll(async ({ playwright }) => {
       'faq-tenant': 'default/default'
     }
   })
+  console.log('first')
   prisma = multiTenant.current({
     headers: {
       'faq-tenant': 'default/default'
@@ -192,6 +191,7 @@ test.beforeAll(async ({ playwright }) => {
   })
   refreshConfiguration(prisma)
   algoliaSettings
+  console.log('second')
   user = await createUserMutation(apiContext)
   tags = await tagsIdQuery(apiContext)
 })
