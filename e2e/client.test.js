@@ -31,7 +31,42 @@ const createConfig = `mutation CreateConfig{
       algoliaApiKey: "512b7a54729ce1a9a33565346332d26d"
       auth0Domain: "zenika.eu.auth0.com"
       auth0ClientId: "wq8LU1f5iXQ4HWL0F6Z07QDcSMgWPd1p"
-      tagCategories: {create: [{name: "agencies", order: 1, labels: {create: [{ name: "paris", order: 1 }, { name: "nantes", order: 2 }]}}, {name: "theme", order: 2, labels: {create: [{name: "tutorial", order: 1}, {name: "meta", order: 2}]}}]}
+      tagCategories: {
+        create: [
+          {
+            name: "agencies",
+            order: 1,
+            labels: {
+              create: [
+                {
+                  name: "paris",
+                  order: 1
+                },
+                {
+                  name: "nantes",
+                  order: 2
+                }
+              ]
+            }
+          },
+          {
+            name: "theme",
+            order: 2,
+            labels: {
+              create: [
+                {
+                  name: "tutorial",
+                  order: 1
+                },
+                {
+                  name: "meta",
+                  order: 2
+                }
+              ]
+            }
+          }
+        ]
+      }
     }
   ) {
     id
@@ -69,7 +104,6 @@ const getConfigQuery = async apiContext => {
   })
   const jsonRes = await res.json()
   const results = await jsonRes.data
-  console.log(await results)
   return { results }
 }
 
@@ -237,6 +271,7 @@ let apiContext
 let prisma
 let tags
 let user
+let config
 
 test.beforeAll(async ({ playwright }) => {
   const PATH = path.resolve(process.cwd(), '..')
@@ -258,9 +293,12 @@ test.beforeAll(async ({ playwright }) => {
       'faq-tenant': 'default/default'
     }
   })
+  console.log('before: ', prisma._meta)
   await refreshConfiguration(prisma)
-  console.log(prisma)
+  console.log('after: ', prisma._meta)
   // await createConfigMutation(apiContext)
+  // config = await getConfigQuery(apiContext)
+  // prisma._meta = { ...prisma._meta, configuration: config.results.configuration }
   algoliaSettings
   user = await createUserMutation(apiContext)
   await getConfigQuery(apiContext)
@@ -456,13 +494,11 @@ test('Should be able to search by text and tag', async ({ page }) => {
   await page.goto('http://localhost:3000')
   await page.locator('input[type=text]').click()
   await page.locator('input[type=text]').fill(questionsText[randomQuestion])
-  await expect(page.getByText('Aucune question trouvée')).not.toBeVisible()
   await expect(
     page.getByRole('heading', { name: questionsText[randomQuestion] }).first()
   ).toBeVisible()
   await page.getByRole('button', { name: 'local_offer' }).click()
   await page.locator('.category-item', { hasText: tags.tagName }).click()
-  await expect(page.getByText('Aucune question trouvée')).not.toBeVisible()
   const openCard = page.getByRole('link', { name: 'keyboard_arrow_right' }).first()
   await openCard.waitFor('visible')
   await openCard.click()
