@@ -2,7 +2,7 @@ const jwt = require('express-jwt')
 const jwksRsa = require('jwks-rsa')
 const { UnauthorizedError } = jwt
 
-const checkJwt = (req, res, next, prisma) => {
+const checkJwt = async (req, res, next, prisma) => {
   const {
     service: { name, stage },
     configuration: conf
@@ -79,14 +79,54 @@ const checkJwt = (req, res, next, prisma) => {
     }
 
     getUser = next
-  } else if (process.env.SKIP_AUTH === true) {
-    req.user = {
-      id: process.env.USER_ID,
-      email: process.env.USER_EMAIL,
-      token: {
-        email: process.env.USER_EMAIL
+  } else if (process.env.SKIP_AUTH === 'true') {
+    const checkUserExist = async req => {
+      let noAuthUser = await userQuery({ auth0Id: process.env.AUTH0_CLIENT_ID })
+      if (!noAuthUser || noAuthUser.email !== 'faq-user-no-auth@zenika.com') {
+        try {
+          noAuthUser = await prisma.mutation.createUser(
+            {
+              data: {
+                auth0Id: process.env.AUTH0_CLIENT_ID,
+                key: 'enableSkipAuth',
+                name: 'enableSkipAuth',
+                email: 'faq-user-no-auth@zenika.com'
+              }
+            },
+            `
+            {
+              id
+              email
+            }
+            `
+          )
+          if (noAuthUser.email === 'faq-user-no-auth@zenika.com') {
+            req.user = {
+              id: noAuthUser.id,
+              email: noAuthUser.email,
+              token: {
+                email: noAuthUser.email
+              }
+            }
+            return req
+          } else {
+            console.error('Failed to create user')
+          }
+        } catch (error) {
+          console.error(error)
+        }
+      } else {
+        req.user = {
+          id: noAuthUser.id,
+          email: noAuthUser.email,
+          token: {
+            email: noAuthUser.email
+          }
+        }
       }
+      return req
     }
+    req = await checkUserExist(req)
     return next()
   } else {
     return next(
