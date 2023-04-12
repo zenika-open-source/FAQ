@@ -57,7 +57,18 @@ jobs:
       - run:
           command: npm run prettier:check
           working_directory: client
-
+  e2e-lint:
+    executor: app-builder
+    steps:
+      - checkout
+      - node/install-packages:
+          app-dir: e2e
+      - run:
+          command: npm run lint
+          working_directory: e2e
+      - run:
+          command: npm run prettier:check
+          working_directory: e2e
   test:
     executor: e2e-runner
     steps:

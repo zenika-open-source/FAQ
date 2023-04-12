@@ -2,7 +2,12 @@
   "scripts": {
     "test": "dotenv -e ../server/.env.local -- npx playwright test",
     "test:headed": "dotenv -e ../server/.env.local -- npx playwright test --headed",
-    "test:trace": "dotenv -e ../server/.env.local -- npx playwright test --trace on"
+    "test:trace": "dotenv -e ../server/.env.local -- npx playwright test --trace on",
+    "lint": "eslint .",
+    "lint:fix": "npm run lint -- --fix",
+    "prettier": "prettier ./*.js",
+    "prettier:write": "npm run prettier -- --write",
+    "prettier:check": "npm run prettier -- --check"
   },
   "devDependencies": {
     "@playwright/test": "^1.31.2",

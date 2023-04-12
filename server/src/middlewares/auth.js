@@ -79,7 +79,7 @@ const checkJwt = (req, res, next, prisma) => {
     }
 
     getUser = next
-  } else if (process.env.AUTH_SKIP === 'skipAuth') {
+  } else if (process.env.SKIP_AUTH === true) {
     req.user = {
       id: process.env.USER_ID,
       email: process.env.USER_EMAIL,
