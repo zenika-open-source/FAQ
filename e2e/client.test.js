@@ -354,7 +354,6 @@ test.beforeEach(async ({ page }) => {
 
 test('Shoud be able to create a question', async ({ page }) => {
   await page.goto('http://localhost:3000')
-  await page.pause()
   await page
     .locator('button', { hasText: 'Nouvelle question' })
     .first()
@@ -492,6 +491,7 @@ test('Should be able to search by text and tag', async ({ page }) => {
   const zNode = await prisma.mutation.createZNode(createZNodeParams(tags.tagId, user))
   await algolia.addNode({ prisma }, zNode.id)
   await page.goto('http://localhost:3000')
+  await page.waitForTimeout(1000)
   await page.locator('input[type=text]').click()
   await page.locator('input[type=text]').fill(questionsText[randomQuestion])
   await expect(

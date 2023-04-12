@@ -18,6 +18,7 @@
         "named": "never",
         "asyncArrow": "always"
       }
-    ]
+    ],
+    "playwright/no-wait-for-timeout": "off"
   }
 }
