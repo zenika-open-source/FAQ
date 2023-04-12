@@ -20,7 +20,7 @@ const createUserMutation = async apiContext => {
   const jsonRes = await res.json()
   const results = await jsonRes.data.createUser
   const { id: userId } = await results
-  return { userId }
+  return userId
 }
 
 const createConfig = `mutation CreateConfig{
@@ -83,6 +83,7 @@ const createConfigMutation = async apiContext => {
 
 const getConfig = `query GetConfig{
   configuration(where: {name: "default"}) {
+    id
     algoliaAppId
     algoliaApiKey
     name
@@ -104,7 +105,7 @@ const getConfigQuery = async apiContext => {
   })
   const jsonRes = await res.json()
   const results = await jsonRes.data
-  return { results }
+  return results
 }
 
 const deleteConfig = `mutation DeleteConfig{
@@ -297,11 +298,11 @@ test.beforeAll(async ({ playwright }) => {
   await refreshConfiguration(prisma)
   console.log('after: ', prisma._meta)
   // await createConfigMutation(apiContext)
-  // config = await getConfigQuery(apiContext)
-  // prisma._meta = { ...prisma._meta, configuration: config.results.configuration }
+  config = await getConfigQuery(apiContext)
+  console.log('config: ', config)
+  // prisma._meta = { ...prisma._meta, configuration: config.configuration }
   algoliaSettings
   user = await createUserMutation(apiContext)
-  await getConfigQuery(apiContext)
   tags = await tagsIdQuery(apiContext)
 })
 
@@ -339,7 +340,7 @@ test.beforeEach(async ({ page }) => {
   await page.goto('http://localhost:3000/auth/login')
   await page.evaluate(user => {
     const userData = {
-      id: user.userId,
+      id: user,
       admin: false,
       name: 'playwrightTest',
       email: 'playwright.test@zenika.com',
@@ -353,6 +354,7 @@ test.beforeEach(async ({ page }) => {
 
 test('Shoud be able to create a question', async ({ page }) => {
   await page.goto('http://localhost:3000')
+  await page.pause()
   await page
     .locator('button', { hasText: 'Nouvelle question' })
     .first()
@@ -385,7 +387,7 @@ test('Should be able to create a question and answer it', async ({ page }) => {
 })
 
 test('Should return a search result', async ({ page }) => {
-  const zNode = await prisma.mutation.createZNode(createZNodeParams(tags.tagId, user.userId))
+  const zNode = await prisma.mutation.createZNode(createZNodeParams(tags.tagId, user))
   await algolia.addNode({ prisma }, zNode.id)
   await page.goto('http://localhost:3000')
   await page.locator('input[type=text]').click()
@@ -407,7 +409,7 @@ test('Should not return results', async ({ page }) => {
 })
 
 test('Should be able to signal a question', async ({ page }) => {
-  const zNode = await prisma.mutation.createZNode(createZNodeParams(tags.tagId, user.userId))
+  const zNode = await prisma.mutation.createZNode(createZNodeParams(tags.tagId, user))
   await algolia.addNode({ prisma }, zNode.id)
   await page.goto('http://localhost:3000')
   await page.waitForTimeout(1000)
@@ -425,7 +427,7 @@ test('Should be able to signal a question', async ({ page }) => {
 })
 
 test('Should be able to add a tag to a question', async ({ page }) => {
-  const zNode = await prisma.mutation.createZNode(createZNodeParams(tags.tagId, user.userId))
+  const zNode = await prisma.mutation.createZNode(createZNodeParams(tags.tagId, user))
   await algolia.addNode({ prisma }, zNode.id)
   await page.goto('http://localhost:3000')
   await page.locator('input[type=text]').click()
@@ -449,7 +451,7 @@ test('Should be able to add a tag to a question', async ({ page }) => {
 })
 
 test('Should be able to modify an answer for an already answered question', async ({ page }) => {
-  const zNode = await prisma.mutation.createZNode(createZNodeParams(tags.tagId, user.userId))
+  const zNode = await prisma.mutation.createZNode(createZNodeParams(tags.tagId, user))
   await algolia.addNode({ prisma }, zNode.id)
   await page.goto('http://localhost:3000')
   await page.locator('input[type=text]').click()
@@ -472,9 +474,7 @@ test('Should be able to modify an answer for an already answered question', asyn
 })
 
 test('Should be able to answer a question that has no answer', async ({ page }) => {
-  const zNode = await prisma.mutation.createZNode(
-    createZNodeWithoutAnswerParams(tags.tagId, user.userId)
-  )
+  const zNode = await prisma.mutation.createZNode(createZNodeWithoutAnswerParams(tags.tagId, user))
   await algolia.addNode({ prisma }, zNode.id)
   await page.goto('http://localhost:3000')
   await expect(page.getByText('Pas encore de réponse...')).toBeVisible()
@@ -489,7 +489,7 @@ test('Should be able to answer a question that has no answer', async ({ page }) 
 })
 
 test('Should be able to search by text and tag', async ({ page }) => {
-  const zNode = await prisma.mutation.createZNode(createZNodeParams(tags.tagId, user.userId))
+  const zNode = await prisma.mutation.createZNode(createZNodeParams(tags.tagId, user))
   await algolia.addNode({ prisma }, zNode.id)
   await page.goto('http://localhost:3000')
   await page.locator('input[type=text]').click()

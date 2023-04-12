@@ -12,7 +12,7 @@ executors:
       - image: cimg/node:16.15
   e2e-runner:
     docker:
-      - image: cimg/node:16.15
+      - image: mcr.microsoft.com/playwright:v1.32.0-focal
       - image: postgres
         environment:
           POSTGRES_USER: prisma
