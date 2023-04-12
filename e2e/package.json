@@ -3,7 +3,7 @@
     "test": "dotenv -e ../server/.env.local -- npx playwright test",
     "test:headed": "dotenv -e ../server/.env.local -- npx playwright test --headed",
     "test:trace": "dotenv -e ../server/.env.local -- npx playwright test --trace on",
-    "lint": "eslint .",
+    "lint": "eslint ./*.test.js",
     "lint:fix": "npm run lint -- --fix",
     "prettier": "prettier ./*.js",
     "prettier:write": "npm run prettier -- --write",
@@ -11,7 +11,6 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.31.2",
-    "babel-eslint": "^10.1.0",
     "dotenv": "^16.0.3",
     "dotenv-cli": "^7.1.0",
     "eslint": "^8.36.0",
@@ -20,7 +19,6 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-playwright": "^0.12.0",
     "eslint-plugin-promise": "^6.1.1",
-    "eslint-plugin-standard": "^5.0.0",
     "husky": "^8.0.3",
     "prettier": "^2.8.6",
     "pretty-quick": "^3.1.3"

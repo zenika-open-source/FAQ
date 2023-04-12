@@ -1,6 +1,5 @@
 {
   "root": true,
-  "parser": "babel-eslint",
   "env": {
     "node": true
   },
