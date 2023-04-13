@@ -295,6 +295,10 @@ test.beforeAll(async ({ playwright }) => {
     }
   })
   // console.log('before: ', prisma._meta)
+  console.log(
+    'default conf: ',
+    await prisma.query.configuration({ where: { name: 'default' } }, `{id}`)
+  )
   await refreshConfiguration(prisma)
   // console.log('after: ', prisma._meta)
   // await createConfigMutation(apiContext)
