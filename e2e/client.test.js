@@ -1,5 +1,4 @@
 import { expect, test } from '@playwright/test'
-import { refreshConfiguration } from '../server/src/middlewares/configuration'
 const path = require('path')
 const multiTenant = require('../server/src/multiTenant')
 const algolia = require('../server/src/integrations/algolia')
@@ -23,103 +22,61 @@ const createUserMutation = async apiContext => {
   return userId
 }
 
-const createConfig = `mutation CreateConfig{
-  createConfiguration(
-    data: {
-      name: "default"
-      algoliaAppId: "M0NJ0PGAH1"
-      algoliaApiKey: "512b7a54729ce1a9a33565346332d26d"
-      auth0Domain: "zenika.eu.auth0.com"
-      auth0ClientId: "wq8LU1f5iXQ4HWL0F6Z07QDcSMgWPd1p"
-      tagCategories: {
-        create: [
-          {
-            name: "agencies",
-            order: 1,
-            labels: {
-              create: [
-                {
-                  name: "paris",
-                  order: 1
-                },
-                {
-                  name: "nantes",
-                  order: 2
-                }
-              ]
-            }
-          },
-          {
-            name: "theme",
-            order: 2,
-            labels: {
-              create: [
-                {
-                  name: "tutorial",
-                  order: 1
-                },
-                {
-                  name: "meta",
-                  order: 2
-                }
-              ]
-            }
-          }
-        ]
-      }
+const upsertConfig = `mutation UpsertConfig{
+  upsertConfiguration(
+    where: {name: "default"}
+    create: {
+      name: "${process.env.SERVICE_NAME}"
+      algoliaAppId: "${process.env.ALGOLIA_APP_ID}"
+      algoliaApiKey: "${process.env.ALGOLIA_API_KEY_ALL}"
+      auth0Domain: "${process.env.AUTH0_DOMAIN}"
+      auth0ClientId: "${process.env.AUTH0_CLIENT_ID}"
+      tagCategories: {create: [{name: "agencies", order: 1, labels: {create: [{ name: "paris", order: 1 }, { name: "nantes", order: 2 }]}}, {name: "theme", order: 2, labels: {create: [{name: "tutorial", order: 1}, {name: "meta", order: 2}]}}]}
+    }
+    update: {
+      name: "${process.env.SERVICE_NAME}"
+      algoliaAppId: "${process.env.ALGOLIA_APP_ID}"
+      algoliaApiKey: "${process.env.ALGOLIA_API_KEY_ALL}"
+      auth0Domain: "${process.env.AUTH0_DOMAIN}"
+      auth0ClientId: "${process.env.AUTH0_CLIENT_ID}"
+      tagCategories: {create: [{name: "agencies", order: 1, labels: {create: [{ name: "paris", order: 1 }, { name: "nantes", order: 2 }]}}, {name: "theme", order: 2, labels: {create: [{name: "tutorial", order: 1}, {name: "meta", order: 2}]}}]}
     }
   ) {
     id
-  }
-}`
-
-const createConfigMutation = async apiContext => {
-  await apiContext.post('/', {
-    data: {
-      query: createConfig
-    }
-  })
-}
-
-const getConfig = `query GetConfig{
-  configuration(where: {name: "default"}) {
-    id
-    algoliaAppId
-    algoliaApiKey
-    name
-    auth0Domain
-    auth0ClientId
-    tagCategories {
-      labels {
+      name
+      title
+      auth0Domain
+      auth0ClientId
+      authorizedDomains
+      algoliaAppId
+      algoliaApiKey
+      algoliaSynonyms
+      mailgunDomain
+      mailgunApiKey
+      slackChannelHook
+      tagCategories {
+        order
         name
+        labels {
+          id
+          order
+          name
+        }
       }
-    }
+      workplaceSharing
+      bugReporting
   }
 }`
 
-const getConfigQuery = async apiContext => {
+const upsertConfigMutation = async apiContext => {
   const res = await apiContext.post('/', {
     data: {
-      query: getConfig
+      query: upsertConfig
     }
   })
   const jsonRes = await res.json()
   const results = await jsonRes.data
   return results
-}
-
-const deleteConfig = `mutation DeleteConfig{
-  deleteConfiguration(where: {name: "default"} ) {
-    id
-  }
-}`
-
-const deleteConfigMutation = async apiContext => {
-  await apiContext.post('/', {
-    data: {
-      query: deleteConfig
-    }
-  })
 }
 
 const tagsId = `query GetAllTags{
@@ -294,16 +251,9 @@ test.beforeAll(async ({ playwright }) => {
       'faq-tenant': 'default/default'
     }
   })
-  // console.log('before: ', prisma._meta)
-  console.log(
-    'default conf: ',
-    await prisma.query.configuration({ where: { name: 'default' } }, `{id}`)
-  )
-  await refreshConfiguration(prisma)
-  // console.log('after: ', prisma._meta)
-  // await createConfigMutation(apiContext)
-  // config = await getConfigQuery(apiContext)
-  // prisma._meta = { ...prisma._meta, configuration: config.configuration }
+  config = await upsertConfigMutation(apiContext)
+  prisma._meta = { ...prisma._meta, configuration: config.upsertConfiguration }
+  console.log('after: ', prisma._meta)
   algoliaSettings
   user = await createUserMutation(apiContext)
   tags = await tagsIdQuery(apiContext)
