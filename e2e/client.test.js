@@ -251,11 +251,14 @@ test.beforeAll(async ({ playwright }) => {
       'faq-tenant': 'default/default'
     }
   })
+  console.log('first')
   config = await upsertConfigMutation(apiContext)
   prisma._meta = { ...prisma._meta, configuration: config.upsertConfiguration }
   algoliaSettings
+  console.log('prisma: ', prisma._meta)
   user = await createUserMutation(apiContext)
   tags = await tagsIdQuery(apiContext)
+  console.log('second')
 })
 
 test.beforeEach(async ({ page }) => {
