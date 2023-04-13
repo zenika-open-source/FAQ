@@ -327,7 +327,6 @@ test('Shoud be able to create a question', async ({ page }) => {
 })
 
 test('Should be able to create a question and answer it', async ({ page }) => {
-  console.log('test2')
   await page.goto('http://localhost:3000')
   await page
     .locator('button', { hasText: 'Nouvelle question' })
