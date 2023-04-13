@@ -298,8 +298,7 @@ test.beforeAll(async ({ playwright }) => {
   await refreshConfiguration(prisma)
   console.log('after: ', prisma._meta)
   // await createConfigMutation(apiContext)
-  config = await getConfigQuery(apiContext)
-  console.log('config: ', config)
+  // config = await getConfigQuery(apiContext)
   // prisma._meta = { ...prisma._meta, configuration: config.configuration }
   algoliaSettings
   user = await createUserMutation(apiContext)
