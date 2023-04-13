@@ -12,7 +12,7 @@ executors:
       - image: cimg/node:16.15
   e2e-runner:
     docker:
-      - image: cimg/node:16.15
+      - image: mcr.microsoft.com/playwright:v1.30.0-focal
       - image: postgres
         environment:
           POSTGRES_USER: prisma
@@ -107,7 +107,6 @@ jobs:
           command: |
             wait-on http://localhost:3000
             wait-on http://localhost:4466
-            npx playwright install --with-deps chromium
             npm run test
           working_directory: e2e
           environment:
