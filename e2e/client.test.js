@@ -251,14 +251,11 @@ test.beforeAll(async ({ playwright }) => {
       'faq-tenant': 'default/default'
     }
   })
-  console.log('first')
   config = await upsertConfigMutation(apiContext)
   prisma._meta = { ...prisma._meta, configuration: config.upsertConfiguration }
   algoliaSettings
-  console.log('prisma: ', prisma._meta)
   user = await createUserMutation(apiContext)
   tags = await tagsIdQuery(apiContext)
-  console.log('second')
 })
 
 test.beforeEach(async ({ page }) => {
@@ -308,6 +305,7 @@ test.beforeEach(async ({ page }) => {
 })
 
 test('Shoud be able to create a question', async ({ page }) => {
+  console.log('test1')
   await page.goto('http://localhost:3000')
   await page
     .locator('button', { hasText: 'Nouvelle question' })
@@ -322,6 +320,7 @@ test('Shoud be able to create a question', async ({ page }) => {
 })
 
 test('Should be able to create a question and answer it', async ({ page }) => {
+  console.log('test2')
   await page.goto('http://localhost:3000')
   await page
     .locator('button', { hasText: 'Nouvelle question' })
