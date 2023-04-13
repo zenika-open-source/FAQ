@@ -1,8 +1,29 @@
 import { defineConfig } from '@playwright/test'
 export default defineConfig({
-  // retries: 2,
+  reporter: process.env.CI
+    ? [
+        [
+          'junit',
+          {
+            outputFile: 'results.xml'
+          }
+        ]
+      ]
+    : [
+        [
+          'json',
+          {
+            outputFile: 'report.json'
+          }
+        ],
+        [
+          'html',
+          {
+            open: 'on-failure'
+          }
+        ]
+      ],
   use: {
-    // trace: 'on-first-retry',
     locale: 'fr-FR'
   }
 })

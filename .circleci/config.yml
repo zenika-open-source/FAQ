@@ -83,8 +83,6 @@ jobs:
       - run:
           command: npm install -g wait-on
       - run:
-          command: npm install -g xvfb
-      - run:
           command: npm start
           working_directory: client
           background: true
@@ -110,7 +108,7 @@ jobs:
             wait-on http://localhost:3000
             wait-on http://localhost:4466
             npx playwright install --with-deps chromium
-            xvfb-run npm run test:headed
+            npm run test
           working_directory: e2e
           environment:
             PRISMA_URL: http://localhost:4466
@@ -120,6 +118,8 @@ jobs:
             SERVICE_STAGE: default
             ALGOLIA_APP_ID: M0NJ0PGAH1
             ALGOLIA_API_KEY_ALL: 512b7a54729ce1a9a33565346332d26d
+      - store_test_results:
+          path: results.xml
 
   client-build:
     executor: app-builder
