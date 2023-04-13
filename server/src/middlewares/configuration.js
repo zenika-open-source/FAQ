@@ -15,7 +15,6 @@ const getConfiguration = async (multiTenant, req, next) => {
 }
 
 const refreshConfiguration = async tenant => {
-  console.log('first')
   const conf = await tenant.query.configuration(
     {
       where: { name: 'default' }
@@ -47,7 +46,7 @@ const refreshConfiguration = async tenant => {
     }`
   )
   // TMP_TAGS
-
+  console.log(conf)
   tenant._meta.configuration = conf
 }
 

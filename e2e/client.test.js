@@ -294,9 +294,9 @@ test.beforeAll(async ({ playwright }) => {
       'faq-tenant': 'default/default'
     }
   })
-  console.log('before: ', prisma._meta)
+  // console.log('before: ', prisma._meta)
   await refreshConfiguration(prisma)
-  console.log('after: ', prisma._meta)
+  // console.log('after: ', prisma._meta)
   // await createConfigMutation(apiContext)
   // config = await getConfigQuery(apiContext)
   // prisma._meta = { ...prisma._meta, configuration: config.configuration }
