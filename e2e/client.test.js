@@ -305,24 +305,16 @@ test.beforeEach(async ({ page }) => {
 })
 
 test('Shoud be able to create a question', async ({ page }) => {
-  console.log('test1')
   await page.goto('http://localhost:3000')
-  console.log('test1-1')
   await page
     .locator('button', { hasText: 'Nouvelle question' })
     .first()
     .click()
-  console.log('test1-2')
   await page.locator('input').click()
-  console.log('test1-3')
   await page.locator('input').fill(questionsText[randomQuestion])
-  console.log('test1-4')
   await page.getByRole('button', { name: 'add' }).click()
-  console.log('test1-5')
   await page.getByText(tags.tagName, { exact: true }).click()
-  console.log('test1-6')
   await page.locator('button', { hasText: 'Envoyer la question' }).click()
-  console.log('test1-7')
   await expect(page.getByRole('heading', { name: questionsText[randomQuestion] })).toBeVisible()
 })
 
@@ -362,6 +354,7 @@ test('Should return a search result', async ({ page }) => {
 })
 
 test('Should not return results', async ({ page }) => {
+  await page.goto('http://localhost:3000')
   await page.locator('input[type=text]').click()
   await page.locator('input[type=text]').fill('test')
   await expect(page.getByText('Aucune question trouvée')).toBeVisible()
