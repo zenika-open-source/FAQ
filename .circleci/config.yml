@@ -119,7 +119,7 @@ jobs:
             ALGOLIA_APP_ID: M0NJ0PGAH1
             ALGOLIA_API_KEY_ALL: 512b7a54729ce1a9a33565346332d26d
       - store_test_results:
-          path: results.xml
+          path: ./e2e/results.xml
 
   client-build:
     executor: app-builder
