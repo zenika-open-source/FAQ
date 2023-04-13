@@ -253,7 +253,6 @@ test.beforeAll(async ({ playwright }) => {
   })
   config = await upsertConfigMutation(apiContext)
   prisma._meta = { ...prisma._meta, configuration: config.upsertConfiguration }
-  console.log('after: ', prisma._meta)
   algoliaSettings
   user = await createUserMutation(apiContext)
   tags = await tagsIdQuery(apiContext)
