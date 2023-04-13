@@ -307,13 +307,13 @@ test.beforeEach(async ({ page }) => {
 test('Shoud be able to create a question', async ({ page }) => {
   console.log('test1')
   await page.goto('http://localhost:3000')
+  console.log('test1-1')
   await page
     .locator('button', { hasText: 'Nouvelle question' })
     .first()
     .click()
   await page.locator('input').click()
   await page.locator('input').fill(questionsText[randomQuestion])
-  console.log('test1-1')
   await page.getByRole('button', { name: 'add' }).click()
   await page.getByText(tags.tagName, { exact: true }).click()
   await page.locator('button', { hasText: 'Envoyer la question' }).click()

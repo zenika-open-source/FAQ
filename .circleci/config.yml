@@ -107,7 +107,6 @@ jobs:
           command: |
             wait-on http://localhost:3000
             wait-on http://localhost:4466
-            npx playwright install --with-deps chromium
             npm run test
           working_directory: e2e
           environment:
