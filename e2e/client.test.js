@@ -301,7 +301,6 @@ test.beforeEach(async ({ page }) => {
     }
     window.localStorage.setItem('user', JSON.stringify(userData))
   }, user)
-  console.log('user id: ', user)
 })
 
 test.only('Shoud be able to create a question', async ({ page }) => {
