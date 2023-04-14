@@ -123,8 +123,8 @@ jobs:
       - store_test_results:
           path: ./e2e/results.xml
       - store_artifacts:
-          path: ./e2e/trace.json
-          destination: ./e2e/trace.json
+          path: trace.zip
+          destination: ./e2e/test-results/trace.zip
 
   client-build:
     executor: app-builder
