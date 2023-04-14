@@ -118,6 +118,8 @@ jobs:
             SERVICE_STAGE: default
             ALGOLIA_APP_ID: M0NJ0PGAH1
             ALGOLIA_API_KEY_ALL: 512b7a54729ce1a9a33565346332d26d
+            SKIP_AUTH: true
+            REACT_APP_DISABLE_AUTH: true
       - store_test_results:
           path: ./e2e/results.xml
 
