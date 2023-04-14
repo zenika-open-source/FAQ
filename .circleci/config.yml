@@ -108,7 +108,7 @@ jobs:
             wait-on http://localhost:3000
             wait-on http://localhost:4466
             npx playwright install --with-deps chromium
-            xvfb-run npm run playwright test
+            xvfb-run npm run test
           working_directory: e2e
           environment:
             PRISMA_URL: http://localhost:4466
