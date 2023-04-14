@@ -123,8 +123,7 @@ jobs:
       - store_test_results:
           path: ./e2e/results.xml
       - store_artifacts:
-          path: ./e2e/trace.zip
-          destination: ./e2e/test-results/trace.zip
+          path: ./e2e/test-results/client-Shoud-be-able-to-create-a-question/trace.zip
 
   client-build:
     executor: app-builder
