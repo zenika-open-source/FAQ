@@ -122,6 +122,9 @@ jobs:
             REACT_APP_DISABLE_AUTH: true
       - store_test_results:
           path: ./e2e/results.xml
+      - store_artifacts:
+          path: ./e2e/trace.json
+          destination: ./e2e/trace.json
 
   client-build:
     executor: app-builder

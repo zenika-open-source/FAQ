@@ -304,6 +304,7 @@ test.beforeEach(async ({ page }) => {
 })
 
 test.only('Shoud be able to create a question', async ({ page }) => {
+  await page.tracing.start({ screenshots: true, snapshots: true })
   await page.goto('http://localhost:3000')
   console.log('page url: ', page.url())
   await page
@@ -319,6 +320,7 @@ test.only('Shoud be able to create a question', async ({ page }) => {
     .click()
   await page.locator('button', { hasText: 'Envoyer la question' }).click()
   await expect(page.getByRole('heading', { name: questionsText[randomQuestion] })).toBeVisible()
+  await page.tracing.stop({ path: 'trace.zip' })
 })
 
 test('Should be able to create a question and answer it', async ({ page }) => {
