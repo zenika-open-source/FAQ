@@ -303,12 +303,13 @@ test.beforeEach(async ({ page }) => {
   }, user)
 })
 
-test('Shoud be able to create a question', async ({ page }) => {
+test.only('Shoud be able to create a question', async ({ page }) => {
+  await page.request.get('http://localhost:3000', { ignoreHTTPSErrors: true })
+  console.log('page url: ', page.url())
   await page.route('**', (route, request) => {
     console.log(request.url())
     route.continue()
   })
-  await page.request.get('http://localhost:3000', { ignoreHTTPSErrors: true })
   // await page.goto('http://localhost:3000')
   await page
     .locator('button', { hasText: 'Nouvelle question' })
