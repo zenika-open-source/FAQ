@@ -39,7 +39,6 @@ const upsertConfig = `mutation UpsertConfig{
       algoliaApiKey: "${process.env.ALGOLIA_API_KEY_ALL}"
       auth0Domain: "${process.env.AUTH0_DOMAIN}"
       auth0ClientId: "${process.env.AUTH0_CLIENT_ID}"
-      tagCategories: {create: [{name: "agencies", order: 1, labels: {create: [{ name: "paris", order: 1 }, { name: "nantes", order: 2 }]}}, {name: "theme", order: 2, labels: {create: [{name: "tutorial", order: 1}, {name: "meta", order: 2}]}}]}
     }
   ) {
     id
@@ -305,7 +304,12 @@ test.beforeEach(async ({ page }) => {
 })
 
 test('Shoud be able to create a question', async ({ page }) => {
-  await page.goto('http://localhost:3000')
+  await page.route('**', (route, request) => {
+    console.log(request.url())
+    route.continue()
+  })
+  await page.request.get('http://localhost:3000', { ignoreHTTPSErrors: true })
+  // await page.goto('http://localhost:3000')
   await page
     .locator('button', { hasText: 'Nouvelle question' })
     .first()
@@ -313,7 +317,10 @@ test('Shoud be able to create a question', async ({ page }) => {
   await page.locator('input').click()
   await page.locator('input').fill(questionsText[randomQuestion])
   await page.getByRole('button', { name: 'add' }).click()
-  await page.getByText(tags.tagName, { exact: true }).click()
+  await page
+    .getByText(tags.tagName, { exact: true })
+    .first()
+    .click()
   await page.locator('button', { hasText: 'Envoyer la question' }).click()
   await expect(page.getByRole('heading', { name: questionsText[randomQuestion] })).toBeVisible()
 })
@@ -327,7 +334,10 @@ test('Should be able to create a question and answer it', async ({ page }) => {
   await page.locator('input[type=text]').click()
   await page.locator('input[type=text]').fill(questionsText[randomQuestion])
   await page.getByRole('button', { name: 'add' }).click()
-  await page.getByText(tags.tagName, { exact: true }).click()
+  await page
+    .getByText(tags.tagName, { exact: true })
+    .first()
+    .click()
   await page.locator('button', { hasText: 'Envoyer la question' }).click()
   await expect(page.getByRole('heading', { name: questionsText[randomQuestion] })).toBeVisible()
   await page.locator('button', { hasText: 'Répondre à la question' }).click()
@@ -471,6 +481,5 @@ test.afterEach(async () => {
 })
 
 test.afterAll(async () => {
-  // await deleteConfigMutation(apiContext)
   await apiContext.dispose()
 })
