@@ -238,6 +238,7 @@ test.beforeAll(async ({ playwright }) => {
   })
     .toString()
     .trim()
+  console.log(token)
   apiContext = await playwright.request.newContext({
     baseURL: 'http://localhost:4466',
     extraHTTPHeaders: {
