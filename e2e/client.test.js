@@ -238,7 +238,6 @@ test.beforeAll(async ({ playwright }) => {
   })
     .toString()
     .trim()
-  console.log(token)
   apiContext = await playwright.request.newContext({
     baseURL: 'http://localhost:4466',
     extraHTTPHeaders: {
@@ -304,7 +303,7 @@ test.beforeEach(async ({ page }) => {
   // }, user)
 })
 
-test('Shoud be able to create a question', async ({ page }) => {
+test.only('Shoud be able to create a question', async ({ page }) => {
   await page.goto('http://localhost:3000')
   console.log('page url: ', page.url())
   await page
