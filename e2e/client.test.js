@@ -289,23 +289,12 @@ test.beforeEach(async ({ page }) => {
     }
   })
   await page.goto('http://localhost:3000/auth/login')
-  // await page.evaluate(user => {
-  //   const userData = {
-  //     id: user,
-  //     admin: false,
-  //     name: 'playwrightTest',
-  //     email: 'playwright.test@zenika.com',
-  //     picture:
-  //       'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg',
-  //     __typename: 'User'
-  //   }
-  //   window.localStorage.setItem('user', JSON.stringify(userData))
-  // }, user)
 })
 
 test.only('Shoud be able to create a question', async ({ page }) => {
   await page.goto('http://localhost:3000')
   console.log('page url: ', page.url())
+  await page.waitForTimeout(10000)
   await page
     .locator('button', { hasText: 'Nouvelle question' })
     .first()
@@ -476,6 +465,6 @@ test.afterEach(async () => {
   algolia.clearIndex({ prisma })
 })
 
-test.afterAll(async () => {
-  await apiContext.dispose()
-})
+// test.afterAll(async () => {
+//   await apiContext.dispose()
+// })
