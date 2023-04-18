@@ -288,13 +288,12 @@ test.beforeEach(async ({ page }) => {
       query: deleteAll('deleteManyZNodes')
     }
   })
-  await page.goto('http://localhost:3000/auth/login')
+  // await page.goto('http://localhost:3000/auth/login')
 })
 
 test.only('Shoud be able to create a question', async ({ page }) => {
   await page.goto('http://localhost:3000')
   console.log('page url: ', page.url())
-  // await page.waitForTimeout(10000)
   await page
     .locator('button', { hasText: 'Nouvelle question' })
     .first()
