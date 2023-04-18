@@ -294,7 +294,7 @@ test.beforeEach(async ({ page }) => {
 test.only('Shoud be able to create a question', async ({ page }) => {
   await page.goto('http://localhost:3000')
   console.log('page url: ', page.url())
-  await page.waitForTimeout(10000)
+  // await page.waitForTimeout(10000)
   await page
     .locator('button', { hasText: 'Nouvelle question' })
     .first()
