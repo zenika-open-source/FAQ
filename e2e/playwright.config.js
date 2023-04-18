@@ -7,5 +7,6 @@ export default defineConfig({
     locale: 'fr-FR',
     navigationTimeout: 60 * 60 * 1000
   },
-  globalTimeout: 60 * 60 * 1000
+  globalTimeout: 60 * 60 * 1000,
+  timeout: 60 * 60 * 1000
 })
