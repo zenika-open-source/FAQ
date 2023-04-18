@@ -257,42 +257,26 @@ test.beforeAll(async ({ playwright }) => {
   tags = await tagsIdQuery(apiContext)
 })
 
-test.beforeEach(async ({ page }) => {
-  await apiContext.post('/', {
-    data: {
-      query: deleteAll('deleteManyAnswers')
-    }
-  })
-  await apiContext.post('/', {
-    data: {
-      query: deleteAll('deleteManyQuestions')
-    }
-  })
-  await apiContext.post('/', {
-    data: {
-      query: deleteAll('deleteManyHistoryActions')
-    }
-  })
-  await apiContext.post('/', {
-    data: {
-      query: deleteAll('deleteManyFlags')
-    }
-  })
-  await apiContext.post('/', {
-    data: {
-      query: deleteAll('deleteManyTags')
-    }
-  })
-  await apiContext.post('/', {
-    data: {
-      query: deleteAll('deleteManyZNodes')
-    }
-  })
-  // await page.goto('http://localhost:3000/auth/login')
+test.beforeEach(async () => {
+  const deleteCommands = [
+    'deleteManyAnswers',
+    'deleteManyQuestions',
+    'deleteManyHistoryActions',
+    'deleteManyFlags',
+    'deleteManyTags',
+    'deleteManyZNodes'
+  ]
+  for (const command of deleteCommands) {
+    await apiContext.post('/', {
+      data: {
+        query: deleteAll(command)
+      }
+    })
+  }
 })
 
-test.only('Shoud be able to create a question', async ({ page }) => {
-  await page.goto('http://localhost:3000')
+test('Shoud be able to create a question', async ({ page }) => {
+  await page.goto('/')
   console.log('page url: ', page.url())
   await page
     .locator('button', { hasText: 'Nouvelle question' })
@@ -310,7 +294,7 @@ test.only('Shoud be able to create a question', async ({ page }) => {
 })
 
 test('Should be able to create a question and answer it', async ({ page }) => {
-  await page.goto('http://localhost:3000')
+  await page.goto('/')
   await page
     .locator('button', { hasText: 'Nouvelle question' })
     .first()
@@ -334,7 +318,7 @@ test('Should be able to create a question and answer it', async ({ page }) => {
 test('Should return a search result', async ({ page }) => {
   const zNode = await prisma.mutation.createZNode(createZNodeParams(tags.tagId, user))
   await algolia.addNode({ prisma }, zNode.id)
-  await page.goto('http://localhost:3000')
+  await page.goto('/')
   await page.locator('input[type=text]').click()
   const slicedQuestion = questionsText[randomQuestion].slice(0, 4)
   await page.locator('input[type=text]').fill(slicedQuestion)
@@ -348,7 +332,7 @@ test('Should return a search result', async ({ page }) => {
 })
 
 test('Should not return results', async ({ page }) => {
-  await page.goto('http://localhost:3000')
+  await page.goto('/')
   await page.locator('input[type=text]').click()
   await page.locator('input[type=text]').fill('test')
   await expect(page.getByText('Aucune question trouvée')).toBeVisible()
@@ -357,7 +341,7 @@ test('Should not return results', async ({ page }) => {
 test('Should be able to signal a question', async ({ page }) => {
   const zNode = await prisma.mutation.createZNode(createZNodeParams(tags.tagId, user))
   await algolia.addNode({ prisma }, zNode.id)
-  await page.goto('http://localhost:3000')
+  await page.goto('/')
   await page.waitForTimeout(1000)
   await page.getByRole('button', { name: 'local_offer' }).click()
   await page.locator('.category-item', { hasText: tags.tagName }).click()
@@ -375,7 +359,7 @@ test('Should be able to signal a question', async ({ page }) => {
 test('Should be able to add a tag to a question', async ({ page }) => {
   const zNode = await prisma.mutation.createZNode(createZNodeParams(tags.tagId, user))
   await algolia.addNode({ prisma }, zNode.id)
-  await page.goto('http://localhost:3000')
+  await page.goto('/')
   await page.locator('input[type=text]').click()
   const slicedQuestion = questionsText[randomQuestion].slice(0, 6)
   await page.locator('input[type=text]').fill(slicedQuestion)
@@ -399,7 +383,7 @@ test('Should be able to add a tag to a question', async ({ page }) => {
 test('Should be able to modify an answer for an already answered question', async ({ page }) => {
   const zNode = await prisma.mutation.createZNode(createZNodeParams(tags.tagId, user))
   await algolia.addNode({ prisma }, zNode.id)
-  await page.goto('http://localhost:3000')
+  await page.goto('/')
   await page.locator('input[type=text]').click()
   await page.locator('input[type=text]').fill(questionsText[randomQuestion])
   await expect(
@@ -422,7 +406,7 @@ test('Should be able to modify an answer for an already answered question', asyn
 test('Should be able to answer a question that has no answer', async ({ page }) => {
   const zNode = await prisma.mutation.createZNode(createZNodeWithoutAnswerParams(tags.tagId, user))
   await algolia.addNode({ prisma }, zNode.id)
-  await page.goto('http://localhost:3000')
+  await page.goto('/')
   await expect(page.getByText('Pas encore de réponse...')).toBeVisible()
   const openCard = page.getByRole('link', { name: 'keyboard_arrow_right' }).first()
   await openCard.waitFor('visible')
@@ -437,7 +421,7 @@ test('Should be able to answer a question that has no answer', async ({ page }) 
 test('Should be able to search by text and tag', async ({ page }) => {
   const zNode = await prisma.mutation.createZNode(createZNodeParams(tags.tagId, user))
   await algolia.addNode({ prisma }, zNode.id)
-  await page.goto('http://localhost:3000')
+  await page.goto('/')
   await page.waitForTimeout(1000)
   await page.locator('input[type=text]').click()
   await page.locator('input[type=text]').fill(questionsText[randomQuestion])
