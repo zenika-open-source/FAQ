@@ -34,6 +34,29 @@ const checkJwt = async (req, res, next, prisma) => {
       }`
     )
 
+  const userUpsert = () =>
+    prisma.mutation.upsertUser(
+      {
+        where: { auth0Id: 'faq-user-no-auth@zenika.com' },
+        create: {
+          auth0Id: 'faq-user-no-auth@zenika.com',
+          key: 'enableSkipAuth',
+          name: 'enableSkipAuth',
+          email: 'faq-user-no-auth@zenika.com'
+        },
+        update: {
+          auth0Id: 'faq-user-no-auth@zenika.com',
+          key: 'enableSkipAuth',
+          name: 'enableSkipAuth',
+          email: 'faq-user-no-auth@zenika.com'
+        }
+      },
+      `{
+        id
+        email
+      }`
+    )
+
   if (authType === 'Bearer') {
     // Auth0 Authentication
 
@@ -80,53 +103,14 @@ const checkJwt = async (req, res, next, prisma) => {
 
     getUser = next
   } else if (process.env.DISABLE_AUTH === 'true') {
-    const checkUserExist = async req => {
-      let noAuthUser = await userQuery({ auth0Id: process.env.AUTH0_CLIENT_ID })
-      if (!noAuthUser || noAuthUser.email !== 'faq-user-no-auth@zenika.com') {
-        try {
-          noAuthUser = await prisma.mutation.createUser(
-            {
-              data: {
-                auth0Id: process.env.AUTH0_CLIENT_ID,
-                key: 'enableSkipAuth',
-                name: 'enableSkipAuth',
-                email: 'faq-user-no-auth@zenika.com'
-              }
-            },
-            `
-            {
-              id
-              email
-            }
-            `
-          )
-          if (noAuthUser.email === 'faq-user-no-auth@zenika.com') {
-            req.user = {
-              id: noAuthUser.id,
-              email: noAuthUser.email,
-              token: {
-                email: noAuthUser.email
-              }
-            }
-            return req
-          } else {
-            console.error('Failed to create user')
-          }
-        } catch (error) {
-          console.error(error)
-        }
-      } else {
-        req.user = {
-          id: noAuthUser.id,
-          email: noAuthUser.email,
-          token: {
-            email: noAuthUser.email
-          }
-        }
+    const user = await userUpsert()
+    req.user = {
+      id: user.id,
+      email: user.email,
+      token: {
+        email: user.email
       }
-      return req
     }
-    req = await checkUserExist(req)
     return next()
   } else {
     return next(

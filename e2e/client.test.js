@@ -42,28 +42,28 @@ const upsertConfig = `mutation UpsertConfig{
     }
   ) {
     id
+    name
+    title
+    auth0Domain
+    auth0ClientId
+    authorizedDomains
+    algoliaAppId
+    algoliaApiKey
+    algoliaSynonyms
+    mailgunDomain
+    mailgunApiKey
+    slackChannelHook
+    tagCategories {
+      order
       name
-      title
-      auth0Domain
-      auth0ClientId
-      authorizedDomains
-      algoliaAppId
-      algoliaApiKey
-      algoliaSynonyms
-      mailgunDomain
-      mailgunApiKey
-      slackChannelHook
-      tagCategories {
+      labels {
+        id
         order
         name
-        labels {
-          id
-          order
-          name
-        }
       }
-      workplaceSharing
-      bugReporting
+    }
+    workplaceSharing
+    bugReporting
   }
 }`
 
