@@ -13,6 +13,21 @@ executors:
   e2e-runner:
     docker:
       - image: mcr.microsoft.com/playwright:v1.30.0-focal
+        environment:
+          PRISMA_URL: http://localhost:4466
+          PRISMA_API_SECRET: secret-42
+          PRISMA_MANAGEMENT_API_SECRET: my-secret-42
+          SERVICE_NAME: default
+          SERVICE_STAGE: default
+          AUTH0_DOMAIN: auth0Domain
+          AUTH0_CLIENT_ID: auth0ClientId
+          ALGOLIA_APP_ID: M0NJ0PGAH1
+          SKIP_AUTH: true
+          REACT_APP_DISABLE_AUTH: true
+          REACT_APP_GRAPHQL_ENDPOINT: http://localhost:4000/gql
+          REACT_APP_REST_ENDPOINT: http://localhost:4000/rest
+          REACT_APP_PRISMA_SERVICE: default/default
+          REACT_APP_FAQ_URL: faq.team
       - image: postgres
         environment:
           POSTGRES_USER: prisma
@@ -95,34 +110,12 @@ jobs:
             wait-on http://localhost:4466
             npm run new_service default/default
           working_directory: server
-          environment:
-            PRISMA_URL: http://localhost:4466
-            PRISMA_API_SECRET: secret-42
-            PRISMA_MANAGEMENT_API_SECRET: my-secret-42
-            AUTH0_DOMAIN: auth0Domain
-            AUTH0_CLIENT_ID: auth0ClientId
-            ALGOLIA_APP_ID: M0NJ0PGAH1
-            ALGOLIA_API_KEY_ALL: 512b7a54729ce1a9a33565346332d26d
       - run:
           command: |
             wait-on http://localhost:3000
             wait-on http://localhost:4466
             npm run test
           working_directory: e2e
-          environment:
-            PRISMA_URL: http://localhost:4466
-            PRISMA_API_SECRET: secret-42
-            PRISMA_MANAGEMENT_API_SECRET: my-secret-42
-            SERVICE_NAME: default
-            SERVICE_STAGE: default
-            ALGOLIA_APP_ID: M0NJ0PGAH1
-            ALGOLIA_API_KEY_ALL: 512b7a54729ce1a9a33565346332d26d
-            SKIP_AUTH: true
-            REACT_APP_DISABLE_AUTH: true
-            REACT_APP_GRAPHQL_ENDPOINT: http://localhost:4000/gql
-            REACT_APP_REST_ENDPOINT: http://localhost:4000/rest
-            REACT_APP_PRISMA_SERVICE: default/default
-            REACT_APP_FAQ_URL: faq.team
       - store_test_results:
           path: ./e2e/results.xml
       - store_artifacts:
