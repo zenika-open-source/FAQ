@@ -3,6 +3,8 @@ export default defineConfig({
   reporter: process.env.CI && [['junit', { outputFile: 'results.xml' }]],
   use: {
     trace: process.env.CI && 'on',
+    screenshot: 'on',
+    video: 'on',
     headless: true,
     locale: 'fr-FR',
     navigationTimeout: 60 * 60 * 1000,

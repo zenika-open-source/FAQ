@@ -275,7 +275,7 @@ test.beforeEach(async () => {
   }
 })
 
-test('Shoud be able to create a question', async ({ page }) => {
+test.only('Shoud be able to create a question', async ({ page }) => {
   await page.goto('/')
   console.log('page url: ', page.url())
   await page
