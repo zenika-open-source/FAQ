@@ -22,7 +22,7 @@ executors:
           AUTH0_DOMAIN: auth0Domain
           AUTH0_CLIENT_ID: auth0ClientId
           ALGOLIA_APP_ID: M0NJ0PGAH1
-          SKIP_AUTH: true
+          DISABLE_AUTH: true
           REACT_APP_DISABLE_AUTH: true
           REACT_APP_GRAPHQL_ENDPOINT: http://localhost:4000/gql
           REACT_APP_REST_ENDPOINT: http://localhost:4000/rest
@@ -88,7 +88,6 @@ jobs:
     executor: e2e-runner
     steps:
       - checkout
-      - setup_remote_docker
       - node/install-packages:
           app-dir: e2e
       - node/install-packages:
@@ -96,21 +95,26 @@ jobs:
       - node/install-packages:
           app-dir: client
       - run:
+          name: Install wait-on
           command: npm install -g wait-on
       - run:
+          name: Start client
           command: npm start
           working_directory: client
           background: true
       - run:
+          name: Start server
           command: npm start
           working_directory: server
           background: true
       - run:
+          name: Create new prisma service
           command: |
             wait-on http://localhost:4466
             npm run new_service default/default
           working_directory: server
       - run:
+          name: Run tests
           command: |
             wait-on http://localhost:3000
             wait-on http://localhost:4466

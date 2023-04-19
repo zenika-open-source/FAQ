@@ -79,7 +79,7 @@ const checkJwt = async (req, res, next, prisma) => {
     }
 
     getUser = next
-  } else if (process.env.SKIP_AUTH === 'true') {
+  } else if (process.env.DISABLE_AUTH === 'true') {
     const checkUserExist = async req => {
       let noAuthUser = await userQuery({ auth0Id: process.env.AUTH0_CLIENT_ID })
       if (!noAuthUser || noAuthUser.email !== 'faq-user-no-auth@zenika.com') {
