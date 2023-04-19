@@ -119,7 +119,7 @@ jobs:
       - store_test_results:
           path: ./e2e/results.xml
       - store_artifacts:
-          path: ./e2e/test-results/client-Shoud-be-able-to-create-a-question
+          path: ./e2e/test-results
 
   client-build:
     executor: app-builder
