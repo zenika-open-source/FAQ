@@ -119,6 +119,10 @@ jobs:
             ALGOLIA_API_KEY_ALL: 512b7a54729ce1a9a33565346332d26d
             SKIP_AUTH: true
             REACT_APP_DISABLE_AUTH: true
+            REACT_APP_GRAPHQL_ENDPOINT: http://localhost:4000/gql
+            REACT_APP_REST_ENDPOINT: http://localhost:4000/rest
+            REACT_APP_PRISMA_SERVICE: default/default
+            REACT_APP_FAQ_URL: faq.team
       - store_test_results:
           path: ./e2e/results.xml
       - store_artifacts:
