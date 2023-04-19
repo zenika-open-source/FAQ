@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test'
 const path = require('path')
 const multiTenant = require('../server/src/multiTenant')
 const algolia = require('../server/src/integrations/algolia')
-const algoliaSettings = require('../server/scripts/algolia_settings/index')
+require('../server/scripts/algolia_settings/index')
 
 const createUser = `mutation CreateUser{
   createUser(data: {key: "playwrightTest", name: "playwrightTest", email: "playwright.test@zenika.com"}) {
@@ -252,7 +252,6 @@ test.beforeAll(async ({ playwright }) => {
   })
   config = await upsertConfigMutation(apiContext)
   prisma._meta = { ...prisma._meta, configuration: config.upsertConfiguration }
-  algoliaSettings
   user = await createUserMutation(apiContext)
   tags = await tagsIdQuery(apiContext)
 })
@@ -275,9 +274,8 @@ test.beforeEach(async () => {
   }
 })
 
-test.only('Shoud be able to create a question', async ({ page }) => {
+test('Shoud be able to create a question', async ({ page }) => {
   await page.goto('/')
-  console.log('page url: ', page.url())
   await page
     .locator('button', { hasText: 'Nouvelle question' })
     .first()
