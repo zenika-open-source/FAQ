@@ -7,9 +7,6 @@ export default defineConfig({
     video: 'on',
     headless: true,
     locale: 'fr-FR',
-    navigationTimeout: 60 * 60 * 1000,
     baseURL: 'http://localhost:3000'
-  },
-  globalTimeout: 120 * 1000,
-  timeout: 120 * 1000
+  }
 })
