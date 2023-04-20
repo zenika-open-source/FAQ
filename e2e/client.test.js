@@ -477,7 +477,7 @@ test('Should be able to search by text and tag', async ({ page }) => {
   await expect(page.getByText(answersText[randomEditAnswer], { exact: true })).toBeVisible()
 })
 
-test.only('Should have access to the user profile', async ({ page }) => {
+test('Should have access to the user profile', async ({ page }) => {
   await page.goto('/')
   await page.getByRole('img', { name: 'avatar' }).hover()
   await page
