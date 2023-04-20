@@ -477,10 +477,20 @@ test('Should be able to search by text and tag', async ({ page }) => {
   await expect(page.getByText(answersText[randomEditAnswer], { exact: true })).toBeVisible()
 })
 
+test.only('Should have access to the user profile', async ({ page }) => {
+  await page.goto('/')
+  await page.getByRole('img', { name: 'avatar' }).hover()
+  await page
+    .locator('a')
+    .filter({ hasText: 'Profil' })
+    .click()
+  await expect(page.getByRole('heading', { name: 'Profile' })).toBeVisible()
+})
+
 test.afterEach(async () => {
   algolia.clearIndex({ prisma })
 })
 
-// test.afterAll(async () => {
-//   await apiContext.dispose()
-// })
+test.afterAll(async () => {
+  await apiContext.dispose()
+})
