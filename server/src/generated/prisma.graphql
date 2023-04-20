@@ -2714,6 +2714,11 @@ input TagLabelCreateInput {
   category: TagCategoryCreateOneWithoutLabelsInput!
 }
 
+input TagLabelCreateManyInput {
+  create: [TagLabelCreateInput!]
+  connect: [TagLabelWhereUniqueInput!]
+}
+
 input TagLabelCreateManyWithoutCategoryInput {
   create: [TagLabelCreateWithoutCategoryInput!]
   connect: [TagLabelWhereUniqueInput!]
@@ -2840,6 +2845,13 @@ input TagLabelSubscriptionWhereInput {
   NOT: [TagLabelSubscriptionWhereInput!]
 }
 
+input TagLabelUpdateDataInput {
+  name: String
+  tags: TagUpdateManyWithoutLabelInput
+  order: Int
+  category: TagCategoryUpdateOneRequiredWithoutLabelsInput
+}
+
 input TagLabelUpdateInput {
   name: String
   tags: TagUpdateManyWithoutLabelInput
@@ -2850,6 +2862,18 @@ input TagLabelUpdateInput {
 input TagLabelUpdateManyDataInput {
   name: String
   order: Int
+}
+
+input TagLabelUpdateManyInput {
+  create: [TagLabelCreateInput!]
+  update: [TagLabelUpdateWithWhereUniqueNestedInput!]
+  upsert: [TagLabelUpsertWithWhereUniqueNestedInput!]
+  delete: [TagLabelWhereUniqueInput!]
+  connect: [TagLabelWhereUniqueInput!]
+  set: [TagLabelWhereUniqueInput!]
+  disconnect: [TagLabelWhereUniqueInput!]
+  deleteMany: [TagLabelScalarWhereInput!]
+  updateMany: [TagLabelUpdateManyWithWhereNestedInput!]
 }
 
 input TagLabelUpdateManyMutationInput {
@@ -2895,6 +2919,11 @@ input TagLabelUpdateWithoutTagsDataInput {
   category: TagCategoryUpdateOneRequiredWithoutLabelsInput
 }
 
+input TagLabelUpdateWithWhereUniqueNestedInput {
+  where: TagLabelWhereUniqueInput!
+  data: TagLabelUpdateDataInput!
+}
+
 input TagLabelUpdateWithWhereUniqueWithoutCategoryInput {
   where: TagLabelWhereUniqueInput!
   data: TagLabelUpdateWithoutCategoryDataInput!
@@ -2903,6 +2932,12 @@ input TagLabelUpdateWithWhereUniqueWithoutCategoryInput {
 input TagLabelUpsertWithoutTagsInput {
   update: TagLabelUpdateWithoutTagsDataInput!
   create: TagLabelCreateWithoutTagsInput!
+}
+
+input TagLabelUpsertWithWhereUniqueNestedInput {
+  where: TagLabelWhereUniqueInput!
+  update: TagLabelUpdateDataInput!
+  create: TagLabelCreateInput!
 }
 
 input TagLabelUpsertWithWhereUniqueWithoutCategoryInput {
@@ -3221,6 +3256,15 @@ type User {
     first: Int
     last: Int
   ): [Tag!]
+  specialities(
+    where: TagLabelWhereInput
+    orderBy: TagLabelOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [TagLabel!]
   history(
     where: HistoryActionWhereInput
     orderBy: HistoryActionOrderByInput
@@ -3253,6 +3297,7 @@ input UserCreateInput {
   answers: AnswerCreateManyWithoutUserInput
   flags: FlagCreateManyWithoutUserInput
   tags: TagCreateManyWithoutUserInput
+  specialities: TagLabelCreateManyInput
   history: HistoryActionCreateManyWithoutUserInput
 }
 
@@ -3293,6 +3338,7 @@ input UserCreateWithoutAnswersInput {
   questions: QuestionCreateManyWithoutUserInput
   flags: FlagCreateManyWithoutUserInput
   tags: TagCreateManyWithoutUserInput
+  specialities: TagLabelCreateManyInput
   history: HistoryActionCreateManyWithoutUserInput
 }
 
@@ -3308,6 +3354,7 @@ input UserCreateWithoutFlagsInput {
   questions: QuestionCreateManyWithoutUserInput
   answers: AnswerCreateManyWithoutUserInput
   tags: TagCreateManyWithoutUserInput
+  specialities: TagLabelCreateManyInput
   history: HistoryActionCreateManyWithoutUserInput
 }
 
@@ -3324,6 +3371,7 @@ input UserCreateWithoutHistoryInput {
   answers: AnswerCreateManyWithoutUserInput
   flags: FlagCreateManyWithoutUserInput
   tags: TagCreateManyWithoutUserInput
+  specialities: TagLabelCreateManyInput
 }
 
 input UserCreateWithoutQuestionsInput {
@@ -3338,6 +3386,7 @@ input UserCreateWithoutQuestionsInput {
   answers: AnswerCreateManyWithoutUserInput
   flags: FlagCreateManyWithoutUserInput
   tags: TagCreateManyWithoutUserInput
+  specialities: TagLabelCreateManyInput
   history: HistoryActionCreateManyWithoutUserInput
 }
 
@@ -3353,6 +3402,7 @@ input UserCreateWithoutTagsInput {
   questions: QuestionCreateManyWithoutUserInput
   answers: AnswerCreateManyWithoutUserInput
   flags: FlagCreateManyWithoutUserInput
+  specialities: TagLabelCreateManyInput
   history: HistoryActionCreateManyWithoutUserInput
 }
 
@@ -3427,6 +3477,7 @@ input UserUpdateInput {
   answers: AnswerUpdateManyWithoutUserInput
   flags: FlagUpdateManyWithoutUserInput
   tags: TagUpdateManyWithoutUserInput
+  specialities: TagLabelUpdateManyInput
   history: HistoryActionUpdateManyWithoutUserInput
 }
 
@@ -3486,6 +3537,7 @@ input UserUpdateWithoutAnswersDataInput {
   questions: QuestionUpdateManyWithoutUserInput
   flags: FlagUpdateManyWithoutUserInput
   tags: TagUpdateManyWithoutUserInput
+  specialities: TagLabelUpdateManyInput
   history: HistoryActionUpdateManyWithoutUserInput
 }
 
@@ -3500,6 +3552,7 @@ input UserUpdateWithoutFlagsDataInput {
   questions: QuestionUpdateManyWithoutUserInput
   answers: AnswerUpdateManyWithoutUserInput
   tags: TagUpdateManyWithoutUserInput
+  specialities: TagLabelUpdateManyInput
   history: HistoryActionUpdateManyWithoutUserInput
 }
 
@@ -3515,6 +3568,7 @@ input UserUpdateWithoutHistoryDataInput {
   answers: AnswerUpdateManyWithoutUserInput
   flags: FlagUpdateManyWithoutUserInput
   tags: TagUpdateManyWithoutUserInput
+  specialities: TagLabelUpdateManyInput
 }
 
 input UserUpdateWithoutQuestionsDataInput {
@@ -3528,6 +3582,7 @@ input UserUpdateWithoutQuestionsDataInput {
   answers: AnswerUpdateManyWithoutUserInput
   flags: FlagUpdateManyWithoutUserInput
   tags: TagUpdateManyWithoutUserInput
+  specialities: TagLabelUpdateManyInput
   history: HistoryActionUpdateManyWithoutUserInput
 }
 
@@ -3542,6 +3597,7 @@ input UserUpdateWithoutTagsDataInput {
   questions: QuestionUpdateManyWithoutUserInput
   answers: AnswerUpdateManyWithoutUserInput
   flags: FlagUpdateManyWithoutUserInput
+  specialities: TagLabelUpdateManyInput
   history: HistoryActionUpdateManyWithoutUserInput
 }
 
@@ -3683,6 +3739,9 @@ input UserWhereInput {
   tags_every: TagWhereInput
   tags_some: TagWhereInput
   tags_none: TagWhereInput
+  specialities_every: TagLabelWhereInput
+  specialities_some: TagLabelWhereInput
+  specialities_none: TagLabelWhereInput
   history_every: HistoryActionWhereInput
   history_some: HistoryActionWhereInput
   history_none: HistoryActionWhereInput
