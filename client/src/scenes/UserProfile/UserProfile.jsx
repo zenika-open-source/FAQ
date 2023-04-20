@@ -9,6 +9,7 @@ import { Avatar, Button, Card, Modal, Loading, Input } from 'components'
 import Logs from './components/Logs'
 
 import { UPDATE_INDENTITY, DELETE_IDENTITY } from './queries'
+import Specialities from './components/Specialities/Specialities'
 
 const UserProfile = ({ history }) => {
   const intl = getIntl(UserProfile)
@@ -114,6 +115,7 @@ const UserProfile = ({ history }) => {
           </Button>
         </Card.Actions>
       </Card>
+      <Specialities />
       <Logs userId={user.id} />
       <Card>
         <Card.Text>
@@ -167,7 +169,7 @@ const UserProfile = ({ history }) => {
 }
 
 UserProfile.translations = {
-  fr: {
+  en: {
     alert: {
       update_success: 'Your profile was successfully updated!',
       delete_success: 'Your personal data was succesfully deleted!'
@@ -204,7 +206,7 @@ UserProfile.translations = {
       button: 'I understand the consequences, delete my data'
     }
   },
-  en: {
+  fr: {
     alert: {
       update_success: 'Votre profil a été modifié avec succès !',
       delete_success: 'Vos données personnelles ont été supprimées avec succès !'
