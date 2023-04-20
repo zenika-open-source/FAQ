@@ -484,7 +484,7 @@ test('Should have access to the user profile', async ({ page }) => {
     .locator('a')
     .filter({ hasText: 'Profil' })
     .click()
-  await expect(page.getByRole('heading', { name: 'Profile' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Profil' })).toBeVisible()
 })
 
 test.afterEach(async () => {
