@@ -7,9 +7,9 @@ import { alert, getIntl } from 'services'
 import { Avatar, Button, Card, Modal, Loading, Input } from 'components'
 
 import Logs from './components/Logs'
+import Specialities from './components/Specialities'
 
 import { UPDATE_INDENTITY, DELETE_IDENTITY } from './queries'
-import Specialities from './components/Specialities/Specialities'
 
 const UserProfile = ({ history }) => {
   const intl = getIntl(UserProfile)
@@ -115,7 +115,7 @@ const UserProfile = ({ history }) => {
           </Button>
         </Card.Actions>
       </Card>
-      <Specialities />
+      <Specialities userId={user.id} />
       <Logs userId={user.id} />
       <Card>
         <Card.Text>
