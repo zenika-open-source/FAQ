@@ -5,8 +5,6 @@ import { getIntl } from 'services'
 const Specialities = ({ specialities }) => {
   const intl = getIntl(Specialities)
 
-  // console.log(specialities)
-
   return (
     <Card>
       <CardText className="specialities">
