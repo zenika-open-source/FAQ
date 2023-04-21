@@ -34,18 +34,22 @@ const checkJwt = async (req, res, next, prisma) => {
       }`
     )
 
+  const speId = conf.tagCategories.find(cat => cat.name === 'services').labels[1].id
   const userUpsert = () =>
     prisma.mutation.upsertUser(
       {
         where: { auth0Id: 'faq-user-no-auth@zenika.com' },
         create: {
           auth0Id: 'faq-user-no-auth@zenika.com',
+          admin: false,
           key: 'enableSkipAuth',
           name: 'enableSkipAuth',
-          email: 'faq-user-no-auth@zenika.com'
+          email: 'faq-user-no-auth@zenika.com',
+          specialities: { connect: { id: speId } }
         },
         update: {
           auth0Id: 'faq-user-no-auth@zenika.com',
+          admin: false,
           key: 'enableSkipAuth',
           name: 'enableSkipAuth',
           email: 'faq-user-no-auth@zenika.com'
@@ -54,6 +58,9 @@ const checkJwt = async (req, res, next, prisma) => {
       `{
         id
         email
+        specialities {
+          name
+        }
       }`
     )
 
