@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-export const meSpecialities = gql`
+export const GET_SPECIALITIES = gql`
   query {
     me {
       specialities {
