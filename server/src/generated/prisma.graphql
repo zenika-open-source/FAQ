@@ -2694,7 +2694,7 @@ type TagLabel {
     first: Int
     last: Int
   ): [Tag!]
-  user: User!
+  user: User
   order: Int!
   category: TagCategory!
   createdAt: DateTime!
@@ -2711,7 +2711,7 @@ input TagLabelCreateInput {
   id: ID
   name: String!
   tags: TagCreateManyWithoutLabelInput
-  user: UserCreateOneWithoutSpecialitiesInput!
+  user: UserCreateOneWithoutSpecialitiesInput
   order: Int!
   category: TagCategoryCreateOneWithoutLabelsInput!
 }
@@ -2735,14 +2735,14 @@ input TagLabelCreateWithoutCategoryInput {
   id: ID
   name: String!
   tags: TagCreateManyWithoutLabelInput
-  user: UserCreateOneWithoutSpecialitiesInput!
+  user: UserCreateOneWithoutSpecialitiesInput
   order: Int!
 }
 
 input TagLabelCreateWithoutTagsInput {
   id: ID
   name: String!
-  user: UserCreateOneWithoutSpecialitiesInput!
+  user: UserCreateOneWithoutSpecialitiesInput
   order: Int!
   category: TagCategoryCreateOneWithoutLabelsInput!
 }
@@ -2860,7 +2860,7 @@ input TagLabelSubscriptionWhereInput {
 input TagLabelUpdateInput {
   name: String
   tags: TagUpdateManyWithoutLabelInput
-  user: UserUpdateOneRequiredWithoutSpecialitiesInput
+  user: UserUpdateOneWithoutSpecialitiesInput
   order: Int
   category: TagCategoryUpdateOneRequiredWithoutLabelsInput
 }
@@ -2916,13 +2916,13 @@ input TagLabelUpdateOneWithoutTagsInput {
 input TagLabelUpdateWithoutCategoryDataInput {
   name: String
   tags: TagUpdateManyWithoutLabelInput
-  user: UserUpdateOneRequiredWithoutSpecialitiesInput
+  user: UserUpdateOneWithoutSpecialitiesInput
   order: Int
 }
 
 input TagLabelUpdateWithoutTagsDataInput {
   name: String
-  user: UserUpdateOneRequiredWithoutSpecialitiesInput
+  user: UserUpdateOneWithoutSpecialitiesInput
   order: Int
   category: TagCategoryUpdateOneRequiredWithoutLabelsInput
 }
@@ -3556,17 +3556,19 @@ input UserUpdateOneRequiredWithoutQuestionsInput {
   connect: UserWhereUniqueInput
 }
 
-input UserUpdateOneRequiredWithoutSpecialitiesInput {
-  create: UserCreateWithoutSpecialitiesInput
-  update: UserUpdateWithoutSpecialitiesDataInput
-  upsert: UserUpsertWithoutSpecialitiesInput
-  connect: UserWhereUniqueInput
-}
-
 input UserUpdateOneRequiredWithoutTagsInput {
   create: UserCreateWithoutTagsInput
   update: UserUpdateWithoutTagsDataInput
   upsert: UserUpsertWithoutTagsInput
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateOneWithoutSpecialitiesInput {
+  create: UserCreateWithoutSpecialitiesInput
+  update: UserUpdateWithoutSpecialitiesDataInput
+  upsert: UserUpsertWithoutSpecialitiesInput
+  delete: Boolean
+  disconnect: Boolean
   connect: UserWhereUniqueInput
 }
 
