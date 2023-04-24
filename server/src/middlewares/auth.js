@@ -34,7 +34,7 @@ const checkJwt = async (req, res, next, prisma) => {
       }`
     )
 
-  const speId = conf.tagCategories.find(cat => cat.name === 'services').labels[1].id
+  const speId = conf.tagCategories[0].labels[1].id
   const userUpsert = () =>
     prisma.mutation.upsertUser(
       {
@@ -45,6 +45,8 @@ const checkJwt = async (req, res, next, prisma) => {
           key: 'enableSkipAuth',
           name: 'enableSkipAuth',
           email: 'faq-user-no-auth@zenika.com',
+          picture:
+            'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg',
           specialities: { connect: { id: speId } }
         },
         update: {
@@ -52,15 +54,14 @@ const checkJwt = async (req, res, next, prisma) => {
           admin: false,
           key: 'enableSkipAuth',
           name: 'enableSkipAuth',
-          email: 'faq-user-no-auth@zenika.com'
+          email: 'faq-user-no-auth@zenika.com',
+          picture:
+            'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg'
         }
       },
       `{
         id
         email
-        specialities {
-          name
-        }
       }`
     )
 
