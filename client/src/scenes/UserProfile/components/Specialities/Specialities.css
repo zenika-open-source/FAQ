@@ -5,8 +5,8 @@
   width: fit-content;
   padding: 0.3rem;
   text-transform: capitalize;
-  background-color: #af1e3a;
-  color: #ffffff;
+  background-color: var(--primary-color);
+  color: var(--primary-color-font);
   border-radius: 4px;
 }
 
