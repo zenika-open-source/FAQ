@@ -1,0 +1,16 @@
+.speciality {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  padding: 0.3rem;
+  text-transform: capitalize;
+  background-color: #af1e3a;
+  color: #ffffff;
+  border-radius: 4px;
+}
+
+.speciality .material-icons {
+  margin-right: 10px;
+  font-size: 1rem;
+}
