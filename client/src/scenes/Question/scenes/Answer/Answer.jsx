@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Redirect, Prompt } from 'react-router-dom'
-import { useApolloClient } from '@apollo/react-hooks'
+import { useApolloClient, useMutation } from '@apollo/react-hooks'
 
 import { SUBMIT_ANSWER, EDIT_ANSWER } from './queries'
 
@@ -19,26 +19,13 @@ import { sourcesToKeyValuePairs, keyValuePairsToSources, canSubmit } from './hel
 
 import Tips from './components/Tips'
 import { useUser } from 'contexts'
+import { REMOVE_FLAG } from '../Read/queries'
 
 const Answer = ({ zNode }) => {
   const { specialities } = useUser()
+  const answer = zNode && zNode.answer
+  const [removeFlag] = useMutation(REMOVE_FLAG)
   const [state, setState] = useState(() => {
-    const answer = zNode && zNode.answer
-
-    // const autoRemoveFlag = () => {
-    //   if (specialities.length) {
-    //     specialities.forEach(speciality => {
-    //       answer.user.specialities.forEach(answerSpe => {
-    //         if (speciality.name !== answerSpe.name) {
-    //         } else {
-    //         }
-    //       })
-    //     })
-    //   }
-    // }
-
-    // autoRemoveFlag()
-
     const initialText = answer ? answer.content : ''
     const initialSources = sourcesToKeyValuePairs(answer ? answer.sources : [])
 
@@ -53,6 +40,22 @@ const Answer = ({ zNode }) => {
       showTips: PermanentClosableCard.isOpen('tips_answer')
     }
   })
+
+  const autoRemoveFlag = () => {
+    if (answer) {
+      if (specialities.length) {
+        specialities.forEach(speciality => {
+          answer.user.specialities.forEach(answerSpe => {
+            if (speciality.name !== answerSpe.name) {
+              removeFlag({ variables: { type: 'certified', nodeId: zNode.id } })
+            }
+          })
+        })
+      } else {
+        removeFlag({ variables: { type: 'certified', nodeId: zNode.id } })
+      }
+    }
+  }
 
   const intl = getIntl(Answer)
 
@@ -108,6 +111,7 @@ const Answer = ({ zNode }) => {
       })
       .then(() => {
         setState(state => ({ ...state, slug: zNode.question.slug + '-' + zNode.id }))
+        autoRemoveFlag()
         alert.pushSuccess(intl('alert.edit_success'))
       })
       .catch(error => {
