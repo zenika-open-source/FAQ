@@ -2694,7 +2694,15 @@ type TagLabel {
     first: Int
     last: Int
   ): [Tag!]
-  user: User
+  specialists(
+    where: UserWhereInput
+    orderBy: UserOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [User!]
   order: Int!
   category: TagCategory!
   createdAt: DateTime!
@@ -2711,7 +2719,7 @@ input TagLabelCreateInput {
   id: ID
   name: String!
   tags: TagCreateManyWithoutLabelInput
-  user: UserCreateOneWithoutSpecialitiesInput
+  specialists: UserCreateManyWithoutSpecialitiesInput
   order: Int!
   category: TagCategoryCreateOneWithoutLabelsInput!
 }
@@ -2721,8 +2729,8 @@ input TagLabelCreateManyWithoutCategoryInput {
   connect: [TagLabelWhereUniqueInput!]
 }
 
-input TagLabelCreateManyWithoutUserInput {
-  create: [TagLabelCreateWithoutUserInput!]
+input TagLabelCreateManyWithoutSpecialistsInput {
+  create: [TagLabelCreateWithoutSpecialistsInput!]
   connect: [TagLabelWhereUniqueInput!]
 }
 
@@ -2735,22 +2743,22 @@ input TagLabelCreateWithoutCategoryInput {
   id: ID
   name: String!
   tags: TagCreateManyWithoutLabelInput
-  user: UserCreateOneWithoutSpecialitiesInput
+  specialists: UserCreateManyWithoutSpecialitiesInput
   order: Int!
+}
+
+input TagLabelCreateWithoutSpecialistsInput {
+  id: ID
+  name: String!
+  tags: TagCreateManyWithoutLabelInput
+  order: Int!
+  category: TagCategoryCreateOneWithoutLabelsInput!
 }
 
 input TagLabelCreateWithoutTagsInput {
   id: ID
   name: String!
-  user: UserCreateOneWithoutSpecialitiesInput
-  order: Int!
-  category: TagCategoryCreateOneWithoutLabelsInput!
-}
-
-input TagLabelCreateWithoutUserInput {
-  id: ID
-  name: String!
-  tags: TagCreateManyWithoutLabelInput
+  specialists: UserCreateManyWithoutSpecialitiesInput
   order: Int!
   category: TagCategoryCreateOneWithoutLabelsInput!
 }
@@ -2860,7 +2868,7 @@ input TagLabelSubscriptionWhereInput {
 input TagLabelUpdateInput {
   name: String
   tags: TagUpdateManyWithoutLabelInput
-  user: UserUpdateOneWithoutSpecialitiesInput
+  specialists: UserUpdateManyWithoutSpecialitiesInput
   order: Int
   category: TagCategoryUpdateOneRequiredWithoutLabelsInput
 }
@@ -2887,14 +2895,14 @@ input TagLabelUpdateManyWithoutCategoryInput {
   updateMany: [TagLabelUpdateManyWithWhereNestedInput!]
 }
 
-input TagLabelUpdateManyWithoutUserInput {
-  create: [TagLabelCreateWithoutUserInput!]
+input TagLabelUpdateManyWithoutSpecialistsInput {
+  create: [TagLabelCreateWithoutSpecialistsInput!]
   delete: [TagLabelWhereUniqueInput!]
   connect: [TagLabelWhereUniqueInput!]
   set: [TagLabelWhereUniqueInput!]
   disconnect: [TagLabelWhereUniqueInput!]
-  update: [TagLabelUpdateWithWhereUniqueWithoutUserInput!]
-  upsert: [TagLabelUpsertWithWhereUniqueWithoutUserInput!]
+  update: [TagLabelUpdateWithWhereUniqueWithoutSpecialistsInput!]
+  upsert: [TagLabelUpsertWithWhereUniqueWithoutSpecialistsInput!]
   deleteMany: [TagLabelScalarWhereInput!]
   updateMany: [TagLabelUpdateManyWithWhereNestedInput!]
 }
@@ -2916,20 +2924,20 @@ input TagLabelUpdateOneWithoutTagsInput {
 input TagLabelUpdateWithoutCategoryDataInput {
   name: String
   tags: TagUpdateManyWithoutLabelInput
-  user: UserUpdateOneWithoutSpecialitiesInput
+  specialists: UserUpdateManyWithoutSpecialitiesInput
   order: Int
 }
 
-input TagLabelUpdateWithoutTagsDataInput {
+input TagLabelUpdateWithoutSpecialistsDataInput {
   name: String
-  user: UserUpdateOneWithoutSpecialitiesInput
+  tags: TagUpdateManyWithoutLabelInput
   order: Int
   category: TagCategoryUpdateOneRequiredWithoutLabelsInput
 }
 
-input TagLabelUpdateWithoutUserDataInput {
+input TagLabelUpdateWithoutTagsDataInput {
   name: String
-  tags: TagUpdateManyWithoutLabelInput
+  specialists: UserUpdateManyWithoutSpecialitiesInput
   order: Int
   category: TagCategoryUpdateOneRequiredWithoutLabelsInput
 }
@@ -2939,9 +2947,9 @@ input TagLabelUpdateWithWhereUniqueWithoutCategoryInput {
   data: TagLabelUpdateWithoutCategoryDataInput!
 }
 
-input TagLabelUpdateWithWhereUniqueWithoutUserInput {
+input TagLabelUpdateWithWhereUniqueWithoutSpecialistsInput {
   where: TagLabelWhereUniqueInput!
-  data: TagLabelUpdateWithoutUserDataInput!
+  data: TagLabelUpdateWithoutSpecialistsDataInput!
 }
 
 input TagLabelUpsertWithoutTagsInput {
@@ -2955,10 +2963,10 @@ input TagLabelUpsertWithWhereUniqueWithoutCategoryInput {
   create: TagLabelCreateWithoutCategoryInput!
 }
 
-input TagLabelUpsertWithWhereUniqueWithoutUserInput {
+input TagLabelUpsertWithWhereUniqueWithoutSpecialistsInput {
   where: TagLabelWhereUniqueInput!
-  update: TagLabelUpdateWithoutUserDataInput!
-  create: TagLabelCreateWithoutUserInput!
+  update: TagLabelUpdateWithoutSpecialistsDataInput!
+  create: TagLabelCreateWithoutSpecialistsInput!
 }
 
 input TagLabelWhereInput {
@@ -2993,7 +3001,9 @@ input TagLabelWhereInput {
   tags_every: TagWhereInput
   tags_some: TagWhereInput
   tags_none: TagWhereInput
-  user: UserWhereInput
+  specialists_every: UserWhereInput
+  specialists_some: UserWhereInput
+  specialists_none: UserWhereInput
   order: Int
   order_not: Int
   order_in: [Int!]
@@ -3313,8 +3323,13 @@ input UserCreateInput {
   answers: AnswerCreateManyWithoutUserInput
   flags: FlagCreateManyWithoutUserInput
   tags: TagCreateManyWithoutUserInput
-  specialities: TagLabelCreateManyWithoutUserInput
+  specialities: TagLabelCreateManyWithoutSpecialistsInput
   history: HistoryActionCreateManyWithoutUserInput
+}
+
+input UserCreateManyWithoutSpecialitiesInput {
+  create: [UserCreateWithoutSpecialitiesInput!]
+  connect: [UserWhereUniqueInput!]
 }
 
 input UserCreateOneWithoutAnswersInput {
@@ -3337,11 +3352,6 @@ input UserCreateOneWithoutQuestionsInput {
   connect: UserWhereUniqueInput
 }
 
-input UserCreateOneWithoutSpecialitiesInput {
-  create: UserCreateWithoutSpecialitiesInput
-  connect: UserWhereUniqueInput
-}
-
 input UserCreateOneWithoutTagsInput {
   create: UserCreateWithoutTagsInput
   connect: UserWhereUniqueInput
@@ -3359,7 +3369,7 @@ input UserCreateWithoutAnswersInput {
   questions: QuestionCreateManyWithoutUserInput
   flags: FlagCreateManyWithoutUserInput
   tags: TagCreateManyWithoutUserInput
-  specialities: TagLabelCreateManyWithoutUserInput
+  specialities: TagLabelCreateManyWithoutSpecialistsInput
   history: HistoryActionCreateManyWithoutUserInput
 }
 
@@ -3375,7 +3385,7 @@ input UserCreateWithoutFlagsInput {
   questions: QuestionCreateManyWithoutUserInput
   answers: AnswerCreateManyWithoutUserInput
   tags: TagCreateManyWithoutUserInput
-  specialities: TagLabelCreateManyWithoutUserInput
+  specialities: TagLabelCreateManyWithoutSpecialistsInput
   history: HistoryActionCreateManyWithoutUserInput
 }
 
@@ -3392,7 +3402,7 @@ input UserCreateWithoutHistoryInput {
   answers: AnswerCreateManyWithoutUserInput
   flags: FlagCreateManyWithoutUserInput
   tags: TagCreateManyWithoutUserInput
-  specialities: TagLabelCreateManyWithoutUserInput
+  specialities: TagLabelCreateManyWithoutSpecialistsInput
 }
 
 input UserCreateWithoutQuestionsInput {
@@ -3407,7 +3417,7 @@ input UserCreateWithoutQuestionsInput {
   answers: AnswerCreateManyWithoutUserInput
   flags: FlagCreateManyWithoutUserInput
   tags: TagCreateManyWithoutUserInput
-  specialities: TagLabelCreateManyWithoutUserInput
+  specialities: TagLabelCreateManyWithoutSpecialistsInput
   history: HistoryActionCreateManyWithoutUserInput
 }
 
@@ -3439,7 +3449,7 @@ input UserCreateWithoutTagsInput {
   questions: QuestionCreateManyWithoutUserInput
   answers: AnswerCreateManyWithoutUserInput
   flags: FlagCreateManyWithoutUserInput
-  specialities: TagLabelCreateManyWithoutUserInput
+  specialities: TagLabelCreateManyWithoutSpecialistsInput
   history: HistoryActionCreateManyWithoutUserInput
 }
 
@@ -3484,6 +3494,128 @@ type UserPreviousValues {
   updatedAt: DateTime!
 }
 
+input UserScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  auth0Id: String
+  auth0Id_not: String
+  auth0Id_in: [String!]
+  auth0Id_not_in: [String!]
+  auth0Id_lt: String
+  auth0Id_lte: String
+  auth0Id_gt: String
+  auth0Id_gte: String
+  auth0Id_contains: String
+  auth0Id_not_contains: String
+  auth0Id_starts_with: String
+  auth0Id_not_starts_with: String
+  auth0Id_ends_with: String
+  auth0Id_not_ends_with: String
+  key: String
+  key_not: String
+  key_in: [String!]
+  key_not_in: [String!]
+  key_lt: String
+  key_lte: String
+  key_gt: String
+  key_gte: String
+  key_contains: String
+  key_not_contains: String
+  key_starts_with: String
+  key_not_starts_with: String
+  key_ends_with: String
+  key_not_ends_with: String
+  admin: Boolean
+  admin_not: Boolean
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  email: String
+  email_not: String
+  email_in: [String!]
+  email_not_in: [String!]
+  email_lt: String
+  email_lte: String
+  email_gt: String
+  email_gte: String
+  email_contains: String
+  email_not_contains: String
+  email_starts_with: String
+  email_not_starts_with: String
+  email_ends_with: String
+  email_not_ends_with: String
+  picture: String
+  picture_not: String
+  picture_in: [String!]
+  picture_not_in: [String!]
+  picture_lt: String
+  picture_lte: String
+  picture_gt: String
+  picture_gte: String
+  picture_contains: String
+  picture_not_contains: String
+  picture_starts_with: String
+  picture_not_starts_with: String
+  picture_ends_with: String
+  picture_not_ends_with: String
+  locale: String
+  locale_not: String
+  locale_in: [String!]
+  locale_not_in: [String!]
+  locale_lt: String
+  locale_lte: String
+  locale_gt: String
+  locale_gte: String
+  locale_contains: String
+  locale_not_contains: String
+  locale_starts_with: String
+  locale_not_starts_with: String
+  locale_ends_with: String
+  locale_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [UserScalarWhereInput!]
+  OR: [UserScalarWhereInput!]
+  NOT: [UserScalarWhereInput!]
+}
+
 type UserSubscriptionPayload {
   mutation: MutationType!
   node: User
@@ -3514,8 +3646,18 @@ input UserUpdateInput {
   answers: AnswerUpdateManyWithoutUserInput
   flags: FlagUpdateManyWithoutUserInput
   tags: TagUpdateManyWithoutUserInput
-  specialities: TagLabelUpdateManyWithoutUserInput
+  specialities: TagLabelUpdateManyWithoutSpecialistsInput
   history: HistoryActionUpdateManyWithoutUserInput
+}
+
+input UserUpdateManyDataInput {
+  auth0Id: String
+  key: String
+  admin: Boolean
+  name: String
+  email: String
+  picture: String
+  locale: String
 }
 
 input UserUpdateManyMutationInput {
@@ -3526,6 +3668,23 @@ input UserUpdateManyMutationInput {
   email: String
   picture: String
   locale: String
+}
+
+input UserUpdateManyWithoutSpecialitiesInput {
+  create: [UserCreateWithoutSpecialitiesInput!]
+  delete: [UserWhereUniqueInput!]
+  connect: [UserWhereUniqueInput!]
+  set: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutSpecialitiesInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutSpecialitiesInput!]
+  deleteMany: [UserScalarWhereInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
+}
+
+input UserUpdateManyWithWhereNestedInput {
+  where: UserScalarWhereInput!
+  data: UserUpdateManyDataInput!
 }
 
 input UserUpdateOneRequiredWithoutAnswersInput {
@@ -3563,15 +3722,6 @@ input UserUpdateOneRequiredWithoutTagsInput {
   connect: UserWhereUniqueInput
 }
 
-input UserUpdateOneWithoutSpecialitiesInput {
-  create: UserCreateWithoutSpecialitiesInput
-  update: UserUpdateWithoutSpecialitiesDataInput
-  upsert: UserUpsertWithoutSpecialitiesInput
-  delete: Boolean
-  disconnect: Boolean
-  connect: UserWhereUniqueInput
-}
-
 input UserUpdateWithoutAnswersDataInput {
   auth0Id: String
   key: String
@@ -3583,7 +3733,7 @@ input UserUpdateWithoutAnswersDataInput {
   questions: QuestionUpdateManyWithoutUserInput
   flags: FlagUpdateManyWithoutUserInput
   tags: TagUpdateManyWithoutUserInput
-  specialities: TagLabelUpdateManyWithoutUserInput
+  specialities: TagLabelUpdateManyWithoutSpecialistsInput
   history: HistoryActionUpdateManyWithoutUserInput
 }
 
@@ -3598,7 +3748,7 @@ input UserUpdateWithoutFlagsDataInput {
   questions: QuestionUpdateManyWithoutUserInput
   answers: AnswerUpdateManyWithoutUserInput
   tags: TagUpdateManyWithoutUserInput
-  specialities: TagLabelUpdateManyWithoutUserInput
+  specialities: TagLabelUpdateManyWithoutSpecialistsInput
   history: HistoryActionUpdateManyWithoutUserInput
 }
 
@@ -3614,7 +3764,7 @@ input UserUpdateWithoutHistoryDataInput {
   answers: AnswerUpdateManyWithoutUserInput
   flags: FlagUpdateManyWithoutUserInput
   tags: TagUpdateManyWithoutUserInput
-  specialities: TagLabelUpdateManyWithoutUserInput
+  specialities: TagLabelUpdateManyWithoutSpecialistsInput
 }
 
 input UserUpdateWithoutQuestionsDataInput {
@@ -3628,7 +3778,7 @@ input UserUpdateWithoutQuestionsDataInput {
   answers: AnswerUpdateManyWithoutUserInput
   flags: FlagUpdateManyWithoutUserInput
   tags: TagUpdateManyWithoutUserInput
-  specialities: TagLabelUpdateManyWithoutUserInput
+  specialities: TagLabelUpdateManyWithoutSpecialistsInput
   history: HistoryActionUpdateManyWithoutUserInput
 }
 
@@ -3658,8 +3808,13 @@ input UserUpdateWithoutTagsDataInput {
   questions: QuestionUpdateManyWithoutUserInput
   answers: AnswerUpdateManyWithoutUserInput
   flags: FlagUpdateManyWithoutUserInput
-  specialities: TagLabelUpdateManyWithoutUserInput
+  specialities: TagLabelUpdateManyWithoutSpecialistsInput
   history: HistoryActionUpdateManyWithoutUserInput
+}
+
+input UserUpdateWithWhereUniqueWithoutSpecialitiesInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutSpecialitiesDataInput!
 }
 
 input UserUpsertWithoutAnswersInput {
@@ -3682,14 +3837,15 @@ input UserUpsertWithoutQuestionsInput {
   create: UserCreateWithoutQuestionsInput!
 }
 
-input UserUpsertWithoutSpecialitiesInput {
-  update: UserUpdateWithoutSpecialitiesDataInput!
-  create: UserCreateWithoutSpecialitiesInput!
-}
-
 input UserUpsertWithoutTagsInput {
   update: UserUpdateWithoutTagsDataInput!
   create: UserCreateWithoutTagsInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutSpecialitiesInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutSpecialitiesDataInput!
+  create: UserCreateWithoutSpecialitiesInput!
 }
 
 input UserWhereInput {

@@ -34,8 +34,8 @@ const checkJwt = async (req, res, next, prisma) => {
       }`
     )
 
-  const speId = conf.tagCategories[0].labels[1].id
-  const userUpsert = () =>
+  const specialityId = conf.tagCategories[0].labels[1].id
+  const userNoAuthUpsert = () =>
     prisma.mutation.upsertUser(
       {
         where: { auth0Id: 'faq-user-no-auth@zenika.com' },
@@ -47,7 +47,7 @@ const checkJwt = async (req, res, next, prisma) => {
           email: 'faq-user-no-auth@zenika.com',
           picture:
             'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg',
-          specialities: { connect: { id: speId } }
+          specialities: { connect: { id: specialityId } }
         },
         update: {
           auth0Id: 'faq-user-no-auth@zenika.com',
@@ -111,7 +111,7 @@ const checkJwt = async (req, res, next, prisma) => {
 
     getUser = next
   } else if (process.env.DISABLE_AUTH === 'true') {
-    const user = await userUpsert()
+    const user = await userNoAuthUpsert()
     req.user = {
       id: user.id,
       email: user.email,
