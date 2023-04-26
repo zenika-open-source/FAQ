@@ -30,14 +30,10 @@ const Answer = ({ zNode }) => {
         specialities.forEach(speciality => {
           answer.user.specialities.forEach(answerSpe => {
             if (speciality.name !== answerSpe.name) {
-              console.log('not equal')
             } else {
-              console.log('equal')
             }
           })
         })
-      } else {
-        console.log('no specialities')
       }
     }
 

@@ -6,7 +6,6 @@ import './Specialities.css'
 
 const Specialities = ({ spe }) => {
   const intl = getIntl(Specialities)
-  console.log(spe)
 
   return (
     <Card>
