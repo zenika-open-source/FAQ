@@ -10,7 +10,7 @@ import Button from 'components/Button'
 import './FlagsDropdown.css'
 import { useUser } from 'contexts'
 
-const FlagsDropdown = ({ flags, tags, onSelect, onRemove }) => {
+const FlagsDropdown = ({ flags, tags, answer, onSelect, onRemove }) => {
   const intl = getIntl(FlagsDropdown)
   const flagIntl = getIntl(Flag)
 
@@ -19,15 +19,18 @@ const FlagsDropdown = ({ flags, tags, onSelect, onRemove }) => {
 
   useEffect(() => {
     const updatedFlagTypes = [...flagTypes]
-    tags.forEach(tag => {
-      specialities.forEach(speciality => {
-        if (tag.label.name === speciality.name) {
-          updatedFlagTypes.push('certified')
-        }
+    if (answer) {
+      tags.forEach(tag => {
+        specialities.forEach(speciality => {
+          if (tag.label.name === speciality.name) {
+            updatedFlagTypes.push('certified')
+          }
+        })
       })
-    })
+    }
     setFlagTypes(updatedFlagTypes)
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tags, answer])
 
   const items = flagTypes.map(type => {
     const isSelected = flags.filter(f => f.type === type).length > 0

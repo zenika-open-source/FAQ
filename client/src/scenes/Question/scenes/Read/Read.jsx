@@ -58,6 +58,7 @@ const Read = ({ history, match, zNode, loading }) => {
         <FlagsDropdown
           flags={zNode.flags}
           tags={zNode.tags}
+          answer={zNode.answer}
           onSelect={type => createFlag({ variables: { type, nodeId: zNode.id } })}
           onRemove={type => removeFlag({ variables: { type, nodeId: zNode.id } })}
         />
