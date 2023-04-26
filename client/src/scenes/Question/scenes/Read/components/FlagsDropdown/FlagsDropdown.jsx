@@ -13,22 +13,17 @@ const FlagsDropdown = ({ specialities, flags, tags, answer, onSelect, onRemove }
   const intl = getIntl(FlagsDropdown)
   const flagIntl = getIntl(Flag)
 
-  const [flagTypes, setFlagTypes] = useState(['incomplete', 'outdated', 'duplicate'])
+  const flagTypes = ['incomplete', 'outdated', 'duplicate']
 
-  useEffect(() => {
-    const updatedFlagTypes = [...flagTypes]
-    if (answer) {
-      tags.forEach(tag => {
-        specialities.forEach(speciality => {
-          if (tag.label.name === speciality.name) {
-            updatedFlagTypes.push('certified')
-          }
-        })
+  if (answer) {
+    tags.forEach(tag => {
+      specialities.forEach(speciality => {
+        if (tag.label.name === speciality.name) {
+          flagTypes.push('certified')
+        }
       })
-    }
-    setFlagTypes(updatedFlagTypes)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tags, answer])
+    })
+  }
 
   const items = flagTypes.map(type => {
     const isSelected = flags.filter(f => f.type === type).length > 0
