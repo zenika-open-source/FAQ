@@ -487,6 +487,50 @@ test('Should see the marketing specialities', async ({ page }) => {
   await expect(page.getByText('verifiedmarketing')).toBeVisible()
 })
 
+test('Should be able to add a certified flag for a question of my speciality', async ({ page }) => {
+  await page.goto('/')
+  await page
+    .locator('button', { hasText: 'Nouvelle question' })
+    .first()
+    .click()
+  await page.locator('input').click()
+  await page.locator('input').fill(questionsText[randomQuestion])
+  await page.getByRole('button', { name: 'add' }).click()
+  await page
+    .getByText('marketing', { exact: true })
+    .first()
+    .click()
+  await page.locator('button', { hasText: 'Envoyer la question' }).click()
+  await page.getByRole('button', { name: 'flag Signaler ...' }).hover()
+  await page
+    .locator('a')
+    .filter({ hasText: 'verifiedcertifiée' })
+    .click()
+  await page.waitForTimeout(1000)
+  await page.goto('/')
+  await expect(page.getByText('verified')).toBeVisible()
+})
+
+test('Should not be able to add a certified flag for a question not in my speciality', async ({
+  page
+}) => {
+  await page.goto('/')
+  await page
+    .locator('button', { hasText: 'Nouvelle question' })
+    .first()
+    .click()
+  await page.locator('input').click()
+  await page.locator('input').fill(questionsText[randomQuestion])
+  await page.getByRole('button', { name: 'add' }).click()
+  await page
+    .getByText('ce', { exact: true })
+    .first()
+    .click()
+  await page.locator('button', { hasText: 'Envoyer la question' }).click()
+  await page.getByRole('button', { name: 'flag Signaler ...' }).hover()
+  await expect(page.locator('a').filter({ hasText: 'verifiedcertifiée' })).not.toBeVisible()
+})
+
 test.afterEach(async () => {
   algolia.clearIndex({ prisma })
 })
