@@ -5,8 +5,9 @@
   width: fit-content;
   padding: 0.3rem;
   text-transform: capitalize;
-  background-color: var(--primary-color);
-  color: var(--primary-color-font);
+  background-color: transparent;
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
   border-radius: 4px;
 }
 
