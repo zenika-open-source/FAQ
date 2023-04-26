@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
 import { getIntl } from 'services'
@@ -10,12 +10,24 @@ import Button from 'components/Button'
 import './FlagsDropdown.css'
 import { useUser } from 'contexts'
 
-const FlagsDropdown = ({ flags, onSelect, onRemove }) => {
+const FlagsDropdown = ({ flags, tags, onSelect, onRemove }) => {
   const intl = getIntl(FlagsDropdown)
   const flagIntl = getIntl(Flag)
 
-  const flagTypes = ['incomplete', 'outdated', 'duplicate', 'certified']
-  const user = useUser()
+  const [flagTypes, setFlagTypes] = useState(['incomplete', 'outdated', 'duplicate'])
+  const { specialities } = useUser()
+
+  useEffect(() => {
+    const updatedFlagTypes = [...flagTypes]
+    tags.forEach(tag => {
+      specialities.forEach(speciality => {
+        if (tag.label.name === speciality.name) {
+          updatedFlagTypes.push('certified')
+        }
+      })
+    })
+    setFlagTypes(updatedFlagTypes)
+  }, [])
 
   const items = flagTypes.map(type => {
     const isSelected = flags.filter(f => f.type === type).length > 0

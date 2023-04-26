@@ -57,6 +57,7 @@ const Read = ({ history, match, zNode, loading }) => {
       <ActionMenu backLink="/" backLabel={intl('menu.home')} goBack>
         <FlagsDropdown
           flags={zNode.flags}
+          tags={zNode.tags}
           onSelect={type => createFlag({ variables: { type, nodeId: zNode.id } })}
           onRemove={type => removeFlag({ variables: { type, nodeId: zNode.id } })}
         />
