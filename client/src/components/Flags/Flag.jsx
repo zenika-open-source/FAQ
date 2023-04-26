@@ -21,6 +21,10 @@ const flagMeta = {
   unanswered: {
     icon: 'help_outline',
     color: '#157B5F'
+  },
+  certified: {
+    icon: 'verified',
+    color: '#caac00'
   }
 }
 
@@ -52,13 +56,15 @@ Flag.translations = {
     duplicate: 'duplicate',
     outdated: 'outdated',
     incomplete: 'incomplete',
-    unanswered: 'unanswered'
+    unanswered: 'unanswered',
+    certified: 'certified'
   },
   fr: {
     duplicate: 'doublon',
     outdated: 'obsolète',
     incomplete: 'incomplète',
-    unanswered: 'sans réponse'
+    unanswered: 'sans réponse',
+    certified: 'certifiée'
   }
 }
 

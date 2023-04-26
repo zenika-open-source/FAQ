@@ -8,12 +8,14 @@ import Dropdown, { DropdownItem } from 'components/Dropdown'
 import Button from 'components/Button'
 
 import './FlagsDropdown.css'
+import { useUser } from 'contexts'
 
 const FlagsDropdown = ({ flags, onSelect, onRemove }) => {
   const intl = getIntl(FlagsDropdown)
   const flagIntl = getIntl(Flag)
 
-  const flagTypes = ['incomplete', 'outdated', 'duplicate']
+  const flagTypes = ['incomplete', 'outdated', 'duplicate', 'certified']
+  const user = useUser()
 
   const items = flagTypes.map(type => {
     const isSelected = flags.filter(f => f.type === type).length > 0
