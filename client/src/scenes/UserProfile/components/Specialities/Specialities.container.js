@@ -1,4 +1,4 @@
-import { withError } from 'components'
+import { withError, withLoading } from 'components'
 import { compose } from 'helpers'
 import { query } from 'services/apollo'
 import { GET_SPECIALITIES } from './queries'
@@ -11,5 +11,6 @@ export default compose(
       spe: me.specialities
     })
   }),
-  withError()
+  withError(),
+  withLoading()
 )(Specialities)

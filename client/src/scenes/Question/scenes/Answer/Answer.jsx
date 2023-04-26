@@ -25,19 +25,19 @@ const Answer = ({ zNode }) => {
   const [state, setState] = useState(() => {
     const answer = zNode && zNode.answer
 
-    const autoRemoveFlag = () => {
-      if (specialities.length) {
-        specialities.forEach(speciality => {
-          answer.user.specialities.forEach(answerSpe => {
-            if (speciality.name !== answerSpe.name) {
-            } else {
-            }
-          })
-        })
-      }
-    }
+    // const autoRemoveFlag = () => {
+    //   if (specialities.length) {
+    //     specialities.forEach(speciality => {
+    //       answer.user.specialities.forEach(answerSpe => {
+    //         if (speciality.name !== answerSpe.name) {
+    //         } else {
+    //         }
+    //       })
+    //     })
+    //   }
+    // }
 
-    autoRemoveFlag()
+    // autoRemoveFlag()
 
     const initialText = answer ? answer.content : ''
     const initialSources = sourcesToKeyValuePairs(answer ? answer.sources : [])
