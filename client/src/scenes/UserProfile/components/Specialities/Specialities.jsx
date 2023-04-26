@@ -6,13 +6,14 @@ import './Specialities.css'
 
 const Specialities = ({ spe }) => {
   const intl = getIntl(Specialities)
+  console.log(spe)
 
   return (
     <Card>
       <CardText className="specialities">
         <h2 style={{ marginBottom: '1rem' }}>{intl('title')}</h2>
         <hr />
-        {spe ? (
+        {spe.length ? (
           spe.map(s => (
             <p key={s.name} className="speciality">
               <i className="material-icons">verified</i>

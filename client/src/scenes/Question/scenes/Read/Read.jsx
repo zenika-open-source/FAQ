@@ -16,6 +16,7 @@ import Dropdown, { DropdownItem } from 'components/Dropdown'
 
 import { ActionMenu } from '../../components'
 import { Views, FlagsDropdown, Sources, Meta, Share, History } from './components'
+import { useUser } from 'contexts'
 
 const Read = ({ history, match, zNode, loading }) => {
   const [loaded, setLoaded] = useState(false)
@@ -24,6 +25,7 @@ const Read = ({ history, match, zNode, loading }) => {
   const [createFlag] = useMutation(CREATE_FLAG)
   const [removeFlag] = useMutation(REMOVE_FLAG)
   const [incrementViewsCounter] = useMutation(INCREMENT_VIEWS_COUNTER)
+  const { specialities } = useUser()
 
   useEffect(() => {
     if (!loaded || incremented) return
@@ -56,6 +58,7 @@ const Read = ({ history, match, zNode, loading }) => {
       </Helmet>
       <ActionMenu backLink="/" backLabel={intl('menu.home')} goBack>
         <FlagsDropdown
+          specialities={specialities}
           flags={zNode.flags}
           tags={zNode.tags}
           answer={zNode.answer}

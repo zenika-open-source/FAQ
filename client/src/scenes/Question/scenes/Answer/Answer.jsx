@@ -18,10 +18,30 @@ import { ActionMenu } from '../../components'
 import { sourcesToKeyValuePairs, keyValuePairsToSources, canSubmit } from './helpers'
 
 import Tips from './components/Tips'
+import { useUser } from 'contexts'
 
 const Answer = ({ zNode }) => {
+  const { specialities } = useUser()
   const [state, setState] = useState(() => {
     const answer = zNode && zNode.answer
+
+    const autoRemoveFlag = () => {
+      if (specialities.length) {
+        specialities.forEach(speciality => {
+          answer.user.specialities.forEach(answerSpe => {
+            if (speciality.name !== answerSpe.name) {
+              console.log('not equal')
+            } else {
+              console.log('equal')
+            }
+          })
+        })
+      } else {
+        console.log('no specialities')
+      }
+    }
+
+    autoRemoveFlag()
 
     const initialText = answer ? answer.content : ''
     const initialSources = sourcesToKeyValuePairs(answer ? answer.sources : [])

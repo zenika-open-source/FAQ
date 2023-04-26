@@ -8,14 +8,12 @@ import Dropdown, { DropdownItem } from 'components/Dropdown'
 import Button from 'components/Button'
 
 import './FlagsDropdown.css'
-import { useUser } from 'contexts'
 
-const FlagsDropdown = ({ flags, tags, answer, onSelect, onRemove }) => {
+const FlagsDropdown = ({ specialities, flags, tags, answer, onSelect, onRemove }) => {
   const intl = getIntl(FlagsDropdown)
   const flagIntl = getIntl(Flag)
 
   const [flagTypes, setFlagTypes] = useState(['incomplete', 'outdated', 'duplicate'])
-  const { specialities } = useUser()
 
   useEffect(() => {
     const updatedFlagTypes = [...flagTypes]
