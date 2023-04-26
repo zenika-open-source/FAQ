@@ -455,7 +455,7 @@ test('Should not be able to add a certified flag to an unanswered question', asy
     .first()
     .click()
   await page.locator('input').click()
-  await page.locator('input').fill(questionsText[randomQuestion])
+  await page.locator('input').fill('Ceci est une question')
   await page.getByRole('button', { name: 'add' }).click()
   await page
     .getByText('marketing', { exact: true })
@@ -463,7 +463,7 @@ test('Should not be able to add a certified flag to an unanswered question', asy
     .click()
   await page.locator('button', { hasText: 'Envoyer la question' }).click()
   await page.getByRole('button', { name: 'flag Signaler ...' }).hover()
-  await expect(page.locator('a').filter({ hasText: 'verifiedcertifiée' })).not.toBeVisible()
+  await expect(page.locator('a').filter({ hasText: 'verifiedcertifiée' })).toBeHidden()
 })
 
 test('Should be able to add a certified flag for a question of my speciality', async ({ page }) => {
@@ -473,7 +473,7 @@ test('Should be able to add a certified flag for a question of my speciality', a
     .first()
     .click()
   await page.locator('input').click()
-  await page.locator('input').fill(questionsText[randomQuestion])
+  await page.locator('input').fill('Ceci est une question')
   await page.getByRole('button', { name: 'add' }).click()
   await page
     .getByText('marketing', { exact: true })
@@ -482,7 +482,7 @@ test('Should be able to add a certified flag for a question of my speciality', a
   await page.locator('button', { hasText: 'Envoyer la question' }).click()
   await page.locator('button', { hasText: 'Répondre à la question' }).click()
   await page.locator('textarea').click()
-  await page.locator('textarea').fill(answersText[randomAnswer])
+  await page.locator('textarea').fill('Ceci est une réponse')
   await page.locator('button', { hasText: 'Envoyer la réponse' }).click()
   await page.getByRole('button', { name: 'flag Signaler ...' }).hover()
   await page
@@ -503,7 +503,7 @@ test('Should not be able to add a certified flag for a question not in my specia
     .first()
     .click()
   await page.locator('input').click()
-  await page.locator('input').fill(questionsText[randomQuestion])
+  await page.locator('input').fill('Ceci est une question')
   await page.getByRole('button', { name: 'add' }).click()
   await page
     .getByText('ce', { exact: true })
@@ -512,10 +512,10 @@ test('Should not be able to add a certified flag for a question not in my specia
   await page.locator('button', { hasText: 'Envoyer la question' }).click()
   await page.locator('button', { hasText: 'Répondre à la question' }).click()
   await page.locator('textarea').click()
-  await page.locator('textarea').fill(answersText[randomAnswer])
+  await page.locator('textarea').fill('Ceci est une réponse')
   await page.locator('button', { hasText: 'Envoyer la réponse' }).click()
   await page.getByRole('button', { name: 'flag Signaler ...' }).hover()
-  await expect(page.locator('a').filter({ hasText: 'verifiedcertifiée' })).not.toBeVisible()
+  await expect(page.locator('a').filter({ hasText: 'verifiedcertifiée' })).toBeHidden()
 })
 
 test.afterEach(async () => {
