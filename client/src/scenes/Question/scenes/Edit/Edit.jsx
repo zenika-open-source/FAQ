@@ -1,24 +1,28 @@
-import React, { useState } from 'react'
+import { useApolloClient, useMutation } from '@apollo/react-hooks'
 import PropTypes from 'prop-types'
-import { Redirect, Prompt } from 'react-router-dom'
-import { useApolloClient } from '@apollo/react-hooks'
+import { useState } from 'react'
+import { Prompt, Redirect } from 'react-router-dom'
 
-import { SUBMIT_QUESTION, EDIT_QUESTION } from './queries'
+import { EDIT_QUESTION, SUBMIT_QUESTION } from './queries'
 
 import { alert, getIntl } from 'services'
 
-import Card, { CardText, CardActions, PermanentClosableCard } from 'components/Card'
-import { Loading, Button, Input, CtrlEnter, TagPicker } from 'components'
+import { Button, CtrlEnter, Input, Loading, TagPicker } from 'components'
+import Card, { CardActions, CardText, PermanentClosableCard } from 'components/Card'
 
 import { ActionMenu } from '../../components'
 
 import { canSubmit } from './helpers'
 
+import { CREATE_FLAG, REMOVE_FLAG } from '../Read/queries'
 import Tips from './components/Tips'
 
 import './Edit.css'
 
 const Edit = ({ location, match, zNode }) => {
+  const [removeFlag] = useMutation(REMOVE_FLAG)
+  const [createFlag] = useMutation(CREATE_FLAG)
+
   const [state, setState] = useState(() => {
     const passedQuestionText = location.state ? location.state.question : ''
     const initialQuestion = zNode ? zNode.question.title : passedQuestionText
@@ -42,6 +46,24 @@ const Edit = ({ location, match, zNode }) => {
   const apollo = useApolloClient()
 
   const { isEditing, loadingSubmit, slug, question, tags, showTips } = state
+
+  const autoRemoveCertif = () => {
+    const flags = zNode.flags
+    const specialities = zNode.answer.user.specialities
+    if (flags.length > 0) {
+      flags.forEach(flag => {
+        specialities.forEach(speciality => {
+          const speTag = tags.find(tag => tag.name === speciality.name)
+          console.log(speTag)
+          if (flag.type === 'certified' && !speTag) {
+            removeFlag({ variables: { type: 'certified', nodeId: zNode.id } })
+          } else if (flag.type !== 'certified' && speTag) {
+            createFlag({ variables: { type: 'certified', nodeId: zNode.id } })
+          }
+        })
+      })
+    }
+  }
 
   const toggleTips = value => () => {
     setState(state => ({ ...state, showTips: value }))
@@ -93,6 +115,7 @@ const Edit = ({ location, match, zNode }) => {
           ...state,
           slug: data.updateQuestionAndTags.slug + '-' + zNode.id
         }))
+        autoRemoveCertif()
         alert.pushSuccess(intl('alert.edit_success'))
       })
       .catch(error => {
