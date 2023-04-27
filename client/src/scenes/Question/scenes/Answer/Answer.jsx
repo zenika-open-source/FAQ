@@ -45,17 +45,32 @@ const Answer = ({ zNode }) => {
   })
 
   const autoRemoveCertif = () => {
-    if (answer) {
+    const flags = zNode.flags
+    if (answer && flags.length > 0) {
+      flags.forEach(flag => {
+        if (specialities.length > 0) {
+          specialities.forEach(speciality => {
+            answer.user.specialities.forEach(answerSpe => {
+              if (flag.type === 'certified' && speciality.name !== answerSpe.name) {
+                removeFlag({ variables: { type: 'certified', nodeId: zNode.id } })
+              } else if (flag.type !== 'certified' && speciality.name === answerSpe.name) {
+                createFlag({ variables: { type: 'certified', nodeId: zNode.id } })
+              }
+            })
+          })
+        } else {
+          removeFlag({ variables: { type: 'certified', nodeId: zNode.id } })
+        }
+      })
+    } else if (answer && !flags.length) {
       if (specialities.length > 0) {
         specialities.forEach(speciality => {
           answer.user.specialities.forEach(answerSpe => {
-            if (speciality.name !== answerSpe.name) {
-              removeFlag({ variables: { type: 'certified', nodeId: zNode.id } })
+            if (speciality.name === answerSpe.name) {
+              createFlag({ variables: { type: 'certified', nodeId: zNode.id } })
             }
           })
         })
-      } else {
-        removeFlag({ variables: { type: 'certified', nodeId: zNode.id } })
       }
     }
   }
