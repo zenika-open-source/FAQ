@@ -48,7 +48,7 @@ const Answer = ({ zNode }) => {
     const flags = zNode.flags
     if (answer && flags.length > 0) {
       flags.forEach(flag => {
-        if (specialities.length > 0) {
+        if (specialities && specialities.length > 0) {
           specialities.forEach(speciality => {
             answer.user.specialities.forEach(answerSpe => {
               if (flag.type === 'certified' && speciality.name !== answerSpe.name) {

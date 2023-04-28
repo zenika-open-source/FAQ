@@ -8,7 +8,7 @@ import './Specialities.css'
 const Specialities = ({ spe }) => {
   const intl = getIntl(Specialities)
 
-  if (spe === undefined) return <Loading />
+  if (!spe) return <Loading />
 
   return (
     <Card>
