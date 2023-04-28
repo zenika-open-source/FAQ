@@ -337,7 +337,7 @@ let deleteCommands = [
 
 const emptyDb = async (apiContext, commands) => {
   for (const command of commands) {
-    const res = await apiContext.post('/', {
+    await apiContext.post('/', {
       data: {
         query: deleteAll(command)
       }
@@ -628,7 +628,7 @@ test.afterEach(async () => {
 })
 
 test.afterAll(async () => {
-  // deleteCommands = [...deleteCommands, 'deleteManyUsers']
-  // await emptyDb(apiContext, deleteCommands)
+  deleteCommands = [...deleteCommands, 'deleteManyUsers']
+  await emptyDb(apiContext, deleteCommands)
   await apiContext.dispose()
 })
