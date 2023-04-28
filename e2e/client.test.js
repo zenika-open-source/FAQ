@@ -342,7 +342,6 @@ const emptyDb = async (apiContext, commands) => {
         query: deleteAll(command)
       }
     })
-    console.log(await res.json())
   }
 }
 
@@ -629,7 +628,7 @@ test.afterEach(async () => {
 })
 
 test.afterAll(async () => {
-  deleteCommands = [...deleteCommands, 'deleteManyUsers']
-  await emptyDb(apiContext, deleteCommands)
+  // deleteCommands = [...deleteCommands, 'deleteManyUsers']
+  // await emptyDb(apiContext, deleteCommands)
   await apiContext.dispose()
 })
