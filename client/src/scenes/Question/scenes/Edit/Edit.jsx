@@ -54,7 +54,6 @@ const Edit = ({ location, match, zNode }) => {
       flags.forEach(flag => {
         specialities.forEach(speciality => {
           const speTag = tags.find(tag => tag.name === speciality.name)
-          console.log(speTag)
           if (flag.type === 'certified' && !speTag) {
             removeFlag({ variables: { type: 'certified', nodeId: zNode.id } })
           } else if (flag.type !== 'certified' && speTag) {
