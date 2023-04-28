@@ -1,4 +1,4 @@
-import { Tab, UsersList } from 'components'
+import { Tab } from 'components'
 import React from 'react'
 import { getIntl } from 'services'
 
@@ -8,7 +8,6 @@ const Specialists = ({ state, dispatch, loading }) => {
   return (
     <Tab label={intl('tab')}>
       <h2>{intl('title')}</h2>
-      <UsersList />
     </Tab>
   )
 }

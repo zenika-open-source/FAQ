@@ -7,7 +7,6 @@ directive @admin on QUERY | FIELD_DEFINITION
 
 type Query {
   me: User
-  users: [User!]
 
   zNode(where: ZNodeWhereUniqueInput): ZNode
 
