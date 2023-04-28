@@ -12,16 +12,25 @@ import { reducer, serializeTags, synonymsToList, listToSynonyms } from './helper
 
 import { UPDATE_CONFIGURATION } from './queries'
 
-import { General, Tags, Synonyms, Integrations } from './scenes'
+import { General, Tags, Synonyms, Integrations, Specialists } from './scenes'
 
 import './Settings.scss'
 
-const initState = conf => ({
-  ...conf,
-  synonyms: synonymsToList(conf.algoliaSynonyms),
-  authorizedDomains: conf.authorizedDomains.join(', '),
-  bugReporting: conf.bugReporting || 'GITHUB'
-})
+let initState
+
+if (process.env.REACT_APP_DISABLE_AUTH === 'true') {
+  initState = conf => ({
+    ...conf,
+    bugReporting: conf.bugReporting || 'GITHUB'
+  })
+} else {
+  initState = conf => ({
+    ...conf,
+    synonyms: synonymsToList(conf.algoliaSynonyms),
+    authorizedDomains: conf.authorizedDomains.join(', '),
+    bugReporting: conf.bugReporting || 'GITHUB'
+  })
+}
 
 const Settings = ({ configuration: conf }) => {
   const intl = getIntl(Settings)
@@ -83,7 +92,10 @@ const Settings = ({ configuration: conf }) => {
           <Tabs>
             <General state={state} dispatch={dispatch} loading={loading} />
             <Tags state={state} onTagsChange={onTagsChange} />
-            <Synonyms state={state} dispatch={dispatch} loading={loading} />
+            {process.env.REACT_APP_DISABLE_AUTH !== 'true' && (
+              <Synonyms state={state} dispatch={dispatch} loading={loading} />
+            )}
+            <Specialists state={state} dispatch={dispatch} loading={loading} />
             <Integrations state={state} dispatch={dispatch} loading={loading} />
           </Tabs>
         </CardText>
@@ -124,6 +136,9 @@ Settings.translations = {
           key: 'Category',
           value: 'Tags'
         }
+      },
+      specialists: {
+        tab: 'Specialists'
       },
       synonyms: {
         tab: 'Synonyms',
@@ -179,6 +194,9 @@ Settings.translations = {
           key: 'Categorie',
           value: 'Tags'
         }
+      },
+      specialists: {
+        tab: 'Spécialistes'
       },
       synonyms: {
         tab: 'Synonymes',
