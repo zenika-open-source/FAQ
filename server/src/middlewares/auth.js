@@ -41,7 +41,7 @@ const checkJwt = async (req, res, next, prisma) => {
         where: { auth0Id: 'faq-user-no-auth@zenika.com' },
         create: {
           auth0Id: 'faq-user-no-auth@zenika.com',
-          admin: true,
+          admin: false,
           key: 'enableSkipAuth',
           name: 'enableSkipAuth',
           email: 'faq-user-no-auth@zenika.com',
@@ -51,7 +51,7 @@ const checkJwt = async (req, res, next, prisma) => {
         },
         update: {
           auth0Id: 'faq-user-no-auth@zenika.com',
-          admin: true,
+          admin: false,
           key: 'enableSkipAuth',
           name: 'enableSkipAuth',
           email: 'faq-user-no-auth@zenika.com',
