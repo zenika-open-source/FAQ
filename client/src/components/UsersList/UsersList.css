@@ -1,3 +1,61 @@
+.dropServices {
+  margin: 1rem 0;
+  border: 1px solid var(--secondary-color-font);
+  border-radius: 4px;
+}
+
+.dropServices .dropbtn {
+  padding: 0.5rem 0.2rem;
+}
+
+.dropServices .dropdown-content {
+  left: 0;
+  top: 2.2rem;
+  box-shadow: none;
+  border: 1px solid var(--secondary-color);
+  border-radius: 4px;
+}
+
+.dropServices .dropdown-content a {
+  text-decoration: none;
+  text-transform: capitalize;
+}
+
+.filtersList {
+  display: flex;
+  gap: 1rem;
+  padding-left: 0;
+  list-style-type: none;
+}
+
+.filtersList li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.2rem 1rem;
+  background-color: var(--primary-color);
+  color: var(--primary-color-font);
+  border-radius: 4px;
+}
+
+.filtersList li i {
+  font-size: var(--small-font-size);
+}
+
+.filtersList li i:last-of-type {
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+}
+
+.filtersList li i:last-of-type:hover {
+  color: var(--primary-color-font-dark);
+}
+
+.filtersList li span {
+  text-transform: capitalize;
+  font-weight: bold;
+}
+
 .usersList {
   display: flex;
   flex-direction: column;
@@ -10,6 +68,17 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  gap: 1rem;
+}
+
+.userElement .userIcon i {
+  font-size: 2rem;
+}
+
+.userElement .userInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .userInfo .userName {
