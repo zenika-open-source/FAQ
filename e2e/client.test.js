@@ -326,6 +326,26 @@ const createQuestionWithFlag = async (prisma, tagId, user) => {
   await algolia.addNode({ prisma }, zNode.id)
 }
 
+let deleteCommands = [
+  'deleteManyAnswers',
+  'deleteManyQuestions',
+  'deleteManyHistoryActions',
+  'deleteManyFlags',
+  'deleteManyTags',
+  'deleteManyZNodes'
+]
+
+const emptyDb = async (apiContext, commands) => {
+  for (const command of commands) {
+    const res = await apiContext.post('/', {
+      data: {
+        query: deleteAll(command)
+      }
+    })
+    console.log(await res.json())
+  }
+}
+
 test.beforeAll(async ({ playwright }) => {
   fetchPrismaToken()
   apiContext = await playwright.request.newContext({
@@ -348,21 +368,7 @@ test.beforeAll(async ({ playwright }) => {
 })
 
 test.beforeEach(async () => {
-  const deleteCommands = [
-    'deleteManyAnswers',
-    'deleteManyQuestions',
-    'deleteManyHistoryActions',
-    'deleteManyFlags',
-    'deleteManyTags',
-    'deleteManyZNodes'
-  ]
-  for (const command of deleteCommands) {
-    await apiContext.post('/', {
-      data: {
-        query: deleteAll(command)
-      }
-    })
-  }
+  emptyDb(apiContext, deleteCommands)
 })
 
 test('Shoud be able to create a question', async ({ page }) => {
@@ -623,5 +629,7 @@ test.afterEach(async () => {
 })
 
 test.afterAll(async () => {
+  deleteCommands = [...deleteCommands, 'deleteManyUsers']
+  await emptyDb(apiContext, deleteCommands)
   await apiContext.dispose()
 })
