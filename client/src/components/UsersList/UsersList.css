@@ -10,7 +10,7 @@
 
 .dropServices .dropdown-content {
   left: 0;
-  top: 2.2rem;
+  top: 2rem;
   box-shadow: none;
   border: 1px solid var(--secondary-color);
   border-radius: 4px;
@@ -64,18 +64,31 @@
   list-style-type: none;
 }
 
-.usersList .userElement {
+.usersList .emptyUsers {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
+}
+
+.usersList .userElement {
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 1rem;
 }
 
-.userElement .userIcon i {
+.userElement .userLeft {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.userLeft .userIcon i {
   font-size: 2rem;
 }
 
-.userElement .userInfo {
+.userLeft .userInfo {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -87,4 +100,24 @@
 
 .userInfo .userEmail {
   font-size: var(--small-font-size);
+}
+
+.userRight .userAddSpecialities {
+  padding: 0.5rem 1rem;
+  background-color: var(--primary-color);
+  color: var(--primary-color-font);
+  border-radius: 4px;
+}
+
+.userAddSpecialities .dropdown-content {
+  left: 0;
+  top: 2rem;
+  box-shadow: none;
+  border: 1px solid var(--secondary-color);
+  border-radius: 4px;
+}
+
+.userAddSpecialities .dropdown-content a {
+  text-decoration: none;
+  text-transform: capitalize;
 }
