@@ -1,10 +1,10 @@
 import gql from 'graphql-tag'
 
-export const GET_SPECIALITIES = gql`
+export const GET_SPECIALTIES = gql`
   query {
     me {
       id
-      specialities {
+      specialties {
         id
         name
       }
