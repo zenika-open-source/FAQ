@@ -242,6 +242,6 @@ workflows:
           requires:
             - app-deploy
       - prisma-deploy-service:
-        context: faq-prisma-deployment
-        requires:
-          - prisma-deploy-server
+          context: faq-prisma-deployment
+          requires:
+            - prisma-deploy-server
