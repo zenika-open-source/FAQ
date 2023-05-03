@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react'
 import { useQuery } from '@apollo/react-hooks'
+import React, { useMemo } from 'react'
 
 import { useAuth } from '../Auth'
 
@@ -10,9 +10,11 @@ export const UserContext = React.createContext({})
 const UserProvider = ({ children }) => {
   const { isAuth } = useAuth()
 
-  const { data } = useQuery(GET_ME, { skip: !isAuth })
+  const { data } = useQuery(GET_ME, {
+    skip: !isAuth && process.env.REACT_APP_DISABLE_AUTH !== 'true'
+  })
 
-  const value = useMemo(() => isAuth && data && data.me, [isAuth, data])
+  const value = useMemo(() => data && data.me, [data])
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>
 }

@@ -34,7 +34,42 @@ const upsertConfig = /* GraphQL */ `mutation UpsertConfig{
       algoliaApiKey: "${process.env.ALGOLIA_API_KEY_ALL}"
       auth0Domain: "${process.env.AUTH0_DOMAIN}"
       auth0ClientId: "${process.env.AUTH0_CLIENT_ID}"
-      tagCategories: {create: [{name: "agencies", order: 1, labels: {create: [{ name: "paris", order: 1 }, { name: "nantes", order: 2 }]}}, {name: "theme", order: 2, labels: {create: [{name: "tutorial", order: 1}, {name: "meta", order: 2}]}}]}
+      tagCategories: {
+        create: [
+          {
+            name: "services",
+            order: 1,
+            labels: {
+              create: [
+                {name: "payroll", order: 1}
+                {name: "marketing", order: 2}
+                {name: "ce", order: 3}
+                {name: "sales", order: 4}
+              ]
+            }
+          },
+          {
+            name: "agencies",
+            order: 2,
+            labels: {
+              create: [
+                { name: "paris", order: 1 }
+                { name: "nantes", order: 2 }
+              ]
+            }
+          },
+          {
+            name: "theme",
+            order: 3,
+            labels: {
+              create: [
+                { name: "tutorial", order: 1 },
+                { name: "meta", order: 2 }
+              ]
+            }
+          }
+        ]
+      }
     }
     update: {
       name: "${process.env.SERVICE_NAME}"
@@ -401,6 +436,16 @@ test('Should be able to search by text and tag', async ({ page }) => {
   await page.locator('textarea').fill('Ceci est une réponse différente')
   await page.locator('button', { hasText: 'Enregistrer la réponse' }).click()
   await expect(page.getByText('Ceci est une réponse différente', { exact: true })).toBeVisible()
+})
+
+test('Should see the marketing specialty on profile page', async ({ page }) => {
+  await page.goto('/')
+  await page.getByRole('img', { name: 'avatar' }).hover()
+  await page
+    .locator('a')
+    .filter({ hasText: 'Profil' })
+    .click()
+  await expect(page.getByText('verifiedmarketing')).toBeVisible()
 })
 
 test.afterEach(async () => {

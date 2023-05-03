@@ -34,21 +34,29 @@ const checkJwt = async (req, res, next, prisma) => {
       }`
     )
 
+  const specialtyId = conf.tagCategories[0].labels[1].id
   const userNoAuthUpsert = () =>
     prisma.mutation.upsertUser(
       {
         where: { auth0Id: 'faq-user-no-auth@zenika.com' },
         create: {
           auth0Id: 'faq-user-no-auth@zenika.com',
+          admin: false,
           key: 'enableSkipAuth',
           name: 'enableSkipAuth',
-          email: 'faq-user-no-auth@zenika.com'
+          email: 'faq-user-no-auth@zenika.com',
+          picture:
+            'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg',
+          specialties: { connect: { id: specialtyId } }
         },
         update: {
           auth0Id: 'faq-user-no-auth@zenika.com',
+          admin: false,
           key: 'enableSkipAuth',
           name: 'enableSkipAuth',
-          email: 'faq-user-no-auth@zenika.com'
+          email: 'faq-user-no-auth@zenika.com',
+          picture:
+            'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg'
         }
       },
       `{

@@ -64,8 +64,20 @@ const main = async () => {
             tagCategories: {
               create: [
                 {
-                  name: "agencies"
-                  order: 1
+                  name: "services",
+                  order: 1,
+                  labels: {
+                    create: [
+                      {name: "payroll", order: 1}
+                      {name: "marketing", order: 2}
+                      {name: "ce", order: 3}
+                      {name: "sales", order: 4}
+                    ]
+                  }
+                },
+                {
+                  name: "agencies",
+                  order: 2,
                   labels: {
                     create: [
                       { name: "paris", order: 1 }
@@ -75,7 +87,7 @@ const main = async () => {
                 },
                 {
                   name: "theme",
-                  order: 2,
+                  order: 3,
                   labels: {
                     create: [
                       { name: "tutorial", order: 1 },
