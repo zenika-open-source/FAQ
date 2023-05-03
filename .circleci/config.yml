@@ -179,8 +179,8 @@ jobs:
           app-dir: server
       - run:
           name: Deploy prisma
-          working_directory: server
-          command: node scripts/prisma_deploy_all/index.js --force
+          working_directory: server/scripts/prisma_deploy_all/
+          command: node index.js --force
 
   app-deploy:
     parameters:
