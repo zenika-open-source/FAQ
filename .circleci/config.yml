@@ -134,6 +134,10 @@ jobs:
       - run:
           command: npm run build
           working_directory: client
+          environment:
+            REACT_APP_GRAPHQL_ENDPOINT: https://zenika.faq.team/gql
+            REACT_APP_REST_ENDPOINT: https://zenika.faq.team/rest
+            REACT_APP_FAQ_URL: faq.team
       - persist_to_workspace:
           root: .
           paths:
