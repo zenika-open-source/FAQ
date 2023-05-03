@@ -33,7 +33,7 @@ const createTempUser = tagId => {
       email: 'temp-user@zenika.com',
       picture:
         'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg',
-      specialities: {
+      specialties: {
         connect: {
           id: tagId
         }
@@ -519,7 +519,7 @@ test('Should be able to search by text and tag', async ({ page }) => {
   await expect(page.getByText('Ceci est une réponse différente', { exact: true })).toBeVisible()
 })
 
-test('Should see the marketing speciality on profile page', async ({ page }) => {
+test('Should see the marketing specialty on profile page', async ({ page }) => {
   await page.goto('/')
   await page.getByRole('img', { name: 'avatar' }).hover()
   await page
@@ -547,7 +547,7 @@ test('Should not be able to add a certified flag to an unanswered question', asy
   await expect(page.locator('a').filter({ hasText: 'verifiedcertifiée' })).toBeHidden()
 })
 
-test('Should be able to add a certified flag for a question of my speciality', async ({ page }) => {
+test('Should be able to add a certified flag for a question of my specialty', async ({ page }) => {
   await page.goto('/')
   await page
     .locator('button', { hasText: 'Nouvelle question' })
@@ -575,7 +575,7 @@ test('Should be able to add a certified flag for a question of my speciality', a
   await expect(page.getByText('verified')).toBeVisible()
 })
 
-test('Should not be able to add a certified flag for a question not in my speciality', async ({
+test('Should not be able to add a certified flag for a question not in my specialty', async ({
   page
 }) => {
   await page.goto('/')

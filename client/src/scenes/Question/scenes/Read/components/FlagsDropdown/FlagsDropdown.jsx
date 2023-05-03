@@ -8,7 +8,7 @@ import { Flag, flagMeta } from 'components/Flags'
 
 import './FlagsDropdown.css'
 
-const FlagsDropdown = ({ specialities, flags, tags, answer, onSelect, onRemove }) => {
+const FlagsDropdown = ({ specialties, flags, tags, answer, onSelect, onRemove }) => {
   const intl = getIntl(FlagsDropdown)
   const flagIntl = getIntl(Flag)
 
@@ -16,8 +16,8 @@ const FlagsDropdown = ({ specialities, flags, tags, answer, onSelect, onRemove }
 
   if (answer) {
     tags.forEach(tag => {
-      specialities.forEach(speciality => {
-        if (tag.label.name === speciality.name) {
+      specialties.forEach(specialty => {
+        if (tag.label.name === specialty.name) {
           flagTypes.push('certified')
         }
       })

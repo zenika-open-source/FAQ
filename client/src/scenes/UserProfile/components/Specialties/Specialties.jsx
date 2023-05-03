@@ -3,21 +3,21 @@ import PropTypes from 'prop-types'
 import { getIntl } from 'services'
 import { Loading } from 'components'
 
-import './Specialities.css'
+import './Specialties.css'
 
-const Specialities = ({ spe }) => {
-  const intl = getIntl(Specialities)
+const Specialties = ({ spe }) => {
+  const intl = getIntl(Specialties)
 
   if (spe === undefined) return <Loading />
 
   return (
     <Card>
-      <CardText className="specialities">
+      <CardText className="specialties">
         <h2 style={{ marginBottom: '1rem' }}>{intl('title')}</h2>
         <hr />
         {spe.length > 0 ? (
           spe.map(s => (
-            <p key={s.name} className="speciality">
+            <p key={s.name} className="specialty">
               <i className="material-icons">verified</i>
               {s.name}
             </p>
@@ -30,14 +30,14 @@ const Specialities = ({ spe }) => {
   )
 }
 
-Specialities.propTypes = {
+Specialties.propTypes = {
   spe: PropTypes.array
 }
 
-Specialities.translations = {
+Specialties.translations = {
   en: {
-    title: 'Specialities',
-    empty: 'No specialities yet'
+    title: 'Specialties',
+    empty: 'No specialties yet'
   },
   fr: {
     title: 'Spécialitées',
@@ -45,4 +45,4 @@ Specialities.translations = {
   }
 }
 
-export default Specialities
+export default Specialties

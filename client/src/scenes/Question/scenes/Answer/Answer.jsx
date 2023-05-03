@@ -22,7 +22,7 @@ import { useUser } from 'contexts'
 import { CREATE_FLAG, REMOVE_FLAG } from '../Read/queries'
 
 const Answer = ({ zNode }) => {
-  const { specialities } = useUser()
+  const { specialties } = useUser()
   const answer = zNode && zNode.answer
 
   const [removeFlag] = useMutation(REMOVE_FLAG)
@@ -48,12 +48,12 @@ const Answer = ({ zNode }) => {
     const flags = zNode.flags
     if (answer && flags.length > 0) {
       flags.forEach(flag => {
-        if (specialities.length > 0) {
-          specialities.forEach(speciality => {
-            answer.user.specialities.forEach(answerSpe => {
-              if (flag.type === 'certified' && speciality.name !== answerSpe.name) {
+        if (specialties.length > 0) {
+          specialties.forEach(specialty => {
+            answer.user.specialties.forEach(answerSpe => {
+              if (flag.type === 'certified' && specialty.name !== answerSpe.name) {
                 removeFlag({ variables: { type: 'certified', nodeId: zNode.id } })
-              } else if (flag.type !== 'certified' && speciality.name === answerSpe.name) {
+              } else if (flag.type !== 'certified' && specialty.name === answerSpe.name) {
                 createFlag({ variables: { type: 'certified', nodeId: zNode.id } })
               }
             })
@@ -63,10 +63,10 @@ const Answer = ({ zNode }) => {
         }
       })
     } else if (answer && !flags.length) {
-      if (specialities.length > 0) {
-        specialities.forEach(speciality => {
-          answer.user.specialities.forEach(answerSpe => {
-            if (speciality.name === answerSpe.name) {
+      if (specialties.length > 0) {
+        specialties.forEach(specialty => {
+          answer.user.specialties.forEach(answerSpe => {
+            if (specialty.name === answerSpe.name) {
               createFlag({ variables: { type: 'certified', nodeId: zNode.id } })
             }
           })
@@ -77,10 +77,10 @@ const Answer = ({ zNode }) => {
 
   const autoAddCertif = () => {
     const tags = zNode.tags
-    if (specialities.length > 0) {
-      specialities.forEach(speciality => {
+    if (specialties.length > 0) {
+      specialties.forEach(specialty => {
         tags.forEach(tag => {
-          if (speciality.name === tag.label.name) {
+          if (specialty.name === tag.label.name) {
             createFlag({ variables: { type: 'certified', nodeId: zNode.id } })
           }
         })

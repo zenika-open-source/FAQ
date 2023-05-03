@@ -25,7 +25,7 @@ const Read = ({ history, match, zNode, loading }) => {
   const [createFlag] = useMutation(CREATE_FLAG)
   const [removeFlag] = useMutation(REMOVE_FLAG)
   const [incrementViewsCounter] = useMutation(INCREMENT_VIEWS_COUNTER)
-  const { specialities } = useUser()
+  const { specialties } = useUser()
 
   useEffect(() => {
     if (!loaded || incremented) return
@@ -58,7 +58,7 @@ const Read = ({ history, match, zNode, loading }) => {
       </Helmet>
       <ActionMenu backLink="/" backLabel={intl('menu.home')} goBack>
         <FlagsDropdown
-          specialities={specialities}
+          specialties={specialties}
           flags={zNode.flags}
           tags={zNode.tags}
           answer={zNode.answer}

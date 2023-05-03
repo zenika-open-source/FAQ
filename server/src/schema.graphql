@@ -88,7 +88,7 @@ type User {
   email: String
 
   picture: String
-  specialities: [TagLabel!]
+  specialties: [TagLabel!]
 }
 
 type Configuration {

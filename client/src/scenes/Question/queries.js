@@ -26,7 +26,7 @@ export const zNodeFragment = `
       id
       name
       picture
-      specialities {
+      specialties {
         name
       }
     }

@@ -49,11 +49,11 @@ const Edit = ({ location, match, zNode }) => {
 
   const autoRemoveCertif = () => {
     const flags = zNode.flags
-    const specialities = zNode.answer.user.specialities
+    const specialties = zNode.answer.user.specialties
     if (flags.length > 0) {
       flags.forEach(flag => {
-        specialities.forEach(speciality => {
-          const speTag = tags.find(tag => tag.name === speciality.name)
+        specialties.forEach(specialty => {
+          const speTag = tags.find(tag => tag.name === specialty.name)
           if (flag.type === 'certified' && !speTag) {
             removeFlag({ variables: { type: 'certified', nodeId: zNode.id } })
           } else if (flag.type !== 'certified' && speTag) {
