@@ -438,7 +438,7 @@ test('Should be able to search by text and tag', async ({ page }) => {
   await expect(page.getByText('Ceci est une réponse différente', { exact: true })).toBeVisible()
 })
 
-test('Should see the marketing speciality on profile page', async ({ page }) => {
+test('Should see the marketing specialty on profile page', async ({ page }) => {
   await page.goto('/')
   await page.getByRole('img', { name: 'avatar' }).hover()
   await page
