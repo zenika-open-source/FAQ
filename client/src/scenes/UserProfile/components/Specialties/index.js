@@ -1,1 +1,1 @@
-export { default } from './Specialities.container'
+export { default } from './Specialties.container'

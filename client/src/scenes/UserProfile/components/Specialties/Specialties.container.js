@@ -3,7 +3,7 @@ import { compose } from 'helpers'
 import { query } from 'services/apollo'
 import { GET_SPECIALITIES } from './queries'
 
-import Specialities from './Specialities'
+import Specialities from './Specialties'
 
 export default compose(
   query(GET_SPECIALITIES, {
