@@ -15,7 +15,7 @@ const Login = ({ location }) => {
 
   const { login, renewAuth, isAuth, wasAuth } = useAuth()
 
-  if (isAuth) {
+  if (isAuth || process.env.REACT_APP_DISABLE_AUTH === 'true') {
     return <Redirect to="/" />
   }
 

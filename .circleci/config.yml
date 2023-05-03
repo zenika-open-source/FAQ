@@ -10,6 +10,41 @@ executors:
   app-builder:
     docker:
       - image: cimg/node:16.15
+  e2e-runner:
+    docker:
+      - image: mcr.microsoft.com/playwright:v1.30.0-focal
+        environment:
+          PRISMA_URL: http://localhost:4466
+          PRISMA_API_SECRET: secret-42
+          PRISMA_MANAGEMENT_API_SECRET: my-secret-42
+          SERVICE_NAME: default
+          SERVICE_STAGE: default
+          AUTH0_DOMAIN: auth0Domain
+          AUTH0_CLIENT_ID: auth0ClientId
+          ALGOLIA_APP_ID: M0NJ0PGAH1
+          DISABLE_AUTH: true
+          REACT_APP_DISABLE_AUTH: true
+          REACT_APP_GRAPHQL_ENDPOINT: http://localhost:4000/gql
+          REACT_APP_REST_ENDPOINT: http://localhost:4000/rest
+          REACT_APP_PRISMA_SERVICE: default/default
+          REACT_APP_FAQ_URL: faq.team
+      - image: postgres
+        environment:
+          POSTGRES_USER: prisma
+          POSTGRES_PASSWORD: prisma
+      - image: prismagraphql/prisma:1.34.10
+        environment:
+          PRISMA_CONFIG: |
+            port: 4466
+            managementApiSecret: my-secret-42
+            databases:
+              default:
+                connector: postgres
+                host: localhost
+                port: 5432
+                user: prisma
+                password: prisma
+                migrations: true
 
 jobs:
   server-lint:
@@ -37,6 +72,58 @@ jobs:
       - run:
           command: npm run prettier:check
           working_directory: client
+  e2e-lint:
+    executor: app-builder
+    steps:
+      - checkout
+      - node/install-packages:
+          app-dir: e2e
+      - run:
+          command: npm run lint
+          working_directory: e2e
+      - run:
+          command: npm run prettier:check
+          working_directory: e2e
+  test:
+    executor: e2e-runner
+    steps:
+      - checkout
+      - node/install-packages:
+          app-dir: e2e
+      - node/install-packages:
+          app-dir: server
+      - node/install-packages:
+          app-dir: client
+      - run:
+          name: Install wait-on
+          command: npm install -g wait-on
+      - run:
+          name: Start client
+          command: npm start
+          working_directory: client
+          background: true
+      - run:
+          name: Start server
+          command: npm start
+          working_directory: server
+          background: true
+      - run:
+          name: Create new prisma service
+          command: |
+            wait-on http://localhost:4466
+            npm run new_service default/default
+          working_directory: server
+      - run:
+          name: Run tests
+          command: |
+            wait-on http://localhost:3000
+            wait-on http://localhost:4466
+            npm run test
+          working_directory: e2e
+      - store_test_results:
+          path: ./e2e/results.xml
+      - store_artifacts:
+          path: ./e2e/test-results
 
   client-build:
     executor: app-builder
@@ -125,6 +212,8 @@ workflows:
     jobs:
       - server-lint
       - client-lint
+      - e2e-lint
+      - test
       - client-build
       - app-deploy:
           clever-app-id: app_c61407ae-b417-4406-86ed-cfd1acf84466

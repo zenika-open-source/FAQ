@@ -2,7 +2,7 @@ const jwt = require('express-jwt')
 const jwksRsa = require('jwks-rsa')
 const { UnauthorizedError } = jwt
 
-const checkJwt = (req, res, next, prisma) => {
+const checkJwt = async (req, res, next, prisma) => {
   const {
     service: { name, stage },
     configuration: conf
@@ -31,6 +31,29 @@ const checkJwt = (req, res, next, prisma) => {
         email
         picture
         locale
+      }`
+    )
+
+  const userNoAuthUpsert = () =>
+    prisma.mutation.upsertUser(
+      {
+        where: { auth0Id: 'faq-user-no-auth@zenika.com' },
+        create: {
+          auth0Id: 'faq-user-no-auth@zenika.com',
+          key: 'enableSkipAuth',
+          name: 'enableSkipAuth',
+          email: 'faq-user-no-auth@zenika.com'
+        },
+        update: {
+          auth0Id: 'faq-user-no-auth@zenika.com',
+          key: 'enableSkipAuth',
+          name: 'enableSkipAuth',
+          email: 'faq-user-no-auth@zenika.com'
+        }
+      },
+      `{
+        id
+        email
       }`
     )
 
@@ -79,6 +102,16 @@ const checkJwt = (req, res, next, prisma) => {
     }
 
     getUser = next
+  } else if (process.env.DISABLE_AUTH === 'true') {
+    const user = await userNoAuthUpsert()
+    req.user = {
+      id: user.id,
+      email: user.email,
+      token: {
+        email: user.email
+      }
+    }
+    return next()
   } else {
     return next(
       new UnauthorizedError(

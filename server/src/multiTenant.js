@@ -1,10 +1,11 @@
 const { Prisma } = require('prisma-binding')
 const { MultiTenant } = require('prisma-multi-tenant')
+const path = require('path')
 
 const multiTenant = new MultiTenant({
   instanciate: (name, stage) =>
     new Prisma({
-      typeDefs: 'src/generated/prisma.graphql',
+      typeDefs: path.join(__dirname, '/generated/prisma.graphql'),
       endpoint: process.env.PRISMA_URL + '/' + name + '/' + stage,
       secret: process.env.PRISMA_API_SECRET
     }),

@@ -1,0 +1,41 @@
+---
+name: Testing
+route: /advanced/testing
+menu: Advanced
+---
+
+# Testing
+
+The project uses Playwright to run end-to-end tests.  
+Here are the steps to make the tests work.
+
+## 1/ Install the dependencies
+
+```bash
+# Path: ./FAQ/e2e
+npm install
+```
+
+## 2/ Update your environment files
+
+- In the `.env.local` of the `client` folder add
+
+```bash
+REACT_APP_DISABLE_AUTH=true
+```
+
+- In the `.env.local` of the `server` folder add
+
+```bash
+DISABLE_AUTH=true
+```
+
+These will make Playwright skip the auth0 authentication and avoid the redirection
+
+## 3/ Launch the tests
+
+- In your terminal, go in the `e2e` folder
+- Use `npm run test` to start the tests
+  - Use `npm run test:headed` to start the tests with a browser opening and closing for each test
+  - Use `npm run test:trace` to start the tests with the trace on. The trace is a record of every action made by Playwright in a test.  
+    Docs here: https://playwright.dev/docs/trace-viewer

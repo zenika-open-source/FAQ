@@ -190,6 +190,10 @@ class Algolia {
       browser.on('error', reject)
     })
   }
+  clearIndex(ctx) {
+    const index = this.getIndex(ctx)
+    index.clearIndex()
+  }
 }
 
 const algolia = new Algolia()

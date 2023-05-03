@@ -101,20 +101,20 @@ Tips.translations = {
     good: {
       title: 'Super questions',
       examples: [
-        'Où puis-je trouver le matériel de formation ElasticSearch&nbsp;?',
-        "Comment utiliser l'API Alibeez&nbsp;?",
-        "Comment rejoindre l'agence de Nantes depuis la gare&nbsp;?",
-        'Quelle est la différence entre un salaire avec et sans variable&nbsp;?'
+        'Où puis-je trouver le matériel de formation ElasticSearch ?',
+        "Comment utiliser l'API Alibeez ?",
+        "Comment rejoindre l'agence de Nantes depuis la gare ?",
+        'Quelle est la différence entre un salaire avec et sans variable ?'
       ]
     },
     bad: {
       title: 'Questions mal placées',
       examples: [
-        ['Technique:', 'Quelles sont les différences entre les mocks et les stubs&nbsp;?'],
-        ['Polémique:', 'Ne devrions-nous pas changer notre convention collective&nbsp;?'],
-        ['Ouverte:', 'Quels sont les livres à lire quand on est architecte logiciel&nbsp;?'],
-        ['Temporelle:', "Quels sont les résultats 2018 de l'agence nantaise&nbsp;?"],
-        ['Vague:', 'Comment fonctionne le recrutement&nbsp;?']
+        ['Technique:', 'Quelles sont les différences entre les mocks et les stubs ?'],
+        ['Polémique:', 'Ne devrions-nous pas changer notre convention collective ?'],
+        ['Ouverte:', 'Quels sont les livres à lire quand on est architecte logiciel ?'],
+        ['Temporelle:', "Quels sont les résultats 2018 de l'agence nantaise ?"],
+        ['Vague:', 'Comment fonctionne le recrutement ?']
       ]
     }
   }

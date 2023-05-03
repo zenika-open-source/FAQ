@@ -69,7 +69,7 @@ Searchbar.translations = {
   },
   fr: {
     filter: {
-      tags: 'Filter par tags:'
+      tags: 'Filtrer par tags:'
     }
   }
 }

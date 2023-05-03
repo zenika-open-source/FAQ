@@ -46,7 +46,6 @@ const refreshConfiguration = async tenant => {
     }`
   )
   // TMP_TAGS
-
   tenant._meta.configuration = conf
 }
 
