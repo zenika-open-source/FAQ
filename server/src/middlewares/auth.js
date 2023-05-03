@@ -47,7 +47,7 @@ const checkJwt = async (req, res, next, prisma) => {
           email: 'faq-user-no-auth@zenika.com',
           picture:
             'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg',
-          specialities: { connect: { id: specialityId } }
+          specialties: { connect: { id: specialityId } }
         },
         update: {
           auth0Id: 'faq-user-no-auth@zenika.com',

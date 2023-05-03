@@ -82,7 +82,7 @@ type TagLabel {
 
   name: String!
   tags: [Tag!]! @relation(name: "TagsLabel", onDelete: CASCADE)
-  specialists: [User!]! @relation(name: "UserSpecialities", link: TABLE)
+  specialists: [User!]! @relation(name: "UserSpecialties", link: TABLE)
 
   order: Int!
   category: TagCategory! @relation(name: "TagLabelsCategory", link: TABLE)
@@ -136,7 +136,7 @@ type User {
 
   flags: [Flag!]! @relation(name: "UserFlags")
   tags: [Tag!]! @relation(name: "UserTags")
-  specialities: [TagLabel!]! @relation(name: "UserSpecialities")
+  specialties: [TagLabel!]! @relation(name: "UserSpecialties")
 
   history: [HistoryAction!]! @relation(name: "UserHistoryActions")
 
