@@ -14,7 +14,7 @@ const UsersList = () => {
 
   const [users, setUsers] = useState(null)
   const [services, setServices] = useState(null)
-  const [filters, setFilters] = useState([])
+  const [results, setResults] = useState([])
 
   useQuery(GET_TAG_CATEGORIES, {
     onCompleted: data =>
@@ -27,29 +27,18 @@ const UsersList = () => {
     onCompleted: data => setUsers(data.users)
   })
 
-  const addFilter = filter => {
-    setFilters(uniqBy([...filters, filter]))
-    console.log(filters)
-  }
-
-  const removeFilter = filter => {
-    setFilters(pull([...filters], filter))
-  }
-
-  const filterUsers = filter => {
-    if (users) {
-      setUsers(
-        users.forEach(user => {
-          if (filters) {
-            return (
-              user.specialities &&
-              user.specialities.every(speciality => speciality.name.includes(filter))
-            )
-          } else {
-            return users
-          }
+  const searchUsers = text => {
+    let matches = []
+    if (text.length > 0) {
+      matches =
+        results &&
+        users?.filter(user => {
+          const regex = new RegExp(`${text}`, `gi`)
+          return user.name.match(regex)
         })
-      )
+      setResults(matches?.slice(0, 5))
+    } else {
+      setResults([])
     }
   }
 
@@ -57,36 +46,30 @@ const UsersList = () => {
 
   return (
     <section>
-      <Dropdown className="dropServices" button={intl('filter')}>
-        {services?.map(service => (
-          <DropdownItem
-            onClick={() => {
-              addFilter(service.name)
-              filterUsers(service.name)
-            }}
-            key={service.id}
-          >
-            {service.name}
-          </DropdownItem>
-        ))}
-      </Dropdown>
-      <ul className="filtersList">
-        {filters.map(filter => (
-          <li>
-            <i className="material-icons">label</i>
-            <span>{filter}</span>
-            <i
-              onClick={() => {
-                removeFilter(filter)
-                filterUsers(filter)
-              }}
-              className="material-icons"
-            >
-              close
-            </i>
-          </li>
-        ))}
-      </ul>
+      <input
+        className="usersSearch"
+        type="text"
+        name="usersSearch"
+        id="usersSearch"
+        placeholder={intl('search')}
+        onChange={e => searchUsers(e.target.value)}
+      />
+      {results.length > 0 && (
+        <div className="resultsContainer">
+          <ul className="resultsList">
+            {results.map(result => (
+              <li className="resultsEl" key={result.id}>
+                <p className="resultName">{result.name}</p>
+                <Dropdown className="userAddSpecialities" button={intl('add')}>
+                  {services?.map(service => (
+                    <DropdownItem key={service.id}>{service.name}</DropdownItem>
+                  ))}
+                </Dropdown>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
       <ul className="usersList">
         {users ? (
           users.map(user => (
@@ -125,12 +108,12 @@ const UsersList = () => {
 
 UsersList.translations = {
   en: {
-    filter: 'Filter by specialities',
+    search: 'Find a user',
     add: 'Add a speciality',
     empty: 'No users found'
   },
   fr: {
-    filter: 'Filtrer par spécialités',
+    search: 'Trouver un utilisateur',
     add: 'Ajouter une spécialité',
     empty: "Pas d'utilisateurs trouvés"
   }
