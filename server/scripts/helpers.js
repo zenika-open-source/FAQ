@@ -92,7 +92,7 @@ const queryManagement = gql => {
 // Implicit env required: PRISMA_URL, PRISMA_API_SECRET
 const deployPrismaService = (name, stage) => {
   const isForcing = process.argv.includes('--force')
-  run('npx prisma deploy ' + (isForcing ? '--force' : ''), {
+  run('npx prisma deploy' + (isForcing ? '--force' : ''), {
     PRISMA_URL: process.env.PRISMA_URL + '/' + name + '/' + stage
   })
 }
