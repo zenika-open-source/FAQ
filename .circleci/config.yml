@@ -84,7 +84,7 @@ jobs:
       - run:
           command: npm run prettier:check
           working_directory: e2e
-  test:
+  e2e-test:
     executor: e2e-runner
     steps:
       - checkout
@@ -224,7 +224,7 @@ workflows:
       - server-lint
       - client-lint
       - e2e-lint
-      - test
+      - e2e-test
       - client-build
       - app-deploy:
           clever-app-id: app_c61407ae-b417-4406-86ed-cfd1acf84466
@@ -232,6 +232,8 @@ workflows:
           requires:
             - server-lint
             - client-lint
+            - e2e-lint
+            - e2e-test
             - client-build
           # filters:
           #   branches:
