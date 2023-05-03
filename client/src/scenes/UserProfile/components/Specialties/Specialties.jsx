@@ -12,7 +12,7 @@ const Specialties = ({ spe }) => {
       <CardText className="specialties">
         <h2 style={{ marginBottom: '1rem' }}>{intl('title')}</h2>
         <hr />
-        {spe.length > 0 ? (
+        {spe && spe.length > 0 ? (
           spe.map(s => (
             <p key={s.name} className="specialty">
               <i className="material-icons">verified</i>
