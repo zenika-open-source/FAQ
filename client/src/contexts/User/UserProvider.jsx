@@ -14,7 +14,7 @@ const UserProvider = ({ children }) => {
     skip: !isAuth && process.env.REACT_APP_DISABLE_AUTH !== 'true'
   })
 
-  const value = useMemo(() => data && data.me, [isAuth, data])
+  const value = useMemo(() => data && data.me, [data])
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>
 }

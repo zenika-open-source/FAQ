@@ -1,14 +1,14 @@
 import { withError } from 'components'
 import { compose } from 'helpers'
 import { query } from 'services/apollo'
-import { GET_SPECALTIES } from './queries'
+import { GET_SPECIALTIES } from './queries'
 
 import Specialties from './Specialties'
 
 export default compose(
-  query(GET_SPECALITIES, {
+  query(GET_SPECIALTIES, {
     parse: ({ me = {} }) => ({
-      spe: me.specalities
+      spe: me.specialties
     })
   }),
   withError()
