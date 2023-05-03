@@ -84,7 +84,7 @@ jobs:
       - run:
           command: npm run prettier:check
           working_directory: e2e
-  test:
+  e2e-test:
     executor: e2e-runner
     steps:
       - checkout
@@ -134,12 +134,16 @@ jobs:
       - run:
           command: npm run build
           working_directory: client
+          environment:
+            REACT_APP_GRAPHQL_ENDPOINT: /gql
+            REACT_APP_REST_ENDPOINT: /rest
+            REACT_APP_FAQ_URL: faq.team
       - persist_to_workspace:
           root: .
           paths:
             - client/build/
 
-  prisma-deploy:
+  prisma-deploy-server:
     parameters:
       clever-app-id:
         type: string
@@ -170,6 +174,17 @@ jobs:
             clever login --secret=$CLEVER_SECRET --token=$CLEVER_TOKEN
             clever link << parameters.clever-app-id >>
             clever deploy --force
+
+  prisma-deploy-service:
+    executor: app-builder
+    steps:
+      - checkout
+      - node/install-packages:
+          app-dir: server
+      - run:
+          name: Deploy prisma
+          working_directory: server/scripts/prisma_deploy_all/
+          command: node index.js
 
   app-deploy:
     parameters:
@@ -213,7 +228,7 @@ workflows:
       - server-lint
       - client-lint
       - e2e-lint
-      - test
+      - e2e-test
       - client-build
       - app-deploy:
           clever-app-id: app_c61407ae-b417-4406-86ed-cfd1acf84466
@@ -221,12 +236,18 @@ workflows:
           requires:
             - server-lint
             - client-lint
+            - e2e-lint
+            - e2e-test
             - client-build
           filters:
             branches:
               only: main
-      - prisma-deploy:
+      - prisma-deploy-server:
           clever-app-id: app_f9c5c1cb-fe9c-41f9-a6c0-793e8326e95b
           context: clever-cloud-deployment
           requires:
             - app-deploy
+      - prisma-deploy-service:
+          context: faq-prisma-deployment
+          requires:
+            - prisma-deploy-server

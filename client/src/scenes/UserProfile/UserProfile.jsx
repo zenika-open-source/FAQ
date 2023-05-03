@@ -7,7 +7,8 @@ import { alert, getIntl } from 'services'
 import { Avatar, Button, Card, Modal, Loading, Input } from 'components'
 
 import Logs from './components/Logs'
-import Specialities from './components/Specialities'
+
+import Specialties from './components/Specialties'
 
 import { UPDATE_INDENTITY, DELETE_IDENTITY } from './queries'
 
@@ -115,7 +116,7 @@ const UserProfile = ({ history }) => {
           </Button>
         </Card.Actions>
       </Card>
-      <Specialities userId={user.id} />
+      <Specialties userId={user.id} />
       <Logs userId={user.id} />
       <Card>
         <Card.Text>
