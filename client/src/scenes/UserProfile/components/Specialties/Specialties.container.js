@@ -8,7 +8,7 @@ import Specialties from './Specialties'
 export default compose(
   query(GET_SPECIALTIES, {
     parse: ({ me = {} }) => ({
-      spe: me.specialties
+      specialties: me.specialties
     })
   }),
   withError(),
