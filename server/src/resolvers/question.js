@@ -1,4 +1,4 @@
-const { history, ctxUser, slugify } = require('../helpers')
+const { history, ctxUser, slugify, questionDeleteCertif } = require('../helpers')
 const { algolia, slack } = require('../integrations')
 
 // TMP_TAGS
@@ -139,20 +139,7 @@ module.exports = {
 
       await Promise.all([...mutationsToAdd, ...mutationsToRemove])
 
-      const flags = node.flags
-      const specialties = user.specialties
-      const specialtyTagMatch = Boolean(specialties.find(specialty => tags.includes(specialty.id)))
-
-      !specialtyTagMatch &&
-        flags.find(
-          flag =>
-            flag.type === 'certified' &&
-            ctx.prisma.mutation.deleteFlag({
-              where: {
-                id: flag.id
-              }
-            })
-        )
+      questionDeleteCertif(node, user, tags, ctx)
 
       const meta = {
         tagsChanges: {

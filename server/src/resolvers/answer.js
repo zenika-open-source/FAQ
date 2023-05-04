@@ -1,4 +1,4 @@
-const { history, ctxUser } = require('../helpers')
+const { history, ctxUser, answerUpdateCertif } = require('../helpers')
 const { algolia, mailgun } = require('../integrations')
 
 module.exports = {
@@ -129,6 +129,7 @@ module.exports = {
         { where: { id: ctxUser(ctx).id } },
         `
             {
+              id
               specialties {
                 id
               }
@@ -186,24 +187,7 @@ module.exports = {
 
       await Promise.all([...mutationsToAdd, ...mutationsToUpdate, ...mutationsToRemove])
 
-      const certified = answer.node.flags.find(flag => flag.type === 'certified')
-      const tags = answer.node.tags.map(tag => tag.label.id)
-      const specialties = user.specialties
-      const specialtyTagMatch = Boolean(specialties.find(specialty => tags.includes(specialty.id)))
-
-      if (specialtyTagMatch && !certified) {
-        ctx.prisma.mutation.createFlag({
-          data: {
-            type: 'certified',
-            node: { connect: { id: answer.node.id } },
-            user: { connect: { id: user.id } }
-          }
-        })
-      } else if (!specialtyTagMatch && certified) {
-        ctx.prisma.mutation.deleteFlag({
-          where: { id: certified.id }
-        })
-      }
+      answerUpdateCertif(answer, user, ctx)
 
       const clean = sources => sources.map(s => ({ label: s.label, url: s.url }))
 
