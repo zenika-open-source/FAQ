@@ -38,50 +38,6 @@ const Answer = ({ zNode }) => {
     }
   })
 
-  // const autoRemoveCertif = () => {
-  //   const flags = zNode.flags
-  //   if (answer && flags.length > 0) {
-  //     flags.forEach(flag => {
-  //       if (specialties.length > 0) {
-  //         specialties.forEach(specialty => {
-  //           answer.user.specialties.forEach(answerSpe => {
-  //             if (flag.type === 'certified' && specialty.name !== answerSpe.name) {
-  //               removeFlag({ variables: { type: 'certified', nodeId: zNode.id } })
-  //             } else if (flag.type !== 'certified' && specialty.name === answerSpe.name) {
-  //               createFlag({ variables: { type: 'certified', nodeId: zNode.id } })
-  //             }
-  //           })
-  //         })
-  //       } else {
-  //         removeFlag({ variables: { type: 'certified', nodeId: zNode.id } })
-  //       }
-  //     })
-  //   } else if (answer && !flags.length) {
-  //     if (specialties.length > 0) {
-  //       specialties.forEach(specialty => {
-  //         answer.user.specialties.forEach(answerSpe => {
-  //           if (specialty.name === answerSpe.name) {
-  //             createFlag({ variables: { type: 'certified', nodeId: zNode.id } })
-  //           }
-  //         })
-  //       })
-  //     }
-  //   }
-  // }
-
-  // const autoAddCertif = () => {
-  //   const tags = zNode.tags
-  //   if (specialties.length > 0) {
-  //     specialties.forEach(specialty => {
-  //       tags.forEach(tag => {
-  //         if (specialty.name === tag.label.name) {
-  //           createFlag({ variables: { type: 'certified', nodeId: zNode.id } })
-  //         }
-  //       })
-  //     })
-  //   }
-  // }
-
   const intl = getIntl(Answer)
 
   const apollo = useApolloClient()
