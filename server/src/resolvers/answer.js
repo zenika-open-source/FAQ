@@ -103,10 +103,39 @@ module.exports = {
           }
           node {
             id
+            tags {
+              label {
+                id
+              }
+            }
+            flags {
+              id
+              type
+            }
+          }
+          user {
+            id
+            name
+            specialties {
+              id
+              name
+            }
           }
         }
         `
       )
+
+      const user = await ctx.prisma.query.user(
+        { where: { id: ctxUser(ctx).id } },
+        `
+            {
+              specialties {
+                id
+              }
+            }
+          `
+      )
+
       if (previousContent !== answer.content) {
         throw new Error(
           "Another user edited the answer before you, copy your version and refresh the page. If you don't copy your version, It will be lost"
@@ -156,6 +185,25 @@ module.exports = {
       )
 
       await Promise.all([...mutationsToAdd, ...mutationsToUpdate, ...mutationsToRemove])
+
+      const certified = answer.node.flags.find(flag => flag.type === 'certified')
+      const tags = answer.node.tags.map(tag => tag.label.id)
+      const specialties = user.specialties
+      const specialtyTagMatch = Boolean(specialties.find(specialty => tags.includes(specialty.id)))
+
+      if (specialtyTagMatch && !certified) {
+        ctx.prisma.mutation.createFlag({
+          data: {
+            type: 'certified',
+            node: { connect: { id: answer.node.id } },
+            user: { connect: { id: user.id } }
+          }
+        })
+      } else if (!specialtyTagMatch && certified) {
+        ctx.prisma.mutation.deleteFlag({
+          where: { id: certified.id }
+        })
+      }
 
       const clean = sources => sources.map(s => ({ label: s.label, url: s.url }))
 

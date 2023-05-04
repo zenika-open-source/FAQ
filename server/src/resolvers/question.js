@@ -67,6 +67,17 @@ module.exports = {
     updateQuestionAndTags: async (_, { id, title, previousTitle, tags }, ctx, info) => {
       const tagLabels = confTagLabels(ctx)
 
+      const user = await ctx.prisma.query.user(
+        { where: { id: ctxUser(ctx).id } },
+        `
+            {
+              specialties {
+                id
+              }
+            }
+          `
+      )
+
       const node = (
         await ctx.prisma.query.question(
           { where: { id } },
@@ -83,6 +94,10 @@ module.exports = {
                 id
                 name
               }
+            }
+            flags {
+              id
+              type
             }
           }
         }
@@ -123,6 +138,21 @@ module.exports = {
       )
 
       await Promise.all([...mutationsToAdd, ...mutationsToRemove])
+
+      const flags = node.flags
+      const specialties = user.specialties
+      const specialtyTagMatch = Boolean(specialties.find(specialty => tags.includes(specialty.id)))
+
+      !specialtyTagMatch &&
+        flags.find(
+          flag =>
+            flag.type === 'certified' &&
+            ctx.prisma.mutation.deleteFlag({
+              where: {
+                id: flag.id
+              }
+            })
+        )
 
       const meta = {
         tagsChanges: {
