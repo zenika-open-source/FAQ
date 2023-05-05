@@ -67,17 +67,6 @@ module.exports = {
     updateQuestionAndTags: async (_, { id, title, previousTitle, tags }, ctx, info) => {
       const tagLabels = confTagLabels(ctx)
 
-      const user = await ctx.prisma.query.user(
-        { where: { id: ctxUser(ctx).id } },
-        `
-            {
-              specialties {
-                id
-              }
-            }
-          `
-      )
-
       const node = (
         await ctx.prisma.query.question(
           { where: { id } },
@@ -98,6 +87,13 @@ module.exports = {
             flags {
               id
               type
+              user {
+                id
+                specialties {
+                  id
+                  name
+                }
+              }
             }
           }
         }
@@ -139,7 +135,7 @@ module.exports = {
 
       await Promise.all([...mutationsToAdd, ...mutationsToRemove])
 
-      questionDeleteCertif(node, user, tags, ctx)
+      questionDeleteCertif(node, tags, ctx)
 
       const meta = {
         tagsChanges: {

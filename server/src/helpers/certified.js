@@ -1,28 +1,26 @@
-const questionDeleteCertif = (node, user, tags, ctx) => {
-  const flags = node.flags
-  const specialties = user.specialties
-  const specialtyTagMatch = Boolean(specialties.find(specialty => tags.includes(specialty.id)))
+const questionDeleteCertif = async (node, tags, ctx) => {
+  const certified = node.flags.find(flag => flag.type === 'certified')
+  const specialties = certified && certified.user.specialties
+  const specialtyTagMatch =
+    specialties && Boolean(specialties.find(specialty => tags.includes(specialty.id)))
 
-  !specialtyTagMatch &&
-    flags.find(
-      flag =>
-        flag.type === 'certified' &&
-        ctx.prisma.mutation.deleteFlag({
-          where: {
-            id: flag.id
-          }
-        })
-    )
+  if (certified && !specialtyTagMatch) {
+    ctx.prisma.mutation.deleteFlag({
+      where: {
+        id: certified.id
+      }
+    })
+  }
 }
 
-const answerUpdateCertif = (answer, user, ctx) => {
+const answerUpdateCertif = async (answer, user, ctx) => {
   const certified = answer.node.flags.find(flag => flag.type === 'certified')
   const tags = answer.node.tags.map(tag => tag.label.id)
   const specialties = user.specialties
   const specialtyTagMatch = Boolean(specialties.find(specialty => tags.includes(specialty.id)))
 
   if (specialtyTagMatch && !certified) {
-    ctx.prisma.mutation.createFlag({
+    await ctx.prisma.mutation.createFlag({
       data: {
         type: 'certified',
         node: { connect: { id: answer.node.id } },
@@ -30,7 +28,7 @@ const answerUpdateCertif = (answer, user, ctx) => {
       }
     })
   } else if (!specialtyTagMatch && certified) {
-    ctx.prisma.mutation.deleteFlag({
+    await ctx.prisma.mutation.deleteFlag({
       where: { id: certified.id }
     })
   }

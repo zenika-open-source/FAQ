@@ -599,7 +599,7 @@ test('Should not be able to add a certified flag for a question not in my specia
   await expect(page.locator('a').filter({ hasText: 'verifiedcertifiée' })).toBeHidden()
 })
 
-test('Should remove the certified flag after modifying a question', async ({ page }) => {
+test('Should remove the certified flag after modifying an answer', async ({ page }) => {
   await createQuestionWithFlag(prisma, tag.id, tempUser)
   await page.goto('/')
   const openCard = page.getByRole('link', { name: 'keyboard_arrow_right' }).first()
