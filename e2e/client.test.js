@@ -618,6 +618,27 @@ test('Should remove the certified flag after modifying an answer', async ({ page
   await expect(page.getByText('verifiedCertifiée')).toBeHidden()
 })
 
+test('Should remove the certified flag when the corresponding tag is deleted', async ({ page }) => {
+  await createQuestionWithFlag(prisma, tag.id, tempUser)
+  await page.goto('/')
+  const openCard = page.getByRole('link', { name: 'keyboard_arrow_right' }).first()
+  await openCard.waitFor('visible')
+  await openCard.click()
+  await expect(page.getByText('verifiedCertifiée')).toBeVisible()
+  await page.getByRole('button', { name: 'Modifier' }).hover()
+  await page
+    .locator('a')
+    .filter({ hasText: 'editQuestion' })
+    .click()
+  await page
+    .locator('.tag', { hasText: 'payroll' })
+    .locator('.material-icons')
+    .click()
+  await page.locator('button', { hasText: 'Enregistrer la question' }).click()
+  await page.waitForTimeout(1000)
+  await expect(page.getByText('verifiedCertifiée')).toBeHidden()
+})
+
 test.afterEach(async () => {
   algolia.clearIndex({ prisma })
 })
