@@ -12,36 +12,6 @@
   border: 1px solid var(--primary-color);
 }
 
-.resultsContainer {
-  position: relative;
-  width: 100%;
-  z-index: 2;
-}
-
-.resultsContainer .resultsList {
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  background: var(--primary-color-font);
-  border: 1px solid var(--secondary-color);
-  border-radius: 3px;
-  list-style-type: none;
-}
-
-.resultsList .resultsEl {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.5rem;
-}
-
-.resultsEl .resultName {
-  font-weight: bold;
-}
-
 .usersList {
   display: flex;
   flex-direction: column;
@@ -88,14 +58,27 @@
   font-size: var(--small-font-size);
 }
 
-.userAddSpecialities {
+.userElement .userRight {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.userRight .userSpecialties {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  text-transform: capitalize;
+}
+
+.userRight .userAddSpecialties {
   padding: 0.5rem 1rem;
   background-color: var(--primary-color);
   color: var(--primary-color-font);
   border-radius: 3px;
 }
 
-.userAddSpecialities .dropdown-content {
+.userAddSpecialties .dropdown-content {
   left: 0;
   top: 2rem;
   box-shadow: none;
@@ -103,7 +86,7 @@
   border-radius: 3px;
 }
 
-.userAddSpecialities .dropdown-content a {
+.userAddSpecialties .dropdown-content a {
   text-decoration: none;
   text-transform: capitalize;
 }

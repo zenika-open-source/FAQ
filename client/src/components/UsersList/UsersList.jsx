@@ -1,11 +1,9 @@
 import { useQuery } from '@apollo/react-hooks'
 import { Dropdown, Loading } from 'components'
-import { useEffect, useState } from 'react'
-import { GET_TAG_CATEGORIES, GET_USERS } from './queries'
 import { DropdownItem } from 'components/Dropdown'
+import { useState } from 'react'
 import { getIntl } from 'services'
-import uniqBy from 'lodash/uniqBy'
-import pull from 'lodash/pull'
+import { GET_TAG_CATEGORIES, GET_USERS } from './queries'
 
 import './UsersList.css'
 
@@ -24,21 +22,22 @@ const UsersList = () => {
   })
 
   const { loading } = useQuery(GET_USERS, {
-    onCompleted: data => setUsers(data.users)
+    onCompleted: data => {
+      setUsers(data.users)
+      setResults(data.users)
+    }
   })
 
   const searchUsers = text => {
     let matches = []
     if (text.length > 0) {
-      matches =
-        results &&
-        users?.filter(user => {
-          const regex = new RegExp(`${text}`, `gi`)
-          return user.name.match(regex)
-        })
+      matches = users?.filter(user => {
+        const regex = new RegExp(`${text}`, `gi`)
+        return user.name.match(regex)
+      })
       setResults(matches?.slice(0, 5))
     } else {
-      setResults([])
+      setResults(users)
     }
   }
 
@@ -54,25 +53,9 @@ const UsersList = () => {
         placeholder={intl('search')}
         onChange={e => searchUsers(e.target.value)}
       />
-      {results.length > 0 && (
-        <div className="resultsContainer">
-          <ul className="resultsList">
-            {results.map(result => (
-              <li className="resultsEl" key={result.id}>
-                <p className="resultName">{result.name}</p>
-                <Dropdown className="userAddSpecialities" button={intl('add')}>
-                  {services?.map(service => (
-                    <DropdownItem key={service.id}>{service.name}</DropdownItem>
-                  ))}
-                </Dropdown>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
       <ul className="usersList">
-        {users ? (
-          users.map(user => (
+        {results.length > 0 ? (
+          results.map(user => (
             <li key={user.id} className="userElement">
               <div className="userLeft">
                 <div className="userIcon">
@@ -84,13 +67,11 @@ const UsersList = () => {
                 </div>
               </div>
               <div className="userRight">
-                <div className="userSpecialities">
-                  {user.specialities &&
-                    user.specialities.map(speciality => (
-                      <p key={speciality.name}>{speciality.name}</p>
-                    ))}
+                <div className="userSpecialties">
+                  {user.specialties &&
+                    user.specialties.map(specialty => <p key={specialty.name}>{specialty.name}</p>)}
                 </div>
-                <Dropdown className="userAddSpecialities" button={intl('add')}>
+                <Dropdown className="userAddSpecialties" button={intl('add')}>
                   {services?.map(service => (
                     <DropdownItem key={service.id}>{service.name}</DropdownItem>
                   ))}
@@ -109,7 +90,7 @@ const UsersList = () => {
 UsersList.translations = {
   en: {
     search: 'Find a user',
-    add: 'Add a speciality',
+    add: 'Add a specialty',
     empty: 'No users found'
   },
   fr: {

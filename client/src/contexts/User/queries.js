@@ -8,7 +8,7 @@ export const GET_ME = gql`
       name
       email
       picture
-      specialities {
+      specialties {
         name
       }
     }

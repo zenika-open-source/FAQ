@@ -12,7 +12,7 @@ module.exports = {
         },
         info
       ),
-    users: (_, args, ctx, info) => ctx.prisma.query.users(info)
+    users: (_, args, ctx, info) => ctx.prisma.query.users({}, info)
   },
   Mutation: {
     authenticate: async (_, { idToken }, ctx, info) => {

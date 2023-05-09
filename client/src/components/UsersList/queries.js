@@ -22,7 +22,7 @@ export const GET_USERS = gql`
       name
       email
       admin
-      specialities {
+      specialties {
         id
         name
       }

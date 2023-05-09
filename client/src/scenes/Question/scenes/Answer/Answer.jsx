@@ -1,32 +1,26 @@
-import React, { useState } from 'react'
+import { useApolloClient } from '@apollo/react-hooks'
 import PropTypes from 'prop-types'
-import { Redirect, Prompt } from 'react-router-dom'
-import { useApolloClient, useMutation } from '@apollo/react-hooks'
+import { useState } from 'react'
+import { Prompt, Redirect } from 'react-router-dom'
 
-import { SUBMIT_ANSWER, EDIT_ANSWER } from './queries'
+import { EDIT_ANSWER, SUBMIT_ANSWER } from './queries'
 
-import { alert, markdown, getIntl } from 'services'
 import { onListChange } from 'helpers'
+import { alert, getIntl, markdown } from 'services'
 
 import NotFound from 'scenes/NotFound'
 
-import { Loading, Flags, Button, MarkdownEditor, CtrlEnter, PairInputList } from 'components'
-import Card, { CardTitle, CardText, CardActions, PermanentClosableCard } from 'components/Card'
+import { Button, CtrlEnter, Flags, Loading, MarkdownEditor, PairInputList } from 'components'
+import Card, { CardActions, CardText, CardTitle, PermanentClosableCard } from 'components/Card'
 
 import { ActionMenu } from '../../components'
 
-import { sourcesToKeyValuePairs, keyValuePairsToSources, canSubmit } from './helpers'
+import { canSubmit, keyValuePairsToSources, sourcesToKeyValuePairs } from './helpers'
 
 import Tips from './components/Tips'
-import { useUser } from 'contexts'
-import { CREATE_FLAG, REMOVE_FLAG } from '../Read/queries'
 
 const Answer = ({ zNode }) => {
-  const { specialities } = useUser()
   const answer = zNode && zNode.answer
-
-  const [removeFlag] = useMutation(REMOVE_FLAG)
-  const [createFlag] = useMutation(CREATE_FLAG)
 
   const [state, setState] = useState(() => {
     const initialText = answer ? answer.content : ''
@@ -43,50 +37,6 @@ const Answer = ({ zNode }) => {
       showTips: PermanentClosableCard.isOpen('tips_answer')
     }
   })
-
-  const autoRemoveCertif = () => {
-    const flags = zNode.flags
-    if (answer && flags.length > 0) {
-      flags.forEach(flag => {
-        if (specialities && specialities.length > 0) {
-          specialities.forEach(speciality => {
-            answer.user.specialities.forEach(answerSpe => {
-              if (flag.type === 'certified' && speciality.name !== answerSpe.name) {
-                removeFlag({ variables: { type: 'certified', nodeId: zNode.id } })
-              } else if (flag.type !== 'certified' && speciality.name === answerSpe.name) {
-                createFlag({ variables: { type: 'certified', nodeId: zNode.id } })
-              }
-            })
-          })
-        } else {
-          removeFlag({ variables: { type: 'certified', nodeId: zNode.id } })
-        }
-      })
-    } else if (answer && !flags.length) {
-      if (specialities.length > 0) {
-        specialities.forEach(speciality => {
-          answer.user.specialities.forEach(answerSpe => {
-            if (speciality.name === answerSpe.name) {
-              createFlag({ variables: { type: 'certified', nodeId: zNode.id } })
-            }
-          })
-        })
-      }
-    }
-  }
-
-  const autoAddCertif = () => {
-    const tags = zNode.tags
-    if (specialities.length > 0) {
-      specialities.forEach(speciality => {
-        tags.forEach(tag => {
-          if (speciality.name === tag.label.name) {
-            createFlag({ variables: { type: 'certified', nodeId: zNode.id } })
-          }
-        })
-      })
-    }
-  }
 
   const intl = getIntl(Answer)
 
@@ -119,7 +69,6 @@ const Answer = ({ zNode }) => {
       })
       .then(() => {
         setState(state => ({ ...state, slug: zNode.question.slug + '-' + zNode.id }))
-        autoAddCertif()
         alert.pushSuccess(intl('alert.submit_success'))
       })
       .catch(error => {
@@ -143,7 +92,6 @@ const Answer = ({ zNode }) => {
       })
       .then(() => {
         setState(state => ({ ...state, slug: zNode.question.slug + '-' + zNode.id }))
-        autoRemoveCertif()
         alert.pushSuccess(intl('alert.edit_success'))
       })
       .catch(error => {

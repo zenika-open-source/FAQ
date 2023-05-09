@@ -34,7 +34,7 @@ const checkJwt = async (req, res, next, prisma) => {
       }`
     )
 
-  const specialityId = conf.tagCategories[0].labels[1].id
+  const specialtyId = conf.tagCategories[0].labels[1].id
   const userNoAuthUpsert = () =>
     prisma.mutation.upsertUser(
       {
@@ -47,7 +47,7 @@ const checkJwt = async (req, res, next, prisma) => {
           email: 'faq-user-no-auth@zenika.com',
           picture:
             'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg',
-          specialities: { connect: { id: specialityId } }
+          specialties: { connect: { id: specialtyId } }
         },
         update: {
           auth0Id: 'auth0Id',
