@@ -1,22 +1,21 @@
-import React, { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
-import { Link, Redirect } from 'react-router-dom'
-import { Helmet } from 'react-helmet'
 import { useMutation } from '@apollo/react-hooks'
+import PropTypes from 'prop-types'
+import { useEffect, useState } from 'react'
+import { Helmet } from 'react-helmet'
+import { Link, Redirect } from 'react-router-dom'
 
-import { CREATE_FLAG, REMOVE_FLAG, INCREMENT_VIEWS_COUNTER } from './queries'
+import { CREATE_FLAG, INCREMENT_VIEWS_COUNTER, REMOVE_FLAG } from './queries'
 
-import { markdown, getIntl } from 'services'
+import { getIntl, markdown } from 'services'
 
 import NotFound from 'scenes/NotFound'
 
-import { Loading, Button, Flags, Tags } from 'components'
-import Card, { CardTitle, CardText } from 'components/Card'
+import { Button, Flags, Loading, Tags } from 'components'
+import Card, { CardText, CardTitle } from 'components/Card'
 import Dropdown, { DropdownItem } from 'components/Dropdown'
 
 import { ActionMenu } from '../../components'
-import { Views, FlagsDropdown, Sources, Meta, Share, History } from './components'
-import { useUser } from 'contexts'
+import { FlagsDropdown, History, Meta, Share, Sources, Views } from './components'
 
 const Read = ({ history, match, zNode, loading }) => {
   const [loaded, setLoaded] = useState(false)
@@ -25,7 +24,6 @@ const Read = ({ history, match, zNode, loading }) => {
   const [createFlag] = useMutation(CREATE_FLAG)
   const [removeFlag] = useMutation(REMOVE_FLAG)
   const [incrementViewsCounter] = useMutation(INCREMENT_VIEWS_COUNTER)
-  const { specialties } = useUser()
 
   useEffect(() => {
     if (!loaded || incremented) return
@@ -58,10 +56,7 @@ const Read = ({ history, match, zNode, loading }) => {
       </Helmet>
       <ActionMenu backLink="/" backLabel={intl('menu.home')} goBack>
         <FlagsDropdown
-          specialties={specialties}
-          flags={zNode.flags}
-          tags={zNode.tags}
-          answer={zNode.answer}
+          zNode={zNode}
           onSelect={type => createFlag({ variables: { type, nodeId: zNode.id } })}
           onRemove={type => removeFlag({ variables: { type, nodeId: zNode.id } })}
         />

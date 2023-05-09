@@ -1,6 +1,6 @@
 const slug = require('slugify')
 
-const { questionDeleteCertif, answerUpdateCertif } = require('./certified')
+const { questionDeleteCertifWhenNotSpecialist, answerUpdateCertif } = require('./certified')
 const diffTags = require('./diffTags')
 const emojify = require('./emojify')
 const history = require('./history')
@@ -13,7 +13,7 @@ const slugify = s => slug(s).toLowerCase()
 
 module.exports = {
   ctxUser,
-  questionDeleteCertif,
+  questionDeleteCertifWhenNotSpecialist,
   answerUpdateCertif,
   diffTags,
   emojify,

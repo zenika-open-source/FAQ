@@ -1,4 +1,4 @@
-const { history, ctxUser, slugify, questionDeleteCertif } = require('../helpers')
+const { history, ctxUser, slugify, questionDeleteCertifWhenNotSpecialist } = require('../helpers')
 const { algolia, slack } = require('../integrations')
 
 // TMP_TAGS
@@ -135,7 +135,7 @@ module.exports = {
 
       await Promise.all([...mutationsToAdd, ...mutationsToRemove])
 
-      await questionDeleteCertif(node, tags, ctx)
+      await questionDeleteCertifWhenNotSpecialist(node, tags, ctx)
 
       const meta = {
         tagsChanges: {
