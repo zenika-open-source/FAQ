@@ -7,22 +7,19 @@ import Dropdown, { DropdownItem } from 'components/Dropdown'
 import { Flag, flagMeta } from 'components/Flags'
 
 import './FlagsDropdown.css'
+import { answerCanBeCertified } from 'helpers/answerCanBeCertified'
+import { useUser } from 'contexts'
 
-const FlagsDropdown = ({ specialties, flags, tags, answer, onSelect, onRemove }) => {
+const FlagsDropdown = ({ zNode, onSelect, onRemove }) => {
   const intl = getIntl(FlagsDropdown)
   const flagIntl = getIntl(Flag)
 
+  const { flags, tags, answer } = zNode
+  const { specialties } = useUser()
+
   const flagTypes = ['incomplete', 'outdated', 'duplicate']
 
-  if (answer) {
-    tags.forEach(tag => {
-      specialties.forEach(specialty => {
-        if (tag.label.name === specialty.name) {
-          flagTypes.push('certified')
-        }
-      })
-    })
-  }
+  answerCanBeCertified(specialties, tags, answer, flagTypes)
 
   const items = flagTypes.map(type => {
     const isSelected = flags.filter(f => f.type === type).length > 0

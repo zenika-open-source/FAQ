@@ -1,25 +1,27 @@
-const questionDeleteCertif = async (node, tags, ctx) => {
-  const certified = node.flags.find(flag => flag.type === 'certified')
-  const specialties = certified && certified.user.specialties
-  const specialtyTagMatch =
-    specialties && Boolean(specialties.find(specialty => tags.includes(specialty.id)))
+const questionDeleteCertifWhenNotSpecialist = async (node, tags, ctx) => {
+  const certifiedFlag = node.flags.find(flag => flag.type === 'certified')
+  if (certifiedFlag) {
+    const specialties = certifiedFlag && certifiedFlag.user.specialties
+    const isUserSpecialist =
+      specialties && Boolean(specialties.find(specialty => tags.includes(specialty.id)))
 
-  if (certified && !specialtyTagMatch) {
-    ctx.prisma.mutation.deleteFlag({
-      where: {
-        id: certified.id
-      }
-    })
+    if (!isUserSpecialist) {
+      await ctx.prisma.mutation.deleteFlag({
+        where: {
+          id: certifiedFlag.id
+        }
+      })
+    }
   }
 }
 
 const answerUpdateCertif = async (answer, user, ctx) => {
-  const certified = answer.node.flags.find(flag => flag.type === 'certified')
+  const certifiedFlag = answer.node.flags.find(flag => flag.type === 'certified')
   const tags = answer.node.tags.map(tag => tag.label.id)
   const specialties = user.specialties
-  const specialtyTagMatch = Boolean(specialties.find(specialty => tags.includes(specialty.id)))
+  const isUserSpecialist = Boolean(specialties.find(specialty => tags.includes(specialty.id)))
 
-  if (specialtyTagMatch && !certified) {
+  if (isUserSpecialist && !certifiedFlag) {
     await ctx.prisma.mutation.createFlag({
       data: {
         type: 'certified',
@@ -27,14 +29,14 @@ const answerUpdateCertif = async (answer, user, ctx) => {
         user: { connect: { id: user.id } }
       }
     })
-  } else if (!specialtyTagMatch && certified) {
+  } else if (!isUserSpecialist && certifiedFlag) {
     await ctx.prisma.mutation.deleteFlag({
-      where: { id: certified.id }
+      where: { id: certifiedFlag.id }
     })
   }
 }
 
 module.exports = {
-  questionDeleteCertif,
+  questionDeleteCertifWhenNotSpecialist,
   answerUpdateCertif
 }
