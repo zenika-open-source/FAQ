@@ -168,16 +168,35 @@
   top: 10.75px;
   border-color: transparent var(--secondary-color-dark) transparent transparent;
   border-width: 10.5px;
-  left: -21px;
+  left: -22px;
 }
 
 .specialtiesList .specialtyEl {
   padding: 0.1rem 0.3rem 0.3rem 0.3rem;
   cursor: pointer;
-  font-variant: small-caps;
+}
+
+.specialtiesList .specialtyEl.selected::before {
+  content: '✓';
+  margin-right: 0.2rem;
+}
+
+.specialtiesList .specialtyEl.selected:hover::before {
+  content: '✕';
+  margin-right: 0.2rem;
 }
 
 .specialtiesList .specialtyEl:hover {
   background-color: var(--secondary-color);
   color: var(--secondary-color-font-dark);
+}
+
+.specialtyEl .specialtyButton {
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-variant: small-caps;
 }

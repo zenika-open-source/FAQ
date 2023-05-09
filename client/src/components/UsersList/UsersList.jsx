@@ -1,15 +1,15 @@
-import { useQuery } from '@apollo/react-hooks'
-import { Dropdown, Loading } from 'components'
-import { DropdownItem } from 'components/Dropdown'
+import { useApolloClient, useQuery } from '@apollo/react-hooks'
+import { Loading } from 'components'
 import { useState } from 'react'
 import { getIntl } from 'services'
-import { GET_TAG_CATEGORIES, GET_USERS } from './queries'
+import { GET_TAG_CATEGORIES, GET_USERS, UPDATE_SPECIALTIES } from './queries'
 
 import './UsersList.css'
 import SpecialtiesList from './components/SpecialtiesList'
 
 const UsersList = () => {
   const intl = getIntl(UsersList)
+  const apollo = useApolloClient()
 
   const [users, setUsers] = useState(null)
   const [specialists, setSpecialists] = useState(null)
@@ -30,13 +30,27 @@ const UsersList = () => {
     }
   })
 
+  // const updateUser = (user, specialties) => {
+  //   apollo
+  //     .mutate({
+  //       mutation: UPDATE_SPECIALTIES,
+  //       variables: {
+  //         id: user.id,
+  //         specialties: specialties
+  //       }
+  //     })
+  //     .then(res => {
+  //       console.log(res)
+  //     })
+  // }
+
   const searchUsers = text => {
     let matches = []
     if (text.length > 0) {
       matches =
         results &&
         users?.filter(user => {
-          const regex = new RegExp(`${text}`, `gi`)
+          const regex = new RegExp(`^${text}`, `gi`)
           return user.name.match(regex)
         })
       setResults(matches?.slice(0, 5))
@@ -97,13 +111,21 @@ const UsersList = () => {
                 <div className="userSpecialties">
                   {user.specialties &&
                     user.specialties.map(specialty => (
-                      <div key={specialty.name} className="userSpecialty">
+                      <div key={specialty.id} className="userSpecialty">
                         <span>{specialty.name}</span>
-                        <i className="material-icons">close</i>
+                        <i
+                          className="material-icons"
+                          // onClick={updateUser(
+                          //   user,
+                          //   user.specialties.filter(spe => spe.id !== specialty.id)
+                          // )}
+                        >
+                          close
+                        </i>
                       </div>
                     ))}
                 </div>
-                <SpecialtiesList services={services} />
+                <SpecialtiesList user={user} services={services} />
               </div>
             </li>
           ))}
