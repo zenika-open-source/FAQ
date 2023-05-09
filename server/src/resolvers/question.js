@@ -135,7 +135,7 @@ module.exports = {
 
       await Promise.all([...mutationsToAdd, ...mutationsToRemove])
 
-      questionDeleteCertif(node, tags, ctx)
+      await questionDeleteCertif(node, tags, ctx)
 
       const meta = {
         tagsChanges: {
