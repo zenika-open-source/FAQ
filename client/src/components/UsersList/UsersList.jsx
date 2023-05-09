@@ -6,6 +6,7 @@ import { getIntl } from 'services'
 import { GET_TAG_CATEGORIES, GET_USERS } from './queries'
 
 import './UsersList.css'
+import SpecialtiesList from './components/SpecialtiesList'
 
 const UsersList = () => {
   const intl = getIntl(UsersList)
@@ -88,13 +89,14 @@ const UsersList = () => {
               <div className="userRight">
                 <div className="userSpecialties">
                   {user.specialties &&
-                    user.specialties.map(specialty => <p key={specialty.name}>{specialty.name}</p>)}
+                    user.specialties.map(specialty => (
+                      <div key={specialty.name} className="userSpecialty">
+                        <span>{specialty.name}</span>
+                        <i className="material-icons">close</i>
+                      </div>
+                    ))}
                 </div>
-                <Dropdown className="userAddSpecialties" button={intl('add')}>
-                  {services?.map(service => (
-                    <DropdownItem key={service.id}>{service.name}</DropdownItem>
-                  ))}
-                </Dropdown>
+                <SpecialtiesList services={services} />
               </div>
             </li>
           ))}
@@ -106,13 +108,11 @@ const UsersList = () => {
 UsersList.translations = {
   en: {
     search: 'Find a user',
-    add: 'Add a specialty',
-    empty: 'No users found'
+    add: 'Add a specialty'
   },
   fr: {
     search: 'Trouver un utilisateur',
-    add: 'Ajouter une spécialité',
-    empty: "Pas d'utilisateurs trouvés"
+    add: 'Ajouter une spécialité'
   }
 }
 
