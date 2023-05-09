@@ -88,11 +88,11 @@
   font-size: var(--small-font-size);
 }
 
-.userElement .userRight {
+.userRight {
   position: relative;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.3rem;
 }
 
 .userRight .userSpecialties {

@@ -63,11 +63,18 @@ const UsersList = () => {
             {results.map(result => (
               <li className="resultsEl" key={result.id}>
                 <p className="resultName">{result.name}</p>
-                <Dropdown className="userAddSpecialities" button={intl('add')}>
-                  {services?.map(service => (
-                    <DropdownItem key={service.id}>{service.name}</DropdownItem>
-                  ))}
-                </Dropdown>
+                <div className="userRight">
+                  <div className="userSpecialties">
+                    {result?.specialties.length > 0 &&
+                      result.specialties.map(specialty => (
+                        <div key={specialty.name} className="userSpecialty">
+                          <span>{specialty.name}</span>
+                          <i className="material-icons">close</i>
+                        </div>
+                      ))}
+                  </div>
+                  <SpecialtiesList services={services} />
+                </div>
               </li>
             ))}
           </ul>
