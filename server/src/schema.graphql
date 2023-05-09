@@ -36,6 +36,7 @@ type Mutation {
   updateMe(name: String!, email: String!, picture: String!): User
   forgetMe: User
   authenticate(idToken: String!): User
+  updateSpecialties(id: ID!, specialties: [TagLabel!]): User
 
   createQuestionAndTags(title: String!, tags: [ID!]!): Question
   updateQuestionAndTags(id: ID!, title: String!, previousTitle: String!, tags: [ID!]!): Question

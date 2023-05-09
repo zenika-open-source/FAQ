@@ -29,3 +29,12 @@ export const GET_USERS = gql`
     }
   }
 `
+
+export const UPDATE_SPECIALTIES = gql`
+  mutation updateSpecialties($id: ID!, $specialties: [TagLabel!]) {
+    updateSpecialties(id: $id, specialties: $specialties) {
+      id
+      specialties
+    }
+  }
+`
