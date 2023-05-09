@@ -12,6 +12,36 @@
   border: 1px solid var(--primary-color);
 }
 
+.resultsContainer {
+  position: relative;
+  width: 100%;
+  z-index: 2;
+}
+
+.resultsList .resultsEl {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem;
+}
+
+.resultsContainer .resultsList {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: var(--primary-color-font);
+  border: 1px solid var(--secondary-color);
+  border-radius: 3px;
+  list-style-type: none;
+}
+
+.resultsEl .resultName {
+  font-weight: bold;
+}
+
 .usersList {
   display: flex;
   flex-direction: column;

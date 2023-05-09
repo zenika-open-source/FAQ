@@ -11,6 +11,7 @@ const UsersList = () => {
   const intl = getIntl(UsersList)
 
   const [users, setUsers] = useState(null)
+  const [specialists, setSpecialists] = useState(null)
   const [services, setServices] = useState(null)
   const [results, setResults] = useState([])
 
@@ -24,20 +25,22 @@ const UsersList = () => {
   const { loading } = useQuery(GET_USERS, {
     onCompleted: data => {
       setUsers(data.users)
-      setResults(data.users)
+      setSpecialists(data.users.filter(user => user.specialties.length > 0))
     }
   })
 
   const searchUsers = text => {
     let matches = []
     if (text.length > 0) {
-      matches = users?.filter(user => {
-        const regex = new RegExp(`${text}`, `gi`)
-        return user.name.match(regex)
-      })
+      matches =
+        results &&
+        users?.filter(user => {
+          const regex = new RegExp(`${text}`, `gi`)
+          return user.name.match(regex)
+        })
       setResults(matches?.slice(0, 5))
     } else {
-      setResults(users)
+      setResults([])
     }
   }
 
@@ -53,9 +56,25 @@ const UsersList = () => {
         placeholder={intl('search')}
         onChange={e => searchUsers(e.target.value)}
       />
+      {results.length > 0 && (
+        <div className="resultsContainer">
+          <ul className="resultsList">
+            {results.map(result => (
+              <li className="resultsEl" key={result.id}>
+                <p className="resultName">{result.name}</p>
+                <Dropdown className="userAddSpecialities" button={intl('add')}>
+                  {services?.map(service => (
+                    <DropdownItem key={service.id}>{service.name}</DropdownItem>
+                  ))}
+                </Dropdown>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
       <ul className="usersList">
-        {results.length > 0 ? (
-          results.map(user => (
+        {users &&
+          specialists.map(user => (
             <li key={user.id} className="userElement">
               <div className="userLeft">
                 <div className="userIcon">
@@ -78,10 +97,7 @@ const UsersList = () => {
                 </Dropdown>
               </div>
             </li>
-          ))
-        ) : (
-          <p className="emptyUsers">{intl('empty')}</p>
-        )}
+          ))}
       </ul>
     </section>
   )
