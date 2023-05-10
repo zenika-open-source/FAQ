@@ -15,6 +15,22 @@ const questionDeleteCertifWhenNotSpecialist = async (node, tags, ctx) => {
   }
 }
 
+const answerAddCertifWhenSpecialist = async (user, node, nodeId, ctx) => {
+  const tags = node.tags.map(tag => tag.label.id)
+  const specialties = user.specialties
+  const isUserSpecialist = Boolean(specialties.find(specialty => tags.includes(specialty.id)))
+
+  if (isUserSpecialist) {
+    await ctx.prisma.mutation.createFlag({
+      data: {
+        type: 'certified',
+        node: { connect: { id: nodeId } },
+        user: { connect: { id: user.id } }
+      }
+    })
+  }
+}
+
 const answerUpdateCertif = async (answer, user, ctx) => {
   const certifiedFlag = answer.node.flags.find(flag => flag.type === 'certified')
   const tags = answer.node.tags.map(tag => tag.label.id)
@@ -38,5 +54,6 @@ const answerUpdateCertif = async (answer, user, ctx) => {
 
 module.exports = {
   questionDeleteCertifWhenNotSpecialist,
+  answerAddCertifWhenSpecialist,
   answerUpdateCertif
 }

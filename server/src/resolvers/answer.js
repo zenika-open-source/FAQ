@@ -1,4 +1,9 @@
-const { history, ctxUser, answerUpdateCertif } = require('../helpers')
+const {
+  history,
+  ctxUser,
+  answerUpdateCertif,
+  answerAddCertifWhenSpecialist
+} = require('../helpers')
 const { algolia, mailgun } = require('../integrations')
 
 module.exports = {
@@ -33,10 +38,19 @@ module.exports = {
           id
           user {
             id
+            specialties {
+              id
+              name
+            }
           }
           node {
             flags(where:{type:"unanswered"}) {
               id
+            }
+            tags {
+              label {
+                id
+              }
             }
             question {
               user {
@@ -63,6 +77,8 @@ module.exports = {
       await ctx.prisma.mutation.deleteManyFlags({
         where: { node: { id: nodeId }, type: 'unanswered' }
       })
+
+      await answerAddCertifWhenSpecialist(answer.user, answer.node, nodeId, ctx)
 
       await history.push(ctx, {
         action: 'CREATED',
