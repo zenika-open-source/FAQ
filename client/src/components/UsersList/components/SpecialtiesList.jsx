@@ -3,7 +3,7 @@ import { Button } from 'components'
 import { useClickOutside } from 'helpers'
 import { useState } from 'react'
 
-const SpecialtiesList = ({ user, services }) => {
+const SpecialtiesList = ({ specialties, services, onChange }) => {
   const [opened, setOpened] = useState(false)
   const ref = useClickOutside(() => setOpened(false))
 
@@ -12,12 +12,20 @@ const SpecialtiesList = ({ user, services }) => {
       <Button icon={'add'} link style={{ padding: 0 }} onClick={() => setOpened(op => !op)} />
       <ul ref={ref} className="specialtiesList" style={{ display: opened ? 'flex' : 'none' }}>
         {services.map(service => {
-          const isSelected = !!user.specialties.filter(spe => spe.id === service.id).length
+          const isSelected = !!specialties?.filter(spe => spe.id === service.id).length
           return (
             <li
+              key={service.id}
               className={cn('specialtyEl', {
                 selected: isSelected
               })}
+              onClick={() =>
+                onChange(
+                  isSelected
+                    ? specialties.filter(specialty => specialty.id !== service.id)
+                    : [...specialties, service]
+                )
+              }
             >
               <button className="specialtyButton">{service.name}</button>
             </li>
