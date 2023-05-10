@@ -31,10 +31,13 @@ export const GET_USERS = gql`
 `
 
 export const UPDATE_SPECIALTIES = gql`
-  mutation updateSpecialties($id: ID!, $specialties: [TagLabel!]) {
+  mutation updateSpecialties($id: ID!, $specialties: [SpecialtiesInput]!) {
     updateSpecialties(id: $id, specialties: $specialties) {
       id
-      specialties
+      specialties {
+        id
+        name
+      }
     }
   }
 `

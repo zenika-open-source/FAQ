@@ -72,13 +72,24 @@ module.exports = {
         },
         info
       ),
-    updateSpecialties: (_, { id, specialties }, info) =>
-      ctx.prisma.mutation.updateUser(
+    updateSpecialties: async (_, { id, specialties }, ctx, info) => {
+      console.log(specialties)
+
+      const specialtyToAdd = ctx.prisma.mutation.updateUser({
+        where: { id: id },
+        data: { specialties }
+      })
+
+      await Promise.resolve(specialtyToAdd)
+
+      console.log(await Promise.resolve(specialtyToAdd))
+
+      return ctx.prisma.query.user(
         {
-          where: { id: id },
-          data: { specialties }
+          where: { id }
         },
         info
       )
+    }
   }
 }
