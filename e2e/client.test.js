@@ -432,7 +432,6 @@ test('Should not return results', async ({ page }) => {
 test('Should be able to flag a question', async ({ page }) => {
   await createQuestionAndAnswer(prisma, tag.id, user)
   await page.goto('/')
-  await page.pause()
   await page.waitForTimeout(1000)
   await page.locator("button:near(:text('Filtrer par tags:'))").click()
   await page.locator('.category-item', { hasText: tag.name }).click()
@@ -643,6 +642,35 @@ test('Should remove the certified flag when the corresponding tag is deleted', a
   await page.locator('button', { hasText: 'Enregistrer la question' }).click()
   await page.waitForTimeout(1000)
   await expect(page.getByText('verifiedCertifiée')).toBeHidden()
+})
+
+test('Should be able to add a specialty to a user', async ({ page }) => {
+  await page.goto('/')
+  await page.getByRole('img', { name: 'avatar' }).hover()
+  await page
+    .locator('a')
+    .filter({ hasText: 'Paramètres' })
+    .click()
+  await page.getByText('Spécialistes').click()
+  const user = page.locator('.userElement', { hasText: 'enableSkipAuth' })
+  const userSpecialties = user.locator('.userSpecialties')
+  await expect(
+    userSpecialties
+      .locator('.userSpecialty')
+      .first()
+      .locator('span')
+  ).toHaveText('marketing')
+  const addSpecialty = user.locator('.userRight').getByRole('button', { hasText: 'add' })
+  await addSpecialty.click()
+  await user.getByRole('button', { name: 'sales' }).click()
+  await page.reload()
+  await page.getByText('Spécialistes').click()
+  await expect(
+    userSpecialties
+      .locator('.userSpecialty')
+      .nth(1)
+      .locator('span')
+  ).toHaveText('sales')
 })
 
 test.afterEach(async () => {
