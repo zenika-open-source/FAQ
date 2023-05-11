@@ -81,7 +81,9 @@ const UsersList = () => {
       )}
       <ul className="usersList">
         {specialists &&
-          specialists.map(specialist => <Specialist services={services} specialist={specialist} />)}
+          specialists.map(specialist => (
+            <Specialist services={services} specialist={specialist} key={specialist.id} />
+          ))}
       </ul>
     </section>
   )

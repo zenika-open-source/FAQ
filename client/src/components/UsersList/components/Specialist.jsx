@@ -1,5 +1,5 @@
 import { useApolloClient } from '@apollo/react-hooks'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { alert, getIntl } from 'services'
 import { UPDATE_SPECIALTIES } from '../queries'
 import SpecialtiesList from './SpecialtiesList'
@@ -16,47 +16,24 @@ const Specialist = ({ specialist, services }) => {
   }
 
   const editSpecialties = specialties => {
-    console.log(specialties)
     apollo
       .mutate({
         mutation: UPDATE_SPECIALTIES,
         variables: {
           id: specialist.id,
-          specialties: specialties.map(({ __typename, ...rest }) => rest)
+          specialties: specialties.map(({ __typename, name, ...rest }) => rest)
         }
       })
-      .then(({ data }) => {
-        console.log(data)
-        alert.pushSuccess(intl('alert.edit_success'))
+      .then(() => {
+        alert.pushSuccess(intl('alert.add_success'))
       })
       .catch(err => {
         alert.pushDefaultError(err)
       })
   }
 
-  //   const removeSpecialty = async specialty => {
-  //     try {
-  //       setSpecialties(specialties.filter(spe => spe.id !== specialty.id))
-  //       await updateSpecialties({
-  //         variables: {
-  //           id: specialist.id,
-  //           specialties: specialties.map(({ __typename, ...rest }) => rest)
-  //         }
-  //       })
-  //       alert.pushSuccess(intl('alert.delete_success'))
-  //   } catch (err) {
-  //     alert.pushDefaultError(err)
-  //   }
-  //   }
-
-  useEffect(() => {
-    if (specialist) {
-      setSpecialties(specialist.specialties)
-    }
-  }, [specialist])
-
   return (
-    <li key={specialist.id} className="userElement">
+    <li className="userElement">
       <div className="userLeft">
         <div className="userIcon">
           <i className="material-icons">{specialist.admin ? 'admin_panel_settings' : 'person'}</i>
