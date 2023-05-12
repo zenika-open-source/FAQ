@@ -432,7 +432,7 @@ test('Should not return results', async ({ page }) => {
 test('Should be able to flag a question', async ({ page }) => {
   await createQuestionAndAnswer(prisma, tag.id, user)
   await page.goto('/')
-  await page.waitForTimeout(1000)
+  await page.waitForTimeout(2000)
   await page.locator("button:near(:text('Filtrer par tags:'))").click()
   await page.locator('.category-item', { hasText: tag.name }).click()
   const openCard = page.getByRole('link', { name: 'keyboard_arrow_right' }).first()
@@ -504,7 +504,7 @@ test('Should be able to answer a question that has no answer', async ({ page }) 
 test('Should be able to search by text and tag', async ({ page }) => {
   await createQuestionAndAnswer(prisma, tag.id, user)
   await page.goto('/')
-  await page.waitForTimeout(1000)
+  await page.waitForTimeout(2000)
   await page.locator("input:near(:text('search'))").click()
   await page.locator("input:near(:text('search'))").fill('Ceci est une question')
   await expect(page.getByRole('heading', { name: 'Ceci est une question' }).first()).toBeVisible()
@@ -653,24 +653,36 @@ test('Should be able to add a specialty to a user', async ({ page }) => {
     .click()
   await page.getByText('Spécialistes').click()
   const user = page.locator('.userElement', { hasText: 'enableSkipAuth' })
-  const userSpecialties = user.locator('.userSpecialties')
-  await expect(
-    userSpecialties
-      .locator('.userSpecialty')
-      .first()
-      .locator('span')
-  ).toHaveText('marketing')
+  const userSpecialty = user.locator('.userSpecialties').locator('.userSpecialty')
+  await expect(userSpecialty.first().locator('span')).toHaveText('marketing')
   const addSpecialty = user.locator('.userRight').getByRole('button', { hasText: 'add' })
   await addSpecialty.click()
   await user.getByRole('button', { name: 'sales' }).click()
   await page.reload()
+  await page.waitForTimeout(1000)
   await page.getByText('Spécialistes').click()
-  await expect(
-    userSpecialties
-      .locator('.userSpecialty')
-      .nth(1)
-      .locator('span')
-  ).toHaveText('sales')
+  await expect(userSpecialty.nth(1).locator('span')).toHaveText('sales')
+})
+
+test("Should be able to remove a user's specialty", async ({ page }) => {
+  await page.goto('/')
+  await page.getByRole('img', { name: 'avatar' }).hover()
+  await page
+    .locator('a')
+    .filter({ hasText: 'Paramètres' })
+    .click()
+  await page.getByText('Spécialistes').click()
+  const user = page.locator('.userElement', { hasText: 'enableSkipAuth' })
+  const userSpecialty = user.locator('.userSpecialties').locator('.userSpecialty')
+  await expect(userSpecialty.first().locator('span')).toHaveText('marketing')
+  await userSpecialty
+    .first()
+    .getByText('close', { exact: true })
+    .click()
+  await page.reload()
+  await page.waitForTimeout(1000)
+  await page.getByText('Spécialistes').click()
+  await expect(userSpecialty.first().locator('span', { hasText: 'sales' })).toBeHidden()
 })
 
 test.afterEach(async () => {
