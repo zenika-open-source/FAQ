@@ -22,8 +22,11 @@ const SpecialtiesList = ({ specialties, services, onChange }) => {
               onClick={() =>
                 onChange(
                   isSelected
-                    ? specialties.filter(specialty => specialty.id !== service.id)
-                    : [...specialties, service]
+                    ? {
+                        data: specialties.filter(specialty => specialty.id !== service.id),
+                        action: 'delete'
+                      }
+                    : { data: [...specialties, service], action: 'add' }
                 )
               }
             >

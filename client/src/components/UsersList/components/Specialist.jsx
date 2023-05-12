@@ -10,12 +10,13 @@ const Specialist = ({ specialist, services }) => {
 
   const [specialties, setSpecialties] = useState(specialist.specialties)
 
-  const onSpecialtyChange = newSpecialties => {
-    setSpecialties(newSpecialties)
-    editSpecialties(newSpecialties)
+  const onSpecialtyChange = params => {
+    const { action, data } = params
+    setSpecialties(data)
+    editSpecialties(data, action)
   }
 
-  const editSpecialties = specialties => {
+  const editSpecialties = (specialties, action) => {
     apollo
       .mutate({
         mutation: UPDATE_SPECIALTIES,
@@ -25,7 +26,7 @@ const Specialist = ({ specialist, services }) => {
         }
       })
       .then(() => {
-        alert.pushSuccess(intl('alert.add_success'))
+        alert.pushSuccess(intl(`alert.${action}_success`))
       })
       .catch(err => {
         alert.pushDefaultError(err)
@@ -52,7 +53,10 @@ const Specialist = ({ specialist, services }) => {
                 <i
                   className="material-icons"
                   onClick={() =>
-                    onSpecialtyChange(specialties.filter(spe => spe.id !== specialty.id))
+                    onSpecialtyChange({
+                      data: specialties.filter(spe => spe.id !== specialty.id),
+                      action: 'delete'
+                    })
                   }
                 >
                   close
