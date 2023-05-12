@@ -1,7 +1,7 @@
 .usersSearch {
   width: 100%;
   padding: 0.2rem 0.5rem;
-  margin: 1rem 0;
+  margin: 1rem 0 0.5rem;
   border-radius: 3px;
   border: 1px solid var(--secondary-color);
   outline: none;
@@ -18,28 +18,18 @@
   z-index: 2;
 }
 
-.resultsList .resultsEl {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.5rem;
-}
-
-.resultsContainer .resultsList {
+.resultsContainer .usersList {
   width: 100%;
   margin: 0;
   padding: 0;
   position: absolute;
   top: 0;
   left: 0;
+  padding: 1rem 0;
   background: var(--primary-color-font);
   border: 1px solid var(--secondary-color);
   border-radius: 3px;
   list-style-type: none;
-}
-
-.resultsEl .resultName {
-  font-weight: bold;
 }
 
 .usersList {
