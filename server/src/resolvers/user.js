@@ -72,10 +72,10 @@ module.exports = {
         },
         info
       ),
-    updateSpecialties: async (_, { id, specialties }, ctx) => {
+    updateSpecialties: (_, { id, specialties }, ctx) => {
       ctx.prisma.mutation.updateUser({
         where: { id },
-        data: { specialties: { connect: specialties } }
+        data: { specialties: { set: specialties } }
       })
     }
   }
