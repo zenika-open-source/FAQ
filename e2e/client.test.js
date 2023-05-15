@@ -661,7 +661,7 @@ test('Should be able to add a specialty to a user', async ({ page }) => {
   await page.reload()
   await page.waitForTimeout(1000)
   await page.getByText('Spécialistes').click()
-  await expect(userSpecialty.nth(1).locator('span')).toHaveText('sales')
+  await expect(userSpecialty.last().locator('span')).toHaveText('sales')
 })
 
 test("Should be able to remove a user's specialty", async ({ page }) => {
@@ -676,7 +676,7 @@ test("Should be able to remove a user's specialty", async ({ page }) => {
   const userSpecialty = user.locator('.userSpecialties').locator('.userSpecialty')
   await expect(userSpecialty.first().locator('span')).toHaveText('marketing')
   await userSpecialty
-    .first()
+    .last()
     .getByText('close', { exact: true })
     .click()
   await page.reload()
