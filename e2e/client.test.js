@@ -427,7 +427,6 @@ test('Should not return results', async ({ page }) => {
 test('Should be able to flag a question', async ({ page }) => {
   await createQuestionAndAnswer(prisma, tag.id, user)
   await page.goto('/')
-  await page.pause()
   await page.waitForTimeout(1000)
   await page.locator("button:near(:text('Filtrer par tags:'))").click()
   await page.locator('.category-item', { hasText: tag.name }).click()
