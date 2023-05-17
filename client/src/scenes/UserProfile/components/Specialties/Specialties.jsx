@@ -16,12 +16,14 @@ const Specialties = ({ specialties }) => {
         <h2 style={{ marginBottom: '1rem' }}>{intl('title')}</h2>
         <hr />
         {specialties.length > 0 ? (
-          specialties.map(specialty => (
-            <p key={specialty.name} className="specialty">
-              <i className="material-icons">verified</i>
-              {specialty.name}
-            </p>
-          ))
+          <ul className="specialtiesList">
+            {specialties.map(specialty => (
+              <li key={specialty.name} className="specialty">
+                <i className="material-icons">verified</i>
+                {specialty.name}
+              </li>
+            ))}
+          </ul>
         ) : (
           <p>{intl('empty')}</p>
         )}
