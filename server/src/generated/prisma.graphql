@@ -22,15 +22,15 @@ type AggregateSource {
   count: Int!
 }
 
+type AggregateSubject {
+  count: Int!
+}
+
 type AggregateTag {
   count: Int!
 }
 
 type AggregateTagCategory {
-  count: Int!
-}
-
-type AggregateTagLabel {
   count: Int!
 }
 
@@ -1448,6 +1448,16 @@ type Mutation {
   ): Source!
   deleteSource(where: SourceWhereUniqueInput!): Source
   deleteManySources(where: SourceWhereInput): BatchPayload!
+  createSubject(data: SubjectCreateInput!): Subject!
+  updateSubject(data: SubjectUpdateInput!, where: SubjectWhereUniqueInput!): Subject
+  updateManySubjects(data: SubjectUpdateManyMutationInput!, where: SubjectWhereInput): BatchPayload!
+  upsertSubject(
+    where: SubjectWhereUniqueInput!
+    create: SubjectCreateInput!
+    update: SubjectUpdateInput!
+  ): Subject!
+  deleteSubject(where: SubjectWhereUniqueInput!): Subject
+  deleteManySubjects(where: SubjectWhereInput): BatchPayload!
   createTag(data: TagCreateInput!): Tag!
   updateTag(data: TagUpdateInput!, where: TagWhereUniqueInput!): Tag
   upsertTag(where: TagWhereUniqueInput!, create: TagCreateInput!, update: TagUpdateInput!): Tag!
@@ -1466,19 +1476,6 @@ type Mutation {
   ): TagCategory!
   deleteTagCategory(where: TagCategoryWhereUniqueInput!): TagCategory
   deleteManyTagCategories(where: TagCategoryWhereInput): BatchPayload!
-  createTagLabel(data: TagLabelCreateInput!): TagLabel!
-  updateTagLabel(data: TagLabelUpdateInput!, where: TagLabelWhereUniqueInput!): TagLabel
-  updateManyTagLabels(
-    data: TagLabelUpdateManyMutationInput!
-    where: TagLabelWhereInput
-  ): BatchPayload!
-  upsertTagLabel(
-    where: TagLabelWhereUniqueInput!
-    create: TagLabelCreateInput!
-    update: TagLabelUpdateInput!
-  ): TagLabel!
-  deleteTagLabel(where: TagLabelWhereUniqueInput!): TagLabel
-  deleteManyTagLabels(where: TagLabelWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
@@ -1633,6 +1630,25 @@ type Query {
     first: Int
     last: Int
   ): SourceConnection!
+  subject(where: SubjectWhereUniqueInput!): Subject
+  subjects(
+    where: SubjectWhereInput
+    orderBy: SubjectOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Subject]!
+  subjectsConnection(
+    where: SubjectWhereInput
+    orderBy: SubjectOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): SubjectConnection!
   tag(where: TagWhereUniqueInput!): Tag
   tags(
     where: TagWhereInput
@@ -1671,25 +1687,6 @@ type Query {
     first: Int
     last: Int
   ): TagCategoryConnection!
-  tagLabel(where: TagLabelWhereUniqueInput!): TagLabel
-  tagLabels(
-    where: TagLabelWhereInput
-    orderBy: TagLabelOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [TagLabel]!
-  tagLabelsConnection(
-    where: TagLabelWhereInput
-    orderBy: TagLabelOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): TagLabelConnection!
   user(where: UserWhereUniqueInput!): User
   users(
     where: UserWhereInput
@@ -2315,6 +2312,362 @@ input SourceWhereUniqueInput {
   id: ID
 }
 
+type Subject {
+  id: ID!
+  name: String!
+  tags(
+    where: TagWhereInput
+    orderBy: TagOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Tag!]
+  specialists(
+    where: UserWhereInput
+    orderBy: UserOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [User!]
+  order: Int!
+  category: TagCategory!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type SubjectConnection {
+  pageInfo: PageInfo!
+  edges: [SubjectEdge]!
+  aggregate: AggregateSubject!
+}
+
+input SubjectCreateInput {
+  id: ID
+  name: String!
+  tags: TagCreateManyWithoutLabelInput
+  specialists: UserCreateManyWithoutSpecialtiesInput
+  order: Int!
+  category: TagCategoryCreateOneWithoutLabelsInput!
+}
+
+input SubjectCreateManyWithoutCategoryInput {
+  create: [SubjectCreateWithoutCategoryInput!]
+  connect: [SubjectWhereUniqueInput!]
+}
+
+input SubjectCreateManyWithoutSpecialistsInput {
+  create: [SubjectCreateWithoutSpecialistsInput!]
+  connect: [SubjectWhereUniqueInput!]
+}
+
+input SubjectCreateOneWithoutTagsInput {
+  create: SubjectCreateWithoutTagsInput
+  connect: SubjectWhereUniqueInput
+}
+
+input SubjectCreateWithoutCategoryInput {
+  id: ID
+  name: String!
+  tags: TagCreateManyWithoutLabelInput
+  specialists: UserCreateManyWithoutSpecialtiesInput
+  order: Int!
+}
+
+input SubjectCreateWithoutSpecialistsInput {
+  id: ID
+  name: String!
+  tags: TagCreateManyWithoutLabelInput
+  order: Int!
+  category: TagCategoryCreateOneWithoutLabelsInput!
+}
+
+input SubjectCreateWithoutTagsInput {
+  id: ID
+  name: String!
+  specialists: UserCreateManyWithoutSpecialtiesInput
+  order: Int!
+  category: TagCategoryCreateOneWithoutLabelsInput!
+}
+
+type SubjectEdge {
+  node: Subject!
+  cursor: String!
+}
+
+enum SubjectOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  order_ASC
+  order_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type SubjectPreviousValues {
+  id: ID!
+  name: String!
+  order: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input SubjectScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  order: Int
+  order_not: Int
+  order_in: [Int!]
+  order_not_in: [Int!]
+  order_lt: Int
+  order_lte: Int
+  order_gt: Int
+  order_gte: Int
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [SubjectScalarWhereInput!]
+  OR: [SubjectScalarWhereInput!]
+  NOT: [SubjectScalarWhereInput!]
+}
+
+type SubjectSubscriptionPayload {
+  mutation: MutationType!
+  node: Subject
+  updatedFields: [String!]
+  previousValues: SubjectPreviousValues
+}
+
+input SubjectSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: SubjectWhereInput
+  AND: [SubjectSubscriptionWhereInput!]
+  OR: [SubjectSubscriptionWhereInput!]
+  NOT: [SubjectSubscriptionWhereInput!]
+}
+
+input SubjectUpdateInput {
+  name: String
+  tags: TagUpdateManyWithoutLabelInput
+  specialists: UserUpdateManyWithoutSpecialtiesInput
+  order: Int
+  category: TagCategoryUpdateOneRequiredWithoutLabelsInput
+}
+
+input SubjectUpdateManyDataInput {
+  name: String
+  order: Int
+}
+
+input SubjectUpdateManyMutationInput {
+  name: String
+  order: Int
+}
+
+input SubjectUpdateManyWithoutCategoryInput {
+  create: [SubjectCreateWithoutCategoryInput!]
+  delete: [SubjectWhereUniqueInput!]
+  connect: [SubjectWhereUniqueInput!]
+  set: [SubjectWhereUniqueInput!]
+  disconnect: [SubjectWhereUniqueInput!]
+  update: [SubjectUpdateWithWhereUniqueWithoutCategoryInput!]
+  upsert: [SubjectUpsertWithWhereUniqueWithoutCategoryInput!]
+  deleteMany: [SubjectScalarWhereInput!]
+  updateMany: [SubjectUpdateManyWithWhereNestedInput!]
+}
+
+input SubjectUpdateManyWithoutSpecialistsInput {
+  create: [SubjectCreateWithoutSpecialistsInput!]
+  delete: [SubjectWhereUniqueInput!]
+  connect: [SubjectWhereUniqueInput!]
+  set: [SubjectWhereUniqueInput!]
+  disconnect: [SubjectWhereUniqueInput!]
+  update: [SubjectUpdateWithWhereUniqueWithoutSpecialistsInput!]
+  upsert: [SubjectUpsertWithWhereUniqueWithoutSpecialistsInput!]
+  deleteMany: [SubjectScalarWhereInput!]
+  updateMany: [SubjectUpdateManyWithWhereNestedInput!]
+}
+
+input SubjectUpdateManyWithWhereNestedInput {
+  where: SubjectScalarWhereInput!
+  data: SubjectUpdateManyDataInput!
+}
+
+input SubjectUpdateOneWithoutTagsInput {
+  create: SubjectCreateWithoutTagsInput
+  update: SubjectUpdateWithoutTagsDataInput
+  upsert: SubjectUpsertWithoutTagsInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: SubjectWhereUniqueInput
+}
+
+input SubjectUpdateWithoutCategoryDataInput {
+  name: String
+  tags: TagUpdateManyWithoutLabelInput
+  specialists: UserUpdateManyWithoutSpecialtiesInput
+  order: Int
+}
+
+input SubjectUpdateWithoutSpecialistsDataInput {
+  name: String
+  tags: TagUpdateManyWithoutLabelInput
+  order: Int
+  category: TagCategoryUpdateOneRequiredWithoutLabelsInput
+}
+
+input SubjectUpdateWithoutTagsDataInput {
+  name: String
+  specialists: UserUpdateManyWithoutSpecialtiesInput
+  order: Int
+  category: TagCategoryUpdateOneRequiredWithoutLabelsInput
+}
+
+input SubjectUpdateWithWhereUniqueWithoutCategoryInput {
+  where: SubjectWhereUniqueInput!
+  data: SubjectUpdateWithoutCategoryDataInput!
+}
+
+input SubjectUpdateWithWhereUniqueWithoutSpecialistsInput {
+  where: SubjectWhereUniqueInput!
+  data: SubjectUpdateWithoutSpecialistsDataInput!
+}
+
+input SubjectUpsertWithoutTagsInput {
+  update: SubjectUpdateWithoutTagsDataInput!
+  create: SubjectCreateWithoutTagsInput!
+}
+
+input SubjectUpsertWithWhereUniqueWithoutCategoryInput {
+  where: SubjectWhereUniqueInput!
+  update: SubjectUpdateWithoutCategoryDataInput!
+  create: SubjectCreateWithoutCategoryInput!
+}
+
+input SubjectUpsertWithWhereUniqueWithoutSpecialistsInput {
+  where: SubjectWhereUniqueInput!
+  update: SubjectUpdateWithoutSpecialistsDataInput!
+  create: SubjectCreateWithoutSpecialistsInput!
+}
+
+input SubjectWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  tags_every: TagWhereInput
+  tags_some: TagWhereInput
+  tags_none: TagWhereInput
+  specialists_every: UserWhereInput
+  specialists_some: UserWhereInput
+  specialists_none: UserWhereInput
+  order: Int
+  order_not: Int
+  order_in: [Int!]
+  order_not_in: [Int!]
+  order_lt: Int
+  order_lte: Int
+  order_gt: Int
+  order_gte: Int
+  category: TagCategoryWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [SubjectWhereInput!]
+  OR: [SubjectWhereInput!]
+  NOT: [SubjectWhereInput!]
+}
+
+input SubjectWhereUniqueInput {
+  id: ID
+}
+
 type Subscription {
   answer(where: AnswerSubscriptionWhereInput): AnswerSubscriptionPayload
   configuration(where: ConfigurationSubscriptionWhereInput): ConfigurationSubscriptionPayload
@@ -2322,16 +2675,16 @@ type Subscription {
   historyAction(where: HistoryActionSubscriptionWhereInput): HistoryActionSubscriptionPayload
   question(where: QuestionSubscriptionWhereInput): QuestionSubscriptionPayload
   source(where: SourceSubscriptionWhereInput): SourceSubscriptionPayload
+  subject(where: SubjectSubscriptionWhereInput): SubjectSubscriptionPayload
   tag(where: TagSubscriptionWhereInput): TagSubscriptionPayload
   tagCategory(where: TagCategorySubscriptionWhereInput): TagCategorySubscriptionPayload
-  tagLabel(where: TagLabelSubscriptionWhereInput): TagLabelSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
   zNode(where: ZNodeSubscriptionWhereInput): ZNodeSubscriptionPayload
 }
 
 type Tag {
   id: ID!
-  label: TagLabel
+  label: Subject
   node: ZNode!
   user: User!
   createdAt: DateTime!
@@ -2342,14 +2695,14 @@ type TagCategory {
   id: ID!
   name: String!
   labels(
-    where: TagLabelWhereInput
-    orderBy: TagLabelOrderByInput
+    where: SubjectWhereInput
+    orderBy: SubjectOrderByInput
     skip: Int
     after: String
     before: String
     first: Int
     last: Int
-  ): [TagLabel!]
+  ): [Subject!]
   order: Int!
   configuration: Configuration!
   createdAt: DateTime!
@@ -2365,7 +2718,7 @@ type TagCategoryConnection {
 input TagCategoryCreateInput {
   id: ID
   name: String!
-  labels: TagLabelCreateManyWithoutCategoryInput
+  labels: SubjectCreateManyWithoutCategoryInput
   order: Int!
   configuration: ConfigurationCreateOneWithoutTagCategoriesInput!
 }
@@ -2383,7 +2736,7 @@ input TagCategoryCreateOneWithoutLabelsInput {
 input TagCategoryCreateWithoutConfigurationInput {
   id: ID
   name: String!
-  labels: TagLabelCreateManyWithoutCategoryInput
+  labels: SubjectCreateManyWithoutCategoryInput
   order: Int!
 }
 
@@ -2498,7 +2851,7 @@ input TagCategorySubscriptionWhereInput {
 
 input TagCategoryUpdateInput {
   name: String
-  labels: TagLabelUpdateManyWithoutCategoryInput
+  labels: SubjectUpdateManyWithoutCategoryInput
   order: Int
   configuration: ConfigurationUpdateOneRequiredWithoutTagCategoriesInput
 }
@@ -2539,7 +2892,7 @@ input TagCategoryUpdateOneRequiredWithoutLabelsInput {
 
 input TagCategoryUpdateWithoutConfigurationDataInput {
   name: String
-  labels: TagLabelUpdateManyWithoutCategoryInput
+  labels: SubjectUpdateManyWithoutCategoryInput
   order: Int
 }
 
@@ -2594,9 +2947,9 @@ input TagCategoryWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
-  labels_every: TagLabelWhereInput
-  labels_some: TagLabelWhereInput
-  labels_none: TagLabelWhereInput
+  labels_every: SubjectWhereInput
+  labels_some: SubjectWhereInput
+  labels_none: SubjectWhereInput
   order: Int
   order_not: Int
   order_in: [Int!]
@@ -2639,7 +2992,7 @@ type TagConnection {
 
 input TagCreateInput {
   id: ID
-  label: TagLabelCreateOneWithoutTagsInput
+  label: SubjectCreateOneWithoutTagsInput
   node: ZNodeCreateOneWithoutTagsInput!
   user: UserCreateOneWithoutTagsInput!
 }
@@ -2667,375 +3020,19 @@ input TagCreateWithoutLabelInput {
 
 input TagCreateWithoutNodeInput {
   id: ID
-  label: TagLabelCreateOneWithoutTagsInput
+  label: SubjectCreateOneWithoutTagsInput
   user: UserCreateOneWithoutTagsInput!
 }
 
 input TagCreateWithoutUserInput {
   id: ID
-  label: TagLabelCreateOneWithoutTagsInput
+  label: SubjectCreateOneWithoutTagsInput
   node: ZNodeCreateOneWithoutTagsInput!
 }
 
 type TagEdge {
   node: Tag!
   cursor: String!
-}
-
-type TagLabel {
-  id: ID!
-  name: String!
-  tags(
-    where: TagWhereInput
-    orderBy: TagOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [Tag!]
-  specialists(
-    where: UserWhereInput
-    orderBy: UserOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [User!]
-  order: Int!
-  category: TagCategory!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-type TagLabelConnection {
-  pageInfo: PageInfo!
-  edges: [TagLabelEdge]!
-  aggregate: AggregateTagLabel!
-}
-
-input TagLabelCreateInput {
-  id: ID
-  name: String!
-  tags: TagCreateManyWithoutLabelInput
-  specialists: UserCreateManyWithoutSpecialtiesInput
-  order: Int!
-  category: TagCategoryCreateOneWithoutLabelsInput!
-}
-
-input TagLabelCreateManyWithoutCategoryInput {
-  create: [TagLabelCreateWithoutCategoryInput!]
-  connect: [TagLabelWhereUniqueInput!]
-}
-
-input TagLabelCreateManyWithoutSpecialistsInput {
-  create: [TagLabelCreateWithoutSpecialistsInput!]
-  connect: [TagLabelWhereUniqueInput!]
-}
-
-input TagLabelCreateOneWithoutTagsInput {
-  create: TagLabelCreateWithoutTagsInput
-  connect: TagLabelWhereUniqueInput
-}
-
-input TagLabelCreateWithoutCategoryInput {
-  id: ID
-  name: String!
-  tags: TagCreateManyWithoutLabelInput
-  specialists: UserCreateManyWithoutSpecialtiesInput
-  order: Int!
-}
-
-input TagLabelCreateWithoutSpecialistsInput {
-  id: ID
-  name: String!
-  tags: TagCreateManyWithoutLabelInput
-  order: Int!
-  category: TagCategoryCreateOneWithoutLabelsInput!
-}
-
-input TagLabelCreateWithoutTagsInput {
-  id: ID
-  name: String!
-  specialists: UserCreateManyWithoutSpecialtiesInput
-  order: Int!
-  category: TagCategoryCreateOneWithoutLabelsInput!
-}
-
-type TagLabelEdge {
-  node: TagLabel!
-  cursor: String!
-}
-
-enum TagLabelOrderByInput {
-  id_ASC
-  id_DESC
-  name_ASC
-  name_DESC
-  order_ASC
-  order_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-
-type TagLabelPreviousValues {
-  id: ID!
-  name: String!
-  order: Int!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-input TagLabelScalarWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  name: String
-  name_not: String
-  name_in: [String!]
-  name_not_in: [String!]
-  name_lt: String
-  name_lte: String
-  name_gt: String
-  name_gte: String
-  name_contains: String
-  name_not_contains: String
-  name_starts_with: String
-  name_not_starts_with: String
-  name_ends_with: String
-  name_not_ends_with: String
-  order: Int
-  order_not: Int
-  order_in: [Int!]
-  order_not_in: [Int!]
-  order_lt: Int
-  order_lte: Int
-  order_gt: Int
-  order_gte: Int
-  createdAt: DateTime
-  createdAt_not: DateTime
-  createdAt_in: [DateTime!]
-  createdAt_not_in: [DateTime!]
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  updatedAt: DateTime
-  updatedAt_not: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_not_in: [DateTime!]
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  AND: [TagLabelScalarWhereInput!]
-  OR: [TagLabelScalarWhereInput!]
-  NOT: [TagLabelScalarWhereInput!]
-}
-
-type TagLabelSubscriptionPayload {
-  mutation: MutationType!
-  node: TagLabel
-  updatedFields: [String!]
-  previousValues: TagLabelPreviousValues
-}
-
-input TagLabelSubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: TagLabelWhereInput
-  AND: [TagLabelSubscriptionWhereInput!]
-  OR: [TagLabelSubscriptionWhereInput!]
-  NOT: [TagLabelSubscriptionWhereInput!]
-}
-
-input TagLabelUpdateInput {
-  name: String
-  tags: TagUpdateManyWithoutLabelInput
-  specialists: UserUpdateManyWithoutSpecialtiesInput
-  order: Int
-  category: TagCategoryUpdateOneRequiredWithoutLabelsInput
-}
-
-input TagLabelUpdateManyDataInput {
-  name: String
-  order: Int
-}
-
-input TagLabelUpdateManyMutationInput {
-  name: String
-  order: Int
-}
-
-input TagLabelUpdateManyWithoutCategoryInput {
-  create: [TagLabelCreateWithoutCategoryInput!]
-  delete: [TagLabelWhereUniqueInput!]
-  connect: [TagLabelWhereUniqueInput!]
-  set: [TagLabelWhereUniqueInput!]
-  disconnect: [TagLabelWhereUniqueInput!]
-  update: [TagLabelUpdateWithWhereUniqueWithoutCategoryInput!]
-  upsert: [TagLabelUpsertWithWhereUniqueWithoutCategoryInput!]
-  deleteMany: [TagLabelScalarWhereInput!]
-  updateMany: [TagLabelUpdateManyWithWhereNestedInput!]
-}
-
-input TagLabelUpdateManyWithoutSpecialistsInput {
-  create: [TagLabelCreateWithoutSpecialistsInput!]
-  delete: [TagLabelWhereUniqueInput!]
-  connect: [TagLabelWhereUniqueInput!]
-  set: [TagLabelWhereUniqueInput!]
-  disconnect: [TagLabelWhereUniqueInput!]
-  update: [TagLabelUpdateWithWhereUniqueWithoutSpecialistsInput!]
-  upsert: [TagLabelUpsertWithWhereUniqueWithoutSpecialistsInput!]
-  deleteMany: [TagLabelScalarWhereInput!]
-  updateMany: [TagLabelUpdateManyWithWhereNestedInput!]
-}
-
-input TagLabelUpdateManyWithWhereNestedInput {
-  where: TagLabelScalarWhereInput!
-  data: TagLabelUpdateManyDataInput!
-}
-
-input TagLabelUpdateOneWithoutTagsInput {
-  create: TagLabelCreateWithoutTagsInput
-  update: TagLabelUpdateWithoutTagsDataInput
-  upsert: TagLabelUpsertWithoutTagsInput
-  delete: Boolean
-  disconnect: Boolean
-  connect: TagLabelWhereUniqueInput
-}
-
-input TagLabelUpdateWithoutCategoryDataInput {
-  name: String
-  tags: TagUpdateManyWithoutLabelInput
-  specialists: UserUpdateManyWithoutSpecialtiesInput
-  order: Int
-}
-
-input TagLabelUpdateWithoutSpecialistsDataInput {
-  name: String
-  tags: TagUpdateManyWithoutLabelInput
-  order: Int
-  category: TagCategoryUpdateOneRequiredWithoutLabelsInput
-}
-
-input TagLabelUpdateWithoutTagsDataInput {
-  name: String
-  specialists: UserUpdateManyWithoutSpecialtiesInput
-  order: Int
-  category: TagCategoryUpdateOneRequiredWithoutLabelsInput
-}
-
-input TagLabelUpdateWithWhereUniqueWithoutCategoryInput {
-  where: TagLabelWhereUniqueInput!
-  data: TagLabelUpdateWithoutCategoryDataInput!
-}
-
-input TagLabelUpdateWithWhereUniqueWithoutSpecialistsInput {
-  where: TagLabelWhereUniqueInput!
-  data: TagLabelUpdateWithoutSpecialistsDataInput!
-}
-
-input TagLabelUpsertWithoutTagsInput {
-  update: TagLabelUpdateWithoutTagsDataInput!
-  create: TagLabelCreateWithoutTagsInput!
-}
-
-input TagLabelUpsertWithWhereUniqueWithoutCategoryInput {
-  where: TagLabelWhereUniqueInput!
-  update: TagLabelUpdateWithoutCategoryDataInput!
-  create: TagLabelCreateWithoutCategoryInput!
-}
-
-input TagLabelUpsertWithWhereUniqueWithoutSpecialistsInput {
-  where: TagLabelWhereUniqueInput!
-  update: TagLabelUpdateWithoutSpecialistsDataInput!
-  create: TagLabelCreateWithoutSpecialistsInput!
-}
-
-input TagLabelWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  name: String
-  name_not: String
-  name_in: [String!]
-  name_not_in: [String!]
-  name_lt: String
-  name_lte: String
-  name_gt: String
-  name_gte: String
-  name_contains: String
-  name_not_contains: String
-  name_starts_with: String
-  name_not_starts_with: String
-  name_ends_with: String
-  name_not_ends_with: String
-  tags_every: TagWhereInput
-  tags_some: TagWhereInput
-  tags_none: TagWhereInput
-  specialists_every: UserWhereInput
-  specialists_some: UserWhereInput
-  specialists_none: UserWhereInput
-  order: Int
-  order_not: Int
-  order_in: [Int!]
-  order_not_in: [Int!]
-  order_lt: Int
-  order_lte: Int
-  order_gt: Int
-  order_gte: Int
-  category: TagCategoryWhereInput
-  createdAt: DateTime
-  createdAt_not: DateTime
-  createdAt_in: [DateTime!]
-  createdAt_not_in: [DateTime!]
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  updatedAt: DateTime
-  updatedAt_not: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_not_in: [DateTime!]
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  AND: [TagLabelWhereInput!]
-  OR: [TagLabelWhereInput!]
-  NOT: [TagLabelWhereInput!]
-}
-
-input TagLabelWhereUniqueInput {
-  id: ID
 }
 
 enum TagOrderByInput {
@@ -3108,7 +3105,7 @@ input TagSubscriptionWhereInput {
 }
 
 input TagUpdateInput {
-  label: TagLabelUpdateOneWithoutTagsInput
+  label: SubjectUpdateOneWithoutTagsInput
   node: ZNodeUpdateOneRequiredWithoutTagsInput
   user: UserUpdateOneRequiredWithoutTagsInput
 }
@@ -3152,12 +3149,12 @@ input TagUpdateWithoutLabelDataInput {
 }
 
 input TagUpdateWithoutNodeDataInput {
-  label: TagLabelUpdateOneWithoutTagsInput
+  label: SubjectUpdateOneWithoutTagsInput
   user: UserUpdateOneRequiredWithoutTagsInput
 }
 
 input TagUpdateWithoutUserDataInput {
-  label: TagLabelUpdateOneWithoutTagsInput
+  label: SubjectUpdateOneWithoutTagsInput
   node: ZNodeUpdateOneRequiredWithoutTagsInput
 }
 
@@ -3209,7 +3206,7 @@ input TagWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  label: TagLabelWhereInput
+  label: SubjectWhereInput
   node: ZNodeWhereInput
   user: UserWhereInput
   createdAt: DateTime
@@ -3283,14 +3280,14 @@ type User {
     last: Int
   ): [Tag!]
   specialties(
-    where: TagLabelWhereInput
-    orderBy: TagLabelOrderByInput
+    where: SubjectWhereInput
+    orderBy: SubjectOrderByInput
     skip: Int
     after: String
     before: String
     first: Int
     last: Int
-  ): [TagLabel!]
+  ): [Subject!]
   history(
     where: HistoryActionWhereInput
     orderBy: HistoryActionOrderByInput
@@ -3323,7 +3320,7 @@ input UserCreateInput {
   answers: AnswerCreateManyWithoutUserInput
   flags: FlagCreateManyWithoutUserInput
   tags: TagCreateManyWithoutUserInput
-  specialties: TagLabelCreateManyWithoutSpecialistsInput
+  specialties: SubjectCreateManyWithoutSpecialistsInput
   history: HistoryActionCreateManyWithoutUserInput
 }
 
@@ -3369,7 +3366,7 @@ input UserCreateWithoutAnswersInput {
   questions: QuestionCreateManyWithoutUserInput
   flags: FlagCreateManyWithoutUserInput
   tags: TagCreateManyWithoutUserInput
-  specialties: TagLabelCreateManyWithoutSpecialistsInput
+  specialties: SubjectCreateManyWithoutSpecialistsInput
   history: HistoryActionCreateManyWithoutUserInput
 }
 
@@ -3385,7 +3382,7 @@ input UserCreateWithoutFlagsInput {
   questions: QuestionCreateManyWithoutUserInput
   answers: AnswerCreateManyWithoutUserInput
   tags: TagCreateManyWithoutUserInput
-  specialties: TagLabelCreateManyWithoutSpecialistsInput
+  specialties: SubjectCreateManyWithoutSpecialistsInput
   history: HistoryActionCreateManyWithoutUserInput
 }
 
@@ -3402,7 +3399,7 @@ input UserCreateWithoutHistoryInput {
   answers: AnswerCreateManyWithoutUserInput
   flags: FlagCreateManyWithoutUserInput
   tags: TagCreateManyWithoutUserInput
-  specialties: TagLabelCreateManyWithoutSpecialistsInput
+  specialties: SubjectCreateManyWithoutSpecialistsInput
 }
 
 input UserCreateWithoutQuestionsInput {
@@ -3417,7 +3414,7 @@ input UserCreateWithoutQuestionsInput {
   answers: AnswerCreateManyWithoutUserInput
   flags: FlagCreateManyWithoutUserInput
   tags: TagCreateManyWithoutUserInput
-  specialties: TagLabelCreateManyWithoutSpecialistsInput
+  specialties: SubjectCreateManyWithoutSpecialistsInput
   history: HistoryActionCreateManyWithoutUserInput
 }
 
@@ -3449,7 +3446,7 @@ input UserCreateWithoutTagsInput {
   questions: QuestionCreateManyWithoutUserInput
   answers: AnswerCreateManyWithoutUserInput
   flags: FlagCreateManyWithoutUserInput
-  specialties: TagLabelCreateManyWithoutSpecialistsInput
+  specialties: SubjectCreateManyWithoutSpecialistsInput
   history: HistoryActionCreateManyWithoutUserInput
 }
 
@@ -3646,7 +3643,7 @@ input UserUpdateInput {
   answers: AnswerUpdateManyWithoutUserInput
   flags: FlagUpdateManyWithoutUserInput
   tags: TagUpdateManyWithoutUserInput
-  specialties: TagLabelUpdateManyWithoutSpecialistsInput
+  specialties: SubjectUpdateManyWithoutSpecialistsInput
   history: HistoryActionUpdateManyWithoutUserInput
 }
 
@@ -3733,7 +3730,7 @@ input UserUpdateWithoutAnswersDataInput {
   questions: QuestionUpdateManyWithoutUserInput
   flags: FlagUpdateManyWithoutUserInput
   tags: TagUpdateManyWithoutUserInput
-  specialties: TagLabelUpdateManyWithoutSpecialistsInput
+  specialties: SubjectUpdateManyWithoutSpecialistsInput
   history: HistoryActionUpdateManyWithoutUserInput
 }
 
@@ -3748,7 +3745,7 @@ input UserUpdateWithoutFlagsDataInput {
   questions: QuestionUpdateManyWithoutUserInput
   answers: AnswerUpdateManyWithoutUserInput
   tags: TagUpdateManyWithoutUserInput
-  specialties: TagLabelUpdateManyWithoutSpecialistsInput
+  specialties: SubjectUpdateManyWithoutSpecialistsInput
   history: HistoryActionUpdateManyWithoutUserInput
 }
 
@@ -3764,7 +3761,7 @@ input UserUpdateWithoutHistoryDataInput {
   answers: AnswerUpdateManyWithoutUserInput
   flags: FlagUpdateManyWithoutUserInput
   tags: TagUpdateManyWithoutUserInput
-  specialties: TagLabelUpdateManyWithoutSpecialistsInput
+  specialties: SubjectUpdateManyWithoutSpecialistsInput
 }
 
 input UserUpdateWithoutQuestionsDataInput {
@@ -3778,7 +3775,7 @@ input UserUpdateWithoutQuestionsDataInput {
   answers: AnswerUpdateManyWithoutUserInput
   flags: FlagUpdateManyWithoutUserInput
   tags: TagUpdateManyWithoutUserInput
-  specialties: TagLabelUpdateManyWithoutSpecialistsInput
+  specialties: SubjectUpdateManyWithoutSpecialistsInput
   history: HistoryActionUpdateManyWithoutUserInput
 }
 
@@ -3808,7 +3805,7 @@ input UserUpdateWithoutTagsDataInput {
   questions: QuestionUpdateManyWithoutUserInput
   answers: AnswerUpdateManyWithoutUserInput
   flags: FlagUpdateManyWithoutUserInput
-  specialties: TagLabelUpdateManyWithoutSpecialistsInput
+  specialties: SubjectUpdateManyWithoutSpecialistsInput
   history: HistoryActionUpdateManyWithoutUserInput
 }
 
@@ -3961,9 +3958,9 @@ input UserWhereInput {
   tags_every: TagWhereInput
   tags_some: TagWhereInput
   tags_none: TagWhereInput
-  specialties_every: TagLabelWhereInput
-  specialties_some: TagLabelWhereInput
-  specialties_none: TagLabelWhereInput
+  specialties_every: SubjectWhereInput
+  specialties_some: SubjectWhereInput
+  specialties_none: SubjectWhereInput
   history_every: HistoryActionWhereInput
   history_some: HistoryActionWhereInput
   history_none: HistoryActionWhereInput

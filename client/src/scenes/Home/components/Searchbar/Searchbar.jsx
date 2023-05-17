@@ -13,7 +13,7 @@ const Searchbar = ({ text, tags, loading, onTextChange, onTagsChange }) => {
   const intl = getIntl(Searchbar)
   const conf = useConfiguration()
 
-  const tagLabels = tags
+  const subjects = tags
     .map(tag =>
       conf.tagCategories
         .reduce((acc, cat) => acc.concat(cat.labels), [])
@@ -45,7 +45,7 @@ const Searchbar = ({ text, tags, loading, onTextChange, onTagsChange }) => {
         <TagPicker
           label={intl('filter.tags')}
           icon="local_offer"
-          tags={tagLabels}
+          tags={subjects}
           onChange={onTagsChange}
         />
       </div>
