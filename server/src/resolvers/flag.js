@@ -2,7 +2,7 @@ const { ctxUser } = require('../helpers')
 const {
   createFlagAndUpdateHistoryAndAlgolia,
   deleteFlagAndUpdateHistoryAndAlgolia
-} = require('../helpers/updateHistoryAndAlgolia')
+} = require('../helpers')
 
 module.exports = {
   Mutation: {

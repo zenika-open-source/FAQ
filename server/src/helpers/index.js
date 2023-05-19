@@ -6,6 +6,10 @@ const emojify = require('./emojify')
 const history = require('./history')
 const randomString = require('./randomString')
 const requireText = require('./requireText')
+const {
+  createFlagAndUpdateHistoryAndAlgolia,
+  deleteFlagAndUpdateHistoryAndAlgolia
+} = require('./updateHistoryAndAlgolia')
 const validateAndParseIdToken = require('./validateAndParseIdToken')
 
 const ctxUser = ctx => ctx.request.user
@@ -21,5 +25,7 @@ module.exports = {
   randomString,
   requireText,
   slugify,
+  createFlagAndUpdateHistoryAndAlgolia,
+  deleteFlagAndUpdateHistoryAndAlgolia,
   validateAndParseIdToken
 }

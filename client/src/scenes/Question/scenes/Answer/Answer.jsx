@@ -20,11 +20,8 @@ import { canSubmit, keyValuePairsToSources, sourcesToKeyValuePairs } from './hel
 import Tips from './components/Tips'
 
 const Answer = ({ zNode }) => {
-  const initialAnswerValue = () => {
-    return zNode && zNode.answer ? zNode.answer : ''
-  }
-
-  const [answer, setAnswer] = useState(() => initialAnswerValue())
+  const answer = zNode && zNode.answer
+  console.log(zNode)
 
   const [state, setState] = useState(() => {
     const initialText = answer ? answer.content : ''
@@ -33,6 +30,7 @@ const Answer = ({ zNode }) => {
     return {
       nodeLoaded: false,
       initialAnswer: initialText,
+      answer: initialText,
       loading: false,
       sources: initialSources,
       initialSources: initialSources,
@@ -47,7 +45,7 @@ const Answer = ({ zNode }) => {
 
   const { loadingSubmit, slug, showTips, sources } = state
 
-  const onTextChange = value => setAnswer({ ...answer, content: value })
+  const onTextChange = value => setState({ ...state, answer: value })
   const onSourcesChange = onListChange(
     changes => setState(state => ({ ...state, ...changes(state) })),
     'sources'
@@ -66,7 +64,7 @@ const Answer = ({ zNode }) => {
         mutation: SUBMIT_ANSWER,
         variables: {
           nodeId: zNode.id,
-          content: answer.content,
+          content: state.answer,
           sources: JSON.stringify(keyValuePairsToSources(state.sources))
         }
       })
@@ -88,7 +86,7 @@ const Answer = ({ zNode }) => {
         mutation: EDIT_ANSWER,
         variables: {
           id: zNode.answer.id,
-          content: answer.content,
+          content: state.answer,
           previousContent: state.initialAnswer,
           sources: JSON.stringify(keyValuePairsToSources(state.sources))
         }
@@ -107,7 +105,7 @@ const Answer = ({ zNode }) => {
   }
 
   const submitForm = () => {
-    if (canSubmit(state, answer)) {
+    if (canSubmit(state)) {
       zNode.answer ? editAnswer() : submitAnswer()
     }
   }
@@ -126,7 +124,7 @@ const Answer = ({ zNode }) => {
 
   return (
     <div>
-      {canSubmit(state, answer) && <Prompt message={intl('prompt_warning')} />}
+      {canSubmit(state) && <Prompt message={intl('prompt_warning')} />}
       <ActionMenu backLink={`/q/${zNode.question.slug}-${zNode.id}`}>
         {!showTips && (
           <Button
@@ -147,7 +145,7 @@ const Answer = ({ zNode }) => {
         </CardTitle>
         <CardText>
           <CtrlEnter onCtrlEnterCallback={submitForm}>
-            <MarkdownEditor content={answer.content} onChange={onTextChange} />
+            <MarkdownEditor content={state.answer} onChange={onTextChange} />
           </CtrlEnter>
         </CardText>
         <CardText>
@@ -167,7 +165,7 @@ const Answer = ({ zNode }) => {
             label={zNode.answer ? intl('validate.edit') : intl('validate.submit')}
             primary
             raised
-            disabled={!canSubmit(state, answer)}
+            disabled={!canSubmit(state)}
             onClick={submitForm}
           />
         </CardActions>
