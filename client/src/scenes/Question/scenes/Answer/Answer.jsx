@@ -21,7 +21,6 @@ import Tips from './components/Tips'
 
 const Answer = ({ zNode }) => {
   const answer = zNode && zNode.answer
-  console.log(zNode)
 
   const [state, setState] = useState(() => {
     const initialText = answer ? answer.content : ''
