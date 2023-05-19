@@ -187,7 +187,7 @@ module.exports = {
 
       await Promise.all([...mutationsToAdd, ...mutationsToUpdate, ...mutationsToRemove])
 
-      await refreshCertifiedFlag(answer, user, ctx)
+      await refreshCertifiedFlag(history, answer, user, ctx)
 
       const clean = sources => sources.map(s => ({ label: s.label, url: s.url }))
 

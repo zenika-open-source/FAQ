@@ -135,7 +135,7 @@ module.exports = {
 
       await Promise.all([...mutationsToAdd, ...mutationsToRemove])
 
-      await deleteCertifedFlagIfNoLongerApplicable(node, tags, ctx)
+      await deleteCertifedFlagIfNoLongerApplicable(history, node, tags, ctx)
 
       const meta = {
         tagsChanges: {

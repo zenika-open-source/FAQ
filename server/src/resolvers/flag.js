@@ -1,7 +1,8 @@
-const { ctxUser } = require('../helpers')
 const {
+  ctxUser,
   createFlagAndUpdateHistoryAndAlgolia,
-  deleteFlagAndUpdateHistoryAndAlgolia
+  deleteFlagAndUpdateHistoryAndAlgolia,
+  history
 } = require('../helpers')
 
 module.exports = {
@@ -18,7 +19,9 @@ module.exports = {
           }
         })
 
-        await createFlagAndUpdateHistoryAndAlgolia(type, ctx, nodeId)
+        console.log(type)
+
+        await createFlagAndUpdateHistoryAndAlgolia(history, type, ctx, nodeId)
       }
 
       return ctx.prisma.query.zNode({ where: { id: nodeId } }, info)
@@ -36,7 +39,7 @@ module.exports = {
           where: { id: flags[0].id }
         })
 
-        await deleteFlagAndUpdateHistoryAndAlgolia(type, ctx, nodeId)
+        await deleteFlagAndUpdateHistoryAndAlgolia(history, type, ctx, nodeId)
       }
 
       return ctx.prisma.query.zNode({ where: { id: nodeId } }, info)

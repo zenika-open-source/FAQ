@@ -1,7 +1,6 @@
 const { algolia } = require('../integrations')
-const { history } = require('../helpers')
 
-const createFlagAndUpdateHistoryAndAlgolia = async (type, ctx, nodeId) => {
+const createFlagAndUpdateHistoryAndAlgolia = async (history, type, ctx, nodeId) => {
   await history.push(ctx, {
     action: 'CREATED',
     model: 'Flag',
@@ -14,7 +13,7 @@ const createFlagAndUpdateHistoryAndAlgolia = async (type, ctx, nodeId) => {
   algolia.updateNode(ctx, nodeId)
 }
 
-const deleteFlagAndUpdateHistoryAndAlgolia = async (type, ctx, nodeId) => {
+const deleteFlagAndUpdateHistoryAndAlgolia = async (history, type, ctx, nodeId) => {
   await history.push(ctx, {
     action: 'DELETED',
     model: 'Flag',

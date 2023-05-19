@@ -5,7 +5,7 @@ const {
 
 const type = 'certified'
 
-const deleteCertifedFlagIfNoLongerApplicable = async (node, tags, ctx) => {
+const deleteCertifedFlagIfNoLongerApplicable = async (history, node, tags, ctx) => {
   const certifiedFlag = node.flags.find(flag => flag.type === type)
   if (certifiedFlag) {
     const specialties = certifiedFlag && certifiedFlag.user.specialties
@@ -13,21 +13,36 @@ const deleteCertifedFlagIfNoLongerApplicable = async (node, tags, ctx) => {
       specialties && Boolean(specialties.find(specialty => tags.includes(specialty.id)))
 
     if (!isUserSpecialist) {
-      await deleteFlagAndUpdateHistoryAndAlgolia(type, ctx, certifiedFlag.id)
+      await ctx.prisma.mutation.deleteFlag({
+        where: {
+          id: certifiedFlag.id
+        }
+      })
+      await deleteFlagAndUpdateHistoryAndAlgolia(history, type, ctx, certifiedFlag.id)
     }
   }
 }
 
-const refreshCertifiedFlag = async (answer, user, ctx) => {
+const refreshCertifiedFlag = async (history, answer, user, ctx) => {
   const certifiedFlag = answer.node.flags.find(flag => flag.type === type)
   const tags = answer.node.tags.map(tag => tag.label.id)
   const specialties = user.specialties
   const isUserSpecialist = Boolean(specialties.find(specialty => tags.includes(specialty.id)))
 
   if (isUserSpecialist && !certifiedFlag) {
-    await createFlagAndUpdateHistoryAndAlgolia(type, ctx, certifiedFlag.id)
+    await ctx.prisma.mutation.createFlag({
+      data: {
+        type: type,
+        node: { connect: { id: answer.node.id } },
+        user: { connect: { id: user.id } }
+      }
+    })
+    await createFlagAndUpdateHistoryAndAlgolia(history, type, ctx, answer.node.id)
   } else if (!isUserSpecialist && certifiedFlag) {
-    await deleteFlagAndUpdateHistoryAndAlgolia(type, ctx, certifiedFlag.id)
+    await ctx.prisma.mutation.deleteFlag({
+      where: { id: certifiedFlag.id }
+    })
+    await deleteFlagAndUpdateHistoryAndAlgolia(history, type, ctx, answer.node.id)
   }
 }
 
