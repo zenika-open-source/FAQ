@@ -3,6 +3,11 @@ version: 2.1
 orbs:
   node: circleci/node@5.0.2
 
+parameters:
+  prismaDeployForce:
+    type: boolean
+    default: false
+
 executors:
   clever-cloud-deployer:
     docker:
@@ -166,13 +171,19 @@ jobs:
             git add .
             git commit -m "deploy!"
       - run:
-          name: Deploy to Clever Cloud
+          name: Check for Dockerfile modification and deploy to Clever Cloud
           working_directory: << parameters.deploy-dir >>
           command: |
-            sudo npm install --global clever-tools
-            clever login --secret=$CLEVER_SECRET --token=$CLEVER_TOKEN
-            clever link << parameters.clever-app-id >>
-            clever deploy --force
+            if [[ -n $(git diff --name-only server/prisma/Dockerfile.clever-cloud) ]]; then
+              echo "File modified. Deploying to Clever Cloud..."
+              cd << parameters.deploy-dir >>
+              sudo npm install --global clever-tools
+              clever login --secret=$CLEVER_SECRET --token=$CLEVER_TOKEN
+              clever link << parameters.clever-app-id >>
+              clever deploy --force
+            else
+              echo "File not modified. Skipping deployment..."
+            fi
   prisma-deploy-service:
     executor: app-builder
     steps:
@@ -182,8 +193,14 @@ jobs:
       - run:
           name: Deploy prisma
           working_directory: server/scripts/prisma_deploy_all/
-          command: node index.js
-
+          command: |
+            if ${{ pipeline.parameters.prismaDeployForce }}; then
+              echo "Deploying prisma with --force"
+              node index.js --force
+            else
+              echo "Deploying prisma without --force"
+              node index.js
+            fi
   app-deploy:
     parameters:
       clever-app-id:
