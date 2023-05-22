@@ -8,7 +8,7 @@ require('../server/scripts/algolia_settings/index')
 const createUser = /* GraphQL */ `
   mutation CreateUser {
     createUser(
-      data: { key: "playwrightTest", name: "playwrightTest", email: "playwright.test@zenika.com" }
+      data: { key: "playwrightTest", name: "playwrightTest", email: "faq-user-no-auth@zenika.com" }
     ) {
       id
     }
@@ -23,6 +23,28 @@ const createUserMutation = async apiContext => {
   })
   const results = await res.json()
   return results.data.createUser.id
+}
+
+const createTempUser = tagId => {
+  return {
+    data: {
+      key: 'tempUser',
+      name: 'tempUser',
+      email: 'temp-user@zenika.com',
+      picture:
+        'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg',
+      specialties: {
+        connect: {
+          id: tagId
+        }
+      }
+    }
+  }
+}
+
+const createTempUserMutation = async (prisma, tagId) => {
+  const user = await prisma.mutation.createUser(createTempUser(tagId))
+  return user.id
 }
 
 const upsertConfig = /* GraphQL */ `mutation UpsertConfig{
@@ -219,12 +241,65 @@ const createZNodeWithoutAnswerParams = (tagId, userId) => {
   }
 }
 
+const createTempZnode = (tagId, userId) => {
+  return {
+    data: {
+      question: {
+        create: {
+          title: 'Ceci est une question',
+          slug: 'slug.Ceci est une question',
+          user: {
+            connect: {
+              id: userId
+            }
+          }
+        }
+      },
+      answer: {
+        create: {
+          content: 'Ceci est une réponse',
+          user: {
+            connect: {
+              id: userId
+            }
+          }
+        }
+      },
+      tags: {
+        create: {
+          label: {
+            connect: {
+              id: tagId
+            }
+          },
+          user: {
+            connect: {
+              id: userId
+            }
+          }
+        }
+      },
+      flags: {
+        create: {
+          type: 'certified',
+          user: {
+            connect: {
+              id: userId
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 let apiContext
 let prisma
 let tag
 let tagEdit
 let token
 let user
+let tempUser
 let config
 
 const fetchPrismaToken = () => {
@@ -246,6 +321,11 @@ const createQuestionAndAnswer = async (prisma, tagId, user) => {
   await algolia.addNode({ prisma }, zNode.id)
 }
 
+const createQuestionWithFlag = async (prisma, tagId, user) => {
+  const zNode = await prisma.mutation.createZNode(createTempZnode(tagId, user))
+  await algolia.addNode({ prisma }, zNode.id)
+}
+
 test.beforeAll(async ({ playwright }) => {
   fetchPrismaToken()
   apiContext = await playwright.request.newContext({
@@ -264,6 +344,7 @@ test.beforeAll(async ({ playwright }) => {
   prisma._meta = { ...prisma._meta, configuration: config.upsertConfiguration }
   user = await createUserMutation(apiContext)
   ;({ tag, tagEdit } = await tagsQuery(apiContext))
+  tempUser = await createTempUserMutation(prisma, tag.id)
 })
 
 test.beforeEach(async () => {
@@ -446,6 +527,116 @@ test('Should see the marketing specialty on profile page', async ({ page }) => {
     .filter({ hasText: 'Profil' })
     .click()
   await expect(page.getByText('verifiedmarketing')).toBeVisible()
+})
+
+test('Should not be able to add a certified flag to an unanswered question', async ({ page }) => {
+  await page.goto('/')
+  await page
+    .locator('button', { hasText: 'Nouvelle question' })
+    .first()
+    .click()
+  await page.locator('input').click()
+  await page.locator('input').fill('Ceci est une question')
+  await page.getByRole('button', { name: 'add' }).click()
+  await page
+    .getByText('marketing', { exact: true })
+    .first()
+    .click()
+  await page.locator('button', { hasText: 'Envoyer la question' }).click()
+  await page.getByRole('button', { name: 'flag Signaler ...' }).hover()
+  await expect(page.locator('a').filter({ hasText: 'verifiedcertifiée' })).toBeHidden()
+})
+
+test('Should be able to add a certified flag for a question of my specialty', async ({ page }) => {
+  await page.goto('/')
+  await page
+    .locator('button', { hasText: 'Nouvelle question' })
+    .first()
+    .click()
+  await page.locator('input').click()
+  await page.locator('input').fill('Ceci est une question')
+  await page.getByRole('button', { name: 'add' }).click()
+  await page
+    .getByText('marketing', { exact: true })
+    .first()
+    .click()
+  await page.locator('button', { hasText: 'Envoyer la question' }).click()
+  await page.locator('button', { hasText: 'Répondre à la question' }).click()
+  await page.locator('textarea').click()
+  await page.locator('textarea').fill('Ceci est une réponse')
+  await page.locator('button', { hasText: 'Envoyer la réponse' }).click()
+  await page.getByRole('button', { name: 'flag Signaler ...' }).hover()
+  await page
+    .locator('a')
+    .filter({ hasText: 'verifiedcertifiée' })
+    .click()
+  await page.waitForTimeout(1000)
+  await page.goto('/')
+  await expect(page.getByText('verified')).toBeVisible()
+})
+
+test('Should not be able to add a certified flag for a question not in my specialty', async ({
+  page
+}) => {
+  await page.goto('/')
+  await page
+    .locator('button', { hasText: 'Nouvelle question' })
+    .first()
+    .click()
+  await page.locator('input').click()
+  await page.locator('input').fill('Ceci est une question')
+  await page.getByRole('button', { name: 'add' }).click()
+  await page
+    .getByText('ce', { exact: true })
+    .first()
+    .click()
+  await page.locator('button', { hasText: 'Envoyer la question' }).click()
+  await page.locator('button', { hasText: 'Répondre à la question' }).click()
+  await page.locator('textarea').click()
+  await page.locator('textarea').fill('Ceci est une réponse')
+  await page.locator('button', { hasText: 'Envoyer la réponse' }).click()
+  await page.getByRole('button', { name: 'flag Signaler ...' }).hover()
+  await expect(page.locator('a').filter({ hasText: 'verifiedcertifiée' })).toBeHidden()
+})
+
+test('Should remove the certified flag after modifying an answer', async ({ page }) => {
+  await createQuestionWithFlag(prisma, tag.id, tempUser)
+  await page.goto('/')
+  const openCard = page.getByRole('link', { name: 'keyboard_arrow_right' }).first()
+  await openCard.waitFor('visible')
+  await openCard.click()
+  await expect(page.getByText('verifiedCertifiée')).toBeVisible()
+  await page.getByRole('button', { name: 'Modifier' }).hover()
+  await page
+    .locator('a')
+    .filter({ hasText: 'Réponse' })
+    .click()
+  await page.locator('textarea').click()
+  await page.locator('textarea').fill('Ceci est une réponse différente')
+  await page.locator('button', { hasText: 'Enregistrer la réponse' }).click()
+  await page.waitForTimeout(1000)
+  await expect(page.getByText('verifiedCertifiée')).toBeHidden()
+})
+
+test('Should remove the certified flag when the corresponding tag is deleted', async ({ page }) => {
+  await createQuestionWithFlag(prisma, tag.id, tempUser)
+  await page.goto('/')
+  const openCard = page.getByRole('link', { name: 'keyboard_arrow_right' }).first()
+  await openCard.waitFor('visible')
+  await openCard.click()
+  await expect(page.getByText('verifiedCertifiée')).toBeVisible()
+  await page.getByRole('button', { name: 'Modifier' }).hover()
+  await page
+    .locator('a')
+    .filter({ hasText: 'editQuestion' })
+    .click()
+  await page
+    .locator('.tag', { hasText: 'payroll' })
+    .locator('.material-icons')
+    .click()
+  await page.locator('button', { hasText: 'Enregistrer la question' }).click()
+  await page.waitForTimeout(1000)
+  await expect(page.getByText('verifiedCertifiée')).toBeHidden()
 })
 
 test.afterEach(async () => {

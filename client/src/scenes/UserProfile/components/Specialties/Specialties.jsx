@@ -1,26 +1,29 @@
 import Card, { CardText } from 'components/Card'
 import PropTypes from 'prop-types'
 import { getIntl } from 'services'
+import { Loading } from 'components'
 
 import './Specialties.css'
 
-const Specialties = ({ spe }) => {
+const Specialties = ({ specialties }) => {
   const intl = getIntl(Specialties)
+
+  if (specialties === undefined) return <Loading />
 
   return (
     <Card>
       <CardText className="specialties">
         <h2 style={{ marginBottom: '1rem' }}>{intl('title')}</h2>
         <hr />
-        {spe && spe.length > 0 ? (
-          spe.map(s => (
-            <p key={s.name} className="specialty">
+        {specialties.length > 0 ? (
+          specialties.map(specialty => (
+            <p key={specialty.name} className="specialty">
               <i className="material-icons">verified</i>
-              {s.name}
+              {specialty.name}
             </p>
           ))
         ) : (
-          <p className="emptyText">{intl('empty')}</p>
+          <p>{intl('empty')}</p>
         )}
       </CardText>
     </Card>
@@ -28,7 +31,7 @@ const Specialties = ({ spe }) => {
 }
 
 Specialties.propTypes = {
-  spe: PropTypes.array
+  specialties: PropTypes.array
 }
 
 Specialties.translations = {

@@ -1,14 +1,14 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
-import { Redirect, Prompt } from 'react-router-dom'
 import { useApolloClient } from '@apollo/react-hooks'
+import PropTypes from 'prop-types'
+import { useState } from 'react'
+import { Prompt, Redirect } from 'react-router-dom'
 
-import { SUBMIT_QUESTION, EDIT_QUESTION } from './queries'
+import { EDIT_QUESTION, SUBMIT_QUESTION } from './queries'
 
 import { alert, getIntl } from 'services'
 
-import Card, { CardText, CardActions, PermanentClosableCard } from 'components/Card'
-import { Loading, Button, Input, CtrlEnter, TagPicker } from 'components'
+import { Button, CtrlEnter, Input, Loading, TagPicker } from 'components'
+import Card, { CardActions, CardText, PermanentClosableCard } from 'components/Card'
 
 import { ActionMenu } from '../../components'
 

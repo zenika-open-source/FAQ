@@ -1,4 +1,4 @@
-const { history, ctxUser } = require('../helpers')
+const { history, ctxUser, refreshCertifiedFlag } = require('../helpers')
 const { algolia, mailgun } = require('../integrations')
 
 module.exports = {
@@ -103,10 +103,40 @@ module.exports = {
           }
           node {
             id
+            tags {
+              label {
+                id
+              }
+            }
+            flags {
+              id
+              type
+            }
+          }
+          user {
+            id
+            name
+            specialties {
+              id
+              name
+            }
           }
         }
         `
       )
+
+      const user = await ctx.prisma.query.user(
+        { where: { id: ctxUser(ctx).id } },
+        `
+            {
+              id
+              specialties {
+                id
+              }
+            }
+          `
+      )
+
       if (previousContent !== answer.content) {
         throw new Error(
           "Another user edited the answer before you, copy your version and refresh the page. If you don't copy your version, It will be lost"
@@ -156,6 +186,8 @@ module.exports = {
       )
 
       await Promise.all([...mutationsToAdd, ...mutationsToUpdate, ...mutationsToRemove])
+
+      await refreshCertifiedFlag(history, answer, user, ctx)
 
       const clean = sources => sources.map(s => ({ label: s.label, url: s.url }))
 

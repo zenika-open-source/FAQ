@@ -45,7 +45,6 @@ executors:
                 user: prisma
                 password: prisma
                 migrations: true
-
 jobs:
   server-lint:
     executor: app-builder
@@ -174,7 +173,6 @@ jobs:
             clever login --secret=$CLEVER_SECRET --token=$CLEVER_TOKEN
             clever link << parameters.clever-app-id >>
             clever deploy --force
-
   prisma-deploy-service:
     executor: app-builder
     steps:
@@ -220,7 +218,6 @@ jobs:
             clever login --secret=$CLEVER_SECRET --token=$CLEVER_TOKEN
             clever link << parameters.clever-app-id >>
             clever deploy --force
-
 workflows:
   version: 2
   build-deploy:

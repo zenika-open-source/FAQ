@@ -7,6 +7,7 @@ import { alert, getIntl } from 'services'
 import { Avatar, Button, Card, Modal, Loading, Input } from 'components'
 
 import Logs from './components/Logs'
+
 import Specialties from './components/Specialties'
 
 import { UPDATE_INDENTITY, DELETE_IDENTITY } from './queries'

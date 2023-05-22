@@ -1,5 +1,9 @@
-const { history, ctxUser } = require('../helpers')
-const { algolia } = require('../integrations')
+const {
+  ctxUser,
+  createFlagAndUpdateHistoryAndAlgolia,
+  deleteFlagAndUpdateHistoryAndAlgolia,
+  history
+} = require('../helpers')
 
 module.exports = {
   Mutation: {
@@ -15,16 +19,7 @@ module.exports = {
           }
         })
 
-        await history.push(ctx, {
-          action: 'CREATED',
-          model: 'Flag',
-          meta: {
-            type
-          },
-          nodeId
-        })
-
-        algolia.updateNode(ctx, nodeId)
+        await createFlagAndUpdateHistoryAndAlgolia(history, type, ctx, nodeId)
       }
 
       return ctx.prisma.query.zNode({ where: { id: nodeId } }, info)
@@ -42,16 +37,7 @@ module.exports = {
           where: { id: flags[0].id }
         })
 
-        await history.push(ctx, {
-          action: 'DELETED',
-          model: 'Flag',
-          meta: {
-            type
-          },
-          nodeId
-        })
-
-        algolia.updateNode(ctx, nodeId)
+        await deleteFlagAndUpdateHistoryAndAlgolia(history, type, ctx, nodeId)
       }
 
       return ctx.prisma.query.zNode({ where: { id: nodeId } }, info)

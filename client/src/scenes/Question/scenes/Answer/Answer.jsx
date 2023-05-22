@@ -1,28 +1,28 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
-import { Redirect, Prompt } from 'react-router-dom'
 import { useApolloClient } from '@apollo/react-hooks'
+import PropTypes from 'prop-types'
+import { useState } from 'react'
+import { Prompt, Redirect } from 'react-router-dom'
 
-import { SUBMIT_ANSWER, EDIT_ANSWER } from './queries'
+import { EDIT_ANSWER, SUBMIT_ANSWER } from './queries'
 
-import { alert, markdown, getIntl } from 'services'
 import { onListChange } from 'helpers'
+import { alert, getIntl, markdown } from 'services'
 
 import NotFound from 'scenes/NotFound'
 
-import { Loading, Flags, Button, MarkdownEditor, CtrlEnter, PairInputList } from 'components'
-import Card, { CardTitle, CardText, CardActions, PermanentClosableCard } from 'components/Card'
+import { Button, CtrlEnter, Flags, Loading, MarkdownEditor, PairInputList } from 'components'
+import Card, { CardActions, CardText, CardTitle, PermanentClosableCard } from 'components/Card'
 
 import { ActionMenu } from '../../components'
 
-import { sourcesToKeyValuePairs, keyValuePairsToSources, canSubmit } from './helpers'
+import { canSubmit, keyValuePairsToSources, sourcesToKeyValuePairs } from './helpers'
 
 import Tips from './components/Tips'
 
 const Answer = ({ zNode }) => {
-  const [state, setState] = useState(() => {
-    const answer = zNode && zNode.answer
+  const answer = zNode && zNode.answer
 
+  const [state, setState] = useState(() => {
     const initialText = answer ? answer.content : ''
     const initialSources = sourcesToKeyValuePairs(answer ? answer.sources : [])
 
@@ -44,7 +44,7 @@ const Answer = ({ zNode }) => {
 
   const { loadingSubmit, slug, showTips, sources } = state
 
-  const onTextChange = value => setState(state => ({ ...state, answer: value }))
+  const onTextChange = value => setState({ ...state, answer: value })
   const onSourcesChange = onListChange(
     changes => setState(state => ({ ...state, ...changes(state) })),
     'sources'
