@@ -19,8 +19,6 @@ module.exports = {
           }
         })
 
-        console.log(type)
-
         await createFlagAndUpdateHistoryAndAlgolia(history, type, ctx, nodeId)
       }
 
