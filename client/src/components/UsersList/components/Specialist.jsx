@@ -83,7 +83,7 @@ Specialist.translations = {
   },
   fr: {
     alert: {
-      add_success: 'La spécialitée a été ajoutée',
+      add_success: 'La spécialité a été ajoutée',
       delete_success: 'La spécialité a été supprimée'
     }
   }
