@@ -13,13 +13,7 @@ const deleteCertifedFlagIfNoLongerApplicable = async (history, node, tags, ctx) 
       specialties && Boolean(specialties.find(specialty => tags.includes(specialty.id)))
 
     if (!isUserSpecialist) {
-      await deleteFlagAndUpdateHistoryAndAlgolia(
-        history,
-        type,
-        ctx,
-        certifiedFlag.id,
-        certifiedFlag.id
-      )
+      await deleteFlagAndUpdateHistoryAndAlgolia(history, type, ctx, node.id, certifiedFlag.id)
     }
   }
 }
@@ -33,7 +27,7 @@ const refreshCertifiedFlag = async (history, answer, user, ctx) => {
   if (isUserSpecialist && !certifiedFlag) {
     await createFlagAndUpdateHistoryAndAlgolia(history, type, ctx, answer.node.id, user.id)
   } else if (!isUserSpecialist && certifiedFlag) {
-    await deleteFlagAndUpdateHistoryAndAlgolia(history, type, ctx, answer.node.id, answer.node.id)
+    await deleteFlagAndUpdateHistoryAndAlgolia(history, type, ctx, answer.node.id, certifiedFlag.id)
   }
 }
 
