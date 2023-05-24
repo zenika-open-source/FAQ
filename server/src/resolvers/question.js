@@ -2,7 +2,7 @@ const { history, ctxUser, slugify, deleteCertifedFlagIfNoLongerApplicable } = re
 const { algolia, slack } = require('../integrations')
 
 // TMP_TAGS
-const confSubjects = ctx =>
+const confTagLabels = ctx =>
   ctx.prisma._meta.configuration.tagCategories.reduce((acc, cat) => acc.concat(cat.labels), [])
 
 module.exports = {
@@ -11,7 +11,7 @@ module.exports = {
   },
   Mutation: {
     createQuestionAndTags: async (_, { title, tags }, ctx, info) => {
-      const subjects = confSubjects(ctx)
+      const tagLabels = confTagLabels(ctx)
 
       const node = await ctx.prisma.mutation.createZNode(
         {
@@ -25,9 +25,9 @@ module.exports = {
             },
             tags: {
               create: tags
-                .filter(subjectId => !!subjects.find(label => label.id === subjectId))
-                .map(subjectId => ({
-                  label: { connect: { id: subjectId } },
+                .filter(tagLabelId => !!tagLabels.find(label => label.id === tagLabelId))
+                .map(tagLabelId => ({
+                  label: { connect: { id: tagLabelId } },
                   user: { connect: { id: ctxUser(ctx).id } }
                 }))
             },
@@ -54,7 +54,7 @@ module.exports = {
         model: 'Question',
         meta: {
           title,
-          tags: tags.map(id => subjects.find(label => label.id === id).name)
+          tags: tags.map(id => tagLabels.find(label => label.id === id).name)
         },
         nodeId: node.id
       })
@@ -65,7 +65,7 @@ module.exports = {
       return ctx.prisma.query.question({ where: { id: node.question.id } }, info)
     },
     updateQuestionAndTags: async (_, { id, title, previousTitle, tags }, ctx, info) => {
-      const subjects = confSubjects(ctx)
+      const tagLabels = confTagLabels(ctx)
 
       const node = (
         await ctx.prisma.query.question(
@@ -113,7 +113,7 @@ module.exports = {
       const tagsToRemove = oldLabels.filter(oldLabel => !newLabels.includes(oldLabel))
 
       const mutationsToAdd = tagsToAdd
-        .filter(labelId => subjects.find(label => label.id === labelId))
+        .filter(labelId => tagLabels.find(label => label.id === labelId))
         .map(labelId =>
           ctx.prisma.mutation.createTag({
             data: {
@@ -139,8 +139,8 @@ module.exports = {
 
       const meta = {
         tagsChanges: {
-          added: tagsToAdd.map(id => subjects.find(label => label.id === id).name),
-          removed: tagsToRemove.map(id => subjects.find(label => label.id === id).name)
+          added: tagsToAdd.map(id => tagLabels.find(label => label.id === id).name),
+          removed: tagsToRemove.map(id => tagLabels.find(label => label.id === id).name)
         }
       }
 

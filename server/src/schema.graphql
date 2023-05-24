@@ -1,4 +1,4 @@
-# import ZNode, Question, Answer, Source, Flag, Subject, TagCategory, HistoryAction, BugReporting from './generated/prisma.graphql'
+# import ZNode, Question, Answer, Source, Flag, TagLabel, TagCategory, HistoryAction, BugReporting from './generated/prisma.graphql'
 
 # import ZNodeOrderByInput, ZNodeConnection, ZNodeWhereUniqueInput from './generated/prisma.graphql'
 # import HistoryActionWhereInput from './generated/prisma.graphql'
@@ -90,7 +90,7 @@ type User {
   email: String
 
   picture: String
-  specialties: [Subject!]
+  specialties: [TagLabel!]
 }
 
 type Configuration {

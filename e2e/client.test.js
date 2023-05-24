@@ -139,7 +139,7 @@ const upsertConfigMutation = async apiContext => {
 
 const tagsId = /* GraphQL */ `
   query GetAllTags {
-    subjects {
+    tagLabels {
       id
       name
     }
@@ -153,7 +153,7 @@ const tagsQuery = async apiContext => {
     }
   })
   const jsonRes = await res.json()
-  const results = await jsonRes.data.subjects
+  const results = await jsonRes.data.tagLabels
   const tag = results[0]
   const tagEdit = results[1]
   return { tag, tagEdit }
