@@ -166,19 +166,13 @@ jobs:
             git add .
             git commit -m "deploy!"
       - run:
-          name: Check for Dockerfile modification and deploy to Clever Cloud
+          name: Deploy to Clever Cloud
           working_directory: << parameters.deploy-dir >>
           command: |
-            if [[ -n $(git diff --name-only server/prisma/Dockerfile.clever-cloud) ]]; then
-              echo "File modified. Deploying to Clever Cloud..."
-              cd << parameters.deploy-dir >>
-              sudo npm install --global clever-tools
-              clever login --secret=$CLEVER_SECRET --token=$CLEVER_TOKEN
-              clever link << parameters.clever-app-id >>
-              clever deploy --force
-            else
-              echo "File not modified. Skipping deployment..."
-            fi
+            sudo npm install --global clever-tools
+            clever login --secret=$CLEVER_SECRET --token=$CLEVER_TOKEN
+            clever link << parameters.clever-app-id >>
+            clever deploy --force
   prisma-deploy-service:
     executor: app-builder
     steps:
