@@ -11,15 +11,7 @@ module.exports = {
       const flag = await ctx.prisma.exists.Flag({ node: { id: nodeId }, type })
 
       if (!flag) {
-        await ctx.prisma.mutation.createFlag({
-          data: {
-            type,
-            node: { connect: { id: nodeId } },
-            user: { connect: { id: ctxUser(ctx).id } }
-          }
-        })
-
-        await createFlagAndUpdateHistoryAndAlgolia(history, type, ctx, nodeId)
+        await createFlagAndUpdateHistoryAndAlgolia(history, type, ctx, nodeId, ctxUser(ctx).id)
       }
 
       return ctx.prisma.query.zNode({ where: { id: nodeId } }, info)
@@ -33,11 +25,7 @@ module.exports = {
       )
 
       if (flags) {
-        await ctx.prisma.mutation.deleteFlag({
-          where: { id: flags[0].id }
-        })
-
-        await deleteFlagAndUpdateHistoryAndAlgolia(history, type, ctx, nodeId)
+        await deleteFlagAndUpdateHistoryAndAlgolia(history, type, ctx, nodeId, flags[0].id)
       }
 
       return ctx.prisma.query.zNode({ where: { id: nodeId } }, info)
