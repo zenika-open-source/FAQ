@@ -40,7 +40,7 @@ const apollo = new ApolloClient({
       }
     }),
     new HttpLink({
-      uri: process.env.REACT_APP_GRAPHQL_ENDPOINT || '/gql'
+      uri: process.env.REACT_APP_GRAPHQL_ENDPOINT
     })
   ]),
   cache: apolloCache,
