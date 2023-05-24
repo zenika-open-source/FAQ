@@ -449,7 +449,7 @@ test('Should be able to add a tag to a question', async ({ page }) => {
   await createQuestionAndAnswer(prisma, tag.id, user)
   await page.goto('/')
   await page.locator("input:near(:text('search'))").click()
-  const searchQuery = 'Ceci est une question'.slice(0, 6)
+  const searchQuery = 'Ceci est une question'.slice(0, 4)
   await page.locator("input:near(:text('search'))").fill(searchQuery)
   await expect(page.getByRole('heading', { name: 'Ceci est une question' }).first()).toBeVisible()
   const openCard = page.getByRole('link', { name: 'keyboard_arrow_right' }).first()
