@@ -344,7 +344,6 @@ const emptyDb = async (apiContext, commands) => {
     })
   }
 }
-
 test.beforeAll(async ({ playwright }) => {
   fetchPrismaToken()
   apiContext = await playwright.request.newContext({

@@ -1,9 +1,4 @@
-const {
-  history,
-  ctxUser,
-  answerUpdateCertif,
-  answerAddCertifWhenSpecialist
-} = require('../helpers')
+const { history, ctxUser, refreshCertifiedFlag, answerAddCertifWhenSpecialist } = require('../helpers')
 const { algolia, mailgun } = require('../integrations')
 
 module.exports = {
@@ -203,7 +198,7 @@ module.exports = {
 
       await Promise.all([...mutationsToAdd, ...mutationsToUpdate, ...mutationsToRemove])
 
-      await answerUpdateCertif(answer, user, ctx)
+      await refreshCertifiedFlag(history, answer, user, ctx)
 
       const clean = sources => sources.map(s => ({ label: s.label, url: s.url }))
 

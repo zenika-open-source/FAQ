@@ -20,11 +20,8 @@ import { canSubmit, keyValuePairsToSources, sourcesToKeyValuePairs } from './hel
 import Tips from './components/Tips'
 
 const Answer = ({ zNode }) => {
-  const initialAnswerValue = () => {
-    return zNode && zNode.answer ? zNode.answer : ''
-  }
 
-  const [answer, setAnswer] = useState(() => initialAnswerValue())
+  const answer = zNode && zNode.answer
 
   const [state, setState] = useState(() => {
     const initialText = answer ? answer.content : ''
@@ -47,7 +44,7 @@ const Answer = ({ zNode }) => {
 
   const { loadingSubmit, slug, showTips, sources } = state
 
-  const onTextChange = value => setAnswer({ ...answer, content: value })
+  const onTextChange = value => setState({ ...state, answer: value })
   const onSourcesChange = onListChange(
     changes => setState(state => ({ ...state, ...changes(state) })),
     'sources'
