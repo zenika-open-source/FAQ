@@ -18,7 +18,7 @@ const deleteCertifedFlagIfNoLongerApplicable = async (history, node, tags, ctx) 
   }
 }
 
-const answerAddCertifWhenSpecialist = async (user, node, nodeId, ctx) => {
+const addCertifiedFlagWhenSpecialist = async (history, user, node, nodeId, ctx) => {
   const tags = node.tags.map(tag => tag.label.id)
   const specialties = user.specialties
   const isUserSpecialist = Boolean(specialties.find(specialty => tags.includes(specialty.id)))
@@ -42,7 +42,7 @@ const refreshCertifiedFlag = async (history, answer, user, ctx) => {
 }
 
 module.exports = {
-  answerAddCertifWhenSpecialist,
+  addCertifiedFlagWhenSpecialist,
   deleteCertifedFlagIfNoLongerApplicable,
   refreshCertifiedFlag
 }

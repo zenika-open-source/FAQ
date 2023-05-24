@@ -20,7 +20,6 @@ import { canSubmit, keyValuePairsToSources, sourcesToKeyValuePairs } from './hel
 import Tips from './components/Tips'
 
 const Answer = ({ zNode }) => {
-
   const answer = zNode && zNode.answer
 
   const [state, setState] = useState(() => {
@@ -30,6 +29,7 @@ const Answer = ({ zNode }) => {
     return {
       nodeLoaded: false,
       initialAnswer: initialText,
+      answer: initialText,
       loading: false,
       sources: initialSources,
       initialSources: initialSources,
@@ -63,7 +63,7 @@ const Answer = ({ zNode }) => {
         mutation: SUBMIT_ANSWER,
         variables: {
           nodeId: zNode.id,
-          content: answer.content,
+          content: state.answer,
           sources: JSON.stringify(keyValuePairsToSources(state.sources))
         }
       })
@@ -85,7 +85,7 @@ const Answer = ({ zNode }) => {
         mutation: EDIT_ANSWER,
         variables: {
           id: zNode.answer.id,
-          content: answer.content,
+          content: state.answer,
           previousContent: state.initialAnswer,
           sources: JSON.stringify(keyValuePairsToSources(state.sources))
         }
@@ -104,7 +104,7 @@ const Answer = ({ zNode }) => {
   }
 
   const submitForm = () => {
-    if (canSubmit(state, answer)) {
+    if (canSubmit(state)) {
       zNode.answer ? editAnswer() : submitAnswer()
     }
   }
@@ -144,7 +144,7 @@ const Answer = ({ zNode }) => {
         </CardTitle>
         <CardText>
           <CtrlEnter onCtrlEnterCallback={submitForm}>
-            <MarkdownEditor content={answer.content} onChange={onTextChange} />
+            <MarkdownEditor content={state.answer} onChange={onTextChange} />
           </CtrlEnter>
         </CardText>
         <CardText>
@@ -164,7 +164,7 @@ const Answer = ({ zNode }) => {
             label={zNode.answer ? intl('validate.edit') : intl('validate.submit')}
             primary
             raised
-            disabled={!canSubmit(state, answer)}
+            disabled={!canSubmit(state)}
             onClick={submitForm}
           />
         </CardActions>

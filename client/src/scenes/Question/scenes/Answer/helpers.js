@@ -23,11 +23,11 @@ export const keyValuePairsToSources = list => {
     .filter(({ label, url }) => label !== '' && url !== '')
 }
 
-export const canSubmit = (state, answer) => {
-  const { initialAnswer, sources, initialSources } = state
+export const canSubmit = state => {
+  const { answer, initialAnswer, sources, initialSources } = state
   return !(
-    (answer && answer.content.length === 0) ||
-    (answer.content === initialAnswer &&
+    answer.length === 0 ||
+    (answer === initialAnswer &&
       differenceWith(sources, initialSources, isEqual).length === 0 &&
       differenceWith(initialSources, sources, isEqual).length === 0)
   )

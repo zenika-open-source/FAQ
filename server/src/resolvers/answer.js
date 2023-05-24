@@ -1,4 +1,9 @@
-const { history, ctxUser, refreshCertifiedFlag, answerAddCertifWhenSpecialist } = require('../helpers')
+const {
+  history,
+  ctxUser,
+  refreshCertifiedFlag,
+  addCertifiedFlagWhenSpecialist
+} = require('../helpers')
 const { algolia, mailgun } = require('../integrations')
 
 module.exports = {
@@ -73,7 +78,7 @@ module.exports = {
         where: { node: { id: nodeId }, type: 'unanswered' }
       })
 
-      await answerAddCertifWhenSpecialist(answer.user, answer.node, nodeId, ctx)
+      await addCertifiedFlagWhenSpecialist(history, answer.user, answer.node, nodeId, ctx)
 
       await history.push(ctx, {
         action: 'CREATED',
