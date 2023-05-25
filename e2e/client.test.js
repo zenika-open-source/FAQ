@@ -366,7 +366,7 @@ test.beforeAll(async ({ playwright }) => {
 })
 
 test.beforeEach(async () => {
-  emptyDb(apiContext, deleteCommands)
+  await emptyDb(apiContext, deleteCommands)
 })
 
 test('Shoud be able to create a question', async ({ page }) => {
