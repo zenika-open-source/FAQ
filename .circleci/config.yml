@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  node: circleci/node@5.0.2
+  node: circleci/node@5.1.0
 
 executors:
   clever-cloud-deployer:
@@ -52,6 +52,7 @@ jobs:
       - checkout
       - node/install-packages:
           app-dir: server
+          cache-version: v2
       - run:
           command: npm run lint
           working_directory: server
@@ -65,6 +66,7 @@ jobs:
       - checkout
       - node/install-packages:
           app-dir: client
+          cache-version: v2
       - run:
           command: npm run lint
           working_directory: client
@@ -77,6 +79,7 @@ jobs:
       - checkout
       - node/install-packages:
           app-dir: e2e
+          cache-version: v2
       - run:
           command: npm run lint
           working_directory: e2e
@@ -89,10 +92,13 @@ jobs:
       - checkout
       - node/install-packages:
           app-dir: e2e
+          cache-version: v2
       - node/install-packages:
           app-dir: server
+          cache-version: v2
       - node/install-packages:
           app-dir: client
+          cache-version: v2
       - run:
           name: Install wait-on
           command: npm install -g wait-on
@@ -130,6 +136,7 @@ jobs:
       - checkout
       - node/install-packages:
           app-dir: client
+          cache-version: v2
       - run:
           command: npm run build
           working_directory: client
@@ -179,6 +186,7 @@ jobs:
       - checkout
       - node/install-packages:
           app-dir: server
+          cache-version: v2
       - run:
           name: Deploy prisma
           working_directory: server/scripts/prisma_deploy_all/
