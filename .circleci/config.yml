@@ -9,10 +9,10 @@ executors:
       - image: cimg/node:lts
   app-builder:
     docker:
-      - image: cimg/node:16.15
+      - image: cimg/node:lts
   e2e-runner:
     docker:
-      - image: mcr.microsoft.com/playwright:v1.30.0-focal
+      - image: mcr.microsoft.com/playwright:v1.34.3-jammy
         environment:
           PRISMA_URL: http://localhost:4466
           PRISMA_API_SECRET: secret-42
