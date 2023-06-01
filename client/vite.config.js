@@ -2,6 +2,7 @@ const path = require('path')
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import dns from 'dns'
+import { isCI } from 'ci-info'
 
 dns.setDefaultResultOrder('verbatim')
 
@@ -19,5 +20,9 @@ export default defineConfig({
   },
   build: {
     outDir: 'build'
+  },
+  server: {
+    open: !isCI,
+    port: 3000
   }
 })
