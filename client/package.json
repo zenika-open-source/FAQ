@@ -38,7 +38,7 @@
     "uuid": "^3.3.3"
   },
   "scripts": {
-    "start": "vite",
+    "start": "vite --port 3000",
     "build": "vite build",
     "test": "vite test --env=jsdom",
     "lint": "eslint src --ext js,jsx",
