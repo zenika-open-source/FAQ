@@ -121,7 +121,7 @@ jobs:
       - run:
           name: Run tests
           command: |
-            wait-on http://localhost:3000
+            wait-on http://localhost:3000/
             wait-on http://localhost:4466
             npm run test
           working_directory: e2e
