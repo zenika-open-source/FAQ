@@ -17,6 +17,7 @@ import { canSubmit } from './helpers'
 import Tips from './components/Tips'
 
 import './Edit.css'
+import gql from 'graphql-tag'
 
 const Edit = ({ location, match, zNode }) => {
   const [state, setState] = useState(() => {
@@ -48,9 +49,26 @@ const Edit = ({ location, match, zNode }) => {
     PermanentClosableCard.setValue('tips_question', value)
   }
 
+  const detectLanguage = async text => {
+    const response = await fetch(
+      `https://translation.googleapis.com/language/translate/v2/detect?key=${
+        import.meta.env.VITE_CLOUD_TRANSLATION_API_KEY
+      }`,
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          q: text
+        })
+      }
+    )
+    const res = await response.json()
+    const data = await res.data
+    return data.detections[0][0].language
+  }
+  detectLanguage(state.question)
+
   const submitQuestion = () => {
     setState(state => ({ ...state, loadingSubmit: true }))
-
     apollo
       .mutate({
         mutation: SUBMIT_QUESTION,
