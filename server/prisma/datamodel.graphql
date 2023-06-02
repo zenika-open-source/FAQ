@@ -18,7 +18,7 @@ type Question {
   id: ID! @unique @id
 
   title: String!
-  language: Language!
+  language: String!
   translation: [Translation]
 
   slug: String!
@@ -35,7 +35,7 @@ type Answer {
   id: ID! @unique @id
 
   content: String!
-  language: Language!
+  language: String!
   translation: [Translation]
 
   sources: [Source!]! @relation(name: "AnswerSources", onDelete: CASCADE, link: TABLE)
@@ -50,7 +50,7 @@ type Answer {
 type Translation {
   id: ID! @unique @id
 
-  language: Language!
+  language: String!
   text: String!
 }
 
@@ -185,11 +185,6 @@ type Configuration {
   bugReporting: BugReporting @default(value: GITHUB)
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
-}
-
-enum Language {
-  en
-  fr
 }
 
 enum BugReporting {
