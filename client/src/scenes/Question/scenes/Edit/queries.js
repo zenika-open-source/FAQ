@@ -3,10 +3,11 @@ import gql from 'graphql-tag'
 import { zNodeFragment } from '../../queries'
 
 export const SUBMIT_QUESTION = gql`
-  mutation($title: String!, $tags: [ID!]!) {
-    createQuestionAndTags(title: $title, tags: $tags) {
+  mutation($title: String!, $language: String! $tags: [ID!]!) {
+    createQuestionAndTags(title: $title, language: $language, tags: $tags) {
       id
       title
+      language
       slug
       user {
         id
@@ -20,15 +21,23 @@ export const SUBMIT_QUESTION = gql`
 `
 
 export const EDIT_QUESTION = gql`
-  mutation($questionId: ID!, $title: String!, $previousTitle: String!, $tags: [ID!]!) {
+  mutation(
+    $questionId: ID!
+    $title: String!
+    $previousTitle: String!
+    $language: String!
+    $tags: [ID!]!
+  ) {
     updateQuestionAndTags(
       id: $questionId
       title: $title
       previousTitle: $previousTitle
+      language: $language
       tags: $tags
     ) {
       id
       title
+      language
       slug
       user {
         id

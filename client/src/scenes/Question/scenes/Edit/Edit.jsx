@@ -16,13 +16,14 @@ import { canSubmit } from './helpers'
 
 import Tips from './components/Tips'
 
+import { detectLanguage } from '@helpers'
 import './Edit.css'
-import gql from 'graphql-tag'
 
 const Edit = ({ location, match, zNode }) => {
   const [state, setState] = useState(() => {
     const passedQuestionText = location.state ? location.state.question : ''
     const initialQuestion = zNode ? zNode.question.title : passedQuestionText
+    const initialLanguage = zNode ? zNode.question.language : ''
     const initialTags = zNode ? zNode.tags.map(tag => tag.label) : []
 
     return {
@@ -30,6 +31,7 @@ const Edit = ({ location, match, zNode }) => {
       initialQuestion: initialQuestion,
       isEditing: !!match.params.slug,
       question: initialQuestion,
+      language: initialLanguage,
       loadingSubmit: false,
       slug: null,
       initialTags: initialTags,
@@ -49,77 +51,61 @@ const Edit = ({ location, match, zNode }) => {
     PermanentClosableCard.setValue('tips_question', value)
   }
 
-  const detectLanguage = async text => {
-    const response = await fetch(
-      `https://translation.googleapis.com/language/translate/v2/detect?key=${
-        import.meta.env.VITE_CLOUD_TRANSLATION_API_KEY
-      }`,
-      {
-        method: 'POST',
-        body: JSON.stringify({
-          q: text
-        })
-      }
-    )
-    const res = await response.json()
-    const data = await res.data
-    return data.detections[0][0].language
-  }
-  detectLanguage(state.question)
-
-  const submitQuestion = () => {
-    setState(state => ({ ...state, loadingSubmit: true }))
-    apollo
-      .mutate({
+  const submitQuestion = async () => {
+    try {
+      const language = await detectLanguage(state.question)
+      setState(state => ({ ...state, language, loadingSubmit: true }))
+      const { data } = await apollo.mutate({
         mutation: SUBMIT_QUESTION,
         variables: {
           title: state.question,
+          language: language,
           tags: state.tags.map(tag => tag.id)
         }
       })
-      .then(({ data }) => {
-        setState(state => ({
-          ...state,
-          slug: data.createQuestionAndTags.slug + '-' + data.createQuestionAndTags.node.id
-        }))
-        alert.pushSuccess(intl('alert.submit_success'))
-      })
-      .catch(error => {
-        alert.pushDefaultError(error)
-        setState(state => ({
-          ...state,
-          loadingSubmit: false
-        }))
-      })
+      setState(state => ({
+        ...state,
+        slug: data.createQuestionAndTags.slug + '-' + data.createQuestionAndTags.node.id
+      }))
+      alert.pushSuccess(intl('alert.submit_success'))
+    } catch (error) {
+      alert.pushDefaultError(error)
+      setState(state => ({
+        ...state,
+        loadingSubmit: false
+      }))
+    }
   }
 
-  const editQuestion = () => {
-    setState(state => ({ ...state, loadingSubmit: true }))
-
-    apollo
-      .mutate({
+  const editQuestion = async () => {
+    try {
+      let language = state.language
+      if (state.question !== state.initialQuestion) {
+        language = await detectLanguage(state.question)
+      }
+      setState(state => ({ ...state, language, loadingSubmit: true }))
+      const { data } = await apollo.mutate({
         mutation: EDIT_QUESTION,
         variables: {
           questionId: zNode.question.id,
           title: state.question,
           previousTitle: state.initialQuestion,
+          language: language,
           tags: state.tags.map(tag => tag.id)
         }
       })
-      .then(({ data }) => {
-        setState(state => ({
-          ...state,
-          slug: data.updateQuestionAndTags.slug + '-' + zNode.id
-        }))
-        alert.pushSuccess(intl('alert.edit_success'))
-      })
-      .catch(error => {
-        alert.pushDefaultError(error)
-        setState(state => ({
-          ...state,
-          loadingSubmit: false
-        }))
-      })
+      setState(state => ({
+        ...state,
+        slug: data.updateQuestionAndTags.slug + '-' + zNode.id
+      }))
+      alert.pushSuccess(intl('alert.edit_success'))
+    } catch (error) {
+      alert.pushDefaultError(error)
+      setState(state => ({
+        ...state,
+        loadingSubmit: false
+      }))
+    }
   }
 
   const submitForm = () => {

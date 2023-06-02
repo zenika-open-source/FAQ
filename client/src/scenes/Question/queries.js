@@ -5,6 +5,7 @@ export const zNodeFragment = `
   question {
     id
     title
+    language
     slug
     views
     user {
