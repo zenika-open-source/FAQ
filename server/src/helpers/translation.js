@@ -1,1 +1,0 @@
-const detect = async () => {}
