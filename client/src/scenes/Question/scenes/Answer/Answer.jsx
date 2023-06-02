@@ -18,18 +18,21 @@ import { ActionMenu } from '../../components'
 import { canSubmit, keyValuePairsToSources, sourcesToKeyValuePairs } from './helpers'
 
 import Tips from './components/Tips'
+import { detectLanguage } from '@helpers'
 
 const Answer = ({ zNode }) => {
   const answer = zNode && zNode.answer
 
   const [state, setState] = useState(() => {
     const initialText = answer ? answer.content : ''
+    const intialLanguage = answer ? answer.language : ''
     const initialSources = sourcesToKeyValuePairs(answer ? answer.sources : [])
 
     return {
       nodeLoaded: false,
       initialAnswer: initialText,
       answer: initialText,
+      language: intialLanguage,
       loading: false,
       sources: initialSources,
       initialSources: initialSources,
@@ -55,52 +58,53 @@ const Answer = ({ zNode }) => {
     PermanentClosableCard.setValue('tips_answer', value)
   }
 
-  const submitAnswer = () => {
-    setState(state => ({ ...state, loadingSubmit: true }))
-
-    apollo
-      .mutate({
+  const submitAnswer = async () => {
+    try {
+      const language = await detectLanguage(state.answer)
+      setState(state => ({ ...state, language, loadingSubmit: true }))
+      await apollo.mutate({
         mutation: SUBMIT_ANSWER,
         variables: {
           nodeId: zNode.id,
           content: state.answer,
+          language: language,
           sources: JSON.stringify(keyValuePairsToSources(state.sources))
         }
       })
-      .then(() => {
-        setState(state => ({ ...state, slug: zNode.question.slug + '-' + zNode.id }))
-        alert.pushSuccess(intl('alert.submit_success'))
-      })
-      .catch(error => {
-        alert.pushDefaultError(error)
-        setState(state => ({ ...state, loadingSubmit: false }))
-      })
+      setState(state => ({ ...state, slug: zNode.question.slug + '-' + zNode.id }))
+      alert.pushSuccess(intl('alert.submit_success'))
+    } catch (error) {
+      alert.pushDefaultError(error)
+      setState(state => ({ ...state, loadingSubmit: false }))
+    }
   }
 
-  const editAnswer = () => {
-    setState(state => ({ ...state, loadingSubmit: true }))
-
-    apollo
-      .mutate({
+  const editAnswer = async () => {
+    try {
+      let language = state.language
+      if (state.answer !== state.initialAnswer) {
+        language = await detectLanguage(state.answer)
+      }
+      setState(state => ({ ...state, language, loadingSubmit: true }))
+      await apollo.mutate({
         mutation: EDIT_ANSWER,
         variables: {
           id: zNode.answer.id,
           content: state.answer,
           previousContent: state.initialAnswer,
+          language: language,
           sources: JSON.stringify(keyValuePairsToSources(state.sources))
         }
       })
-      .then(() => {
-        setState(state => ({ ...state, slug: zNode.question.slug + '-' + zNode.id }))
-        alert.pushSuccess(intl('alert.edit_success'))
-      })
-      .catch(error => {
-        alert.pushDefaultError(error)
-        setState(state => ({
-          ...state,
-          loadingSubmit: false
-        }))
-      })
+      setState(state => ({ ...state, slug: zNode.question.slug + '-' + zNode.id }))
+      alert.pushSuccess(intl('alert.edit_success'))
+    } catch (error) {
+      alert.pushDefaultError(error)
+      setState(state => ({
+        ...state,
+        loadingSubmit: false
+      }))
+    }
   }
 
   const submitForm = () => {
