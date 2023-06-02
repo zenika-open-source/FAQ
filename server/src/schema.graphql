@@ -38,22 +38,35 @@ type Mutation {
   authenticate(idToken: String!): User
   updateSpecialties(id: ID!, specialties: [SpecialtiesInput]!): User
 
-  createQuestionAndTags(title: String!, language: String!, tags: [ID!]!): Question
+  createQuestionAndTags(
+    title: String!
+    language: String!
+    translation: String!
+    tags: [ID!]!
+  ): Question
   updateQuestionAndTags(
     id: ID!
     title: String!
     previousTitle: String!
     language: String!
+    translation: String!
     tags: [ID!]!
   ): Question
   incrementQuestionViewsCounter(id: ID!): Question
 
-  createAnswerAndSources(content: String, language: String!, sources: String!, nodeId: ID!): Answer
+  createAnswerAndSources(
+    content: String
+    language: String!
+    translation: String!
+    sources: String!
+    nodeId: ID!
+  ): Answer
   updateAnswerAndSources(
     id: ID!
     content: String
     previousContent: String!
     language: String!
+    translation: String!
     sources: String!
   ): Answer
 

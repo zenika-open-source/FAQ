@@ -50,15 +50,7 @@ type Answer {
   id: ID!
   content: String!
   language: String!
-  translation(
-    where: TranslationWhereInput
-    orderBy: TranslationOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [Translation!]
+  translation: Translation
   sources(
     where: SourceWhereInput
     orderBy: SourceOrderByInput
@@ -84,7 +76,7 @@ input AnswerCreateInput {
   id: ID
   content: String!
   language: String!
-  translation: TranslationCreateManyInput
+  translation: TranslationCreateOneInput
   sources: SourceCreateManyWithoutAnswerInput
   node: ZNodeCreateOneWithoutAnswerInput!
   user: UserCreateOneWithoutAnswersInput!
@@ -109,7 +101,7 @@ input AnswerCreateWithoutNodeInput {
   id: ID
   content: String!
   language: String!
-  translation: TranslationCreateManyInput
+  translation: TranslationCreateOneInput
   sources: SourceCreateManyWithoutAnswerInput
   user: UserCreateOneWithoutAnswersInput!
 }
@@ -118,7 +110,7 @@ input AnswerCreateWithoutSourcesInput {
   id: ID
   content: String!
   language: String!
-  translation: TranslationCreateManyInput
+  translation: TranslationCreateOneInput
   node: ZNodeCreateOneWithoutAnswerInput!
   user: UserCreateOneWithoutAnswersInput!
 }
@@ -127,7 +119,7 @@ input AnswerCreateWithoutUserInput {
   id: ID
   content: String!
   language: String!
-  translation: TranslationCreateManyInput
+  translation: TranslationCreateOneInput
   sources: SourceCreateManyWithoutAnswerInput
   node: ZNodeCreateOneWithoutAnswerInput!
 }
@@ -243,7 +235,7 @@ input AnswerSubscriptionWhereInput {
 input AnswerUpdateInput {
   content: String
   language: String
-  translation: TranslationUpdateManyInput
+  translation: TranslationUpdateOneInput
   sources: SourceUpdateManyWithoutAnswerInput
   node: ZNodeUpdateOneRequiredWithoutAnswerInput
   user: UserUpdateOneRequiredWithoutAnswersInput
@@ -295,7 +287,7 @@ input AnswerUpdateOneWithoutNodeInput {
 input AnswerUpdateWithoutNodeDataInput {
   content: String
   language: String
-  translation: TranslationUpdateManyInput
+  translation: TranslationUpdateOneInput
   sources: SourceUpdateManyWithoutAnswerInput
   user: UserUpdateOneRequiredWithoutAnswersInput
 }
@@ -303,7 +295,7 @@ input AnswerUpdateWithoutNodeDataInput {
 input AnswerUpdateWithoutSourcesDataInput {
   content: String
   language: String
-  translation: TranslationUpdateManyInput
+  translation: TranslationUpdateOneInput
   node: ZNodeUpdateOneRequiredWithoutAnswerInput
   user: UserUpdateOneRequiredWithoutAnswersInput
 }
@@ -311,7 +303,7 @@ input AnswerUpdateWithoutSourcesDataInput {
 input AnswerUpdateWithoutUserDataInput {
   content: String
   language: String
-  translation: TranslationUpdateManyInput
+  translation: TranslationUpdateOneInput
   sources: SourceUpdateManyWithoutAnswerInput
   node: ZNodeUpdateOneRequiredWithoutAnswerInput
 }
@@ -380,9 +372,7 @@ input AnswerWhereInput {
   language_not_starts_with: String
   language_ends_with: String
   language_not_ends_with: String
-  translation_every: TranslationWhereInput
-  translation_some: TranslationWhereInput
-  translation_none: TranslationWhereInput
+  translation: TranslationWhereInput
   sources_every: SourceWhereInput
   sources_some: SourceWhereInput
   sources_none: SourceWhereInput
@@ -1833,15 +1823,7 @@ type Question {
   id: ID!
   title: String!
   language: String!
-  translation(
-    where: TranslationWhereInput
-    orderBy: TranslationOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [Translation!]
+  translation: Translation
   slug: String!
   views: Int
   node: ZNode!
@@ -1860,7 +1842,7 @@ input QuestionCreateInput {
   id: ID
   title: String!
   language: String!
-  translation: TranslationCreateManyInput
+  translation: TranslationCreateOneInput
   slug: String!
   views: Int
   node: ZNodeCreateOneWithoutQuestionInput!
@@ -1881,7 +1863,7 @@ input QuestionCreateWithoutNodeInput {
   id: ID
   title: String!
   language: String!
-  translation: TranslationCreateManyInput
+  translation: TranslationCreateOneInput
   slug: String!
   views: Int
   user: UserCreateOneWithoutQuestionsInput!
@@ -1891,7 +1873,7 @@ input QuestionCreateWithoutUserInput {
   id: ID
   title: String!
   language: String!
-  translation: TranslationCreateManyInput
+  translation: TranslationCreateOneInput
   slug: String!
   views: Int
   node: ZNodeCreateOneWithoutQuestionInput!
@@ -2036,7 +2018,7 @@ input QuestionSubscriptionWhereInput {
 input QuestionUpdateInput {
   title: String
   language: String
-  translation: TranslationUpdateManyInput
+  translation: TranslationUpdateOneInput
   slug: String
   views: Int
   node: ZNodeUpdateOneRequiredWithoutQuestionInput
@@ -2086,7 +2068,7 @@ input QuestionUpdateOneWithoutNodeInput {
 input QuestionUpdateWithoutNodeDataInput {
   title: String
   language: String
-  translation: TranslationUpdateManyInput
+  translation: TranslationUpdateOneInput
   slug: String
   views: Int
   user: UserUpdateOneRequiredWithoutQuestionsInput
@@ -2095,7 +2077,7 @@ input QuestionUpdateWithoutNodeDataInput {
 input QuestionUpdateWithoutUserDataInput {
   title: String
   language: String
-  translation: TranslationUpdateManyInput
+  translation: TranslationUpdateOneInput
   slug: String
   views: Int
   node: ZNodeUpdateOneRequiredWithoutQuestionInput
@@ -2160,9 +2142,7 @@ input QuestionWhereInput {
   language_not_starts_with: String
   language_ends_with: String
   language_not_ends_with: String
-  translation_every: TranslationWhereInput
-  translation_some: TranslationWhereInput
-  translation_none: TranslationWhereInput
+  translation: TranslationWhereInput
   slug: String
   slug_not: String
   slug_in: [String!]
@@ -3412,9 +3392,9 @@ input TranslationCreateInput {
   text: String!
 }
 
-input TranslationCreateManyInput {
-  create: [TranslationCreateInput!]
-  connect: [TranslationWhereUniqueInput!]
+input TranslationCreateOneInput {
+  create: TranslationCreateInput
+  connect: TranslationWhereUniqueInput
 }
 
 type TranslationEdge {
@@ -3435,54 +3415,6 @@ type TranslationPreviousValues {
   id: ID!
   language: String!
   text: String!
-}
-
-input TranslationScalarWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  language: String
-  language_not: String
-  language_in: [String!]
-  language_not_in: [String!]
-  language_lt: String
-  language_lte: String
-  language_gt: String
-  language_gte: String
-  language_contains: String
-  language_not_contains: String
-  language_starts_with: String
-  language_not_starts_with: String
-  language_ends_with: String
-  language_not_ends_with: String
-  text: String
-  text_not: String
-  text_in: [String!]
-  text_not_in: [String!]
-  text_lt: String
-  text_lte: String
-  text_gt: String
-  text_gte: String
-  text_contains: String
-  text_not_contains: String
-  text_starts_with: String
-  text_not_starts_with: String
-  text_ends_with: String
-  text_not_ends_with: String
-  AND: [TranslationScalarWhereInput!]
-  OR: [TranslationScalarWhereInput!]
-  NOT: [TranslationScalarWhereInput!]
 }
 
 type TranslationSubscriptionPayload {
@@ -3513,40 +3445,21 @@ input TranslationUpdateInput {
   text: String
 }
 
-input TranslationUpdateManyDataInput {
-  language: String
-  text: String
-}
-
-input TranslationUpdateManyInput {
-  create: [TranslationCreateInput!]
-  update: [TranslationUpdateWithWhereUniqueNestedInput!]
-  upsert: [TranslationUpsertWithWhereUniqueNestedInput!]
-  delete: [TranslationWhereUniqueInput!]
-  connect: [TranslationWhereUniqueInput!]
-  set: [TranslationWhereUniqueInput!]
-  disconnect: [TranslationWhereUniqueInput!]
-  deleteMany: [TranslationScalarWhereInput!]
-  updateMany: [TranslationUpdateManyWithWhereNestedInput!]
-}
-
 input TranslationUpdateManyMutationInput {
   language: String
   text: String
 }
 
-input TranslationUpdateManyWithWhereNestedInput {
-  where: TranslationScalarWhereInput!
-  data: TranslationUpdateManyDataInput!
+input TranslationUpdateOneInput {
+  create: TranslationCreateInput
+  update: TranslationUpdateDataInput
+  upsert: TranslationUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: TranslationWhereUniqueInput
 }
 
-input TranslationUpdateWithWhereUniqueNestedInput {
-  where: TranslationWhereUniqueInput!
-  data: TranslationUpdateDataInput!
-}
-
-input TranslationUpsertWithWhereUniqueNestedInput {
-  where: TranslationWhereUniqueInput!
+input TranslationUpsertNestedInput {
   update: TranslationUpdateDataInput!
   create: TranslationCreateInput!
 }

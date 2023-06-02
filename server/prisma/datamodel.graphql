@@ -19,7 +19,7 @@ type Question {
 
   title: String!
   language: String!
-  translation: [Translation]
+  translation: Translation
 
   slug: String!
   views: Int
@@ -36,7 +36,7 @@ type Answer {
 
   content: String!
   language: String!
-  translation: [Translation]
+  translation: Translation
 
   sources: [Source!]! @relation(name: "AnswerSources", onDelete: CASCADE, link: TABLE)
 
