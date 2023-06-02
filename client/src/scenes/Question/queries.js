@@ -6,6 +6,11 @@ export const zNodeFragment = `
     id
     title
     language
+    translation {
+      id
+      language
+      text
+    }
     slug
     views
     user {
@@ -18,6 +23,10 @@ export const zNodeFragment = `
   answer {
     id
     content
+    translation {
+      language
+      text
+    }
     sources {
       id
       label

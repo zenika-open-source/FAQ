@@ -10,8 +10,9 @@ module.exports = {
     zNode: (_, args, ctx, info) => ctx.prisma.query.zNode(args, info)
   },
   Mutation: {
-    createQuestionAndTags: async (_, { title, language, tags }, ctx, info) => {
+    createQuestionAndTags: async (_, { title, language, translation, tags }, ctx, info) => {
       const tagLabels = confTagLabels(ctx)
+      translation = JSON.parse(translation)
 
       const node = await ctx.prisma.mutation.createZNode(
         {
@@ -20,6 +21,9 @@ module.exports = {
               create: {
                 title,
                 language,
+                translation: {
+                  create: translation
+                },
                 slug: slugify(title),
                 user: { connect: { id: ctxUser(ctx).id } }
               }
@@ -65,9 +69,13 @@ module.exports = {
 
       return ctx.prisma.query.question({ where: { id: node.question.id } }, info)
     },
-    updateQuestionAndTags: async (_, { id, title, previousTitle, language, tags }, ctx, info) => {
+    updateQuestionAndTags: async (
+      _,
+      { id, title, previousTitle, language, translation, tags },
+      ctx,
+      info
+    ) => {
       const tagLabels = confTagLabels(ctx)
-
       const node = (
         await ctx.prisma.query.question(
           { where: { id } },
@@ -150,11 +158,16 @@ module.exports = {
         meta.title = title
       }
 
+      translation = JSON.parse(translation)
+
       await ctx.prisma.mutation.updateQuestion({
         where: { id },
         data: {
           title,
           language,
+          translation: {
+            update: translation
+          },
           slug: slugify(title)
         }
       })
