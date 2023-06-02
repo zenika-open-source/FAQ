@@ -8,8 +8,14 @@ const { algolia, mailgun } = require('../integrations')
 
 module.exports = {
   Mutation: {
-    createAnswerAndSources: async (_, { content, language, sources, nodeId }, ctx, info) => {
+    createAnswerAndSources: async (
+      _,
+      { content, language, translation, sources, nodeId },
+      ctx,
+      info
+    ) => {
       sources = JSON.parse(sources)
+      translation = JSON.parse(translation)
 
       let answer
 
@@ -28,6 +34,9 @@ module.exports = {
                 connect: {
                   id: ctxUser(ctx).id
                 }
+              },
+              translation: {
+                create: translation
               },
               sources: {
                 create: sources
@@ -108,7 +117,7 @@ module.exports = {
     },
     updateAnswerAndSources: async (
       _,
-      { id, content, previousContent, language, sources },
+      { id, content, previousContent, language, translation, sources },
       ctx,
       info
     ) => {
@@ -225,11 +234,16 @@ module.exports = {
         meta.content = content
       }
 
+      translation = JSON.parse(translation)
+
       await ctx.prisma.mutation.updateAnswer({
         where: { id },
         data: {
           content,
-          language
+          language,
+          translation: {
+            update: translation
+          }
         }
       })
 
