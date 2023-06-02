@@ -173,7 +173,14 @@ const createZNodeParams = (tagId, userId) => {
       question: {
         create: {
           title: 'Ceci est une question',
+          language: 'fr',
           slug: 'slug.Ceci est une question',
+          translation: {
+            create: {
+              language: 'en',
+              text: 'This is a question'
+            }
+          },
           user: {
             connect: {
               id: userId
@@ -184,6 +191,13 @@ const createZNodeParams = (tagId, userId) => {
       answer: {
         create: {
           content: 'Ceci est une réponse',
+          language: 'fr',
+          translation: {
+            create: {
+              language: 'en',
+              text: 'This is an answer'
+            }
+          },
           user: {
             connect: {
               id: userId
@@ -215,7 +229,14 @@ const createZNodeWithoutAnswerParams = (tagId, userId) => {
       question: {
         create: {
           title: 'Ceci est une question',
+          language: 'fr',
           slug: 'slug.Ceci est une question',
+          translation: {
+            create: {
+              language: 'en',
+              text: 'This is a question'
+            }
+          },
           user: {
             connect: {
               id: userId
@@ -247,7 +268,14 @@ const createTempZnode = (tagId, userId) => {
       question: {
         create: {
           title: 'Ceci est une question',
+          language: 'fr',
           slug: 'slug.Ceci est une question',
+          translation: {
+            create: {
+              language: 'en',
+              text: 'This is a question'
+            }
+          },
           user: {
             connect: {
               id: userId
@@ -258,6 +286,13 @@ const createTempZnode = (tagId, userId) => {
       answer: {
         create: {
           content: 'Ceci est une réponse',
+          language: 'fr',
+          translation: {
+            create: {
+              language: 'en',
+              text: 'This is an answer'
+            }
+          },
           user: {
             connect: {
               id: userId
@@ -461,6 +496,7 @@ test('Should be able to add a tag to a question', async ({ page }) => {
   await page.getByRole('button', { name: 'add' }).click()
   await page.getByText(tagEdit.name, { exact: true }).click()
   await page.locator('button', { hasText: 'Enregistrer la question' }).click()
+  await page.pause()
   await expect(page.getByText(tag.name, tagEdit.name)).toBeVisible()
 })
 
