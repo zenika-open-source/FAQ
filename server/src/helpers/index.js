@@ -9,6 +9,12 @@ const diffTags = require('./diffTags')
 const history = require('./history')
 const randomString = require('./randomString')
 const {
+  detectLanguage,
+  getTranslatedText,
+  translationToKeyValuePairs,
+  keyValuePairsToTranslations
+} = require('./translation')
+const {
   createFlagAndUpdateHistoryAndAlgolia,
   deleteFlagAndUpdateHistoryAndAlgolia
 } = require('./updateHistoryAndAlgolia')
@@ -26,6 +32,10 @@ module.exports = {
   history,
   randomString,
   slugify,
+  detectLanguage,
+  getTranslatedText,
+  translationToKeyValuePairs,
+  keyValuePairsToTranslations,
   createFlagAndUpdateHistoryAndAlgolia,
   deleteFlagAndUpdateHistoryAndAlgolia,
   validateAndParseIdToken

@@ -7,9 +7,3 @@ export * from './question'
 export { default as safeFetch } from './safeFetch'
 export * from './serialize'
 export { default as useClickOutside } from './useClickOutside'
-export {
-  detectLanguage,
-  getTranslatedText,
-  translationToKeyValuePairs,
-  keyValuePairsToTranslations
-} from './translation'
