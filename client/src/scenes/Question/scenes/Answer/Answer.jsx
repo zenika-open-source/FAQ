@@ -6,13 +6,7 @@ import { Prompt, Redirect } from 'react-router-dom'
 import { EDIT_ANSWER, SUBMIT_ANSWER } from './queries'
 
 import { alert, markdown, getIntl } from 'services'
-import {
-  onListChange,
-  detectLanguage,
-  getTranslatedText,
-  translationToKeyValuePairs,
-  keyValuePairsToTranslations
-} from 'helpers'
+import { onListChange } from 'helpers'
 
 import NotFound from 'scenes/NotFound'
 
@@ -29,19 +23,15 @@ const Answer = ({ zNode }) => {
   const answer = zNode && zNode.answer
   const [state, setState] = useState(() => {
     const initialText = answer ? answer.content : ''
-    const intialLanguage = answer ? answer.language : ''
     const initialSources = sourcesToKeyValuePairs(answer ? answer.sources : [])
-    const initialTranslation = answer ? answer.translation : []
 
     return {
       nodeLoaded: false,
       initialAnswer: initialText,
       answer: initialText,
-      language: intialLanguage,
       loading: false,
       sources: initialSources,
       initialSources: initialSources,
-      translation: initialTranslation,
       slug: null,
       showTips: PermanentClosableCard.isOpen('tips_answer')
     }
@@ -66,17 +56,12 @@ const Answer = ({ zNode }) => {
 
   const submitAnswer = async () => {
     try {
-      const language = await detectLanguage(state.answer)
-      const { targetLanguage, translatedText } = await getTranslatedText(state.answer, language)
-      const translation = translationToKeyValuePairs(targetLanguage, translatedText)
-      setState(state => ({ ...state, language, loadingSubmit: true }))
+      setState(state => ({ ...state, loadingSubmit: true }))
       await apollo.mutate({
         mutation: SUBMIT_ANSWER,
         variables: {
           nodeId: zNode.id,
           content: state.answer,
-          language: language,
-          translation: JSON.stringify(keyValuePairsToTranslations(translation)),
           sources: JSON.stringify(keyValuePairsToSources(state.sources))
         }
       })
@@ -90,22 +75,13 @@ const Answer = ({ zNode }) => {
 
   const editAnswer = async () => {
     try {
-      let language = state.language
-      let translation = state.translation
-      if (state.answer !== state.initialAnswer) {
-        language = await detectLanguage(state.answer)
-        const { targetLanguage, translatedText } = await getTranslatedText(state.answer, language)
-        translation = translationToKeyValuePairs(targetLanguage, translatedText)
-      }
-      setState(state => ({ ...state, language, loadingSubmit: true }))
+      setState(state => ({ ...state, loadingSubmit: true }))
       await apollo.mutate({
         mutation: EDIT_ANSWER,
         variables: {
           id: zNode.answer.id,
           content: state.answer,
           previousContent: state.initialAnswer,
-          language: language,
-          translation: JSON.stringify(keyValuePairsToTranslations(translation)),
           sources: JSON.stringify(keyValuePairsToSources(state.sources))
         }
       })
