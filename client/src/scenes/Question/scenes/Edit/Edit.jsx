@@ -16,30 +16,20 @@ import { canSubmit } from './helpers'
 
 import Tips from './components/Tips'
 
-import {
-  detectLanguage,
-  getTranslatedText,
-  translationToKeyValuePairs,
-  keyValuePairsToTranslations
-} from '@helpers'
 import './Edit.css'
 
 const Edit = ({ location, match, zNode }) => {
   const [state, setState] = useState(() => {
     const passedQuestionText = location.state ? location.state.question : ''
     const initialQuestion = zNode ? zNode.question.title : passedQuestionText
-    const initialLanguage = zNode ? zNode.question.language : ''
     const initialTags = zNode ? zNode.tags.map(tag => tag.label) : []
-    const initialTranslation = zNode ? zNode.question.translation : []
 
     return {
       nodeLoaded: false,
       initialQuestion: initialQuestion,
       isEditing: !!match.params.slug,
       question: initialQuestion,
-      language: initialLanguage,
       loadingSubmit: false,
-      translation: initialTranslation,
       slug: null,
       initialTags: initialTags,
       tags: initialTags,
@@ -60,19 +50,15 @@ const Edit = ({ location, match, zNode }) => {
 
   const submitQuestion = async () => {
     try {
-      const language = await detectLanguage(state.question)
-      const { targetLanguage, translatedText } = await getTranslatedText(state.question, language)
-      const translation = translationToKeyValuePairs(targetLanguage, translatedText)
-      setState(state => ({ ...state, language, loadingSubmit: true }))
+      setState(state => ({ ...state, loadingSubmit: true }))
       const { data } = await apollo.mutate({
         mutation: SUBMIT_QUESTION,
         variables: {
           title: state.question,
-          language: language,
-          translation: JSON.stringify(keyValuePairsToTranslations(translation)),
           tags: state.tags.map(tag => tag.id)
         }
       })
+      console.log(data)
       setState(state => ({
         ...state,
         slug: data.createQuestionAndTags.slug + '-' + data.createQuestionAndTags.node.id
@@ -89,23 +75,13 @@ const Edit = ({ location, match, zNode }) => {
 
   const editQuestion = async () => {
     try {
-      let language = state.language
-      let translation = state.translation
-      if (state.question !== state.initialQuestion) {
-        language = await detectLanguage(state.question)
-        const { targetLanguage, translatedText } = await getTranslatedText(state.question, language)
-        translation = translationToKeyValuePairs(targetLanguage, translatedText)
-      }
-      console.log(translation)
-      setState(state => ({ ...state, language, loadingSubmit: true }))
+      setState(state => ({ ...state, loadingSubmit: true }))
       const { data } = await apollo.mutate({
         mutation: EDIT_QUESTION,
         variables: {
           questionId: zNode.question.id,
           title: state.question,
           previousTitle: state.initialQuestion,
-          language: language,
-          translation: JSON.stringify(keyValuePairsToTranslations(translation)),
           tags: state.tags.map(tag => tag.id)
         }
       })

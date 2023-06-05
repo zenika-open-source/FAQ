@@ -1,4 +1,13 @@
-const { history, ctxUser, slugify, deleteCertifedFlagIfNoLongerApplicable } = require('../helpers')
+const {
+  history,
+  ctxUser,
+  slugify,
+  deleteCertifedFlagIfNoLongerApplicable,
+  detectLanguage,
+  getTranslatedText,
+  translationToKeyValuePairs,
+  keyValuePairsToTranslations
+} = require('../helpers')
 const { algolia, slack } = require('../integrations')
 
 // TMP_TAGS
@@ -10,9 +19,14 @@ module.exports = {
     zNode: (_, args, ctx, info) => ctx.prisma.query.zNode(args, info)
   },
   Mutation: {
-    createQuestionAndTags: async (_, { title, language, translation, tags }, ctx, info) => {
+    createQuestionAndTags: async (_, { title, tags }, ctx, info) => {
       const tagLabels = confTagLabels(ctx)
-      translation = JSON.parse(translation)
+
+      const language = await detectLanguage(title)
+      const { targetLanguage, translatedText } = await getTranslatedText(title, language)
+      const translation = keyValuePairsToTranslations(
+        translationToKeyValuePairs(targetLanguage, translatedText)
+      )
 
       const node = await ctx.prisma.mutation.createZNode(
         {
@@ -69,12 +83,7 @@ module.exports = {
 
       return ctx.prisma.query.question({ where: { id: node.question.id } }, info)
     },
-    updateQuestionAndTags: async (
-      _,
-      { id, title, previousTitle, language, translation, tags },
-      ctx,
-      info
-    ) => {
+    updateQuestionAndTags: async (_, { id, title, previousTitle, tags }, ctx, info) => {
       const tagLabels = confTagLabels(ctx)
       const node = (
         await ctx.prisma.query.question(
@@ -157,8 +166,11 @@ module.exports = {
       if (title !== node.question.title) {
         meta.title = title
       }
-
-      translation = JSON.parse(translation)
+      const language = await detectLanguage(title)
+      const { targetLanguage, translatedText } = await getTranslatedText(title, language)
+      const translation = keyValuePairsToTranslations(
+        translationToKeyValuePairs(targetLanguage, translatedText)
+      )
 
       await ctx.prisma.mutation.updateQuestion({
         where: { id },
