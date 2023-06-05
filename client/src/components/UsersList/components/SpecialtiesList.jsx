@@ -9,10 +9,15 @@ const SpecialtiesList = ({ specialties, services, onChange }) => {
 
   return (
     <>
-      <Button icon={'add'} link style={{ padding: 0 }} onClick={() => setOpened(op => !op)} />
+      <Button
+        icon={'add'}
+        link
+        style={{ padding: 0 }}
+        onClick={() => setOpened(opened => !opened)}
+      />
       <ul ref={ref} className="specialtiesList" style={{ display: opened ? 'flex' : 'none' }}>
         {services.map(service => {
-          const isSelected = !!specialties?.filter(spe => spe.id === service.id).length
+          const isSelected = specialties?.filter(({ id }) => id === service.id).length > 0
           return (
             <li
               key={service.id}

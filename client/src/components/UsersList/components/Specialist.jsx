@@ -1,12 +1,18 @@
-import { useApolloClient } from '@apollo/react-hooks'
+import { useMutation, useQuery } from '@apollo/react-hooks'
 import { useState } from 'react'
 import { alert, getIntl } from 'services'
-import { UPDATE_SPECIALTIES } from '../queries'
+import { GET_TAG_CATEGORIES, UPDATE_SPECIALTIES } from '../queries'
 import SpecialtiesList from './SpecialtiesList'
 
-const Specialist = ({ specialist, services }) => {
+const Specialist = ({ specialist, refetch }) => {
   const intl = getIntl(Specialist)
-  const apollo = useApolloClient()
+
+  const { data: servicesData } = useQuery(GET_TAG_CATEGORIES)
+
+  const services = servicesData
+    ? servicesData.configuration.tagCategories.find(category => category.name === 'services')
+        ?.labels
+    : null
 
   const [specialties, setSpecialties] = useState(specialist.specialties)
 
@@ -16,21 +22,20 @@ const Specialist = ({ specialist, services }) => {
     editSpecialties(data, action)
   }
 
-  const editSpecialties = (specialties, action) => {
-    apollo
-      .mutate({
-        mutation: UPDATE_SPECIALTIES,
-        variables: {
-          id: specialist.id,
-          specialties: specialties.map(({ __typename, name, ...rest }) => rest)
-        }
-      })
-      .then(() => {
-        alert.pushSuccess(intl(`alert.${action}_success`))
-      })
-      .catch(err => {
-        alert.pushDefaultError(err)
-      })
+  const [mutateFunction] = useMutation(UPDATE_SPECIALTIES)
+  const editSpecialties = async (specialties, action) => {
+    try {
+      const { id } = specialist
+      const variables = {
+        id,
+        specialties: specialties.map(({ __typename, name, ...rest }) => rest)
+      }
+      await mutateFunction({ variables })
+      refetch()
+      alert.pushSuccess(intl(`alert.${action}_success`))
+    } catch (error) {
+      alert.pushDefaultError(error)
+    }
   }
 
   return (
@@ -54,7 +59,7 @@ const Specialist = ({ specialist, services }) => {
                   className="material-icons"
                   onClick={() =>
                     onSpecialtyChange({
-                      data: specialties.filter(spe => spe.id !== specialty.id),
+                      data: specialties.filter(({ id }) => id !== specialty.id),
                       action: 'delete'
                     })
                   }
@@ -64,11 +69,13 @@ const Specialist = ({ specialist, services }) => {
               </div>
             ))}
         </div>
-        <SpecialtiesList
-          specialties={specialties}
-          services={services}
-          onChange={onSpecialtyChange}
-        />
+        {services && (
+          <SpecialtiesList
+            specialties={specialties}
+            services={services}
+            onChange={onSpecialtyChange}
+          />
+        )}
       </div>
     </li>
   )

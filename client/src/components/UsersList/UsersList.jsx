@@ -1,8 +1,8 @@
 import { useQuery } from '@apollo/react-hooks'
 import { Loading } from 'components'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { getIntl } from 'services'
-import { GET_TAG_CATEGORIES, GET_USERS } from './queries'
+import { GET_USERS } from './queries'
 
 import './UsersList.css'
 import Specialist from './components/Specialist'
@@ -10,41 +10,27 @@ import Specialist from './components/Specialist'
 const UsersList = () => {
   const intl = getIntl(UsersList)
 
-  const [users, setUsers] = useState(null)
-  const [specialists, setSpecialists] = useState(null)
-  const [services, setServices] = useState(null)
-  const [filteredUsers, setFilteredUsers] = useState([])
+  const [userSearchText, setUserSearchText] = useState('')
+  const [userSearchResults, setUserSearchResults] = useState([])
 
-  useQuery(GET_TAG_CATEGORIES, {
-    onCompleted: data =>
-      setServices(
-        data.configuration.tagCategories.find(category => category.name === 'services').labels
-      )
-  })
+  const { data: usersData, loading, refetch } = useQuery(GET_USERS)
 
-  const { loading } = useQuery(GET_USERS, {
-    onCompleted: data => {
-      setUsers(data.users)
-      setSpecialists(data.users.filter(user => user.specialties.length > 0))
-    }
-  })
+  const users = usersData ? usersData.users : []
+  const specialists = usersData ? usersData.users.filter(user => user.specialties.length > 0) : []
 
+  let matches = []
   const searchUsers = text => {
-    let matches = []
+    setUserSearchText(text)
     if (text.length > 0) {
       matches = users?.filter(user => {
         const regex = new RegExp(`^${text}`, `gi`)
         return user.name.match(regex)
       })
-      setFilteredUsers(matches?.slice(0, 5))
+      setUserSearchResults(matches?.slice(0, 5))
     } else {
-      setFilteredUsers([])
+      setUserSearchResults([])
     }
   }
-
-  useEffect(() => {
-    setSpecialists(specialists)
-  }, [specialists])
 
   if (loading) return <Loading />
 
@@ -56,13 +42,14 @@ const UsersList = () => {
         name="usersSearch"
         id="usersSearch"
         placeholder={intl('search')}
+        value={userSearchText}
         onChange={e => searchUsers(e.target.value)}
       />
-      {filteredUsers.length > 0 && (
+      {userSearchResults.length > 0 && (
         <div className="resultsContainer">
           <ul className="usersList">
-            {filteredUsers.map(user => (
-              <Specialist services={services} specialist={user} key={user.id} />
+            {userSearchResults.map(user => (
+              <Specialist specialist={user} key={user.id} refetch={refetch} />
             ))}
           </ul>
         </div>
@@ -70,7 +57,7 @@ const UsersList = () => {
       <ul className="usersList">
         {specialists &&
           specialists.map(specialist => (
-            <Specialist services={services} specialist={specialist} key={specialist.id} />
+            <Specialist specialist={specialist} key={specialist.id} refetch={refetch} />
           ))}
       </ul>
     </section>
