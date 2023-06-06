@@ -18,18 +18,14 @@ const UsersList = () => {
   const users = usersData ? usersData.users : []
   const specialists = usersData ? usersData.users.filter(user => user.specialties.length > 0) : []
 
-  let matches = []
   const searchUsers = text => {
+    let matches = []
     setUserSearchText(text)
-    if (text.length > 0) {
-      matches = users?.filter(user => {
-        const regex = new RegExp(`^${text}`, `gi`)
-        return user.name.match(regex)
-      })
-      setUserSearchResults(matches?.slice(0, 5))
-    } else {
-      setUserSearchResults([])
+    if (text.length > 0 && users) {
+      const regex = new RegExp(`^${text}`, `gi`)
+      matches = users.filter(user => user.name.match(regex)).slice(0, 5)
     }
+    setUserSearchResults(matches)
   }
 
   if (loading) return <Loading />
@@ -49,7 +45,7 @@ const UsersList = () => {
         <div className="resultsContainer">
           <ul className="usersList">
             {userSearchResults.map(user => (
-              <Specialist specialist={user} key={user.id} refetch={refetch} />
+              <Specialist specialist={user} key={user.id} onUpdateSpecialty={refetch} />
             ))}
           </ul>
         </div>
@@ -57,7 +53,7 @@ const UsersList = () => {
       <ul className="usersList">
         {specialists &&
           specialists.map(specialist => (
-            <Specialist specialist={specialist} key={specialist.id} refetch={refetch} />
+            <Specialist specialist={specialist} key={specialist.id} onUpdateSpecialty={refetch} />
           ))}
       </ul>
     </section>

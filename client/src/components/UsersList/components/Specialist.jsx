@@ -4,7 +4,7 @@ import { alert, getIntl } from 'services'
 import { GET_TAG_CATEGORIES, UPDATE_SPECIALTIES } from '../queries'
 import SpecialtiesList from './SpecialtiesList'
 
-const Specialist = ({ specialist, refetch }) => {
+const Specialist = ({ specialist, onUpdateSpecialty }) => {
   const intl = getIntl(Specialist)
 
   const { data: servicesData } = useQuery(GET_TAG_CATEGORIES)
@@ -18,8 +18,8 @@ const Specialist = ({ specialist, refetch }) => {
 
   const onSpecialtyChange = params => {
     const { action, data } = params
-    setSpecialties(data)
     editSpecialties(data, action)
+    setSpecialties(data)
   }
 
   const [mutateFunction] = useMutation(UPDATE_SPECIALTIES)
@@ -31,7 +31,7 @@ const Specialist = ({ specialist, refetch }) => {
         specialties: specialties.map(({ __typename, name, ...rest }) => rest)
       }
       await mutateFunction({ variables })
-      refetch()
+      await onUpdateSpecialty()
       alert.pushSuccess(intl(`alert.${action}_success`))
     } catch (error) {
       alert.pushDefaultError(error)

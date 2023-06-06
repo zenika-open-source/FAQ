@@ -72,11 +72,13 @@ module.exports = {
         },
         info
       ),
-    updateSpecialties: (_, { id, specialties }, ctx) => {
-      ctx.prisma.mutation.updateUser({
-        where: { id },
-        data: { specialties: { set: specialties } }
-      })
-    }
+    updateSpecialties: (_, { id, specialties }, ctx, info) =>
+      ctx.prisma.mutation.updateUser(
+        {
+          where: { id },
+          data: { specialties: { set: specialties } }
+        },
+        info
+      )
   }
 }

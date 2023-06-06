@@ -3,6 +3,7 @@ import gql from 'graphql-tag'
 export const GET_TAG_CATEGORIES = gql`
   query {
     configuration {
+      id
       tagCategories {
         id
         name
