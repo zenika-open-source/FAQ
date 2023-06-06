@@ -21,8 +21,8 @@ const Read = ({ history, match, zNode, loading }) => {
   const [loaded, setLoaded] = useState(false)
   const [incremented, setIncremented] = useState(false)
 
-  const [questionTitle, setQuestionTitle] = useState(zNode.question.title)
-  const [answerContent, setAnswerContent] = useState(zNode.answer.content)
+  const [questionTitle, setQuestionTitle] = useState('')
+  const [answerContent, setAnswerContent] = useState('')
 
   const [createFlag] = useMutation(CREATE_FLAG)
   const [removeFlag] = useMutation(REMOVE_FLAG)
@@ -35,7 +35,13 @@ const Read = ({ history, match, zNode, loading }) => {
   }, [loaded, incremented, incrementViewsCounter, zNode])
 
   useEffect(() => {
-    if (!loaded && zNode) setLoaded(true)
+    if (!loaded && zNode) {
+      setLoaded(true)
+      setQuestionTitle(zNode.question.title)
+      {
+        zNode.answer && setAnswerContent(zNode.answer.content)
+      }
+    }
   }, [zNode, loaded])
 
   const intl = getIntl(Read)
@@ -84,7 +90,7 @@ const Read = ({ history, match, zNode, loading }) => {
           <Flags node={zNode} withLabels={true} />
           <Views value={zNode.question.views} />
           <Share node={zNode} />
-          {zNode.question.language && zNode.answer.language && (
+          {zNode.question.language && (
             <Translate
               node={zNode}
               setQuestionTitle={setQuestionTitle}

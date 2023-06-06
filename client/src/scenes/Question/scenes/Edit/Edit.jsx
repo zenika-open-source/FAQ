@@ -58,7 +58,6 @@ const Edit = ({ location, match, zNode }) => {
           tags: state.tags.map(tag => tag.id)
         }
       })
-      console.log(data)
       setState(state => ({
         ...state,
         slug: data.createQuestionAndTags.slug + '-' + data.createQuestionAndTags.node.id

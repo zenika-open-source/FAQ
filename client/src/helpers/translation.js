@@ -7,9 +7,13 @@ export const handleTranslation = (
 ) => {
   if (originalLanguage === targetLanguage) {
     setQuestion(node.question.title)
-    setAnswer(node.answer.content)
+    {
+      node.answer && setAnswer(node.answer.content)
+    }
   } else {
     setQuestion(node.question.translation.text)
-    setAnswer(node.answer.translation.text)
+    {
+      node.answer && setAnswer(node.answer.translation.text)
+    }
   }
 }
