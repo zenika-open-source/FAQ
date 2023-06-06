@@ -15,11 +15,14 @@ import Card, { CardTitle, CardText } from 'components/Card'
 import Dropdown, { DropdownItem } from 'components/Dropdown'
 
 import { ActionMenu } from '../../components'
-import { FlagsDropdown, History, Meta, Share, Sources, Views } from './components'
+import { FlagsDropdown, History, Meta, Share, Sources, Translate, Views } from './components'
 
 const Read = ({ history, match, zNode, loading }) => {
   const [loaded, setLoaded] = useState(false)
   const [incremented, setIncremented] = useState(false)
+
+  const [questionTitle, setQuestionTitle] = useState(zNode.question.title)
+  const [answerContent, setAnswerContent] = useState(zNode.answer.content)
 
   const [createFlag] = useMutation(CREATE_FLAG)
   const [removeFlag] = useMutation(REMOVE_FLAG)
@@ -75,18 +78,25 @@ const Read = ({ history, match, zNode, loading }) => {
       <Card>
         <CardTitle style={{ padding: '1.2rem' }}>
           <div className="grow">
-            <h1>{markdown.title(zNode.question.title)}</h1>
+            <h1>{markdown.title(questionTitle)}</h1>
             {zNode.tags.length > 0 && <Tags tags={zNode.tags} />}
           </div>
           <Flags node={zNode} withLabels={true} />
           <Views value={zNode.question.views} />
           <Share node={zNode} />
+          {zNode.question.language && zNode.answer.language && (
+            <Translate
+              node={zNode}
+              setQuestionTitle={setQuestionTitle}
+              setAnswerContent={setAnswerContent}
+            />
+          )}
         </CardTitle>
         <CardText>
           {zNode.answer ? (
             <>
               <div style={{ padding: '0.5rem', marginBottom: '0.5rem' }}>
-                {markdown.html(zNode.answer.content)}
+                {markdown.html(answerContent)}
               </div>
               <Sources sources={zNode.answer.sources} />
             </>

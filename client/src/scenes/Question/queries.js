@@ -23,6 +23,7 @@ export const zNodeFragment = `
   answer {
     id
     content
+    language
     translation {
       language
       text
