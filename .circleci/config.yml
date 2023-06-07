@@ -27,7 +27,6 @@ executors:
           AUTH0_DOMAIN: auth0Domain
           AUTH0_CLIENT_ID: auth0ClientId
           ALGOLIA_APP_ID: M0NJ0PGAH1
-          CLOUD_TRANSLATION_API_KEY: AIzaSyCwpSfzG-y-e2_AhLKXQ_aQKKYwi_H1KaU
           DISABLE_AUTH: true
           VITE_DISABLE_AUTH: true
           VITE_PRISMA_SERVICE: default/default
