@@ -14,7 +14,6 @@
     "apollo-link-http": "^1.5.16",
     "auth0-js": "^9.12.1",
     "babel-runtime": "^6.26.0",
-    "ci-info": "^3.8.0",
     "classnames": "^2.2.5",
     "copy-to-clipboard": "^3.2.0",
     "date-fns": "^1.29.0",
@@ -45,8 +44,7 @@
     "lint:fix": "npm run lint -- --fix",
     "prettier": "prettier \"src/**/*.{jsx,css,js}\"",
     "prettier:write": "npm run prettier -- --write",
-    "prettier:check": "npm run prettier -- --check",
-    "stats": "NODE_ENV=production webpack --config node_modules/vite/config/webpack.config.prod.js --json > stats.json"
+    "prettier:check": "npm run prettier -- --check"
   },
   "husky": {
     "hooks": {
@@ -54,7 +52,7 @@
     }
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^3.1.0",
+    "@vitejs/plugin-react": "^4.0.0",
     "dotenv": "^5.0.0",
     "dotenv-cli": "^1.4.0",
     "eslint-config-prettier": "^4.3.0",
