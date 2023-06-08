@@ -21,7 +21,7 @@ const resync = async (name, stage) => {
 
   const tagsCategories = await Promise.all(
     categories.map(([name, tags], order) =>
-      prisma.mutation.createTagCategory(
+      prisma.mutation.createSubjectCategory(
         {
           data: {
             name,
@@ -50,7 +50,7 @@ const resync = async (name, stage) => {
     )
   )
 
-  const tagLabels = tagsCategories.reduce((acc, cat) => acc.concat(cat.labels), [])
+  const subjects = tagsCategories.reduce((acc, cat) => acc.concat(cat.labels), [])
 
   const tags = await prisma.query.tags(
     null,
@@ -64,8 +64,8 @@ const resync = async (name, stage) => {
 
   return Promise.all(
     tags.map(tag => {
-      const tagLabel = tagLabels.find(label => label.name === tag.label)
-      if (!tagLabel) {
+      const subject = subjects.find(label => label.name === tag.label)
+      if (!subject) {
         console.log(`Unknown tag "${tag.label}" on "${tag.id}"`)
         return
       }
@@ -73,7 +73,7 @@ const resync = async (name, stage) => {
         where: { id: tag.id },
         data: {
           // label: null, // I'll manually remove label. This is a security in case something goes wrong
-          tagLabel: { connect: { id: tagLabel.id } }
+          subject: { connect: { id: subject.id } }
         }
       })
     })

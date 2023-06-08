@@ -16,7 +16,7 @@ const diffTags = (ctx, oldCats, newCats, confId) => {
   promises.push(
     Promise.all(
       catsToCreate.map(cat =>
-        ctx.prisma.mutation.createTagCategory({
+        ctx.prisma.mutation.createSubjectCategory({
           data: {
             name: cat.name,
             order: cat.order,
@@ -43,7 +43,7 @@ const diffTags = (ctx, oldCats, newCats, confId) => {
   promises.push(
     Promise.all(
       catsToUpdate.map(cat =>
-        ctx.prisma.mutation.updateTagCategory({
+        ctx.prisma.mutation.updateSubjectCategory({
           where: {
             id: cat.id
           },
@@ -65,7 +65,7 @@ const diffTags = (ctx, oldCats, newCats, confId) => {
   promises.push(
     Promise.all(
       catsToDelete.map(cat =>
-        ctx.prisma.mutation.deleteTagCategory({
+        ctx.prisma.mutation.deleteSubjectCategory({
           where: { id: cat.id }
         })
       )
@@ -83,7 +83,7 @@ const diffTags = (ctx, oldCats, newCats, confId) => {
   promises.push(
     Promise.all(
       labelsToCreate.map(label =>
-        ctx.prisma.mutation.createTagLabel({
+        ctx.prisma.mutation.createSubject({
           data: {
             name: label.name,
             order: label.order,
@@ -123,7 +123,7 @@ const diffTags = (ctx, oldCats, newCats, confId) => {
   promises.push(
     Promise.all(
       labelsToUpdate.map(label =>
-        ctx.prisma.mutation.updateTagLabel({
+        ctx.prisma.mutation.updateSubject({
           where: { id: label.id },
           data: { name: label.name, order: label.order }
         })
@@ -141,7 +141,7 @@ const diffTags = (ctx, oldCats, newCats, confId) => {
   algoliaChanges.deleted.push(...labelsToDelete.map(l => l.name))
   promises.push(
     Promise.all(
-      labelsToDelete.map(label => ctx.prisma.mutation.deleteTagLabel({ where: { id: label.id } }))
+      labelsToDelete.map(label => ctx.prisma.mutation.deleteSubject({ where: { id: label.id } }))
     )
   )
 

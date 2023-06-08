@@ -8,8 +8,13 @@ module.exports = {
       ctx.prisma.query.configuration({ where: { name: 'default' } }, info)
   },
   Mutation: {
-    updateConfiguration: async (_, { authorizedDomains, tagCategories, ...args }, ctx, info) => {
-      const oldTagCategories = await ctx.prisma.query.tagCategories(
+    updateConfiguration: async (
+      _,
+      { authorizedDomains, subjectCategories, ...args },
+      ctx,
+      info
+    ) => {
+      const oldSubjectCategories = await ctx.prisma.query.subjectCategories(
         null,
         `
         {
@@ -27,8 +32,8 @@ module.exports = {
 
       await diffTags(
         ctx,
-        oldTagCategories,
-        JSON.parse(tagCategories),
+        oldSubjectCategories,
+        JSON.parse(subjectCategories),
         ctx.prisma._meta.configuration.id
       )
 

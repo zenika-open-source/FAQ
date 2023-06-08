@@ -4,7 +4,7 @@ export const GET_TAG_CATEGORIES = gql`
   query {
     configuration {
       id
-      tagCategories {
+      subjectCategories {
         id
         name
         labels {

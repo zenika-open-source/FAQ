@@ -11,7 +11,7 @@ const Tags = ({ state, onTagsChange }) => {
 
   return (
     <Tab label={intl('tab')}>
-      <TagsEditor categories={state.tagCategories} onChange={onTagsChange} />
+      <TagsEditor categories={state.subjectCategories} onChange={onTagsChange} />
     </Tab>
   )
 }

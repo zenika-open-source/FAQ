@@ -18,7 +18,7 @@ const UsersList = () => {
   const users = usersData ? usersData.users : []
   const specialists = usersData ? usersData.users.filter(user => user.specialties.length > 0) : []
   const services = servicesData
-    ? servicesData.configuration.tagCategories.find(category => category.name === 'services')
+    ? servicesData.configuration.subjectCategories.find(category => category.name === 'services')
         ?.labels
     : null
 

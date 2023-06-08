@@ -18,7 +18,7 @@ export const reducer = (state, action) => {
     case 'change_slack_commandkey':
       return { ...state, slackCommandKey: action.data }
     case 'change_tags':
-      return { ...state, tagCategories: action.data }
+      return { ...state, subjectCategories: action.data }
     default:
       return {
         ...state,

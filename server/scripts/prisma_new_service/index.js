@@ -62,7 +62,7 @@ const main = async () => {
             algoliaSynonyms: "{\"objectId\": \"testSynonyms\", \"type\": \"synonym\", \"synonyms\": [\"hello\", \"hi\"]}"
             mailgunDomain: "${MAILGUN_DOMAIN || ''}"
             mailgunApiKey: "${MAILGUN_API_KEY || ''}"
-            tagCategories: {
+            subjectCategories: {
               create: [
                 {
                   name: "services",

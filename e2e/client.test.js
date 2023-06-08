@@ -56,7 +56,7 @@ const upsertConfig = /* GraphQL */ `mutation UpsertConfig{
       algoliaApiKey: "${process.env.ALGOLIA_API_KEY_ALL}"
       auth0Domain: "${process.env.AUTH0_DOMAIN}"
       auth0ClientId: "${process.env.AUTH0_CLIENT_ID}"
-      tagCategories: {
+      subjectCategories: {
         create: [
           {
             name: "services",
@@ -113,7 +113,7 @@ const upsertConfig = /* GraphQL */ `mutation UpsertConfig{
     mailgunDomain
     mailgunApiKey
     slackChannelHook
-    tagCategories {
+    subjectCategories {
       order
       name
       labels {
@@ -139,7 +139,7 @@ const upsertConfigMutation = async apiContext => {
 
 const tagsId = /* GraphQL */ `
   query GetAllTags {
-    tagLabels {
+    subjects {
       id
       name
     }
@@ -153,7 +153,7 @@ const tagsQuery = async apiContext => {
     }
   })
   const jsonRes = await res.json()
-  const results = await jsonRes.data.tagLabels
+  const results = await jsonRes.data.subjects
   const tag = results[0]
   const tagEdit = results[1]
   return { tag, tagEdit }
