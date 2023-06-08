@@ -195,7 +195,7 @@ jobs:
       - run:
           name: Deploy prisma
           working_directory: server/scripts/prisma_deploy_all/
-          command: node index.js <<#pipeline.parameters.prisma-deploy-force>>--force<</pipeline.parameters.prismaDeployForce>>
+          command: node index.js <<# pipeline.parameters.prisma-deploy-force >>--force<</ pipeline.parameters.prismaDeployForce >>
   app-deploy:
     parameters:
       clever-app-id:
