@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/react-hooks'
-import { Loading } from '@components'
+import { Loading } from 'components'
 import { useState } from 'react'
-import { getIntl } from '@services'
+import { getIntl } from 'services'
 import { GET_TAG_CATEGORIES, GET_USERS } from './queries'
 
 import './UsersList.css'

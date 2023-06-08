@@ -1,8 +1,8 @@
-import { compose } from '@helpers'
+import { compose } from 'helpers'
 
-import { withLoading } from '@components'
+import { withLoading } from 'components'
 
-import { query } from '@services/apollo'
+import { query } from 'services/apollo'
 
 import { GET_CONFIGURATION } from './queries'
 

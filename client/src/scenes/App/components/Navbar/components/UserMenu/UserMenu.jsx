@@ -2,11 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
 
-import { getIntl } from '@services'
-import { useUser, useConfiguration } from '@contexts'
+import { getIntl } from 'services'
+import { useUser, useConfiguration } from 'contexts'
 
-import { Authenticated, Avatar } from '@components'
-import Dropdown, { DropdownItem, DropdownDivider } from '@components/Dropdown'
+import { Authenticated, Avatar } from 'components'
+import Dropdown, { DropdownItem, DropdownDivider } from 'components/Dropdown'
 
 import GithubIcon from '../GithubIcon'
 

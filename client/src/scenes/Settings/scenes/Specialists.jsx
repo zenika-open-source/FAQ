@@ -1,6 +1,6 @@
-import { Tab, UsersList } from '@components'
+import { Tab, UsersList } from 'components'
 import React from 'react'
-import { getIntl } from '@services'
+import { getIntl } from 'services'
 
 const Specialists = ({ state, dispatch, loading }) => {
   const intl = getIntl(Specialists)

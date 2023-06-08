@@ -3,9 +3,9 @@ import cn from 'classnames'
 import sortBy from 'lodash/sortBy'
 import uuid from 'uuid/v4'
 
-import { useClickOutside } from '@helpers'
-import { Input, Icon, Button } from '@components'
-import Card, { CardTitle, CardText, CardActions } from '@components/Card'
+import { useClickOutside } from 'helpers'
+import { Input, Icon, Button } from 'components'
+import Card, { CardTitle, CardText, CardActions } from 'components/Card'
 
 import './TagsEditor.scss'
 

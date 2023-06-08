@@ -1,9 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { getIntl } from '@services'
-import { useConfiguration } from '@contexts'
-import { Authenticated, Button, Icon } from '@components'
+import { getIntl } from 'services'
+import { useConfiguration } from 'contexts'
+import { Authenticated, Button, Icon } from 'components'
 
 import { GithubIcon, UserMenu } from './components'
 

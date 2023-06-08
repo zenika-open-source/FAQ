@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import cn from 'classnames'
 import merge from 'lodash/merge'
 
-import { getIntl } from '@services'
+import { getIntl } from 'services'
 
-import { Button } from '@components'
+import { Button } from 'components'
 
 import PairInput from './PairInput'
 

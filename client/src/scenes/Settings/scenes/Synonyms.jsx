@@ -1,10 +1,10 @@
 import React from 'react'
 
-import { Tab, PairInputList } from '@components'
+import { Tab, PairInputList } from 'components'
 
-import { getIntl } from '@services'
+import { getIntl } from 'services'
 
-import { onListChangeActions } from '@helpers/onListChange'
+import { onListChangeActions } from 'helpers/onListChange'
 
 const Synonyms = ({ state, dispatch, loading }) => {
   const intl = getIntl(Synonyms)

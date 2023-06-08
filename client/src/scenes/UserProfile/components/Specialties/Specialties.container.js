@@ -1,6 +1,6 @@
-import { withError, withLoading } from '@components'
-import { compose } from '@helpers'
-import { query } from '@services/apollo'
+import { withError, withLoading } from 'components'
+import { compose } from 'helpers'
+import { query } from 'services/apollo'
 import { GET_SPECIALTIES } from './queries'
 
 import Specialties from './Specialties'

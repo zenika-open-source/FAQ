@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
 import { Link } from 'react-router-dom'
 
-import { getIntl } from '@services'
-import Button from '@components/Button'
+import { getIntl } from 'services'
+import Button from 'components/Button'
 
 import './ActionMenu.css'
 

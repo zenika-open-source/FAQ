@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import cn from 'classnames'
 
-import { getIntl } from '@services'
+import { getIntl } from 'services'
 import HistoryActions from './HistoryActions.container'
 
 import './History.css'

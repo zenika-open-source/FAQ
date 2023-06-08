@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 
-import { getIntl } from '@services'
-import { useAuth } from '@contexts'
+import { getIntl } from 'services'
+import { useAuth } from 'contexts'
 
-import { Loading } from '@components'
+import { Loading } from 'components'
 
 const Callback = ({ location }) => {
   const intl = getIntl(Callback)

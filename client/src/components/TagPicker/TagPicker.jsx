@@ -3,11 +3,11 @@ import cn from 'classnames'
 import PropTypes from 'prop-types'
 import sortBy from 'lodash/sortBy'
 
-import { useConfiguration } from '@contexts'
+import { useConfiguration } from 'contexts'
 
-import { useClickOutside } from '@helpers'
+import { useClickOutside } from 'helpers'
 
-import { Button } from '@components'
+import { Button } from 'components'
 
 import './TagPicker.css'
 

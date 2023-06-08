@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { DefaultPagination, Loading } from '@components'
+import { DefaultPagination, Loading } from 'components'
 
 import HistoryAction from './HistoryAction'
 

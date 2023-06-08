@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { useMutation } from '@apollo/react-hooks'
 
-import { useUser } from '@contexts'
-import { alert, getIntl } from '@services'
+import { useUser } from 'contexts'
+import { alert, getIntl } from 'services'
 
-import { Avatar, Button, Card, Modal, Loading, Input } from '@components'
+import { Avatar, Button, Card, Modal, Loading, Input } from 'components'
 
 import Logs from './components/Logs'
 

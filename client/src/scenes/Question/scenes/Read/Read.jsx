@@ -6,13 +6,13 @@ import { Link, Redirect } from 'react-router-dom'
 
 import { CREATE_FLAG, INCREMENT_VIEWS_COUNTER, REMOVE_FLAG } from './queries'
 
-import { markdown, getIntl } from '@services'
+import { markdown, getIntl } from 'services'
 
-import NotFound from '@scenes/NotFound'
+import NotFound from 'scenes/NotFound'
 
-import { Loading, Button, Flags, Tags } from '@components'
-import Card, { CardTitle, CardText } from '@components/Card'
-import Dropdown, { DropdownItem } from '@components/Dropdown'
+import { Loading, Button, Flags, Tags } from 'components'
+import Card, { CardTitle, CardText } from 'components/Card'
+import Dropdown, { DropdownItem } from 'components/Dropdown'
 
 import { ActionMenu } from '../../components'
 import { FlagsDropdown, History, Meta, Share, Sources, Views } from './components'

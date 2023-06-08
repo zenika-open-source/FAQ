@@ -2,7 +2,7 @@ import React, { createContext, useReducer, useEffect, useMemo } from 'react'
 import { withRouter } from 'react-router'
 import { useApolloClient } from '@apollo/react-hooks'
 
-import { alert, auth } from '@services'
+import { alert, auth } from 'services'
 
 import { AUTHENTICATE_MUTATION } from './queries'
 

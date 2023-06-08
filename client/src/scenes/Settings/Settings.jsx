@@ -1,12 +1,12 @@
 import React, { useState, useReducer, useEffect } from 'react'
 import { useMutation } from '@apollo/react-hooks'
 
-import { alert, getIntl } from '@services'
+import { alert, getIntl } from 'services'
 
-import { useConfiguration } from '@contexts'
+import { useConfiguration } from 'contexts'
 
-import { Tabs, Button } from '@components'
-import Card, { CardTitle, CardText, CardActions } from '@components/Card'
+import { Tabs, Button } from 'components'
+import Card, { CardTitle, CardText, CardActions } from 'components/Card'
 
 import { reducer, serializeTags, synonymsToList, listToSynonyms } from './helpers'
 

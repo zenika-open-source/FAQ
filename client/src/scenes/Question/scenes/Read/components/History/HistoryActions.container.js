@@ -1,8 +1,8 @@
 import { withRouter } from 'react-router'
-import { compose, unserialize } from '@helpers'
-import { routing } from '@services'
-import { query } from '@services/apollo'
-import { withError, withPagination } from '@components'
+import { compose, unserialize } from 'helpers'
+import { routing } from 'services'
+import { query } from 'services/apollo'
+import { withError, withPagination } from 'components'
 
 import { LOAD_HISTORY } from './queries'
 

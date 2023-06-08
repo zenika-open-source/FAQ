@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types'
 
-import { getIntl } from '@services'
+import { getIntl } from 'services'
 
-import { Flag, flagMeta } from '@components/Flags'
-import Dropdown, { DropdownItem } from '@components/Dropdown'
-import Button from '@components/Button'
+import { Flag, flagMeta } from 'components/Flags'
+import Dropdown, { DropdownItem } from 'components/Dropdown'
+import Button from 'components/Button'
 
 import './FlagsDropdown.css'
-import { answerCanBeCertified } from '@helpers/answerCanBeCertified'
-import { useUser } from '@contexts'
+import { answerCanBeCertified } from 'helpers/answerCanBeCertified'
+import { useUser } from 'contexts'
 
 const FlagsDropdown = ({ zNode, onSelect, onRemove }) => {
   const intl = getIntl(FlagsDropdown)

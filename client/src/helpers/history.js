@@ -4,7 +4,7 @@ import differenceInMilliseconds from 'date-fns/difference_in_milliseconds'
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now'
 import format from 'date-fns/format'
 
-import { markdown } from '@services'
+import { markdown } from 'services'
 
 const join = array => {
   array = compact(array)

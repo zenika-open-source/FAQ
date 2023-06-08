@@ -1,7 +1,7 @@
-import Card, { CardText } from '@components/Card'
+import Card, { CardText } from 'components/Card'
 import PropTypes from 'prop-types'
-import { getIntl } from '@services'
-import { Loading } from '@components'
+import { getIntl } from 'services'
+import { Loading } from 'components'
 
 import './Specialties.css'
 

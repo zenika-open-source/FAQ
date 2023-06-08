@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Input, Button } from '@components'
+import { Input, Button } from 'components'
 
 import './PairInput.css'
 

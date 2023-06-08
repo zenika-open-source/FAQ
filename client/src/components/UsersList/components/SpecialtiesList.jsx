@@ -1,6 +1,6 @@
 import cn from 'classnames'
-import { Button } from '@components'
-import { useClickOutside } from '@helpers'
+import { Button } from 'components'
+import { useClickOutside } from 'helpers'
 import { useState } from 'react'
 
 const SpecialtiesList = ({ specialties, services, onChange }) => {

@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
-import { getIntl } from '@services'
-import Button from '@components/Button'
+import { getIntl } from 'services'
+import Button from 'components/Button'
 
 const NoResults = ({ prefill }) => {
   const intl = getIntl(NoResults)

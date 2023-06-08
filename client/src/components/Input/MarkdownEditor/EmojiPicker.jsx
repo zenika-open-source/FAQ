@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react'
 import { Picker } from 'emoji-mart'
 
-import { useClickOutside } from '@helpers'
+import { useClickOutside } from 'helpers'
 
 import 'emoji-mart/css/emoji-mart.css'
 import './EmojiPicker.scss'

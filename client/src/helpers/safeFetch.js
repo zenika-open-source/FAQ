@@ -1,4 +1,4 @@
-import routing from '@services/routing'
+import routing from 'services/routing'
 
 export default async function safeFetch(path) {
   const response = await fetch(import.meta.env.VITE_REST_ENDPOINT + '/' + path, {

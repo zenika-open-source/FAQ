@@ -4,11 +4,11 @@ import { BrowserRouter } from 'react-router-dom'
 import { ApolloProvider } from '@apollo/react-hooks'
 import { persistCache } from 'apollo-cache-persist'
 
-import { apollo, apolloCache } from '@services'
+import { apollo, apolloCache } from 'services'
 
 import 'normalize.css'
 
-import App from '@scenes/App'
+import App from 'scenes/App'
 
 persistCache({
   cache: apolloCache,

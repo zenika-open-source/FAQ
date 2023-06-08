@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import { getIntl } from '@services'
+import { getIntl } from 'services'
 
-import Button from '@components/Button'
+import Button from 'components/Button'
 
 import Card from './Card'
 import CardActions from './CardActions'

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react'
 
-import { safeFetch } from '@helpers'
+import { safeFetch } from 'helpers'
 
 export const ConfigurationContext = React.createContext()
 

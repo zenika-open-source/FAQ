@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { getIntl } from '@services'
-import TipsComponent from '@components/Tips'
+import { getIntl } from 'services'
+import TipsComponent from 'components/Tips'
 
 const Tips = props => {
   const intl = getIntl(Tips)

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { getIntl } from '@services'
+import { getIntl } from 'services'
 
 import './Loading.css'
 

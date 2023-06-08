@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { formatHistoryAction } from '@helpers'
+import { formatHistoryAction } from 'helpers'
 
-import Avatar from '@components/Avatar'
+import Avatar from 'components/Avatar'
 
 import './History.css'
 
