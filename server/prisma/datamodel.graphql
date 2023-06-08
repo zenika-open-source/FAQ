@@ -68,7 +68,7 @@ type Flag {
 type Tag {
   id: ID! @unique @id
 
-  label: Subject @relation(name: "Tags", link: TABLE)
+  label: Subject @relation(name: "TagSubject", link: TABLE)
 
   node: ZNode! @relation(name: "NodeTags")
   user: User! @relation(name: "UserTags", link: TABLE)
@@ -81,11 +81,11 @@ type Subject {
   id: ID! @unique @id
 
   name: String!
-  tags: [Tag!]! @relation(name: "Tags", onDelete: CASCADE)
+  tags: [Tag!]! @relation(name: "TagSubject", onDelete: CASCADE)
   specialists: [User!]! @relation(name: "UserSpecialties", link: TABLE)
 
   order: Int!
-  category: TagCategory! @relation(name: "SubjectsCategory", link: TABLE)
+  category: TagCategory! @relation(name: "SubjectCategory", link: TABLE)
 
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
@@ -95,7 +95,7 @@ type TagCategory {
   id: ID! @unique @id
 
   name: String!
-  labels: [Subject!]! @relation(name: "SubjectsCategory", onDelete: CASCADE)
+  labels: [Subject!]! @relation(name: "SubjectCategory", onDelete: CASCADE)
 
   order: Int!
   configuration: Configuration! @relation(name: "ConfigurationTags", link: TABLE)
