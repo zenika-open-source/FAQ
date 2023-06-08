@@ -18,6 +18,16 @@ const deleteCertifedFlagIfNoLongerApplicable = async (history, node, tags, ctx) 
   }
 }
 
+const addCertifiedFlagWhenSpecialist = async (history, user, node, nodeId, ctx) => {
+  const tags = node.tags.map(tag => tag.label.id)
+  const specialties = user.specialties
+  const isUserSpecialist = Boolean(specialties.find(specialty => tags.includes(specialty.id)))
+
+  if (isUserSpecialist) {
+    await createFlagAndUpdateHistoryAndAlgolia(history, type, ctx, nodeId, user.id)
+  }
+}
+
 const refreshCertifiedFlag = async (history, answer, user, ctx) => {
   const certifiedFlag = answer.node.flags.find(flag => flag.type === type)
   const tags = answer.node.tags.map(tag => tag.label.id)
@@ -32,6 +42,7 @@ const refreshCertifiedFlag = async (history, answer, user, ctx) => {
 }
 
 module.exports = {
+  addCertifiedFlagWhenSpecialist,
   deleteCertifedFlagIfNoLongerApplicable,
   refreshCertifiedFlag
 }

@@ -59,6 +59,7 @@ const main = async () => {
             auth0ClientId: "${AUTH0_CLIENT_ID}"
             algoliaAppId: "${ALGOLIA_APP_ID || ''}"
             algoliaApiKey: "${ALGOLIA_API_KEY_ALL || ''}"
+            algoliaSynonyms: "{\"objectId\": \"testSynonyms\", \"type\": \"synonym\", \"synonyms\": [\"hello\", \"hi\"]}"
             mailgunDomain: "${MAILGUN_DOMAIN || ''}"
             mailgunApiKey: "${MAILGUN_API_KEY || ''}"
             tagCategories: {

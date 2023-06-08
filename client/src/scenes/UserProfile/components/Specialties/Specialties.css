@@ -1,3 +1,11 @@
+.specialtiesList {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
 .specialty {
   display: flex;
   align-items: center;
@@ -8,7 +16,7 @@
   background-color: transparent;
   color: var(--primary-color);
   border: 1px solid var(--primary-color);
-  border-radius: 4px;
+  border-radius: 3px;
 }
 
 .specialty .material-icons {

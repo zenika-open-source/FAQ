@@ -1,0 +1,197 @@
+.usersSearch {
+  width: 100%;
+  padding: 0.2rem 0.5rem;
+  margin: 1rem 0 0.5rem;
+  border-radius: 3px;
+  border: 1px solid var(--secondary-color);
+  outline: none;
+}
+
+.usersSearch:focus {
+  outline: 1px solid var(--primary-color);
+  border: 1px solid var(--primary-color);
+}
+
+.resultsContainer {
+  position: relative;
+  width: 100%;
+  z-index: 2;
+}
+
+.resultsContainer .usersList {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 1rem 0;
+  background: var(--primary-color-font);
+  border: 1px solid var(--secondary-color);
+  border-radius: 3px;
+  list-style-type: none;
+}
+
+.usersList {
+  display: flex;
+  flex-direction: column;
+  padding-left: 0;
+  gap: 1rem;
+  list-style-type: none;
+}
+
+.usersList .emptyUsers {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.usersList .userElement {
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.userElement .userLeft {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.userLeft .userIcon i {
+  font-size: 2rem;
+}
+
+.userLeft .userInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.userInfo .userName {
+  font-weight: bold;
+}
+
+.userInfo .userEmail {
+  font-size: var(--small-font-size);
+}
+
+.userRight {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.userRight .userSpecialties {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.userSpecialties .userSpecialty {
+  background-color: var(--primary-color-light);
+  color: var(--primary-color-font);
+  line-height: 0.8rem;
+  padding-bottom: 0.2rem;
+  padding-left: 0.2rem;
+  padding-right: 0.2rem;
+  border-radius: 3px;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  margin: 0.1rem 0;
+  margin-right: 0.4rem;
+}
+
+.userSpecialty span {
+  font-variant: small-caps;
+  padding-bottom: 1px;
+}
+
+.userSpecialty .material-icons {
+  font-size: 0.8rem;
+  margin-left: 0.2rem;
+  margin-bottom: -0.2rem;
+  cursor: pointer;
+}
+
+.userSpecialty .material-icons:hover {
+  font-weight: bolder;
+}
+
+.userRight .specialtiesList {
+  min-width: 100px;
+  position: absolute;
+  top: -10px;
+  right: -110px;
+  flex-direction: column;
+  border: 1px solid var(--secondary-color-dark);
+  background-color: white;
+  border-radius: 3px;
+  padding: 0.2rem;
+  list-style-type: none;
+  z-index: 9;
+}
+
+.userRight .specialtiesList::after,
+.userRight .specialtiesList::before {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+}
+
+.userRight .specialtiesList::after {
+  top: 11px;
+  border-color: transparent white transparent transparent;
+  border-width: 10px;
+  left: -19px;
+}
+
+.userRight .specialtiesList::before {
+  top: 10.75px;
+  border-color: transparent var(--secondary-color-dark) transparent transparent;
+  border-width: 10.25px;
+  left: -20px;
+}
+
+.specialtiesList .specialtyEl {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.1rem 0.3rem 0.3rem 0.3rem;
+  cursor: pointer;
+}
+
+.specialtiesList .specialtyEl.selected::before {
+  content: '✓';
+  margin-right: 0.2rem;
+}
+
+.specialtiesList .specialtyEl.selected:hover::before {
+  content: '✕';
+  margin-right: 0.2rem;
+}
+
+.specialtiesList .specialtyEl:hover {
+  background-color: var(--secondary-color);
+  color: var(--secondary-color-font-dark);
+}
+
+.specialtyEl .specialtyButton {
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-variant: small-caps;
+}

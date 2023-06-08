@@ -326,6 +326,24 @@ const createQuestionWithFlag = async (prisma, tagId, user) => {
   await algolia.addNode({ prisma }, zNode.id)
 }
 
+let deleteCommands = [
+  'deleteManyAnswers',
+  'deleteManyQuestions',
+  'deleteManyHistoryActions',
+  'deleteManyFlags',
+  'deleteManyTags',
+  'deleteManyZNodes'
+]
+
+const emptyDb = async (apiContext, commands) => {
+  for (const command of commands) {
+    await apiContext.post('/', {
+      data: {
+        query: deleteAll(command)
+      }
+    })
+  }
+}
 test.beforeAll(async ({ playwright }) => {
   fetchPrismaToken()
   apiContext = await playwright.request.newContext({
@@ -348,21 +366,7 @@ test.beforeAll(async ({ playwright }) => {
 })
 
 test.beforeEach(async () => {
-  const deleteCommands = [
-    'deleteManyAnswers',
-    'deleteManyQuestions',
-    'deleteManyHistoryActions',
-    'deleteManyFlags',
-    'deleteManyTags',
-    'deleteManyZNodes'
-  ]
-  for (const command of deleteCommands) {
-    await apiContext.post('/', {
-      data: {
-        query: deleteAll(command)
-      }
-    })
-  }
+  await emptyDb(apiContext, deleteCommands)
 })
 
 test('Shoud be able to create a question', async ({ page }) => {
@@ -408,8 +412,7 @@ test('Should return a search result', async ({ page }) => {
   await createQuestionAndAnswer(prisma, tag.id, user)
   await page.goto('/')
   await page.locator("input:near(:text('search'))").click()
-  const searchQuery = 'Ceci est une question'.slice(0, 4)
-  await page.locator("input:near(:text('search'))").fill(searchQuery)
+  await page.locator("input:near(:text('search'))").fill('Ceci est une question')
   await expect(page.getByRole('heading', { name: 'Ceci est une question' }).first()).toBeVisible()
   const openCard = page.getByRole('link', { name: 'keyboard_arrow_right' }).first()
   await openCard.waitFor('visible')
@@ -427,7 +430,7 @@ test('Should not return results', async ({ page }) => {
 test('Should be able to flag a question', async ({ page }) => {
   await createQuestionAndAnswer(prisma, tag.id, user)
   await page.goto('/')
-  await page.waitForTimeout(1000)
+  await page.waitForTimeout(2000)
   await page.locator("button:near(:text('Filtrer par tags:'))").click()
   await page.locator('.category-item', { hasText: tag.name }).click()
   const openCard = page.getByRole('link', { name: 'keyboard_arrow_right' }).first()
@@ -445,8 +448,7 @@ test('Should be able to add a tag to a question', async ({ page }) => {
   await createQuestionAndAnswer(prisma, tag.id, user)
   await page.goto('/')
   await page.locator("input:near(:text('search'))").click()
-  const searchQuery = 'Ceci est une question'.slice(0, 6)
-  await page.locator("input:near(:text('search'))").fill(searchQuery)
+  await page.locator("input:near(:text('search'))").fill('Ceci est une question')
   await expect(page.getByRole('heading', { name: 'Ceci est une question' }).first()).toBeVisible()
   const openCard = page.getByRole('link', { name: 'keyboard_arrow_right' }).first()
   await openCard.waitFor('visible')
@@ -499,7 +501,7 @@ test('Should be able to answer a question that has no answer', async ({ page }) 
 test('Should be able to search by text and tag', async ({ page }) => {
   await createQuestionAndAnswer(prisma, tag.id, user)
   await page.goto('/')
-  await page.waitForTimeout(1000)
+  await page.waitForTimeout(2000)
   await page.locator("input:near(:text('search'))").click()
   await page.locator("input:near(:text('search'))").fill('Ceci est une question')
   await expect(page.getByRole('heading', { name: 'Ceci est une question' }).first()).toBeVisible()
@@ -639,10 +641,59 @@ test('Should remove the certified flag when the corresponding tag is deleted', a
   await expect(page.getByText('verifiedCertifiée')).toBeHidden()
 })
 
+test('Should be able to add a specialty to a user', async ({ page }) => {
+  await page.goto('/')
+  await page.getByRole('img', { name: 'avatar' }).hover()
+  await page
+    .locator('a')
+    .filter({ hasText: 'Paramètres' })
+    .click()
+  await page.getByText('Spécialistes').click()
+  const user = page.locator('.userElement', { hasText: 'enableSkipAuth' })
+  const userSpecialty = user.locator('.userSpecialties').locator('.userSpecialty')
+  await expect(userSpecialty.first().locator('span')).toHaveText('marketing')
+  const addSpecialty = user.locator('.userRight').getByRole('button', { hasText: 'add' })
+  await addSpecialty.click()
+  await user.getByRole('button', { name: 'sales' }).click()
+  await page
+    .locator('.alert-content', { hasText: 'La spécialité a été ajoutée' })
+    .waitFor({ state: 'visible' })
+  await page.reload()
+  await page.waitForTimeout(1000)
+  await page.getByText('Spécialistes').click()
+  await expect(userSpecialty.last().locator('span')).toHaveText('sales')
+})
+
+test("Should be able to remove a user's specialty", async ({ page }) => {
+  await page.goto('/')
+  await page.getByRole('img', { name: 'avatar' }).hover()
+  await page
+    .locator('a')
+    .filter({ hasText: 'Paramètres' })
+    .click()
+  await page.getByText('Spécialistes').click()
+  const user = page.locator('.userElement', { hasText: 'enableSkipAuth' })
+  const userSpecialty = user.locator('.userSpecialties').locator('.userSpecialty')
+  await expect(userSpecialty.first().locator('span')).toHaveText('marketing')
+  await userSpecialty
+    .last()
+    .getByText('close', { exact: true })
+    .click()
+  await page
+    .locator('.alert-content', { hasText: 'La spécialité a été supprimée' })
+    .waitFor({ state: 'visible' })
+  await page.reload()
+  await page.waitForTimeout(1000)
+  await page.getByText('Spécialistes').click()
+  await expect(userSpecialty.first().locator('span', { hasText: 'sales' })).toBeHidden()
+})
+
 test.afterEach(async () => {
   algolia.clearIndex({ prisma })
 })
 
 test.afterAll(async () => {
+  deleteCommands = [...deleteCommands, 'deleteManyUsers']
+  await emptyDb(apiContext, deleteCommands)
   await apiContext.dispose()
 })

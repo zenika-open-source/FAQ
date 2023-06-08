@@ -123,7 +123,7 @@ const Answer = ({ zNode }) => {
 
   return (
     <div>
-      {canSubmit(state) && <Prompt message={intl('prompt_warning')} />}
+      {canSubmit(state, answer) && <Prompt message={intl('prompt_warning')} />}
       <ActionMenu backLink={`/q/${zNode.question.slug}-${zNode.id}`}>
         {!showTips && (
           <Button

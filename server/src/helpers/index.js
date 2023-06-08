@@ -1,6 +1,10 @@
 const slug = require('slugify')
 
-const { deleteCertifedFlagIfNoLongerApplicable, refreshCertifiedFlag } = require('./certified')
+const {
+  deleteCertifedFlagIfNoLongerApplicable,
+  addCertifiedFlagWhenSpecialist,
+  refreshCertifiedFlag
+} = require('./certified')
 const diffTags = require('./diffTags')
 const emojify = require('./emojify')
 const history = require('./history')
@@ -17,6 +21,7 @@ const slugify = s => slug(s).toLowerCase()
 
 module.exports = {
   ctxUser,
+  addCertifiedFlagWhenSpecialist,
   deleteCertifedFlagIfNoLongerApplicable,
   refreshCertifiedFlag,
   diffTags,

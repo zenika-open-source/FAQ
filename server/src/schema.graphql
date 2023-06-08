@@ -1,4 +1,4 @@
-# import ZNode, Question, Answer, Source, Flag, Tag, TagLabel, TagCategory, HistoryAction, BugReporting from './generated/prisma.graphql'
+# import ZNode, Question, Answer, Source, Flag, TagLabel, TagCategory, HistoryAction, BugReporting from './generated/prisma.graphql'
 
 # import ZNodeOrderByInput, ZNodeConnection, ZNodeWhereUniqueInput from './generated/prisma.graphql'
 # import HistoryActionWhereInput from './generated/prisma.graphql'
@@ -7,6 +7,7 @@ directive @admin on QUERY | FIELD_DEFINITION
 
 type Query {
   me: User
+  users: [User!]
 
   zNode(where: ZNodeWhereUniqueInput): ZNode
 
@@ -35,6 +36,7 @@ type Mutation {
   updateMe(name: String!, email: String!, picture: String!): User
   forgetMe: User
   authenticate(idToken: String!): User
+  updateSpecialties(id: ID!, specialties: [SpecialtiesInput]!): User
 
   createQuestionAndTags(title: String!, tags: [ID!]!): Question
   updateQuestionAndTags(id: ID!, title: String!, previousTitle: String!, tags: [ID!]!): Question
@@ -114,4 +116,9 @@ type Configuration {
   workplaceSharing: Boolean
 
   bugReporting: BugReporting
+}
+
+input SpecialtiesInput {
+  id: ID
+  name: String
 }

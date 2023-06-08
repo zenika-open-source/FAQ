@@ -11,7 +11,8 @@ module.exports = {
           }
         },
         info
-      )
+      ),
+    users: (_, args, ctx, info) => ctx.prisma.query.users({}, info)
   },
   Mutation: {
     authenticate: async (_, { idToken }, ctx, info) => {
@@ -68,6 +69,14 @@ module.exports = {
             key: null,
             locale: null
           }
+        },
+        info
+      ),
+    updateSpecialties: (_, { id, specialties }, ctx, info) =>
+      ctx.prisma.mutation.updateUser(
+        {
+          where: { id },
+          data: { specialties: { set: specialties } }
         },
         info
       )
