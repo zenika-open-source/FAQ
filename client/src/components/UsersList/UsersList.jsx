@@ -11,22 +11,15 @@ const UsersList = () => {
   const intl = getIntl(UsersList)
 
   const [userSearchText, setUserSearchText] = useState('')
-  const [userSearchResults, setUserSearchResults] = useState([])
 
   const { data: usersData, loading, refetch } = useQuery(GET_USERS)
 
   const users = usersData ? usersData.users : []
   const specialists = usersData ? usersData.users.filter(user => user.specialties.length > 0) : []
 
-  const searchUsers = text => {
-    let matches = []
-    setUserSearchText(text)
-    if (text.length > 0 && users) {
-      const regex = new RegExp(`^${text}`, `gi`)
-      matches = users.filter(user => user.name.match(regex)).slice(0, 5)
-    }
-    setUserSearchResults(matches)
-  }
+  const regex = new RegExp(`^${userSearchText}`, `gi`)
+  const userSearchResults =
+    users && userSearchText ? users.filter(user => user.name.match(regex)).slice(0, 5) : []
 
   if (loading) return <Loading />
 
@@ -39,7 +32,7 @@ const UsersList = () => {
         id="usersSearch"
         placeholder={intl('search')}
         value={userSearchText}
-        onChange={e => searchUsers(e.target.value)}
+        onChange={e => setUserSearchText(e.target.value)}
       />
       {userSearchResults.length > 0 && (
         <div className="resultsContainer">

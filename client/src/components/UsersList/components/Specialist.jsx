@@ -1,5 +1,4 @@
 import { useMutation, useQuery } from '@apollo/react-hooks'
-import { useState } from 'react'
 import { alert, getIntl } from 'services'
 import { GET_TAG_CATEGORIES, UPDATE_SPECIALTIES } from '../queries'
 import SpecialtiesList from './SpecialtiesList'
@@ -14,12 +13,11 @@ const Specialist = ({ specialist, onUpdateSpecialty }) => {
         ?.labels
     : null
 
-  const [specialties, setSpecialties] = useState(specialist.specialties)
+  const specialties = specialist.specialties
 
   const onSpecialtyChange = params => {
     const { action, data } = params
     editSpecialties(data, action)
-    setSpecialties(data)
   }
 
   const [mutateFunction] = useMutation(UPDATE_SPECIALTIES)
