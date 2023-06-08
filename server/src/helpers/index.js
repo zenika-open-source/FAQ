@@ -6,10 +6,8 @@ const {
   refreshCertifiedFlag
 } = require('./certified')
 const diffTags = require('./diffTags')
-const emojify = require('./emojify')
 const history = require('./history')
 const randomString = require('./randomString')
-const requireText = require('./requireText')
 const {
   createFlagAndUpdateHistoryAndAlgolia,
   deleteFlagAndUpdateHistoryAndAlgolia
@@ -25,10 +23,8 @@ module.exports = {
   deleteCertifedFlagIfNoLongerApplicable,
   refreshCertifiedFlag,
   diffTags,
-  emojify,
   history,
   randomString,
-  requireText,
   slugify,
   createFlagAndUpdateHistoryAndAlgolia,
   deleteFlagAndUpdateHistoryAndAlgolia,

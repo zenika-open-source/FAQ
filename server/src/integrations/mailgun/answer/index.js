@@ -1,7 +1,8 @@
 const mjml2html = require('mjml')
 const Converter = require('showdown').Converter
 const XSSFilter = require('showdown-xss-filter')
-const { requireText, emojify } = require('../../../helpers')
+const requireText = require('../../../helpers/requireText')
+const emojify = require('../../../helpers/emojify')
 
 const answer = {
   generateHtml: variables => mjml2html(requireText('./answer.mjml', require, variables)).html,
