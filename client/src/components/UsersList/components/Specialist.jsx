@@ -1,17 +1,10 @@
-import { useMutation, useQuery } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/react-hooks'
 import { alert, getIntl } from 'services'
-import { GET_TAG_CATEGORIES, UPDATE_SPECIALTIES } from '../queries'
+import { UPDATE_SPECIALTIES } from '../queries'
 import SpecialtiesList from './SpecialtiesList'
 
-const Specialist = ({ specialist, onUpdateSpecialty }) => {
+const Specialist = ({ specialist, services, onUpdateSpecialty }) => {
   const intl = getIntl(Specialist)
-
-  const { data: servicesData } = useQuery(GET_TAG_CATEGORIES)
-
-  const services = servicesData
-    ? servicesData.configuration.tagCategories.find(category => category.name === 'services')
-        ?.labels
-    : null
 
   const specialties = specialist.specialties
 

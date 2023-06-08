@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/react-hooks'
 import { Loading } from 'components'
 import { useState } from 'react'
 import { getIntl } from 'services'
-import { GET_USERS } from './queries'
+import { GET_TAG_CATEGORIES, GET_USERS } from './queries'
 
 import './UsersList.css'
 import Specialist from './components/Specialist'
@@ -13,15 +13,20 @@ const UsersList = () => {
   const [userSearchText, setUserSearchText] = useState('')
 
   const { data: usersData, loading, refetch } = useQuery(GET_USERS)
+  const { data: servicesData, loading: servicesLoading } = useQuery(GET_TAG_CATEGORIES)
 
   const users = usersData ? usersData.users : []
   const specialists = usersData ? usersData.users.filter(user => user.specialties.length > 0) : []
+  const services = servicesData
+    ? servicesData.configuration.tagCategories.find(category => category.name === 'services')
+        ?.labels
+    : null
 
   const regex = new RegExp(`^${userSearchText}`, `gi`)
   const userSearchResults =
     users && userSearchText ? users.filter(user => user.name.match(regex)).slice(0, 5) : []
 
-  if (loading) return <Loading />
+  if (loading || servicesLoading) return <Loading />
 
   return (
     <section>
@@ -38,7 +43,12 @@ const UsersList = () => {
         <div className="resultsContainer">
           <ul className="usersList">
             {userSearchResults.map(user => (
-              <Specialist specialist={user} key={user.id} onUpdateSpecialty={refetch} />
+              <Specialist
+                specialist={user}
+                services={services}
+                key={user.id}
+                onUpdateSpecialty={refetch}
+              />
             ))}
           </ul>
         </div>
@@ -46,7 +56,12 @@ const UsersList = () => {
       <ul className="usersList">
         {specialists &&
           specialists.map(specialist => (
-            <Specialist specialist={specialist} key={specialist.id} onUpdateSpecialty={refetch} />
+            <Specialist
+              specialist={specialist}
+              services={services}
+              key={specialist.id}
+              onUpdateSpecialty={refetch}
+            />
           ))}
       </ul>
     </section>
