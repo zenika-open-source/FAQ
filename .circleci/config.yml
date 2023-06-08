@@ -4,7 +4,7 @@ orbs:
   node: circleci/node@5.1.0
 
 parameters:
-  prismaDeployForce:
+  prisma-deploy-force:
     type: boolean
     default: false
 
@@ -195,14 +195,7 @@ jobs:
       - run:
           name: Deploy prisma
           working_directory: server/scripts/prisma_deploy_all/
-          command: |
-            if ${{ pipeline.parameters.prismaDeployForce }}; then
-              echo "Deploying prisma with --force"
-              node index.js --force
-            else
-              echo "Deploying prisma without --force"
-              node index.js
-            fi
+          command: node index.js <<#pipeline.parameters.prismaDeployForce>>--force<</pipeline.parameters.prismaDeployForce>>
   app-deploy:
     parameters:
       clever-app-id:
