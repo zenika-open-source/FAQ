@@ -56,7 +56,7 @@ const upsertConfig = /* GraphQL */ `mutation UpsertConfig{
       algoliaApiKey: "${process.env.ALGOLIA_API_KEY_ALL}"
       auth0Domain: "${process.env.AUTH0_DOMAIN}"
       auth0ClientId: "${process.env.AUTH0_CLIENT_ID}"
-      tagCategories: {
+      subjectCategories: {
         create: [
           {
             name: "services",
@@ -113,7 +113,7 @@ const upsertConfig = /* GraphQL */ `mutation UpsertConfig{
     mailgunDomain
     mailgunApiKey
     slackChannelHook
-    tagCategories {
+    subjectCategories {
       order
       name
       labels {

@@ -34,7 +34,7 @@ const checkJwt = async (req, res, next, prisma) => {
       }`
     )
 
-  const specialtyId = conf.tagCategories[0].labels[1].id
+  const specialtyId = conf.subjectCategories[0].labels[1].id
   const userNoAuthUpsert = () =>
     prisma.mutation.upsertUser(
       {

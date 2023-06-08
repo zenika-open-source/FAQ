@@ -16,7 +16,7 @@ const TagPicker = ({ label, icon, tags, onChange }) => {
   const [opened, setOpened] = useState(false)
   const ref = useClickOutside(() => setOpened(false))
 
-  const tagCategories = conf ? conf.tagCategories : []
+  const subjectCategories = conf ? conf.subjectCategories : []
 
   return (
     <div className="tagpicker">
@@ -45,7 +45,7 @@ const TagPicker = ({ label, icon, tags, onChange }) => {
         />
         <div ref={ref} className="picker" style={{ display: opened ? 'flex' : 'none' }}>
           <div className="picker-body">
-            {sortBy(tagCategories, ['order']).map(category => (
+            {sortBy(subjectCategories, ['order']).map(category => (
               <div key={category.name} className="category">
                 {sortBy(category.labels, ['order']).map(label => {
                   const isSelected = !!tags.find(t => t.id === label.id)

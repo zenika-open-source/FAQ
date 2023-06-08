@@ -15,7 +15,7 @@ const Searchbar = ({ text, tags, loading, onTextChange, onTagsChange }) => {
 
   const subjects = tags
     .map(tag =>
-      conf.tagCategories
+      conf.subjectCategories
         .reduce((acc, cat) => acc.concat(cat.labels), [])
         .find(label => label.name === tag)
     )

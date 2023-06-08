@@ -21,7 +21,7 @@ const resync = async (name, stage) => {
 
   const tagsCategories = await Promise.all(
     categories.map(([name, tags], order) =>
-      prisma.mutation.createTagCategory(
+      prisma.mutation.createSubjectCategory(
         {
           data: {
             name,

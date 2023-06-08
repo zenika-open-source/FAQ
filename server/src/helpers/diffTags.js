@@ -16,7 +16,7 @@ const diffTags = (ctx, oldCats, newCats, confId) => {
   promises.push(
     Promise.all(
       catsToCreate.map(cat =>
-        ctx.prisma.mutation.createTagCategory({
+        ctx.prisma.mutation.createSubjectCategory({
           data: {
             name: cat.name,
             order: cat.order,
@@ -43,7 +43,7 @@ const diffTags = (ctx, oldCats, newCats, confId) => {
   promises.push(
     Promise.all(
       catsToUpdate.map(cat =>
-        ctx.prisma.mutation.updateTagCategory({
+        ctx.prisma.mutation.updateSubjectCategory({
           where: {
             id: cat.id
           },
@@ -65,7 +65,7 @@ const diffTags = (ctx, oldCats, newCats, confId) => {
   promises.push(
     Promise.all(
       catsToDelete.map(cat =>
-        ctx.prisma.mutation.deleteTagCategory({
+        ctx.prisma.mutation.deleteSubjectCategory({
           where: { id: cat.id }
         })
       )

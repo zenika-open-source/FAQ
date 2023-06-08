@@ -85,13 +85,13 @@ type Subject {
   specialists: [User!]! @relation(name: "UserSpecialties", link: TABLE)
 
   order: Int!
-  category: TagCategory! @relation(name: "SubjectCategory", link: TABLE)
+  category: SubjectCategory! @relation(name: "TagLabelsCategory", link: TABLE)
 
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }
 
-type TagCategory {
+type SubjectCategory {
   id: ID! @unique @id
 
   name: String!
@@ -166,7 +166,7 @@ type Configuration {
   slackCommandKey: String
 
   tags: Json
-  tagCategories: [TagCategory!]! @relation(name: "ConfigurationTags", onDelete: CASCADE)
+  subjectCategories: [SubjectCategory!]! @relation(name: "ConfigurationTags", onDelete: CASCADE)
 
   workplaceSharing: Boolean @default(value: false)
 

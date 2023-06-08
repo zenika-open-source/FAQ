@@ -1,4 +1,4 @@
-# import ZNode, Question, Answer, Source, Flag, Subject, TagCategory, HistoryAction, BugReporting from './generated/prisma.graphql'
+# import ZNode, Question, Answer, Source, Flag, TagLabel, SubjectCategory, HistoryAction, BugReporting from './generated/prisma.graphql'
 
 # import ZNodeOrderByInput, ZNodeConnection, ZNodeWhereUniqueInput from './generated/prisma.graphql'
 # import HistoryActionWhereInput from './generated/prisma.graphql'
@@ -55,7 +55,7 @@ type Mutation {
 
   updateConfiguration(
     title: String!
-    tagCategories: Json!
+    subjectCategories: Json!
     algoliaSynonyms: Json!
     workplaceSharing: Boolean!
     authorizedDomains: [String!]!
@@ -110,7 +110,7 @@ type Configuration {
   slackCommandKey: String @admin
 
   tags: Json
-  tagCategories: [TagCategory!]!
+  subjectCategories: [SubjectCategory!]!
   # TMP_TAGS
 
   workplaceSharing: Boolean

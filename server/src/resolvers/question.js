@@ -2,8 +2,8 @@ const { history, ctxUser, slugify, deleteCertifedFlagIfNoLongerApplicable } = re
 const { algolia, slack } = require('../integrations')
 
 // TMP_TAGS
-const confSubjects = ctx =>
-  ctx.prisma._meta.configuration.tagCategories.reduce((acc, cat) => acc.concat(cat.labels), [])
+const confTagLabels = ctx =>
+  ctx.prisma._meta.configuration.subjectCategories.reduce((acc, cat) => acc.concat(cat.labels), [])
 
 module.exports = {
   Query: {

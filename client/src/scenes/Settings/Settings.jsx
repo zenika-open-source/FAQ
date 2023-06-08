@@ -55,7 +55,7 @@ const Settings = ({ configuration: conf }) => {
     mutate({
       variables: {
         title: state.title,
-        tagCategories: serializeTags(state.tagCategories),
+        subjectCategories: serializeTags(state.subjectCategories),
         algoliaSynonyms: listToSynonyms(state.synonyms),
         workplaceSharing: state.workplaceSharing,
         authorizedDomains: state.authorizedDomains

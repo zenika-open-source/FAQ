@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 const CONFIGURATION_FRAGMENT = `
   id
   title
-  tagCategories {
+  subjectCategories {
     id
     order
     name
@@ -32,7 +32,7 @@ export const GET_CONFIGURATION = gql`
 export const UPDATE_CONFIGURATION = gql`
   mutation updateConfiguration(
     $title: String!
-    $tagCategories: Json!
+    $subjectCategories: Json!
     $algoliaSynonyms: Json!
     $workplaceSharing: Boolean!
     $authorizedDomains: [String!]!
@@ -41,7 +41,7 @@ export const UPDATE_CONFIGURATION = gql`
   ) {
     updateConfiguration(
       title: $title
-      tagCategories: $tagCategories
+      subjectCategories: $subjectCategories
       algoliaSynonyms: $algoliaSynonyms
       workplaceSharing: $workplaceSharing
       authorizedDomains: $authorizedDomains
