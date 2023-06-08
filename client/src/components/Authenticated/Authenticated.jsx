@@ -8,7 +8,7 @@ import { useAuth } from '@contexts'
 const Authenticated = ({ location, reverse, redirect, children, admin }) => {
   const { isAuth, isAdmin } = useAuth()
 
-  if (process.env.REACT_APP_DISABLE_AUTH === 'true') {
+  if (import.meta.env.VITE_DISABLE_AUTH === 'true') {
     return children
   }
 

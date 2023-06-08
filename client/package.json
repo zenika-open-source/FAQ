@@ -41,7 +41,6 @@
   "scripts": {
     "start": "vite",
     "build": "vite build",
-    "test": "vite test --env=jsdom",
     "lint": "eslint src --ext js,jsx",
     "lint:fix": "npm run lint -- --fix",
     "prettier": "prettier \"src/**/*.{jsx,css,js}\"",

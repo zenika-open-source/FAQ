@@ -23,11 +23,11 @@ executors:
           AUTH0_CLIENT_ID: auth0ClientId
           ALGOLIA_APP_ID: M0NJ0PGAH1
           DISABLE_AUTH: true
-          REACT_APP_DISABLE_AUTH: true
-          REACT_APP_GRAPHQL_ENDPOINT: http://localhost:4000/gql
-          REACT_APP_REST_ENDPOINT: http://localhost:4000/rest
-          REACT_APP_PRISMA_SERVICE: default/default
-          REACT_APP_FAQ_URL: faq.team
+          VITE_DISABLE_AUTH: true
+          VITE_GRAPHQL_ENDPOINT: http://localhost:4000/gql
+          VITE_REST_ENDPOINT: http://localhost:4000/rest
+          VITE_PRISMA_SERVICE: default/default
+          VITE_FAQ_URL: faq.team
       - image: postgres
         environment:
           POSTGRES_USER: prisma

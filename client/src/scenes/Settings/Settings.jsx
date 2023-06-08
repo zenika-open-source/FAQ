@@ -18,7 +18,7 @@ import './Settings.scss'
 
 let initState
 
-if (process.env.REACT_APP_DISABLE_AUTH === 'true') {
+if (import.meta.env.VITE_DISABLE_AUTH === 'true') {
   initState = conf => ({
     ...conf,
     bugReporting: conf.bugReporting || 'GITHUB'
@@ -92,7 +92,7 @@ const Settings = ({ configuration: conf }) => {
           <Tabs>
             <General state={state} dispatch={dispatch} loading={loading} />
             <Tags state={state} onTagsChange={onTagsChange} />
-            {process.env.REACT_APP_DISABLE_AUTH !== 'true' && (
+            {import.meta.env.VITE_DISABLE_AUTH !== 'true' && (
               <Synonyms state={state} dispatch={dispatch} loading={loading} />
             )}
             <Specialists state={state} dispatch={dispatch} loading={loading} />
