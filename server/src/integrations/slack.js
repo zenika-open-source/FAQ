@@ -2,7 +2,7 @@ const fetch = require('isomorphic-fetch')
 
 const algolia = require('./algolia')
 
-const { emojify } = require('../helpers')
+const emojify = require('../helpers/emojify')
 
 // TMP_TAGS
 
