@@ -3,6 +3,11 @@ version: 2.1
 orbs:
   node: circleci/node@5.1.0
 
+parameters:
+  prisma-deploy-force:
+    type: boolean
+    default: false
+
 executors:
   clever-cloud-deployer:
     docker:
@@ -24,8 +29,6 @@ executors:
           ALGOLIA_APP_ID: M0NJ0PGAH1
           DISABLE_AUTH: true
           VITE_DISABLE_AUTH: true
-          VITE_GRAPHQL_ENDPOINT: http://localhost:4000/gql
-          VITE_REST_ENDPOINT: http://localhost:4000/rest
           VITE_PRISMA_SERVICE: default/default
           VITE_FAQ_URL: faq.team
       - image: postgres
@@ -190,8 +193,7 @@ jobs:
       - run:
           name: Deploy prisma
           working_directory: server/scripts/prisma_deploy_all/
-          command: node index.js
-
+          command: node index.js <<# pipeline.parameters.prisma-deploy-force >>--force<</ pipeline.parameters.prisma-deploy-force >>
   app-deploy:
     parameters:
       clever-app-id:

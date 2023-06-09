@@ -40,7 +40,7 @@ const apollo = new ApolloClient({
       }
     }),
     new HttpLink({
-      uri: import.meta.env.VITE_GRAPHQL_ENDPOINT
+      uri: import.meta.env.VITE_GRAPHQL_ENDPOINT || '/gql'
     })
   ]),
   cache: apolloCache,
