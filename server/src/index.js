@@ -64,7 +64,7 @@ if (process.env.NODE_ENV === 'production') {
 
   server.express.use(secure)
 
-  const staticPaths = ['static', 'img', '.well-known', 'manifest.json', 'robot.txt']
+  const staticPaths = ['assets', 'img', '.well-known', 'manifest.json', 'robot.txt']
 
   staticPaths.map(path => server.express.use('/' + path, express.static(frontPath + '/' + path)))
 
