@@ -124,8 +124,8 @@ const UserProfile = ({ history }) => {
           <hr />
           <p>
             <span style={{ marginRight: '5px' }}>{intl('gdpr.contact')}</span>
-            <a href={`mailto:contact@${process.env.REACT_APP_FAQ_URL}`}>
-              contact@{process.env.REACT_APP_FAQ_URL}
+            <a href={`mailto:contact@${import.meta.env.VITE_FAQ_URL}`}>
+              contact@{import.meta.env.VITE_FAQ_URL}
             </a>
           </p>
           <hr />

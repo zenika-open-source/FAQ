@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
-import { formatHistoryAction, nodeUrl } from 'helpers'
 import { getIntl } from 'services'
+import { formatHistoryAction, nodeUrl } from 'helpers'
 
 import { Loading } from 'components'
 import Card, { CardText } from 'components/Card'

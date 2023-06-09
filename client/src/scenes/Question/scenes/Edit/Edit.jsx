@@ -7,8 +7,8 @@ import { EDIT_QUESTION, SUBMIT_QUESTION } from './queries'
 
 import { alert, getIntl } from 'services'
 
-import { Button, CtrlEnter, Input, Loading, TagPicker } from 'components'
-import Card, { CardActions, CardText, PermanentClosableCard } from 'components/Card'
+import Card, { CardText, CardActions, PermanentClosableCard } from 'components/Card'
+import { Loading, Button, Input, CtrlEnter, TagPicker } from 'components'
 
 import { ActionMenu } from '../../components'
 

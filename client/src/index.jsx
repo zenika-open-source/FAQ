@@ -8,7 +8,7 @@ import { apollo, apolloCache } from 'services'
 
 import 'normalize.css'
 
-import App from './scenes/App'
+import App from 'scenes/App'
 
 persistCache({
   cache: apolloCache,

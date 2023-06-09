@@ -6,12 +6,12 @@ import { Link, Redirect } from 'react-router-dom'
 
 import { CREATE_FLAG, INCREMENT_VIEWS_COUNTER, REMOVE_FLAG } from './queries'
 
-import { getIntl, markdown } from 'services'
+import { markdown, getIntl } from 'services'
 
 import NotFound from 'scenes/NotFound'
 
-import { Button, Flags, Loading, Tags } from 'components'
-import Card, { CardText, CardTitle } from 'components/Card'
+import { Loading, Button, Flags, Tags } from 'components'
+import Card, { CardTitle, CardText } from 'components/Card'
 import Dropdown, { DropdownItem } from 'components/Dropdown'
 
 import { ActionMenu } from '../../components'

@@ -6,9 +6,9 @@ export const SEARCH_NODES = gql`
       text: $text
       tags: $tags
       flags: $flags
+      orderBy: createdAt_DESC
       first: $first
       skip: $skip
-      orderBy: createdAt_DESC
     ) {
       nodes {
         id

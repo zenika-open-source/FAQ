@@ -2,9 +2,9 @@ import PropTypes from 'prop-types'
 
 import { getIntl } from 'services'
 
-import Button from 'components/Button'
-import Dropdown, { DropdownItem } from 'components/Dropdown'
 import { Flag, flagMeta } from 'components/Flags'
+import Dropdown, { DropdownItem } from 'components/Dropdown'
+import Button from 'components/Button'
 
 import './FlagsDropdown.css'
 import { answerCanBeCertified } from 'helpers/answerCanBeCertified'
