@@ -3,6 +3,11 @@ version: 2.1
 orbs:
   node: circleci/node@5.1.0
 
+parameters:
+  prisma-deploy-force:
+    type: boolean
+    default: false
+
 executors:
   clever-cloud-deployer:
     docker:
@@ -188,8 +193,7 @@ jobs:
       - run:
           name: Deploy prisma
           working_directory: server/scripts/prisma_deploy_all/
-          command: node index.js
-
+          command: node index.js <<# pipeline.parameters.prisma-deploy-force >>--force<</ pipeline.parameters.prisma-deploy-force >>
   app-deploy:
     parameters:
       clever-app-id:
