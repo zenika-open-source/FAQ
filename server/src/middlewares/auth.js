@@ -34,8 +34,9 @@ const checkJwt = async (req, res, next, prisma) => {
       }`
     )
 
-  const specialtyId = conf.tagCategories[0].labels[1].id
-  const userNoAuthUpsert = () =>
+  const userNoAuthUpsert = () => {
+    const specialtyId = conf.tagCategories[0]?.labels[1]?.id
+    const specialties = specialtyId ? { specialties: { connect: { id: specialtyId } } } : {}
     prisma.mutation.upsertUser(
       {
         where: { auth0Id: 'faq-user-no-auth@zenika.com' },
@@ -47,7 +48,7 @@ const checkJwt = async (req, res, next, prisma) => {
           email: 'faq-user-no-auth@zenika.com',
           picture:
             'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg',
-          specialties: { connect: { id: specialtyId } }
+          ...specialties
         },
         update: {
           auth0Id: 'faq-user-no-auth@zenika.com',
@@ -64,6 +65,7 @@ const checkJwt = async (req, res, next, prisma) => {
         email
       }`
     )
+  }
 
   if (authType === 'Bearer') {
     // Auth0 Authentication
