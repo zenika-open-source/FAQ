@@ -37,7 +37,7 @@ const checkJwt = async (req, res, next, prisma) => {
   const userNoAuthUpsert = () => {
     const specialtyId = conf.tagCategories[0]?.labels[1]?.id
     const specialties = specialtyId ? { specialties: { connect: { id: specialtyId } } } : {}
-    prisma.mutation.upsertUser(
+    return prisma.mutation.upsertUser(
       {
         where: { auth0Id: 'faq-user-no-auth@zenika.com' },
         create: {
