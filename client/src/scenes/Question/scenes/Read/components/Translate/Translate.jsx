@@ -12,7 +12,7 @@ const Share = ({ node, setQuestionTitle, setAnswerContent }) => {
   const intl = getIntl(Share)
 
   const originalQuestionLanguage = node.question.language
-  const originalAnswerLanguage = node.answer.language
+  const originalAnswerLanguage = node.answer && node.answer.language
 
   return (
     <div className="translate">
