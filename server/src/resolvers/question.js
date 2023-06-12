@@ -22,11 +22,15 @@ module.exports = {
     createQuestionAndTags: async (_, { title, tags }, ctx, info) => {
       const tagLabels = confTagLabels(ctx)
 
-      const language = await detectLanguage(title)
-      const { targetLanguage, translatedText } = await getTranslatedText(title, language)
-      const translation = keyValuePairsToTranslations(
-        translationToKeyValuePairs(targetLanguage, translatedText)
-      )
+      let language = ''
+      let translation = { language: language, text: '' }
+      if (process.env.CLOUD_TRANSLATION_API_KEY) {
+        language = await detectLanguage(title)
+        const { targetLanguage, translatedText } = await getTranslatedText(title, language)
+        translation = keyValuePairsToTranslations(
+          translationToKeyValuePairs(targetLanguage, translatedText)
+        )
+      }
 
       const node = await ctx.prisma.mutation.createZNode(
         {
@@ -166,11 +170,16 @@ module.exports = {
       if (title !== node.question.title) {
         meta.title = title
       }
-      const language = await detectLanguage(title)
-      const { targetLanguage, translatedText } = await getTranslatedText(title, language)
-      const translation = keyValuePairsToTranslations(
-        translationToKeyValuePairs(targetLanguage, translatedText)
-      )
+
+      let language = ''
+      let translation = { language: language, text: '' }
+      if (process.env.CLOUD_TRANSLATION_API_KEY) {
+        language = await detectLanguage(title)
+        const { targetLanguage, translatedText } = await getTranslatedText(title, language)
+        translation = keyValuePairsToTranslations(
+          translationToKeyValuePairs(targetLanguage, translatedText)
+        )
+      }
 
       await ctx.prisma.mutation.updateQuestion({
         where: { id },

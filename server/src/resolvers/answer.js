@@ -15,11 +15,15 @@ module.exports = {
     createAnswerAndSources: async (_, { content, sources, nodeId }, ctx, info) => {
       sources = JSON.parse(sources)
 
-      const language = await detectLanguage(content)
-      const { targetLanguage, translatedText } = await getTranslatedText(content, language)
-      const translation = keyValuePairsToTranslations(
-        translationToKeyValuePairs(targetLanguage, translatedText)
-      )
+      let language = ''
+      let translation = { language: language, text: '' }
+      if (process.env.CLOUD_TRANSLATION_API_KEY) {
+        language = await detectLanguage(title)
+        const { targetLanguage, translatedText } = await getTranslatedText(title, language)
+        translation = keyValuePairsToTranslations(
+          translationToKeyValuePairs(targetLanguage, translatedText)
+        )
+      }
 
       let answer
 
@@ -233,11 +237,15 @@ module.exports = {
         meta.content = content
       }
 
-      const language = await detectLanguage(content)
-      const { targetLanguage, translatedText } = await getTranslatedText(content, language)
-      const translation = keyValuePairsToTranslations(
-        translationToKeyValuePairs(targetLanguage, translatedText)
-      )
+      let language = ''
+      let translation = { language: language, text: '' }
+      if (process.env.CLOUD_TRANSLATION_API_KEY) {
+        language = await detectLanguage(title)
+        const { targetLanguage, translatedText } = await getTranslatedText(title, language)
+        translation = keyValuePairsToTranslations(
+          translationToKeyValuePairs(targetLanguage, translatedText)
+        )
+      }
 
       await ctx.prisma.mutation.updateAnswer({
         where: { id },
