@@ -4,10 +4,9 @@ import { getIntl } from '@services'
 
 import Dropdown, { DropdownItem } from '@components/Dropdown'
 
-import Button from '@components/Button'
+import Button from 'components/Button'
 
-import './Translate.css'
-import { handleTranslation } from '@helpers'
+import { handleTranslation } from 'helpers'
 
 const Share = ({ node, setQuestionTitle, setAnswerContent }) => {
   const intl = getIntl(Share)
@@ -22,16 +21,14 @@ const Share = ({ node, setQuestionTitle, setAnswerContent }) => {
             handleTranslation(originalLanguage, 'fr', node, setQuestionTitle, setAnswerContent)
           }
         >
-          <i className="material-icons">🇫🇷</i> {intl('french')}{' '}
-          {originalLanguage === 'fr' && '(original)'}
+          {intl('french')} {originalLanguage === 'fr' && '(original)'}
         </DropdownItem>
         <DropdownItem
           onClick={() =>
             handleTranslation(originalLanguage, 'en', node, setQuestionTitle, setAnswerContent)
           }
         >
-          <i className="material-icons">🇬🇧</i> {intl('english')}{' '}
-          {originalLanguage === 'en' && '(original)'}
+          {intl('english')} {originalLanguage === 'en' && '(original)'}
         </DropdownItem>
       </Dropdown>
     </div>
