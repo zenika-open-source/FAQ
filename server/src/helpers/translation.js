@@ -15,6 +15,7 @@ const detectLanguage = async text => {
     const data = await res.data
     return data.detections[0][0].language
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error(error)
   }
 }
@@ -36,6 +37,7 @@ const getTranslatedText = async (text, language) => {
     const data = await res.data
     return { targetLanguage, translatedText: data.translations[0].translatedText }
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error(error)
   }
 }

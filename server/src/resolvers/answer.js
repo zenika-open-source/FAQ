@@ -18,8 +18,8 @@ module.exports = {
       let language = ''
       let translation = { language: language, text: '' }
       if (process.env.CLOUD_TRANSLATION_API_KEY) {
-        language = await detectLanguage(title)
-        const { targetLanguage, translatedText } = await getTranslatedText(title, language)
+        language = await detectLanguage(content)
+        const { targetLanguage, translatedText } = await getTranslatedText(content, language)
         translation = keyValuePairsToTranslations(
           translationToKeyValuePairs(targetLanguage, translatedText)
         )
@@ -240,8 +240,8 @@ module.exports = {
       let language = ''
       let translation = { language: language, text: '' }
       if (process.env.CLOUD_TRANSLATION_API_KEY) {
-        language = await detectLanguage(title)
-        const { targetLanguage, translatedText } = await getTranslatedText(title, language)
+        language = await detectLanguage(content)
+        const { targetLanguage, translatedText } = await getTranslatedText(content, language)
         translation = keyValuePairsToTranslations(
           translationToKeyValuePairs(targetLanguage, translatedText)
         )
