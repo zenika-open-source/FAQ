@@ -19,3 +19,19 @@ export const handleTranslation = (
     }
   }
 }
+
+export const getNavigatorLanguage = () => {
+  let language = navigator.language
+  if (language !== 'fr' || language !== 'en') {
+    language === 'en'
+  }
+  return language
+}
+
+export const handleAutoTranslation = (navigatortLanguage, questionLanguage) => {
+  let isAutoTranslated = false
+  if (navigatortLanguage !== questionLanguage) {
+    isAutoTranslated = true
+  }
+  return isAutoTranslated
+}
