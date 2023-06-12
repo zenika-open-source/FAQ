@@ -1,4 +1,4 @@
-export const answerCanBeCertified = (specialties, tags, answer, flagTypes) => {
+const answerCanBeCertified = (specialties, tags, answer, flagTypes) => {
   let isCertified = false
 
   if (answer) {
@@ -12,3 +12,5 @@ export const answerCanBeCertified = (specialties, tags, answer, flagTypes) => {
     })
   }
 }
+
+export default answerCanBeCertified

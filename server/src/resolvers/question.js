@@ -1,4 +1,10 @@
-const { history, ctxUser, slugify, deleteCertifedFlagIfNoLongerApplicable } = require('../helpers')
+const {
+  history,
+  ctxUser,
+  slugify,
+  deleteCertifedFlagIfNoLongerApplicable,
+  storeTranslation
+} = require('../helpers')
 const { algolia, slack } = require('../integrations')
 
 // TMP_TAGS
@@ -13,12 +19,18 @@ module.exports = {
     createQuestionAndTags: async (_, { title, tags }, ctx, info) => {
       const tagLabels = confTagLabels(ctx)
 
+      const { language, translation } = await storeTranslation(title)
+
       const node = await ctx.prisma.mutation.createZNode(
         {
           data: {
             question: {
               create: {
                 title,
+                language,
+                translation: {
+                  create: translation
+                },
                 slug: slugify(title),
                 user: { connect: { id: ctxUser(ctx).id } }
               }
@@ -66,7 +78,6 @@ module.exports = {
     },
     updateQuestionAndTags: async (_, { id, title, previousTitle, tags }, ctx, info) => {
       const tagLabels = confTagLabels(ctx)
-
       const node = (
         await ctx.prisma.query.question(
           { where: { id } },
@@ -76,6 +87,7 @@ module.exports = {
             id
             question {
               title
+              language
             }
             tags {
               id
@@ -148,10 +160,16 @@ module.exports = {
         meta.title = title
       }
 
+      const { language, translation } = await storeTranslation(title)
+
       await ctx.prisma.mutation.updateQuestion({
         where: { id },
         data: {
           title,
+          language,
+          translation: {
+            update: translation
+          },
           slug: slugify(title)
         }
       })
