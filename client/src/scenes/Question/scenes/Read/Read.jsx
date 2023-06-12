@@ -93,24 +93,7 @@ const Read = ({ history, match, zNode, loading }) => {
       <Card>
         <CardTitle style={{ padding: '1.2rem' }}>
           <div className="grow">
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'baseline'
-              }}
-            >
-              <h1>{markdown.title(questionTitle)}</h1>
-              {isAutoTranslated && (
-                <p
-                  className="small-text"
-                  style={{
-                    marginLeft: '1rem'
-                  }}
-                >
-                  {intl('auto_translated')}
-                </p>
-              )}
-            </div>
+            <h1>{markdown.title(questionTitle)}</h1>
             {zNode.tags.length > 0 && <Tags tags={zNode.tags} />}
           </div>
           <Flags node={zNode} withLabels={true} />
@@ -121,7 +104,6 @@ const Read = ({ history, match, zNode, loading }) => {
               node={zNode}
               setQuestionTitle={setQuestionTitle}
               setAnswerContent={setAnswerContent}
-              isAutoTranslated={isAutoTranslated}
             />
           )}
         </CardTitle>
@@ -177,7 +159,6 @@ Read.translations = {
         answer: 'Answer'
       }
     },
-    auto_translated: 'Automatic translation',
     no_answer: 'No answer yet...',
     answer: 'Answer the question'
   },
@@ -190,7 +171,6 @@ Read.translations = {
         answer: 'Réponse'
       }
     },
-    auto_translated: 'Traduction automatique',
     no_answer: 'Pas encore de réponse...',
     answer: 'Répondre à la question'
   }
