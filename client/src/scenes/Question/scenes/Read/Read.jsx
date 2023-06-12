@@ -51,7 +51,7 @@ const Read = ({ history, match, zNode, loading }) => {
         setAnswerContent
       )
     }
-  }, [zNode, loaded])
+  }, [zNode, loaded, navigatorLanguage])
 
   const intl = getIntl(Read)
 
