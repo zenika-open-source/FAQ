@@ -236,23 +236,23 @@ workflows:
       - e2e-test
       - client-build
       - app-deploy:
-          clever-app-id: app_c61407ae-b417-4406-86ed-cfd1acf84466
+          clever-app-id: app_7bc5f50d-48dc-4924-b361-9747c7e72e95
           context: clever-cloud-deployment
           requires:
-            - server-lint
-            - client-lint
-            - e2e-lint
-            - e2e-test
+            #   - server-lint
+            #   - client-lint
+            #   - e2e-lint
+            #   - e2e-test
             - client-build
           filters:
             branches:
-              only: main
+              only: deploy-staging
       - prisma-deploy-server:
-          clever-app-id: app_f9c5c1cb-fe9c-41f9-a6c0-793e8326e95b
+          clever-app-id: app_933d1ac5-2839-424a-9055-6d021a6404e5
           context: clever-cloud-deployment
           requires:
             - app-deploy
       - prisma-deploy-service:
-          context: faq-prisma-deployment
+          context: faq-prisma-deployment-staging
           requires:
             - prisma-deploy-server
