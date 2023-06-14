@@ -30,8 +30,6 @@ const Read = ({ history, match, zNode, loading }) => {
   const [incrementViewsCounter] = useMutation(INCREMENT_VIEWS_COUNTER)
 
   const navigatorLanguage = getNavigatorLanguage()
-  const isAutoTranslated =
-    zNode && handleAutoTranslation(navigatorLanguage, zNode.question.language)
 
   useEffect(() => {
     if (!loaded || incremented) return
