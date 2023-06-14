@@ -3,10 +3,9 @@ const {
   ctxUser,
   refreshCertifiedFlag,
   addCertifiedFlagWhenSpecialist,
-  keyValuePairsToTranslations,
   detectLanguage,
   getTranslatedText,
-  translationToKeyValuePairs
+  storeTranslation
 } = require('../helpers')
 const { algolia, mailgun } = require('../integrations')
 
@@ -15,15 +14,7 @@ module.exports = {
     createAnswerAndSources: async (_, { content, sources, nodeId }, ctx, info) => {
       sources = JSON.parse(sources)
 
-      let language = ''
-      let translation = { language: language, text: '' }
-      if (process.env.CLOUD_TRANSLATION_API_KEY) {
-        language = await detectLanguage(content)
-        const { targetLanguage, translatedText } = await getTranslatedText(content, language)
-        translation = keyValuePairsToTranslations(
-          translationToKeyValuePairs(targetLanguage, translatedText)
-        )
-      }
+      const { language, translation } = await storeTranslation(content)
 
       let answer
 
@@ -237,15 +228,7 @@ module.exports = {
         meta.content = content
       }
 
-      let language = ''
-      let translation = { language: language, text: '' }
-      if (process.env.CLOUD_TRANSLATION_API_KEY) {
-        language = await detectLanguage(content)
-        const { targetLanguage, translatedText } = await getTranslatedText(content, language)
-        translation = keyValuePairsToTranslations(
-          translationToKeyValuePairs(targetLanguage, translatedText)
-        )
-      }
+      const { language, translation } = await storeTranslation(content)
 
       await ctx.prisma.mutation.updateAnswer({
         where: { id },

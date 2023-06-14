@@ -3,10 +3,7 @@ const {
   ctxUser,
   slugify,
   deleteCertifedFlagIfNoLongerApplicable,
-  detectLanguage,
-  getTranslatedText,
-  translationToKeyValuePairs,
-  keyValuePairsToTranslations
+  storeTranslation
 } = require('../helpers')
 const { algolia, slack } = require('../integrations')
 
@@ -22,15 +19,7 @@ module.exports = {
     createQuestionAndTags: async (_, { title, tags }, ctx, info) => {
       const tagLabels = confTagLabels(ctx)
 
-      let language = ''
-      let translation = { language: language, text: '' }
-      if (process.env.CLOUD_TRANSLATION_API_KEY) {
-        language = await detectLanguage(title)
-        const { targetLanguage, translatedText } = await getTranslatedText(title, language)
-        translation = keyValuePairsToTranslations(
-          translationToKeyValuePairs(targetLanguage, translatedText)
-        )
-      }
+      const { language, translation } = await storeTranslation(title)
 
       const node = await ctx.prisma.mutation.createZNode(
         {
@@ -171,15 +160,7 @@ module.exports = {
         meta.title = title
       }
 
-      let language = ''
-      let translation = { language: language, text: '' }
-      if (process.env.CLOUD_TRANSLATION_API_KEY) {
-        language = await detectLanguage(title)
-        const { targetLanguage, translatedText } = await getTranslatedText(title, language)
-        translation = keyValuePairsToTranslations(
-          translationToKeyValuePairs(targetLanguage, translatedText)
-        )
-      }
+      const { language, translation } = await storeTranslation(title)
 
       await ctx.prisma.mutation.updateQuestion({
         where: { id },

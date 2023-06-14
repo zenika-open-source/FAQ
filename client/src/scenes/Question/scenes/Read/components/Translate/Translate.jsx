@@ -8,8 +8,8 @@ import Button from 'components/Button'
 
 import { handleTranslation } from 'helpers'
 
-const Share = ({ node, setQuestionTitle, setAnswerContent }) => {
-  const intl = getIntl(Share)
+const Translate = ({ node, setQuestionTitle, setAnswerContent }) => {
+  const intl = getIntl(Translate)
 
   const originalQuestionLanguage = node.question.language
   const originalAnswerLanguage = node.answer && node.answer.language
@@ -50,13 +50,13 @@ const Share = ({ node, setQuestionTitle, setAnswerContent }) => {
   )
 }
 
-Share.propTypes = {
+Translate.propTypes = {
   node: PropTypes.object.isRequired
 }
 
-Share.translations = {
+Translate.translations = {
   en: { french: 'French', english: 'English' },
   fr: { french: 'Français', english: 'Anglais' }
 }
 
-export default Share
+export default Translate
