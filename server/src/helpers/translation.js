@@ -38,7 +38,6 @@ const getTranslatedText = async (text, language) => {
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error(error)
-    return { language: '', text: '' }
   }
 }
 

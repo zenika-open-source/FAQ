@@ -14,31 +14,36 @@ module.exports = {
 
       const { language, translation } = await storeTranslation(content)
 
+      const createAnswerData = {
+        content,
+        language,
+        node: {
+          connect: {
+            id: nodeId
+          }
+        },
+        user: {
+          connect: {
+            id: ctxUser(ctx).id
+          }
+        },
+        sources: {
+          create: sources
+        }
+      }
+
+      if (translation) {
+        createAnswerData.translation = {
+          create: translation
+        }
+      }
+
       let answer
 
       try {
         answer = await ctx.prisma.mutation.createAnswer(
           {
-            data: {
-              content,
-              language,
-              node: {
-                connect: {
-                  id: nodeId
-                }
-              },
-              user: {
-                connect: {
-                  id: ctxUser(ctx).id
-                }
-              },
-              translation: {
-                create: translation
-              },
-              sources: {
-                create: sources
-              }
-            }
+            data: createAnswerData
           },
           `
         {
@@ -228,15 +233,20 @@ module.exports = {
 
       const { language, translation } = await storeTranslation(content)
 
+      const updateAnswerData = {
+        content,
+        language
+      }
+
+      if (translation) {
+        updateAnswerData.translation = {
+          update: translation
+        }
+      }
+
       await ctx.prisma.mutation.updateAnswer({
         where: { id },
-        data: {
-          content,
-          language,
-          translation: {
-            update: translation
-          }
-        }
+        data: updateAnswerData
       })
 
       await history.push(ctx, {

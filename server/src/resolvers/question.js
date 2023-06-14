@@ -21,19 +21,24 @@ module.exports = {
 
       const { language, translation } = await storeTranslation(title)
 
+      const createQuestionData = {
+        title,
+        language,
+        slug: slugify(title),
+        user: { connect: { id: ctxUser(ctx).id } }
+      }
+
+      if (translation) {
+        createQuestionData.translation = {
+          create: translation
+        }
+      }
+
       const node = await ctx.prisma.mutation.createZNode(
         {
           data: {
             question: {
-              create: {
-                title,
-                language,
-                translation: {
-                  create: translation
-                },
-                slug: slugify(title),
-                user: { connect: { id: ctxUser(ctx).id } }
-              }
+              create: createQuestionData
             },
             tags: {
               create: tags
@@ -162,16 +167,21 @@ module.exports = {
 
       const { language, translation } = await storeTranslation(title)
 
+      const updateQuestionData = {
+        title,
+        language,
+        slug: slugify(title)
+      }
+
+      if (translation) {
+        updateQuestionData.translation = {
+          update: translation
+        }
+      }
+
       await ctx.prisma.mutation.updateQuestion({
         where: { id },
-        data: {
-          title,
-          language,
-          translation: {
-            update: translation
-          },
-          slug: slugify(title)
-        }
+        data: updateQuestionData
       })
 
       await history.push(ctx, {
