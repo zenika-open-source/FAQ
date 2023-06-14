@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types'
 
-import { getIntl } from '@services'
+import { getIntl } from 'services'
 
-import Dropdown, { DropdownItem } from '@components/Dropdown'
+import Dropdown, { DropdownItem } from 'components/Dropdown'
 
 import Button from 'components/Button'
 
