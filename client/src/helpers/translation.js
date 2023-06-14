@@ -22,10 +22,10 @@ export const handleTranslation = (
 
 export const getNavigatorLanguage = () => {
   let language = navigator.language
-  if (language !== 'fr' || language !== 'en') {
-    return language === 'en'
-  }
   const [formattedLanguage] = language.split('-')
+  if (formattedLanguage !== 'fr' && formattedLanguage !== 'en') {
+    return formattedLanguage === 'en'
+  }
   return formattedLanguage
 }
 
