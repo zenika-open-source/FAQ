@@ -3,8 +3,6 @@ const {
   ctxUser,
   refreshCertifiedFlag,
   addCertifiedFlagWhenSpecialist,
-  detectLanguage,
-  getTranslatedText,
   storeTranslation
 } = require('../helpers')
 const { algolia, mailgun } = require('../integrations')
