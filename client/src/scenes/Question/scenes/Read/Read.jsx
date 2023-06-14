@@ -61,8 +61,6 @@ const Read = ({ history, match, zNode, loading }) => {
     return <NotFound />
   }
 
-  console.log(answerContent)
-
   /* Redirect to correct URL if old slug used */
   const correctSlug = zNode.question.slug + '-' + zNode.id
   if (match.params.slug !== correctSlug) {
