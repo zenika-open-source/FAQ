@@ -38,8 +38,8 @@ const Read = ({ history, match, zNode, loading }) => {
     if (!loaded && zNode) {
       setLoaded(true)
       setQuestionTitle(zNode.question.title)
-      {
-        zNode.answer && setAnswerContent(zNode.answer.content)
+      if (zNode.answer) {
+        setAnswerContent(zNode.answer.content)
       }
     }
   }, [zNode, loaded])
