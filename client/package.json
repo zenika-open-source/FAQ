@@ -5,6 +5,7 @@
   "dependencies": {
     "@apollo/client": "^3.7.15",
     "algoliasearch": "^3.35.1",
+    "apollo3-cache-persist": "^0.14.1",
     "auth0-js": "^9.12.1",
     "babel-runtime": "^6.26.0",
     "classnames": "^2.2.5",
