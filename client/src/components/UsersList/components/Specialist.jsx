@@ -1,4 +1,4 @@
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 import { alert, getIntl } from 'services'
 import { UPDATE_SPECIALTIES } from '../queries'
 import SpecialtiesList from './SpecialtiesList'
