@@ -4,6 +4,9 @@
   "env": {
     "node": true
   },
+  "globals": {
+    "fetch": false
+  },
   "extends": ["standard", "prettier", "prettier/standard"],
   "parserOptions": {
     "ecmaVersion": 2019,

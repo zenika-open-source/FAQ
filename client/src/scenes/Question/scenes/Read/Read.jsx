@@ -15,15 +15,23 @@ import Card, { CardTitle, CardText } from 'components/Card'
 import Dropdown, { DropdownItem } from 'components/Dropdown'
 
 import { ActionMenu } from '../../components'
-import { FlagsDropdown, History, Meta, Share, Sources, Views } from './components'
+import { FlagsDropdown, History, Meta, Share, Sources, Translate, Views } from './components'
+import { getNavigatorLanguage, handleAutoTranslation, handleTranslation } from 'helpers'
 
 const Read = ({ history, match, zNode, loading }) => {
   const [loaded, setLoaded] = useState(false)
   const [incremented, setIncremented] = useState(false)
 
+  const [questionTitle, setQuestionTitle] = useState('')
+  const [answerContent, setAnswerContent] = useState('')
+
   const [createFlag] = useMutation(CREATE_FLAG)
   const [removeFlag] = useMutation(REMOVE_FLAG)
   const [incrementViewsCounter] = useMutation(INCREMENT_VIEWS_COUNTER)
+
+  const navigatorLanguage = getNavigatorLanguage()
+  const isAutoTranslated =
+    zNode && handleAutoTranslation(navigatorLanguage, zNode.question.language)
 
   useEffect(() => {
     if (!loaded || incremented) return
@@ -32,8 +40,23 @@ const Read = ({ history, match, zNode, loading }) => {
   }, [loaded, incremented, incrementViewsCounter, zNode])
 
   useEffect(() => {
-    if (!loaded && zNode) setLoaded(true)
+    if (!loaded && zNode) {
+      setLoaded(true)
+    }
   }, [zNode, loaded])
+
+  useEffect(() => {
+    if (zNode) {
+      handleTranslation(
+        zNode.question.language,
+        zNode.answer?.language,
+        navigatorLanguage,
+        zNode,
+        setQuestionTitle,
+        setAnswerContent
+      )
+    }
+  }, [zNode, navigatorLanguage])
 
   const intl = getIntl(Read)
 
@@ -75,18 +98,43 @@ const Read = ({ history, match, zNode, loading }) => {
       <Card>
         <CardTitle style={{ padding: '1.2rem' }}>
           <div className="grow">
-            <h1>{markdown.title(zNode.question.title)}</h1>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'baseline'
+              }}
+            >
+              <h1>{markdown.title(questionTitle)}</h1>
+              {isAutoTranslated && (
+                <p
+                  className="small-text"
+                  style={{
+                    marginLeft: '1rem'
+                  }}
+                >
+                  {intl('auto_translated')}
+                </p>
+              )}
+            </div>
             {zNode.tags.length > 0 && <Tags tags={zNode.tags} />}
           </div>
           <Flags node={zNode} withLabels={true} />
           <Views value={zNode.question.views} />
           <Share node={zNode} />
+          {zNode.question.language && (
+            <Translate
+              node={zNode}
+              setQuestionTitle={setQuestionTitle}
+              setAnswerContent={setAnswerContent}
+              isAutoTranslated={isAutoTranslated}
+            />
+          )}
         </CardTitle>
         <CardText>
           {zNode.answer ? (
             <>
               <div style={{ padding: '0.5rem', marginBottom: '0.5rem' }}>
-                {markdown.html(zNode.answer.content)}
+                {markdown.html(answerContent)}
               </div>
               <Sources sources={zNode.answer.sources} />
             </>
@@ -134,6 +182,7 @@ Read.translations = {
         answer: 'Answer'
       }
     },
+    auto_translated: 'Automatic translation',
     no_answer: 'No answer yet...',
     answer: 'Answer the question'
   },
@@ -146,6 +195,7 @@ Read.translations = {
         answer: 'Réponse'
       }
     },
+    auto_translated: 'Traduction automatique',
     no_answer: 'Pas encore de réponse...',
     answer: 'Répondre à la question'
   }
