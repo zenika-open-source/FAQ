@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import { Loading } from 'components'
 import { useState } from 'react'
 import { getIntl } from 'services'
