@@ -1,4 +1,4 @@
-import { useApolloClient } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/client'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
 import { Prompt, Redirect } from 'react-router-dom'

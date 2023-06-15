@@ -1,4 +1,4 @@
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 import PropTypes from 'prop-types'
 import { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'

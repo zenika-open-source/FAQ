@@ -1,49 +1,50 @@
-/* eslint-disable react/display-name */
 import React from 'react'
-import { useQuery } from '@apollo/react-hooks'
-
-import { ApolloClient } from 'apollo-client'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-import { HttpLink } from 'apollo-link-http'
-import { onError } from 'apollo-link-error'
-import { ApolloLink } from 'apollo-link'
-import { setContext } from 'apollo-link-context'
+import {
+  ApolloClient,
+  ApolloProvider,
+  InMemoryCache,
+  HttpLink,
+  ApolloLink,
+  useQuery
+} from '@apollo/client'
+import { onError } from '@apollo/client/link/error'
+import { setContext } from '@apollo/client/link/context'
 
 import routing from './routing'
 
 const apolloCache = new InMemoryCache()
 
-const apollo = new ApolloClient({
-  link: ApolloLink.from([
-    onError(({ graphQLErrors, networkError }) => {
-      if (graphQLErrors) {
-        graphQLErrors.map(({ message, locations, path }) =>
-          // eslint-disable-next-line no-console
-          console.error(
-            `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}. Please refresh the page.`
-          )
-        )
-      }
-      if (networkError) {
-        // eslint-disable-next-line no-console
-        console.error(`[Network error] Please refresh the page.`, networkError)
-      }
-    }),
-    setContext((_, { headers }) => {
-      const token = localStorage.accessToken || null
-      return {
-        headers: {
-          ...headers,
-          Authorization: token ? `Bearer ${token}` : '',
-          'faq-tenant': routing.getPrismaService()
-        }
-      }
-    }),
-    new HttpLink({
-      uri: import.meta.env.VITE_GRAPHQL_ENDPOINT || '/gql'
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors) {
+    graphQLErrors.forEach(({ message, locations, path }) => {
+      console.error(
+        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}. Please refresh the page.`
+      )
     })
-  ]),
+  }
+  if (networkError) {
+    console.error('[Network error] Please refresh the page.', networkError)
+  }
+})
+
+const authLink = setContext((_, { headers }) => {
+  const token = localStorage.accessToken || null
+  return {
+    headers: {
+      ...headers,
+      Authorization: token ? `Bearer ${token}` : '',
+      'faq-tenant': routing.getPrismaService()
+    }
+  }
+})
+
+const httpLink = new HttpLink({
+  uri: import.meta.env.VITE_GRAPHQL_ENDPOINT || '/gql'
+})
+
+const apolloClient = new ApolloClient({
   cache: apolloCache,
+  link: ApolloLink.from([errorLink, authLink, httpLink]),
   defaultOptions: {
     watchQuery: {
       fetchPolicy: 'cache-and-network'
@@ -51,9 +52,9 @@ const apollo = new ApolloClient({
   }
 })
 
-const query = (query, { variables, skip, parse, ...queryProps } = {}) => Wrapped => {
+const query = (gqlQuery, { variables, skip, parse, ...queryProps } = {}) => Wrapped => {
   const ApolloQueryWrapper = props => {
-    const { loading, error, data } = useQuery(query, {
+    const { loading, error, data } = useQuery(gqlQuery, {
       variables: variables ? variables(props) : {},
       skip: skip ? skip(props) : false,
       pollInterval: 60 * 1000, // Poll every min
@@ -65,12 +66,19 @@ const query = (query, { variables, skip, parse, ...queryProps } = {}) => Wrapped
     return (
       <Wrapped
         {...props}
-        {...{ loading: loading && Object.values(data || {}).length === 0, error, ...parsedData }}
+        loading={loading && Object.values(data || {}).length === 0}
+        error={error}
+        {...parsedData}
       />
     )
   }
+
   return ApolloQueryWrapper
 }
 
-export default apollo
+const ApolloWrapper = ({ children }) => {
+  return <ApolloProvider client={apolloClient}>{children}</ApolloProvider>
+}
+
+export default ApolloWrapper
 export { query, apolloCache }
