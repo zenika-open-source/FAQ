@@ -42,6 +42,11 @@ const Read = ({ history, match, zNode, loading }) => {
   useEffect(() => {
     if (!loaded && zNode) {
       setLoaded(true)
+    }
+  }, [zNode, loaded])
+
+  useEffect(() => {
+    if (zNode) {
       handleTranslation(
         zNode.question.language,
         zNode.answer?.language,
@@ -51,7 +56,7 @@ const Read = ({ history, match, zNode, loading }) => {
         setAnswerContent
       )
     }
-  }, [zNode, loaded, navigatorLanguage])
+  }, [zNode, navigatorLanguage])
 
   const intl = getIntl(Read)
 
