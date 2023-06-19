@@ -4,17 +4,10 @@ import ReactMde, { commands } from 'react-mde'
 
 import { markdown, getIntl } from 'services'
 
-import { emojiPickerCommand } from './EmojiPicker'
-
 import 'react-mde/lib/styles/css/react-mde-all.css'
 import '../Input.css'
 
-const listCommands = [
-  ...commands.getDefaultCommands(),
-  {
-    commands: [emojiPickerCommand]
-  }
-]
+const listCommands = [...commands.getDefaultCommands()]
 
 const MarkdownEditor = ({ content, onChange }) => {
   const intl = getIntl(MarkdownEditor)
