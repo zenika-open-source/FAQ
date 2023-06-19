@@ -42,8 +42,8 @@ Specialties.translations = {
     empty: 'No specialties yet'
   },
   fr: {
-    title: 'Spécialitées',
-    empty: 'Pas encore de spécialitées'
+    title: 'Spécialités',
+    empty: 'Pas encore de spécialités'
   }
 }
 
