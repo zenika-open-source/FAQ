@@ -14,7 +14,6 @@ module.exports = {
 
       const { language, translation } = await storeTranslation(content)
 
-
       const createAnswerData = {
         content,
         language,

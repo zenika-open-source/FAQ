@@ -21,7 +21,6 @@ module.exports = {
 
       const { language, translation } = await storeTranslation(title)
 
-
       const createQuestionData = {
         title,
         language,
