@@ -48,38 +48,34 @@ const Edit = ({ location, match, zNode }) => {
     PermanentClosableCard.setValue('tips_question', value)
   }
 
-  const submitQuestion = () => {
-    setState(state => ({ ...state, loadingSubmit: true }))
-
-    apollo
-      .mutate({
+  const submitQuestion = async () => {
+    try {
+      setState(state => ({ ...state, loadingSubmit: true }))
+      const { data } = await apollo.mutate({
         mutation: SUBMIT_QUESTION,
         variables: {
           title: state.question,
           tags: state.tags.map(tag => tag.id)
         }
       })
-      .then(({ data }) => {
-        setState(state => ({
-          ...state,
-          slug: data.createQuestionAndTags.slug + '-' + data.createQuestionAndTags.node.id
-        }))
-        alert.pushSuccess(intl('alert.submit_success'))
-      })
-      .catch(error => {
-        alert.pushDefaultError(error)
-        setState(state => ({
-          ...state,
-          loadingSubmit: false
-        }))
-      })
+      setState(state => ({
+        ...state,
+        slug: data.createQuestionAndTags.slug + '-' + data.createQuestionAndTags.node.id
+      }))
+      alert.pushSuccess(intl('alert.submit_success'))
+    } catch (error) {
+      alert.pushDefaultError(error)
+      setState(state => ({
+        ...state,
+        loadingSubmit: false
+      }))
+    }
   }
 
-  const editQuestion = () => {
-    setState(state => ({ ...state, loadingSubmit: true }))
-
-    apollo
-      .mutate({
+  const editQuestion = async () => {
+    try {
+      setState(state => ({ ...state, loadingSubmit: true }))
+      const { data } = await apollo.mutate({
         mutation: EDIT_QUESTION,
         variables: {
           questionId: zNode.question.id,
@@ -88,20 +84,18 @@ const Edit = ({ location, match, zNode }) => {
           tags: state.tags.map(tag => tag.id)
         }
       })
-      .then(({ data }) => {
-        setState(state => ({
-          ...state,
-          slug: data.updateQuestionAndTags.slug + '-' + zNode.id
-        }))
-        alert.pushSuccess(intl('alert.edit_success'))
-      })
-      .catch(error => {
-        alert.pushDefaultError(error)
-        setState(state => ({
-          ...state,
-          loadingSubmit: false
-        }))
-      })
+      setState(state => ({
+        ...state,
+        slug: data.updateQuestionAndTags.slug + '-' + zNode.id
+      }))
+      alert.pushSuccess(intl('alert.edit_success'))
+    } catch (error) {
+      alert.pushDefaultError(error)
+      setState(state => ({
+        ...state,
+        loadingSubmit: false
+      }))
+    }
   }
 
   const submitForm = () => {
