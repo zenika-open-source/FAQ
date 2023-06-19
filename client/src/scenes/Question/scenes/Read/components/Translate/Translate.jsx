@@ -9,6 +9,7 @@ import Button from 'components/Button'
 import { handleTranslation } from 'helpers'
 
 const Translate = ({ node, setQuestionTitle, setAnswerContent, isAutoTranslated }) => {
+
   const intl = getIntl(Translate)
 
   const originalQuestionLanguage = node.question.language

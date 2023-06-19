@@ -7,6 +7,12 @@ export const SUBMIT_QUESTION = gql`
     createQuestionAndTags(title: $title, tags: $tags) {
       id
       title
+      language
+      translation {
+        id
+        language
+        text
+      }
       slug
       user {
         id
@@ -29,6 +35,12 @@ export const EDIT_QUESTION = gql`
     ) {
       id
       title
+      language
+      translation {
+        id
+        language
+        text
+      }
       slug
       user {
         id
