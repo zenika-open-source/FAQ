@@ -2,7 +2,6 @@ const mjml2html = require('mjml')
 const Converter = require('showdown').Converter
 const XSSFilter = require('showdown-xss-filter')
 const requireText = require('../../../helpers/requireText')
-const emojify = require('../../../helpers/emojify')
 
 const answer = {
   generateHtml: variables => mjml2html(requireText('./answer.mjml', require, variables)).html,
@@ -19,12 +18,12 @@ const answer = {
 
     const variables = {
       content: node.answer.content,
-      content_md: emojify(showdown.makeHtml(node.answer.content)),
+      content_md: showdown.makeHtml(node.answer.content),
       base_url: origin,
       user_name: node.question.user.name,
       answerer_name: node.answer.user.name,
       title: node.question.title,
-      title_md: emojify(node.question.title),
+      title_md: node.question.title,
       question_url: origin + '/q/' + node.question.slug + '-' + node.id
     }
 
