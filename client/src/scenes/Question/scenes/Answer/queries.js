@@ -11,6 +11,10 @@ export const SUBMIT_ANSWER = gql`
     ) {
       id
       content
+      translation {
+        language
+        text
+      }
       sources {
         label
         url
@@ -36,6 +40,11 @@ export const EDIT_ANSWER = gql`
     ) {
       id
       content
+      language
+      translation {
+        language
+        text
+      }
       sources {
         label
         url
