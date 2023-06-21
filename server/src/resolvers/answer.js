@@ -240,7 +240,10 @@ module.exports = {
 
       if (translation) {
         updateAnswerData.translation = {
-          set: translation
+          upsert: {
+            create: { language: translation.language, text: translation.text },
+            update: { language: translation.language, text: translation.text }
+          }
         }
       }
 
