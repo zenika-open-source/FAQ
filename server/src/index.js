@@ -8,8 +8,8 @@ const resolvers = require('./resolvers')
 const directives = require('./directives')
 const { auth, error, getConfiguration, getFirstUserFlag } = require('./middlewares')
 const { configuration, integrations } = require('./endpoints')
-
 const multiTenant = require('./multiTenant')
+const logger = require('./helpers/logger')
 
 /* Create server */
 
@@ -73,5 +73,4 @@ if (process.env.NODE_ENV === 'production') {
   })
 }
 
-// eslint-disable-next-line no-console
-console.log('Server is successfuly running at http://localhost:' + port)
+logger.log('Server is successfuly running at http://localhost:' + port)
