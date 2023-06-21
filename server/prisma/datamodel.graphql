@@ -18,7 +18,7 @@ type Question {
   id: ID! @unique @id
 
   title: String!
-  language: String!
+  language: String
   translation: Translation
 
   slug: String!
@@ -35,7 +35,7 @@ type Answer {
   id: ID! @unique @id
 
   content: String!
-  language: String!
+  language: String
   translation: Translation
 
   sources: [Source!]! @relation(name: "AnswerSources", onDelete: CASCADE, link: TABLE)
