@@ -240,7 +240,7 @@ module.exports = {
 
       if (translation) {
         updateAnswerData.translation = {
-          update: translation
+          set: translation
         }
       }
 
