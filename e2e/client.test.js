@@ -262,6 +262,52 @@ const createZNodeWithoutAnswerParams = (tagId, userId) => {
   }
 }
 
+const createZNodeWithoutTranslation = (tagId, userId) => {
+  return {
+    data: {
+      question: {
+        create: {
+          title: 'Ceci est une question',
+          language: '',
+          slug: 'slug.Ceci est une question',
+          translation: {},
+          user: {
+            connect: {
+              id: userId
+            }
+          }
+        }
+      },
+      answer: {
+        create: {
+          content: 'Ceci est une réponse',
+          language: '',
+          translation: {},
+          user: {
+            connect: {
+              id: userId
+            }
+          }
+        }
+      },
+      tags: {
+        create: {
+          label: {
+            connect: {
+              id: tagId
+            }
+          },
+          user: {
+            connect: {
+              id: userId
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 const createTempZnode = (tagId, userId) => {
   return {
     data: {
@@ -358,6 +404,11 @@ const createQuestionAndAnswer = async (prisma, tagId, user) => {
 
 const createQuestionWithFlag = async (prisma, tagId, user) => {
   const zNode = await prisma.mutation.createZNode(createTempZnode(tagId, user))
+  await algolia.addNode({ prisma }, zNode.id)
+}
+
+const createQuestionAndAnswerWithoutTranslation = async (prisma, tagId, user) => {
+  const zNode = await prisma.mutation.createZNode(createZNodeWithoutTranslation(tagId, user))
   await algolia.addNode({ prisma }, zNode.id)
 }
 
@@ -737,6 +788,39 @@ test('Should be able to translate the question and answer', async ({ page }) => 
     .click()
   await expect(page.getByRole('heading', { name: 'This is a question' })).toBeVisible()
   await expect(page.getByText('This is an answer')).toBeVisible()
+})
+
+test('Should add a translation to a question and an answer created without one', async ({
+  page
+}) => {
+  await createQuestionAndAnswerWithoutTranslation(prisma, tag.id, user)
+  await page.goto('/')
+  const openCard = page.getByRole('link', { name: 'keyboard_arrow_right' }).first()
+  await openCard.waitFor('visible')
+  await openCard.click()
+  await page.getByRole('button', { name: 'Modifier' }).hover()
+  await page
+    .locator('a')
+    .filter({ hasText: 'editQuestion' })
+    .click()
+  await page.locator('input').click()
+  await page.locator('input').fill('Ceci est une question différente')
+  await page.locator('button', { hasText: 'Enregistrer la question' }).click()
+  await page.getByRole('button', { name: 'Modifier' }).hover()
+  await page
+    .locator('a')
+    .filter({ hasText: 'Réponse' })
+    .click()
+  await page.locator('textarea').click()
+  await page.locator('textarea').fill('Ceci est une réponse différente')
+  await page.locator('button', { hasText: 'Enregistrer la réponse' }).click()
+  await page.getByRole('button', { name: 'translate' }).hover()
+  await page
+    .locator('a')
+    .filter({ hasText: 'Anglais' })
+    .click()
+  await expect(page.getByRole('heading', { name: 'This is a different question' })).toBeVisible()
+  await expect(page.getByText('This is a different answer')).toBeVisible()
 })
 
 test.afterEach(async () => {
