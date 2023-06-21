@@ -47,7 +47,9 @@ const refreshConfiguration = async tenant => {
     }`
   )
   if (!conf) {
-    throw new TypeError('could not find configuration with name "default"')
+    throw new TypeError(
+      `could not find configuration with name "default" for service "${tenant._meta.service.name}" and stage "${tenant._meta.service.stage}"`
+    )
   }
   // TMP_TAGS
   tenant._meta.configuration = conf
