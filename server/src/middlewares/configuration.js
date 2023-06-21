@@ -8,10 +8,11 @@ const getConfiguration = async (multiTenant, req, next) => {
 
   try {
     await refreshConfiguration(tenant)
-    next()
   } catch (err) {
     next(err)
+    return
   }
+  next()
 }
 
 const refreshConfiguration = async tenant => {
@@ -45,6 +46,9 @@ const refreshConfiguration = async tenant => {
       bugReporting
     }`
   )
+  if (!conf) {
+    throw new TypeError('could not find configuration with name "default"')
+  }
   // TMP_TAGS
   tenant._meta.configuration = conf
 }
