@@ -175,7 +175,7 @@ module.exports = {
 
       if (translation) {
         updateQuestionData.translation = {
-          update: translation
+          set: translation
         }
       }
 
