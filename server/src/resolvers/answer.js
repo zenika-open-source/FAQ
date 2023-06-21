@@ -2,8 +2,7 @@ const {
   history,
   ctxUser,
   refreshCertifiedFlag,
-  addCertifiedFlagWhenSpecialist,
-  storeTranslation
+  addCertifiedFlagWhenSpecialist
 } = require('../helpers')
 const { algolia, mailgun } = require('../integrations')
 
@@ -12,38 +11,27 @@ module.exports = {
     createAnswerAndSources: async (_, { content, sources, nodeId }, ctx, info) => {
       sources = JSON.parse(sources)
 
-      const { language, translation } = await storeTranslation(content)
-
-      const createAnswerData = {
-        content,
-        language,
-        node: {
-          connect: {
-            id: nodeId
-          }
-        },
-        user: {
-          connect: {
-            id: ctxUser(ctx).id
-          }
-        },
-        sources: {
-          create: sources
-        }
-      }
-
-      if (translation) {
-        createAnswerData.translation = {
-          create: translation
-        }
-      }
-
       let answer
 
       try {
         answer = await ctx.prisma.mutation.createAnswer(
           {
-            data: createAnswerData
+            data: {
+              content,
+              node: {
+                connect: {
+                  id: nodeId
+                }
+              },
+              user: {
+                connect: {
+                  id: ctxUser(ctx).id
+                }
+              },
+              sources: {
+                create: sources
+              }
+            }
           },
           `
         {
@@ -231,22 +219,11 @@ module.exports = {
         meta.content = content
       }
 
-      const { language, translation } = await storeTranslation(content)
-
-      const updateAnswerData = {
-        content,
-        language
-      }
-
-      if (translation) {
-        updateAnswerData.translation = {
-          update: translation
-        }
-      }
-
       await ctx.prisma.mutation.updateAnswer({
         where: { id },
-        data: updateAnswerData
+        data: {
+          content
+        }
       })
 
       await history.push(ctx, {

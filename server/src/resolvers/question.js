@@ -1,10 +1,4 @@
-const {
-  history,
-  ctxUser,
-  slugify,
-  deleteCertifedFlagIfNoLongerApplicable,
-  storeTranslation
-} = require('../helpers')
+const { history, ctxUser, slugify, deleteCertifedFlagIfNoLongerApplicable } = require('../helpers')
 const { algolia, slack } = require('../integrations')
 
 // TMP_TAGS
@@ -19,26 +13,15 @@ module.exports = {
     createQuestionAndTags: async (_, { title, tags }, ctx, info) => {
       const tagLabels = confTagLabels(ctx)
 
-      const { language, translation } = await storeTranslation(title)
-
-      const createQuestionData = {
-        title,
-        language,
-        slug: slugify(title),
-        user: { connect: { id: ctxUser(ctx).id } }
-      }
-
-      if (translation) {
-        createQuestionData.translation = {
-          create: translation
-        }
-      }
-
       const node = await ctx.prisma.mutation.createZNode(
         {
           data: {
             question: {
-              create: createQuestionData
+              create: {
+                title,
+                slug: slugify(title),
+                user: { connect: { id: ctxUser(ctx).id } }
+              }
             },
             tags: {
               create: tags
@@ -83,6 +66,7 @@ module.exports = {
     },
     updateQuestionAndTags: async (_, { id, title, previousTitle, tags }, ctx, info) => {
       const tagLabels = confTagLabels(ctx)
+
       const node = (
         await ctx.prisma.query.question(
           { where: { id } },
@@ -92,7 +76,6 @@ module.exports = {
             id
             question {
               title
-              language
             }
             tags {
               id
@@ -165,23 +148,12 @@ module.exports = {
         meta.title = title
       }
 
-      const { language, translation } = await storeTranslation(title)
-
-      const updateQuestionData = {
-        title,
-        language,
-        slug: slugify(title)
-      }
-
-      if (translation) {
-        updateQuestionData.translation = {
-          update: translation
-        }
-      }
-
       await ctx.prisma.mutation.updateQuestion({
         where: { id },
-        data: updateQuestionData
+        data: {
+          title,
+          slug: slugify(title)
+        }
       })
 
       await history.push(ctx, {

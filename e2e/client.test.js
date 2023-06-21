@@ -173,14 +173,7 @@ const createZNodeParams = (tagId, userId) => {
       question: {
         create: {
           title: 'Ceci est une question',
-          language: 'fr',
           slug: 'slug.Ceci est une question',
-          translation: {
-            create: {
-              language: 'en',
-              text: 'This is a question'
-            }
-          },
           user: {
             connect: {
               id: userId
@@ -191,13 +184,6 @@ const createZNodeParams = (tagId, userId) => {
       answer: {
         create: {
           content: 'Ceci est une réponse',
-          language: 'fr',
-          translation: {
-            create: {
-              language: 'en',
-              text: 'This is an answer'
-            }
-          },
           user: {
             connect: {
               id: userId
@@ -229,14 +215,7 @@ const createZNodeWithoutAnswerParams = (tagId, userId) => {
       question: {
         create: {
           title: 'Ceci est une question',
-          language: 'fr',
           slug: 'slug.Ceci est une question',
-          translation: {
-            create: {
-              language: 'en',
-              text: 'This is a question'
-            }
-          },
           user: {
             connect: {
               id: userId
@@ -268,14 +247,7 @@ const createTempZnode = (tagId, userId) => {
       question: {
         create: {
           title: 'Ceci est une question',
-          language: 'fr',
           slug: 'slug.Ceci est une question',
-          translation: {
-            create: {
-              language: 'en',
-              text: 'This is a question'
-            }
-          },
           user: {
             connect: {
               id: userId
@@ -286,13 +258,6 @@ const createTempZnode = (tagId, userId) => {
       answer: {
         create: {
           content: 'Ceci est une réponse',
-          language: 'fr',
-          translation: {
-            create: {
-              language: 'en',
-              text: 'This is an answer'
-            }
-          },
           user: {
             connect: {
               id: userId
@@ -721,22 +686,6 @@ test("Should be able to remove a user's specialty", async ({ page }) => {
   await page.waitForTimeout(1000)
   await page.getByText('Spécialistes').click()
   await expect(userSpecialty.first().locator('span', { hasText: 'sales' })).toBeHidden()
-})
-
-test('Should be able to translate the question and answer', async ({ page }) => {
-  await createQuestionAndAnswer(prisma, tag.id, user)
-  await page.goto('/')
-  const openCard = page.getByRole('link', { name: 'keyboard_arrow_right' }).first()
-  await openCard.waitFor('visible')
-  await openCard.click()
-  await expect(page.getByRole('button', { name: 'translate' })).toBeVisible()
-  await page.getByRole('button', { name: 'translate' }).hover()
-  await page
-    .locator('a')
-    .filter({ hasText: 'Anglais' })
-    .click()
-  await expect(page.getByRole('heading', { name: 'This is a question' })).toBeVisible()
-  await expect(page.getByText('This is an answer')).toBeVisible()
 })
 
 test.afterEach(async () => {

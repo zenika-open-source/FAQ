@@ -34,10 +34,6 @@ type AggregateTagLabel {
   count: Int!
 }
 
-type AggregateTranslation {
-  count: Int!
-}
-
 type AggregateUser {
   count: Int!
 }
@@ -49,8 +45,6 @@ type AggregateZNode {
 type Answer {
   id: ID!
   content: String!
-  language: String!
-  translation: Translation
   sources(
     where: SourceWhereInput
     orderBy: SourceOrderByInput
@@ -75,8 +69,6 @@ type AnswerConnection {
 input AnswerCreateInput {
   id: ID
   content: String!
-  language: String!
-  translation: TranslationCreateOneInput
   sources: SourceCreateManyWithoutAnswerInput
   node: ZNodeCreateOneWithoutAnswerInput!
   user: UserCreateOneWithoutAnswersInput!
@@ -100,8 +92,6 @@ input AnswerCreateOneWithoutSourcesInput {
 input AnswerCreateWithoutNodeInput {
   id: ID
   content: String!
-  language: String!
-  translation: TranslationCreateOneInput
   sources: SourceCreateManyWithoutAnswerInput
   user: UserCreateOneWithoutAnswersInput!
 }
@@ -109,8 +99,6 @@ input AnswerCreateWithoutNodeInput {
 input AnswerCreateWithoutSourcesInput {
   id: ID
   content: String!
-  language: String!
-  translation: TranslationCreateOneInput
   node: ZNodeCreateOneWithoutAnswerInput!
   user: UserCreateOneWithoutAnswersInput!
 }
@@ -118,8 +106,6 @@ input AnswerCreateWithoutSourcesInput {
 input AnswerCreateWithoutUserInput {
   id: ID
   content: String!
-  language: String!
-  translation: TranslationCreateOneInput
   sources: SourceCreateManyWithoutAnswerInput
   node: ZNodeCreateOneWithoutAnswerInput!
 }
@@ -134,8 +120,6 @@ enum AnswerOrderByInput {
   id_DESC
   content_ASC
   content_DESC
-  language_ASC
-  language_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -145,7 +129,6 @@ enum AnswerOrderByInput {
 type AnswerPreviousValues {
   id: ID!
   content: String!
-  language: String!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -179,20 +162,6 @@ input AnswerScalarWhereInput {
   content_not_starts_with: String
   content_ends_with: String
   content_not_ends_with: String
-  language: String
-  language_not: String
-  language_in: [String!]
-  language_not_in: [String!]
-  language_lt: String
-  language_lte: String
-  language_gt: String
-  language_gte: String
-  language_contains: String
-  language_not_contains: String
-  language_starts_with: String
-  language_not_starts_with: String
-  language_ends_with: String
-  language_not_ends_with: String
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -234,8 +203,6 @@ input AnswerSubscriptionWhereInput {
 
 input AnswerUpdateInput {
   content: String
-  language: String
-  translation: TranslationUpdateOneInput
   sources: SourceUpdateManyWithoutAnswerInput
   node: ZNodeUpdateOneRequiredWithoutAnswerInput
   user: UserUpdateOneRequiredWithoutAnswersInput
@@ -243,12 +210,10 @@ input AnswerUpdateInput {
 
 input AnswerUpdateManyDataInput {
   content: String
-  language: String
 }
 
 input AnswerUpdateManyMutationInput {
   content: String
-  language: String
 }
 
 input AnswerUpdateManyWithoutUserInput {
@@ -286,24 +251,18 @@ input AnswerUpdateOneWithoutNodeInput {
 
 input AnswerUpdateWithoutNodeDataInput {
   content: String
-  language: String
-  translation: TranslationUpdateOneInput
   sources: SourceUpdateManyWithoutAnswerInput
   user: UserUpdateOneRequiredWithoutAnswersInput
 }
 
 input AnswerUpdateWithoutSourcesDataInput {
   content: String
-  language: String
-  translation: TranslationUpdateOneInput
   node: ZNodeUpdateOneRequiredWithoutAnswerInput
   user: UserUpdateOneRequiredWithoutAnswersInput
 }
 
 input AnswerUpdateWithoutUserDataInput {
   content: String
-  language: String
-  translation: TranslationUpdateOneInput
   sources: SourceUpdateManyWithoutAnswerInput
   node: ZNodeUpdateOneRequiredWithoutAnswerInput
 }
@@ -358,21 +317,6 @@ input AnswerWhereInput {
   content_not_starts_with: String
   content_ends_with: String
   content_not_ends_with: String
-  language: String
-  language_not: String
-  language_in: [String!]
-  language_not_in: [String!]
-  language_lt: String
-  language_lte: String
-  language_gt: String
-  language_gte: String
-  language_contains: String
-  language_not_contains: String
-  language_starts_with: String
-  language_not_starts_with: String
-  language_ends_with: String
-  language_not_ends_with: String
-  translation: TranslationWhereInput
   sources_every: SourceWhereInput
   sources_some: SourceWhereInput
   sources_none: SourceWhereInput
@@ -1535,19 +1479,6 @@ type Mutation {
   ): TagLabel!
   deleteTagLabel(where: TagLabelWhereUniqueInput!): TagLabel
   deleteManyTagLabels(where: TagLabelWhereInput): BatchPayload!
-  createTranslation(data: TranslationCreateInput!): Translation!
-  updateTranslation(data: TranslationUpdateInput!, where: TranslationWhereUniqueInput!): Translation
-  updateManyTranslations(
-    data: TranslationUpdateManyMutationInput!
-    where: TranslationWhereInput
-  ): BatchPayload!
-  upsertTranslation(
-    where: TranslationWhereUniqueInput!
-    create: TranslationCreateInput!
-    update: TranslationUpdateInput!
-  ): Translation!
-  deleteTranslation(where: TranslationWhereUniqueInput!): Translation
-  deleteManyTranslations(where: TranslationWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
@@ -1759,25 +1690,6 @@ type Query {
     first: Int
     last: Int
   ): TagLabelConnection!
-  translation(where: TranslationWhereUniqueInput!): Translation
-  translations(
-    where: TranslationWhereInput
-    orderBy: TranslationOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): [Translation]!
-  translationsConnection(
-    where: TranslationWhereInput
-    orderBy: TranslationOrderByInput
-    skip: Int
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): TranslationConnection!
   user(where: UserWhereUniqueInput!): User
   users(
     where: UserWhereInput
@@ -1822,8 +1734,6 @@ type Query {
 type Question {
   id: ID!
   title: String!
-  language: String!
-  translation: Translation
   slug: String!
   views: Int
   node: ZNode!
@@ -1841,8 +1751,6 @@ type QuestionConnection {
 input QuestionCreateInput {
   id: ID
   title: String!
-  language: String!
-  translation: TranslationCreateOneInput
   slug: String!
   views: Int
   node: ZNodeCreateOneWithoutQuestionInput!
@@ -1862,8 +1770,6 @@ input QuestionCreateOneWithoutNodeInput {
 input QuestionCreateWithoutNodeInput {
   id: ID
   title: String!
-  language: String!
-  translation: TranslationCreateOneInput
   slug: String!
   views: Int
   user: UserCreateOneWithoutQuestionsInput!
@@ -1872,8 +1778,6 @@ input QuestionCreateWithoutNodeInput {
 input QuestionCreateWithoutUserInput {
   id: ID
   title: String!
-  language: String!
-  translation: TranslationCreateOneInput
   slug: String!
   views: Int
   node: ZNodeCreateOneWithoutQuestionInput!
@@ -1889,8 +1793,6 @@ enum QuestionOrderByInput {
   id_DESC
   title_ASC
   title_DESC
-  language_ASC
-  language_DESC
   slug_ASC
   slug_DESC
   views_ASC
@@ -1904,7 +1806,6 @@ enum QuestionOrderByInput {
 type QuestionPreviousValues {
   id: ID!
   title: String!
-  language: String!
   slug: String!
   views: Int
   createdAt: DateTime!
@@ -1940,20 +1841,6 @@ input QuestionScalarWhereInput {
   title_not_starts_with: String
   title_ends_with: String
   title_not_ends_with: String
-  language: String
-  language_not: String
-  language_in: [String!]
-  language_not_in: [String!]
-  language_lt: String
-  language_lte: String
-  language_gt: String
-  language_gte: String
-  language_contains: String
-  language_not_contains: String
-  language_starts_with: String
-  language_not_starts_with: String
-  language_ends_with: String
-  language_not_ends_with: String
   slug: String
   slug_not: String
   slug_in: [String!]
@@ -2017,8 +1904,6 @@ input QuestionSubscriptionWhereInput {
 
 input QuestionUpdateInput {
   title: String
-  language: String
-  translation: TranslationUpdateOneInput
   slug: String
   views: Int
   node: ZNodeUpdateOneRequiredWithoutQuestionInput
@@ -2027,14 +1912,12 @@ input QuestionUpdateInput {
 
 input QuestionUpdateManyDataInput {
   title: String
-  language: String
   slug: String
   views: Int
 }
 
 input QuestionUpdateManyMutationInput {
   title: String
-  language: String
   slug: String
   views: Int
 }
@@ -2067,8 +1950,6 @@ input QuestionUpdateOneWithoutNodeInput {
 
 input QuestionUpdateWithoutNodeDataInput {
   title: String
-  language: String
-  translation: TranslationUpdateOneInput
   slug: String
   views: Int
   user: UserUpdateOneRequiredWithoutQuestionsInput
@@ -2076,8 +1957,6 @@ input QuestionUpdateWithoutNodeDataInput {
 
 input QuestionUpdateWithoutUserDataInput {
   title: String
-  language: String
-  translation: TranslationUpdateOneInput
   slug: String
   views: Int
   node: ZNodeUpdateOneRequiredWithoutQuestionInput
@@ -2128,21 +2007,6 @@ input QuestionWhereInput {
   title_not_starts_with: String
   title_ends_with: String
   title_not_ends_with: String
-  language: String
-  language_not: String
-  language_in: [String!]
-  language_not_in: [String!]
-  language_lt: String
-  language_lte: String
-  language_gt: String
-  language_gte: String
-  language_contains: String
-  language_not_contains: String
-  language_starts_with: String
-  language_not_starts_with: String
-  language_ends_with: String
-  language_not_ends_with: String
-  translation: TranslationWhereInput
   slug: String
   slug_not: String
   slug_in: [String!]
@@ -2461,7 +2325,6 @@ type Subscription {
   tag(where: TagSubscriptionWhereInput): TagSubscriptionPayload
   tagCategory(where: TagCategorySubscriptionWhereInput): TagCategorySubscriptionPayload
   tagLabel(where: TagLabelSubscriptionWhereInput): TagLabelSubscriptionPayload
-  translation(where: TranslationSubscriptionWhereInput): TranslationSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
   zNode(where: ZNodeSubscriptionWhereInput): ZNodeSubscriptionPayload
 }
@@ -3371,148 +3234,6 @@ input TagWhereInput {
 }
 
 input TagWhereUniqueInput {
-  id: ID
-}
-
-type Translation {
-  id: ID!
-  language: String!
-  text: String!
-}
-
-type TranslationConnection {
-  pageInfo: PageInfo!
-  edges: [TranslationEdge]!
-  aggregate: AggregateTranslation!
-}
-
-input TranslationCreateInput {
-  id: ID
-  language: String!
-  text: String!
-}
-
-input TranslationCreateOneInput {
-  create: TranslationCreateInput
-  connect: TranslationWhereUniqueInput
-}
-
-type TranslationEdge {
-  node: Translation!
-  cursor: String!
-}
-
-enum TranslationOrderByInput {
-  id_ASC
-  id_DESC
-  language_ASC
-  language_DESC
-  text_ASC
-  text_DESC
-}
-
-type TranslationPreviousValues {
-  id: ID!
-  language: String!
-  text: String!
-}
-
-type TranslationSubscriptionPayload {
-  mutation: MutationType!
-  node: Translation
-  updatedFields: [String!]
-  previousValues: TranslationPreviousValues
-}
-
-input TranslationSubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: TranslationWhereInput
-  AND: [TranslationSubscriptionWhereInput!]
-  OR: [TranslationSubscriptionWhereInput!]
-  NOT: [TranslationSubscriptionWhereInput!]
-}
-
-input TranslationUpdateDataInput {
-  language: String
-  text: String
-}
-
-input TranslationUpdateInput {
-  language: String
-  text: String
-}
-
-input TranslationUpdateManyMutationInput {
-  language: String
-  text: String
-}
-
-input TranslationUpdateOneInput {
-  create: TranslationCreateInput
-  update: TranslationUpdateDataInput
-  upsert: TranslationUpsertNestedInput
-  delete: Boolean
-  disconnect: Boolean
-  connect: TranslationWhereUniqueInput
-}
-
-input TranslationUpsertNestedInput {
-  update: TranslationUpdateDataInput!
-  create: TranslationCreateInput!
-}
-
-input TranslationWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  language: String
-  language_not: String
-  language_in: [String!]
-  language_not_in: [String!]
-  language_lt: String
-  language_lte: String
-  language_gt: String
-  language_gte: String
-  language_contains: String
-  language_not_contains: String
-  language_starts_with: String
-  language_not_starts_with: String
-  language_ends_with: String
-  language_not_ends_with: String
-  text: String
-  text_not: String
-  text_in: [String!]
-  text_not_in: [String!]
-  text_lt: String
-  text_lte: String
-  text_gt: String
-  text_gte: String
-  text_contains: String
-  text_not_contains: String
-  text_starts_with: String
-  text_not_starts_with: String
-  text_ends_with: String
-  text_not_ends_with: String
-  AND: [TranslationWhereInput!]
-  OR: [TranslationWhereInput!]
-  NOT: [TranslationWhereInput!]
-}
-
-input TranslationWhereUniqueInput {
   id: ID
 }
 

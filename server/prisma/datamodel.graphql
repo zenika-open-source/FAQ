@@ -18,9 +18,6 @@ type Question {
   id: ID! @unique @id
 
   title: String!
-  language: String!
-  translation: Translation
-
   slug: String!
   views: Int
 
@@ -35,8 +32,6 @@ type Answer {
   id: ID! @unique @id
 
   content: String!
-  language: String!
-  translation: Translation
 
   sources: [Source!]! @relation(name: "AnswerSources", onDelete: CASCADE, link: TABLE)
 
@@ -45,13 +40,6 @@ type Answer {
 
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
-}
-
-type Translation {
-  id: ID! @unique @id
-
-  language: String!
-  text: String!
 }
 
 type Source {
