@@ -8,7 +8,7 @@ import Button from 'components/Button'
 
 import { handleTranslation } from 'helpers'
 
-const Translate = ({ node, setQuestionTitle, setAnswerContent }) => {
+const Translate = ({ node, setQuestionTitle, setAnswerContent, isAutoTranslated }) => {
   const intl = getIntl(Translate)
 
   const originalQuestionLanguage = node.question.language
@@ -16,7 +16,16 @@ const Translate = ({ node, setQuestionTitle, setAnswerContent }) => {
 
   return (
     <div className="translate">
-      <Dropdown button={<Button icon="translate" link style={{ padding: '0.2rem' }} />}>
+      <Dropdown
+        button={
+          <Button
+            id={isAutoTranslated ? 'hoveredBtn' : ''}
+            icon="translate"
+            link
+            style={{ padding: '0.2rem' }}
+          />
+        }
+      >
         <DropdownItem
           onClick={() =>
             handleTranslation(

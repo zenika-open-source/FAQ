@@ -105,3 +105,9 @@
   box-shadow: none;
   margin-bottom: -1px;
 }
+
+#hoveredBtn {
+  color: var(--primary-color-font);
+  background-color: var(--primary-color-light);
+  border-color: var(--primary-color-light);
+}
