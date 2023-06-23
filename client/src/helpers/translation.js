@@ -21,7 +21,7 @@ export const handleTranslation = (
 }
 
 export const getNavigatorLanguage = () => {
-  let language = navigator.language
+  const language = navigator?.language ?? 'en'
   const [formattedLanguage] = language.split('-')
   if (formattedLanguage !== 'fr' && formattedLanguage !== 'en') {
     return formattedLanguage === 'en'
@@ -29,10 +29,6 @@ export const getNavigatorLanguage = () => {
   return formattedLanguage
 }
 
-export const handleAutoTranslation = (navigatortLanguage, questionLanguage) => {
-  let isAutoTranslated = false
-  if (navigatortLanguage !== questionLanguage) {
-    isAutoTranslated = true
-  }
-  return isAutoTranslated
+export const shouldAutoTranslate = (navigatorLanguage, questionLanguage) => {
+  return navigatorLanguage !== questionLanguage
 }

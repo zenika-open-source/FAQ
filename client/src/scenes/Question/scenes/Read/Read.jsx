@@ -16,7 +16,7 @@ import Dropdown, { DropdownItem } from 'components/Dropdown'
 
 import { ActionMenu } from '../../components'
 import { FlagsDropdown, History, Meta, Share, Sources, Translate, Views } from './components'
-import { getNavigatorLanguage, handleAutoTranslation, handleTranslation } from 'helpers'
+import { getNavigatorLanguage, handleTranslation } from 'helpers'
 
 const Read = ({ history, match, zNode, loading }) => {
   const [loaded, setLoaded] = useState(false)
