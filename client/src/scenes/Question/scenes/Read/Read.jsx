@@ -15,7 +15,8 @@ import Card, { CardTitle, CardText } from 'components/Card'
 import Dropdown, { DropdownItem } from 'components/Dropdown'
 
 import { ActionMenu } from '../../components'
-import { FlagsDropdown, History, Meta, Share, Sources, Translate, Views } from './components'
+import { FlagsDropdown, History, Meta, Share, Sources, LanguageDropdown, Views } from './components'
+import { handleTranslation } from 'helpers'
 
 const Read = ({ history, match, zNode, loading }) => {
   const [loaded, setLoaded] = useState(false)
@@ -28,6 +29,21 @@ const Read = ({ history, match, zNode, loading }) => {
   const [createFlag] = useMutation(CREATE_FLAG)
   const [removeFlag] = useMutation(REMOVE_FLAG)
   const [incrementViewsCounter] = useMutation(INCREMENT_VIEWS_COUNTER)
+
+  const originalQuestionLanguage = zNode.question.language
+  const originalAnswerLanguage = zNode.answer && zNode.answer.language
+
+  const translate = language => {
+    const content = handleTranslation(
+      originalQuestionLanguage,
+      originalAnswerLanguage,
+      language,
+      zNode
+    )
+    setQuestionTitle(content.question)
+    setAnswerContent(content.answer)
+    setIsTranslated(content.isTranslation)
+  }
 
   useEffect(() => {
     if (!loaded || incremented) return
@@ -109,12 +125,11 @@ const Read = ({ history, match, zNode, loading }) => {
           <Views value={zNode.question.views} />
           <Share node={zNode} />
           {zNode.question.language && (
-            <Translate
-              node={zNode}
-              setQuestionTitle={setQuestionTitle}
-              setAnswerContent={setAnswerContent}
-              isTranslated={isTranslated}
-              setIsTranslated={setIsTranslated}
+            <LanguageDropdown
+              onLanguageChanged={translate}
+              originalLanguage={originalQuestionLanguage}
+              primary={isTranslated}
+              link={!isTranslated}
             />
           )}
         </CardTitle>
