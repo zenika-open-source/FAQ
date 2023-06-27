@@ -8,41 +8,40 @@ import Button from 'components/Button'
 
 import { handleTranslation } from 'helpers'
 
-const Translate = ({ node, setQuestionTitle, setAnswerContent }) => {
+const Translate = ({ node, setQuestionTitle, setAnswerContent, isTranslated, setIsTranslated }) => {
   const intl = getIntl(Translate)
 
   const originalQuestionLanguage = node.question.language
   const originalAnswerLanguage = node.answer && node.answer.language
 
+  const translate = language => {
+    const content = handleTranslation(
+      originalQuestionLanguage,
+      originalAnswerLanguage,
+      language,
+      node
+    )
+    setQuestionTitle(content.question)
+    setAnswerContent(content.answer)
+    setIsTranslated(content.isTranslation)
+  }
+
   return (
     <div className="translate">
-      <Dropdown button={<Button icon="translate" link style={{ padding: '0.2rem' }} />}>
-        <DropdownItem
-          onClick={() =>
-            handleTranslation(
-              originalQuestionLanguage,
-              originalAnswerLanguage,
-              'fr',
-              node,
-              setQuestionTitle,
-              setAnswerContent
-            )
-          }
-        >
+      <Dropdown
+        button={
+          <Button
+            id={isTranslated ? 'hoveredBtn' : ''}
+            icon="translate"
+            link
+            style={{ padding: '0.2rem' }}
+          />
+        }
+      >
+        <DropdownItem onClick={() => translate('fr')}>
           {intl('french')} {originalQuestionLanguage === 'fr' && '(original)'}
         </DropdownItem>
-        <DropdownItem
-          onClick={() =>
-            handleTranslation(
-              originalQuestionLanguage,
-              originalAnswerLanguage,
-              'en',
-              node,
-              setQuestionTitle,
-              setAnswerContent
-            )
-          }
-        >
+        <DropdownItem onClick={() => translate('en')}>
           {intl('english')} {originalQuestionLanguage === 'en' && '(original)'}
         </DropdownItem>
       </Dropdown>

@@ -22,14 +22,14 @@ const detectLanguage = async text => {
   }
 }
 
-const getTranslatedText = async (text, language) => {
+const getTranslatedText = async (text, originalLanguage) => {
   try {
-    const targetLanguage = language === 'fr' ? 'en' : 'fr'
+    const language = originalLanguage === 'fr' ? 'en' : 'fr'
     const response = await fetch(translationApiUrl, {
       method: 'POST',
       body: JSON.stringify({
         q: text,
-        target: targetLanguage
+        target: language
       })
     })
     const res = await response.json()

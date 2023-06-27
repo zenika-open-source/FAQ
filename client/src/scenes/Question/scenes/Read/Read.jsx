@@ -23,6 +23,7 @@ const Read = ({ history, match, zNode, loading }) => {
 
   const [questionTitle, setQuestionTitle] = useState('')
   const [answerContent, setAnswerContent] = useState('')
+  const [isTranslated, setIsTranslated] = useState(false)
 
   const [createFlag] = useMutation(CREATE_FLAG)
   const [removeFlag] = useMutation(REMOVE_FLAG)
@@ -84,7 +85,24 @@ const Read = ({ history, match, zNode, loading }) => {
       <Card>
         <CardTitle style={{ padding: '1.2rem' }}>
           <div className="grow">
-            <h1>{markdown.title(questionTitle)}</h1>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'baseline'
+              }}
+            >
+              <h1>{markdown.title(questionTitle)}</h1>
+              {isTranslated && (
+                <p
+                  className="small-text"
+                  style={{
+                    marginLeft: '1rem'
+                  }}
+                >
+                  {intl('auto_translated')}
+                </p>
+              )}
+            </div>
             {zNode.tags.length > 0 && <Tags tags={zNode.tags} />}
           </div>
           <Flags node={zNode} withLabels={true} />
@@ -95,6 +113,8 @@ const Read = ({ history, match, zNode, loading }) => {
               node={zNode}
               setQuestionTitle={setQuestionTitle}
               setAnswerContent={setAnswerContent}
+              isTranslated={isTranslated}
+              setIsTranslated={setIsTranslated}
             />
           )}
         </CardTitle>
@@ -150,6 +170,7 @@ Read.translations = {
         answer: 'Answer'
       }
     },
+    auto_translated: 'Automatic translation',
     no_answer: 'No answer yet...',
     answer: 'Answer the question'
   },
@@ -162,6 +183,7 @@ Read.translations = {
         answer: 'Réponse'
       }
     },
+    auto_translated: 'Traduction automatique',
     no_answer: 'Pas encore de réponse...',
     answer: 'Répondre à la question'
   }
