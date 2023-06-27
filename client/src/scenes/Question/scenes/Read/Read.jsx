@@ -30,7 +30,6 @@ const Read = ({ history, match, zNode, loading }) => {
   const [removeFlag] = useMutation(REMOVE_FLAG)
   const [incrementViewsCounter] = useMutation(INCREMENT_VIEWS_COUNTER)
 
-  const navigatorLanguage = getNavigatorLanguage()
   const originalQuestionLanguage = zNode?.question.language
   const originalAnswerLanguage = zNode?.answer?.language
 
@@ -53,7 +52,8 @@ const Read = ({ history, match, zNode, loading }) => {
   }, [loaded, incremented, incrementViewsCounter, zNode])
 
   useEffect(() => {
-    if (!loaded && zNode) {
+    if (!loaded && zNode && originalQuestionLanguage && originalAnswerLanguage) {
+      const navigatorLanguage = getNavigatorLanguage()
       translate(navigatorLanguage)
     }
   }, [zNode, loaded])
