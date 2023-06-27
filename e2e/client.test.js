@@ -787,6 +787,7 @@ test('Should be able to translate the question and answer', async ({ page }) => 
     .filter({ hasText: 'Anglais' })
     .click()
   await expect(page.getByRole('heading', { name: 'This is a question' })).toBeVisible()
+  await expect(page.getByText('Traduction automatique')).toBeVisible()
   await expect(page.getByText('This is an answer')).toBeVisible()
 })
 
