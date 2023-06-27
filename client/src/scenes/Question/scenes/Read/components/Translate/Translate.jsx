@@ -31,9 +31,9 @@ const Translate = ({ node, setQuestionTitle, setAnswerContent, isTranslated, set
       <Dropdown
         button={
           <Button
-            id={isTranslated ? 'hoveredBtn' : ''}
             icon="translate"
-            link
+            primary={isTranslated}
+            link={!isTranslated}
             style={{ padding: '0.2rem' }}
           />
         }
