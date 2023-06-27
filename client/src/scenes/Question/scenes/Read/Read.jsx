@@ -30,8 +30,8 @@ const Read = ({ history, match, zNode, loading }) => {
   const [removeFlag] = useMutation(REMOVE_FLAG)
   const [incrementViewsCounter] = useMutation(INCREMENT_VIEWS_COUNTER)
 
-  const originalQuestionLanguage = zNode.question.language
-  const originalAnswerLanguage = zNode.answer && zNode.answer.language
+  const originalQuestionLanguage = zNode?.question.language
+  const originalAnswerLanguage = zNode?.answer?.language
 
   const translate = language => {
     const content = handleTranslation(
