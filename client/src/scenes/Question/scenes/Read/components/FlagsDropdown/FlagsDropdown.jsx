@@ -7,7 +7,7 @@ import Dropdown, { DropdownItem } from 'components/Dropdown'
 import Button from 'components/Button'
 
 import './FlagsDropdown.css'
-import { answerCanBeCertified } from 'helpers/answerCanBeCertified'
+import { answerCanBeCertified } from 'helpers'
 import { useUser } from 'contexts'
 
 const FlagsDropdown = ({ zNode, onSelect, onRemove }) => {
