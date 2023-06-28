@@ -13,7 +13,51 @@ const confTagLabels = ctx =>
 
 module.exports = {
   Query: {
-    zNode: (_, args, ctx, info) => ctx.prisma.query.zNode(args, info)
+    zNode: async (_, args, ctx, info) => {
+      let node = await ctx.prisma.query.zNode(args, info)
+      if (!node.question.language) {
+        const title = node.question.title
+        const content = node.answer?.content ?? ''
+        const {
+          language: questionLanguage,
+          translation: questionTranslation
+        } = await storeTranslation(title)
+        const { language: answerLanguage, translation: answerTranslation } = await storeTranslation(
+          content
+        )
+        node = await ctx.prisma.mutation.updateZNode(
+          {
+            where: { id: node.id },
+            data: {
+              question: {
+                update: {
+                  language: questionLanguage,
+                  translation: {
+                    create: {
+                      language: questionTranslation.language,
+                      text: questionTranslation.text
+                    }
+                  }
+                }
+              },
+              answer: {
+                update: {
+                  language: answerLanguage,
+                  translation: {
+                    create: {
+                      language: answerTranslation.language,
+                      text: answerTranslation.text
+                    }
+                  }
+                }
+              }
+            }
+          },
+          info
+        )
+      }
+      return node
+    }
   },
   Mutation: {
     createQuestionAndTags: async (_, { title, tags }, ctx, info) => {
