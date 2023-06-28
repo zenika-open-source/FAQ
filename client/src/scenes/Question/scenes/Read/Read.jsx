@@ -16,7 +16,7 @@ import Dropdown, { DropdownItem } from 'components/Dropdown'
 
 import { ActionMenu } from '../../components'
 import { FlagsDropdown, History, Meta, Share, Sources, LanguageDropdown, Views } from './components'
-import { handleTranslation } from 'helpers'
+import { getNavigatorLanguage, handleTranslation } from 'helpers'
 
 const Read = ({ history, match, zNode, loading }) => {
   const [loaded, setLoaded] = useState(false)
@@ -32,6 +32,7 @@ const Read = ({ history, match, zNode, loading }) => {
 
   const originalQuestionLanguage = zNode?.question.language
   const originalAnswerLanguage = zNode?.answer?.language
+  const navigatorLanguage = getNavigatorLanguage()
 
   const translate = language => {
     const content = handleTranslation(
@@ -52,12 +53,8 @@ const Read = ({ history, match, zNode, loading }) => {
   }, [loaded, incremented, incrementViewsCounter, zNode])
 
   useEffect(() => {
-    if (!loaded && zNode) {
-      setLoaded(true)
-      setQuestionTitle(zNode.question.title)
-      if (zNode.answer) {
-        setAnswerContent(zNode.answer.content)
-      }
+    if (!loaded && zNode && navigatorLanguage) {
+      translate(navigatorLanguage)
     }
   }, [zNode, loaded])
 
