@@ -54,6 +54,7 @@ const Read = ({ history, match, zNode, loading }) => {
 
   useEffect(() => {
     if (!loaded && zNode && navigatorLanguage) {
+      setLoaded(true)
       translate(navigatorLanguage)
     }
   }, [zNode, loaded])

@@ -28,7 +28,3 @@ export const getNavigatorLanguage = () => {
   }
   return formattedLanguage
 }
-
-export const shouldAutoTranslate = (navigatorLanguage, questionLanguage) => {
-  return navigatorLanguage !== questionLanguage
-}
