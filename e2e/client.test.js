@@ -799,7 +799,6 @@ test('Should add a translation to a question and an answer created without one',
   const openCard = page.getByRole('link', { name: 'keyboard_arrow_right' }).first()
   await openCard.waitFor('visible')
   await openCard.click()
-  await page.pause()
   await page.getByRole('button', { name: 'Modifier' }).hover()
   await page
     .locator('a')
