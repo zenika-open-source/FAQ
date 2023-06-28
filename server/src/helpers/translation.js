@@ -17,7 +17,9 @@ const detectLanguage = async text => {
     return data.detections[0][0].language
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.error(error)
+    console.error(
+      "L'appel à Google Cloud  Translation API a échoué. Vérifiez les limites d'appels fixées pour ce projet"
+    )
     return ''
   }
 }
@@ -37,7 +39,9 @@ const getTranslatedText = async (text, originalLanguage) => {
     return { language, text: data.translations[0].translatedText }
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.error(error)
+    console.error(
+      "L'appel à Google Cloud  Translation API a échoué. Vérifiez les limites d'appels fixées pour ce projet"
+    )
   }
 }
 
