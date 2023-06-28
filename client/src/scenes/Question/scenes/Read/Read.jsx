@@ -32,6 +32,7 @@ const Read = ({ history, match, zNode, loading }) => {
 
   const originalQuestionLanguage = zNode?.question.language
   const originalAnswerLanguage = zNode?.answer?.language
+  const navigatorLanguage = getNavigatorLanguage()
 
   const translate = language => {
     const content = handleTranslation(
@@ -52,8 +53,8 @@ const Read = ({ history, match, zNode, loading }) => {
   }, [loaded, incremented, incrementViewsCounter, zNode])
 
   useEffect(() => {
-    if (!loaded && zNode && originalQuestionLanguage && originalAnswerLanguage) {
-      const navigatorLanguage = getNavigatorLanguage()
+    if (!loaded && zNode && navigatorLanguage) {
+      console.log(navigatorLanguage)
       translate(navigatorLanguage)
     }
   }, [zNode, loaded])

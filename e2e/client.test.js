@@ -268,7 +268,7 @@ const createZNodeWithoutTranslation = (tagId, userId) => {
       question: {
         create: {
           title: 'Ceci est une question',
-          language: '',
+          language: 'fr',
           slug: 'slug.Ceci est une question',
           translation: {},
           user: {
@@ -281,7 +281,7 @@ const createZNodeWithoutTranslation = (tagId, userId) => {
       answer: {
         create: {
           content: 'Ceci est une réponse',
-          language: '',
+          language: 'fr',
           translation: {},
           user: {
             connect: {
@@ -799,6 +799,7 @@ test('Should add a translation to a question and an answer created without one',
   const openCard = page.getByRole('link', { name: 'keyboard_arrow_right' }).first()
   await openCard.waitFor('visible')
   await openCard.click()
+  await page.pause()
   await page.getByRole('button', { name: 'Modifier' }).hover()
   await page
     .locator('a')
