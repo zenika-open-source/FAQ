@@ -791,7 +791,7 @@ test('Should be able to translate the question and answer', async ({ page }) => 
   await expect(page.getByText('This is an answer')).toBeVisible()
 })
 
-test('Should add a translation when modifying a question and an answer created without one', async ({
+test('Should modify the content of the translation when the question and answers are modified', async ({
   page
 }) => {
   await createQuestionAndAnswerWithoutTranslation(prisma, tag.id, user)
@@ -799,6 +799,13 @@ test('Should add a translation when modifying a question and an answer created w
   const openCard = page.getByRole('link', { name: 'keyboard_arrow_right' }).first()
   await openCard.waitFor('visible')
   await openCard.click()
+  await page.getByRole('button', { name: 'translate' }).hover()
+  await page
+    .locator('a')
+    .filter({ hasText: 'Anglais' })
+    .click()
+  await expect(page.getByRole('heading', { name: 'This is a question' })).toBeVisible()
+  await expect(page.getByText('This is an answer')).toBeVisible()
   await page.getByRole('button', { name: 'Modifier' }).hover()
   await page
     .locator('a')
@@ -822,23 +829,6 @@ test('Should add a translation when modifying a question and an answer created w
     .click()
   await expect(page.getByRole('heading', { name: 'This is a different question' })).toBeVisible()
   await expect(page.getByText('This is a different answer')).toBeVisible()
-})
-
-test('Should create a translation when going on a question with no translation', async ({
-  page
-}) => {
-  await createQuestionAndAnswerWithoutTranslation(prisma, tag.id, user)
-  await page.goto('/')
-  const openCard = page.getByRole('link', { name: 'keyboard_arrow_right' }).first()
-  await openCard.waitFor('visible')
-  await openCard.click()
-  await page.getByRole('button', { name: 'translate' }).hover()
-  await page
-    .locator('a')
-    .filter({ hasText: 'Anglais' })
-    .click()
-  await expect(page.getByRole('heading', { name: 'This is a question' })).toBeVisible()
-  await expect(page.getByText('This is an answer')).toBeVisible()
 })
 
 test.afterEach(async () => {
