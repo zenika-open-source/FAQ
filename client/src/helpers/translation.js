@@ -8,13 +8,13 @@ export const handleTranslation = (
   if (originalQuestionLanguage === targetLanguage) {
     content = { ...content, question: node.question.title }
   } else {
-    content = { ...content, question: node.question.translation.text, isTranslation: true }
+    content = { ...content, question: node.question.translation?.text, isTranslation: true }
   }
   if (node.answer) {
     if (originalAnswerLanguage === targetLanguage) {
       content = { ...content, answer: node.answer.content }
     } else {
-      content = { ...content, answer: node.answer.translation.text, isTranslated: true }
+      content = { ...content, answer: node.answer.translation?.text, isTranslated: true }
     }
   }
   return content
