@@ -268,7 +268,7 @@ const createZNodeWithoutTranslation = (tagId, userId) => {
       question: {
         create: {
           title: 'Ceci est une question',
-          language: '',
+          language: 'fr',
           slug: 'slug.Ceci est une question',
           translation: {},
           user: {
@@ -281,7 +281,7 @@ const createZNodeWithoutTranslation = (tagId, userId) => {
       answer: {
         create: {
           content: 'Ceci est une réponse',
-          language: '',
+          language: 'fr',
           translation: {},
           user: {
             connect: {
