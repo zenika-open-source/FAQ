@@ -11,8 +11,6 @@
     "classnames": "^2.2.5",
     "copy-to-clipboard": "^3.2.0",
     "date-fns": "^1.29.0",
-    "emoji-mart": "^2.11.2",
-    "emojilib": "^2.3.0",
     "eslint-config-react-app": "^7.0.1",
     "graphql": "^14.7.0",
     "graphql-tag": "^2.8.0",
