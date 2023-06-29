@@ -6,17 +6,17 @@ import { Link, Redirect } from 'react-router-dom'
 
 import { CREATE_FLAG, INCREMENT_VIEWS_COUNTER, REMOVE_FLAG } from './queries'
 
-import { markdown, getIntl } from 'services'
+import { getIntl, markdown } from 'services'
 
 import NotFound from 'scenes/NotFound'
 
-import { Loading, Button, Flags, Tags } from 'components'
-import Card, { CardTitle, CardText } from 'components/Card'
+import { Button, Flags, Loading, Tags } from 'components'
+import Card, { CardText, CardTitle } from 'components/Card'
 import Dropdown, { DropdownItem } from 'components/Dropdown'
 
-import { ActionMenu } from '../../components'
-import { FlagsDropdown, History, Meta, Share, Sources, LanguageDropdown, Views } from './components'
 import { getNavigatorLanguage, handleTranslation } from 'helpers'
+import { ActionMenu } from '../../components'
+import { FlagsDropdown, History, LanguageDropdown, Meta, Share, Sources, Views } from './components'
 
 const Read = ({ history, match, zNode, loading }) => {
   const [loaded, setLoaded] = useState(false)
@@ -31,16 +31,10 @@ const Read = ({ history, match, zNode, loading }) => {
   const [incrementViewsCounter] = useMutation(INCREMENT_VIEWS_COUNTER)
 
   const originalQuestionLanguage = zNode?.question.language
-  const originalAnswerLanguage = zNode?.answer?.language
   const navigatorLanguage = getNavigatorLanguage()
 
   const translate = language => {
-    const content = handleTranslation(
-      originalQuestionLanguage,
-      originalAnswerLanguage,
-      language,
-      zNode
-    )
+    const content = handleTranslation(language, zNode)
     setQuestionTitle(content.question)
     setAnswerContent(content.answer)
     setIsTranslated(content.isTranslation)
