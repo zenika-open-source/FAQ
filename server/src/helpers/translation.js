@@ -18,7 +18,8 @@ const detectLanguage = async text => {
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error(
-      "L'appel à Google Cloud  Translation API a échoué. Vérifiez les limites d'appels fixées pour ce projet"
+      "L'appel à Google Cloud Translation API a échoué. Vérifiez les limites d'appels fixées pour ce projet.",
+      error
     )
     return ''
   }
@@ -40,7 +41,8 @@ const getTranslatedText = async (text, originalLanguage) => {
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error(
-      "L'appel à Google Cloud  Translation API a échoué. Vérifiez les limites d'appels fixées pour ce projet"
+      "L'appel à Google Cloud Translation API a échoué. Vérifiez les limites d'appels fixées pour ce projet.",
+      error
     )
   }
 }
@@ -55,8 +57,50 @@ const storeTranslation = async text => {
   return { language, translation }
 }
 
+const translateContentAndSave = async (node, ctx) => {
+  const title = node.question.title
+  const content = node.answer?.content ?? ''
+  const { language: questionLanguage, translation: questionTranslation } = await storeTranslation(
+    title
+  )
+  const { language: answerLanguage, translation: answerTranslation } = await storeTranslation(
+    content
+  )
+  node = await ctx.prisma.mutation.updateZNode(
+    {
+      where: { id: node.id },
+      data: {
+        question: {
+          update: {
+            language: questionLanguage,
+            translation: {
+              create: {
+                language: questionTranslation.language,
+                text: questionTranslation.text
+              }
+            }
+          }
+        },
+        answer: {
+          update: {
+            language: answerLanguage,
+            translation: {
+              create: {
+                language: answerTranslation.language,
+                text: answerTranslation.text
+              }
+            }
+          }
+        }
+      }
+    },
+    info
+  )
+}
+
 module.exports = {
   detectLanguage,
   getTranslatedText,
-  storeTranslation
+  storeTranslation,
+  translateContentAndSave
 }
