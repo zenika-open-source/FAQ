@@ -91,6 +91,7 @@ jobs:
           working_directory: e2e
   e2e-test:
     executor: e2e-runner
+    parallelism: 2
     steps:
       - checkout
       - node/install-packages:
@@ -126,7 +127,7 @@ jobs:
           command: |
             wait-on tcp:3000
             wait-on http://localhost:4466
-            npm run test
+            SHARD="$((${CIRCLE_NODE_INDEX}+1))"; npm run test -- --shard=${SHARD}/${CIRCLE_NODE_TOTAL}
           working_directory: e2e
       - store_test_results:
           path: ./e2e/results.xml
