@@ -17,7 +17,7 @@ module.exports = {
     zNode: async (_, args, ctx, info) => {
       let node = await ctx.prisma.query.zNode(args, info)
       if (!node.question.language) {
-        await translateContentAndSave(node, ctx, info)
+        node = await translateContentAndSave(node, ctx, info)
       }
       return node
     }

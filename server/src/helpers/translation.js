@@ -57,18 +57,18 @@ const storeTranslation = async text => {
   return { language, translation }
 }
 
-const translateContentAndSave = async (node, ctx, info) => {
-  const title = node.question.title
-  const content = node.answer?.content ?? ''
+const translateContentAndSave = async (zNode, ctx, info) => {
+  const title = zNode.question.title
+  const content = zNode.answer?.content ?? ''
   const { language: questionLanguage, translation: questionTranslation } = await storeTranslation(
     title
   )
   const { language: answerLanguage, translation: answerTranslation } = await storeTranslation(
     content
   )
-  node = await ctx.prisma.mutation.updateZNode(
+  const node = await ctx.prisma.mutation.updateZNode(
     {
-      where: { id: node.id },
+      where: { id: zNode.id },
       data: {
         question: {
           update: {
@@ -96,6 +96,7 @@ const translateContentAndSave = async (node, ctx, info) => {
     },
     info
   )
+  return node
 }
 
 module.exports = {
