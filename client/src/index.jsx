@@ -1,25 +1,30 @@
-import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
-import { ApolloProvider } from '@apollo/react-hooks'
-import { persistCache } from 'apollo-cache-persist'
+import { persistCache, LocalStorageWrapper } from 'apollo3-cache-persist'
 
-import { apollo, apolloCache } from 'services'
+import { apolloCache } from 'services'
 
 import 'normalize.css'
 
 import App from 'scenes/App'
+import ApolloWrapper from 'services/apollo'
 
-persistCache({
-  cache: apolloCache,
-  storage: window.localStorage
-}).then(() => {
+const cache = apolloCache
+
+const initializeApp = async () => {
+  await persistCache({
+    cache,
+    storage: new LocalStorageWrapper(window.localStorage)
+  })
+
   ReactDOM.render(
-    <ApolloProvider client={apollo}>
+    <ApolloWrapper>
       <BrowserRouter>
         <App />
       </BrowserRouter>
-    </ApolloProvider>,
+    </ApolloWrapper>,
     document.getElementById('root')
   )
-})
+}
+
+initializeApp()
