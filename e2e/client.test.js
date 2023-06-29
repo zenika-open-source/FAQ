@@ -268,7 +268,7 @@ const createZNodeWithoutTranslation = (tagId, userId) => {
       question: {
         create: {
           title: 'Ceci est une question',
-          language: 'fr',
+          language: '',
           slug: 'slug.Ceci est une question',
           translation: {},
           user: {
@@ -281,7 +281,7 @@ const createZNodeWithoutTranslation = (tagId, userId) => {
       answer: {
         create: {
           content: 'Ceci est une réponse',
-          language: 'fr',
+          language: '',
           translation: {},
           user: {
             connect: {
@@ -822,6 +822,7 @@ test('Should modify the content of the translation when the question and answers
   await page.locator('textarea').click()
   await page.locator('textarea').fill('Ceci est une réponse différente')
   await page.locator('button', { hasText: 'Enregistrer la réponse' }).click()
+  await page.waitForTimeout(1000)
   await page.getByRole('button', { name: 'translate' }).hover()
   await page
     .locator('a')
