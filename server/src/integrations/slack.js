@@ -2,8 +2,6 @@ const fetch = require('isomorphic-fetch')
 
 const algolia = require('./algolia')
 
-const emojify = require('../helpers/emojify')
-
 // TMP_TAGS
 
 class Slack {
@@ -41,7 +39,7 @@ class Slack {
     const url = origin + `/q/${node.question.slug}-${node.id}`
     const tags = node.tags.map(tag => `#${tag.label.name}`).join(', ')
 
-    const title = emojify(this.escapeText(node.question.title))
+    const title = this.escapeText(node.question.title)
 
     const message = {
       text: `<${url}|${title}>` + (tags ? ` (${tags})` : '')

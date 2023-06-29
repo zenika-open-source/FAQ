@@ -1,5 +1,5 @@
 import React, { useState, useReducer, useEffect } from 'react'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 
 import { alert, getIntl } from 'services'
 

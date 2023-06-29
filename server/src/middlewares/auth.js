@@ -51,7 +51,6 @@ const checkJwt = async (req, res, next, prisma) => {
           ...specialties
         },
         update: {
-          auth0Id: 'faq-user-no-auth@zenika.com',
           admin: false,
           key: 'enableSkipAuth',
           name: 'enableSkipAuth',
