@@ -57,7 +57,7 @@ const storeTranslation = async text => {
   return { language, translation }
 }
 
-const translateContentAndSave = async (node, ctx) => {
+const translateContentAndSave = async (node, ctx, info) => {
   const title = node.question.title
   const content = node.answer?.content ?? ''
   const { language: questionLanguage, translation: questionTranslation } = await storeTranslation(
