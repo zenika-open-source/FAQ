@@ -1,20 +1,15 @@
-export const handleTranslation = (
-  originalQuestionLanguage,
-  originalAnswerLanguage,
-  targetLanguage,
-  node
-) => {
+export const handleTranslation = (targetLanguage, node) => {
   let content = { question: '', answer: '', isTranslation: false, language: targetLanguage }
-  if (originalQuestionLanguage === targetLanguage) {
-    content = { ...content, question: node.question.title }
-  } else {
+  if (node.question.translation?.language === targetLanguage && node.question.translation?.text) {
     content = { ...content, question: node.question.translation.text, isTranslation: true }
+  } else {
+    content = { ...content, question: node.question.title }
   }
   if (node.answer) {
-    if (originalAnswerLanguage === targetLanguage) {
-      content = { ...content, answer: node.answer.content }
-    } else {
+    if (node.answer.translation?.language === targetLanguage && node.answer.translation?.text) {
       content = { ...content, answer: node.answer.translation.text, isTranslated: true }
+    } else {
+      content = { ...content, answer: node.answer.content }
     }
   }
   return content
