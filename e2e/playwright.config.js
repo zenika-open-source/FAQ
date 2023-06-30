@@ -2,7 +2,8 @@ import { defineConfig } from '@playwright/test'
 
 export default defineConfig({
   reporter: process.env.CI && [['junit', { outputFile: 'results.xml' }]],
-  workers: process.env.CI ? 2 : undefined,
+  // workers: process.env.CI ? 2 : undefined,
+  // fullyParallel: true,
   use: {
     trace: process.env.CI && 'on',
     screenshot: process.env.CI && 'on',
