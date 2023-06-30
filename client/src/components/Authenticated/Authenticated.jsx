@@ -14,16 +14,8 @@ const Authenticated = ({ location, reverse, redirect, children, admin, specialis
 
   const currentURL = location.pathname + location.search
 
-  if (admin) {
-    if (!isAdmin) {
-      return redirect ? <Redirect to="/" /> : ''
-    } else {
-      return children
-    }
-  }
-
-  if (specialist) {
-    if (!isSpecialist) {
+  if (admin || specialist) {
+    if (!isAdmin || !isSpecialist) {
       return redirect ? <Redirect to="/" /> : ''
     } else {
       return children
