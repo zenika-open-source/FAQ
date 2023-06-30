@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/client'
 
 import { alert, getIntl } from 'services'
 
-import { useConfiguration } from 'contexts'
+import { useAuth, useConfiguration } from 'contexts'
 
 import { Tabs, Button } from 'components'
 import Card, { CardTitle, CardText, CardActions } from 'components/Card'
@@ -34,6 +34,8 @@ if (import.meta.env.VITE_DISABLE_AUTH === 'true') {
 
 const Settings = ({ configuration: conf }) => {
   const intl = getIntl(Settings)
+
+  const { isAdmin, isSpecialist } = useAuth()
 
   const configuration = useConfiguration()
 
@@ -90,13 +92,25 @@ const Settings = ({ configuration: conf }) => {
         </CardTitle>
         <CardText>
           <Tabs>
-            <General state={state} dispatch={dispatch} loading={loading} />
-            <Tags state={state} onTagsChange={onTagsChange} />
-            {import.meta.env.VITE_DISABLE_AUTH !== 'true' && (
-              <Synonyms state={state} dispatch={dispatch} loading={loading} />
-            )}
-            <Specialists state={state} dispatch={dispatch} loading={loading} />
-            <Integrations state={state} dispatch={dispatch} loading={loading} />
+            {isAdmin ||
+              (import.meta.env.VITE_DISABLE_AUTH === 'true' && (
+                <>
+                  <General state={state} dispatch={dispatch} loading={loading} />
+                  <Tags state={state} onTagsChange={onTagsChange} />
+                  {import.meta.env.VITE_DISABLE_AUTH !== 'true' && (
+                    <Synonyms state={state} dispatch={dispatch} loading={loading} />
+                  )}
+                </>
+              ))}
+            {isAdmin ||
+              isSpecialist ||
+              (import.meta.env.VITE_DISABLE_AUTH === 'true' && (
+                <Specialists state={state} dispatch={dispatch} loading={loading} />
+              ))}
+            {isAdmin ||
+              (import.meta.env.VITE_DISABLE_AUTH === 'true' && (
+                <Integrations state={state} dispatch={dispatch} loading={loading} />
+              ))}
           </Tabs>
         </CardText>
         <CardActions>

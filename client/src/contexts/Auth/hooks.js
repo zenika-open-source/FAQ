@@ -8,6 +8,7 @@ export const useAuth = () => {
   const isAuth = !!(auth.session && auth.session.expiresAt > new Date().getTime() && auth.user)
   const wasAuth = !!(auth.session && auth.session.expiresAt < new Date().getTime() && auth.user)
   const isAdmin = isAuth && auth.user && auth.user.admin
+  const isSpecialist = isAuth && auth.user && auth.user.specialties
 
-  return { ready: auth.ready, isAuth, wasAuth, isAdmin, ...actions }
+  return { ready: auth.ready, isAuth, wasAuth, isAdmin, isSpecialist, ...actions }
 }

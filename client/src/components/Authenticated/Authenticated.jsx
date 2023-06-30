@@ -5,8 +5,8 @@ import { Redirect } from 'react-router-dom'
 
 import { useAuth } from 'contexts'
 
-const Authenticated = ({ location, reverse, redirect, children, admin }) => {
-  const { isAuth, isAdmin } = useAuth()
+const Authenticated = ({ location, reverse, redirect, children, admin, specialist }) => {
+  const { isAuth, isAdmin, isSpecialist } = useAuth()
 
   if (import.meta.env.VITE_DISABLE_AUTH === 'true') {
     return children
@@ -16,6 +16,14 @@ const Authenticated = ({ location, reverse, redirect, children, admin }) => {
 
   if (admin) {
     if (!isAdmin) {
+      return redirect ? <Redirect to="/" /> : ''
+    } else {
+      return children
+    }
+  }
+
+  if (specialist) {
+    if (!isSpecialist) {
       return redirect ? <Redirect to="/" /> : ''
     } else {
       return children
