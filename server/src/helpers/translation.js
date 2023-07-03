@@ -81,19 +81,21 @@ const translateContentAndSave = async (zNode, ctx, info) => {
             }
           }
         },
-        ...(zNode.answer && {
-          answer: {
-            update: {
-              language: answerLanguage,
-              translation: {
-                create: {
-                  language: answerTranslation.language,
-                  text: answerTranslation.text
+        ...(zNode.answer
+          ? {
+              answer: {
+                update: {
+                  language: answerLanguage,
+                  translation: {
+                    create: {
+                      language: answerTranslation.language,
+                      text: answerTranslation.text
+                    }
+                  }
                 }
               }
             }
-          }
-        })
+          : {})
       }
     },
     info
