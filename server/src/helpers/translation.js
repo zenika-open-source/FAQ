@@ -1,4 +1,5 @@
 const fs = require('fs/promises')
+const logger = require('./logger')
 
 const key = process.env.CLOUD_TRANSLATION_API_KEY || ''
 const detectApiUrl = new URL('https://translation.googleapis.com/language/translate/v2/detect')
@@ -18,8 +19,7 @@ const detectLanguage = async text => {
     const data = res.data
     return data.detections[0][0].language
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error(
+    logger.error(
       "L'appel à Google Cloud Translation API a échoué. Vérifiez les limites d'appels fixées pour ce projet.",
       error
     )
@@ -41,8 +41,7 @@ const getTranslatedText = async (text, originalLanguage) => {
     const data = res.data
     return { language, text: data.translations[0].translatedText }
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error(
+    logger.error(
       "L'appel à Google Cloud Translation API a échoué. Vérifiez les limites d'appels fixées pour ce projet.",
       error
     )
@@ -55,8 +54,7 @@ const readTranslationMockFile = async file => {
     const data = JSON.parse(rawData)
     return data
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error(error)
+    logger.error('Error while reading the translation mock file', file, error)
     return {}
   }
 }
