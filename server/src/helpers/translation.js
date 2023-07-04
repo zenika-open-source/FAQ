@@ -67,7 +67,6 @@ const findData = (data, text) => {
       return item
     }
   }
-
   return null
 }
 
