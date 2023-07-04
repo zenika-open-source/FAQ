@@ -55,13 +55,14 @@ const readTranslationMockFile = async file => {
     const data = JSON.parse(rawData)
     return data
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error(error)
     return {}
   }
 }
 
 const findTranslationMock = (data, text) => {
-  for (const [key, item] of Object.entries(data)) {
+  for (const [, item] of Object.entries(data)) {
     if (item.title === text || item.content === text) {
       return item
     }

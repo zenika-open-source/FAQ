@@ -5,6 +5,7 @@ const configurationEndpoint = multiTenant => async (req, res) =>
     res.header('Access-Control-Allow-Origin', '*')
 
     if (err) {
+      // eslint-disable-next-line no-console
       console.error('error while retrieving configuration', err)
       res.status(500).send(`Avez-vous bien fait la commande 'npm run new_service' ?`)
       return
