@@ -17,7 +17,10 @@ const detectLanguage = async text => {
     return data.detections[0][0].language
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.error(error)
+    console.error(
+      "L'appel à Google Cloud Translation API a échoué. Vérifiez les limites d'appels fixées pour ce projet.",
+      error
+    )
     return ''
   }
 }
@@ -37,7 +40,10 @@ const getTranslatedText = async (text, originalLanguage) => {
     return { language, text: data.translations[0].translatedText }
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.error(error)
+    console.error(
+      "L'appel à Google Cloud Translation API a échoué. Vérifiez les limites d'appels fixées pour ce projet.",
+      error
+    )
   }
 }
 
@@ -51,8 +57,55 @@ const storeTranslation = async text => {
   return { language, translation }
 }
 
+const translateContentAndSave = async (zNode, ctx, info) => {
+  const title = zNode.question.title
+  const content = zNode.answer?.content ?? ''
+  const { language: questionLanguage, translation: questionTranslation } = await storeTranslation(
+    title
+  )
+  const { language: answerLanguage, translation: answerTranslation } = await storeTranslation(
+    content
+  )
+  const node = await ctx.prisma.mutation.updateZNode(
+    {
+      where: { id: zNode.id },
+      data: {
+        question: {
+          update: {
+            language: questionLanguage,
+            translation: {
+              create: {
+                language: questionTranslation.language,
+                text: questionTranslation.text
+              }
+            }
+          }
+        },
+        ...(zNode.answer
+          ? {
+              answer: {
+                update: {
+                  language: answerLanguage,
+                  translation: {
+                    create: {
+                      language: answerTranslation.language,
+                      text: answerTranslation.text
+                    }
+                  }
+                }
+              }
+            }
+          : {})
+      }
+    },
+    info
+  )
+  return node
+}
+
 module.exports = {
   detectLanguage,
   getTranslatedText,
-  storeTranslation
+  storeTranslation,
+  translateContentAndSave
 }

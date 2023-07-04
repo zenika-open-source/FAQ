@@ -19,6 +19,7 @@
         "asyncArrow": "always"
       }
     ],
-    "playwright/no-wait-for-timeout": "off"
+    "playwright/no-wait-for-timeout": "off",
+    "playwright/no-page-pause": "error"
   }
 }
