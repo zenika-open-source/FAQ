@@ -1,3 +1,5 @@
+const fs = require('fs')
+
 const key = process.env.CLOUD_TRANSLATION_API_KEY || ''
 const detectApiUrl = new URL('https://translation.googleapis.com/language/translate/v2/detect')
 detectApiUrl.searchParams.append('key', key)
@@ -47,12 +49,39 @@ const getTranslatedText = async (text, originalLanguage) => {
   }
 }
 
+const readTranslationMockFile = async file => {
+  try {
+    const rawData = fs.readFileSync(file)
+    const data = JSON.parse(rawData)
+    return data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+const findData = (data, text) => {
+  const keys = Object.keys(data)
+  for (const key of keys) {
+    const item = data[key]
+    if (item.title === text || item.content === text) {
+      return item
+    }
+  }
+
+  return null
+}
+
 const storeTranslation = async text => {
   let language = ''
   let translation = { language: language, text: '' }
   if (process.env.CLOUD_TRANSLATION_API_KEY) {
     language = await detectLanguage(text)
     translation = await getTranslatedText(text, language)
+  } else if (process.env.TRANSLATION_MOCK_FILE) {
+    const translationMocks = await readTranslationMockFile(process.env.TRANSLATION_MOCK_FILE)
+    const data = findData(translationMocks, text)
+    language = data.language
+    translation = data.translation
   }
   return { language, translation }
 }
