@@ -61,13 +61,8 @@ const readTranslationMockFile = async file => {
   }
 }
 
-const findTranslationMock = (data, text) => {
-  for (const [, item] of Object.entries(data)) {
-    if (item.title === text || item.content === text) {
-      return item
-    }
-  }
-  return null
+const findTranslationMock = (mocks, text) => {
+  return Object.values(mocks).find(({ title, content }) => title === text || content === text)
 }
 
 const storeTranslation = async text => {
