@@ -1,11 +1,12 @@
 const { getConfiguration } = require('../middlewares/configuration')
+const logger = require('../helpers/logger')
 
 const configurationEndpoint = multiTenant => async (req, res) =>
   getConfiguration(multiTenant, req, err => {
     res.header('Access-Control-Allow-Origin', '*')
 
     if (err) {
-      console.error('error while retrieving configuration', err)
+      logger.error('Error while retrieving configuration', err)
       res.status(500).send(`Avez-vous bien fait la commande 'npm run new_service' ?`)
       return
     }

@@ -1,5 +1,5 @@
 const fetch = require('isomorphic-fetch')
-
+const logger = require('../helpers/logger')
 const algolia = require('./algolia')
 
 // TMP_TAGS
@@ -13,8 +13,7 @@ class Slack {
     const origin = `${ctx.request.protocol}://${ctx.request.hostname}`
 
     if (!conf.slackChannelHook) {
-      // eslint-disable-next-line no-console
-      console.warn(`Please provide a slack channel hook for service ${name}/${stage}`)
+      logger.warn(`Please provide a slack channel hook for service ${name}/${stage}`)
       return
     }
 
