@@ -1,6 +1,6 @@
 const fetch = require('isomorphic-fetch')
 const FormData = require('form-data')
-
+const logger = require('../../helpers/logger')
 const answer = require('./answer')
 
 class Mailgun {
@@ -11,8 +11,7 @@ class Mailgun {
     } = ctx.prisma._meta
 
     if (!conf.mailgunDomain || !conf.mailgunApiKey) {
-      // eslint-disable-next-line no-console
-      console.warn(`Please provide a mailgun domain and api key for service ${name}/${stage}`)
+      logger.warn(`Please provide a mailgun domain and api key for service ${name}/${stage}`)
       return null
     }
 

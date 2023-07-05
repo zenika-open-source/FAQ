@@ -1,0 +1,34 @@
+{
+  "question": {
+    "title": "Ceci est une question",
+    "language": "fr",
+    "translation": {
+      "language": "en",
+      "text": "This is a question"
+    }
+  },
+  "answer": {
+    "content": "Ceci est une réponse",
+    "language": "fr",
+    "translation": {
+      "language": "en",
+      "text": "This is an answer"
+    }
+  },
+  "newQuestion": {
+    "title": "Ceci est une question différente",
+    "language": "fr",
+    "translation": {
+      "language": "en",
+      "text": "This is a different question"
+    }
+  },
+  "newAnswer": {
+    "content": "Ceci est une réponse différente",
+    "language": "fr",
+    "translation": {
+      "language": "en",
+      "text": "This is a different answer"
+    }
+  }
+}

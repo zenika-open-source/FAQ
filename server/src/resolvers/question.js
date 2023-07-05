@@ -3,7 +3,8 @@ const {
   ctxUser,
   slugify,
   deleteCertifedFlagIfNoLongerApplicable,
-  storeTranslation
+  storeTranslation,
+  translateContentAndSave
 } = require('../helpers')
 const { algolia, slack } = require('../integrations')
 
@@ -13,7 +14,13 @@ const confTagLabels = ctx =>
 
 module.exports = {
   Query: {
-    zNode: (_, args, ctx, info) => ctx.prisma.query.zNode(args, info)
+    zNode: async (_, args, ctx, info) => {
+      let node = await ctx.prisma.query.zNode(args, info)
+      if (!node.question.language || (node.answer && !node.answer?.language)) {
+        node = await translateContentAndSave(node, ctx, info)
+      }
+      return node
+    }
   },
   Mutation: {
     createQuestionAndTags: async (_, { title, tags }, ctx, info) => {
