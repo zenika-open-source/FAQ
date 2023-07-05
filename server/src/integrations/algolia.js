@@ -1,4 +1,5 @@
 const algoliasearch = require('algoliasearch')
+const logger = require('../helpers/logger')
 
 // TMP_TAGS
 
@@ -34,8 +35,7 @@ class Algolia {
     } = ctx.prisma._meta
 
     if (!conf.algoliaAppId || !conf.algoliaApiKey) {
-      // eslint-disable-next-line no-console
-      console.warn(`Please provide an algolia app id and an api key for service ${name}/${stage}`)
+      logger.warn(`Please provide an algolia app id and an api key for service ${name}/${stage}`)
       return null
     }
 
