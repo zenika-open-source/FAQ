@@ -92,25 +92,21 @@ const Settings = ({ configuration: conf }) => {
         </CardTitle>
         <CardText>
           <Tabs>
-            {isAdmin ||
-              (import.meta.env.VITE_DISABLE_AUTH === 'true' && (
-                <>
-                  <General state={state} dispatch={dispatch} loading={loading} />
-                  <Tags state={state} onTagsChange={onTagsChange} />
-                  {import.meta.env.VITE_DISABLE_AUTH !== 'true' && (
-                    <Synonyms state={state} dispatch={dispatch} loading={loading} />
-                  )}
-                </>
-              ))}
-            {isAdmin ||
-              isSpecialist ||
-              (import.meta.env.VITE_DISABLE_AUTH === 'true' && (
-                <Specialists state={state} dispatch={dispatch} loading={loading} />
-              ))}
-            {isAdmin ||
-              (import.meta.env.VITE_DISABLE_AUTH === 'true' && (
-                <Integrations state={state} dispatch={dispatch} loading={loading} />
-              ))}
+            {(isAdmin || import.meta.env.VITE_DISABLE_AUTH === 'true') && (
+              <>
+                <General state={state} dispatch={dispatch} loading={loading} />
+                <Tags state={state} onTagsChange={onTagsChange} />
+                {import.meta.env.VITE_DISABLE_AUTH !== 'true' && (
+                  <Synonyms state={state} dispatch={dispatch} loading={loading} />
+                )}
+              </>
+            )}
+            {(isAdmin || isSpecialist || import.meta.env.VITE_DISABLE_AUTH === 'true') && (
+              <Specialists state={state} dispatch={dispatch} loading={loading} />
+            )}
+            {(isAdmin || import.meta.env.VITE_DISABLE_AUTH === 'true') && (
+              <Integrations state={state} dispatch={dispatch} loading={loading} />
+            )}
           </Tabs>
         </CardText>
         <CardActions>
