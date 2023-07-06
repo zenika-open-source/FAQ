@@ -16,21 +16,12 @@ import { General, Tags, Synonyms, Integrations, Specialists } from './scenes'
 
 import './Settings.scss'
 
-let initState
-
-if (import.meta.env.VITE_DISABLE_AUTH === 'true') {
-  initState = conf => ({
-    ...conf,
-    bugReporting: conf.bugReporting || 'GITHUB'
-  })
-} else {
-  initState = conf => ({
-    ...conf,
-    synonyms: synonymsToList(conf.algoliaSynonyms),
-    authorizedDomains: conf.authorizedDomains.join(', '),
-    bugReporting: conf.bugReporting || 'GITHUB'
-  })
-}
+const initState = conf => ({
+  ...conf,
+  synonyms: synonymsToList(conf.algoliaSynonyms),
+  authorizedDomains: conf.authorizedDomains.join(', '),
+  bugReporting: conf.bugReporting || 'GITHUB'
+})
 
 const Settings = ({ configuration: conf }) => {
   const intl = getIntl(Settings)
@@ -96,9 +87,7 @@ const Settings = ({ configuration: conf }) => {
               <>
                 <General state={state} dispatch={dispatch} loading={loading} />
                 <Tags state={state} onTagsChange={onTagsChange} />
-                {import.meta.env.VITE_DISABLE_AUTH !== 'true' && (
-                  <Synonyms state={state} dispatch={dispatch} loading={loading} />
-                )}
+                <Synonyms state={state} dispatch={dispatch} loading={loading} />
               </>
             )}
             {(isAdmin || isSpecialist || import.meta.env.VITE_DISABLE_AUTH === 'true') && (

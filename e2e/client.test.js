@@ -587,7 +587,7 @@ test('Should be able to answer a question that has no answer', async ({ page }) 
 test('Should be able to search by text and tag', async ({ page }) => {
   await createQuestionAndAnswer(prisma, tag.id, user)
   await page.goto('/')
-  await page.waitForTimeout(2000)
+  await page.waitForTimeout(1000)
   await page.locator("input:near(:text('search'))").click()
   await page.locator("input:near(:text('search'))").fill('Ceci est une question')
   await expect(page.getByRole('heading', { name: 'Ceci est une question' }).first()).toBeVisible()
@@ -607,7 +607,7 @@ test('Should be able to search by text and tag', async ({ page }) => {
   await expect(page.getByText('Ceci est une réponse différente', { exact: true })).toBeVisible()
 })
 
-test('Should see the marketing specialty on profile page', async ({ page }) => {
+test('Should see the "marketing" specialty on profile page', async ({ page }) => {
   await page.goto('/')
   await page.getByRole('img', { name: 'avatar' }).hover()
   await page
@@ -735,19 +735,19 @@ test('Should be able to add a specialty to a user', async ({ page }) => {
     .filter({ hasText: 'Paramètres' })
     .click()
   await page.getByText('Spécialistes').click()
-  const user = page.locator('.userElement', { hasText: 'enableSkipAuth' })
+  const user = page.locator('.userElement', { hasText: 'tempUser' }).first()
   const userSpecialty = user.locator('.userSpecialties').locator('.userSpecialty')
-  await expect(userSpecialty.first().locator('span')).toHaveText('marketing')
+  await expect(userSpecialty.first().locator('span')).toHaveText('payroll')
   const addSpecialty = user.locator('.userRight').getByRole('button', { hasText: 'add' })
   await addSpecialty.click()
-  await user.getByRole('button', { name: 'sales' }).click()
+  await user.getByRole('button', { name: 'marketing' }).click()
   await page
     .locator('.alert-content', { hasText: 'La spécialité a été ajoutée' })
     .waitFor({ state: 'visible' })
   await page.reload()
   await page.waitForTimeout(1000)
   await page.getByText('Spécialistes').click()
-  await expect(userSpecialty.last().locator('span')).toHaveText('sales')
+  await expect(userSpecialty.last().locator('span')).toHaveText('marketing')
 })
 
 test("Should be able to remove a user's specialty", async ({ page }) => {

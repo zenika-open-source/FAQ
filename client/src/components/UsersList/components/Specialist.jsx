@@ -2,11 +2,14 @@ import { useMutation } from '@apollo/client'
 import { alert, getIntl } from 'services'
 import { UPDATE_SPECIALTIES } from '../queries'
 import SpecialtiesList from './SpecialtiesList'
+import { useUser } from 'contexts'
 
 const Specialist = ({ specialist, services, onUpdateSpecialty }) => {
   const intl = getIntl(Specialist)
 
   const specialties = specialist.specialties
+  const user = useUser()
+  console.log('specialties: ', specialties)
 
   const onSpecialtyChange = params => {
     const { action, data } = params
@@ -63,7 +66,7 @@ const Specialist = ({ specialist, services, onUpdateSpecialty }) => {
         {services && (
           <SpecialtiesList
             specialties={specialties}
-            services={services}
+            userSpecialties={user.specialties}
             onChange={onSpecialtyChange}
           />
         )}
