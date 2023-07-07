@@ -1,8 +1,5 @@
 import compact from 'lodash/compact'
-import subMonths from 'date-fns/sub_months'
-import differenceInMilliseconds from 'date-fns/difference_in_milliseconds'
-import distanceInWordsToNow from 'date-fns/distance_in_words_to_now'
-import format from 'date-fns/format'
+import { format, formatDistanceToNow, differenceInMilliseconds, subMonths } from 'date-fns'
 
 import { markdown } from 'services'
 
@@ -84,12 +81,13 @@ export const formatHistoryAction = (historyAction, options = { relative: true })
 
   const monthOld = subMonths(new Date(), 1)
 
+  const createdAtDate = new Date(createdAt)
   const date =
-    differenceInMilliseconds(createdAt, monthOld) > 0
-      ? distanceInWordsToNow(createdAt, {
+    differenceInMilliseconds(createdAtDate, monthOld) > 0
+      ? formatDistanceToNow(createdAtDate, {
           addSuffix: true
         })
-      : format(createdAt, 'D MMM YYYY, HH:mm')
+      : format(createdAtDate, 'Pp')
 
   return {
     date,

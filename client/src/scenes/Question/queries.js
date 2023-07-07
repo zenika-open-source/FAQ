@@ -59,6 +59,12 @@ export const zNodeFragment = `
       name
     }
   }
+  history {
+    id
+    meta
+    action
+    model
+  }
 `
 
 export const getNode = gql`

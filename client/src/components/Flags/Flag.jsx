@@ -4,6 +4,7 @@ import capitalize from 'lodash/capitalize'
 import cn from 'classnames'
 
 import { getIntl } from 'services'
+import { format } from 'date-fns'
 
 const flagMeta = {
   duplicate: {
@@ -40,7 +41,12 @@ const Flag = ({ flag, withlabel, style, ...otherProps }) => {
       {...otherProps}
     >
       <i className="material-icons">{flagMeta[flag.type].icon}</i>
-      {withlabel && <span className="label">{capitalize(intl(flag.type))}</span>}
+      {withlabel && (
+        <span className="label">
+          {capitalize(intl(flag.type))}{' '}
+          {flag.type === 'certified' && format(new Date(flag.createdAt), 'P')}
+        </span>
+      )}
     </div>
   )
 }
@@ -57,14 +63,14 @@ Flag.translations = {
     outdated: 'outdated',
     incomplete: 'incomplete',
     unanswered: 'unanswered',
-    certified: 'certified'
+    certified: 'certified on'
   },
   fr: {
     duplicate: 'doublon',
     outdated: 'obsolète',
     incomplete: 'incomplète',
     unanswered: 'sans réponse',
-    certified: 'certifiée'
+    certified: 'certifiée le'
   }
 }
 

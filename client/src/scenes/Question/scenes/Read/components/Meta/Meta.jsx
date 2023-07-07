@@ -21,7 +21,7 @@ const Meta = ({ node }) => {
         <div>
           {intl('asked')} {node.question.user.name}
           <br />
-          {format(node.question.createdAt, 'D MMM YYYY')}
+          {format(new Date(node.question.createdAt), 'P')}
         </div>
       </div>
       {node.answer && (
@@ -29,7 +29,7 @@ const Meta = ({ node }) => {
           <div>
             {intl('answered')} {node.answer.user.name}
             <br />
-            {format(node.answer.createdAt, 'D MMM YYYY')}
+            {format(new Date(node.answer.createdAt), 'P')}
           </div>
           <Avatar
             image={node.answer.user.picture}

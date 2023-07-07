@@ -31,8 +31,6 @@ const Read = ({ history, match, zNode, loading }) => {
   const [removeFlag] = useMutation(REMOVE_FLAG)
   const [incrementViewsCounter] = useMutation(INCREMENT_VIEWS_COUNTER)
 
-  const certified = zNode?.flags.find(flag => flag.type === 'certified')
-
   const originalQuestionLanguage = zNode?.question.language
   const navigatorLanguage = getNavigatorLanguage()
 
@@ -116,26 +114,17 @@ const Read = ({ history, match, zNode, loading }) => {
             </div>
             {zNode.tags.length > 0 && <Tags tags={zNode.tags} />}
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-              <Flags node={zNode} withLabels={true} />
-              <Views value={zNode.question.views} />
-              <Share node={zNode} />
-              {zNode.question.language && (
-                <LanguageDropdown
-                  onLanguageChanged={translate}
-                  originalLanguage={originalQuestionLanguage}
-                  primary={isTranslated}
-                  link={!isTranslated}
-                />
-              )}
-            </div>
-            {certified && (
-              <p className="small-text">
-                {intl('certified')} <b>{format(certified.createdAt, 'D MMM YYYY')}</b>
-              </p>
-            )}
-          </div>
+          <Flags node={zNode} withLabels={true} />
+          <Views value={zNode.question.views} />
+          <Share node={zNode} />
+          {zNode.question.language && (
+            <LanguageDropdown
+              onLanguageChanged={translate}
+              originalLanguage={originalQuestionLanguage}
+              primary={isTranslated}
+              link={!isTranslated}
+            />
+          )}
         </CardTitle>
         <CardText>
           {zNode.answer ? (

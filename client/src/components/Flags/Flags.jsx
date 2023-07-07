@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import clone from 'lodash/clone'
 import find from 'lodash/find'
 import map from 'lodash/map'
-import format from 'date-fns/format'
+import { format } from 'date-fns'
 
 import { getIntl } from 'services'
 
@@ -29,7 +29,7 @@ const Flags = ({ node, withLabels }) => {
         let tooltip
 
         if (withLabels && flag.user) {
-          tooltip = intl('tooltip')(flag.user.name, format(flag.createdAt, 'D MMM YYYY'))
+          tooltip = intl('tooltip')(flag.user.name, format(new Date(flag.createdAt), 'P'))
         } else {
           tooltip = flagIntl(flag.type).toUpperCase()
         }
