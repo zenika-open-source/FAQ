@@ -9,7 +9,6 @@ const Specialist = ({ specialist, services, onUpdateSpecialty }) => {
 
   const specialties = specialist.specialties
   const user = useUser()
-  console.log('specialties: ', specialties)
 
   const onSpecialtyChange = params => {
     const { action, data } = params

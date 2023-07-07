@@ -54,7 +54,6 @@ class Auth {
   scheduleRenew = (session, renewCallback) => {
     // Renew session 5min before end of token
     const fiveMinBefore = (session.expiresIn - 5 * 60) * 1000
-    console.log({ session, fiveMinBefore })
 
     if (this.scheduledTimeout) {
       clearTimeout(this.scheduledTimeout)

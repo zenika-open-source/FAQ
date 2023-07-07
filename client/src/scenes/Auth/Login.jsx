@@ -15,7 +15,6 @@ const Login = ({ location }) => {
 
   const { login, renewAuth, isAuth, wasAuth } = useAuth()
 
-  console.log({ wasAuth, renewing, isAuth })
   if (isAuth) {
     return <Redirect to="/" />
   }

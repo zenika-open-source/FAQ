@@ -864,6 +864,33 @@ test('Should modify the content of the translation when the question and answers
   await expect(page.getByText('This is a different answer')).toBeVisible()
 })
 
+test.only('Should be able, as a specialist, to give my specialy to other users', async ({
+  page
+}) => {
+  await setUser(page, { specialties: [{ name: 'marketing' }] })
+  await page.goto('/')
+  await page.pause()
+  await page.getByRole('img', { name: 'avatar' }).hover()
+  await page
+    .locator('a')
+    .filter({ hasText: 'Paramètres' })
+    .click()
+  await page.getByText('Spécialistes').click()
+  const user = page.locator('.userElement', { hasText: 'tempUser' }).first()
+  const userSpecialty = user.locator('.userSpecialties').locator('.userSpecialty')
+  await expect(userSpecialty.first().locator('span')).toHaveText('payroll')
+  const addSpecialty = user.locator('.userRight').getByRole('button', { hasText: 'add' })
+  await addSpecialty.click()
+  await user.getByRole('button', { name: 'marketing' }).click()
+  await page
+    .locator('.alert-content', { hasText: 'La spécialité a été ajoutée' })
+    .waitFor({ state: 'visible' })
+  await page.reload()
+  await page.waitForTimeout(1000)
+  await page.getByText('Spécialistes').click()
+  await expect(userSpecialty.last().locator('span')).toHaveText('marketing')
+})
+
 test.afterEach(async () => {
   algolia.clearIndex({ prisma })
 })

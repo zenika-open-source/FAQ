@@ -6,7 +6,6 @@ import { useState } from 'react'
 const SpecialtiesList = ({ specialties, userSpecialties, onChange }) => {
   const [opened, setOpened] = useState(false)
   const ref = useClickOutside(() => setOpened(false))
-  console.log('user specialties: ', userSpecialties)
 
   return (
     <>
