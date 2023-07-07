@@ -64,6 +64,7 @@ const AuthProvider = ({ history, children }) => {
   }
 
   const [state, dispatch] = useReducer(reducer, null, init)
+  console.log(state)
 
   // If conf is not loaded, wait for it then set ready
   useEffect(() => {
@@ -114,6 +115,7 @@ const AuthProvider = ({ history, children }) => {
 
   const renewAuth = useMemo(() => {
     return async redirectedFrom => {
+      console.trace('This is renewAuth')
       const redirectTo = redirectedFrom || window.location.pathname || '/'
 
       try {
@@ -137,6 +139,7 @@ const AuthProvider = ({ history, children }) => {
 
   // Effect after state change
   useEffect(() => {
+    console.log('useEffect')
     switch (state.state) {
       case 'signed_in':
       case 'renewed_in':

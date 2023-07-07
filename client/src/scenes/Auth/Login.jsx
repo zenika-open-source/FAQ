@@ -15,7 +15,8 @@ const Login = ({ location }) => {
 
   const { login, renewAuth, isAuth, wasAuth } = useAuth()
 
-  if (isAuth || import.meta.env.VITE_DISABLE_AUTH === 'true') {
+  console.log({ wasAuth, renewing, isAuth })
+  if (isAuth) {
     return <Redirect to="/" />
   }
 

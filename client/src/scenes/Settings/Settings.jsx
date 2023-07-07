@@ -83,19 +83,17 @@ const Settings = ({ configuration: conf }) => {
         </CardTitle>
         <CardText>
           <Tabs>
-            {(isAdmin || import.meta.env.VITE_DISABLE_AUTH === 'true') && (
+            {isAdmin && (
               <>
                 <General state={state} dispatch={dispatch} loading={loading} />
                 <Tags state={state} onTagsChange={onTagsChange} />
                 <Synonyms state={state} dispatch={dispatch} loading={loading} />
               </>
             )}
-            {(isAdmin || isSpecialist || import.meta.env.VITE_DISABLE_AUTH === 'true') && (
+            {(isAdmin || isSpecialist) && (
               <Specialists state={state} dispatch={dispatch} loading={loading} />
             )}
-            {(isAdmin || import.meta.env.VITE_DISABLE_AUTH === 'true') && (
-              <Integrations state={state} dispatch={dispatch} loading={loading} />
-            )}
+            {isAdmin && <Integrations state={state} dispatch={dispatch} loading={loading} />}
           </Tabs>
         </CardText>
         <CardActions>

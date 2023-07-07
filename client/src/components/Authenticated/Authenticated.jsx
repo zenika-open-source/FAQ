@@ -7,19 +7,18 @@ import { useAuth } from 'contexts'
 
 const Authenticated = ({ location, reverse, redirect, children, admin, specialist }) => {
   const { isAuth, isAdmin, isSpecialist } = useAuth()
+  const currentURL = location.pathname + location.search
 
-  if (import.meta.env.VITE_DISABLE_AUTH === 'true') {
+  if (admin && isAdmin) {
     return children
   }
 
-  const currentURL = location.pathname + location.search
+  if (specialist && isSpecialist) {
+    return children
+  }
 
   if (admin || specialist) {
-    if (!isAdmin || !isSpecialist) {
-      return redirect ? <Redirect to="/" /> : ''
-    } else {
-      return children
-    }
+    return redirect ? <Redirect to="/" /> : ''
   }
 
   if ((isAuth && !reverse) || (!isAuth && reverse)) {
