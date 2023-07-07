@@ -14,6 +14,7 @@ import { Button, Flags, Loading, Tags } from 'components'
 import Card, { CardText, CardTitle } from 'components/Card'
 import Dropdown, { DropdownItem } from 'components/Dropdown'
 
+import { format } from 'date-fns'
 import { getNavigatorLanguage, handleTranslation } from 'helpers'
 import { ActionMenu } from '../../components'
 import { FlagsDropdown, History, LanguageDropdown, Meta, Share, Sources, Views } from './components'
@@ -29,6 +30,9 @@ const Read = ({ history, match, zNode, loading }) => {
   const [createFlag] = useMutation(CREATE_FLAG)
   const [removeFlag] = useMutation(REMOVE_FLAG)
   const [incrementViewsCounter] = useMutation(INCREMENT_VIEWS_COUNTER)
+  console.log(zNode)
+
+  const certified = zNode.flags.find(flag => flag.type === 'certified')
 
   const originalQuestionLanguage = zNode?.question.language
   const navigatorLanguage = getNavigatorLanguage()
@@ -113,17 +117,26 @@ const Read = ({ history, match, zNode, loading }) => {
             </div>
             {zNode.tags.length > 0 && <Tags tags={zNode.tags} />}
           </div>
-          <Flags node={zNode} withLabels={true} />
-          <Views value={zNode.question.views} />
-          <Share node={zNode} />
-          {zNode.question.language && (
-            <LanguageDropdown
-              onLanguageChanged={translate}
-              originalLanguage={originalQuestionLanguage}
-              primary={isTranslated}
-              link={!isTranslated}
-            />
-          )}
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+              <Flags node={zNode} withLabels={true} />
+              <Views value={zNode.question.views} />
+              <Share node={zNode} />
+              {zNode.question.language && (
+                <LanguageDropdown
+                  onLanguageChanged={translate}
+                  originalLanguage={originalQuestionLanguage}
+                  primary={isTranslated}
+                  link={!isTranslated}
+                />
+              )}
+            </div>
+            {certified && (
+              <p className="small-text">
+                {intl('certified')} <b>{format(certified.createdAt, 'D MMM YYYY')}</b>
+              </p>
+            )}
+          </div>
         </CardTitle>
         <CardText>
           {zNode.answer ? (
@@ -177,6 +190,7 @@ Read.translations = {
         answer: 'Answer'
       }
     },
+    certified: 'Certified on',
     auto_translated: 'Automatic translation',
     no_answer: 'No answer yet...',
     answer: 'Answer the question'
@@ -190,6 +204,7 @@ Read.translations = {
         answer: 'Réponse'
       }
     },
+    certified: 'Certifiée le',
     auto_translated: 'Traduction automatique',
     no_answer: 'Pas encore de réponse...',
     answer: 'Répondre à la question'
