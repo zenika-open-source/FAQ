@@ -30,9 +30,8 @@ const Read = ({ history, match, zNode, loading }) => {
   const [createFlag] = useMutation(CREATE_FLAG)
   const [removeFlag] = useMutation(REMOVE_FLAG)
   const [incrementViewsCounter] = useMutation(INCREMENT_VIEWS_COUNTER)
-  console.log(zNode)
 
-  const certified = zNode.flags.find(flag => flag.type === 'certified')
+  const certified = zNode?.flags.find(flag => flag.type === 'certified')
 
   const originalQuestionLanguage = zNode?.question.language
   const navigatorLanguage = getNavigatorLanguage()
