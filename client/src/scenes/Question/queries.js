@@ -24,6 +24,7 @@ export const zNodeFragment = `
     id
     content
     language
+    certified
     translation {
       language
       text

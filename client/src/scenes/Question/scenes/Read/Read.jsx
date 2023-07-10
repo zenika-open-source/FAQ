@@ -138,6 +138,14 @@ const Read = ({ history, match, zNode, loading }) => {
             />
           )}
         </CardTitle>
+        {zNode.answer?.certified && (
+          <CardText
+            style={{ border: '2px solid #caac00', marginTop: '0.5rem', paddingBottom: '0.5rem' }}
+          >
+            <b>{zNode.answer.certified}</b>
+            <p className="small-text centered">{intl('certified_answer')}</p>
+          </CardText>
+        )}
         <CardText>
           {zNode.answer ? (
             <>
@@ -194,7 +202,9 @@ Read.translations = {
     auto_translated: 'Automatic translation',
     no_answer: 'No answer yet...',
     answer: 'Answer the question',
-    alert: ''
+    certified_answer: 'Certified answer',
+    alert:
+      'This answer has been certified by a specialist in this field. Are you sure that you want to modify it ?'
   },
   fr: {
     menu: {
@@ -209,7 +219,9 @@ Read.translations = {
     auto_translated: 'Traduction automatique',
     no_answer: 'Pas encore de réponse...',
     answer: 'Répondre à la question',
-    alert: 'Cette réponse a été certifiée par une personne spécialisée dans le domaine. '
+    certified_answer: 'Réponse certifiée',
+    alert:
+      'Cette réponse a été certifiée par une personne spécialisée dans le domaine. Etes-vous sûr de vouloir la modifier ?'
   }
 }
 

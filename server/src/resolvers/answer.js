@@ -231,11 +231,18 @@ module.exports = {
         meta.content = content
       }
 
+      const certifiedFlag = Boolean(answer.node.flags?.find(flag => flag.type === 'certified'))
+      let certifiedContent = ''
+      if (certifiedFlag) {
+        certifiedContent = previousContent
+      }
+
       const { language, translation } = await storeTranslation(content)
 
       const updateAnswerData = {
         content,
-        language
+        language,
+        certified: certifiedContent
       }
 
       if (translation) {
