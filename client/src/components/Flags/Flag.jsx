@@ -43,8 +43,12 @@ const Flag = ({ flag, withlabel, style, ...otherProps }) => {
       <i className="material-icons">{flagMeta[flag.type].icon}</i>
       {withlabel && (
         <span className="label">
-          {capitalize(intl(flag.type))}{' '}
-          {flag.type === 'certified' && format(new Date(flag.createdAt), 'P')}
+          {capitalize(intl(flag.type))}
+          {flag.type === 'certified' &&
+            `
+          ${intl('certifiedAdd')}
+          ${format(new Date(flag.createdAt), 'P')}
+          `}
         </span>
       )}
     </div>
@@ -63,14 +67,16 @@ Flag.translations = {
     outdated: 'outdated',
     incomplete: 'incomplete',
     unanswered: 'unanswered',
-    certified: 'certified on'
+    certified: 'certified',
+    certifiedAdd: ' on '
   },
   fr: {
     duplicate: 'doublon',
     outdated: 'obsolète',
     incomplete: 'incomplète',
     unanswered: 'sans réponse',
-    certified: 'certifiée le'
+    certified: 'certifiée',
+    certifiedAdd: ' le '
   }
 }
 

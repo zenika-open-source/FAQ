@@ -14,10 +14,10 @@ import { Button, Flags, Loading, Tags } from 'components'
 import Card, { CardText, CardTitle } from 'components/Card'
 import Dropdown, { DropdownItem } from 'components/Dropdown'
 
-import { format } from 'date-fns'
 import { getNavigatorLanguage, handleTranslation } from 'helpers'
 import { ActionMenu } from '../../components'
 import { FlagsDropdown, History, LanguageDropdown, Meta, Share, Sources, Views } from './components'
+import { useUser } from 'contexts'
 
 const Read = ({ history, match, zNode, loading }) => {
   const [loaded, setLoaded] = useState(false)
@@ -30,6 +30,8 @@ const Read = ({ history, match, zNode, loading }) => {
   const [createFlag] = useMutation(CREATE_FLAG)
   const [removeFlag] = useMutation(REMOVE_FLAG)
   const [incrementViewsCounter] = useMutation(INCREMENT_VIEWS_COUNTER)
+
+  const user = useUser()
 
   const originalQuestionLanguage = zNode?.question.language
   const navigatorLanguage = getNavigatorLanguage()
@@ -62,6 +64,19 @@ const Read = ({ history, match, zNode, loading }) => {
     return <NotFound />
   }
 
+  const preventAnswerEdit = () => {
+    const certified = zNode?.flags.find(flag => flag.type === 'certified')
+    const isSpecialist = Boolean(
+      user.specialties.filter(specialty =>
+        zNode.tags.some(tag => specialty.name === tag.label.name)
+      )
+    )
+    if (certified && !isSpecialist) {
+      alert(intl('alert'))
+    }
+    history.push(`/q/${match.params.slug}/answer`)
+  }
+
   /* Redirect to correct URL if old slug used */
   const correctSlug = zNode.question.slug + '-' + zNode.id
   if (match.params.slug !== correctSlug) {
@@ -83,10 +98,7 @@ const Read = ({ history, match, zNode, loading }) => {
           <DropdownItem icon="edit" onClick={() => history.push(`/q/${match.params.slug}/edit`)}>
             {intl('menu.edit.question')}
           </DropdownItem>
-          <DropdownItem
-            icon="question_answer"
-            onClick={() => history.push(`/q/${match.params.slug}/answer`)}
-          >
+          <DropdownItem icon="question_answer" onClick={preventAnswerEdit}>
             {intl('menu.edit.answer')}
           </DropdownItem>
         </Dropdown>
@@ -181,7 +193,8 @@ Read.translations = {
     certified: 'Certified on',
     auto_translated: 'Automatic translation',
     no_answer: 'No answer yet...',
-    answer: 'Answer the question'
+    answer: 'Answer the question',
+    alert: ''
   },
   fr: {
     menu: {
@@ -195,7 +208,8 @@ Read.translations = {
     certified: 'Certifiée le',
     auto_translated: 'Traduction automatique',
     no_answer: 'Pas encore de réponse...',
-    answer: 'Répondre à la question'
+    answer: 'Répondre à la question',
+    alert: 'Cette réponse a été certifiée par une personne spécialisée dans le domaine. '
   }
 }
 
