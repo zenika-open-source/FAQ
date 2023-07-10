@@ -864,12 +864,9 @@ test('Should modify the content of the translation when the question and answers
   await expect(page.getByText('This is a different answer')).toBeVisible()
 })
 
-test.only('Should be able, as a specialist, to give my specialy to other users', async ({
-  page
-}) => {
+test('Should be able, as a specialist, to give my specialy to other users', async ({ page }) => {
   await setUser(page, { specialties: [{ name: 'marketing' }] })
   await page.goto('/')
-  await page.pause()
   await page.getByRole('img', { name: 'avatar' }).hover()
   await page
     .locator('a')
