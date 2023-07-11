@@ -425,7 +425,7 @@ const setUser = async (page, { admin = false, specialties = [] } = {}) => {
   )
 }
 
-let deleteCommands = [
+const deleteCommands = [
   'deleteManyAnswers',
   'deleteManyQuestions',
   'deleteManyHistoryActions',
