@@ -9,18 +9,15 @@ const Authenticated = ({ location, reverse, redirect, children, admin, specialis
   const { isAuth, isAdmin, isSpecialist } = useAuth()
   const currentURL = location.pathname + location.search
 
-  console.log({ admin, isAdmin, specialist, isSpecialist })
   if (admin && isAdmin) {
     return children
   }
 
   if (specialist && isSpecialist) {
-    console.log('first')
     return children
   }
 
   if (admin || specialist) {
-    console.log('second')
     return redirect ? <Redirect to="/" /> : ''
   }
 
