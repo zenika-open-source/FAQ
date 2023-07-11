@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/client'
 
 import { alert, getIntl } from 'services'
 
-import { useConfiguration } from 'contexts'
+import { useAuth, useConfiguration } from 'contexts'
 
 import { Tabs, Button } from 'components'
 import Card, { CardTitle, CardText, CardActions } from 'components/Card'
@@ -16,24 +16,17 @@ import { General, Tags, Synonyms, Integrations, Specialists } from './scenes'
 
 import './Settings.scss'
 
-let initState
-
-if (import.meta.env.VITE_DISABLE_AUTH === 'true') {
-  initState = conf => ({
-    ...conf,
-    bugReporting: conf.bugReporting || 'GITHUB'
-  })
-} else {
-  initState = conf => ({
-    ...conf,
-    synonyms: synonymsToList(conf.algoliaSynonyms),
-    authorizedDomains: conf.authorizedDomains.join(', '),
-    bugReporting: conf.bugReporting || 'GITHUB'
-  })
-}
+const initState = conf => ({
+  ...conf,
+  synonyms: synonymsToList(conf.algoliaSynonyms),
+  authorizedDomains: conf.authorizedDomains.join(', '),
+  bugReporting: conf.bugReporting || 'GITHUB'
+})
 
 const Settings = ({ configuration: conf }) => {
   const intl = getIntl(Settings)
+
+  const { isAdmin, isSpecialist } = useAuth()
 
   const configuration = useConfiguration()
 
@@ -90,13 +83,17 @@ const Settings = ({ configuration: conf }) => {
         </CardTitle>
         <CardText>
           <Tabs>
-            <General state={state} dispatch={dispatch} loading={loading} />
-            <Tags state={state} onTagsChange={onTagsChange} />
-            {import.meta.env.VITE_DISABLE_AUTH !== 'true' && (
-              <Synonyms state={state} dispatch={dispatch} loading={loading} />
+            {isAdmin && (
+              <>
+                <General state={state} dispatch={dispatch} loading={loading} />
+                <Tags state={state} onTagsChange={onTagsChange} />
+                <Synonyms state={state} dispatch={dispatch} loading={loading} />
+              </>
             )}
-            <Specialists state={state} dispatch={dispatch} loading={loading} />
-            <Integrations state={state} dispatch={dispatch} loading={loading} />
+            {(isAdmin || isSpecialist) && (
+              <Specialists state={state} dispatch={dispatch} loading={loading} />
+            )}
+            {isAdmin && <Integrations state={state} dispatch={dispatch} loading={loading} />}
           </Tabs>
         </CardText>
         <CardActions>

@@ -65,8 +65,17 @@ const checkJwt = async (req, res, next, prisma) => {
       }`
     )
   }
-
-  if (authType === 'Bearer') {
+  if (process.env.DISABLE_AUTH === 'true') {
+    const user = await userNoAuthUpsert()
+    req.user = {
+      id: user.id,
+      email: user.email,
+      token: {
+        email: user.email
+      }
+    }
+    return next()
+  } else if (authType === 'Bearer') {
     // Auth0 Authentication
 
     options = {
@@ -111,16 +120,6 @@ const checkJwt = async (req, res, next, prisma) => {
     }
 
     getUser = next
-  } else if (process.env.DISABLE_AUTH === 'true') {
-    const user = await userNoAuthUpsert()
-    req.user = {
-      id: user.id,
-      email: user.email,
-      token: {
-        email: user.email
-      }
-    }
-    return next()
   } else {
     return next(
       new UnauthorizedError(
