@@ -72,7 +72,7 @@ const Read = ({ history, match, zNode, loading }) => {
       )
     )
     if (certified && !isSpecialist) {
-      if (confirm(intl('alert'))) {
+      if (window.confirm(intl('alert'))) {
         return history.push(`/q/${match.params.slug}/answer`)
       }
     } else {
