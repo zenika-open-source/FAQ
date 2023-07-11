@@ -146,17 +146,19 @@ const Read = ({ history, match, zNode, loading }) => {
             <p className="small-text centered" style={{ padding: '0.5rem', margin: '0' }}>
               {intl('certified_answer')}
             </p>
-            <p style={{ padding: '0.5rem', margin: '0' }}>
+            <div style={{ padding: '0.5rem', margin: '0' }}>
               {markdown.html(zNode.answer.certified)}
-            </p>
+            </div>
           </CardText>
         )}
         <CardText>
           {zNode.answer ? (
             <>
-              <p className="small-text centered" style={{ padding: '0.5rem', margin: '0' }}>
-                {intl('recent_answer')}
-              </p>
+              {zNode.answer.certified && (
+                <p className="small-text centered" style={{ padding: '0.5rem', margin: '0' }}>
+                  {intl('recent_answer')}
+                </p>
+              )}
               <div style={{ padding: '0.5rem', marginBottom: '0.5rem' }}>
                 {markdown.html(answerContent)}
               </div>

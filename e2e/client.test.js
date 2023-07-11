@@ -635,7 +635,7 @@ test('Should not be able to add a certified flag to an unanswered question', asy
   await expect(page.locator('a').filter({ hasText: 'verifiedcertifiée' })).toBeHidden()
 })
 
-test('Should be able to add a certified flag for a question of my specialty', async ({ page }) => {
+test('Should be able to add a certified flag to a question of my specialty', async ({ page }) => {
   await page.goto('/')
   await page
     .locator('button', { hasText: 'Nouvelle question' })
@@ -653,17 +653,21 @@ test('Should be able to add a certified flag for a question of my specialty', as
   await page.locator('textarea').click()
   await page.locator('textarea').fill('Ceci est une réponse')
   await page.locator('button', { hasText: 'Envoyer la réponse' }).click()
-  await page.getByRole('button', { name: 'flag Signaler ...' }).hover()
+  await page.getByRole('button', { name: 'Modifier' }).hover()
   await page
     .locator('a')
-    .filter({ hasText: 'verifiedcertifiée' })
+    .filter({ hasText: 'Réponse' })
     .click()
+  await page.locator('textarea').click()
+  await page.locator('textarea').fill('Ceci est une réponse différente')
+  await page.locator('button', { hasText: 'Enregistrer la réponse' }).click()
   await page.waitForTimeout(1000)
-  await page.goto('/')
-  await expect(page.getByText('verified')).toBeVisible()
+  await expect(page.getByText('Ceci est une réponse différente')).toBeVisible()
+  await expect(page.getByText('Réponse certifiée')).toBeHidden()
+  await expect(page.getByText('verified').nth(1)).toBeVisible()
 })
 
-test('Should not be able to add a certified flag for a question not in my specialty', async ({
+test('Should not be able to add a certified flag to a question not in my specialty', async ({
   page
 }) => {
   await page.goto('/')
@@ -703,6 +707,9 @@ test('Should remove the certified flag after modifying an answer', async ({ page
   await page.locator('textarea').fill('Ceci est une réponse différente')
   await page.locator('button', { hasText: 'Enregistrer la réponse' }).click()
   await page.waitForTimeout(1000)
+  await expect(page.locator("p:near(:text('Réponse certifiée'))")).toHaveText(
+    'Ceci est une réponse'
+  )
   await expect(page.getByText('verifiedCertifiée')).toBeHidden()
 })
 

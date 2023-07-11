@@ -215,7 +215,7 @@ module.exports = {
 
       await Promise.all([...mutationsToAdd, ...mutationsToUpdate, ...mutationsToRemove])
 
-      await refreshCertifiedFlag(history, answer, user, ctx)
+      const isCertified = await refreshCertifiedFlag(history, answer, user, ctx)
 
       const clean = sources => sources.map(s => ({ label: s.label, url: s.url }))
 
@@ -233,8 +233,10 @@ module.exports = {
 
       const certifiedFlag = Boolean(answer.node.flags?.find(flag => flag.type === 'certified'))
       let certifiedContent = ''
-      if (certifiedFlag) {
+      if (certifiedFlag && !isCertified) {
         certifiedContent = previousContent
+      } else if (certifiedFlag && isCertified) {
+        certifiedContent = ''
       }
 
       const { language, translation } = await storeTranslation(content)
