@@ -4,11 +4,11 @@ import { Route } from 'react-router-dom'
 
 import Authenticated from 'components/Authenticated'
 
-const PrivateRoute = ({ component: Component, render, admin, ...otherProps }) => (
+const PrivateRoute = ({ component: Component, render, admin, specialist, ...otherProps }) => (
   <Route
     {...otherProps}
     render={props => (
-      <Authenticated {...props} admin={admin} redirect="/auth/login">
+      <Authenticated {...props} admin={admin} specialist={specialist} redirect="/auth/login">
         {Component ? <Component {...props} {...otherProps} /> : render(props)}
       </Authenticated>
     )}
