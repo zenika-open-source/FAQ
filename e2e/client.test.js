@@ -431,7 +431,8 @@ let deleteCommands = [
   'deleteManyHistoryActions',
   'deleteManyFlags',
   'deleteManyTags',
-  'deleteManyZNodes'
+  'deleteManyZNodes',
+  'deleteManyUsers'
 ]
 
 const emptyDb = async (apiContext, commands) => {
@@ -459,13 +460,13 @@ test.beforeAll(async ({ playwright }) => {
   })
   config = await upsertConfigMutation(apiContext)
   prisma._meta = { ...prisma._meta, configuration: config.upsertConfiguration }
-  user = await createUserMutation(apiContext)
   ;({ tag, tagEdit } = await tagsQuery(apiContext))
-  tempUser = await createTempUserMutation(prisma, tag.id)
 })
 
 test.beforeEach(async () => {
   await emptyDb(apiContext, deleteCommands)
+  user = await createUserMutation(apiContext)
+  tempUser = await createTempUserMutation(prisma, tag.id)
 })
 
 test('Shoud be able to create a question', async ({ page }) => {
@@ -769,14 +770,14 @@ test('Should be able to add a specialty to a user', async ({ page }) => {
   await expect(userSpecialty.first().locator('span')).toHaveText('payroll')
   const addSpecialty = user.locator('.userRight').getByRole('button', { hasText: 'add' })
   await addSpecialty.click()
-  await user.getByRole('button', { name: 'marketing' }).click()
+  await user.getByRole('button', { name: 'ce' }).click()
   await page
     .locator('.alert-content', { hasText: 'La spécialité a été ajoutée' })
     .waitFor({ state: 'visible' })
   await page.reload()
   await page.waitForTimeout(1000)
   await page.getByText('Spécialistes').click()
-  await expect(userSpecialty.last().locator('span')).toHaveText('marketing')
+  await expect(userSpecialty.last().locator('span')).toHaveText('ce')
 })
 
 test("Should be able to remove a user's specialty", async ({ page }) => {
@@ -822,7 +823,7 @@ test('Should be able to translate the question and answer', async ({ page }) => 
   await expect(page.getByText('This is an answer')).toBeVisible()
 })
 
-test('Should modify the content of the translation when the question and answers are modified', async ({
+test('Should modify the content of the translation when the question and answer are modified', async ({
   page
 }) => {
   await setUser(page)
@@ -864,7 +865,7 @@ test('Should modify the content of the translation when the question and answers
   await expect(page.getByText('This is a different answer')).toBeVisible()
 })
 
-test('Should be able, as a specialist, to give my specialy to other users', async ({ page }) => {
+test('Should be able, as a specialist, to give my specialty to other users', async ({ page }) => {
   await setUser(page, { specialties: [{ name: 'marketing' }] })
   await page.goto('/')
   await page.getByRole('img', { name: 'avatar' }).hover()
@@ -893,7 +894,6 @@ test.afterEach(async () => {
 })
 
 test.afterAll(async () => {
-  deleteCommands = [...deleteCommands, 'deleteManyUsers']
   await emptyDb(apiContext, deleteCommands)
   await apiContext.dispose()
 })
