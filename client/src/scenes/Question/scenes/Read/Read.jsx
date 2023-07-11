@@ -72,9 +72,12 @@ const Read = ({ history, match, zNode, loading }) => {
       )
     )
     if (certified && !isSpecialist) {
-      alert(intl('alert'))
+      if (confirm(intl('alert'))) {
+        return history.push(`/q/${match.params.slug}/answer`)
+      }
+    } else {
+      return history.push(`/q/${match.params.slug}/answer`)
     }
-    history.push(`/q/${match.params.slug}/answer`)
   }
 
   /* Redirect to correct URL if old slug used */
@@ -204,7 +207,7 @@ Read.translations = {
     answer: 'Answer the question',
     certified_answer: 'Certified answer',
     alert:
-      'This answer has been certified by a specialist in this field. Are you sure that you want to modify it ?'
+      'This answer has been certified by a specialist in this field.\nAre you sure that you want to modify it ?\nThis version will still be kept'
   },
   fr: {
     menu: {
@@ -221,7 +224,7 @@ Read.translations = {
     answer: 'Répondre à la question',
     certified_answer: 'Réponse certifiée',
     alert:
-      'Cette réponse a été certifiée par une personne spécialisée dans le domaine. Etes-vous sûr de vouloir la modifier ?'
+      'Cette réponse a été certifiée par une personne spécialisée dans le domaine.\nEtes-vous sûr de vouloir la modifier ?\nCelle-ci sera tout de même conservée'
   }
 }
 
