@@ -142,16 +142,21 @@ const Read = ({ history, match, zNode, loading }) => {
           )}
         </CardTitle>
         {zNode.answer?.certified && (
-          <CardText
-            style={{ border: '2px solid #caac00', marginTop: '0.5rem', paddingBottom: '0.5rem' }}
-          >
-            <b>{zNode.answer.certified}</b>
-            <p className="small-text centered">{intl('certified_answer')}</p>
+          <CardText style={{ border: '2px solid #caac00', marginTop: '0.5rem' }}>
+            <p className="small-text centered" style={{ padding: '0.5rem', margin: '0' }}>
+              {intl('certified_answer')}
+            </p>
+            <p style={{ padding: '0.5rem', margin: '0' }}>
+              {markdown.html(zNode.answer.certified)}
+            </p>
           </CardText>
         )}
         <CardText>
           {zNode.answer ? (
             <>
+              <p className="small-text centered" style={{ padding: '0.5rem', margin: '0' }}>
+                {intl('recent_answer')}
+              </p>
               <div style={{ padding: '0.5rem', marginBottom: '0.5rem' }}>
                 {markdown.html(answerContent)}
               </div>
@@ -206,6 +211,7 @@ Read.translations = {
     no_answer: 'No answer yet...',
     answer: 'Answer the question',
     certified_answer: 'Certified answer',
+    recent_answer: 'Latest answer',
     alert:
       'This answer has been certified by a specialist in this field.\nAre you sure that you want to modify it ?\nThis version will still be kept'
   },
@@ -223,6 +229,7 @@ Read.translations = {
     no_answer: 'Pas encore de réponse...',
     answer: 'Répondre à la question',
     certified_answer: 'Réponse certifiée',
+    recent_answer: 'Dernière réponse',
     alert:
       'Cette réponse a été certifiée par une personne spécialisée dans le domaine.\nEtes-vous sûr de vouloir la modifier ?\nCelle-ci sera tout de même conservée'
   }
