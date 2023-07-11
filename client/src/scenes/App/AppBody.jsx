@@ -30,7 +30,7 @@ const AppBody = () => {
             <Route path="/auth" component={Auth} />
             <PrivateRoute path="/q" component={Question} />
             <PrivateRoute path="/user-profile" component={UserProfile} />
-            <PrivateRoute path="/settings" component={Settings} admin />
+            <PrivateRoute path="/settings" component={Settings} admin specialist />
             <PrivateRoute component={NotFound} />
           </Switch>
         </ErrorBoundary>

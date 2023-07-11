@@ -412,13 +412,27 @@ const createQuestionAndAnswerWithoutTranslation = async (prisma, tagId, user) =>
   await algolia.addNode({ prisma }, zNode.id)
 }
 
-let deleteCommands = [
+const setUser = async (page, { admin = false, specialties = [] } = {}) => {
+  await page.addInitScript(
+    user => {
+      window.localStorage.setItem('user', JSON.stringify({ name: 'Test', ...user }))
+      window.localStorage.setItem(
+        'session',
+        JSON.stringify({ expiresAt: new Date().getTime() + 3600 * 1000, expiresIn: 3600 })
+      )
+    },
+    { admin, specialties }
+  )
+}
+
+const deleteCommands = [
   'deleteManyAnswers',
   'deleteManyQuestions',
   'deleteManyHistoryActions',
   'deleteManyFlags',
   'deleteManyTags',
-  'deleteManyZNodes'
+  'deleteManyZNodes',
+  'deleteManyUsers'
 ]
 
 const emptyDb = async (apiContext, commands) => {
@@ -446,16 +460,17 @@ test.beforeAll(async ({ playwright }) => {
   })
   config = await upsertConfigMutation(apiContext)
   prisma._meta = { ...prisma._meta, configuration: config.upsertConfiguration }
-  user = await createUserMutation(apiContext)
   ;({ tag, tagEdit } = await tagsQuery(apiContext))
-  tempUser = await createTempUserMutation(prisma, tag.id)
 })
 
 test.beforeEach(async () => {
   await emptyDb(apiContext, deleteCommands)
+  user = await createUserMutation(apiContext)
+  tempUser = await createTempUserMutation(prisma, tag.id)
 })
 
 test('Shoud be able to create a question', async ({ page }) => {
+  await setUser(page)
   await page.goto('/')
   await page
     .locator('button', { hasText: 'Nouvelle question' })
@@ -473,6 +488,7 @@ test('Shoud be able to create a question', async ({ page }) => {
 })
 
 test('Should be able to create a question and answer it', async ({ page }) => {
+  await setUser(page)
   await page.goto('/')
   await page
     .locator('button', { hasText: 'Nouvelle question' })
@@ -495,6 +511,7 @@ test('Should be able to create a question and answer it', async ({ page }) => {
 })
 
 test('Should return a search result', async ({ page }) => {
+  await setUser(page)
   await createQuestionAndAnswer(prisma, tag.id, user)
   await page.goto('/')
   await page.locator("input:near(:text('search'))").click()
@@ -507,6 +524,7 @@ test('Should return a search result', async ({ page }) => {
 })
 
 test('Should not return results', async ({ page }) => {
+  await setUser(page)
   await page.goto('/')
   await page.locator("input:near(:text('search'))").click()
   await page.locator("input:near(:text('search'))").fill('test')
@@ -514,6 +532,7 @@ test('Should not return results', async ({ page }) => {
 })
 
 test('Should be able to flag a question', async ({ page }) => {
+  await setUser(page)
   await createQuestionAndAnswer(prisma, tag.id, user)
   await page.goto('/')
   await page.waitForTimeout(2000)
@@ -531,6 +550,7 @@ test('Should be able to flag a question', async ({ page }) => {
 })
 
 test('Should be able to add a tag to a question', async ({ page }) => {
+  await setUser(page)
   await createQuestionAndAnswer(prisma, tag.id, user)
   await page.goto('/')
   await page.locator("input:near(:text('search'))").click()
@@ -551,6 +571,7 @@ test('Should be able to add a tag to a question', async ({ page }) => {
 })
 
 test('Should be able to modify an answer for an already answered question', async ({ page }) => {
+  await setUser(page)
   await createQuestionAndAnswer(prisma, tag.id, user)
   await page.goto('/')
   await page.locator("input:near(:text('search'))").click()
@@ -571,6 +592,7 @@ test('Should be able to modify an answer for an already answered question', asyn
 })
 
 test('Should be able to answer a question that has no answer', async ({ page }) => {
+  await setUser(page)
   await createQuestion(prisma, tag.id, user)
   await page.goto('/')
   await expect(page.getByText('Pas encore de réponse...')).toBeVisible()
@@ -585,9 +607,10 @@ test('Should be able to answer a question that has no answer', async ({ page }) 
 })
 
 test('Should be able to search by text and tag', async ({ page }) => {
+  await setUser(page)
   await createQuestionAndAnswer(prisma, tag.id, user)
   await page.goto('/')
-  await page.waitForTimeout(2000)
+  await page.waitForTimeout(1000)
   await page.locator("input:near(:text('search'))").click()
   await page.locator("input:near(:text('search'))").fill('Ceci est une question')
   await expect(page.getByRole('heading', { name: 'Ceci est une question' }).first()).toBeVisible()
@@ -607,7 +630,8 @@ test('Should be able to search by text and tag', async ({ page }) => {
   await expect(page.getByText('Ceci est une réponse différente', { exact: true })).toBeVisible()
 })
 
-test('Should see the marketing specialty on profile page', async ({ page }) => {
+test('Should see the "marketing" specialty on profile page', async ({ page }) => {
+  await setUser(page)
   await page.goto('/')
   await page.getByRole('img', { name: 'avatar' }).hover()
   await page
@@ -618,6 +642,7 @@ test('Should see the marketing specialty on profile page', async ({ page }) => {
 })
 
 test('Should not be able to add a certified flag to an unanswered question', async ({ page }) => {
+  await setUser(page)
   await page.goto('/')
   await page
     .locator('button', { hasText: 'Nouvelle question' })
@@ -636,6 +661,7 @@ test('Should not be able to add a certified flag to an unanswered question', asy
 })
 
 test('Should be able to add a certified flag to a question of my specialty', async ({ page }) => {
+  await setUser(page)
   await page.goto('/')
   await page
     .locator('button', { hasText: 'Nouvelle question' })
@@ -670,6 +696,7 @@ test('Should be able to add a certified flag to a question of my specialty', asy
 test('Should not be able to add a certified flag to a question not in my specialty', async ({
   page
 }) => {
+  await setUser(page)
   await page.goto('/')
   await page
     .locator('button', { hasText: 'Nouvelle question' })
@@ -692,6 +719,7 @@ test('Should not be able to add a certified flag to a question not in my special
 })
 
 test('Should remove the certified flag after modifying an answer', async ({ page }) => {
+  await setUser(page)
   await createQuestionWithFlag(prisma, tag.id, tempUser)
   await page.goto('/')
   const openCard = page.getByRole('link', { name: 'keyboard_arrow_right' }).first()
@@ -714,6 +742,7 @@ test('Should remove the certified flag after modifying an answer', async ({ page
 })
 
 test('Should remove the certified flag when the corresponding tag is deleted', async ({ page }) => {
+  await setUser(page)
   await createQuestionWithFlag(prisma, tag.id, tempUser)
   await page.goto('/')
   const openCard = page.getByRole('link', { name: 'keyboard_arrow_right' }).first()
@@ -735,6 +764,7 @@ test('Should remove the certified flag when the corresponding tag is deleted', a
 })
 
 test('Should be able to add a specialty to a user', async ({ page }) => {
+  await setUser(page, { admin: true })
   await page.goto('/')
   await page.getByRole('img', { name: 'avatar' }).hover()
   await page
@@ -742,22 +772,23 @@ test('Should be able to add a specialty to a user', async ({ page }) => {
     .filter({ hasText: 'Paramètres' })
     .click()
   await page.getByText('Spécialistes').click()
-  const user = page.locator('.userElement', { hasText: 'enableSkipAuth' })
+  const user = page.locator('.userElement', { hasText: 'tempUser' }).first()
   const userSpecialty = user.locator('.userSpecialties').locator('.userSpecialty')
-  await expect(userSpecialty.first().locator('span')).toHaveText('marketing')
+  await expect(userSpecialty.first().locator('span')).toHaveText('payroll')
   const addSpecialty = user.locator('.userRight').getByRole('button', { hasText: 'add' })
   await addSpecialty.click()
-  await user.getByRole('button', { name: 'sales' }).click()
+  await user.getByRole('button', { name: 'ce' }).click()
   await page
     .locator('.alert-content', { hasText: 'La spécialité a été ajoutée' })
     .waitFor({ state: 'visible' })
   await page.reload()
   await page.waitForTimeout(1000)
   await page.getByText('Spécialistes').click()
-  await expect(userSpecialty.last().locator('span')).toHaveText('sales')
+  await expect(userSpecialty.last().locator('span')).toHaveText('ce')
 })
 
 test("Should be able to remove a user's specialty", async ({ page }) => {
+  await setUser(page, { admin: true })
   await page.goto('/')
   await page.getByRole('img', { name: 'avatar' }).hover()
   await page
@@ -782,6 +813,7 @@ test("Should be able to remove a user's specialty", async ({ page }) => {
 })
 
 test('Should be able to translate the question and answer', async ({ page }) => {
+  await setUser(page)
   await createQuestionAndAnswer(prisma, tag.id, user)
   await page.goto('/')
   const openCard = page.getByRole('link', { name: 'keyboard_arrow_right' }).first()
@@ -798,9 +830,10 @@ test('Should be able to translate the question and answer', async ({ page }) => 
   await expect(page.getByText('This is an answer')).toBeVisible()
 })
 
-test('Should modify the content of the translation when the question and answers are modified', async ({
+test('Should modify the content of the translation when the question and answer are modified', async ({
   page
 }) => {
+  await setUser(page)
   await createQuestionAndAnswerWithoutTranslation(prisma, tag.id, user)
   await page.goto('/')
   const openCard = page.getByRole('link', { name: 'keyboard_arrow_right' }).first()
@@ -839,12 +872,35 @@ test('Should modify the content of the translation when the question and answers
   await expect(page.getByText('This is a different answer')).toBeVisible()
 })
 
+test('Should be able, as a specialist, to give my specialty to other users', async ({ page }) => {
+  await setUser(page, { specialties: [{ name: 'marketing' }] })
+  await page.goto('/')
+  await page.getByRole('img', { name: 'avatar' }).hover()
+  await page
+    .locator('a')
+    .filter({ hasText: 'Paramètres' })
+    .click()
+  await page.getByText('Spécialistes').click()
+  const user = page.locator('.userElement', { hasText: 'tempUser' }).first()
+  const userSpecialty = user.locator('.userSpecialties').locator('.userSpecialty')
+  await expect(userSpecialty.first().locator('span')).toHaveText('payroll')
+  const addSpecialty = user.locator('.userRight').getByRole('button', { hasText: 'add' })
+  await addSpecialty.click()
+  await user.getByRole('button', { name: 'marketing' }).click()
+  await page
+    .locator('.alert-content', { hasText: 'La spécialité a été ajoutée' })
+    .waitFor({ state: 'visible' })
+  await page.reload()
+  await page.waitForTimeout(1000)
+  await page.getByText('Spécialistes').click()
+  await expect(userSpecialty.last().locator('span')).toHaveText('marketing')
+})
+
 test.afterEach(async () => {
   algolia.clearIndex({ prisma })
 })
 
 test.afterAll(async () => {
-  deleteCommands = [...deleteCommands, 'deleteManyUsers']
   await emptyDb(apiContext, deleteCommands)
   await apiContext.dispose()
 })

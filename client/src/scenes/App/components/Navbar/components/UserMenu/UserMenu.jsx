@@ -23,7 +23,7 @@ const UserMenu = ({ history }) => {
       <DropdownItem icon="account_box" path="/user-profile">
         {intl('profile')}
       </DropdownItem>
-      <Authenticated admin>
+      <Authenticated admin specialist>
         <DropdownItem icon="settings" path="/settings">
           {intl('settings')}
         </DropdownItem>
