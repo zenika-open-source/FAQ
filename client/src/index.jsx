@@ -1,4 +1,4 @@
-import ReactDOM from 'react-dom'
+import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { persistCache, LocalStorageWrapper } from 'apollo3-cache-persist'
 
@@ -17,13 +17,14 @@ const initializeApp = async () => {
     storage: new LocalStorageWrapper(window.localStorage)
   })
 
-  ReactDOM.render(
+  const root = ReactDOM.createRoot(document.getElementById('root'))
+
+  root.render(
     <ApolloWrapper>
       <BrowserRouter>
         <App />
       </BrowserRouter>
-    </ApolloWrapper>,
-    document.getElementById('root')
+    </ApolloWrapper>
   )
 }
 
