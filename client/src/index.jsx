@@ -1,6 +1,6 @@
+import { LocalStorageWrapper, persistCache } from 'apollo3-cache-persist'
 import ReactDOM from 'react-dom/client'
-import { BrowserRouter } from 'react-router-dom'
-import { persistCache, LocalStorageWrapper } from 'apollo3-cache-persist'
+import { BrowserRouter, RouterProvider, createBrowserRouter } from 'react-router-dom'
 
 import { apolloCache } from 'services'
 

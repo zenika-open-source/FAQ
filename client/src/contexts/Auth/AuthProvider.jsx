@@ -1,6 +1,6 @@
-import React, { createContext, useReducer, useEffect, useMemo } from 'react'
-import { withRouter } from 'react-router'
 import { useApolloClient } from '@apollo/client'
+import { createContext, useEffect, useMemo, useReducer } from 'react'
+import { useNavigate } from 'react-router'
 
 import { alert, auth } from 'services'
 
@@ -46,6 +46,7 @@ const reducer = (state, action) => {
 
 const AuthProvider = ({ history, children }) => {
   const conf = useConfiguration()
+  const navigate = useNavigate()
 
   const init = () => {
     const { session, user } = auth.retrieveFromLocalStorage()
@@ -77,7 +78,7 @@ const AuthProvider = ({ history, children }) => {
     () => () => {
       auth.logout()
       dispatch({ type: 'logout' })
-      history.push('/auth/login')
+      navigate('/auth/login')
     },
     [history]
   )
@@ -101,12 +102,12 @@ const AuthProvider = ({ history, children }) => {
 
         auth.clearStateBeforeLogin()
 
-        history.push(redirectTo || '')
+        navigate(redirectTo || '')
       } catch (err) {
         alert.pushError('Authentication failed: ' + JSON.stringify(err.message), err)
         auth.logout()
         dispatch({ type: 'logout' })
-        history.push('/auth/login')
+        navigate('/auth/login')
       }
     },
     [apollo, history]
@@ -130,7 +131,7 @@ const AuthProvider = ({ history, children }) => {
         auth.logout()
         dispatch({ type: 'logout' })
         auth.cacheStateBeforeLogin({ redirectTo })
-        history.push('/auth/login')
+        navigate('/auth/login')
       }
     }
   }, [history])
@@ -158,5 +159,5 @@ const AuthProvider = ({ history, children }) => {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
-export default withRouter(AuthProvider)
+export default AuthProvider
 export { AuthContext }

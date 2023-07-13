@@ -2,7 +2,7 @@ import { useMutation } from '@apollo/client'
 import PropTypes from 'prop-types'
 import { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
-import { Link, Redirect } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 
 import { CREATE_FLAG, INCREMENT_VIEWS_COUNTER, REMOVE_FLAG } from './queries'
 
@@ -19,6 +19,7 @@ import { ActionMenu } from '../../components'
 import { FlagsDropdown, History, LanguageDropdown, Meta, Share, Sources, Views } from './components'
 
 const Read = ({ history, match, zNode, loading }) => {
+  const navigate = useNavigate()
   const [loaded, setLoaded] = useState(false)
   const [incremented, setIncremented] = useState(false)
 
@@ -64,7 +65,7 @@ const Read = ({ history, match, zNode, loading }) => {
   /* Redirect to correct URL if old slug used */
   const correctSlug = zNode.question.slug + '-' + zNode.id
   if (match.params.slug !== correctSlug) {
-    return <Redirect to={'/q/' + correctSlug} />
+    return <Navigate to={'/q/' + correctSlug} />
   }
 
   return (
@@ -79,12 +80,12 @@ const Read = ({ history, match, zNode, loading }) => {
           onRemove={type => removeFlag({ variables: { type, nodeId: zNode.id } })}
         />
         <Dropdown button={<Button icon="edit" label={intl('menu.edit.label')} link />}>
-          <DropdownItem icon="edit" onClick={() => history.push(`/q/${match.params.slug}/edit`)}>
+          <DropdownItem icon="edit" onClick={() => navigate(`/q/${match.params.slug}/edit`)}>
             {intl('menu.edit.question')}
           </DropdownItem>
           <DropdownItem
             icon="question_answer"
-            onClick={() => history.push(`/q/${match.params.slug}/answer`)}
+            onClick={() => navigate(`/q/${match.params.slug}/answer`)}
           >
             {intl('menu.edit.answer')}
           </DropdownItem>

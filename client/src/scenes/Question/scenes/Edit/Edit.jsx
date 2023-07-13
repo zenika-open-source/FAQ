@@ -1,14 +1,14 @@
 import { useApolloClient } from '@apollo/client'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
-import { Prompt, Redirect } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 
 import { EDIT_QUESTION, SUBMIT_QUESTION } from './queries'
 
 import { alert, getIntl } from 'services'
 
-import Card, { CardText, CardActions, PermanentClosableCard } from 'components/Card'
-import { Loading, Button, Input, CtrlEnter, TagPicker } from 'components'
+import { Button, CtrlEnter, Input, Loading, TagPicker } from 'components'
+import Card, { CardActions, CardText, PermanentClosableCard } from 'components/Card'
 
 import { ActionMenu } from '../../components'
 
@@ -16,6 +16,7 @@ import { canSubmit } from './helpers'
 
 import Tips from './components/Tips'
 
+import { Prompt } from 'helpers'
 import './Edit.css'
 
 const Edit = ({ location, match, zNode }) => {
@@ -112,7 +113,7 @@ const Edit = ({ location, match, zNode }) => {
   const onTagsChange = tags => setState(state => ({ ...state, tags }))
 
   if (slug) {
-    return <Redirect to={`/q/${slug}`} />
+    return <Navigate to={`/q/${slug}`} />
   }
 
   if (loadingSubmit) {
@@ -120,12 +121,12 @@ const Edit = ({ location, match, zNode }) => {
   }
 
   if (isEditing && zNode === null) {
-    return <Redirect to={'/'} />
+    return <Navigate to={'/'} />
   }
 
   return (
     <div className="Edit">
-      {canSubmit(state) && <Prompt message={intl('prompt_warning')} />}
+      <Prompt message={intl('prompt_warning')} when={canSubmit(state)} />
       <ActionMenu
         backLabel={!isEditing ? intl('home') : null}
         backLink={isEditing ? `/q/${match.params.slug}` : '/'}

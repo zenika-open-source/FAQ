@@ -1,16 +1,16 @@
-import React from 'react'
 import PropTypes from 'prop-types'
-import { withRouter } from 'react-router'
 
-import { getIntl } from 'services'
 import Button from 'components/Button'
+import { getIntl } from 'services'
+import { useNavigate } from 'react-router'
 
 const NotFound = ({ history }) => {
+  const navigate = useNavigate()
   const intl = getIntl(NotFound)
 
   return (
     <div>
-      <Button icon="chevron_left" label="Home" link onClick={() => history.push('/')} />
+      <Button icon="chevron_left" label="Home" link onClick={() => navigate('/')} />
       <div style={{ textAlign: 'center' }}>
         <h1>{intl('title')}</h1>
         <br />
@@ -36,4 +36,4 @@ NotFound.translations = {
   }
 }
 
-export default withRouter(NotFound)
+export default NotFound

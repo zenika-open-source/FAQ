@@ -1,89 +1,78 @@
-import React, { Component } from 'react'
+import debounce from 'lodash/debounce'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import debounce from 'lodash/debounce'
 
 import { Button } from 'components'
 
+import { addToQueryString, unserialize } from 'helpers'
 import { getIntl } from 'services'
-import { unserialize, addToQueryString } from 'helpers'
 
-import { Searchbar, ResultList } from './components'
+import { useState } from 'react'
+import { ResultList, Searchbar } from './components'
 
-class Home extends Component {
-  constructor(props) {
-    super(props)
+const Home = () => {
+  const intl = getIntl(Home)
 
-    const params = unserialize(props.location.search)
+  const params = unserialize(location.search)
 
-    this.state = {
-      searchText: params.q,
-      debouncedSearchText: params.q,
-      searchLoading: false,
-      tags: params.tags
-    }
-  }
+  const [searchText, setSearchText] = useState(params.q)
+  const [debouncedSearchText, setDebouncedSearchText] = useState(params.q)
+  const [loading, setLoading] = useState(false)
+  const [tags, setTags] = useState(params.tags)
 
-  onSearchChange = text => {
-    const { history, location } = this.props
+  const onSearchChange = text => {
+    const { history, location } = props
 
-    this.setState({ searchText: text })
+    setSearchText(text)
 
     addToQueryString(history, location, {
       q: text
     })
 
-    this.querySearchProvider()
+    querySearchProvider()
   }
 
-  setDebounceTextSearch = () => {
-    this.setState(state => ({ debouncedSearchText: state.searchText }))
+  const setDebounceTextSearch = () => {
+    setDebouncedSearchText(searchText)
   }
 
-  querySearchProvider = debounce(this.setDebounceTextSearch, 200)
+  const querySearchProvider = debounce(setDebounceTextSearch, 200)
 
-  setSearchLoading = loading => this.setState({ searchLoading: loading })
+  const setSearchLoading = loading => setLoading(loading)
 
-  onTagsChange = tags => {
+  const onTagsChange = tags => {
     const { history, location } = this.props
 
     const labels = tags.map(tag => tag.name)
 
-    this.setState({ tags: labels })
+    setTags(labels)
 
     addToQueryString(history, location, { tags: labels })
   }
 
-  render() {
-    const intl = getIntl(Home)
-
-    return (
-      <div>
-        <Searchbar
-          text={this.state.searchText}
-          tags={this.state.tags}
-          loading={this.state.searchLoading}
-          onTextChange={this.onSearchChange}
-          onTagsChange={this.onTagsChange}
+  return (
+    <div>
+      <Searchbar
+        text={searchText}
+        tags={tags}
+        loading={loading}
+        onTextChange={onSearchChange}
+        onTagsChange={onTagsChange}
+      />
+      <ResultList searchText={debouncedSearchText} setSearchLoading={setSearchLoading} />
+      <Link to="/q/new">
+        <Button
+          icon="record_voice_over"
+          data-tooltip={intl('new_question')}
+          style={{ position: 'fixed', bottom: '1rem', right: '1rem' }}
+          primary
+          round
+          raised
+          fixed
         />
-        <ResultList
-          searchText={this.state.debouncedSearchText}
-          setSearchLoading={this.setSearchLoading}
-        />
-        <Link to="/q/new">
-          <Button
-            icon="record_voice_over"
-            data-tooltip={intl('new_question')}
-            style={{ position: 'fixed', bottom: '1rem', right: '1rem' }}
-            primary
-            round
-            raised
-            fixed
-          />
-        </Link>
-      </div>
-    )
-  }
+      </Link>
+    </div>
+  )
 }
 
 Home.propTypes = {

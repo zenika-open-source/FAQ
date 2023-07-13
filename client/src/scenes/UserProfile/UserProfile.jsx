@@ -1,18 +1,20 @@
-import React, { useState, useEffect } from 'react'
 import { useMutation } from '@apollo/client'
+import { useEffect, useState } from 'react'
 
 import { useUser } from 'contexts'
 import { alert, getIntl } from 'services'
 
-import { Avatar, Button, Card, Modal, Loading, Input } from 'components'
+import { Avatar, Button, Card, Input, Loading, Modal } from 'components'
 
 import Logs from './components/Logs'
 
 import Specialties from './components/Specialties'
 
-import { UPDATE_INDENTITY, DELETE_IDENTITY } from './queries'
+import { useNavigate } from 'react-router'
+import { DELETE_IDENTITY, UPDATE_INDENTITY } from './queries'
 
 const UserProfile = ({ history }) => {
+  const navigate = useNavigate()
   const intl = getIntl(UserProfile)
 
   const [loading, setLoading] = useState(false)
@@ -54,7 +56,7 @@ const UserProfile = ({ history }) => {
       setLoading(true)
       await deleteIdentity()
       alert.pushSuccess(intl('alert.delete_success'))
-      history.push('/auth/logout')
+      navigate('/auth/logout')
     } catch (err) {
       alert.pushDefaultError(err)
       setModalActive(false)

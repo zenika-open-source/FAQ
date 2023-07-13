@@ -1,17 +1,19 @@
-import React from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { Outlet, Route, Routes } from 'react-router-dom'
 
 import Auth from 'scenes/Auth'
 import Home from 'scenes/Home'
-import Question from 'scenes/Question'
-import UserProfile from 'scenes/UserProfile'
-import Settings from 'scenes/Settings'
 import NotFound from 'scenes/NotFound'
+import Question from 'scenes/Question'
+import Settings from 'scenes/Settings'
+import UserProfile from 'scenes/UserProfile'
 
-import { PrivateRoute, Loading, ErrorBoundary } from 'components'
+import { ErrorBoundary, Loading, PrivateRoute } from 'components'
 
+import { useAuth, useConfiguration } from 'contexts'
 import { getIntl } from 'services'
-import { useConfiguration, useAuth } from 'contexts'
+import Login from 'scenes/Auth/Login'
+import Callback from 'scenes/Auth/Callback'
+import Logout from 'scenes/Auth/Logout'
 
 const AppBody = () => {
   const intl = getIntl(AppBody)
@@ -25,14 +27,21 @@ const AppBody = () => {
         <Loading text={intl('loading')} />
       ) : (
         <ErrorBoundary>
-          <Switch>
-            <PrivateRoute exact path="/" component={Home} />
-            <Route path="/auth" component={Auth} />
-            <PrivateRoute path="/q" component={Question} />
-            <PrivateRoute path="/user-profile" component={UserProfile} />
-            <PrivateRoute path="/settings" component={Settings} admin specialist />
-            <PrivateRoute component={NotFound} />
-          </Switch>
+          <Routes>
+            <Route path="auth" element={<Outlet />}>
+              <Route path="login" element={<Login />} />
+              <Route path="callback" element={<Callback />} />
+              <Route path="logout" element={<Logout />} />
+              <Route render={() => <Navigate to="/" />} />
+            </Route>
+            <Route element={<PrivateRoute />}>
+              <Route path="/" element={<Home />} />
+              <Route path="q" element={<Question />} />
+              <Route path="user-profile" element={<UserProfile />} />
+              <Route path="settings" element={<Settings />} admin specialist />
+              <Route path="*" element={<NotFound />} />
+            </Route>
+          </Routes>
         </ErrorBoundary>
       )}
     </div>

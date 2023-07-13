@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { withRouter } from 'react-router'
 import { Link } from 'react-router-dom'
 
 import { getIntl } from 'services'
@@ -20,7 +19,7 @@ const ActionMenu = ({ backLabel, backLink, goBack, title, children, history, loc
             label={backLabel || intl('back')}
             link
             raised
-            onClick={() => history.goBack()}
+            onClick={() => navigate(-1)}
           />
         ) : (
           <Link to={backLink}>
@@ -51,4 +50,4 @@ ActionMenu.translations = {
   fr: { back: 'Retour' }
 }
 
-export default withRouter(ActionMenu)
+export default ActionMenu

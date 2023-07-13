@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { withRouter } from 'react-router'
 
 import { getIntl } from 'services'
 import { useUser, useConfiguration } from 'contexts'
@@ -56,7 +55,7 @@ const UserMenu = ({ history }) => {
 }
 
 UserMenu.propTypes = {
-  history: PropTypes.object.isRequired
+  history: PropTypes.object
 }
 
 UserMenu.translations = {
@@ -76,4 +75,4 @@ UserMenu.translations = {
   }
 }
 
-export default withRouter(UserMenu)
+export default UserMenu

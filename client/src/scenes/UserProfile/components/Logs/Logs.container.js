@@ -1,19 +1,18 @@
-import { withRouter } from 'react-router'
-
+import { withError, withPagination } from 'components'
 import { compose, unserialize } from 'helpers'
 import { query } from 'services/apollo'
-import { withError, withPagination } from 'components'
 
 import { meHistory } from './queries'
 
+import { useNavigate } from 'react-router'
 import Logs from './Logs'
 
 const ENTRIES_PER_PAGE = 15
 
 export default compose(
-  withRouter,
   query(meHistory, {
     variables: props => {
+      const navigate = useNavigate()
       const { page } = unserialize(props.location.search)
 
       return {

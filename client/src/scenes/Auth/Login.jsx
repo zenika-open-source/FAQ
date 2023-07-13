@@ -1,22 +1,23 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { withRouter, Redirect } from 'react-router-dom'
+import { Navigate, useLocation } from 'react-router-dom'
 
 import { getIntl } from 'services'
 import { useAuth } from 'contexts'
 
 import { Loading, Button } from 'components'
 
-const Login = ({ location }) => {
+const Login = () => {
   const intl = getIntl(Login)
+  const { state } = useLocation()
 
   const [renewing, setRenewing] = useState(false)
-  const redirectedFrom = location.state && location.state.from
+  const redirectedFrom = state && state.from
 
   const { login, renewAuth, isAuth, wasAuth } = useAuth()
 
   if (isAuth) {
-    return <Redirect to="/" />
+    return <Navigate to="/" />
   }
 
   if (wasAuth) {
@@ -63,4 +64,4 @@ Login.translations = {
   }
 }
 
-export default withRouter(Login)
+export default Login

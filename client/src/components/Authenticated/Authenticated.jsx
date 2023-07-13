@@ -1,13 +1,10 @@
-import React from 'react'
 import PropTypes from 'prop-types'
-import { withRouter } from 'react-router'
-import { Redirect } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 
 import { useAuth } from 'contexts'
 
-const Authenticated = ({ location, reverse, redirect, children, admin, specialist }) => {
+const Authenticated = ({ reverse, redirect, children, admin, specialist }) => {
   const { isAuth, isAdmin, isSpecialist } = useAuth()
-  const currentURL = location.pathname + location.search
 
   if (admin && isAdmin) {
     return children
@@ -18,7 +15,7 @@ const Authenticated = ({ location, reverse, redirect, children, admin, specialis
   }
 
   if (admin || specialist) {
-    return redirect ? <Redirect to="/" /> : ''
+    return redirect ? <Navigate replace to="/" /> : ''
   }
 
   if ((isAuth && !reverse) || (!isAuth && reverse)) {
@@ -26,18 +23,17 @@ const Authenticated = ({ location, reverse, redirect, children, admin, specialis
   }
 
   if (redirect) {
-    return <Redirect to={{ pathname: redirect, state: { from: currentURL } }} />
+    return <Navigate replace to={redirect} />
   }
 
   return ''
 }
 
 Authenticated.propTypes = {
-  location: PropTypes.object.isRequired,
   reverse: PropTypes.bool,
   redirect: PropTypes.string,
   children: PropTypes.node,
   admin: PropTypes.bool
 }
 
-export default withRouter(Authenticated)
+export default Authenticated

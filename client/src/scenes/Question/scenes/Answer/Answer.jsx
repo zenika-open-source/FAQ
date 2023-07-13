@@ -1,17 +1,17 @@
 import { useApolloClient } from '@apollo/client'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
-import { Prompt, Redirect } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 
 import { EDIT_ANSWER, SUBMIT_ANSWER } from './queries'
 
-import { alert, markdown, getIntl } from 'services'
-import { onListChange } from 'helpers'
+import { Prompt, onListChange } from 'helpers'
+import { alert, getIntl, markdown } from 'services'
 
 import NotFound from 'scenes/NotFound'
 
-import { Loading, Flags, Button, MarkdownEditor, CtrlEnter, PairInputList } from 'components'
-import Card, { CardTitle, CardText, CardActions, PermanentClosableCard } from 'components/Card'
+import { Button, CtrlEnter, Flags, Loading, MarkdownEditor, PairInputList } from 'components'
+import Card, { CardActions, CardText, CardTitle, PermanentClosableCard } from 'components/Card'
 
 import { ActionMenu } from '../../components'
 
@@ -103,7 +103,7 @@ const Answer = ({ zNode }) => {
   }
 
   if (slug) {
-    return <Redirect to={`/q/${slug}`} />
+    return <Navigate to={`/q/${slug}`} />
   }
 
   if (loadingSubmit) {
@@ -116,7 +116,7 @@ const Answer = ({ zNode }) => {
 
   return (
     <div>
-      {canSubmit(state, answer) && <Prompt message={intl('prompt_warning')} />}
+      <Prompt message={intl('prompt_warning')} when={canSubmit(state, answer)} />
       <ActionMenu backLink={`/q/${zNode.question.slug}-${zNode.id}`}>
         {!showTips && (
           <Button
