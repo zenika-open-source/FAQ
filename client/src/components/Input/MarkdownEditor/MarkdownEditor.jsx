@@ -1,49 +1,19 @@
-import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import ReactMde, { commands } from 'react-mde'
 
-import { markdown, getIntl } from 'services'
-
-import 'react-mde/lib/styles/css/react-mde-all.css'
+import MDEditor from '@uiw/react-md-editor'
 import '../Input.css'
 
-const listCommands = [...commands.getDefaultCommands()]
-
 const MarkdownEditor = ({ content, onChange }) => {
-  const intl = getIntl(MarkdownEditor)
-  const [tab, setTab] = useState('write')
   return (
-    <ReactMde
-      className="markdown-editor"
-      value={content}
-      onTabChange={setTab}
-      selectedTab={tab}
-      generateMarkdownPreview={md => Promise.resolve(markdown.text(md))}
-      onChange={onChange}
-      commands={listCommands}
-      l18n={intl('l18n')}
-    />
+    <div data-color-mode="light">
+      <MDEditor className="markdown-editor" value={content} onChange={onChange} />
+    </div>
   )
 }
 
 MarkdownEditor.propTypes = {
   content: PropTypes.string,
   onChange: PropTypes.func
-}
-
-MarkdownEditor.translations = {
-  en: {
-    l18n: {
-      write: 'Write',
-      preview: 'Preview'
-    }
-  },
-  fr: {
-    l18n: {
-      write: 'Ecrire',
-      preview: 'Prévisualiser'
-    }
-  }
 }
 
 export default MarkdownEditor
