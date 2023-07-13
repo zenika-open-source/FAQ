@@ -1,10 +1,8 @@
-import React from 'react'
 import PropTypes from 'prop-types'
-import Pluralize from 'react-pluralize'
 
-import { getIntl } from 'services'
 import { Loading } from 'components'
 import { DefaultPagination } from 'components/Pagination'
+import { getIntl } from 'services'
 
 import NoResults from '../NoResults'
 import Result from '../Result'
@@ -49,7 +47,15 @@ const ResultList = ({
             padding: '0 1rem'
           }}
         >
-          <i>{searchText ? <span>{intl('count')(entriesCount)}</span> : intl('latest')}</i>
+          <i>
+            {searchText ? (
+              <span>
+                {entriesCount} {entriesCount > 1 ? intl('results') : intl('result')}
+              </span>
+            ) : (
+              intl('latest')
+            )}
+          </i>
           <i>{intl('page')(pageCurrent)}</i>
         </p>
       )}
@@ -81,20 +87,14 @@ ResultList.propTypes = {
 ResultList.translations = {
   en: {
     latest: 'Latest questions',
-    count: count => (
-      <>
-        <Pluralize singular="result" count={count} /> found
-      </>
-    ),
+    result: 'result found',
+    results: 'results found',
     page: current => <>Page {current}</>
   },
   fr: {
     latest: 'Dernières questions',
-    count: count => (
-      <>
-        <Pluralize singular="résultat" count={count} /> trouvés
-      </>
-    ),
+    result: 'résultat trouvé',
+    results: 'résultats trouvés',
     page: current => <>Page {current}</>
   }
 }
