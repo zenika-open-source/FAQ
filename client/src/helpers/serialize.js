@@ -39,7 +39,7 @@ export const unserialize = queryString => {
   }
 }
 
-export const addToQueryString = (history, location, addedParams, options = { push: true }) => {
+export const addToQueryString = (navigate, location, addedParams, options = { push: true }) => {
   const params = unserialize(location.search)
 
   const qs = serialize({
@@ -47,7 +47,7 @@ export const addToQueryString = (history, location, addedParams, options = { pus
     ...addedParams
   })
 
-  history[options.push ? 'push' : 'replace']({
+  navigate[options.push ? 'push' : 'replace']({
     search: qs
   })
 }

@@ -1,6 +1,6 @@
 import debounce from 'lodash/debounce'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 import { Button } from 'components'
 
@@ -13,7 +13,10 @@ import { ResultList, Searchbar } from './components'
 const Home = () => {
   const intl = getIntl(Home)
 
+  const location = useLocation()
+  console.log('🚀 ~ file: Home.jsx:17 ~ Home ~ location:', location)
   const params = unserialize(location.search)
+  const navigate = useNavigate()
 
   const [searchText, setSearchText] = useState(params.q)
   const [debouncedSearchText, setDebouncedSearchText] = useState(params.q)
@@ -21,11 +24,9 @@ const Home = () => {
   const [tags, setTags] = useState(params.tags)
 
   const onSearchChange = text => {
-    const { history, location } = props
-
     setSearchText(text)
 
-    addToQueryString(history, location, {
+    addToQueryString(navigate, location, {
       q: text
     })
 
@@ -41,13 +42,11 @@ const Home = () => {
   const setSearchLoading = loading => setLoading(loading)
 
   const onTagsChange = tags => {
-    const { history, location } = this.props
-
     const labels = tags.map(tag => tag.name)
 
     setTags(labels)
 
-    addToQueryString(history, location, { tags: labels })
+    addToQueryString(navigate, location, { tags: labels })
   }
 
   return (
