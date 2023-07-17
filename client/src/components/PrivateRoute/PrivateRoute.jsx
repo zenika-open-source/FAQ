@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import { Navigate, Outlet } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
 
 import Authenticated from 'components/Authenticated'
 
