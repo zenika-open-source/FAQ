@@ -1,13 +1,12 @@
+import { useCallback, useEffect, useRef } from 'react'
 import { useBeforeUnload, unstable_useBlocker as useBlocker } from 'react-router-dom'
 
 const usePrompt = (message, { beforeUnload } = {}) => {
   let blocker = useBlocker(
-    React.useCallback(() => (typeof message === 'string' ? !window.confirm(message) : false), [
-      message
-    ])
+    useCallback(() => (typeof message === 'string' ? !window.confirm(message) : false), [message])
   )
-  let prevState = React.useRef(blocker.state)
-  React.useEffect(() => {
+  let prevState = useRef(blocker.state)
+  useEffect(() => {
     if (blocker.state === 'blocked') {
       blocker.reset()
     }
@@ -15,7 +14,7 @@ const usePrompt = (message, { beforeUnload } = {}) => {
   }, [blocker])
 
   useBeforeUnload(
-    React.useCallback(
+    useCallback(
       event => {
         if (beforeUnload && typeof message === 'string') {
           event.preventDefault()
