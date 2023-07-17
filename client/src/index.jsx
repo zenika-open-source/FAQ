@@ -1,31 +1,46 @@
-import { LocalStorageWrapper, persistCache } from 'apollo3-cache-persist'
 import ReactDOM from 'react-dom/client'
-import { BrowserRouter, RouterProvider, createBrowserRouter } from 'react-router-dom'
-
-import { apolloCache } from 'services'
+import {
+  Route,
+  RouterProvider,
+  createBrowserRouter,
+  createRoutesFromElements
+} from 'react-router-dom'
 
 import 'normalize.css'
 
-import App from 'scenes/App'
+import { ErrorBoundary, PrivateRoute } from 'components'
+import App from 'scenes/App/App'
+import Auth from 'scenes/Auth/Auth'
+import Home from 'scenes/Home/Home'
+import NotFound from 'scenes/NotFound/NotFound'
+import Question from 'scenes/Question/Question'
+import Settings from 'scenes/Settings/Settings'
+import UserProfile from 'scenes/UserProfile/UserProfile'
 import ApolloWrapper from 'services/apollo'
 
-const cache = apolloCache
-
-const initializeApp = async () => {
-  await persistCache({
-    cache,
-    storage: new LocalStorageWrapper(window.localStorage)
-  })
-
-  const root = ReactDOM.createRoot(document.getElementById('root'))
-
-  root.render(
-    <ApolloWrapper>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </ApolloWrapper>
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route element={<App />}>
+      <Route path="auth/*" element={<Auth />} errorElement={<ErrorBoundary />} />
+      <Route element={<PrivateRoute />}>
+        <Route path="/" element={<Home />} errorElement={<ErrorBoundary />} />
+        <Route path="q/*" element={<Question />} errorElement={<ErrorBoundary />} />
+        <Route path="user-profile" element={<UserProfile />} errorElement={<ErrorBoundary />} />
+        <Route
+          path="settings"
+          element={<Settings />}
+          errorElement={<ErrorBoundary />}
+          admin
+          specialist
+        />
+      </Route>
+      <Route path="*" element={<NotFound />} />
+    </Route>
   )
-}
+)
 
-initializeApp()
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <ApolloWrapper>
+    <RouterProvider router={router} />
+  </ApolloWrapper>
+)
