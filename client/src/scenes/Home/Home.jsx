@@ -14,7 +14,6 @@ const Home = () => {
   const intl = getIntl(Home)
 
   const location = useLocation()
-  console.log('🚀 ~ file: Home.jsx:17 ~ Home ~ location:', location)
   const params = unserialize(location.search)
   const navigate = useNavigate()
 
