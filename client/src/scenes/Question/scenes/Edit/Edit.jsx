@@ -1,7 +1,7 @@
 import { useApolloClient } from '@apollo/client'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
-import { Navigate } from 'react-router-dom'
+import { Navigate, useLocation, useParams } from 'react-router-dom'
 
 import { EDIT_QUESTION, SUBMIT_QUESTION } from './queries'
 
@@ -19,7 +19,9 @@ import Tips from './components/Tips'
 import { Prompt } from 'helpers'
 import './Edit.css'
 
-const Edit = ({ location, match, zNode }) => {
+const Edit = ({ zNode }) => {
+  const params = useParams()
+  const location = useLocation()
   const [state, setState] = useState(() => {
     const passedQuestionText = location.state ? location.state.question : ''
     const initialQuestion = zNode ? zNode.question.title : passedQuestionText
@@ -28,7 +30,7 @@ const Edit = ({ location, match, zNode }) => {
     return {
       nodeLoaded: false,
       initialQuestion: initialQuestion,
-      isEditing: !!match.params.slug,
+      isEditing: !!params.slug,
       question: initialQuestion,
       loadingSubmit: false,
       slug: null,
@@ -129,7 +131,7 @@ const Edit = ({ location, match, zNode }) => {
       <Prompt message={intl('prompt_warning')} when={canSubmit(state)} />
       <ActionMenu
         backLabel={!isEditing ? intl('home') : null}
-        backLink={isEditing ? `/q/${match.params.slug}` : '/'}
+        backLink={isEditing ? `/q/${params.slug}` : '/'}
         title={isEditing ? intl('title.edit') : intl('title.submit')}
       >
         {!showTips && (
@@ -173,8 +175,6 @@ const Edit = ({ location, match, zNode }) => {
 }
 
 Edit.propTypes = {
-  match: PropTypes.object.isRequired,
-  location: PropTypes.object.isRequired,
   zNode: PropTypes.object
 }
 
