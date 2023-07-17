@@ -3,7 +3,7 @@ import React from 'react'
 import './Footer.scss'
 
 const Footer = () => (
-  <div className="footer">
+  <footer className="footer">
     <a href="https://www.algolia.com" target="_blank" rel="noopener noreferrer">
       <img src="/img/brands/powered-by-algolia.svg" alt="Powered by Algolia" />
     </a>
@@ -13,7 +13,7 @@ const Footer = () => (
         contact@{import.meta.env.VITE_FAQ_URL}
       </a>
     </span>
-  </div>
+  </footer>
 )
 
 export default Footer

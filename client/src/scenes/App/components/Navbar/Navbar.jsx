@@ -15,7 +15,7 @@ const Navbar = () => {
   const conf = useConfiguration()
 
   return (
-    <div className="navbar">
+    <nav className="navbar">
       <div className="brand">
         <Link to="/" className="title">
           <img alt="emoji" src="/img/favicon/favicon-64.png" />
@@ -45,7 +45,7 @@ const Navbar = () => {
           </Link>
         </Authenticated>
       </div>
-    </div>
+    </nav>
   )
 }
 
