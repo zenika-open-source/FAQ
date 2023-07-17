@@ -11,6 +11,7 @@ import { onError } from '@apollo/client/link/error'
 import { setContext } from '@apollo/client/link/context'
 
 import routing from './routing'
+import { LocalStorageWrapper, persistCache } from 'apollo3-cache-persist'
 
 const apolloCache = new InMemoryCache()
 
@@ -40,6 +41,13 @@ const authLink = setContext((_, { headers }) => {
 
 const httpLink = new HttpLink({
   uri: import.meta.env.VITE_GRAPHQL_ENDPOINT || '/gql'
+})
+
+const cache = apolloCache
+
+await persistCache({
+  cache,
+  storage: new LocalStorageWrapper(window.localStorage)
 })
 
 const apolloClient = new ApolloClient({
