@@ -1,7 +1,7 @@
-import React, { PureComponent, memo, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import { useEffect } from 'react'
 
-import { unserialize, addToQueryString } from 'helpers'
+import { addToQueryString, unserialize } from 'helpers'
 import { useLocation } from 'react-router'
 
 const withPagination = (options = { push: true }) => Component => {

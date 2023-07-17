@@ -1,13 +1,14 @@
-import React, { useEffect } from 'react'
-import PropTypes from 'prop-types'
+import { useEffect } from 'react'
 
-import { getIntl } from 'services'
 import { useAuth } from 'contexts'
+import { getIntl } from 'services'
 
 import { Loading } from 'components'
+import { useLocation } from 'react-router'
 
-const Callback = ({ location }) => {
+const Callback = () => {
   const intl = getIntl(Callback)
+  const location = useLocation()
 
   const { parseHash } = useAuth()
 
@@ -16,10 +17,6 @@ const Callback = ({ location }) => {
   }, [parseHash, location.hash])
 
   return <Loading text={intl('loading')} />
-}
-
-Callback.propTypes = {
-  location: PropTypes.object.isRequired
 }
 
 Callback.translations = {

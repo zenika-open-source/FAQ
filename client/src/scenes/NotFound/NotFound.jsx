@@ -1,10 +1,8 @@
-import PropTypes from 'prop-types'
-
 import Button from 'components/Button'
-import { getIntl } from 'services'
 import { useNavigate } from 'react-router'
+import { getIntl } from 'services'
 
-const NotFound = ({ history }) => {
+const NotFound = () => {
   const navigate = useNavigate()
   const intl = getIntl(NotFound)
 
@@ -22,10 +20,6 @@ const NotFound = ({ history }) => {
       </div>
     </div>
   )
-}
-
-NotFound.propTypes = {
-  history: PropTypes.object.isRequired
 }
 
 NotFound.translations = {
