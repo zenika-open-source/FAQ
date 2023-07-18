@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@apollo/client": "^3.7.15",
+    "@apollo/client": "^3.7.17",
     "@uiw/react-md-editor": "^3.23.3",
     "algoliasearch": "^3.35.1",
     "apollo3-cache-persist": "^0.14.1",
