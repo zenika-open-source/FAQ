@@ -21,18 +21,12 @@ import ApolloWrapper from 'services/apollo'
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<App />}>
-      <Route path="auth/*" element={<Auth />} errorElement={<ErrorBoundary />} />
+      <Route path="auth/*" element={<Auth />} />
       <Route element={<PrivateRoute />}>
-        <Route path="/" element={<Home />} errorElement={<ErrorBoundary />} />
-        <Route path="q/*" element={<Question />} errorElement={<ErrorBoundary />} />
-        <Route path="user-profile" element={<UserProfile />} errorElement={<ErrorBoundary />} />
-        <Route
-          path="settings"
-          element={<Settings />}
-          errorElement={<ErrorBoundary />}
-          admin
-          specialist
-        />
+        <Route path="/" element={<Home />} />
+        <Route path="q/*" element={<Question />} />
+        <Route path="user-profile" element={<UserProfile />} />
+        <Route path="settings" element={<Settings />} admin specialist />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Route>

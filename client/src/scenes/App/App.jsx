@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet'
 
 import { AuthProvider, ConfigurationProvider, UserProvider } from 'contexts'
 
-import { AlertProvider, AlertStack } from 'components'
+import { AlertProvider, AlertStack, ErrorBoundary } from 'components'
 
 import Footer from './components/Footer'
 import Navbar from './components/Navbar'
@@ -22,7 +22,9 @@ const App = () => {
             <UserProvider>
               <Navbar />
               <main className="main">
-                <Outlet />
+                <ErrorBoundary>
+                  <Outlet />
+                </ErrorBoundary>
               </main>
               <Footer />
             </UserProvider>
