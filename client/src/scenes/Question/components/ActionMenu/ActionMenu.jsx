@@ -1,14 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 import { getIntl } from 'services'
 import Button from 'components/Button'
 
 import './ActionMenu.css'
 
-const ActionMenu = ({ backLabel, backLink, goBack, title, children, history, location }) => {
+const ActionMenu = ({ backLabel, backLink, goBack, title, children }) => {
   const intl = getIntl(ActionMenu)
+  const location = useLocation()
 
   return (
     <div className="action-menu">
@@ -40,9 +41,7 @@ ActionMenu.propTypes = {
   backLabel: PropTypes.string,
   goBack: PropTypes.bool,
   title: PropTypes.string,
-  children: PropTypes.node,
-  history: PropTypes.object,
-  location: PropTypes.object
+  children: PropTypes.node
 }
 
 ActionMenu.translations = {
