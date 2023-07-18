@@ -1,27 +1,24 @@
-import { useApolloClient } from '@apollo/client'
+import './Edit.css'
+
+import { useApolloClient, useMutation } from '@apollo/client'
+import { Button, CtrlEnter, Input, Loading, TagPicker } from 'components'
+import Card, { CardActions, CardText, PermanentClosableCard } from 'components/Card'
+import { Prompt } from 'helpers'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
 import { Navigate, useLocation, useParams } from 'react-router-dom'
-
-import { EDIT_QUESTION, SUBMIT_QUESTION } from './queries'
-
+import { GET_NODE } from 'scenes/Question/queries'
 import { alert, getIntl } from 'services'
 
-import { Button, CtrlEnter, Input, Loading, TagPicker } from 'components'
-import Card, { CardActions, CardText, PermanentClosableCard } from 'components/Card'
-
 import { ActionMenu } from '../../components'
-
-import { canSubmit } from './helpers'
-
 import Tips from './components/Tips'
+import { canSubmit } from './helpers'
+import { EDIT_QUESTION, SUBMIT_QUESTION } from './queries'
 
-import { Prompt } from 'helpers'
-import './Edit.css'
-
-const Edit = ({ zNode }) => {
+const Edit = ({ zNode = null }) => {
   const params = useParams()
   const location = useLocation()
+
   const [state, setState] = useState(() => {
     const passedQuestionText = location.state ? location.state.question : ''
     const initialQuestion = zNode ? zNode.question.title : passedQuestionText
@@ -32,7 +29,6 @@ const Edit = ({ zNode }) => {
       initialQuestion: initialQuestion,
       isEditing: !!params.slug,
       question: initialQuestion,
-      loadingSubmit: false,
       slug: null,
       initialTags: initialTags,
       tags: initialTags,
@@ -44,62 +40,48 @@ const Edit = ({ zNode }) => {
 
   const apollo = useApolloClient()
 
-  const { isEditing, loadingSubmit, slug, question, tags, showTips } = state
+  const { isEditing, slug, question, tags, showTips } = state
 
   const toggleTips = value => () => {
     setState(state => ({ ...state, showTips: value }))
     PermanentClosableCard.setValue('tips_question', value)
   }
 
-  const submitQuestion = async () => {
-    try {
-      setState(state => ({ ...state, loadingSubmit: true }))
-      const { data } = await apollo.mutate({
-        mutation: SUBMIT_QUESTION,
-        variables: {
-          title: state.question,
-          tags: state.tags.map(tag => tag.id)
-        }
-      })
+  const [submitQuestion, { loading: loadingSubmit }] = useMutation(SUBMIT_QUESTION, {
+    variables: {
+      title: state.question,
+      tags: state.tags.map(tag => tag.id)
+    },
+    onCompleted(data) {
       setState(state => ({
         ...state,
         slug: data.createQuestionAndTags.slug + '-' + data.createQuestionAndTags.node.id
       }))
       alert.pushSuccess(intl('alert.submit_success'))
-    } catch (error) {
+    },
+    onError(error) {
       alert.pushDefaultError(error)
-      setState(state => ({
-        ...state,
-        loadingSubmit: false
-      }))
     }
-  }
+  })
 
-  const editQuestion = async () => {
-    try {
-      setState(state => ({ ...state, loadingSubmit: true }))
-      const { data } = await apollo.mutate({
-        mutation: EDIT_QUESTION,
-        variables: {
-          questionId: zNode.question.id,
-          title: state.question,
-          previousTitle: state.initialQuestion,
-          tags: state.tags.map(tag => tag.id)
-        }
-      })
+  const [editQuestion, { loading: loadingEdit }] = useMutation(EDIT_QUESTION, {
+    variables: {
+      questionId: zNode?.question.id,
+      title: state.question,
+      previousTitle: state.initialQuestion,
+      tags: state.tags.map(tag => tag.id)
+    },
+    onCompleted(data) {
       setState(state => ({
         ...state,
         slug: data.updateQuestionAndTags.slug + '-' + zNode.id
       }))
       alert.pushSuccess(intl('alert.edit_success'))
-    } catch (error) {
+    },
+    onError(error) {
       alert.pushDefaultError(error)
-      setState(state => ({
-        ...state,
-        loadingSubmit: false
-      }))
     }
-  }
+  })
 
   const submitForm = () => {
     if (canSubmit(state)) {
@@ -118,7 +100,7 @@ const Edit = ({ zNode }) => {
     return <Navigate to={`/q/${slug}`} />
   }
 
-  if (loadingSubmit) {
+  if (loadingSubmit || loadingEdit) {
     return <Loading />
   }
 
