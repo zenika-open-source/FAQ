@@ -41,6 +41,9 @@ export const unserialize = queryString => {
 
 export const addToQueryString = (navigate, location, addedParams, options = { push: true }) => {
   const params = unserialize(location.search)
+  console.log('navigate: ', navigate)
+  console.log('params: ', params)
+  console.log('options: ', options)
 
   const qs = serialize({
     ...params,
