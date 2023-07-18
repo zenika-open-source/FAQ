@@ -1,4 +1,4 @@
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 export const zNodeFragment = `
   id
@@ -61,7 +61,7 @@ export const zNodeFragment = `
   }
 `
 
-export const getNode = gql`
+export const GET_NODE = gql`
   query($id: ID!) {
     zNode(where: { id: $id }) {
       ${zNodeFragment}
