@@ -10,7 +10,7 @@ const Auth = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/callback" element={<Callback />} />
       <Route path="/logout" element={<Logout />} />
-      <Route render={() => <Navigate to="/" />} />
+      <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   )
 }
