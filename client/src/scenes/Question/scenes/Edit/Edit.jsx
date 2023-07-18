@@ -7,7 +7,6 @@ import { Prompt } from 'helpers'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
 import { Navigate, useLocation, useParams } from 'react-router-dom'
-import { GET_NODE } from 'scenes/Question/queries'
 import { alert, getIntl } from 'services'
 
 import { ActionMenu } from '../../components'
@@ -37,8 +36,6 @@ const Edit = ({ zNode = null }) => {
   })
 
   const intl = getIntl(Edit)
-
-  const apollo = useApolloClient()
 
   const { isEditing, slug, question, tags, showTips } = state
 

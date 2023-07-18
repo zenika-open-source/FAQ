@@ -1,11 +1,10 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+import { useState } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
 
-import { getIntl } from 'services'
 import { useAuth } from 'contexts'
+import { getIntl } from 'services'
 
-import { Loading, Button } from 'components'
+import { Button, Loading } from 'components'
 
 const Login = () => {
   const intl = getIntl(Login)
