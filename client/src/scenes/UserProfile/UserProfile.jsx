@@ -1,33 +1,25 @@
 import { useMutation } from '@apollo/client'
-import { useEffect, useState } from 'react'
-
+import { Avatar, Button, Card, Input, Loading, Modal } from 'components'
 import { useUser } from 'contexts'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router'
 import { alert, getIntl } from 'services'
 
-import { Avatar, Button, Card, Input, Loading, Modal } from 'components'
-
 import Logs from './components/Logs'
-
 import Specialties from './components/Specialties'
-
-import { useNavigate } from 'react-router'
 import { DELETE_IDENTITY, UPDATE_INDENTITY } from './queries'
 
-const UserProfile = ({ history }) => {
+const UserProfile = () => {
   const navigate = useNavigate()
   const intl = getIntl(UserProfile)
-
-  const [loading, setLoading] = useState(false)
 
   const user = useUser()
   const [name, setName] = useState(user.name)
   const [email, setEmail] = useState(user.email)
   const [picture, setPicture] = useState(user.picture)
-  const [updateIdentity] = useMutation(UPDATE_INDENTITY)
 
   const [goodbye, setGoodbye] = useState('')
   const [modalActive, setModalActive] = useState(false)
-  const [deleteIdentity] = useMutation(DELETE_IDENTITY)
 
   useEffect(() => {
     if (user && user.name) {
@@ -37,32 +29,26 @@ const UserProfile = ({ history }) => {
     }
   }, [user])
 
-  const save = async () => {
-    try {
-      setLoading(true)
-      await updateIdentity({
-        variables: { name, email, picture }
-      })
+  const [save, { loading: saveLoading }] = useMutation(UPDATE_INDENTITY, {
+    variables: { name, email, picture },
+    onCompleted() {
       alert.pushSuccess(intl('alert.update_success'))
-    } catch (err) {
-      alert.pushDefaultError(err)
-    } finally {
-      setLoading(false)
+    },
+    onError(error) {
+      alert.pushDefaultError(error)
     }
-  }
+  })
 
-  const deleteData = async () => {
-    try {
-      setLoading(true)
-      await deleteIdentity()
+  const [deleteData, { loading: deleteLoading }] = useMutation(DELETE_IDENTITY, {
+    onCompleted() {
       alert.pushSuccess(intl('alert.delete_success'))
       navigate('/auth/logout')
-    } catch (err) {
-      alert.pushDefaultError(err)
+    },
+    onError(error) {
+      alert.pushDefaultError(error)
       setModalActive(false)
-      setLoading(false)
     }
-  }
+  })
 
   if (name === undefined) return <Loading />
 
@@ -113,7 +99,7 @@ const UserProfile = ({ history }) => {
           </div>
         </Card.Text>
         <Card.Actions>
-          <Button primary type="button" disabled={loading} onClick={save}>
+          <Button primary type="button" disabled={saveLoading || deleteLoading} onClick={save}>
             {intl('identity.save')}
           </Button>
         </Card.Actions>
@@ -135,7 +121,7 @@ const UserProfile = ({ history }) => {
             {intl('gdpr.erase.label')}
             <Button
               secondary
-              disabled={loading}
+              disabled={saveLoading || deleteLoading}
               data-tooltip={intl('gdpr.erase.tooltip')}
               style={{ marginLeft: '1rem' }}
               onClick={() => setModalActive(true)}
@@ -145,7 +131,7 @@ const UserProfile = ({ history }) => {
           </p>
         </Card.Text>
       </Card>
-      <Modal active={modalActive} setActive={setModalActive} loading={loading}>
+      <Modal active={modalActive} setActive={setModalActive} loading={saveLoading || deleteLoading}>
         <Modal.Title>
           <h2>{intl('modal.title')}</h2>
         </Modal.Title>
@@ -159,9 +145,9 @@ const UserProfile = ({ history }) => {
           <Button
             primary
             style={{ width: '100%' }}
-            disabled={goodbye !== 'goodbye' || loading}
+            disabled={goodbye !== 'goodbye' || saveLoading || deleteLoading}
             onClick={deleteData}
-            loading={loading}
+            loading={saveLoading || deleteLoading}
           >
             {intl('modal.button')}
           </Button>
