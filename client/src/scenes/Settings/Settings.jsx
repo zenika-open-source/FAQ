@@ -1,26 +1,21 @@
-import React, { useState, useReducer, useEffect } from 'react'
-import { useMutation } from '@apollo/client'
+import './Settings.scss'
 
+import { useMutation } from '@apollo/client'
+import { Button, Tabs } from 'components'
+import Card, { CardActions, CardText, CardTitle } from 'components/Card'
+import { useAuth, useConfiguration } from 'contexts'
+import { useEffect, useReducer } from 'react'
 import { alert, getIntl } from 'services'
 
-import { useAuth, useConfiguration } from 'contexts'
-
-import { Tabs, Button } from 'components'
-import Card, { CardTitle, CardText, CardActions } from 'components/Card'
-
-import { reducer, serializeTags, synonymsToList, listToSynonyms } from './helpers'
-
+import { listToSynonyms, reducer, serializeTags, synonymsToList } from './helpers'
 import { UPDATE_CONFIGURATION } from './queries'
-
-import { General, Tags, Synonyms, Integrations, Specialists } from './scenes'
-
-import './Settings.scss'
+import { General, Integrations, Specialists, Synonyms, Tags } from './scenes'
 
 const initState = conf => ({
   ...conf,
-  synonyms: synonymsToList(conf.algoliaSynonyms),
-  authorizedDomains: conf.authorizedDomains.join(', '),
-  bugReporting: conf.bugReporting || 'GITHUB'
+  synonyms: synonymsToList(conf?.algoliaSynonyms),
+  authorizedDomains: conf?.authorizedDomains?.join(', '),
+  bugReporting: conf?.bugReporting || 'GITHUB'
 })
 
 const Settings = ({ configuration: conf }) => {
@@ -30,11 +25,7 @@ const Settings = ({ configuration: conf }) => {
 
   const configuration = useConfiguration()
 
-  const [loading, setLoading] = useState(false)
-
   const [state, dispatch] = useReducer(reducer, initState(conf))
-
-  const [mutate] = useMutation(UPDATE_CONFIGURATION)
 
   useEffect(() => {
     dispatch({
@@ -43,33 +34,27 @@ const Settings = ({ configuration: conf }) => {
     })
   }, [conf])
 
-  const onSave = () => {
-    setLoading(true)
-    mutate({
-      variables: {
-        title: state.title,
-        tagCategories: serializeTags(state.tagCategories),
-        algoliaSynonyms: listToSynonyms(state.synonyms),
-        workplaceSharing: state.workplaceSharing,
-        authorizedDomains: state.authorizedDomains
-          .split(',')
-          .map(x => x.trim())
-          .filter(x => x),
-        bugReporting: state.bugReporting,
-        slackChannelHook: state.slackChannelHook
-      }
-    })
-      .then(() => {
-        alert.pushSuccess(intl('alert_success'))
-        configuration.reload()
-      })
-      .catch(error => {
-        alert.pushDefaultError(error)
-      })
-      .finally(() => {
-        setLoading(false)
-      })
-  }
+  const [onSave, { loading }] = useMutation(UPDATE_CONFIGURATION, {
+    variables: {
+      title: state.title,
+      tagCategories: serializeTags(state.tagCategories),
+      algoliaSynonyms: listToSynonyms(state.synonyms),
+      workplaceSharing: state.workplaceSharing,
+      authorizedDomains: state.authorizedDomains
+        .split(',')
+        .map(x => x.trim())
+        .filter(x => x),
+      bugReporting: state.bugReporting,
+      slackChannelHook: state.slackChannelHook
+    },
+    onCompleted() {
+      alert.pushSuccess(intl('alert_success'))
+      configuration.reload()
+    },
+    onError(error) {
+      alert.pushDefaultError(error)
+    }
+  })
 
   const onTagsChange = tags => dispatch({ type: 'change_tags', data: tags })
 
