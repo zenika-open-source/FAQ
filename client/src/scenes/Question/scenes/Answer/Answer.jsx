@@ -1,4 +1,4 @@
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient, useMutation } from '@apollo/client'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
 import { Navigate } from 'react-router-dom'
@@ -29,7 +29,6 @@ const Answer = ({ zNode }) => {
       nodeLoaded: false,
       initialAnswer: initialText,
       answer: initialText,
-      loading: false,
       sources: initialSources,
       initialSources: initialSources,
       slug: null,
@@ -41,7 +40,7 @@ const Answer = ({ zNode }) => {
 
   const apollo = useApolloClient()
 
-  const { loadingSubmit, slug, showTips, sources } = state
+  const { slug, showTips, sources } = state
 
   const onTextChange = value => setState({ ...state, answer: value })
   const onSourcesChange = onListChange(
@@ -54,47 +53,36 @@ const Answer = ({ zNode }) => {
     PermanentClosableCard.setValue('tips_answer', value)
   }
 
-  const submitAnswer = async () => {
-    try {
-      setState(state => ({ ...state, loadingSubmit: true }))
-      await apollo.mutate({
-        mutation: SUBMIT_ANSWER,
-        variables: {
-          nodeId: zNode.id,
-          content: state.answer,
-          sources: JSON.stringify(keyValuePairsToSources(state.sources))
-        }
-      })
+  const [submitAnswer, { loading: loadingSubmit }] = useMutation(SUBMIT_ANSWER, {
+    variables: {
+      nodeId: zNode.id,
+      content: state.answer,
+      sources: JSON.stringify(keyValuePairsToSources(state.sources))
+    },
+    onCompleted() {
       setState(state => ({ ...state, slug: zNode.question.slug + '-' + zNode.id }))
       alert.pushSuccess(intl('alert.submit_success'))
-    } catch (error) {
+    },
+    onError(error) {
       alert.pushDefaultError(error)
-      setState(state => ({ ...state, loadingSubmit: false }))
     }
-  }
+  })
 
-  const editAnswer = async () => {
-    try {
-      setState(state => ({ ...state, loadingSubmit: true }))
-      await apollo.mutate({
-        mutation: EDIT_ANSWER,
-        variables: {
-          id: zNode.answer.id,
-          content: state.answer,
-          previousContent: state.initialAnswer,
-          sources: JSON.stringify(keyValuePairsToSources(state.sources))
-        }
-      })
+  const [editAnswer, { loading: loadingEdit }] = useMutation(EDIT_ANSWER, {
+    variables: {
+      id: zNode.answer?.id,
+      content: state.answer,
+      previousContent: state.initialAnswer,
+      sources: JSON.stringify(keyValuePairsToSources(state.sources))
+    },
+    onCompleted() {
       setState(state => ({ ...state, slug: zNode.question.slug + '-' + zNode.id }))
       alert.pushSuccess(intl('alert.edit_success'))
-    } catch (error) {
+    },
+    onError() {
       alert.pushDefaultError(error)
-      setState(state => ({
-        ...state,
-        loadingSubmit: false
-      }))
     }
-  }
+  })
 
   const submitForm = () => {
     if (canSubmit(state)) {
@@ -106,7 +94,7 @@ const Answer = ({ zNode }) => {
     return <Navigate to={`/q/${slug}`} />
   }
 
-  if (loadingSubmit) {
+  if (loadingSubmit || loadingEdit) {
     return <Loading />
   }
 
@@ -167,7 +155,6 @@ const Answer = ({ zNode }) => {
 }
 
 Answer.propTypes = {
-  match: PropTypes.object.isRequired,
   zNode: PropTypes.object
 }
 
