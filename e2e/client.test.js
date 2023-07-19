@@ -718,7 +718,7 @@ test('Should not be able to add a certified flag to a question not in my special
   await expect(page.locator('a').filter({ hasText: 'verifiedcertifiée' })).toBeHidden()
 })
 
-test.only('Should remove the certified flag after modifying an answer', async ({ page }) => {
+test('Should remove the certified flag after modifying an answer', async ({ page }) => {
   await setUser(page)
   await createQuestionWithFlag(prisma, tag.id, tempUser)
   await page.goto('/')
