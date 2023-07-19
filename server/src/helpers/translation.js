@@ -4,7 +4,9 @@ const logger = require('./logger')
 const key = process.env.CLOUD_TRANSLATION_API_KEY || ''
 const detectApiUrl = new URL('https://translation.googleapis.com/language/translate/v2/detect')
 detectApiUrl.searchParams.append('key', key)
-const translationApiUrl = new URL('https://translation.googleapis.com/language/translate/v2')
+const translationApiUrl = new URL(
+  'https://translation.googleapis.com/language/translate/v2?format=text'
+)
 translationApiUrl.searchParams.append('key', key)
 
 const detectLanguage = async text => {
