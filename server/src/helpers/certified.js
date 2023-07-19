@@ -31,6 +31,7 @@ const addCertifiedFlagWhenSpecialist = async (history, user, node, nodeId, ctx) 
 const refreshCertifiedFlag = async (history, answer, user, ctx) => {
   const certifiedFlag = answer.node.flags.find(flag => flag.type === type)
   let isCertified = Boolean(certifiedFlag)
+  const wasCertified = isCertified
   const tags = answer.node.tags.map(tag => tag.label.id)
   const specialties = user.specialties
   const isUserSpecialist = Boolean(specialties.find(specialty => tags.includes(specialty.id)))
@@ -42,7 +43,7 @@ const refreshCertifiedFlag = async (history, answer, user, ctx) => {
     await deleteFlagAndUpdateHistoryAndAlgolia(history, type, ctx, answer.node.id, certifiedFlag.id)
     isCertified = false
   }
-  return isCertified
+  return { isCertified, wasCertified }
 }
 
 module.exports = {

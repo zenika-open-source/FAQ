@@ -124,6 +124,7 @@ module.exports = {
         {
           id
           content
+          certified
           sources {
             id
             label
@@ -215,7 +216,7 @@ module.exports = {
 
       await Promise.all([...mutationsToAdd, ...mutationsToUpdate, ...mutationsToRemove])
 
-      const isCertified = await refreshCertifiedFlag(history, answer, user, ctx)
+      const { isCertified, wasCertified } = await refreshCertifiedFlag(history, answer, user, ctx)
 
       const clean = sources => sources.map(s => ({ label: s.label, url: s.url }))
 
@@ -231,11 +232,12 @@ module.exports = {
         meta.content = content
       }
 
-      const certifiedFlag = Boolean(answer.node.flags?.find(flag => flag.type === 'certified'))
       let certifiedContent = ''
-      if (certifiedFlag && !isCertified) {
+      if (wasCertified && !isCertified) {
         certifiedContent = previousContent
-      } else if (certifiedFlag && isCertified) {
+      } else if (!wasCertified && !isCertified && answer.certified) {
+        certifiedContent = answer.certified
+      } else if (isCertified && answer.certified) {
         certifiedContent = ''
       }
 
