@@ -66,10 +66,8 @@ const Read = ({ history, match, zNode, loading }) => {
 
   const preventAnswerEdit = () => {
     const certified = zNode?.flags.find(flag => flag.type === 'certified')
-    const isSpecialist = Boolean(
-      user.specialties.filter(specialty =>
-        zNode.tags.some(tag => specialty.name === tag.label.name)
-      )
+    const isSpecialist = user.specialties.some(specialty =>
+      zNode.tags.some(tag => specialty.name === tag.label.name)
     )
     if (certified && !isSpecialist) {
       if (window.confirm(intl('alert'))) {
