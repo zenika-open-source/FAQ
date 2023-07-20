@@ -1,3 +1,5 @@
+/* eslint no-self-compare: 0 */
+
 import cn from 'classnames'
 import { Button } from 'components'
 import { useClickOutside } from 'helpers'
