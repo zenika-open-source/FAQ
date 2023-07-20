@@ -1,5 +1,5 @@
-import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
+import { useContext } from 'react'
 import { Link } from 'react-router-dom'
 
 import { DropdownContext } from './Dropdown'
@@ -19,32 +19,36 @@ const DropdownItem = ({
   let CustomLink
 
   if (path) {
-    CustomLink = ({ children }) => (
-      <Link
-        to={path}
-        onClick={evt => {
-          if (onClick) onClick(evt)
-          setDropdownActive(false)
-        }}
-      >
-        {children}
-      </Link>
-    )
+    CustomLink = function CustomLinkWithRouter({ children }) {
+      return (
+        <Link
+          to={path}
+          onClick={evt => {
+            if (onClick) onClick(evt)
+            setDropdownActive(false)
+          }}
+        >
+          {children}
+        </Link>
+      )
+    }
   } else {
-    CustomLink = ({ children }) => (
-      <a
-        tabIndex={0}
-        href={href}
-        target={target || '_self'}
-        onClick={evt => {
-          if (onClick) onClick(evt)
-          setDropdownActive(false)
-        }}
-        {...otherProps}
-      >
-        {children}
-      </a>
-    )
+    CustomLink = function CustomLinkWithHref({ children }) {
+      return (
+        <a
+          tabIndex={0}
+          href={href}
+          target={target || '_self'}
+          onClick={evt => {
+            if (onClick) onClick(evt)
+            setDropdownActive(false)
+          }}
+          {...otherProps}
+        >
+          {children}
+        </a>
+      )
+    }
   }
 
   return (
@@ -72,7 +76,8 @@ DropdownItem.propTypes = {
   rightIcon: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   path: PropTypes.string,
   href: PropTypes.string,
-  target: PropTypes.string
+  target: PropTypes.string,
+  onClick: PropTypes.func
 }
 
 export default DropdownItem
