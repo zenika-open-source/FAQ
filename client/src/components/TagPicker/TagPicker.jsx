@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
 import cn from 'classnames'
-import PropTypes from 'prop-types'
 import sortBy from 'lodash/sortBy'
+import PropTypes from 'prop-types'
+import { useState } from 'react'
 
 import { useConfiguration } from 'contexts'
 

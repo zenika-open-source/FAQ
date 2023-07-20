@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import cn from 'classnames'
+import PropTypes from 'prop-types'
+import { Component } from 'react'
 
 import './Button.css'
 
@@ -73,7 +73,9 @@ Button.propTypes = {
   active: PropTypes.bool,
   raised: PropTypes.bool,
   disabled: PropTypes.bool,
-  fixed: PropTypes.bool
+  fixed: PropTypes.bool,
+  loading: PropTypes.bool,
+  small: PropTypes.bool,
 }
 
 export default Button

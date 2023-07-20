@@ -1,11 +1,11 @@
-import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { Component } from 'react'
 import { Link } from 'react-router-dom'
 
-import { markdown, getIntl } from 'services'
+import { getIntl, markdown } from 'services'
 
 // import Avatar from 'components/Avatar'
-import Card, { CardTitle, CardText } from 'components/Card'
+import Card, { CardText, CardTitle } from 'components/Card'
 import Flags from 'components/Flags'
 import Tags from 'components/Tags'
 

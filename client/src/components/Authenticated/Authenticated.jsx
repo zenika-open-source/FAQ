@@ -33,7 +33,8 @@ Authenticated.propTypes = {
   reverse: PropTypes.bool,
   redirect: PropTypes.string,
   children: PropTypes.node,
-  admin: PropTypes.bool
+  admin: PropTypes.bool,
+  specialist: PropTypes.bool
 }
 
 export default Authenticated

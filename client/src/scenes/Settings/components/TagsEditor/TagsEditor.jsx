@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react'
 import cn from 'classnames'
 import sortBy from 'lodash/sortBy'
+import { useEffect, useState } from 'react'
 import uuid from 'uuid/v4'
 
+import { Button, Icon, Input } from 'components'
+import Card, { CardActions, CardText, CardTitle } from 'components/Card'
 import { useClickOutside } from 'helpers'
-import { Input, Icon, Button } from 'components'
-import Card, { CardTitle, CardText, CardActions } from 'components/Card'
 
 import './TagsEditor.scss'
 

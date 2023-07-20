@@ -1,6 +1,6 @@
 import './Edit.css'
 
-import { useApolloClient, useMutation } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 import { Button, CtrlEnter, Input, Loading, TagPicker } from 'components'
 import Card, { CardActions, CardText, PermanentClosableCard } from 'components/Card'
 import { Prompt } from 'helpers'

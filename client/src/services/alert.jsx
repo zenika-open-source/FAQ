@@ -1,4 +1,4 @@
-import React from 'react'
+
 import { AlertProvider } from 'components'
 
 import { getIntl as intl } from './intl'

@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
 import cn from 'classnames'
+import { useState } from 'react'
 
 import { getIntl } from 'services'
 import HistoryActions from './HistoryActions.container'

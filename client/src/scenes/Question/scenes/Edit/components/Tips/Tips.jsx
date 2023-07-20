@@ -1,4 +1,4 @@
-import React from 'react'
+
 
 import { getIntl } from 'services'
 
@@ -63,6 +63,7 @@ Tips.translations = {
     tips: [
       "Search the FAQ before you add your question to make sure it doesn't already exist.",
       "You don't have to strike for the perfect wording. Others can improve it.",
+      // eslint-disable-next-line react/jsx-key
       <span>
         Privilege questions responding to the <b>"how"</b> rather than the <b>"why"</b>.
       </span>,
@@ -93,6 +94,7 @@ Tips.translations = {
     tips: [
       "Cherchez la FAQ avant d'ajouter votre question pour vous assurer que celle-ci n'existe pas déjà.",
       "Vous n'avez pas besoin de trouver la formulation parfaite. D'autres pourront l'améliorer.",
+      // eslint-disable-next-line react/jsx-key
       <span>
         Privilégiez les question qui répondent au <b>comment</b> plutôt qu'au <b>pourquoi</b>.
       </span>,

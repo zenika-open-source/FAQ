@@ -1,4 +1,4 @@
-import React from 'react'
+
 
 import { getIntl } from 'services'
 import TipsComponent from 'components/Tips'

@@ -1,4 +1,4 @@
-import { useApolloClient, useMutation } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
 import { Navigate } from 'react-router-dom'
@@ -37,8 +37,6 @@ const Answer = ({ zNode }) => {
   })
 
   const intl = getIntl(Answer)
-
-  const apollo = useApolloClient()
 
   const { slug, showTips, sources } = state
 
@@ -79,7 +77,7 @@ const Answer = ({ zNode }) => {
       setState(state => ({ ...state, slug: zNode.question.slug + '-' + zNode.id }))
       alert.pushSuccess(intl('alert.edit_success'))
     },
-    onError() {
+    onError(error) {
       alert.pushDefaultError(error)
     }
   })

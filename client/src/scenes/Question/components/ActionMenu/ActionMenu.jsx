@@ -1,15 +1,14 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { Link, useLocation } from 'react-router-dom'
+import './ActionMenu.css';
 
-import { getIntl } from 'services'
-import Button from 'components/Button'
-
-import './ActionMenu.css'
+import Button from 'components/Button';
+import PropTypes from 'prop-types';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { getIntl } from 'services';
 
 const ActionMenu = ({ backLabel, backLink, goBack, title, children }) => {
   const intl = getIntl(ActionMenu)
   const location = useLocation()
+  const navigate = useNavigate()
 
   return (
     <div className="action-menu">

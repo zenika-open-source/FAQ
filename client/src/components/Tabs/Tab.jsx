@@ -1,5 +1,5 @@
-import React, { useEffect, useContext } from 'react'
 import cn from 'classnames'
+import { useContext, useEffect } from 'react'
 
 import { TabsContext } from './Tabs'
 

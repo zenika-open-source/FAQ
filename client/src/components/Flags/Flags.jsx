@@ -1,4 +1,4 @@
-import React from 'react'
+
 import PropTypes from 'prop-types'
 import clone from 'lodash/clone'
 import find from 'lodash/find'

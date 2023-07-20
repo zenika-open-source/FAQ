@@ -1,6 +1,5 @@
-import React from 'react'
-import PropTypes from 'prop-types'
 import cn from 'classnames'
+import PropTypes from 'prop-types'
 
 const CardText = ({ children, collapsed, className, ...otherProps }) => (
   <div className={cn('card-item card-text', { collapsed }, className)} {...otherProps}>

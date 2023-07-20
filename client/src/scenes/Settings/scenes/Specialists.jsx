@@ -1,5 +1,5 @@
 import { Tab, UsersList } from 'components'
-import React from 'react'
+
 import { getIntl } from 'services'
 
 const Specialists = ({ state, dispatch, loading }) => {

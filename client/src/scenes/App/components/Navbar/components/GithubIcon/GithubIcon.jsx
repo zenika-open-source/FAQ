@@ -1,4 +1,4 @@
-import React from 'react'
+
 
 const GithubIcon = props => (
   <svg viewBox="0 0 284 277" {...props}>

@@ -1,4 +1,4 @@
-import React from 'react'
+
 import { Converter } from 'showdown'
 import XSSFilter from 'showdown-xss-filter'
 
