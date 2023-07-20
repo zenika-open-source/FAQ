@@ -2,12 +2,13 @@ import PropTypes from 'prop-types'
 import { useEffect } from 'react'
 
 import { addToQueryString, unserialize } from 'helpers'
-import { useLocation, useNavigate } from 'react-router'
+import { useLocation } from 'react-router'
+import { useSearchParams } from 'react-router-dom'
 
 const withPagination = (options = { push: true }) => Component => {
   const withPaginationWrapper = props => {
     const location = useLocation()
-    const navigate = useNavigate()
+    const [, setSearchParams] = useSearchParams()
     const { loading, meta } = props
 
     const onMountOrUpdate = () => {
@@ -16,7 +17,7 @@ const withPagination = (options = { push: true }) => Component => {
 
       // If currentPage > pagesCount, redirect to last page
       if (!loading && pagesCount > 0 && currentPage > pagesCount) {
-        addToQueryString(navigate, location, { page: pagesCount }, { push: options.push })
+        addToQueryString(setSearchParams, location, { page: pagesCount }, { push: options.push })
       }
     }
 
@@ -35,7 +36,7 @@ const withPagination = (options = { push: true }) => Component => {
         pageCurrent={page}
         pagesCount={pagesCount}
         onPageSelected={page =>
-          addToQueryString(navigate, location, { page }, { push: options.push })
+          addToQueryString(setSearchParams, location, { page }, { push: options.push })
         }
       />
     )
