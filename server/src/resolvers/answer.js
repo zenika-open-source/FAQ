@@ -237,8 +237,6 @@ module.exports = {
         certifiedContent = previousContent
       } else if (!wasCertified && !isCertified && answer.certified) {
         certifiedContent = answer.certified
-      } else if (isCertified && answer.certified) {
-        certifiedContent = ''
       }
 
       const { language, translation } = await storeTranslation(content)
