@@ -14,6 +14,25 @@ module.exports = {
         await createFlagAndUpdateHistoryAndAlgolia(history, type, ctx, nodeId, ctxUser(ctx).id)
       }
 
+      if (type === 'certified') {
+        let certified = ''
+        const node = await ctx.prisma.query.zNode(
+          {
+            where: { id: nodeId }
+          },
+          `{
+            id
+            answer {
+              id
+            }
+          }`
+        )
+        await ctx.prisma.mutation.updateAnswer({
+          where: { id: node.answer.id },
+          data: { certified }
+        })
+      }
+
       return ctx.prisma.query.zNode({ where: { id: nodeId } }, info)
     },
     removeFlag: async (_, { type, nodeId }, ctx, info) => {
