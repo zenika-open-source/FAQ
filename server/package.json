@@ -36,9 +36,15 @@
     "local_containers": "cd prisma/ && dotenv -e ../.env.local docker-compose up",
     "token": "dotenv -e .env.local bash scripts/prisma_token/token.sh"
   },
+  "lint-staged": {
+    "./src/**/*.js": [
+      "npm run lint",
+      "npm run prettier"
+    ]
+  },
   "husky": {
     "hooks": {
-      "pre-commit": "pretty-quick --staged"
+      "pre-commit": "lint-staged"
     }
   },
   "devDependencies": {
@@ -52,6 +58,7 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.1.0",
     "husky": "^3.1.0",
+    "lint-staged": "^13.2.3",
     "nodemon": "^1.19.4",
     "prettier": "^1.19.1",
     "pretty-quick": "^1.11.1",
