@@ -37,11 +37,11 @@ const Read = ({ zNode, loading }) => {
     setIsTranslated(content.isTranslation)
   }
 
-  // useEffect(() => {
-  //   if (!loading || incremented) return
-  //   incrementViewsCounter({ variables: { questionId: zNode.question.id } })
-  //   setIncremented(true)
-  // }, [incremented, incrementViewsCounter, zNode])
+  useEffect(() => {
+    if (loading || incremented) return
+    incrementViewsCounter({ variables: { questionId: zNode.question.id } })
+    setIncremented(true)
+  }, [incremented, incrementViewsCounter, zNode])
 
   useEffect(() => {
     if (!loading && zNode && navigatorLanguage) {
