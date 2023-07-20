@@ -6,9 +6,7 @@ import {
   createRoutesFromElements
 } from 'react-router-dom'
 
-import 'normalize.css'
-
-import { ErrorBoundary, PrivateRoute } from 'components'
+import { PrivateRoute } from 'components'
 import App from 'scenes/App/App'
 import Auth from 'scenes/Auth/Auth'
 import Home from 'scenes/Home/Home'
