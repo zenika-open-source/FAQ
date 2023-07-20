@@ -5,22 +5,29 @@ const algolia = require('../server/src/integrations/algolia')
 const execSync = require('child_process').execSync
 require('../server/scripts/algolia_settings/index')
 
-const createUser = () => {
-  return {
-    data: { auth0Id: 'mainUserAuth0Id', key: 'mainUser', name: 'mainUser', email: 'main-user@zenika.com', picture: 'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg' }
+const createUser = /* GraphQL */ `
+  mutation CreateUser {
+    createUser(
+      data: { key: "playwrightTest", name: "playwrightTest", email: "faq-user-no-auth@zenika.com" }
+    ) {
+      id
+    }
   }
-}
+`
 
-
-const createUserMutation = async (prisma) => {
-  const user = await prisma.mutation.createUser(createUser())
-  return user.id
+const createUserMutation = async apiContext => {
+  const res = await apiContext.post('/', {
+    data: {
+      query: createUser
+    }
+  })
+  const results = await res.json()
+  return results.data.createUser.id
 }
 
 const createTempUser = tagId => {
   return {
     data: {
-      auth0Id: 'tempUserAuth0Id',
       key: 'tempUser',
       name: 'tempUser',
       email: 'temp-user@zenika.com',
@@ -453,12 +460,12 @@ test.beforeAll(async ({ playwright }) => {
   })
   config = await upsertConfigMutation(apiContext)
   prisma._meta = { ...prisma._meta, configuration: config.upsertConfiguration }
-    ; ({ tag, tagEdit } = await tagsQuery(apiContext))
+  ;({ tag, tagEdit } = await tagsQuery(apiContext))
 })
 
 test.beforeEach(async () => {
   await emptyDb(apiContext, deleteCommands)
-  user = await createUserMutation(prisma)
+  user = await createUserMutation(apiContext)
   tempUser = await createTempUserMutation(prisma, tag.id)
 })
 
@@ -480,10 +487,9 @@ test('Shoud be able to create a question', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Ceci est une question' })).toBeVisible()
 })
 
-test.only('Should be able to create a question and answer it', async ({ page }) => {
+test('Should be able to create a question and answer it', async ({ page }) => {
   await setUser(page)
   await page.goto('/')
-  await page.pause()
   await page
     .locator('button', { hasText: 'Nouvelle question' })
     .first()
