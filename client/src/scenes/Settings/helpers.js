@@ -27,12 +27,17 @@ export const reducer = (state, action) => {
   }
 }
 
-export const synonymsToList = synonyms =>
-  (synonyms || []).map(({ objectID, synonyms }, id) => ({
+export const synonymsToList = synonyms => {
+  if (!synonyms) {
+    return []
+  }
+  const actualSynonyms = Array.isArray(synonyms) ? synonyms : [synonyms]
+  return actualSynonyms.map(({ objectID, synonyms }, id) => ({
     id,
     key: objectID,
     value: synonyms.join(', ')
   }))
+}
 
 export const listToSynonyms = list =>
   list.map(item => ({

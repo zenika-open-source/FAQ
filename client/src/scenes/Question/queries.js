@@ -24,6 +24,7 @@ export const zNodeFragment = `
     id
     content
     language
+    certified
     translation {
       language
       text
@@ -59,10 +60,16 @@ export const zNodeFragment = `
       name
     }
   }
+  history {
+    id
+    meta
+    action
+    model
+  }
 `
 
 export const GET_NODE = gql`
-  query($id: ID!) {
+  query getNode($id: ID!) {
     zNode(where: { id: $id }) {
       ${zNodeFragment}
     }

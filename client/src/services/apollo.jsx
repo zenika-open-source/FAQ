@@ -18,12 +18,14 @@ const apolloCache = new InMemoryCache()
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
     graphQLErrors.forEach(({ message, locations, path }) => {
+      // eslint-disable-next-line no-console
       console.error(
         `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}. Please refresh the page.`
       )
     })
   }
   if (networkError) {
+    // eslint-disable-next-line no-console
     console.error('[Network error] Please refresh the page.', networkError)
   }
 })

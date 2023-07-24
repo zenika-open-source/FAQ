@@ -51,6 +51,7 @@ type Answer {
   content: String!
   language: String!
   translation: Translation
+  certified: String
   sources(
     where: SourceWhereInput
     orderBy: SourceOrderByInput
@@ -77,6 +78,7 @@ input AnswerCreateInput {
   content: String!
   language: String!
   translation: TranslationCreateOneInput
+  certified: String
   sources: SourceCreateManyWithoutAnswerInput
   node: ZNodeCreateOneWithoutAnswerInput!
   user: UserCreateOneWithoutAnswersInput!
@@ -102,6 +104,7 @@ input AnswerCreateWithoutNodeInput {
   content: String!
   language: String!
   translation: TranslationCreateOneInput
+  certified: String
   sources: SourceCreateManyWithoutAnswerInput
   user: UserCreateOneWithoutAnswersInput!
 }
@@ -111,6 +114,7 @@ input AnswerCreateWithoutSourcesInput {
   content: String!
   language: String!
   translation: TranslationCreateOneInput
+  certified: String
   node: ZNodeCreateOneWithoutAnswerInput!
   user: UserCreateOneWithoutAnswersInput!
 }
@@ -120,6 +124,7 @@ input AnswerCreateWithoutUserInput {
   content: String!
   language: String!
   translation: TranslationCreateOneInput
+  certified: String
   sources: SourceCreateManyWithoutAnswerInput
   node: ZNodeCreateOneWithoutAnswerInput!
 }
@@ -136,6 +141,8 @@ enum AnswerOrderByInput {
   content_DESC
   language_ASC
   language_DESC
+  certified_ASC
+  certified_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -146,6 +153,7 @@ type AnswerPreviousValues {
   id: ID!
   content: String!
   language: String!
+  certified: String
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -193,6 +201,20 @@ input AnswerScalarWhereInput {
   language_not_starts_with: String
   language_ends_with: String
   language_not_ends_with: String
+  certified: String
+  certified_not: String
+  certified_in: [String!]
+  certified_not_in: [String!]
+  certified_lt: String
+  certified_lte: String
+  certified_gt: String
+  certified_gte: String
+  certified_contains: String
+  certified_not_contains: String
+  certified_starts_with: String
+  certified_not_starts_with: String
+  certified_ends_with: String
+  certified_not_ends_with: String
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -236,6 +258,7 @@ input AnswerUpdateInput {
   content: String
   language: String
   translation: TranslationUpdateOneInput
+  certified: String
   sources: SourceUpdateManyWithoutAnswerInput
   node: ZNodeUpdateOneRequiredWithoutAnswerInput
   user: UserUpdateOneRequiredWithoutAnswersInput
@@ -244,11 +267,13 @@ input AnswerUpdateInput {
 input AnswerUpdateManyDataInput {
   content: String
   language: String
+  certified: String
 }
 
 input AnswerUpdateManyMutationInput {
   content: String
   language: String
+  certified: String
 }
 
 input AnswerUpdateManyWithoutUserInput {
@@ -288,6 +313,7 @@ input AnswerUpdateWithoutNodeDataInput {
   content: String
   language: String
   translation: TranslationUpdateOneInput
+  certified: String
   sources: SourceUpdateManyWithoutAnswerInput
   user: UserUpdateOneRequiredWithoutAnswersInput
 }
@@ -296,6 +322,7 @@ input AnswerUpdateWithoutSourcesDataInput {
   content: String
   language: String
   translation: TranslationUpdateOneInput
+  certified: String
   node: ZNodeUpdateOneRequiredWithoutAnswerInput
   user: UserUpdateOneRequiredWithoutAnswersInput
 }
@@ -304,6 +331,7 @@ input AnswerUpdateWithoutUserDataInput {
   content: String
   language: String
   translation: TranslationUpdateOneInput
+  certified: String
   sources: SourceUpdateManyWithoutAnswerInput
   node: ZNodeUpdateOneRequiredWithoutAnswerInput
 }
@@ -373,6 +401,20 @@ input AnswerWhereInput {
   language_ends_with: String
   language_not_ends_with: String
   translation: TranslationWhereInput
+  certified: String
+  certified_not: String
+  certified_in: [String!]
+  certified_not_in: [String!]
+  certified_lt: String
+  certified_lte: String
+  certified_gt: String
+  certified_gte: String
+  certified_contains: String
+  certified_not_contains: String
+  certified_starts_with: String
+  certified_not_starts_with: String
+  certified_ends_with: String
+  certified_not_ends_with: String
   sources_every: SourceWhereInput
   sources_some: SourceWhereInput
   sources_none: SourceWhereInput
