@@ -1,9 +1,11 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
+import { setDefaultOptions } from 'date-fns'
+import { enUS, fr } from 'date-fns/locale'
 
 import { ConfigurationProvider, AuthProvider, UserProvider } from 'contexts'
-
 import { AlertStack, AlertProvider } from 'components'
+import { getNavigatorLanguage } from 'helpers'
 
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
@@ -11,6 +13,10 @@ import Footer from './components/Footer'
 import AppBody from './AppBody'
 
 import 'styles'
+
+setDefaultOptions({
+  locale: getNavigatorLanguage() === 'en' ? enUS : fr
+})
 
 const App = () => (
   <div className="app theme">

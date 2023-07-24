@@ -17,6 +17,7 @@ import Dropdown, { DropdownItem } from 'components/Dropdown'
 import { getNavigatorLanguage, handleTranslation } from 'helpers'
 import { ActionMenu } from '../../components'
 import { FlagsDropdown, History, LanguageDropdown, Meta, Share, Sources, Views } from './components'
+import { useUser } from 'contexts'
 
 const Read = ({ history, match, zNode, loading }) => {
   const [loaded, setLoaded] = useState(false)
@@ -26,9 +27,11 @@ const Read = ({ history, match, zNode, loading }) => {
   const [answerContent, setAnswerContent] = useState('')
   const [isTranslated, setIsTranslated] = useState(false)
 
-  const [createFlag] = useMutation(CREATE_FLAG)
+  const [createFlag] = useMutation(CREATE_FLAG, { refetchQueries: ['getNode'] })
   const [removeFlag] = useMutation(REMOVE_FLAG)
   const [incrementViewsCounter] = useMutation(INCREMENT_VIEWS_COUNTER)
+
+  const user = useUser()
 
   const originalQuestionLanguage = zNode?.question.language
   const navigatorLanguage = getNavigatorLanguage()
@@ -61,6 +64,20 @@ const Read = ({ history, match, zNode, loading }) => {
     return <NotFound />
   }
 
+  const preventAnswerEdit = () => {
+    const certified = zNode?.flags.find(flag => flag.type === 'certified')
+    const isSpecialist = user.specialties.some(specialty =>
+      zNode.tags.some(tag => specialty.name === tag.label.name)
+    )
+    if (certified && !isSpecialist) {
+      if (window.confirm(intl('alert'))) {
+        return history.push(`/q/${match.params.slug}/answer`)
+      }
+    } else {
+      return history.push(`/q/${match.params.slug}/answer`)
+    }
+  }
+
   /* Redirect to correct URL if old slug used */
   const correctSlug = zNode.question.slug + '-' + zNode.id
   if (match.params.slug !== correctSlug) {
@@ -82,10 +99,7 @@ const Read = ({ history, match, zNode, loading }) => {
           <DropdownItem icon="edit" onClick={() => history.push(`/q/${match.params.slug}/edit`)}>
             {intl('menu.edit.question')}
           </DropdownItem>
-          <DropdownItem
-            icon="question_answer"
-            onClick={() => history.push(`/q/${match.params.slug}/answer`)}
-          >
+          <DropdownItem icon="question_answer" onClick={preventAnswerEdit}>
             {intl('menu.edit.answer')}
           </DropdownItem>
         </Dropdown>
@@ -125,9 +139,24 @@ const Read = ({ history, match, zNode, loading }) => {
             />
           )}
         </CardTitle>
+        {zNode.answer?.certified && (
+          <CardText style={{ border: '2px solid #caac00', marginTop: '0.5rem' }}>
+            <p className="small-text centered" style={{ padding: '0.5rem', margin: '0' }}>
+              {intl('certified_answer')}
+            </p>
+            <div style={{ padding: '0.5rem', margin: '0' }}>
+              {markdown.html(zNode.answer.certified)}
+            </div>
+          </CardText>
+        )}
         <CardText>
           {zNode.answer ? (
             <>
+              {zNode.answer.certified && (
+                <p className="small-text centered" style={{ padding: '0.5rem', margin: '0' }}>
+                  {intl('recent_answer')}
+                </p>
+              )}
               <div style={{ padding: '0.5rem', marginBottom: '0.5rem' }}>
                 {markdown.html(answerContent)}
               </div>
@@ -177,9 +206,14 @@ Read.translations = {
         answer: 'Answer'
       }
     },
+    certified: 'Certified on',
     auto_translated: 'Automatic translation',
     no_answer: 'No answer yet...',
-    answer: 'Answer the question'
+    answer: 'Answer the question',
+    certified_answer: 'Certified answer',
+    recent_answer: 'Latest answer',
+    alert:
+      'This answer has been certified by a specialist in this field.\nAre you sure that you want to modify it ?\nThis version will still be kept'
   },
   fr: {
     menu: {
@@ -190,9 +224,14 @@ Read.translations = {
         answer: 'Réponse'
       }
     },
+    certified: 'Certifiée le',
     auto_translated: 'Traduction automatique',
     no_answer: 'Pas encore de réponse...',
-    answer: 'Répondre à la question'
+    answer: 'Répondre à la question',
+    certified_answer: 'Réponse certifiée',
+    recent_answer: 'Dernière réponse',
+    alert:
+      'Cette réponse a été certifiée par une personne spécialisée dans le domaine.\nEtes-vous sûr de vouloir la modifier ?\nCelle-ci sera tout de même conservée'
   }
 }
 

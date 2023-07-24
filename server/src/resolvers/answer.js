@@ -124,6 +124,7 @@ module.exports = {
         {
           id
           content
+          certified
           sources {
             id
             label
@@ -215,7 +216,7 @@ module.exports = {
 
       await Promise.all([...mutationsToAdd, ...mutationsToUpdate, ...mutationsToRemove])
 
-      await refreshCertifiedFlag(history, answer, user, ctx)
+      const { isCertified, wasCertified } = await refreshCertifiedFlag(history, answer, user, ctx)
 
       const clean = sources => sources.map(s => ({ label: s.label, url: s.url }))
 
@@ -231,11 +232,19 @@ module.exports = {
         meta.content = content
       }
 
+      let certifiedContent = ''
+      if (wasCertified && !isCertified) {
+        certifiedContent = previousContent
+      } else if (!wasCertified && !isCertified && answer.certified) {
+        certifiedContent = answer.certified
+      }
+
       const { language, translation } = await storeTranslation(content)
 
       const updateAnswerData = {
         content,
-        language
+        language,
+        certified: certifiedContent
       }
 
       if (translation) {

@@ -37,6 +37,7 @@ type Answer {
   content: String!
   language: String!
   translation: Translation
+  certified: String
 
   sources: [Source!]! @relation(name: "AnswerSources", onDelete: CASCADE, link: TABLE)
 
