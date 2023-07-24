@@ -15,7 +15,7 @@ const ResultList = ({
   pagesCount,
   pageCurrent,
   onPageSelected,
-  meta
+  meta,
 }) => {
   const intl = getIntl(ResultList)
 
@@ -25,7 +25,7 @@ const ResultList = ({
     return <NoResults prefill={searchText} />
   }
 
-  const Results = nodes.map(node => {
+  const Results = nodes.map((node) => {
     const opened = !searchText
     return (
       <Result
@@ -44,7 +44,7 @@ const ResultList = ({
           style={{
             display: 'flex',
             justifyContent: 'space-between',
-            padding: '0 1rem'
+            padding: '0 1rem',
           }}
         >
           <i>
@@ -64,7 +64,7 @@ const ResultList = ({
       <DefaultPagination
         nbPages={pagesCount}
         current={pageCurrent}
-        onPageSelected={index => {
+        onPageSelected={(index) => {
           onPageSelected(index)
           window.scrollTo(0, 0)
         }}
@@ -81,7 +81,7 @@ ResultList.propTypes = {
   pagesCount: PropTypes.number,
   pageCurrent: PropTypes.number,
   onPageSelected: PropTypes.func,
-  meta: PropTypes.object
+  meta: PropTypes.object,
 }
 
 ResultList.translations = {
@@ -89,14 +89,14 @@ ResultList.translations = {
     latest: 'Latest questions',
     result: 'result found',
     results: 'results found',
-    page: current => <>Page {current}</>
+    page: (current) => <>Page {current}</>,
   },
   fr: {
     latest: 'Dernières questions',
     result: 'résultat trouvé',
     results: 'résultats trouvés',
-    page: current => <>Page {current}</>
-  }
+    page: (current) => <>Page {current}</>,
+  },
 }
 
 export default ResultList

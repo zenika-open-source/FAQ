@@ -1,25 +1,21 @@
-const parseQueryString = text =>
+const parseQueryString = (text) =>
   text
     ? decodeURI(text)
-      .substr(1)
-      .split('&')
-      .map(s => s.split('='))
-      .reduce((obj, [k, v]) => ({ ...obj, [k]: v }), {})
+        .substr(1)
+        .split('&')
+        .map((s) => s.split('='))
+        .reduce((obj, [k, v]) => ({ ...obj, [k]: v }), {})
     : {}
-const stringifyQueryString = params =>
+const stringifyQueryString = (params) =>
   '?' +
   Object.entries(params)
-    .map(p => p.join('='))
+    .map((p) => p.join('='))
     .join('&')
 
 export const serialize = ({ q, tags, flags, page }) => {
   const params = {}
 
-  if (q)
-    params.q = q
-      .trim()
-      .replace(/\s/g, '+')
-      .replace(/%/g, '%25')
+  if (q) params.q = q.trim().replace(/\s/g, '+').replace(/%/g, '%25')
   if (tags && tags.length > 0) params.tags = tags.join('+').replace(/\s/g, '-')
   if (flags && flags.length > 0) {
     params.flags = tags.join('+').replace(/\s/g, '-')
@@ -29,22 +25,27 @@ export const serialize = ({ q, tags, flags, page }) => {
   return stringifyQueryString(params)
 }
 
-export const unserialize = queryString => {
+export const unserialize = (queryString) => {
   const { q, tags, flags, page } = parseQueryString(queryString)
   return {
     q: q ? q.replace(/\+/g, ' ').trim() : '',
     tags: tags ? tags.replace(/-/g, ' ').split('+') : [],
     flags: flags ? flags.replace(/-/g, ' ').split('+') : [],
-    page: page > 1 ? +page : 1
+    page: page > 1 ? +page : 1,
   }
 }
 
-export const addToQueryString = (setSearchParams, location, addedParams, options = { push: true }) => {
+export const addToQueryString = (
+  setSearchParams,
+  location,
+  addedParams,
+  options = { push: true },
+) => {
   const params = unserialize(location.search)
 
   const qs = serialize({
     ...params,
-    ...addedParams
+    ...addedParams,
   })
 
   setSearchParams(qs, { replace: !options.push })

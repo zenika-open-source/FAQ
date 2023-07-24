@@ -22,14 +22,14 @@ const TagPicker = ({ label, icon, tags, onChange }) => {
     <div className="tagpicker">
       <h3>{label || 'Tags:'}</h3>
       <div className="tags-list">
-        {tags.map(tag => (
+        {tags.map((tag) => (
           <div key={tag.id} className="tag">
             <span style={{ fontVariant: 'small-caps', paddingBottom: '1px' }}>
               {tag.name.toLowerCase()}
             </span>
             <i
               className="material-icons"
-              onClick={() => onChange(tags.filter(t => t.id !== tag.id))}
+              onClick={() => onChange(tags.filter((t) => t.id !== tag.id))}
             >
               close
             </i>
@@ -41,23 +41,23 @@ const TagPicker = ({ label, icon, tags, onChange }) => {
           icon={icon || 'add'}
           link
           style={{ padding: 0 }}
-          onClick={() => setOpened(op => !op)}
+          onClick={() => setOpened((op) => !op)}
         />
         <div ref={ref} className="picker" style={{ display: opened ? 'flex' : 'none' }}>
           <div className="picker-body">
-            {sortBy(tagCategories, ['order']).map(category => (
+            {sortBy(tagCategories, ['order']).map((category) => (
               <div key={category.name} className="category">
-                {sortBy(category.labels, ['order']).map(label => {
-                  const isSelected = !!tags.find(t => t.id === label.id)
+                {sortBy(category.labels, ['order']).map((label) => {
+                  const isSelected = !!tags.find((t) => t.id === label.id)
                   return (
                     <div
                       key={label.name}
                       className={cn('category-item', {
-                        selected: isSelected
+                        selected: isSelected,
                       })}
                       onClick={() =>
                         onChange(
-                          isSelected ? tags.filter(t => t.id !== label.id) : [...tags, label]
+                          isSelected ? tags.filter((t) => t.id !== label.id) : [...tags, label],
                         )
                       }
                     >
@@ -78,7 +78,7 @@ TagPicker.propTypes = {
   label: PropTypes.string,
   icon: PropTypes.string,
   tags: PropTypes.array.isRequired,
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
 }
 
 export default TagPicker

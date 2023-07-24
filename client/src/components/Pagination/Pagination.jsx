@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types'
 import clamp from 'lodash/clamp'
 
@@ -10,7 +9,7 @@ const filterPages = (pagesCount, current) =>
         i === 1 || i === pagesCount || (i >= current - 2 && i <= current + 2)
           ? [...acc, i]
           : [...acc, null],
-      []
+      [],
     )
     .reduce((acc, x, index, arr) => {
       if (x == null) {
@@ -41,20 +40,20 @@ const Pagination = ({
     return renderPage({
       index,
       isCurrent,
-      onClick: () => !isCurrent && onPageSelected(index)
+      onClick: () => !isCurrent && onPageSelected(index),
     })
   })
 
   const previous = renderNav({
     type: 'previous',
     disabled: current === 1,
-    onClick: () => current > 1 && onPageSelected(current - 1)
+    onClick: () => current > 1 && onPageSelected(current - 1),
   })
 
   const next = renderNav({
     type: 'next',
     disabled: current === nbPages,
-    onClick: () => current < nbPages && onPageSelected(current + 1)
+    onClick: () => current < nbPages && onPageSelected(current + 1),
   })
 
   return (
@@ -72,7 +71,7 @@ Pagination.propTypes = {
   onPageSelected: PropTypes.func,
   renderPage: PropTypes.func,
   renderEllipsis: PropTypes.func,
-  renderNav: PropTypes.func
+  renderNav: PropTypes.func,
 }
 
 export default Pagination

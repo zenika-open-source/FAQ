@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types'
 
 import { formatHistoryAction } from 'helpers'
@@ -31,7 +30,7 @@ const HistoryAction = ({ action }) => {
 }
 
 HistoryAction.propTypes = {
-  action: PropTypes.object.isRequired
+  action: PropTypes.object.isRequired,
 }
 
 export default HistoryAction

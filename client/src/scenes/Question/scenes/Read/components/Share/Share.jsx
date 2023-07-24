@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types'
 import copy from 'copy-to-clipboard'
 
@@ -51,12 +50,12 @@ const Share = ({ node }) => {
 }
 
 Share.propTypes = {
-  node: PropTypes.object.isRequired
+  node: PropTypes.object.isRequired,
 }
 
 Share.translations = {
   en: { copy: 'Copy link' },
-  fr: { copy: 'Copier lien' }
+  fr: { copy: 'Copier lien' },
 }
 
 export default Share

@@ -3,7 +3,7 @@ import { useBeforeUnload, unstable_useBlocker as useBlocker } from 'react-router
 
 const usePrompt = (message, { beforeUnload } = {}) => {
   let blocker = useBlocker(
-    useCallback(() => (typeof message === 'string' ? !window.confirm(message) : false), [message])
+    useCallback(() => (typeof message === 'string' ? !window.confirm(message) : false), [message]),
   )
   let prevState = useRef(blocker.state)
   useEffect(() => {
@@ -15,15 +15,15 @@ const usePrompt = (message, { beforeUnload } = {}) => {
 
   useBeforeUnload(
     useCallback(
-      event => {
+      (event) => {
         if (beforeUnload && typeof message === 'string') {
           event.preventDefault()
           event.returnValue = message
         }
       },
-      [message, beforeUnload]
+      [message, beforeUnload],
     ),
-    { capture: true }
+    { capture: true },
   )
 }
 

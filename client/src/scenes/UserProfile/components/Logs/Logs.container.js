@@ -10,21 +10,21 @@ const ENTRIES_PER_PAGE = 15
 
 export default compose(
   query(meHistory, {
-    variables: props => {
+    variables: (props) => {
       const location = useLocation()
       const { page } = unserialize(location.search)
 
       return {
         id: props.userId,
         first: ENTRIES_PER_PAGE,
-        skip: ENTRIES_PER_PAGE * (page - 1)
+        skip: ENTRIES_PER_PAGE * (page - 1),
       }
     },
     parse: ({ history = {} }) => ({
       logs: history.historyActions,
-      meta: history.meta
-    })
+      meta: history.meta,
+    }),
   }),
   withPagination({ push: false }),
-  withError()
+  withError(),
 )(Logs)

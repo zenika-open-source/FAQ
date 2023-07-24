@@ -22,12 +22,12 @@ export const reducer = (state, action) => {
     default:
       return {
         ...state,
-        synonyms: onListChangeReducer('synonyms')(state.synonyms, action)
+        synonyms: onListChangeReducer('synonyms')(state.synonyms, action),
       }
   }
 }
 
-export const synonymsToList = synonyms => {
+export const synonymsToList = (synonyms) => {
   if (!synonyms) {
     return []
   }
@@ -35,18 +35,18 @@ export const synonymsToList = synonyms => {
   return actualSynonyms.map(({ objectID, synonyms }, id) => ({
     id,
     key: objectID,
-    value: synonyms.join(', ')
+    value: synonyms.join(', '),
   }))
 }
 
-export const listToSynonyms = list =>
-  list.map(item => ({
+export const listToSynonyms = (list) =>
+  list.map((item) => ({
     objectID: item.key,
     type: 'synonym',
-    synonyms: item.value.split(',').map(x => x.trim())
+    synonyms: item.value.split(',').map((x) => x.trim()),
   }))
 
-export const serializeTags = categories =>
+export const serializeTags = (categories) =>
   JSON.stringify(
     categories.map(({ id, name, order, labels }) => {
       const serializedLabels = labels.map(({ id, name, order }) => {
@@ -62,5 +62,5 @@ export const serializeTags = categories =>
       } else {
         return { id, name, order, labels: serializedLabels }
       }
-    })
+    }),
   )

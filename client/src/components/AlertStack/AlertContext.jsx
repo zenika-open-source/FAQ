@@ -11,15 +11,15 @@ class AlertProvider extends Component {
       alerts: [],
       pushAlert: this.pushAlert,
       showAlert: this.showAlert,
-      closeAlert: this.closeAlert
+      closeAlert: this.closeAlert,
     }
 
     AlertProvider.pushAlert = this.pushAlert
   }
 
-  pushAlert = alert => {
-    this.setState(state => ({
-      alerts: [{ ...alert, id: Math.random() }, ...state.alerts]
+  pushAlert = (alert) => {
+    this.setState((state) => ({
+      alerts: [{ ...alert, id: Math.random() }, ...state.alerts],
     }))
 
     if (['error', 'warning'].includes(alert.type)) {
@@ -28,20 +28,20 @@ class AlertProvider extends Component {
     }
   }
 
-  showAlert = alert =>
-    this.setState(state => ({
-      alerts: state.alerts.map(a => {
+  showAlert = (alert) =>
+    this.setState((state) => ({
+      alerts: state.alerts.map((a) => {
         if (a !== alert) return a
         return { ...alert, shown: true }
-      })
+      }),
     }))
 
-  closeAlert = alert =>
-    this.setState(state => ({
-      alerts: state.alerts.map(a => {
+  closeAlert = (alert) =>
+    this.setState((state) => ({
+      alerts: state.alerts.map((a) => {
         if (a !== alert) return a
         return { ...alert, closed: true }
-      })
+      }),
     }))
 
   render() {
@@ -50,7 +50,7 @@ class AlertProvider extends Component {
 }
 
 AlertProvider.propTypes = {
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
 }
 
 export default AlertContext

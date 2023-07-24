@@ -26,8 +26,8 @@ NotFound.translations = {
   en: { title: 'Ooops! 404', subtitle: "Looks like we couldn't find what you were looking for..." },
   fr: {
     title: 'Ouups ! 404',
-    subtitle: "Il semblerait que nous n'ayons pas trouvé ce que vous cherchiez..."
-  }
+    subtitle: "Il semblerait que nous n'ayons pas trouvé ce que vous cherchiez...",
+  },
 }
 
 export default NotFound

@@ -19,10 +19,10 @@ const Home = () => {
   const [loading, setLoading] = useState(false)
   const [tags, setTags] = useState(params.tags)
 
-  const onSearchChange = text => {
+  const onSearchChange = (text) => {
     setSearchText(text)
     addToQueryString(setSearchParams, location, {
-      q: text
+      q: text,
     })
 
     querySearchProvider()
@@ -34,10 +34,10 @@ const Home = () => {
 
   const querySearchProvider = debounce(setDebounceTextSearch, 200)
 
-  const setSearchLoading = loading => setLoading(loading)
+  const setSearchLoading = (loading) => setLoading(loading)
 
-  const onTagsChange = tags => {
-    const labels = tags.map(tag => tag.name)
+  const onTagsChange = (tags) => {
+    const labels = tags.map((tag) => tag.name)
 
     setTags(labels)
 
@@ -71,7 +71,7 @@ const Home = () => {
 
 Home.translations = {
   en: { new_question: 'New question' },
-  fr: { new_question: 'Nouvelle question' }
+  fr: { new_question: 'Nouvelle question' },
 }
 
 export default Home

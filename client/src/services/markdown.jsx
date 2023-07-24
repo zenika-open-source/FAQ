@@ -1,4 +1,3 @@
-
 import { Converter } from 'showdown'
 import XSSFilter from 'showdown-xss-filter'
 
@@ -7,7 +6,7 @@ class Markdown {
     this.showdown = new Converter({
       openLinksInNewWindow: true,
       backslashEscapesHTMLTags: true,
-      extensions: [XSSFilter]
+      extensions: [XSSFilter],
     })
 
     this.showdown.setFlavor('github')
@@ -32,10 +31,10 @@ class Markdown {
             marginTop: '0',
             padding: '0',
             border: '0',
-            wordBreak: 'break-word'
+            wordBreak: 'break-word',
           }}
           dangerouslySetInnerHTML={{
-            __html: this.text(text)
+            __html: this.text(text),
           }}
         />
       </div>
@@ -43,7 +42,7 @@ class Markdown {
   }
 
   removeEmTagInLink(text) {
-    const sanitize = txt => txt.replace(/<em>/g, '').replace(/<\/em>/g, '')
+    const sanitize = (txt) => txt.replace(/<em>/g, '').replace(/<\/em>/g, '')
 
     text = text.replace(/(\[.*\]\()?(https?:\/\/\S*)/gim, (link, a, b) => {
       const endOfB = b.split('').reduce(
@@ -51,7 +50,7 @@ class Markdown {
           if (acc.stack === 0) return acc
           return { i, stack: acc.stack + (c === '(' ? 1 : c === ')' ? -1 : 0) }
         },
-        { i: 0, stack: 1 }
+        { i: 0, stack: 1 },
       )
 
       if (a && endOfB.stack === 0) {

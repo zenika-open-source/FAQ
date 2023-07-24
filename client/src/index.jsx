@@ -3,7 +3,7 @@ import {
   Route,
   RouterProvider,
   createBrowserRouter,
-  createRoutesFromElements
+  createRoutesFromElements,
 } from 'react-router-dom'
 
 import { PrivateRoute } from 'components'
@@ -27,12 +27,12 @@ const router = createBrowserRouter(
         <Route path="settings" element={<Settings />} admin specialist />
       </Route>
       <Route path="*" element={<NotFound />} />
-    </Route>
-  )
+    </Route>,
+  ),
 )
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <ApolloWrapper>
     <RouterProvider router={router} />
-  </ApolloWrapper>
+  </ApolloWrapper>,
 )

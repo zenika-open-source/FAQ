@@ -16,12 +16,12 @@ const Specialists = ({ state, dispatch, loading }) => {
 Specialists.translations = {
   en: {
     tab: 'Specialists',
-    title: 'Users'
+    title: 'Users',
   },
   fr: {
     tab: 'Spécialistes',
-    title: 'Utilisateurs'
-  }
+    title: 'Utilisateurs',
+  },
 }
 
 export default Specialists

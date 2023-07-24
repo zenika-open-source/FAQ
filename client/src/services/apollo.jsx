@@ -1,11 +1,10 @@
-
 import {
   ApolloClient,
   ApolloProvider,
   InMemoryCache,
   HttpLink,
   ApolloLink,
-  useQuery
+  useQuery,
 } from '@apollo/client'
 import { onError } from '@apollo/client/link/error'
 import { setContext } from '@apollo/client/link/context'
@@ -20,7 +19,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
     graphQLErrors.forEach(({ message, locations, path }) => {
       // eslint-disable-next-line no-console
       console.error(
-        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}. Please refresh the page.`
+        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}. Please refresh the page.`,
       )
     })
   }
@@ -36,20 +35,20 @@ const authLink = setContext((_, { headers }) => {
     headers: {
       ...headers,
       Authorization: token ? `Bearer ${token}` : '',
-      'faq-tenant': routing.getPrismaService()
-    }
+      'faq-tenant': routing.getPrismaService(),
+    },
   }
 })
 
 const httpLink = new HttpLink({
-  uri: import.meta.env.VITE_GRAPHQL_ENDPOINT || '/gql'
+  uri: import.meta.env.VITE_GRAPHQL_ENDPOINT || '/gql',
 })
 
 const cache = apolloCache
 
 await persistCache({
   cache,
-  storage: new LocalStorageWrapper(window.localStorage)
+  storage: new LocalStorageWrapper(window.localStorage),
 })
 
 const apolloClient = new ApolloClient({
@@ -57,34 +56,36 @@ const apolloClient = new ApolloClient({
   link: ApolloLink.from([errorLink, authLink, httpLink]),
   defaultOptions: {
     watchQuery: {
-      fetchPolicy: 'cache-and-network'
-    }
-  }
+      fetchPolicy: 'cache-and-network',
+    },
+  },
 })
 
-const query = (gqlQuery, { variables, skip, parse, ...queryProps } = {}) => Wrapped => {
-  const ApolloQueryWrapper = props => {
-    const { loading, error, data } = useQuery(gqlQuery, {
-      variables: variables ? variables(props) : {},
-      skip: skip ? skip(props) : false,
-      pollInterval: 60 * 1000, // Poll every min
-      ...queryProps
-    })
+const query =
+  (gqlQuery, { variables, skip, parse, ...queryProps } = {}) =>
+  (Wrapped) => {
+    const ApolloQueryWrapper = (props) => {
+      const { loading, error, data } = useQuery(gqlQuery, {
+        variables: variables ? variables(props) : {},
+        skip: skip ? skip(props) : false,
+        pollInterval: 60 * 1000, // Poll every min
+        ...queryProps,
+      })
 
-    let parsedData = parse && data ? parse(data) : data
+      let parsedData = parse && data ? parse(data) : data
 
-    return (
-      <Wrapped
-        {...props}
-        loading={loading && Object.values(data || {}).length === 0}
-        error={error}
-        {...parsedData}
-      />
-    )
+      return (
+        <Wrapped
+          {...props}
+          loading={loading && Object.values(data || {}).length === 0}
+          error={error}
+          {...parsedData}
+        />
+      )
+    }
+
+    return ApolloQueryWrapper
   }
-
-  return ApolloQueryWrapper
-}
 
 const ApolloWrapper = ({ children }) => {
   return <ApolloProvider client={apolloClient}>{children}</ApolloProvider>

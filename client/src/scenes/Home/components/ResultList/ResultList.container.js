@@ -10,7 +10,7 @@ const RESULTS_PER_PAGE = 10
 
 export default compose(
   query(SEARCH_NODES, {
-    variables: props => {
+    variables: (props) => {
       const location = useLocation()
       const { tags, flags, page } = unserialize(location.search)
       return {
@@ -18,11 +18,11 @@ export default compose(
         tags,
         flags,
         first: RESULTS_PER_PAGE,
-        skip: RESULTS_PER_PAGE * (page - 1)
+        skip: RESULTS_PER_PAGE * (page - 1),
       }
     },
-    parse: ({ search = {} }) => ({ ...search })
+    parse: ({ search = {} }) => ({ ...search }),
   }),
   withPagination(),
-  withError()
+  withError(),
 )(ResultList)

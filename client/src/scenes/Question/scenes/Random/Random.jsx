@@ -14,18 +14,18 @@ const Random = ({ randomNode }) => {
 }
 
 Random.propTypes = {
-  randomNode: PropTypes.object.isRequired
+  randomNode: PropTypes.object.isRequired,
 }
 
 Random.translations = {
   en: {
     loading: 'Unleashing the randomizator...',
-    error: 'There is no questions corresponding to your search. Try again later!'
+    error: 'There is no questions corresponding to your search. Try again later!',
   },
   fr: {
     loading: 'Déverrouillage du randomizateur...',
-    error: "Il n'y a pas de question correspondant à votre recherche. Essayez plus tard!"
-  }
+    error: "Il n'y a pas de question correspondant à votre recherche. Essayez plus tard!",
+  },
 }
 
 export default Random

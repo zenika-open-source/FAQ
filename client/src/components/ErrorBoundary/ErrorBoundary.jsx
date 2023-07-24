@@ -1,5 +1,5 @@
-import { Component } from 'react';
-import { getIntl } from 'services';
+import { Component } from 'react'
+import { getIntl } from 'services'
 
 class ErrorBoundary extends Component {
   constructor(props) {
@@ -24,7 +24,7 @@ class ErrorBoundary extends Component {
 
 ErrorBoundary.translations = {
   en: { message: 'Something went wrong.' },
-  fr: { message: "Quelque chose s'est mal passé." }
+  fr: { message: "Quelque chose s'est mal passé." },
 }
 
 export default ErrorBoundary

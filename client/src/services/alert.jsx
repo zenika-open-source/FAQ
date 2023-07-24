@@ -1,17 +1,16 @@
-
 import { AlertProvider } from 'components'
 
 import { getIntl as intl } from './intl'
 
 const alert = {
-  push: alert => AlertProvider.pushAlert(alert),
+  push: (alert) => AlertProvider.pushAlert(alert),
   pushError: (message, err) =>
     alert.push({
       message,
       type: 'error',
-      raw: err
+      raw: err,
     }),
-  pushDefaultError: err =>
+  pushDefaultError: (err) =>
     alert.push({
       message: (
         <>
@@ -20,14 +19,14 @@ const alert = {
         </>
       ),
       type: 'error',
-      raw: err
+      raw: err,
     }),
-  pushSuccess: message => alert.push({ message, type: 'success' })
+  pushSuccess: (message) => alert.push({ message, type: 'success' }),
 }
 
 alert.translations = {
   en: { unknown: 'An unknown error occured.', try_again: 'Please, try again' },
-  fr: { unknown: 'Une erreur inconnue est survenue.', try_again: 'Réessayez de nouveau' }
+  fr: { unknown: 'Une erreur inconnue est survenue.', try_again: 'Réessayez de nouveau' },
 }
 
 export default alert

@@ -20,7 +20,9 @@
 .alert-wrapper {
   position: relative;
   max-height: 0;
-  transition: max-height 0.5s, margin-right 0.5s 0.5s;
+  transition:
+    max-height 0.5s,
+    margin-right 0.5s 0.5s;
   margin-right: 0;
 }
 

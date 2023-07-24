@@ -16,7 +16,7 @@ class Result extends Component {
     super(props)
 
     this.state = {
-      collapsed: props.collapsed || false
+      collapsed: props.collapsed || false,
     }
   }
 
@@ -35,7 +35,7 @@ class Result extends Component {
             ) : (
               <h1
                 dangerouslySetInnerHTML={{
-                  __html: markdown.title(node.highlights.question)
+                  __html: markdown.title(node.highlights.question),
                 }}
               />
             )}
@@ -45,7 +45,7 @@ class Result extends Component {
           <Link
             to={{
               pathname: `/q/${node.question.slug}-${node.id}`,
-              state: { from: 'home' }
+              state: { from: 'home' },
             }}
             className="open-card"
           >
@@ -57,7 +57,7 @@ class Result extends Component {
             markdown.html(
               node.highlights && node.highlights.answer
                 ? node.highlights.answer
-                : node.answer.content
+                : node.answer.content,
             )
           ) : (
             <p style={{ textAlign: 'center' }}>
@@ -72,12 +72,12 @@ class Result extends Component {
 
 Result.propTypes = {
   node: PropTypes.object.isRequired,
-  collapsed: PropTypes.bool
+  collapsed: PropTypes.bool,
 }
 
 Result.translations = {
   en: { no_answer: 'No answer yet...' },
-  fr: { no_answer: 'Pas encore de réponse...' }
+  fr: { no_answer: 'Pas encore de réponse...' },
 }
 
 export default Result

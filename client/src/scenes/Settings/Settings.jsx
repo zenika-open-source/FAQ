@@ -11,11 +11,11 @@ import { listToSynonyms, reducer, serializeTags, synonymsToList } from './helper
 import { UPDATE_CONFIGURATION } from './queries'
 import { General, Integrations, Specialists, Synonyms, Tags } from './scenes'
 
-const initState = conf => ({
+const initState = (conf) => ({
   ...conf,
   synonyms: synonymsToList(conf?.algoliaSynonyms),
   authorizedDomains: conf?.authorizedDomains?.join(', '),
-  bugReporting: conf?.bugReporting || 'GITHUB'
+  bugReporting: conf?.bugReporting || 'GITHUB',
 })
 
 const Settings = ({ configuration: conf }) => {
@@ -30,7 +30,7 @@ const Settings = ({ configuration: conf }) => {
   useEffect(() => {
     dispatch({
       type: 'reset',
-      data: initState(conf)
+      data: initState(conf),
     })
   }, [conf])
 
@@ -42,10 +42,10 @@ const Settings = ({ configuration: conf }) => {
       workplaceSharing: state.workplaceSharing,
       authorizedDomains: state.authorizedDomains
         .split(',')
-        .map(x => x.trim())
-        .filter(x => x),
+        .map((x) => x.trim())
+        .filter((x) => x),
       bugReporting: state.bugReporting,
-      slackChannelHook: state.slackChannelHook
+      slackChannelHook: state.slackChannelHook,
     },
     onCompleted() {
       alert.pushSuccess(intl('alert_success'))
@@ -53,10 +53,10 @@ const Settings = ({ configuration: conf }) => {
     },
     onError(error) {
       alert.pushDefaultError(error)
-    }
+    },
   })
 
-  const onTagsChange = tags => dispatch({ type: 'change_tags', data: tags })
+  const onTagsChange = (tags) => dispatch({ type: 'change_tags', data: tags })
 
   return (
     <div>
@@ -98,17 +98,17 @@ Settings.translations = {
         tab: 'General',
         title: {
           title: 'Title',
-          placeholder: 'Title'
+          placeholder: 'Title',
         },
         domains: {
           title: 'Authorized domains',
-          placeholder: 'E.g.: zenika.com, google.com, ...'
+          placeholder: 'E.g.: zenika.com, google.com, ...',
         },
         bug_reporting: {
           title: 'Bug reporting',
           mail: 'By email',
-          github: 'By Github'
-        }
+          github: 'By Github',
+        },
       },
       tags: {
         tab: 'Tags',
@@ -116,11 +116,11 @@ Settings.translations = {
           add: 'Add tags',
           more: 'More tags',
           key: 'Category',
-          value: 'Tags'
-        }
+          value: 'Tags',
+        },
       },
       specialists: {
-        tab: 'Specialists'
+        tab: 'Specialists',
       },
       synonyms: {
         tab: 'Synonyms',
@@ -128,25 +128,25 @@ Settings.translations = {
           add: 'Add a synonym',
           more: 'More synonyms',
           key: 'ID',
-          value: 'Synonyms'
-        }
+          value: 'Synonyms',
+        },
       },
       integrations: {
         tab: 'Integrations',
         workplace: {
           title: 'Workplace',
-          label: 'Enable Workplace sharing'
+          label: 'Enable Workplace sharing',
         },
         slack: {
           title: 'Slack',
           channel: 'Slack Channel Hook:',
           command: 'Slack Command Hook:',
           generate: 'Generate',
-          regenerate: 'Regenerate'
-        }
-      }
+          regenerate: 'Regenerate',
+        },
+      },
     },
-    validate: 'Save'
+    validate: 'Save',
   },
   fr: {
     alert_success: 'Les paramètres ont été modifiés avec succès !',
@@ -156,17 +156,17 @@ Settings.translations = {
         tab: 'Général',
         title: {
           title: 'Titre',
-          placeholder: 'Titre'
+          placeholder: 'Titre',
         },
         domains: {
           title: 'Domaines autorisés',
-          placeholder: 'Ex: zenika.com, google.com, ...'
+          placeholder: 'Ex: zenika.com, google.com, ...',
         },
         bug_reporting: {
           title: 'Signalement de bug',
           mail: 'Par email',
-          github: 'Par Github'
-        }
+          github: 'Par Github',
+        },
       },
       tags: {
         tab: 'Tags',
@@ -174,11 +174,11 @@ Settings.translations = {
           add: 'Ajouter un tags',
           more: 'Plus de tags',
           key: 'Categorie',
-          value: 'Tags'
-        }
+          value: 'Tags',
+        },
       },
       specialists: {
-        tab: 'Spécialistes'
+        tab: 'Spécialistes',
       },
       synonyms: {
         tab: 'Synonymes',
@@ -186,26 +186,26 @@ Settings.translations = {
           add: 'Ajouter un synonyme',
           more: 'Plus de synonymes',
           key: 'ID',
-          value: 'Synonymes'
-        }
+          value: 'Synonymes',
+        },
       },
       integrations: {
         tab: 'Intégrations',
         workplace: {
           title: 'Workplace',
-          label: 'Activer le partage par Workplace'
+          label: 'Activer le partage par Workplace',
         },
         slack: {
           title: 'Slack',
           channel: 'Slack Channel Hook:',
           command: 'Slack Command Hook:',
           generate: 'Générer',
-          regenerate: 'Régénérer'
-        }
-      }
+          regenerate: 'Régénérer',
+        },
+      },
     },
-    validate: 'Enregistrer'
-  }
+    validate: 'Enregistrer',
+  },
 }
 
 export default Settings

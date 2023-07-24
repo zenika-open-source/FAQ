@@ -1,9 +1,7 @@
-
-
 import { getIntl } from 'services'
 import TipsComponent from 'components/Tips'
 
-const Tips = props => {
+const Tips = (props) => {
   const intl = getIntl(Tips)
 
   return (
@@ -30,8 +28,8 @@ Tips.translations = {
       'Stay impersonal, an answer is neither a discussion nor a report.',
       'FAQ is meant to feel like an encyclopedia more than a forum. You may leave out politeness formulas.',
       'Specify the sources of your information (Internal wiki, Workplace or others).',
-      'Mention similar questions to complete your answer.'
-    ]
+      'Mention similar questions to complete your answer.',
+    ],
   },
   fr: {
     title: 'Conseils pour écrire de super réponses sur la FAQ',
@@ -42,9 +40,9 @@ Tips.translations = {
       "Restez impersonnel, une réponse n'est ni une discussion ni un rapport.",
       "FAQ est conçu pour ressembler à une encyclopédie plutôt qu'à un forum. Vous pouvez omettre les formules de politesse.",
       'Précisez les sources de vos informations (wiki interne, Workplace ou autres).',
-      'Mentionnez des questions similaires pour compléter votre réponse.'
-    ]
-  }
+      'Mentionnez des questions similaires pour compléter votre réponse.',
+    ],
+  },
 }
 
 export default Tips

@@ -11,16 +11,16 @@ const ENTRIES_PER_PAGE = 10
 
 export default compose(
   query(LOAD_HISTORY, {
-    variables: props => {
+    variables: (props) => {
       const { page } = unserialize(props.location.search)
       return {
         nodeId: routing.getUIDFromSlug(props.match),
         first: ENTRIES_PER_PAGE,
-        skip: ENTRIES_PER_PAGE * (page - 1)
+        skip: ENTRIES_PER_PAGE * (page - 1),
       }
     },
-    parse: ({ history = {} }) => ({ ...history })
+    parse: ({ history = {} }) => ({ ...history }),
   }),
   withPagination({ push: false }),
-  withError()
+  withError(),
 )(HistoryActions)

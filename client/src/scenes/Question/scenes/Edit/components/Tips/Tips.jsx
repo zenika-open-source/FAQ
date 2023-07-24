@@ -1,10 +1,8 @@
-
-
 import { getIntl } from 'services'
 
 import TipsComponent from 'components/Tips'
 
-const Tips = props => {
+const Tips = (props) => {
   const intl = getIntl(Tips)
 
   return (
@@ -67,7 +65,7 @@ Tips.translations = {
       <span>
         Privilege questions responding to the <b>"how"</b> rather than the <b>"why"</b>.
       </span>,
-      'Stay objective and factual.'
+      'Stay objective and factual.',
     ],
     good: {
       title: 'Great questions',
@@ -75,8 +73,8 @@ Tips.translations = {
         'Where can I get the ElasticSearch training material?',
         'How can I use Alibeez API?',
         'How to reach the Nantes office from the train station?',
-        "What's the difference between pay with and without variable?"
-      ]
+        "What's the difference between pay with and without variable?",
+      ],
     },
     bad: {
       title: 'Misplaced questions',
@@ -85,9 +83,9 @@ Tips.translations = {
         ['Debating:', "Shouldn't we change the collective agreement?"],
         ['Open:', 'What are the best books to read for an architect?'],
         ['Temporal:', "What are the 2018 figures for the Nantes' office?"],
-        ['Vague:', 'How does recruitment work?']
-      ]
-    }
+        ['Vague:', 'How does recruitment work?'],
+      ],
+    },
   },
   fr: {
     title: 'Conseils pour écrire de super questions sur la FAQ',
@@ -98,7 +96,7 @@ Tips.translations = {
       <span>
         Privilégiez les question qui répondent au <b>comment</b> plutôt qu'au <b>pourquoi</b>.
       </span>,
-      'Restez objectif et factuel.'
+      'Restez objectif et factuel.',
     ],
     good: {
       title: 'Super questions',
@@ -106,8 +104,8 @@ Tips.translations = {
         'Où puis-je trouver le matériel de formation ElasticSearch ?',
         "Comment utiliser l'API Alibeez ?",
         "Comment rejoindre l'agence de Nantes depuis la gare ?",
-        'Quelle est la différence entre un salaire avec et sans variable ?'
-      ]
+        'Quelle est la différence entre un salaire avec et sans variable ?',
+      ],
     },
     bad: {
       title: 'Questions mal placées',
@@ -116,10 +114,10 @@ Tips.translations = {
         ['Polémique:', 'Ne devrions-nous pas changer notre convention collective ?'],
         ['Ouverte:', 'Quels sont les livres à lire quand on est architecte logiciel ?'],
         ['Temporelle:', "Quels sont les résultats 2018 de l'agence nantaise ?"],
-        ['Vague:', 'Comment fonctionne le recrutement ?']
-      ]
-    }
-  }
+        ['Vague:', 'Comment fonctionne le recrutement ?'],
+      ],
+    },
+  },
 }
 
 export default Tips

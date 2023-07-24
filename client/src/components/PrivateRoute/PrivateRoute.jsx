@@ -14,7 +14,7 @@ const PrivateRoute = ({ element, render, admin, specialist, ...otherProps }) => 
 PrivateRoute.propTypes = {
   component: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
   render: PropTypes.func,
-  admin: PropTypes.bool
+  admin: PropTypes.bool,
 }
 
 export default PrivateRoute

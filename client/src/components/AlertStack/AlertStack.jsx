@@ -10,7 +10,7 @@ class AlertStack extends Component {
   render() {
     return (
       <div className="alert-stack">
-        {this.context.alerts.map(alert => (
+        {this.context.alerts.map((alert) => (
           <Alert key={alert.id} alert={alert} />
         ))}
       </div>

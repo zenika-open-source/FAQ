@@ -11,26 +11,27 @@ const ConfigurationProvider = ({ children }) => {
     if (localStorage.configuration) {
       return {
         ...JSON.parse(localStorage.configuration),
-        loading: false
+        loading: false,
       }
     }
     return {
-      loading: true
+      loading: true,
     }
   })
 
   // Retrieve configuration from server
   useEffect(() => {
-    safeFetch('configuration').then(conf => {
+    safeFetch('configuration').then((conf) => {
       localStorage.configuration = JSON.stringify(conf)
       setConfiguration({ ...conf, loading: false })
     })
   }, [reload])
 
   // Provide reload function when editing configuration
-  const value = useMemo(() => ({ ...configuration, reload: () => setReload(state => state + 1) }), [
-    configuration
-  ])
+  const value = useMemo(
+    () => ({ ...configuration, reload: () => setReload((state) => state + 1) }),
+    [configuration],
+  )
 
   return <ConfigurationContext.Provider value={value}>{children}</ConfigurationContext.Provider>
 }

@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types'
 
 import { getIntl } from 'services'
@@ -31,12 +30,12 @@ const Loading = ({ text }) => {
 }
 
 Loading.propTypes = {
-  text: PropTypes.string
+  text: PropTypes.string,
 }
 
 Loading.translations = {
   en: { loading: 'Loading...' },
-  fr: { loading: 'Chargement...' }
+  fr: { loading: 'Chargement...' },
 }
 
 export default Loading

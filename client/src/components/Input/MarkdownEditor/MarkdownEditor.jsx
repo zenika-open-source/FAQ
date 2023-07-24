@@ -13,7 +13,7 @@ const MarkdownEditor = ({ content, onChange }) => {
 
 MarkdownEditor.propTypes = {
   content: PropTypes.string,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
 }
 
 export default MarkdownEditor

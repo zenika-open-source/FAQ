@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types'
 
 import { Input, Button } from 'components'
@@ -16,7 +15,7 @@ const PairInput = ({ pair, options, actions, disabled }) => {
           icon={options.icons.key}
           placeholder={options.labels.key}
           value={key}
-          onChange={e => actions.update({ ...pair, key: e.target.value })}
+          onChange={(e) => actions.update({ ...pair, key: e.target.value })}
           disabled={disabled}
         />
         <Input
@@ -24,7 +23,7 @@ const PairInput = ({ pair, options, actions, disabled }) => {
           icon={options.icons.value}
           placeholder={options.labels.value}
           value={value}
-          onChange={e => actions.update({ ...pair, value: e.target.value })}
+          onChange={(e) => actions.update({ ...pair, value: e.target.value })}
           disabled={disabled}
         />
       </div>
@@ -44,7 +43,7 @@ PairInput.propTypes = {
   pair: PropTypes.object.isRequired,
   options: PropTypes.object.isRequired,
   actions: PropTypes.object.isRequired,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
 }
 
 export default PairInput

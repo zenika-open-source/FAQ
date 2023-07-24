@@ -36,7 +36,7 @@ const UserProfile = () => {
     },
     onError(error) {
       alert.pushDefaultError(error)
-    }
+    },
   })
 
   const [deleteData, { loading: deleteLoading }] = useMutation(DELETE_IDENTITY, {
@@ -47,7 +47,7 @@ const UserProfile = () => {
     onError(error) {
       alert.pushDefaultError(error)
       setModalActive(false)
-    }
+    },
   })
 
   if (name === undefined) return <Loading />
@@ -69,7 +69,7 @@ const UserProfile = () => {
               id="name"
               className="card-input"
               value={name}
-              onChange={e => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
               autoComplete="off"
             />
             <label htmlFor="email">{intl('identity.email')}</label>
@@ -77,7 +77,7 @@ const UserProfile = () => {
               id="email"
               className="card-input"
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <label htmlFor="picture">{intl('identity.picture')}</label>
             <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -86,14 +86,14 @@ const UserProfile = () => {
                 style={{
                   width: '60px',
                   height: '60px',
-                  marginRight: '20px'
+                  marginRight: '20px',
                 }}
               />
               <input
                 id="picture"
                 className="card-input"
                 value={picture}
-                onChange={e => setPicture(e.target.value)}
+                onChange={(e) => setPicture(e.target.value)}
               />
             </div>
           </div>
@@ -140,7 +140,7 @@ const UserProfile = () => {
           {intl('modal.text').map((text, i) => (
             <p key={i}>{text}</p>
           ))}
-          <Input value={goodbye} onChange={e => setGoodbye(e.target.value)} />
+          <Input value={goodbye} onChange={(e) => setGoodbye(e.target.value)} />
           <br />
           <Button
             primary
@@ -161,7 +161,7 @@ UserProfile.translations = {
   en: {
     alert: {
       update_success: 'Your profile was successfully updated!',
-      delete_success: 'Your personal data was succesfully deleted!'
+      delete_success: 'Your personal data was succesfully deleted!',
     },
     title: 'Profile',
     identity: {
@@ -169,7 +169,7 @@ UserProfile.translations = {
       name: 'Name',
       email: 'Email address',
       picture: 'Picture url',
-      save: 'Save'
+      save: 'Save',
     },
     gdpr: {
       title: 'GDPR',
@@ -177,8 +177,8 @@ UserProfile.translations = {
       erase: {
         label: 'Erase all your personal data:',
         tooltip: 'This will erase all your personal data from FAQ',
-        button: 'Delete my data'
-      }
+        button: 'Delete my data',
+      },
     },
     modal: {
       title: 'Are you absolutely sure?',
@@ -190,15 +190,15 @@ UserProfile.translations = {
         'Your personal data will be erased, which means your actions will become anonymous. The content you have written and edited will remain.',
         <>
           Please type in <b>"goodbye"</b> to confirm.
-        </>
+        </>,
       ],
-      button: 'I understand the consequences, delete my data'
-    }
+      button: 'I understand the consequences, delete my data',
+    },
   },
   fr: {
     alert: {
       update_success: 'Votre profil a été modifié avec succès !',
-      delete_success: 'Vos données personnelles ont été supprimées avec succès !'
+      delete_success: 'Vos données personnelles ont été supprimées avec succès !',
     },
     title: 'Profil',
     identity: {
@@ -206,7 +206,7 @@ UserProfile.translations = {
       name: 'Nom',
       email: 'Adresse email',
       picture: 'Image URL',
-      save: 'Enregistrer'
+      save: 'Enregistrer',
     },
     gdpr: {
       title: 'RGPD',
@@ -215,8 +215,8 @@ UserProfile.translations = {
       erase: {
         label: 'Supprimez toutes vos données personnelles',
         tooltip: 'Cela va supprimer toutes vos données personnelles de la FAQ',
-        button: 'Effacer mes données'
-      }
+        button: 'Effacer mes données',
+      },
     },
     modal: {
       title: 'En êtes-vous absolument sûr ?',
@@ -227,11 +227,11 @@ UserProfile.translations = {
           personnelles.
         </>,
         'Vos données personnelles seront effacées, ce qui signifie que vos actions deviendront anonymes. Le contenu que vous avez écrit et édité sera conservé.',
-        <>Veuillez saisir "goodbye" pour confirmer.</>
+        <>Veuillez saisir "goodbye" pour confirmer.</>,
       ],
-      button: 'Je comprends les conséquences, effacer mes données'
-    }
-  }
+      button: 'Je comprends les conséquences, effacer mes données',
+    },
+  },
 }
 
 export default UserProfile

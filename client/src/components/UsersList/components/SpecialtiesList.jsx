@@ -15,25 +15,25 @@ const SpecialtiesList = ({ specialties, userSpecialties, onChange }) => {
         icon={'add'}
         link
         style={{ padding: 0 }}
-        onClick={() => setOpened(opened => !opened)}
+        onClick={() => setOpened((opened) => !opened)}
       />
       <ul ref={ref} className="specialtiesList" style={{ display: opened ? 'flex' : 'none' }}>
-        {userSpecialties.map(specialty => {
+        {userSpecialties.map((specialty) => {
           const isSelected = specialties?.filter(({ id }) => id === specialty.id).length > 0
           return (
             <li
               key={specialty.id}
               className={cn('specialtyEl', {
-                selected: isSelected
+                selected: isSelected,
               })}
               onClick={() =>
                 onChange(
                   isSelected
                     ? {
-                        data: specialties.filter(specialty => specialty.id !== specialty.id),
-                        action: 'delete'
+                        data: specialties.filter((specialty) => specialty.id !== specialty.id),
+                        action: 'delete',
                       }
-                    : { data: [...specialties, specialty], action: 'add' }
+                    : { data: [...specialties, specialty], action: 'add' },
                 )
               }
             >

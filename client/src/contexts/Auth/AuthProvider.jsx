@@ -15,21 +15,21 @@ const reducer = (state, action) => {
     case 'ready':
       return {
         ...state,
-        ready: true
+        ready: true,
       }
     case 'login':
       return {
         ...state,
         ...action.data,
         previousState: state.state,
-        state: 'signed_in'
+        state: 'signed_in',
       }
     case 'renew':
       return {
         ...state,
         ...action.data,
         previousState: state.state,
-        state: 'renewed_in'
+        state: 'renewed_in',
       }
     case 'logout':
       return {
@@ -37,7 +37,7 @@ const reducer = (state, action) => {
         session: null,
         user: null,
         previousState: state.state,
-        state: 'signed_out'
+        state: 'signed_out',
       }
     default:
       return state
@@ -60,7 +60,7 @@ const AuthProvider = ({ history, children }) => {
       state: session && user ? 'signed_in' : 'init',
       session,
       user,
-      ready: !conf.loading
+      ready: !conf.loading,
     }
   }
 
@@ -80,22 +80,22 @@ const AuthProvider = ({ history, children }) => {
       dispatch({ type: 'logout' })
       navigate('/auth/login')
     },
-    [history]
+    [history],
   )
 
   const apollo = useApolloClient()
 
   const parseHash = useMemo(
-    () => async hash => {
+    () => async (hash) => {
       try {
         const session = await auth.parseHash(hash)
 
         const { redirectTo } = auth.getStateBeforeLogin()
         const {
-          data: { authenticate }
+          data: { authenticate },
         } = await apollo.mutate({
           mutation: AUTHENTICATE_MUTATION,
-          variables: { idToken: session.idToken }
+          variables: { idToken: session.idToken },
         })
 
         dispatch({ type: 'login', data: { session, user: authenticate } })
@@ -110,11 +110,11 @@ const AuthProvider = ({ history, children }) => {
         navigate('/auth/login')
       }
     },
-    [apollo, history]
+    [apollo, history],
   )
 
   const renewAuth = useMemo(() => {
-    return async redirectedFrom => {
+    return async (redirectedFrom) => {
       const redirectTo = redirectedFrom || window.location.pathname || '/'
 
       try {
@@ -149,12 +149,10 @@ const AuthProvider = ({ history, children }) => {
     }
   }, [state, renewAuth])
 
-  const value = useMemo(() => [state, { login: auth.login, logout, parseHash, renewAuth }], [
-    state,
-    logout,
-    parseHash,
-    renewAuth
-  ])
+  const value = useMemo(
+    () => [state, { login: auth.login, logout, parseHash, renewAuth }],
+    [state, logout, parseHash, renewAuth],
+  )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

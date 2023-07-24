@@ -1,10 +1,9 @@
 /* eslint react/display-name: 0 react/prop-types: 0 */
 
-
 import Loading from './Loading'
 
-const withLoading = text => Component => {
-  const withLoadingWrapper = props => {
+const withLoading = (text) => (Component) => {
+  const withLoadingWrapper = (props) => {
     if (props.loading) return text !== false ? <Loading text={text} /> : null
 
     return <Component {...props} />

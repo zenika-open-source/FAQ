@@ -23,7 +23,7 @@ class Button extends Component {
       ...otherProps
     } = this.props
 
-    const b2s = b => (b ? 'true' : 'false')
+    const b2s = (b) => (b ? 'true' : 'false')
 
     const buttonModifiers = [
       'primary',
@@ -33,7 +33,7 @@ class Button extends Component {
       'active',
       'raised',
       'fixed',
-      'small'
+      'small',
     ].reduce((acc, m) => {
       this.props[m] && (acc[m] = b2s(this.props[m]))
       return acc

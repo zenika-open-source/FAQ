@@ -23,7 +23,15 @@ const Radio = ({ label, value, disabled, className, ...props }) => {
   )
 }
 
-Radio.Group = function RadioGroup({ name, selected, onChange, disabled, className, children, ...props }) {
+Radio.Group = function RadioGroup({
+  name,
+  selected,
+  onChange,
+  disabled,
+  className,
+  children,
+  ...props
+}) {
   return (
     <RadioContext.Provider value={{ name, selected, onChange, disabled }}>
       <div className={cn('radio-group', className)} {...props}>

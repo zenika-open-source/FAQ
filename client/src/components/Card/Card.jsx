@@ -15,7 +15,7 @@ const Card = ({ children, className, ...otherProps }) => (
 
 Card.propTypes = {
   children: PropTypes.node.isRequired,
-  className: PropTypes.string
+  className: PropTypes.string,
 }
 
 Card.Title = CardTitle

@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types'
 import format from 'date-fns/format'
 
@@ -42,12 +41,12 @@ const Meta = ({ node }) => {
 }
 
 Meta.propTypes = {
-  node: PropTypes.object.isRequired
+  node: PropTypes.object.isRequired,
 }
 
 Meta.translations = {
   en: { asked: 'Asked by', answered: 'Answer by' },
-  fr: { asked: 'Posée par', answered: 'Répondue par' }
+  fr: { asked: 'Posée par', answered: 'Répondue par' },
 }
 
 export default Meta

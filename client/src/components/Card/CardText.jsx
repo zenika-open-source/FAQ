@@ -10,7 +10,7 @@ const CardText = ({ children, collapsed, className, ...otherProps }) => (
 CardText.propTypes = {
   children: PropTypes.node.isRequired,
   collapsed: PropTypes.bool,
-  className: PropTypes.string
+  className: PropTypes.string,
 }
 
 export default CardText

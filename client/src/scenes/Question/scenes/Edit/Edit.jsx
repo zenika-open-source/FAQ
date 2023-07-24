@@ -21,7 +21,7 @@ const Edit = ({ zNode = null }) => {
   const [state, setState] = useState(() => {
     const passedQuestionText = location.state ? location.state.question : ''
     const initialQuestion = zNode ? zNode.question.title : passedQuestionText
-    const initialTags = zNode ? zNode.tags.map(tag => tag.label) : []
+    const initialTags = zNode ? zNode.tags.map((tag) => tag.label) : []
 
     return {
       nodeLoaded: false,
@@ -31,7 +31,7 @@ const Edit = ({ zNode = null }) => {
       slug: null,
       initialTags: initialTags,
       tags: initialTags,
-      showTips: PermanentClosableCard.isOpen('tips_question')
+      showTips: PermanentClosableCard.isOpen('tips_question'),
     }
   })
 
@@ -39,26 +39,26 @@ const Edit = ({ zNode = null }) => {
 
   const { isEditing, slug, question, tags, showTips } = state
 
-  const toggleTips = value => () => {
-    setState(state => ({ ...state, showTips: value }))
+  const toggleTips = (value) => () => {
+    setState((state) => ({ ...state, showTips: value }))
     PermanentClosableCard.setValue('tips_question', value)
   }
 
   const [submitQuestion, { loading: loadingSubmit }] = useMutation(SUBMIT_QUESTION, {
     variables: {
       title: state.question,
-      tags: state.tags.map(tag => tag.id)
+      tags: state.tags.map((tag) => tag.id),
     },
     onCompleted(data) {
-      setState(state => ({
+      setState((state) => ({
         ...state,
-        slug: data.createQuestionAndTags.slug + '-' + data.createQuestionAndTags.node.id
+        slug: data.createQuestionAndTags.slug + '-' + data.createQuestionAndTags.node.id,
       }))
       alert.pushSuccess(intl('alert.submit_success'))
     },
     onError(error) {
       alert.pushDefaultError(error)
-    }
+    },
   })
 
   const [editQuestion, { loading: loadingEdit }] = useMutation(EDIT_QUESTION, {
@@ -66,18 +66,18 @@ const Edit = ({ zNode = null }) => {
       questionId: zNode?.question.id,
       title: state.question,
       previousTitle: state.initialQuestion,
-      tags: state.tags.map(tag => tag.id)
+      tags: state.tags.map((tag) => tag.id),
     },
     onCompleted(data) {
-      setState(state => ({
+      setState((state) => ({
         ...state,
-        slug: data.updateQuestionAndTags.slug + '-' + zNode.id
+        slug: data.updateQuestionAndTags.slug + '-' + zNode.id,
       }))
       alert.pushSuccess(intl('alert.edit_success'))
     },
     onError(error) {
       alert.pushDefaultError(error)
-    }
+    },
   })
 
   const submitForm = () => {
@@ -87,11 +87,11 @@ const Edit = ({ zNode = null }) => {
     }
   }
 
-  const onTextChange = e => {
+  const onTextChange = (e) => {
     const question = e.target.value
-    setState(state => ({ ...state, question }))
+    setState((state) => ({ ...state, question }))
   }
-  const onTagsChange = tags => setState(state => ({ ...state, tags }))
+  const onTagsChange = (tags) => setState((state) => ({ ...state, tags }))
 
   if (slug) {
     return <Navigate to={`/q/${slug}`} />
@@ -154,18 +154,18 @@ const Edit = ({ zNode = null }) => {
 }
 
 Edit.propTypes = {
-  zNode: PropTypes.object
+  zNode: PropTypes.object,
 }
 
 Edit.translations = {
   en: {
     title: {
       submit: 'Ask a new question',
-      edit: 'Edit question'
+      edit: 'Edit question',
     },
     alert: {
       submit_success: 'Your question was successfully submitted!',
-      edit_success: 'The question was successfully edited!'
+      edit_success: 'The question was successfully edited!',
     },
     prompt_warning: 'Are you sure you want to leave this page with an unsaved question?',
     home: 'Home',
@@ -173,17 +173,17 @@ Edit.translations = {
     placeholder: 'E.g.: How to fill an expense report?',
     validate: {
       submit: 'Submit',
-      edit: 'Edit'
-    }
+      edit: 'Edit',
+    },
   },
   fr: {
     title: {
       submit: 'Poser une nouvelle question',
-      edit: 'Modifier une question'
+      edit: 'Modifier une question',
     },
     alert: {
       submit_success: 'Votre question a bien été envoyée !',
-      edit_success: 'La question a bien été modifiée !'
+      edit_success: 'La question a bien été modifiée !',
     },
     prompt_warning: 'Êtes-vous sûr de vouloir quitter cette page sans enregistrer la question ?',
     home: 'Accueil',
@@ -191,9 +191,9 @@ Edit.translations = {
     placeholder: 'Ex: Comment remplir une note de frais ?',
     validate: {
       submit: 'Envoyer la question',
-      edit: 'Enregistrer la question'
-    }
-  }
+      edit: 'Enregistrer la question',
+    },
+  },
 }
 
 export default Edit

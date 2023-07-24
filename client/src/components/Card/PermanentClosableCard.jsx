@@ -34,7 +34,7 @@ class PermanentClosableCard extends Component {
                 position: 'absolute',
                 top: '0.3rem',
                 right: '0.3rem',
-                cursor: 'pointer'
+                cursor: 'pointer',
               }}
               onClick={close}
             >
@@ -54,12 +54,12 @@ class PermanentClosableCard extends Component {
 PermanentClosableCard.propTypes = {
   open: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
 }
 
 PermanentClosableCard.translations = {
   en: { understood: 'Understood!' },
-  fr: { understood: 'Compris !' }
+  fr: { understood: 'Compris !' },
 }
 
 export default PermanentClosableCard

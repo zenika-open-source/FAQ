@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 export const SEARCH_NODES = gql`
-  query($text: String, $tags: [String!], $flags: [String!], $first: Int!, $skip: Int!) {
+  query ($text: String, $tags: [String!], $flags: [String!], $first: Int!, $skip: Int!) {
     search(
       text: $text
       tags: $tags

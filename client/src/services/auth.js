@@ -8,14 +8,14 @@ class Auth {
       redirectUri: window.location.origin + '/auth/callback',
       audience: `https://${auth0Domain}/userinfo`,
       responseType: 'token id_token',
-      scope: 'openid profile email'
+      scope: 'openid profile email',
     })
     return this.auth0
   }
 
   /* AUTH LIFECYCLE */
 
-  login = redirectTo => {
+  login = (redirectTo) => {
     if (redirectTo) this.cacheStateBeforeLogin({ redirectTo })
     this.auth0.authorize()
   }
@@ -24,7 +24,7 @@ class Auth {
     this.clearLocalStorage()
   }
 
-  parseHash = hash =>
+  parseHash = (hash) =>
     new Promise((resolve, reject) => {
       this.auth0.parseHash({ hash }, this.authCheck(resolve, reject))
     })
@@ -44,7 +44,7 @@ class Auth {
 
       resolve({
         ...authResult,
-        expiresAt
+        expiresAt,
       })
     } else {
       reject(err || null)
@@ -67,7 +67,7 @@ class Auth {
   retrieveFromLocalStorage() {
     return {
       session: localStorage.session ? JSON.parse(localStorage.session) : null,
-      user: localStorage.user ? JSON.parse(localStorage.user) : null
+      user: localStorage.user ? JSON.parse(localStorage.user) : null,
     }
   }
 

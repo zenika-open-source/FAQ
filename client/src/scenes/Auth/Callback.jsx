@@ -21,7 +21,7 @@ const Callback = () => {
 
 Callback.translations = {
   en: { loading: 'Authenticating...' },
-  fr: { loading: 'Authentification en cours...' }
+  fr: { loading: 'Authentification en cours...' },
 }
 
 export default Callback

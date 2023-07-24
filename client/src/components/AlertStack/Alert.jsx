@@ -13,7 +13,7 @@ class Alert extends Component {
     setTimeout(() => this.context.showAlert(this.props.alert), 0)
     setTimeout(
       () => this.context.closeAlert(this.props.alert),
-      this.props.alert.type === 'success' ? 5000 : 7000
+      this.props.alert.type === 'success' ? 5000 : 7000,
     )
   }
 
@@ -24,7 +24,7 @@ class Alert extends Component {
       <div
         className={cn('alert-wrapper', {
           'is-shown': alert.shown,
-          'is-closed': alert.closed
+          'is-closed': alert.closed,
         })}
       >
         <div className={cn('alert', 'is-' + alert.type)}>
@@ -39,8 +39,8 @@ class Alert extends Component {
 Alert.propTypes = {
   alert: PropTypes.shape({
     type: PropTypes.string.isRequired,
-    message: PropTypes.node.isRequired
-  }).isRequired
+    message: PropTypes.node.isRequired,
+  }).isRequired,
 }
 
 export default Alert

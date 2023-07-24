@@ -32,7 +32,7 @@ const Answer = ({ zNode }) => {
       sources: initialSources,
       initialSources: initialSources,
       slug: null,
-      showTips: PermanentClosableCard.isOpen('tips_answer')
+      showTips: PermanentClosableCard.isOpen('tips_answer'),
     }
   })
 
@@ -40,14 +40,14 @@ const Answer = ({ zNode }) => {
 
   const { slug, showTips, sources } = state
 
-  const onTextChange = value => setState({ ...state, answer: value })
+  const onTextChange = (value) => setState({ ...state, answer: value })
   const onSourcesChange = onListChange(
-    changes => setState(state => ({ ...state, ...changes(state) })),
-    'sources'
+    (changes) => setState((state) => ({ ...state, ...changes(state) })),
+    'sources',
   )
 
-  const toggleTips = value => () => {
-    setState(state => ({ ...state, showTips: value }))
+  const toggleTips = (value) => () => {
+    setState((state) => ({ ...state, showTips: value }))
     PermanentClosableCard.setValue('tips_answer', value)
   }
 
@@ -55,15 +55,15 @@ const Answer = ({ zNode }) => {
     variables: {
       nodeId: zNode.id,
       content: state.answer,
-      sources: JSON.stringify(keyValuePairsToSources(state.sources))
+      sources: JSON.stringify(keyValuePairsToSources(state.sources)),
     },
     onCompleted() {
-      setState(state => ({ ...state, slug: zNode.question.slug + '-' + zNode.id }))
+      setState((state) => ({ ...state, slug: zNode.question.slug + '-' + zNode.id }))
       alert.pushSuccess(intl('alert.submit_success'))
     },
     onError(error) {
       alert.pushDefaultError(error)
-    }
+    },
   })
 
   const [editAnswer, { loading: loadingEdit }] = useMutation(EDIT_ANSWER, {
@@ -71,15 +71,15 @@ const Answer = ({ zNode }) => {
       id: zNode.answer?.id,
       content: state.answer,
       previousContent: state.initialAnswer,
-      sources: JSON.stringify(keyValuePairsToSources(state.sources))
+      sources: JSON.stringify(keyValuePairsToSources(state.sources)),
     },
     onCompleted() {
-      setState(state => ({ ...state, slug: zNode.question.slug + '-' + zNode.id }))
+      setState((state) => ({ ...state, slug: zNode.question.slug + '-' + zNode.id }))
       alert.pushSuccess(intl('alert.edit_success'))
     },
     onError(error) {
       alert.pushDefaultError(error)
-    }
+    },
   })
 
   const submitForm = () => {
@@ -133,7 +133,7 @@ const Answer = ({ zNode }) => {
             options={{
               title: intl('sources.title'),
               icons: { line: 'info_outline', value: 'link' },
-              labels: intl('sources.labels')
+              labels: intl('sources.labels'),
             }}
             actions={onSourcesChange.actions}
           />
@@ -153,14 +153,14 @@ const Answer = ({ zNode }) => {
 }
 
 Answer.propTypes = {
-  zNode: PropTypes.object
+  zNode: PropTypes.object,
 }
 
 Answer.translations = {
   en: {
     alert: {
       submit_success: 'Your answer was successfully submitted!',
-      edit_success: 'The answer was successfully edited!'
+      edit_success: 'The answer was successfully edited!',
     },
     prompt_warning: 'Are you sure you want to leave this page with an unsaved answer?',
     show_tips: 'Show tips',
@@ -170,18 +170,18 @@ Answer.translations = {
         add: 'Add a source link',
         more: 'More sources',
         key: 'Label',
-        value: 'URL'
-      }
+        value: 'URL',
+      },
     },
     validate: {
       submit: 'Submit answer',
-      edit: 'Save answer'
-    }
+      edit: 'Save answer',
+    },
   },
   fr: {
     alert: {
       submit_success: 'Votre réponse a bien été envoyée !',
-      edit_success: 'La réponse a bien été modifiée !'
+      edit_success: 'La réponse a bien été modifiée !',
     },
     prompt_warning: 'Êtes-vous sûr de vouloir quitter cette page sans enregistrer la réponse ?',
     show_tips: 'Voir conseils',
@@ -191,14 +191,14 @@ Answer.translations = {
         add: 'Ajouter une source',
         more: 'Plus de sources',
         key: 'Label',
-        value: 'URL'
-      }
+        value: 'URL',
+      },
     },
     validate: {
       submit: 'Envoyer la réponse',
-      edit: 'Enregistrer la réponse'
-    }
-  }
+      edit: 'Enregistrer la réponse',
+    },
+  },
 }
 
 export default Answer

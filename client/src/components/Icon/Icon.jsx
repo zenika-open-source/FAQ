@@ -1,5 +1,5 @@
-import cn from 'classnames';
-import PropTypes from 'prop-types';
+import cn from 'classnames'
+import PropTypes from 'prop-types'
 
 const Icon = ({ material, className, ...rest }) => {
   if (material)
@@ -15,7 +15,7 @@ const Icon = ({ material, className, ...rest }) => {
 
 Icon.propTypes = {
   material: PropTypes.string,
-  className: PropTypes.string
+  className: PropTypes.string,
 }
 
 export default Icon

@@ -48,14 +48,14 @@ Login.translations = {
     loading: 'Authenticating...',
     welcome: 'Welcome',
     text: 'Please sign in to access the FAQ',
-    sign_in: 'Sign in'
+    sign_in: 'Sign in',
   },
   fr: {
     loading: 'Authentification en cours...',
     welcome: 'Bienvenue',
     text: 'Connectez-vous pour accéder à la FAQ',
-    sign_in: 'Se connecter'
-  }
+    sign_in: 'Se connecter',
+  },
 }
 
 export default Login

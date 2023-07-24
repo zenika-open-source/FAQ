@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom'
 
 import { getIntl } from 'services'
@@ -51,7 +50,7 @@ const Navbar = () => {
 
 Navbar.translations = {
   en: { report_bug: 'Report a bug', new_question: 'New question' },
-  fr: { report_bug: 'Signaler un bug', new_question: 'Nouvelle question' }
+  fr: { report_bug: 'Signaler un bug', new_question: 'Nouvelle question' },
 }
 
 export default Navbar

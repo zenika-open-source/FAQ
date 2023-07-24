@@ -7,7 +7,7 @@ const CardAction = ({ children, ...otherProps }) => (
 )
 
 CardAction.propTypes = {
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
 }
 
 export default CardAction

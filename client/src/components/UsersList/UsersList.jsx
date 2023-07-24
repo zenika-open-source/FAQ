@@ -16,15 +16,15 @@ const UsersList = () => {
   const { data: servicesData, loading: servicesLoading } = useQuery(GET_TAG_CATEGORIES)
 
   const users = usersData ? usersData.users : []
-  const specialists = usersData ? usersData.users.filter(user => user.specialties.length > 0) : []
+  const specialists = usersData ? usersData.users.filter((user) => user.specialties.length > 0) : []
   const services = servicesData
-    ? servicesData.configuration.tagCategories.find(category => category.name === 'services')
+    ? servicesData.configuration.tagCategories.find((category) => category.name === 'services')
         ?.labels
     : null
 
   const regex = new RegExp(`^${userSearchText}`, `gi`)
   const userSearchResults =
-    users && userSearchText ? users.filter(user => user.name.match(regex)).slice(0, 5) : []
+    users && userSearchText ? users.filter((user) => user.name.match(regex)).slice(0, 5) : []
 
   if (loading || servicesLoading) return <Loading />
 
@@ -37,12 +37,12 @@ const UsersList = () => {
         id="usersSearch"
         placeholder={intl('search')}
         value={userSearchText}
-        onChange={e => setUserSearchText(e.target.value)}
+        onChange={(e) => setUserSearchText(e.target.value)}
       />
       {userSearchResults.length > 0 && (
         <div className="resultsContainer">
           <ul className="usersList">
-            {userSearchResults.map(user => (
+            {userSearchResults.map((user) => (
               <Specialist
                 specialist={user}
                 services={services}
@@ -55,7 +55,7 @@ const UsersList = () => {
       )}
       <ul className="usersList">
         {specialists &&
-          specialists.map(specialist => (
+          specialists.map((specialist) => (
             <Specialist
               specialist={specialist}
               services={services}
@@ -70,11 +70,11 @@ const UsersList = () => {
 
 UsersList.translations = {
   en: {
-    search: 'Find a user'
+    search: 'Find a user',
   },
   fr: {
-    search: 'Trouver un utilisateur'
-  }
+    search: 'Trouver un utilisateur',
+  },
 }
 
 export default UsersList

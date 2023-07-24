@@ -8,7 +8,7 @@ const Avatar = ({ image, alt, ...otherProps }) => (
 
 Avatar.propTypes = {
   image: PropTypes.string.isRequired,
-  alt: PropTypes.string
+  alt: PropTypes.string,
 }
 
 export default Avatar

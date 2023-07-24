@@ -7,7 +7,7 @@ const routing = {
     const queryParams = new URLSearchParams(location.search)
     queryParams.set(name, value)
     const arg = {
-      search: '?' + queryParams.toString()
+      search: '?' + queryParams.toString(),
     }
     if (replace) {
       history.replace(arg)
@@ -40,7 +40,7 @@ const routing = {
 
     // Otherwise, it's default/default
     return 'default/default'
-  }
+  },
 }
 
 export default routing

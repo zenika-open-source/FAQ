@@ -11,7 +11,7 @@ const UserProvider = ({ children }) => {
   const { isAuth } = useAuth()
 
   const { data } = useQuery(GET_ME, {
-    skip: !isAuth && import.meta.env.VITE_DISABLE_AUTH !== 'true'
+    skip: !isAuth && import.meta.env.VITE_DISABLE_AUTH !== 'true',
   })
 
   const value = useMemo(() => data && data.me, [data])

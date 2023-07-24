@@ -11,7 +11,7 @@ const Specialist = ({ specialist, services, onUpdateSpecialty }) => {
   const user = useUser()
   const { isAdmin } = useAuth()
 
-  const onSpecialtyChange = params => {
+  const onSpecialtyChange = (params) => {
     const { action, data } = params
     editSpecialties(data, action)
   }
@@ -22,7 +22,7 @@ const Specialist = ({ specialist, services, onUpdateSpecialty }) => {
       const { id } = specialist
       const variables = {
         id,
-        specialties: specialties.map(({ __typename, name, ...rest }) => rest)
+        specialties: specialties.map(({ __typename, name, ...rest }) => rest),
       }
       await mutateFunction({ variables })
       await onUpdateSpecialty()
@@ -46,7 +46,7 @@ const Specialist = ({ specialist, services, onUpdateSpecialty }) => {
       <div className="userRight">
         <div className="userSpecialties">
           {specialties &&
-            specialties.map(specialty => (
+            specialties.map((specialty) => (
               <div key={specialty.id} className="userSpecialty">
                 <span>{specialty.name}</span>
                 <i
@@ -54,7 +54,7 @@ const Specialist = ({ specialist, services, onUpdateSpecialty }) => {
                   onClick={() =>
                     onSpecialtyChange({
                       data: specialties.filter(({ id }) => id !== specialty.id),
-                      action: 'delete'
+                      action: 'delete',
                     })
                   }
                 >
@@ -79,15 +79,15 @@ Specialist.translations = {
   en: {
     alert: {
       add_success: 'The specialty has been added',
-      delete_success: 'The specialty has been removed'
-    }
+      delete_success: 'The specialty has been removed',
+    },
   },
   fr: {
     alert: {
       add_success: 'La spécialité a été ajoutée',
-      delete_success: 'La spécialité a été supprimée'
-    }
-  }
+      delete_success: 'La spécialité a été supprimée',
+    },
+  },
 }
 
 export default Specialist

@@ -20,7 +20,7 @@ class CtrlEnter extends Component {
     }
   }
 
-  keydownHandler = e => {
+  keydownHandler = (e) => {
     if (e.keyCode === 13 && e.ctrlKey) {
       this.props.onCtrlEnterCallback()
     }
@@ -38,7 +38,7 @@ class CtrlEnter extends Component {
 
 CtrlEnter.propTypes = {
   onCtrlEnterCallback: PropTypes.func.isRequired,
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
 }
 
 export default CtrlEnter

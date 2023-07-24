@@ -23,7 +23,7 @@ const DropdownItem = ({
       return (
         <Link
           to={path}
-          onClick={evt => {
+          onClick={(evt) => {
             if (onClick) onClick(evt)
             setDropdownActive(false)
           }}
@@ -39,7 +39,7 @@ const DropdownItem = ({
           tabIndex={0}
           href={href}
           target={target || '_self'}
-          onClick={evt => {
+          onClick={(evt) => {
             if (onClick) onClick(evt)
             setDropdownActive(false)
           }}
@@ -77,7 +77,7 @@ DropdownItem.propTypes = {
   path: PropTypes.string,
   href: PropTypes.string,
   target: PropTypes.string,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
 }
 
 export default DropdownItem

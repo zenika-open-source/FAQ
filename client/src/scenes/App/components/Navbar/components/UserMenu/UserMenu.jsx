@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types'
 
 import { getIntl } from 'services'
@@ -55,7 +54,7 @@ const UserMenu = ({ history }) => {
 }
 
 UserMenu.propTypes = {
-  history: PropTypes.object
+  history: PropTypes.object,
 }
 
 UserMenu.translations = {
@@ -64,15 +63,15 @@ UserMenu.translations = {
     settings: 'Settings',
     github: 'Github',
     bug_report: 'Bug report',
-    sign_out: 'Sign out'
+    sign_out: 'Sign out',
   },
   fr: {
     profile: 'Profil',
     settings: 'Paramètres',
     github: 'Github',
     bug_report: 'Signaler un bug',
-    sign_out: 'Deconnexion'
-  }
+    sign_out: 'Deconnexion',
+  },
 }
 
 export default UserMenu

@@ -22,7 +22,7 @@ const Logs = ({ logs, loading, pagesCount, pageCurrent, onPageSelected, meta }) 
         <hr />
         {shouldShowLoading && <Loading />}
         {!shouldShowLoading &&
-          logs.map(h => {
+          logs.map((h) => {
             const action = formatHistoryAction(h, { relative: false })
 
             return (
@@ -60,12 +60,12 @@ Logs.propTypes = {
   pagesCount: PropTypes.number,
   pageCurrent: PropTypes.number,
   onPageSelected: PropTypes.func,
-  meta: PropTypes.object
+  meta: PropTypes.object,
 }
 
 Logs.translations = {
   en: { title: 'Logs' },
-  fr: { title: 'Logs' }
+  fr: { title: 'Logs' },
 }
 
 export default Logs

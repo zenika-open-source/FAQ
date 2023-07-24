@@ -16,7 +16,7 @@ const QuestionContainer = () => {
     skip: !params.slug,
     onCompleted(data) {
       setZNode(data.zNode)
-    }
+    },
   })
 
   if (loading) return <Loading />
