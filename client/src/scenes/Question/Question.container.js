@@ -4,10 +4,10 @@ import { query } from 'services/apollo'
 
 import { withError } from 'components'
 
-import { getNode } from './queries'
+import { GET_NODE } from './queries'
 
 export const withNode = compose(
-  query(getNode, {
+  query(GET_NODE, {
     skip: props => !props.match.params.slug,
     variables: props => ({ id: routing.getUIDFromSlug(props.match) })
   }),

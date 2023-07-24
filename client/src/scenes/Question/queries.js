@@ -68,8 +68,8 @@ export const zNodeFragment = `
   }
 `
 
-export const getNode = gql`
-  query($id: ID!) {
+export const GET_NODE = gql`
+  query getNode($id: ID!) {
     zNode(where: { id: $id }) {
       ${zNodeFragment}
     }

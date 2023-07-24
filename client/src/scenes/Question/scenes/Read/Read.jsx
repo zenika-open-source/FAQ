@@ -27,7 +27,7 @@ const Read = ({ history, match, zNode, loading }) => {
   const [answerContent, setAnswerContent] = useState('')
   const [isTranslated, setIsTranslated] = useState(false)
 
-  const [createFlag] = useMutation(CREATE_FLAG)
+  const [createFlag] = useMutation(CREATE_FLAG, { refetchQueries: ['getNode'] })
   const [removeFlag] = useMutation(REMOVE_FLAG)
   const [incrementViewsCounter] = useMutation(INCREMENT_VIEWS_COUNTER)
 
