@@ -15,7 +15,6 @@ module.exports = {
       }
 
       if (type === 'certified') {
-        let certified = ''
         const node = await ctx.prisma.query.zNode(
           {
             where: { id: nodeId }
@@ -29,7 +28,7 @@ module.exports = {
         )
         await ctx.prisma.mutation.updateAnswer({
           where: { id: node.answer.id },
-          data: { certified }
+          data: { certified: '' }
         })
       }
 
