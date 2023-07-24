@@ -11,28 +11,28 @@ import { listToSynonyms, reducer, serializeTags, synonymsToList } from './helper
 import { UPDATE_CONFIGURATION } from './queries'
 import { General, Integrations, Specialists, Synonyms, Tags } from './scenes'
 
-const initState = (conf) => ({
-  ...conf,
-  synonyms: synonymsToList(conf?.algoliaSynonyms),
-  authorizedDomains: conf?.authorizedDomains?.join(', '),
-  bugReporting: conf?.bugReporting || 'GITHUB',
+const initState = (configuration) => ({
+  ...configuration,
+  synonyms: synonymsToList(configuration.algoliaSynonyms),
+  authorizedDomains: configuration.authorizedDomains?.join(', '),
+  bugReporting: configuration?.bugReporting || 'GITHUB',
 })
 
-const Settings = ({ configuration: conf }) => {
+const Settings = () => {
   const intl = getIntl(Settings)
 
   const { isAdmin, isSpecialist } = useAuth()
 
   const configuration = useConfiguration()
 
-  const [state, dispatch] = useReducer(reducer, initState(conf))
+  const [state, dispatch] = useReducer(reducer, initState(configuration))
 
   useEffect(() => {
     dispatch({
       type: 'reset',
-      data: initState(conf),
+      data: initState(configuration),
     })
-  }, [conf])
+  }, [configuration])
 
   const [onSave, { loading }] = useMutation(UPDATE_CONFIGURATION, {
     variables: {
@@ -41,7 +41,7 @@ const Settings = ({ configuration: conf }) => {
       algoliaSynonyms: listToSynonyms(state.synonyms),
       workplaceSharing: state.workplaceSharing,
       authorizedDomains: state.authorizedDomains
-        .split(',')
+        ?.split(',')
         .map((x) => x.trim())
         .filter((x) => x),
       bugReporting: state.bugReporting,
