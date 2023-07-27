@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import { Error, Loading } from 'components'
+import { Loading } from 'components'
 import { useState } from 'react'
 import { Navigate, Route, Routes, useParams } from 'react-router'
 
@@ -11,7 +11,7 @@ import Read from './scenes/Read/Read'
 const QuestionContainer = () => {
   const params = useParams()
   const [zNode, setZNode] = useState(null)
-  const { loading, error } = useQuery(GET_NODE, {
+  const { loading } = useQuery(GET_NODE, {
     variables: { id: params.slug.split('-').pop() },
     skip: !params.slug,
     onCompleted(data) {
@@ -20,8 +20,6 @@ const QuestionContainer = () => {
   })
 
   if (loading) return <Loading />
-
-  if (error) return <Error />
 
   return (
     <Routes>
