@@ -174,7 +174,7 @@ const createZNodeParams = (tagId, userId) => {
         create: {
           title: 'Ceci est une question',
           language: 'fr',
-          slug: 'slug.Ceci est une question',
+          slug: 'ceci-est-une-question',
           translation: {
             create: {
               language: 'en',
@@ -230,7 +230,7 @@ const createZNodeWithoutAnswerParams = (tagId, userId) => {
         create: {
           title: 'Ceci est une question',
           language: 'fr',
-          slug: 'slug.Ceci est une question',
+          slug: 'ceci-est-une-question',
           translation: {
             create: {
               language: 'en',
@@ -269,7 +269,7 @@ const createZNodeWithoutTranslation = (tagId, userId) => {
         create: {
           title: 'Ceci est une question',
           language: '',
-          slug: 'slug.Ceci est une question',
+          slug: 'ceci-est-une-question',
           translation: {},
           user: {
             connect: {
@@ -315,7 +315,7 @@ const createTempZnode = (tagId, userId) => {
         create: {
           title: 'Ceci est une question',
           language: 'fr',
-          slug: 'slug.Ceci est une question',
+          slug: 'ceci-est-une-question',
           translation: {
             create: {
               language: 'en',
@@ -412,7 +412,7 @@ const createQuestionAndAnswerWithoutTranslation = async (prisma, tagId, user) =>
   await algolia.addNode({ prisma }, zNode.id)
 }
 
-const setUser = async (page, { admin = false, specialties = [] } = {}) => {
+async function setUser(page, { admin = false, specialties = [], ...rest } = {}) {
   await page.addInitScript(
     user => {
       window.localStorage.setItem('user', JSON.stringify({ name: 'Test', ...user }))
@@ -421,7 +421,7 @@ const setUser = async (page, { admin = false, specialties = [] } = {}) => {
         JSON.stringify({ expiresAt: new Date().getTime() + 3600 * 1000, expiresIn: 3600 })
       )
     },
-    { admin, specialties }
+    { admin, specialties, ...rest }
   )
 }
 
@@ -460,7 +460,7 @@ test.beforeAll(async ({ playwright }) => {
   })
   config = await upsertConfigMutation(apiContext)
   prisma._meta = { ...prisma._meta, configuration: config.upsertConfiguration }
-  ;({ tag, tagEdit } = await tagsQuery(apiContext))
+    ; ({ tag, tagEdit } = await tagsQuery(apiContext))
 })
 
 test.beforeEach(async () => {
@@ -470,7 +470,7 @@ test.beforeEach(async () => {
 })
 
 test('Shoud be able to create a question', async ({ page }) => {
-  await setUser(page)
+  await setUser(page, { id: user })
   await page.goto('/')
   await page
     .locator('button', { hasText: 'Nouvelle question' })
@@ -488,7 +488,7 @@ test('Shoud be able to create a question', async ({ page }) => {
 })
 
 test('Should be able to create a question and answer it', async ({ page }) => {
-  await setUser(page)
+  await setUser(page, { id: user })
   await page.goto('/')
   await page
     .locator('button', { hasText: 'Nouvelle question' })
@@ -511,7 +511,7 @@ test('Should be able to create a question and answer it', async ({ page }) => {
 })
 
 test('Should return a search result', async ({ page }) => {
-  await setUser(page)
+  await setUser(page, { id: user })
   await createQuestionAndAnswer(prisma, tag.id, user)
   await page.goto('/')
   await page.locator("input:near(:text('search'))").click()
@@ -524,7 +524,7 @@ test('Should return a search result', async ({ page }) => {
 })
 
 test('Should not return results', async ({ page }) => {
-  await setUser(page)
+  await setUser(page, { id: user })
   await page.goto('/')
   await page.locator("input:near(:text('search'))").click()
   await page.locator("input:near(:text('search'))").fill('test')
@@ -532,7 +532,7 @@ test('Should not return results', async ({ page }) => {
 })
 
 test('Should be able to flag a question', async ({ page }) => {
-  await setUser(page)
+  await setUser(page, { id: user })
   await createQuestionAndAnswer(prisma, tag.id, user)
   await page.goto('/')
   await page.waitForTimeout(2000)
@@ -550,7 +550,7 @@ test('Should be able to flag a question', async ({ page }) => {
 })
 
 test('Should be able to add a tag to a question', async ({ page }) => {
-  await setUser(page)
+  await setUser(page, { id: user })
   await createQuestionAndAnswer(prisma, tag.id, user)
   await page.goto('/')
   await page.locator("input:near(:text('search'))").click()
@@ -571,7 +571,7 @@ test('Should be able to add a tag to a question', async ({ page }) => {
 })
 
 test('Should be able to modify an answer for an already answered question', async ({ page }) => {
-  await setUser(page)
+  await setUser(page, { id: user })
   await createQuestionAndAnswer(prisma, tag.id, user)
   await page.goto('/')
   await page.locator("input:near(:text('search'))").click()
@@ -592,7 +592,7 @@ test('Should be able to modify an answer for an already answered question', asyn
 })
 
 test('Should be able to answer a question that has no answer', async ({ page }) => {
-  await setUser(page)
+  await setUser(page, { id: user })
   await createQuestion(prisma, tag.id, user)
   await page.goto('/')
   await expect(page.getByText('Pas encore de réponse...')).toBeVisible()
@@ -607,7 +607,7 @@ test('Should be able to answer a question that has no answer', async ({ page }) 
 })
 
 test('Should be able to search by text and tag', async ({ page }) => {
-  await setUser(page)
+  await setUser(page, { id: user })
   await createQuestionAndAnswer(prisma, tag.id, user)
   await page.goto('/')
   await page.waitForTimeout(1000)
@@ -630,8 +630,8 @@ test('Should be able to search by text and tag', async ({ page }) => {
   await expect(page.getByText('Ceci est une réponse différente', { exact: true })).toBeVisible()
 })
 
-test('Should see the "marketing" specialty on profile page', async ({ page }) => {
-  await setUser(page)
+test('Should see the "marketing" specialty on a profile page', async ({ page }) => {
+  await setUser(page, { id: user })
   await page.goto('/')
   await page.getByRole('img', { name: 'avatar' }).hover()
   await page
@@ -642,7 +642,7 @@ test('Should see the "marketing" specialty on profile page', async ({ page }) =>
 })
 
 test('Should not be able to add a certified flag to an unanswered question', async ({ page }) => {
-  await setUser(page)
+  await setUser(page, { id: user })
   await page.goto('/')
   await page
     .locator('button', { hasText: 'Nouvelle question' })
@@ -661,7 +661,7 @@ test('Should not be able to add a certified flag to an unanswered question', asy
 })
 
 test('Should be able to add a certified flag to a question of my specialty', async ({ page }) => {
-  await setUser(page)
+  await setUser(page, { id: user })
   await page.goto('/')
   await page
     .locator('button', { hasText: 'Nouvelle question' })
@@ -696,7 +696,7 @@ test('Should be able to add a certified flag to a question of my specialty', asy
 test('Should not be able to add a certified flag to a question not in my specialty', async ({
   page
 }) => {
-  await setUser(page)
+  await setUser(page, { id: user })
   await page.goto('/')
   await page
     .locator('button', { hasText: 'Nouvelle question' })
@@ -719,7 +719,7 @@ test('Should not be able to add a certified flag to a question not in my special
 })
 
 test('Should remove the certified flag after modifying an answer', async ({ page }) => {
-  await setUser(page)
+  await setUser(page, { id: user })
   await createQuestionWithFlag(prisma, tag.id, tempUser)
   await page.goto('/')
   const openCard = page.getByRole('link', { name: 'keyboard_arrow_right' }).first()
@@ -743,7 +743,7 @@ test('Should remove the certified flag after modifying an answer', async ({ page
 })
 
 test('Should remove the certified flag when the corresponding tag is deleted', async ({ page }) => {
-  await setUser(page)
+  await setUser(page, { id: user })
   await createQuestionWithFlag(prisma, tag.id, tempUser)
   await page.goto('/')
   const openCard = page.getByRole('link', { name: 'keyboard_arrow_right' }).first()
@@ -765,7 +765,7 @@ test('Should remove the certified flag when the corresponding tag is deleted', a
 })
 
 test('Should be able to add a specialty to a user', async ({ page }) => {
-  await setUser(page, { admin: true })
+  await setUser(page, { admin: true, id: user })
   await page.goto('/')
   await page.getByRole('img', { name: 'avatar' }).hover()
   await page
@@ -789,7 +789,7 @@ test('Should be able to add a specialty to a user', async ({ page }) => {
 })
 
 test("Should be able to remove a user's specialty", async ({ page }) => {
-  await setUser(page, { admin: true })
+  await setUser(page, { admin: true, id: user })
   await page.goto('/')
   await page.getByRole('img', { name: 'avatar' }).hover()
   await page
@@ -814,7 +814,7 @@ test("Should be able to remove a user's specialty", async ({ page }) => {
 })
 
 test('Should be able to translate the question and answer', async ({ page }) => {
-  await setUser(page)
+  await setUser(page, { id: user })
   await createQuestionAndAnswer(prisma, tag.id, user)
   await page.goto('/')
   const openCard = page.getByRole('link', { name: 'keyboard_arrow_right' }).first()
@@ -834,7 +834,7 @@ test('Should be able to translate the question and answer', async ({ page }) => 
 test('Should modify the content of the translation when the question and answer are modified', async ({
   page
 }) => {
-  await setUser(page)
+  await setUser(page, { id: user })
   await createQuestionAndAnswerWithoutTranslation(prisma, tag.id, user)
   await page.goto('/')
   const openCard = page.getByRole('link', { name: 'keyboard_arrow_right' }).first()
@@ -874,7 +874,7 @@ test('Should modify the content of the translation when the question and answer 
 })
 
 test('Should be able, as a specialist, to give my specialty to other users', async ({ page }) => {
-  await setUser(page, { specialties: [{ name: 'marketing' }] })
+  await setUser(page, { specialties: [{ name: 'marketing' }], id: user })
   await page.goto('/')
   await page.getByRole('img', { name: 'avatar' }).hover()
   await page

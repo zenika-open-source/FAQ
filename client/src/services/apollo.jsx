@@ -1,16 +1,16 @@
 import {
   ApolloClient,
-  ApolloProvider,
-  InMemoryCache,
-  HttpLink,
   ApolloLink,
+  ApolloProvider,
+  HttpLink,
+  InMemoryCache,
   useQuery,
 } from '@apollo/client'
-import { onError } from '@apollo/client/link/error'
 import { setContext } from '@apollo/client/link/context'
+import { onError } from '@apollo/client/link/error'
 
-import routing from './routing'
 import { LocalStorageWrapper, persistCache } from 'apollo3-cache-persist'
+import routing from './routing'
 
 const apolloCache = new InMemoryCache()
 
@@ -30,7 +30,10 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 })
 
 const authLink = setContext((_, { headers }) => {
-  const token = localStorage.accessToken || null
+  let token = localStorage.accessToken || null
+  if (import.meta.env.VITE_DISABLE_AUTH === 'true' && localStorage.user) {
+    token = JSON.parse(localStorage.user).id
+  }
   return {
     headers: {
       ...headers,
@@ -92,4 +95,4 @@ const ApolloWrapper = ({ children }) => {
 }
 
 export default ApolloWrapper
-export { query, apolloCache }
+export { apolloCache, query }

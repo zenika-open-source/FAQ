@@ -3,15 +3,16 @@ const { refreshFirstUserFlag } = require('../middlewares/first-user')
 
 module.exports = {
   Query: {
-    me: (_, args, ctx, info) =>
-      ctx.prisma.query.user(
+    me: (_, args, ctx, info) => {
+      return ctx.prisma.query.user(
         {
           where: {
             id: ctxUser(ctx) ? ctxUser(ctx).id : ''
           }
         },
         info
-      ),
+      )
+    },
     users: (_, args, ctx, info) => ctx.prisma.query.users({}, info)
   },
   Mutation: {
@@ -24,7 +25,6 @@ module.exports = {
         throw new Error(err.message)
       }
       const auth0Id = userToken.sub.split('|')[1]
-
       const user = await ctx.prisma.mutation.upsertUser(
         {
           where: { auth0Id },
