@@ -73,6 +73,7 @@ const Answer = ({ zNode }) => {
       previousContent: state.initialAnswer,
       sources: JSON.stringify(keyValuePairsToSources(state.sources)),
     },
+    refetchQueries: ['getNode'],
     onCompleted() {
       setState((state) => ({ ...state, slug: zNode.question.slug + '-' + zNode.id }))
       alert.pushSuccess(intl('alert.edit_success'))
