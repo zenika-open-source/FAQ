@@ -68,6 +68,7 @@ const Edit = ({ zNode = null }) => {
       previousTitle: state.initialQuestion,
       tags: state.tags.map((tag) => tag.id),
     },
+    refetchQueries: ['getNode'],
     onCompleted(data) {
       setState((state) => ({
         ...state,

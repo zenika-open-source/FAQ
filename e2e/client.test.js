@@ -6,19 +6,28 @@ const execSync = require('child_process').execSync
 require('../server/scripts/algolia_settings/index')
 
 const createUser = /* GraphQL */ `
-  mutation CreateUser {
+  mutation CreateUser($tagEditId: ID!) {
     createUser(
-      data: { key: "playwrightTest", name: "playwrightTest", email: "faq-user-no-auth@zenika.com" }
+      data: { key: "playwrightTest", name: "playwrightTest", email: "faq-user-no-auth@zenika.com", picture:
+        "https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg",
+      specialties: {
+        connect: {
+          id: $tagEditId
+        }
+      } }
     ) {
       id
     }
   }
 `
 
-const createUserMutation = async apiContext => {
+const createUserMutation = async (apiContext, tagEditId) => {
   const res = await apiContext.post('/', {
     data: {
-      query: createUser
+      query: createUser,
+      variables: {
+        tagEditId: tagEditId
+      }
     }
   })
   const results = await res.json()
@@ -465,7 +474,7 @@ test.beforeAll(async ({ playwright }) => {
 
 test.beforeEach(async () => {
   await emptyDb(apiContext, deleteCommands)
-  user = await createUserMutation(apiContext)
+  user = await createUserMutation(apiContext, tagEdit.id)
   tempUser = await createTempUserMutation(prisma, tag.id)
 })
 
@@ -725,7 +734,7 @@ test('Should remove the certified flag after modifying an answer', async ({ page
   const openCard = page.getByRole('link', { name: 'keyboard_arrow_right' }).first()
   await openCard.waitFor('visible')
   await openCard.click()
-  await expect(page.getByText('verifiedCertifiée')).toBeVisible()
+  await expect(page.getByText('verifiedCertifiée le ', { exact: false })).toBeVisible()
   await page.getByRole('button', { name: 'Modifier' }).hover()
   page.on('dialog', dialog => dialog.accept())
   await page
@@ -736,10 +745,11 @@ test('Should remove the certified flag after modifying an answer', async ({ page
   await page.locator('textarea').fill('Ceci est une réponse différente')
   await page.locator('button', { hasText: 'Enregistrer la réponse' }).click()
   await page.waitForTimeout(1000)
+  await page.pause()
   await expect(page.locator("p:near(:text('Réponse certifiée'))")).toHaveText(
     'Ceci est une réponse'
   )
-  await expect(page.getByText('verifiedCertifiée')).toBeHidden()
+  await expect(page.getByText('verifiedCertifiée le')).toBeHidden()
 })
 
 test('Should remove the certified flag when the corresponding tag is deleted', async ({ page }) => {
@@ -749,7 +759,7 @@ test('Should remove the certified flag when the corresponding tag is deleted', a
   const openCard = page.getByRole('link', { name: 'keyboard_arrow_right' }).first()
   await openCard.waitFor('visible')
   await openCard.click()
-  await expect(page.getByText('verifiedCertifiée')).toBeVisible()
+  await expect(page.getByText('verifiedCertifiée le ', { exact: false })).toBeVisible()
   await page.getByRole('button', { name: 'Modifier' }).hover()
   await page
     .locator('a')
@@ -761,7 +771,7 @@ test('Should remove the certified flag when the corresponding tag is deleted', a
     .click()
   await page.locator('button', { hasText: 'Enregistrer la question' }).click()
   await page.waitForTimeout(1000)
-  await expect(page.getByText('verifiedCertifiée')).toBeHidden()
+  await expect(page.getByText('verifiedCertifiée le ', { exact: false })).toBeHidden()
 })
 
 test('Should be able to add a specialty to a user', async ({ page }) => {
@@ -797,7 +807,7 @@ test("Should be able to remove a user's specialty", async ({ page }) => {
     .filter({ hasText: 'Paramètres' })
     .click()
   await page.getByText('Spécialistes').click()
-  const userLocator = page.locator('.userElement', { hasText: 'enableSkipAuth' })
+  const userLocator = page.locator('.userElement', { hasText: 'playwrightTest' })
   const userSpecialty = userLocator.locator('.userSpecialties').locator('.userSpecialty')
   await expect(userSpecialty.first().locator('span')).toHaveText('marketing')
   await userSpecialty
