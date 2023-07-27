@@ -745,7 +745,6 @@ test('Should remove the certified flag after modifying an answer', async ({ page
   await page.locator('textarea').fill('Ceci est une réponse différente')
   await page.locator('button', { hasText: 'Enregistrer la réponse' }).click()
   await page.waitForTimeout(1000)
-  await page.pause()
   await expect(page.locator("p:near(:text('Réponse certifiée'))")).toHaveText(
     'Ceci est une réponse'
   )
