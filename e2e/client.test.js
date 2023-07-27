@@ -8,13 +8,13 @@ require('../server/scripts/algolia_settings/index')
 const createUser = /* GraphQL */ `
   mutation CreateUser($tagEditId: ID!) {
     createUser(
-      data: { key: "playwrightTest", name: "playwrightTest", email: "faq-user-no-auth@zenika.com", picture:
-        "https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg",
-      specialties: {
-        connect: {
-          id: $tagEditId
-        }
-      } }
+      data: {
+        key: "playwrightTest"
+        name: "playwrightTest"
+        email: "faq-user-no-auth@zenika.com"
+        picture: "https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg"
+        specialties: { connect: { id: $tagEditId } }
+      }
     ) {
       id
     }
@@ -469,7 +469,7 @@ test.beforeAll(async ({ playwright }) => {
   })
   config = await upsertConfigMutation(apiContext)
   prisma._meta = { ...prisma._meta, configuration: config.upsertConfiguration }
-    ; ({ tag, tagEdit } = await tagsQuery(apiContext))
+  ;({ tag, tagEdit } = await tagsQuery(apiContext))
 })
 
 test.beforeEach(async () => {
