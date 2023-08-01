@@ -27,9 +27,9 @@ class Result extends Component {
     const { collapsed } = this.state
 
     return (
-      <Card className="result">
-        <CardTitle onClick={() => this.setState({ collapsed: !collapsed })}>
-          <div className="grow">
+      <Card>
+        <CardTitle className="pr-16" onClick={() => this.setState({ collapsed: !collapsed })}>
+          <div className="flex-grow">
             {!node.highlights ? (
               <h1>{markdown.title(node.question.title)}</h1>
             ) : (
@@ -47,9 +47,9 @@ class Result extends Component {
               pathname: `/q/${node.question.slug}-${node.id}`,
               state: { from: 'home' },
             }}
-            className="open-card"
+            className="absolute top-0 right-0 h-full w-12 border-l border-l-secondary flex items-center justify-center rounded-r-sm hover:bg-primary hover:text-primary-font"
           >
-            <i className="material-icons">keyboard_arrow_right</i>
+            <i className="material-icons text-[2rem]">keyboard_arrow_right</i>
           </Link>
         </CardTitle>
         <CardText collapsed={collapsed}>
@@ -60,7 +60,7 @@ class Result extends Component {
                 : node.answer.content,
             )
           ) : (
-            <p style={{ textAlign: 'center' }}>
+            <p className="text-center">
               <i>{intl('no_answer')}</i>
             </p>
           )}

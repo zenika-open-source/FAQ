@@ -8,15 +8,8 @@ const NoResults = ({ prefill }) => {
   const intl = getIntl(NoResults)
 
   return (
-    <div style={{ textAlign: 'center', marginTop: '4rem' }}>
-      <div
-        className="indication"
-        style={{
-          marginBottom: '2rem',
-          display: 'inline-flex',
-          alignItems: 'center',
-        }}
-      >
+    <div className="text-center mt-16">
+      <div className="mb-8 inline-flex items-center">
         {intl('nothing')} &nbsp;
         <i className="material-icons">sms_failed</i>
       </div>
