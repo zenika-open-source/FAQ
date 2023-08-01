@@ -1,9 +1,13 @@
 import PropTypes from 'prop-types'
+import cn from 'classnames'
 
-const CardTitle = ({ children, style, onClick, ...otherProps }) => (
+const CardTitle = ({ children, className, onClick, ...otherProps }) => (
   <div
-    className="card-item card-title"
-    style={{ ...style, cursor: onClick ? 'pointer' : 'initial' }}
+    className={cn(
+      'bg-secondary-light text-secondary-font p-[0.7rem] relative flex items-center break-words shadow-[0px_3px_4px] shadow-secondary',
+      className,
+    )}
+    style={{ cursor: onClick ? 'pointer' : 'initial' }}
     onClick={onClick}
     {...otherProps}
   >

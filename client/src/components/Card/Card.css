@@ -1,9 +1,9 @@
-.card {
+/* .card {
   width: 100%;
   border: 1px solid var(--secondary-color);
   border-radius: 2px;
   position: relative;
-}
+} */
 
 .card + .card {
   margin-top: 1rem;
@@ -29,20 +29,6 @@
   display: flex;
   align-items: center;
   word-break: break-word;
-}
-
-.card .card-text.collapsed {
-  height: 0;
-  padding: 0;
-  overflow: hidden;
-}
-
-.card .card-text a:not(.btn-container) {
-  text-decoration: underline;
-}
-
-.card .card-text img {
-  max-width: 100%;
 }
 
 .card .card-actions {

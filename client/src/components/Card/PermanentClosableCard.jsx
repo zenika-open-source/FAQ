@@ -29,15 +29,7 @@ class PermanentClosableCard extends Component {
       <>
         {open && (
           <Card {...otherProps}>
-            <span
-              style={{
-                position: 'absolute',
-                top: '0.3rem',
-                right: '0.3rem',
-                cursor: 'pointer',
-              }}
-              onClick={close}
-            >
+            <span className="absolute top-2 right-2 cursor-pointer" onClick={close}>
               <i className="material-icons">close</i>
             </span>
             {children}
