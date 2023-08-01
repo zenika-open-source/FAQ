@@ -4,32 +4,34 @@ import Button from '../Button'
 
 import Pagination from './Pagination'
 
-import './Pagination.css'
+const renderPage = ({ index, isCurrent, onClick }) => {
+  return (
+    <Button
+      key={index}
+      label={index}
+      active={isCurrent}
+      intent={isCurrent ? 'primary' : 'link'}
+      action="raised"
+      size="pagination"
+      onClick={onClick}
+    />
+  )
+}
 
-const renderPage = ({ index, isCurrent, onClick }) => (
-  <Button
-    key={index}
-    label={index}
-    link={!isCurrent}
-    primary={isCurrent}
-    active={isCurrent}
-    raised
-    onClick={onClick}
-  />
-)
+const renderEllipsis = ({ key }) => <Button key={key} label="⋯" action="disabled" />
 
-const renderEllipsis = ({ key }) => <Button key={key} label="⋯" disabled />
-
-const renderNav = ({ type, disabled, onClick }) => (
-  <Button
-    key={type}
-    icon={type === 'previous' ? 'chevron_left' : 'chevron_right'}
-    disabled={disabled}
-    raised
-    link
-    onClick={onClick}
-  />
-)
+const renderNav = ({ type, disabled, onClick }) => {
+  return (
+    <Button
+      key={type}
+      icon={type === 'previous' ? 'chevron_left' : 'chevron_right'}
+      intent="link"
+      size="pagination"
+      action={disabled ? 'disabled' : 'raised'}
+      onClick={onClick}
+    />
+  )
+}
 
 const DefaultPagination = ({ nbPages, current, onPageSelected }) => (
   <Pagination
@@ -39,7 +41,7 @@ const DefaultPagination = ({ nbPages, current, onPageSelected }) => (
     renderPage={renderPage}
     renderEllipsis={renderEllipsis}
     renderNav={renderNav}
-    className="pagination"
+    className="flex justify-center gap-x-2"
   />
 )
 
