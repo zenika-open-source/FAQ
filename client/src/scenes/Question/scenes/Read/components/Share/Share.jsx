@@ -18,15 +18,11 @@ const Share = ({ node }) => {
 
   return (
     <div className="share">
-      <Dropdown button={<Button icon="share" link style={{ padding: '0.2rem' }} />}>
+      <Dropdown button={<Button icon="share" intent="link" size="small" />}>
         {conf.workplaceSharing ? (
           <DropdownItem
             icon={
-              <img
-                src="/img/brands/workplace.png"
-                alt="workplace logo"
-                style={{ height: '20px', width: '20px', margin: '0 2px' }}
-              />
+              <img src="/img/brands/workplace.png" alt="workplace logo" className="h-5 w-5 mx-1" />
             }
             onClick={() => {
               let url =

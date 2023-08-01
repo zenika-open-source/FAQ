@@ -39,8 +39,8 @@ const TagPicker = ({ label, icon, tags, onChange }) => {
       <div className="picker-wrapper">
         <Button
           icon={icon || 'add'}
-          link
-          style={{ padding: 0 }}
+          intent="link"
+          className="px-0 py-0"
           onClick={() => setOpened((op) => !op)}
         />
         <div ref={ref} className="picker" style={{ display: opened ? 'flex' : 'none' }}>
