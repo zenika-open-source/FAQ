@@ -3,11 +3,11 @@ import { useState } from 'react'
 
 import { alert, getIntl } from 'services'
 
-import { Button, Checkbox, Input, Tab } from 'components'
+import { Button, Input, Tab } from 'components'
 
 import { REGENERATE_SLACK_COMMAND_KEY } from '../queries'
 
-const Integrations = ({ state, dispatch, loading }) => {
+const Integrations = ({ state, dispatch }) => {
   const intl = getIntl(Integrations)
 
   const [slackHookLoading, setSlackHookLoading] = useState(false)
@@ -30,20 +30,6 @@ const Integrations = ({ state, dispatch, loading }) => {
   return (
     <Tab label={intl('tab')}>
       <h2>{intl('workplace.title')}</h2>
-      <br />
-      <div style={{ marginLeft: '1rem' }}>
-        <Checkbox
-          label={intl('workplace.label')}
-          checked={state.workplaceSharing}
-          onChange={(e) =>
-            dispatch({
-              type: 'toggle_workplace',
-              data: e.target.checked,
-            })
-          }
-          disabled={loading}
-        />
-      </div>
       <br />
       <hr />
       <h2>{intl('slack.title')}</h2>
