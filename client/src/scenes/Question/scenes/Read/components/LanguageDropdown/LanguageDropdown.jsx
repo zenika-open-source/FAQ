@@ -6,20 +6,13 @@ import Dropdown, { DropdownItem } from 'components/Dropdown'
 
 import Button from 'components/Button'
 
-const LanguageDropdown = ({
-  onLanguageChanged = () => {},
-  primary = false,
-  link = true,
-  originalLanguage,
-}) => {
+const LanguageDropdown = ({ onLanguageChanged = () => {}, primary = false, originalLanguage }) => {
   const intl = getIntl(LanguageDropdown)
 
   return (
     <div className="translate">
       <Dropdown
-        button={
-          <Button icon="translate" primary={primary} link={link} style={{ padding: '0.2rem' }} />
-        }
+        button={<Button icon="translate" intent={primary ? 'primary' : 'link'} size="small" />}
       >
         <DropdownItem onClick={() => onLanguageChanged('fr')}>
           {intl('french')} {originalLanguage === 'fr' && '(original)'}
@@ -35,7 +28,6 @@ const LanguageDropdown = ({
 LanguageDropdown.propTypes = {
   onLanguageChanged: PropTypes.func,
   primary: PropTypes.bool,
-  link: PropTypes.bool,
   originalLanguage: PropTypes.string,
 }
 

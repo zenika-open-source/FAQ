@@ -17,13 +17,20 @@ const ActionMenu = ({ backLabel, backLink, goBack, title, children }) => {
           <Button
             icon="chevron_left"
             label={backLabel || intl('back')}
-            link
-            raised
+            intent="link"
+            action="raised"
+            size="medium"
             onClick={() => navigate(-1)}
           />
         ) : (
           <Link to={backLink}>
-            <Button icon="chevron_left" label={backLabel || intl('back')} link raised />
+            <Button
+              icon="chevron_left"
+              label={backLabel || intl('back')}
+              intent="link"
+              action="raised"
+              size="medium"
+            />
           </Link>
         )}
       </div>

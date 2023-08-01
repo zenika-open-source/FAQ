@@ -42,7 +42,11 @@ const FlagsDropdown = ({ zNode, onSelect, onRemove }) => {
     )
   })
 
-  return <Dropdown button={<Button icon="flag" label={intl('button')} link />}>{items}</Dropdown>
+  return (
+    <Dropdown button={<Button icon="flag" label={intl('button')} intent="link" size="medium" />}>
+      {items}
+    </Dropdown>
+  )
 }
 
 FlagsDropdown.propTypes = {
