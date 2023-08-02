@@ -10,10 +10,10 @@ const Tabs = ({ children, className, ...rest }) => {
   const [tabs, setTabs] = useState([])
 
   const register = useMemo(
-    () => tab => {
-      setTabs(tabs => [...tabs, tab])
+    () => (tab) => {
+      setTabs((tabs) => [...tabs, tab])
     },
-    [setTabs]
+    [setTabs],
   )
 
   const active = current || tabs[0]
@@ -25,7 +25,7 @@ const Tabs = ({ children, className, ...rest }) => {
       <div className={cn('tabs', className)}>
         <div className="tabs-list">
           <ul>
-            {tabs.map(label => (
+            {tabs.map((label) => (
               <li
                 key={label}
                 onClick={() => setCurrent(label)}

@@ -1,4 +1,4 @@
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 import { zNodeFragment } from '../../queries'
 
@@ -31,7 +31,7 @@ export const SUBMIT_ANSWER = gql`
 `
 
 export const EDIT_ANSWER = gql`
-  mutation($id: ID!, $content: String!, $previousContent: String!, $sources: String!) {
+  mutation ($id: ID!, $content: String!, $previousContent: String!, $sources: String!) {
     updateAnswerAndSources(
       id: $id
       content: $content

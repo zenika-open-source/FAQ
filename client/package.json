@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@apollo/client": "^3.7.15",
+    "@apollo/client": "^3.7.17",
+    "@uiw/react-md-editor": "^3.23.3",
     "algoliasearch": "^3.35.1",
     "apollo3-cache-persist": "^0.14.1",
     "auth0-js": "^9.12.1",
@@ -11,19 +12,16 @@
     "classnames": "^2.2.5",
     "copy-to-clipboard": "^3.2.0",
     "date-fns": "^2.30.0",
-    "eslint-config-react-app": "^7.0.1",
     "graphql": "^14.7.0",
-    "graphql-tag": "^2.8.0",
     "lodash": "^4.17.15",
-    "normalize.css": "^8.0.0",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
+    "modern-normalize": "^2.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-helmet": "^6.0.0-beta",
-    "react-mde": "^7.9.0",
+    "react-markdown": "^8.0.7",
     "react-onclickoutside": "^6.9.0",
-    "react-pluralize": "^1.6.3",
-    "react-router": "^4.2.0",
-    "react-router-dom": "^4.2.2",
+    "react-router": "^6.14.1",
+    "react-router-dom": "^6.14.1",
     "showdown": "^1.9.1",
     "showdown-xss-filter": "^0.2.0",
     "subscriptions-transport-ws": "^0.9.16",
@@ -38,23 +36,33 @@
     "prettier:write": "npm run prettier -- --write",
     "prettier:check": "npm run prettier -- --check"
   },
+  "lint-staged": {
+    "./src/**/*.{js,jsx}": [
+      "npm run lint",
+      "npm run prettier"
+    ]
+  },
   "husky": {
     "hooks": {
-      "pre-commit": "pretty-quick --staged"
+      "pre-commit": "lint-staged"
     }
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.22.9",
+    "@babel/preset-react": "^7.22.5",
     "@vitejs/plugin-react": "^4.0.0",
     "dotenv": "^5.0.0",
     "dotenv-cli": "^1.4.0",
-    "eslint-config-prettier": "^4.3.0",
+    "eslint": "^8.42.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-config-react-app": "^7.0.1",
     "eslint-config-standard": "^12.0.0",
-    "eslint-plugin-node": "^7.0.1",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.32.2",
     "husky": "^3.1.0",
-    "prettier": "^1.19.1",
-    "pretty-quick": "^1.11.1",
+    "lint-staged": "^13.2.3",
+    "prettier": "^3.0.0",
     "sass": "^1.52.3",
     "vite": "^4.1.4"
   },

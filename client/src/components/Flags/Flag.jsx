@@ -1,4 +1,3 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 import capitalize from 'lodash/capitalize'
 import cn from 'classnames'
@@ -9,24 +8,24 @@ import { format } from 'date-fns'
 const flagMeta = {
   duplicate: {
     icon: 'filter_2',
-    color: '#AF1E3A'
+    color: '#AF1E3A',
   },
   outdated: {
     icon: 'history',
-    color: '#586069'
+    color: '#586069',
   },
   incomplete: {
     icon: 'report',
-    color: '#BC5820'
+    color: '#BC5820',
   },
   unanswered: {
     icon: 'help_outline',
-    color: '#157B5F'
+    color: '#157B5F',
   },
   certified: {
     icon: 'verified',
-    color: '#caac00'
-  }
+    color: '#caac00',
+  },
 }
 
 const Flag = ({ flag, withlabel, style, ...otherProps }) => {
@@ -35,7 +34,7 @@ const Flag = ({ flag, withlabel, style, ...otherProps }) => {
   return (
     <div
       className={cn('flag', {
-        'with-label': withlabel
+        'with-label': withlabel,
       })}
       style={{ backgroundColor: flagMeta[flag.type].color, ...style }}
       {...otherProps}
@@ -58,7 +57,7 @@ const Flag = ({ flag, withlabel, style, ...otherProps }) => {
 Flag.propTypes = {
   flag: PropTypes.object.isRequired,
   withlabel: PropTypes.bool,
-  style: PropTypes.object
+  style: PropTypes.object,
 }
 
 Flag.translations = {
@@ -68,7 +67,7 @@ Flag.translations = {
     incomplete: 'incomplete',
     unanswered: 'unanswered',
     certified: 'certified',
-    certifiedAdd: ' on '
+    certifiedAdd: ' on ',
   },
   fr: {
     duplicate: 'doublon',
@@ -76,8 +75,8 @@ Flag.translations = {
     incomplete: 'incomplète',
     unanswered: 'sans réponse',
     certified: 'certifiée',
-    certifiedAdd: ' le '
-  }
+    certifiedAdd: ' le ',
+  },
 }
 
 export default Flag

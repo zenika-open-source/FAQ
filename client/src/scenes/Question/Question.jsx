@@ -1,31 +1,29 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { Switch, Route, Redirect } from 'react-router-dom'
+import { useQuery } from '@apollo/client'
+import { Loading } from 'components'
+import { Navigate, Route, Routes, useParams } from 'react-router'
 
-import { withNode } from './Question.container'
+import { GET_NODE } from './queries'
+import Answer from './scenes/Answer/Answer'
+import Edit from './scenes/Edit/Edit'
+import Read from './scenes/Read/Read'
 
-import Edit from './scenes/Edit'
-import Read from './scenes/Read'
-import Answer from './scenes/Answer'
-import Random from './scenes/Random'
+const Question = () => {
+  const params = useParams()
+  const { data, loading } = useQuery(GET_NODE, {
+    variables: { id: params.slug?.split('-').at(-1) },
+    skip: !params.slug,
+  })
 
-const withNodeRead = withNode(Read)
-const withNodeEdit = withNode(Edit)
-const withNodeAnswer = withNode(Answer)
+  if (loading) return <Loading />
 
-const Question = ({ match }) => (
-  <Switch>
-    <Route path={`${match.path}/new`} component={Edit} />
-    <Route path={`${match.path}/random/:tag?`} component={Random} />
-    <Route path={`${match.path}/:slug`} exact component={withNodeRead} />
-    <Route path={`${match.path}/:slug/edit`} component={withNodeEdit} />
-    <Route path={`${match.path}/:slug/answer`} component={withNodeAnswer} />
-    <Route render={() => <Redirect to="/" />} />
-  </Switch>
-)
-
-Question.propTypes = {
-  match: PropTypes.object.isRequired
+  return (
+    <Routes>
+      <Route path="/" element={<Read zNode={data.zNode} loading={loading} />} />
+      <Route path="/edit" element={<Edit zNode={data.zNode} loading={loading} />} />
+      <Route path="/answer" element={<Answer zNode={data.zNode} loading={loading} />} />
+      <Route path="*" element={<Navigate to="/" />} />
+    </Routes>
+  )
 }
 
 export default Question

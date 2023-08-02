@@ -1,102 +1,85 @@
-import { useApolloClient } from '@apollo/client'
-import PropTypes from 'prop-types'
-import { useState } from 'react'
-import { Prompt, Redirect } from 'react-router-dom'
-
-import { EDIT_QUESTION, SUBMIT_QUESTION } from './queries'
-
-import { alert, getIntl } from 'services'
-
-import Card, { CardText, CardActions, PermanentClosableCard } from 'components/Card'
-import { Loading, Button, Input, CtrlEnter, TagPicker } from 'components'
-
-import { ActionMenu } from '../../components'
-
-import { canSubmit } from './helpers'
-
-import Tips from './components/Tips'
-
 import './Edit.css'
 
-const Edit = ({ location, match, zNode }) => {
+import { useMutation } from '@apollo/client'
+import { Button, CtrlEnter, Input, Loading, TagPicker } from 'components'
+import Card, { CardActions, CardText, PermanentClosableCard } from 'components/Card'
+import { Prompt } from 'helpers'
+import PropTypes from 'prop-types'
+import { useState } from 'react'
+import { Navigate, useLocation, useParams } from 'react-router-dom'
+import { alert, getIntl } from 'services'
+
+import { ActionMenu } from '../../components'
+import Tips from './components/Tips'
+import { canSubmit } from './helpers'
+import { EDIT_QUESTION, SUBMIT_QUESTION } from './queries'
+
+const Edit = ({ zNode = null }) => {
+  const params = useParams()
+  const location = useLocation()
+
   const [state, setState] = useState(() => {
     const passedQuestionText = location.state ? location.state.question : ''
     const initialQuestion = zNode ? zNode.question.title : passedQuestionText
-    const initialTags = zNode ? zNode.tags.map(tag => tag.label) : []
+    const initialTags = zNode ? zNode.tags.map((tag) => tag.label) : []
 
     return {
       nodeLoaded: false,
       initialQuestion: initialQuestion,
-      isEditing: !!match.params.slug,
+      isEditing: !!params.slug,
       question: initialQuestion,
-      loadingSubmit: false,
       slug: null,
       initialTags: initialTags,
       tags: initialTags,
-      showTips: PermanentClosableCard.isOpen('tips_question')
+      showTips: PermanentClosableCard.isOpen('tips_question'),
     }
   })
 
   const intl = getIntl(Edit)
 
-  const apollo = useApolloClient()
+  const { isEditing, slug, question, tags, showTips } = state
 
-  const { isEditing, loadingSubmit, slug, question, tags, showTips } = state
-
-  const toggleTips = value => () => {
-    setState(state => ({ ...state, showTips: value }))
+  const toggleTips = (value) => () => {
+    setState((state) => ({ ...state, showTips: value }))
     PermanentClosableCard.setValue('tips_question', value)
   }
 
-  const submitQuestion = async () => {
-    try {
-      setState(state => ({ ...state, loadingSubmit: true }))
-      const { data } = await apollo.mutate({
-        mutation: SUBMIT_QUESTION,
-        variables: {
-          title: state.question,
-          tags: state.tags.map(tag => tag.id)
-        }
-      })
-      setState(state => ({
+  const [submitQuestion, { loading: loadingSubmit }] = useMutation(SUBMIT_QUESTION, {
+    variables: {
+      title: state.question,
+      tags: state.tags.map((tag) => tag.id),
+    },
+    onCompleted(data) {
+      setState((state) => ({
         ...state,
-        slug: data.createQuestionAndTags.slug + '-' + data.createQuestionAndTags.node.id
+        slug: data.createQuestionAndTags.slug + '-' + data.createQuestionAndTags.node.id,
       }))
       alert.pushSuccess(intl('alert.submit_success'))
-    } catch (error) {
+    },
+    onError(error) {
       alert.pushDefaultError(error)
-      setState(state => ({
-        ...state,
-        loadingSubmit: false
-      }))
-    }
-  }
+    },
+  })
 
-  const editQuestion = async () => {
-    try {
-      setState(state => ({ ...state, loadingSubmit: true }))
-      const { data } = await apollo.mutate({
-        mutation: EDIT_QUESTION,
-        variables: {
-          questionId: zNode.question.id,
-          title: state.question,
-          previousTitle: state.initialQuestion,
-          tags: state.tags.map(tag => tag.id)
-        }
-      })
-      setState(state => ({
+  const [editQuestion, { loading: loadingEdit }] = useMutation(EDIT_QUESTION, {
+    variables: {
+      questionId: zNode?.question.id,
+      title: state.question,
+      previousTitle: state.initialQuestion,
+      tags: state.tags.map((tag) => tag.id),
+    },
+    refetchQueries: ['getNode'],
+    onCompleted(data) {
+      setState((state) => ({
         ...state,
-        slug: data.updateQuestionAndTags.slug + '-' + zNode.id
+        slug: data.updateQuestionAndTags.slug + '-' + zNode.id,
       }))
       alert.pushSuccess(intl('alert.edit_success'))
-    } catch (error) {
+    },
+    onError(error) {
       alert.pushDefaultError(error)
-      setState(state => ({
-        ...state,
-        loadingSubmit: false
-      }))
-    }
-  }
+    },
+  })
 
   const submitForm = () => {
     if (canSubmit(state)) {
@@ -105,30 +88,30 @@ const Edit = ({ location, match, zNode }) => {
     }
   }
 
-  const onTextChange = e => {
+  const onTextChange = (e) => {
     const question = e.target.value
-    setState(state => ({ ...state, question }))
+    setState((state) => ({ ...state, question }))
   }
-  const onTagsChange = tags => setState(state => ({ ...state, tags }))
+  const onTagsChange = (tags) => setState((state) => ({ ...state, tags }))
 
   if (slug) {
-    return <Redirect to={`/q/${slug}`} />
+    return <Navigate to={`/q/${slug}`} />
   }
 
-  if (loadingSubmit) {
+  if (loadingSubmit || loadingEdit) {
     return <Loading />
   }
 
   if (isEditing && zNode === null) {
-    return <Redirect to={'/'} />
+    return <Navigate to={'/'} />
   }
 
   return (
     <div className="Edit">
-      {canSubmit(state) && <Prompt message={intl('prompt_warning')} />}
+      <Prompt message={intl('prompt_warning')} when={canSubmit(state)} />
       <ActionMenu
         backLabel={!isEditing ? intl('home') : null}
-        backLink={isEditing ? `/q/${match.params.slug}` : '/'}
+        backLink={isEditing ? `/q/${params.slug}` : '/'}
         title={isEditing ? intl('title.edit') : intl('title.submit')}
       >
         {!showTips && (
@@ -172,20 +155,18 @@ const Edit = ({ location, match, zNode }) => {
 }
 
 Edit.propTypes = {
-  match: PropTypes.object.isRequired,
-  location: PropTypes.object.isRequired,
-  zNode: PropTypes.object
+  zNode: PropTypes.object,
 }
 
 Edit.translations = {
   en: {
     title: {
       submit: 'Ask a new question',
-      edit: 'Edit question'
+      edit: 'Edit question',
     },
     alert: {
       submit_success: 'Your question was successfully submitted!',
-      edit_success: 'The question was successfully edited!'
+      edit_success: 'The question was successfully edited!',
     },
     prompt_warning: 'Are you sure you want to leave this page with an unsaved question?',
     home: 'Home',
@@ -193,17 +174,17 @@ Edit.translations = {
     placeholder: 'E.g.: How to fill an expense report?',
     validate: {
       submit: 'Submit',
-      edit: 'Edit'
-    }
+      edit: 'Edit',
+    },
   },
   fr: {
     title: {
       submit: 'Poser une nouvelle question',
-      edit: 'Modifier une question'
+      edit: 'Modifier une question',
     },
     alert: {
       submit_success: 'Votre question a bien été envoyée !',
-      edit_success: 'La question a bien été modifiée !'
+      edit_success: 'La question a bien été modifiée !',
     },
     prompt_warning: 'Êtes-vous sûr de vouloir quitter cette page sans enregistrer la question ?',
     home: 'Accueil',
@@ -211,9 +192,9 @@ Edit.translations = {
     placeholder: 'Ex: Comment remplir une note de frais ?',
     validate: {
       submit: 'Envoyer la question',
-      edit: 'Enregistrer la question'
-    }
-  }
+      edit: 'Enregistrer la question',
+    },
+  },
 }
 
 export default Edit

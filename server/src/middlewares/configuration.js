@@ -34,6 +34,7 @@ const refreshConfiguration = async tenant => {
       mailgunApiKey
       slackChannelHook
       tagCategories {
+        id
         order
         name
         labels {

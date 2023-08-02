@@ -1,17 +1,17 @@
-import { useApolloClient } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
-import { Prompt, Redirect } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 
 import { EDIT_ANSWER, SUBMIT_ANSWER } from './queries'
 
-import { alert, markdown, getIntl } from 'services'
-import { onListChange } from 'helpers'
+import { Prompt, onListChange } from 'helpers'
+import { alert, getIntl, markdown } from 'services'
 
 import NotFound from 'scenes/NotFound'
 
-import { Loading, Flags, Button, MarkdownEditor, CtrlEnter, PairInputList } from 'components'
-import Card, { CardTitle, CardText, CardActions, PermanentClosableCard } from 'components/Card'
+import { Button, CtrlEnter, Flags, Loading, MarkdownEditor, PairInputList } from 'components'
+import Card, { CardActions, CardText, CardTitle, PermanentClosableCard } from 'components/Card'
 
 import { ActionMenu } from '../../components'
 
@@ -29,72 +29,59 @@ const Answer = ({ zNode }) => {
       nodeLoaded: false,
       initialAnswer: initialText,
       answer: initialText,
-      loading: false,
       sources: initialSources,
       initialSources: initialSources,
       slug: null,
-      showTips: PermanentClosableCard.isOpen('tips_answer')
+      showTips: PermanentClosableCard.isOpen('tips_answer'),
     }
   })
 
   const intl = getIntl(Answer)
 
-  const apollo = useApolloClient()
+  const { slug, showTips, sources } = state
 
-  const { loadingSubmit, slug, showTips, sources } = state
-
-  const onTextChange = value => setState({ ...state, answer: value })
+  const onTextChange = (value) => setState({ ...state, answer: value })
   const onSourcesChange = onListChange(
-    changes => setState(state => ({ ...state, ...changes(state) })),
-    'sources'
+    (changes) => setState((state) => ({ ...state, ...changes(state) })),
+    'sources',
   )
 
-  const toggleTips = value => () => {
-    setState(state => ({ ...state, showTips: value }))
+  const toggleTips = (value) => () => {
+    setState((state) => ({ ...state, showTips: value }))
     PermanentClosableCard.setValue('tips_answer', value)
   }
 
-  const submitAnswer = async () => {
-    try {
-      setState(state => ({ ...state, loadingSubmit: true }))
-      await apollo.mutate({
-        mutation: SUBMIT_ANSWER,
-        variables: {
-          nodeId: zNode.id,
-          content: state.answer,
-          sources: JSON.stringify(keyValuePairsToSources(state.sources))
-        }
-      })
-      setState(state => ({ ...state, slug: zNode.question.slug + '-' + zNode.id }))
+  const [submitAnswer, { loading: loadingSubmit }] = useMutation(SUBMIT_ANSWER, {
+    variables: {
+      nodeId: zNode.id,
+      content: state.answer,
+      sources: JSON.stringify(keyValuePairsToSources(state.sources)),
+    },
+    onCompleted() {
+      setState((state) => ({ ...state, slug: zNode.question.slug + '-' + zNode.id }))
       alert.pushSuccess(intl('alert.submit_success'))
-    } catch (error) {
+    },
+    onError(error) {
       alert.pushDefaultError(error)
-      setState(state => ({ ...state, loadingSubmit: false }))
-    }
-  }
+    },
+  })
 
-  const editAnswer = async () => {
-    try {
-      setState(state => ({ ...state, loadingSubmit: true }))
-      await apollo.mutate({
-        mutation: EDIT_ANSWER,
-        variables: {
-          id: zNode.answer.id,
-          content: state.answer,
-          previousContent: state.initialAnswer,
-          sources: JSON.stringify(keyValuePairsToSources(state.sources))
-        }
-      })
-      setState(state => ({ ...state, slug: zNode.question.slug + '-' + zNode.id }))
+  const [editAnswer, { loading: loadingEdit }] = useMutation(EDIT_ANSWER, {
+    variables: {
+      id: zNode.answer?.id,
+      content: state.answer,
+      previousContent: state.initialAnswer,
+      sources: JSON.stringify(keyValuePairsToSources(state.sources)),
+    },
+    refetchQueries: ['getNode'],
+    onCompleted() {
+      setState((state) => ({ ...state, slug: zNode.question.slug + '-' + zNode.id }))
       alert.pushSuccess(intl('alert.edit_success'))
-    } catch (error) {
+    },
+    onError(error) {
       alert.pushDefaultError(error)
-      setState(state => ({
-        ...state,
-        loadingSubmit: false
-      }))
-    }
-  }
+    },
+  })
 
   const submitForm = () => {
     if (canSubmit(state)) {
@@ -103,10 +90,10 @@ const Answer = ({ zNode }) => {
   }
 
   if (slug) {
-    return <Redirect to={`/q/${slug}`} />
+    return <Navigate to={`/q/${slug}`} />
   }
 
-  if (loadingSubmit) {
+  if (loadingSubmit || loadingEdit) {
     return <Loading />
   }
 
@@ -116,7 +103,7 @@ const Answer = ({ zNode }) => {
 
   return (
     <div>
-      {canSubmit(state, answer) && <Prompt message={intl('prompt_warning')} />}
+      <Prompt message={intl('prompt_warning')} when={canSubmit(state, answer)} />
       <ActionMenu backLink={`/q/${zNode.question.slug}-${zNode.id}`}>
         {!showTips && (
           <Button
@@ -147,7 +134,7 @@ const Answer = ({ zNode }) => {
             options={{
               title: intl('sources.title'),
               icons: { line: 'info_outline', value: 'link' },
-              labels: intl('sources.labels')
+              labels: intl('sources.labels'),
             }}
             actions={onSourcesChange.actions}
           />
@@ -167,15 +154,14 @@ const Answer = ({ zNode }) => {
 }
 
 Answer.propTypes = {
-  match: PropTypes.object.isRequired,
-  zNode: PropTypes.object
+  zNode: PropTypes.object,
 }
 
 Answer.translations = {
   en: {
     alert: {
       submit_success: 'Your answer was successfully submitted!',
-      edit_success: 'The answer was successfully edited!'
+      edit_success: 'The answer was successfully edited!',
     },
     prompt_warning: 'Are you sure you want to leave this page with an unsaved answer?',
     show_tips: 'Show tips',
@@ -185,18 +171,18 @@ Answer.translations = {
         add: 'Add a source link',
         more: 'More sources',
         key: 'Label',
-        value: 'URL'
-      }
+        value: 'URL',
+      },
     },
     validate: {
       submit: 'Submit answer',
-      edit: 'Save answer'
-    }
+      edit: 'Save answer',
+    },
   },
   fr: {
     alert: {
       submit_success: 'Votre réponse a bien été envoyée !',
-      edit_success: 'La réponse a bien été modifiée !'
+      edit_success: 'La réponse a bien été modifiée !',
     },
     prompt_warning: 'Êtes-vous sûr de vouloir quitter cette page sans enregistrer la réponse ?',
     show_tips: 'Voir conseils',
@@ -206,14 +192,14 @@ Answer.translations = {
         add: 'Ajouter une source',
         more: 'Plus de sources',
         key: 'Label',
-        value: 'URL'
-      }
+        value: 'URL',
+      },
     },
     validate: {
       submit: 'Envoyer la réponse',
-      edit: 'Enregistrer la réponse'
-    }
-  }
+      edit: 'Enregistrer la réponse',
+    },
+  },
 }
 
 export default Answer

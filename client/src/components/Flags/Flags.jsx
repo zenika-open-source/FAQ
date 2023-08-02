@@ -1,4 +1,3 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 import clone from 'lodash/clone'
 import find from 'lodash/find'
@@ -42,12 +41,12 @@ const Flags = ({ node, withLabels }) => {
 
 Flags.propTypes = {
   node: PropTypes.object.isRequired,
-  withLabels: PropTypes.bool
+  withLabels: PropTypes.bool,
 }
 
 Flags.translations = {
   en: { tooltip: (name, date) => `By ${name} on ${date}` },
-  fr: { tooltip: (name, date) => `Par ${name} le ${date}` }
+  fr: { tooltip: (name, date) => `Par ${name} le ${date}` },
 }
 
 export default Flags

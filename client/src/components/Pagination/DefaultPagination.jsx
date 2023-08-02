@@ -1,4 +1,3 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 
 import Button from '../Button'
@@ -47,23 +46,23 @@ const DefaultPagination = ({ nbPages, current, onPageSelected }) => (
 DefaultPagination.propTypes = {
   nbPages: PropTypes.number,
   current: PropTypes.number,
-  onPageSelected: PropTypes.func
+  onPageSelected: PropTypes.func,
 }
 
 renderPage.propTypes = {
   index: PropTypes.number,
   isCurrent: PropTypes.bool,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
 }
 
 renderEllipsis.propTypes = {
-  key: PropTypes.string
+  key: PropTypes.string,
 }
 
 renderNav.propTypes = {
   type: PropTypes.string,
   disabled: PropTypes.bool,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
 }
 
 export default DefaultPagination

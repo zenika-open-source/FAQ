@@ -6,11 +6,11 @@ const getLanguage = () => {
   return raw
 }
 
-export const getIntl = component => {
+export const getIntl = (component) => {
   let context = (component && component.translations) || {}
   const language = getLanguage()
 
   context = context[language] || context['en']
 
-  return path => get(context, path)
+  return (path) => get(context, path)
 }

@@ -17,7 +17,7 @@ const Specialties = ({ specialties }) => {
         <hr />
         {specialties.length > 0 ? (
           <ul className="specialtiesList">
-            {specialties.map(specialty => (
+            {specialties.map((specialty) => (
               <li key={specialty.name} className="specialty">
                 <i className="material-icons">verified</i>
                 {specialty.name}
@@ -33,18 +33,18 @@ const Specialties = ({ specialties }) => {
 }
 
 Specialties.propTypes = {
-  specialties: PropTypes.array
+  specialties: PropTypes.array,
 }
 
 Specialties.translations = {
   en: {
     title: 'Specialties',
-    empty: 'No specialties yet'
+    empty: 'No specialties yet',
   },
   fr: {
     title: 'Spécialités',
-    empty: 'Pas encore de spécialités'
-  }
+    empty: 'Pas encore de spécialités',
+  },
 }
 
 export default Specialties

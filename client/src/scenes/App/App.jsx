@@ -1,41 +1,44 @@
-import React from 'react'
-import { Helmet } from 'react-helmet'
-import { setDefaultOptions } from 'date-fns'
-import { enUS, fr } from 'date-fns/locale'
-
-import { ConfigurationProvider, AuthProvider, UserProvider } from 'contexts'
-import { AlertStack, AlertProvider } from 'components'
-import { getNavigatorLanguage } from 'helpers'
-
-import Navbar from './components/Navbar'
-import Footer from './components/Footer'
-
-import AppBody from './AppBody'
-
 import 'styles'
 
+import { AlertProvider, AlertStack, ErrorBoundary } from 'components'
+import { AuthProvider, ConfigurationProvider, UserProvider } from 'contexts'
+import { setDefaultOptions } from 'date-fns'
+import { enUS, fr } from 'date-fns/locale'
+import { getNavigatorLanguage } from 'helpers'
+import { Helmet } from 'react-helmet'
+import { Outlet } from 'react-router'
+
+import Footer from './components/Footer'
+import Navbar from './components/Navbar'
+
 setDefaultOptions({
-  locale: getNavigatorLanguage() === 'en' ? enUS : fr
+  locale: getNavigatorLanguage() === 'en' ? enUS : fr,
 })
 
-const App = () => (
-  <div className="app theme">
-    <Helmet>
-      <title>FAQ</title>
-    </Helmet>
-    <AlertProvider>
-      <ConfigurationProvider>
-        <AuthProvider>
-          <UserProvider>
-            <Navbar />
-            <AppBody />
-            <Footer />
-          </UserProvider>
-        </AuthProvider>
-      </ConfigurationProvider>
-      <AlertStack />
-    </AlertProvider>
-  </div>
-)
+const App = () => {
+  return (
+    <div className="app theme">
+      <Helmet>
+        <title>FAQ</title>
+      </Helmet>
+      <AlertProvider>
+        <ConfigurationProvider>
+          <AuthProvider>
+            <UserProvider>
+              <Navbar />
+              <main className="main">
+                <ErrorBoundary>
+                  <Outlet />
+                </ErrorBoundary>
+              </main>
+              <Footer />
+            </UserProvider>
+          </AuthProvider>
+        </ConfigurationProvider>
+        <AlertStack />
+      </AlertProvider>
+    </div>
+  )
+}
 
 export default App

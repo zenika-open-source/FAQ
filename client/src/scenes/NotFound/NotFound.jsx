@@ -1,16 +1,14 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { withRouter } from 'react-router'
-
-import { getIntl } from 'services'
 import Button from 'components/Button'
+import { useNavigate } from 'react-router'
+import { getIntl } from 'services'
 
-const NotFound = ({ history }) => {
+const NotFound = () => {
+  const navigate = useNavigate()
   const intl = getIntl(NotFound)
 
   return (
     <div>
-      <Button icon="chevron_left" label="Home" link onClick={() => history.push('/')} />
+      <Button icon="chevron_left" label="Home" link onClick={() => navigate('/')} />
       <div style={{ textAlign: 'center' }}>
         <h1>{intl('title')}</h1>
         <br />
@@ -24,16 +22,12 @@ const NotFound = ({ history }) => {
   )
 }
 
-NotFound.propTypes = {
-  history: PropTypes.object.isRequired
-}
-
 NotFound.translations = {
   en: { title: 'Ooops! 404', subtitle: "Looks like we couldn't find what you were looking for..." },
   fr: {
     title: 'Ouups ! 404',
-    subtitle: "Il semblerait que nous n'ayons pas trouvé ce que vous cherchiez..."
-  }
+    subtitle: "Il semblerait que nous n'ayons pas trouvé ce que vous cherchiez...",
+  },
 }
 
-export default withRouter(NotFound)
+export default NotFound

@@ -21,8 +21,8 @@ const FlagsDropdown = ({ zNode, onSelect, onRemove }) => {
 
   answerCanBeCertified(specialties, tags, answer, flagTypes)
 
-  const items = flagTypes.map(type => {
-    const isSelected = flags.filter(f => f.type === type).length > 0
+  const items = flagTypes.map((type) => {
+    const isSelected = flags.filter((f) => f.type === type).length > 0
     return (
       <DropdownItem
         key={type}
@@ -48,12 +48,12 @@ const FlagsDropdown = ({ zNode, onSelect, onRemove }) => {
 FlagsDropdown.propTypes = {
   flags: PropTypes.array.isRequired,
   onSelect: PropTypes.func.isRequired,
-  onRemove: PropTypes.func.isRequired
+  onRemove: PropTypes.func.isRequired,
 }
 
 FlagsDropdown.translations = {
   en: { button: 'Flag as ...' },
-  fr: { button: 'Signaler ...' }
+  fr: { button: 'Signaler ...' },
 }
 
 export default FlagsDropdown

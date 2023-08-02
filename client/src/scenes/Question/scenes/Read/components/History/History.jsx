@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
 import cn from 'classnames'
+import { useState } from 'react'
 
 import { getIntl } from 'services'
 import HistoryActions from './HistoryActions.container'
@@ -12,7 +12,7 @@ const History = () => {
 
   return (
     <div className="history">
-      <div className={cn('toggler', open ? 'up' : 'down')} onClick={() => setOpen(st => !st)}>
+      <div className={cn('toggler', open ? 'up' : 'down')} onClick={() => setOpen((st) => !st)}>
         <span>{intl('title')}</span>
         <div className="arrow" />
       </div>
@@ -27,7 +27,7 @@ const History = () => {
 
 History.translations = {
   en: { title: 'history' },
-  fr: { title: 'historique' }
+  fr: { title: 'historique' },
 }
 
 export default History

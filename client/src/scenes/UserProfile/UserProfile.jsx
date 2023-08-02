@@ -1,31 +1,25 @@
-import React, { useState, useEffect } from 'react'
 import { useMutation } from '@apollo/client'
-
+import { Avatar, Button, Card, Input, Loading, Modal } from 'components'
 import { useUser } from 'contexts'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router'
 import { alert, getIntl } from 'services'
 
-import { Avatar, Button, Card, Modal, Loading, Input } from 'components'
-
 import Logs from './components/Logs'
-
 import Specialties from './components/Specialties'
+import { DELETE_IDENTITY, UPDATE_INDENTITY } from './queries'
 
-import { UPDATE_INDENTITY, DELETE_IDENTITY } from './queries'
-
-const UserProfile = ({ history }) => {
+const UserProfile = () => {
+  const navigate = useNavigate()
   const intl = getIntl(UserProfile)
-
-  const [loading, setLoading] = useState(false)
 
   const user = useUser()
   const [name, setName] = useState(user.name)
   const [email, setEmail] = useState(user.email)
   const [picture, setPicture] = useState(user.picture)
-  const [updateIdentity] = useMutation(UPDATE_INDENTITY)
 
   const [goodbye, setGoodbye] = useState('')
   const [modalActive, setModalActive] = useState(false)
-  const [deleteIdentity] = useMutation(DELETE_IDENTITY)
 
   useEffect(() => {
     if (user && user.name) {
@@ -35,32 +29,26 @@ const UserProfile = ({ history }) => {
     }
   }, [user])
 
-  const save = async () => {
-    try {
-      setLoading(true)
-      await updateIdentity({
-        variables: { name, email, picture }
-      })
+  const [save, { loading: saveLoading }] = useMutation(UPDATE_INDENTITY, {
+    variables: { name, email, picture },
+    onCompleted() {
       alert.pushSuccess(intl('alert.update_success'))
-    } catch (err) {
-      alert.pushDefaultError(err)
-    } finally {
-      setLoading(false)
-    }
-  }
+    },
+    onError(error) {
+      alert.pushDefaultError(error)
+    },
+  })
 
-  const deleteData = async () => {
-    try {
-      setLoading(true)
-      await deleteIdentity()
+  const [deleteData, { loading: deleteLoading }] = useMutation(DELETE_IDENTITY, {
+    onCompleted() {
       alert.pushSuccess(intl('alert.delete_success'))
-      history.push('/auth/logout')
-    } catch (err) {
-      alert.pushDefaultError(err)
+      navigate('/auth/logout')
+    },
+    onError(error) {
+      alert.pushDefaultError(error)
       setModalActive(false)
-      setLoading(false)
-    }
-  }
+    },
+  })
 
   if (name === undefined) return <Loading />
 
@@ -81,7 +69,7 @@ const UserProfile = ({ history }) => {
               id="name"
               className="card-input"
               value={name}
-              onChange={e => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
               autoComplete="off"
             />
             <label htmlFor="email">{intl('identity.email')}</label>
@@ -89,7 +77,7 @@ const UserProfile = ({ history }) => {
               id="email"
               className="card-input"
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <label htmlFor="picture">{intl('identity.picture')}</label>
             <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -98,20 +86,20 @@ const UserProfile = ({ history }) => {
                 style={{
                   width: '60px',
                   height: '60px',
-                  marginRight: '20px'
+                  marginRight: '20px',
                 }}
               />
               <input
                 id="picture"
                 className="card-input"
                 value={picture}
-                onChange={e => setPicture(e.target.value)}
+                onChange={(e) => setPicture(e.target.value)}
               />
             </div>
           </div>
         </Card.Text>
         <Card.Actions>
-          <Button primary type="button" disabled={loading} onClick={save}>
+          <Button primary type="button" disabled={saveLoading || deleteLoading} onClick={save}>
             {intl('identity.save')}
           </Button>
         </Card.Actions>
@@ -133,7 +121,7 @@ const UserProfile = ({ history }) => {
             {intl('gdpr.erase.label')}
             <Button
               secondary
-              disabled={loading}
+              disabled={saveLoading || deleteLoading}
               data-tooltip={intl('gdpr.erase.tooltip')}
               style={{ marginLeft: '1rem' }}
               onClick={() => setModalActive(true)}
@@ -143,7 +131,7 @@ const UserProfile = ({ history }) => {
           </p>
         </Card.Text>
       </Card>
-      <Modal active={modalActive} setActive={setModalActive} loading={loading}>
+      <Modal active={modalActive} setActive={setModalActive} loading={saveLoading || deleteLoading}>
         <Modal.Title>
           <h2>{intl('modal.title')}</h2>
         </Modal.Title>
@@ -152,14 +140,14 @@ const UserProfile = ({ history }) => {
           {intl('modal.text').map((text, i) => (
             <p key={i}>{text}</p>
           ))}
-          <Input value={goodbye} onChange={e => setGoodbye(e.target.value)} />
+          <Input value={goodbye} onChange={(e) => setGoodbye(e.target.value)} />
           <br />
           <Button
             primary
             style={{ width: '100%' }}
-            disabled={goodbye !== 'goodbye' || loading}
+            disabled={goodbye !== 'goodbye' || saveLoading || deleteLoading}
             onClick={deleteData}
-            loading={loading}
+            loading={saveLoading || deleteLoading}
           >
             {intl('modal.button')}
           </Button>
@@ -173,7 +161,7 @@ UserProfile.translations = {
   en: {
     alert: {
       update_success: 'Your profile was successfully updated!',
-      delete_success: 'Your personal data was succesfully deleted!'
+      delete_success: 'Your personal data was succesfully deleted!',
     },
     title: 'Profile',
     identity: {
@@ -181,7 +169,7 @@ UserProfile.translations = {
       name: 'Name',
       email: 'Email address',
       picture: 'Picture url',
-      save: 'Save'
+      save: 'Save',
     },
     gdpr: {
       title: 'GDPR',
@@ -189,8 +177,8 @@ UserProfile.translations = {
       erase: {
         label: 'Erase all your personal data:',
         tooltip: 'This will erase all your personal data from FAQ',
-        button: 'Delete my data'
-      }
+        button: 'Delete my data',
+      },
     },
     modal: {
       title: 'Are you absolutely sure?',
@@ -202,15 +190,15 @@ UserProfile.translations = {
         'Your personal data will be erased, which means your actions will become anonymous. The content you have written and edited will remain.',
         <>
           Please type in <b>"goodbye"</b> to confirm.
-        </>
+        </>,
       ],
-      button: 'I understand the consequences, delete my data'
-    }
+      button: 'I understand the consequences, delete my data',
+    },
   },
   fr: {
     alert: {
       update_success: 'Votre profil a été modifié avec succès !',
-      delete_success: 'Vos données personnelles ont été supprimées avec succès !'
+      delete_success: 'Vos données personnelles ont été supprimées avec succès !',
     },
     title: 'Profil',
     identity: {
@@ -218,7 +206,7 @@ UserProfile.translations = {
       name: 'Nom',
       email: 'Adresse email',
       picture: 'Image URL',
-      save: 'Enregistrer'
+      save: 'Enregistrer',
     },
     gdpr: {
       title: 'RGPD',
@@ -227,8 +215,8 @@ UserProfile.translations = {
       erase: {
         label: 'Supprimez toutes vos données personnelles',
         tooltip: 'Cela va supprimer toutes vos données personnelles de la FAQ',
-        button: 'Effacer mes données'
-      }
+        button: 'Effacer mes données',
+      },
     },
     modal: {
       title: 'En êtes-vous absolument sûr ?',
@@ -239,11 +227,11 @@ UserProfile.translations = {
           personnelles.
         </>,
         'Vos données personnelles seront effacées, ce qui signifie que vos actions deviendront anonymes. Le contenu que vous avez écrit et édité sera conservé.',
-        <>Veuillez saisir "goodbye" pour confirmer.</>
+        <>Veuillez saisir "goodbye" pour confirmer.</>,
       ],
-      button: 'Je comprends les conséquences, effacer mes données'
-    }
-  }
+      button: 'Je comprends les conséquences, effacer mes données',
+    },
+  },
 }
 
 export default UserProfile

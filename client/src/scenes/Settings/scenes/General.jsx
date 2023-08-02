@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { getIntl } from 'services'
 
 import { Tab, Input, Icon, Radio } from 'components'
@@ -15,7 +13,7 @@ const General = ({ state, dispatch, loading }) => {
         <Icon material="home" />
         <Input
           value={state.title}
-          onChange={e => dispatch({ type: 'change_title', data: e.target.value })}
+          onChange={(e) => dispatch({ type: 'change_title', data: e.target.value })}
           placeholder={intl('title.placeholder')}
           disabled={loading}
         />
@@ -29,7 +27,7 @@ const General = ({ state, dispatch, loading }) => {
         <Input
           style={{ flex: 1 }}
           value={state.authorizedDomains}
-          onChange={e => dispatch({ type: 'change_domains', data: e.target.value })}
+          onChange={(e) => dispatch({ type: 'change_domains', data: e.target.value })}
           placeholder={intl('domains.placeholder')}
           disabled={loading}
         />
@@ -42,7 +40,7 @@ const General = ({ state, dispatch, loading }) => {
         <Radio.Group
           name="bug_reporting"
           selected={state.bugReporting}
-          onChange={data => dispatch({ type: 'change_bug_reporting', data })}
+          onChange={(data) => dispatch({ type: 'change_bug_reporting', data })}
           disabled={loading}
         >
           <Radio label={intl('bug_reporting.mail')} value="MAIL" />
@@ -58,34 +56,34 @@ General.translations = {
     tab: 'General',
     title: {
       title: 'Title',
-      placeholder: 'Title'
+      placeholder: 'Title',
     },
     domains: {
       title: 'Authorized domains',
-      placeholder: 'E.g.: zenika.com, google.com, ...'
+      placeholder: 'E.g.: zenika.com, google.com, ...',
     },
     bug_reporting: {
       title: 'Bug reporting',
       mail: 'By email',
-      github: 'By Github'
-    }
+      github: 'By Github',
+    },
   },
   fr: {
     tab: 'Général',
     title: {
       title: 'Titre',
-      placeholder: 'Titre'
+      placeholder: 'Titre',
     },
     domains: {
       title: 'Domaines autorisés',
-      placeholder: 'Ex: zenika.com, google.com, ...'
+      placeholder: 'Ex: zenika.com, google.com, ...',
     },
     bug_reporting: {
       title: 'Signalement de bug',
       mail: 'Par email',
-      github: 'Par Github'
-    }
-  }
+      github: 'Par Github',
+    },
+  },
 }
 
 export default General

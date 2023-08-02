@@ -1,4 +1,3 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
 
@@ -14,12 +13,12 @@ const Searchbar = ({ text, tags, loading, onTextChange, onTagsChange }) => {
   const conf = useConfiguration()
 
   const tagLabels = tags
-    .map(tag =>
+    .map((tag) =>
       conf.tagCategories
         .reduce((acc, cat) => acc.concat(cat.labels), [])
-        .find(label => label.name === tag)
+        .find((label) => label.name === tag),
     )
-    .filter(l => l)
+    .filter((l) => l)
 
   return (
     <div className="searchbar">
@@ -38,7 +37,7 @@ const Searchbar = ({ text, tags, loading, onTextChange, onTagsChange }) => {
           </>
         }
         value={text}
-        onChange={e => onTextChange(e.target.value)}
+        onChange={(e) => onTextChange(e.target.value)}
         onClear={() => onTextChange('')}
       />
       <div className="filters">
@@ -58,20 +57,20 @@ Searchbar.propTypes = {
   tags: PropTypes.array,
   loading: PropTypes.bool,
   onTextChange: PropTypes.func,
-  onTagsChange: PropTypes.func
+  onTagsChange: PropTypes.func,
 }
 
 Searchbar.translations = {
   en: {
     filter: {
-      tags: 'Filter by tags:'
-    }
+      tags: 'Filter by tags:',
+    },
   },
   fr: {
     filter: {
-      tags: 'Filtrer par tags:'
-    }
-  }
+      tags: 'Filtrer par tags:',
+    },
+  },
 }
 
 export default Searchbar

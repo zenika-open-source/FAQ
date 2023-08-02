@@ -1,4 +1,3 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 
 const ListItem = ({ caption, icon, href }) => {
@@ -25,7 +24,7 @@ const ListItem = ({ caption, icon, href }) => {
 ListItem.propTypes = {
   caption: PropTypes.node.isRequired,
   icon: PropTypes.string,
-  href: PropTypes.string
+  href: PropTypes.string,
 }
 
 export default ListItem

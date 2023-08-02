@@ -1,4 +1,3 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 
 import { getIntl } from 'services'
@@ -22,18 +21,18 @@ const Views = ({ value }) => {
 }
 
 Views.propTypes = {
-  value: PropTypes.number
+  value: PropTypes.number,
 }
 
 Views.translations = {
   en: {
     view: 'view',
-    views: 'views'
+    views: 'views',
   },
   fr: {
     view: 'vue',
-    views: 'vues'
-  }
+    views: 'vues',
+  },
 }
 
 export default Views

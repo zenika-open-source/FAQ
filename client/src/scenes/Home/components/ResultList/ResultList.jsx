@@ -1,10 +1,8 @@
-import React from 'react'
 import PropTypes from 'prop-types'
-import Pluralize from 'react-pluralize'
 
-import { getIntl } from 'services'
 import { Loading } from 'components'
 import { DefaultPagination } from 'components/Pagination'
+import { getIntl } from 'services'
 
 import NoResults from '../NoResults'
 import Result from '../Result'
@@ -17,7 +15,7 @@ const ResultList = ({
   pagesCount,
   pageCurrent,
   onPageSelected,
-  meta
+  meta,
 }) => {
   const intl = getIntl(ResultList)
 
@@ -27,7 +25,7 @@ const ResultList = ({
     return <NoResults prefill={searchText} />
   }
 
-  const Results = nodes.map(node => {
+  const Results = nodes.map((node) => {
     const opened = !searchText
     return (
       <Result
@@ -46,10 +44,18 @@ const ResultList = ({
           style={{
             display: 'flex',
             justifyContent: 'space-between',
-            padding: '0 1rem'
+            padding: '0 1rem',
           }}
         >
-          <i>{searchText ? <span>{intl('count')(entriesCount)}</span> : intl('latest')}</i>
+          <i>
+            {searchText ? (
+              <span>
+                {entriesCount} {entriesCount > 1 ? intl('results') : intl('result')}
+              </span>
+            ) : (
+              intl('latest')
+            )}
+          </i>
           <i>{intl('page')(pageCurrent)}</i>
         </p>
       )}
@@ -58,7 +64,7 @@ const ResultList = ({
       <DefaultPagination
         nbPages={pagesCount}
         current={pageCurrent}
-        onPageSelected={index => {
+        onPageSelected={(index) => {
           onPageSelected(index)
           window.scrollTo(0, 0)
         }}
@@ -75,28 +81,22 @@ ResultList.propTypes = {
   pagesCount: PropTypes.number,
   pageCurrent: PropTypes.number,
   onPageSelected: PropTypes.func,
-  meta: PropTypes.object
+  meta: PropTypes.object,
 }
 
 ResultList.translations = {
   en: {
     latest: 'Latest questions',
-    count: count => (
-      <>
-        <Pluralize singular="result" count={count} /> found
-      </>
-    ),
-    page: current => <>Page {current}</>
+    result: 'result found',
+    results: 'results found',
+    page: (current) => <>Page {current}</>,
   },
   fr: {
     latest: 'Dernières questions',
-    count: count => (
-      <>
-        <Pluralize singular="résultat" count={count} /> trouvés
-      </>
-    ),
-    page: current => <>Page {current}</>
-  }
+    result: 'résultat trouvé',
+    results: 'résultats trouvés',
+    page: (current) => <>Page {current}</>,
+  },
 }
 
 export default ResultList

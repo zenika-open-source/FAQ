@@ -10,7 +10,7 @@ const LanguageDropdown = ({
   onLanguageChanged = () => {},
   primary = false,
   link = true,
-  originalLanguage
+  originalLanguage,
 }) => {
   const intl = getIntl(LanguageDropdown)
 
@@ -36,12 +36,12 @@ LanguageDropdown.propTypes = {
   onLanguageChanged: PropTypes.func,
   primary: PropTypes.bool,
   link: PropTypes.bool,
-  originalLanguage: PropTypes.string
+  originalLanguage: PropTypes.string,
 }
 
 LanguageDropdown.translations = {
   en: { french: 'French', english: 'English' },
-  fr: { french: 'Français', english: 'Anglais' }
+  fr: { french: 'Français', english: 'Anglais' },
 }
 
 export default LanguageDropdown

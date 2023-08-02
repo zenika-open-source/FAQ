@@ -1,99 +1,76 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
-import debounce from 'lodash/debounce'
-
 import { Button } from 'components'
-
+import { addToQueryString, unserialize } from 'helpers'
+import debounce from 'lodash/debounce'
+import { useState, useEffect } from 'react'
+import { Link, useLocation, useSearchParams } from 'react-router-dom'
 import { getIntl } from 'services'
-import { unserialize, addToQueryString } from 'helpers'
 
-import { Searchbar, ResultList } from './components'
+import { ResultList, Searchbar } from './components'
 
-class Home extends Component {
-  constructor(props) {
-    super(props)
+const Home = () => {
+  const intl = getIntl(Home)
 
-    const params = unserialize(props.location.search)
+  const location = useLocation()
+  const params = unserialize(location.search)
+  const [, setSearchParams] = useSearchParams()
 
-    this.state = {
-      searchText: params.q,
-      debouncedSearchText: params.q,
-      searchLoading: false,
-      tags: params.tags
+  const [searchbarText, setSearchbarText] = useState(params.q)
+  const [resultListSearchText, setResultListSearchText] = useState(searchbarText)
+
+  const debouncedSetResultListSearchText = debounce(setResultListSearchText, 200)
+
+  useEffect(() => {
+    debouncedSetResultListSearchText(searchbarText)
+    return () => {
+      debouncedSetResultListSearchText.cancel()
     }
-  }
+  }, [searchbarText])
 
-  onSearchChange = text => {
-    const { history, location } = this.props
-
-    this.setState({ searchText: text })
-
-    addToQueryString(history, location, {
-      q: text
+  useEffect(() => {
+    addToQueryString(setSearchParams, location, {
+      q: resultListSearchText,
     })
+  }, [resultListSearchText])
 
-    this.querySearchProvider()
+  const [loading, setLoading] = useState(false)
+  const [tags, setTags] = useState(params.tags)
+
+  const onTagsChange = (tags) => {
+    const labels = tags.map((tag) => tag.name)
+
+    setTags(labels)
+
+    addToQueryString(setSearchParams, location, { tags: labels })
   }
 
-  setDebounceTextSearch = () => {
-    this.setState(state => ({ debouncedSearchText: state.searchText }))
-  }
-
-  querySearchProvider = debounce(this.setDebounceTextSearch, 200)
-
-  setSearchLoading = loading => this.setState({ searchLoading: loading })
-
-  onTagsChange = tags => {
-    const { history, location } = this.props
-
-    const labels = tags.map(tag => tag.name)
-
-    this.setState({ tags: labels })
-
-    addToQueryString(history, location, { tags: labels })
-  }
-
-  render() {
-    const intl = getIntl(Home)
-
-    return (
-      <div>
-        <Searchbar
-          text={this.state.searchText}
-          tags={this.state.tags}
-          loading={this.state.searchLoading}
-          onTextChange={this.onSearchChange}
-          onTagsChange={this.onTagsChange}
+  return (
+    <div>
+      <Searchbar
+        text={searchbarText}
+        tags={tags}
+        loading={loading}
+        onTextChange={setSearchbarText}
+        onTagsChange={onTagsChange}
+      />
+      <ResultList searchText={resultListSearchText} setSearchLoading={setLoading} />
+      <Link to="/q/new">
+        <Button
+          icon="record_voice_over"
+          data-tooltip={intl('new_question')}
+          style={{ position: 'fixed', bottom: '1rem', right: '1rem' }}
+          primary
+          round
+          raised
+          fixed
         />
-        <ResultList
-          searchText={this.state.debouncedSearchText}
-          setSearchLoading={this.setSearchLoading}
-        />
-        <Link to="/q/new">
-          <Button
-            icon="record_voice_over"
-            data-tooltip={intl('new_question')}
-            style={{ position: 'fixed', bottom: '1rem', right: '1rem' }}
-            primary
-            round
-            raised
-            fixed
-          />
-        </Link>
-      </div>
-    )
-  }
-}
-
-Home.propTypes = {
-  location: PropTypes.object,
-  history: PropTypes.object
+      </Link>
+    </div>
+  )
 }
 
 Home.translations = {
   en: { new_question: 'New question' },
-  fr: { new_question: 'Nouvelle question' }
+  fr: { new_question: 'Nouvelle question' },
 }
 
 export default Home

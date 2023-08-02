@@ -1,4 +1,3 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
 import merge from 'lodash/merge'
@@ -20,14 +19,14 @@ const PairInputList = ({ pairs, options, actions, disabled, className, ...rest }
       more: 'add',
       line: 'info_outline',
       key: 'label_outline',
-      value: 'link'
-    }
+      value: 'link',
+    },
   }
 
   const defaultActions = {
     create: noop,
     update: noop,
-    delete: noop
+    delete: noop,
   }
 
   options = merge(defaultOptions, options)
@@ -40,7 +39,7 @@ const PairInputList = ({ pairs, options, actions, disabled, className, ...rest }
       {options.title && !isEmpty ? (
         <h3 style={{ color: 'var(--primary-color)', margin: '0.7rem' }}>{options.title}</h3>
       ) : null}
-      {pairs.map(pair => (
+      {pairs.map((pair) => (
         <PairInput
           key={pair.id}
           pair={pair}
@@ -51,7 +50,7 @@ const PairInputList = ({ pairs, options, actions, disabled, className, ...rest }
       ))}
       <div
         style={{
-          textAlign: isEmpty ? 'left' : 'center'
+          textAlign: isEmpty ? 'left' : 'center',
         }}
       >
         {
@@ -74,7 +73,7 @@ PairInputList.propTypes = {
   options: PropTypes.object,
   actions: PropTypes.object,
   disabled: PropTypes.bool,
-  className: PropTypes.string
+  className: PropTypes.string,
 }
 
 PairInputList.translations = {
@@ -82,16 +81,16 @@ PairInputList.translations = {
     labels: {
       more: 'More pairs',
       key: 'Key',
-      value: 'Value'
-    }
+      value: 'Value',
+    },
   },
   fr: {
     labels: {
       more: 'Plus de paires',
       key: 'Clef',
-      value: 'Valeur'
-    }
-  }
+      value: 'Valeur',
+    },
+  },
 }
 
 export default PairInputList

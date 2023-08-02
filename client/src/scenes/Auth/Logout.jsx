@@ -1,8 +1,6 @@
-import React, { useEffect } from 'react'
-
-import { useAuth } from 'contexts'
-
 import { Loading } from 'components'
+import { useAuth } from 'contexts'
+import { useEffect } from 'react'
 
 const Logout = () => {
   const { logout } = useAuth()

@@ -1,26 +1,23 @@
 import { useMutation } from '@apollo/client'
-import PropTypes from 'prop-types'
-import { useEffect, useState } from 'react'
-import { Helmet } from 'react-helmet'
-import { Link, Redirect } from 'react-router-dom'
-
-import { CREATE_FLAG, INCREMENT_VIEWS_COUNTER, REMOVE_FLAG } from './queries'
-
-import { getIntl, markdown } from 'services'
-
-import NotFound from 'scenes/NotFound'
-
-import { Button, Flags, Loading, Tags } from 'components'
+import { Button, Flags, Tags } from 'components'
 import Card, { CardText, CardTitle } from 'components/Card'
 import Dropdown, { DropdownItem } from 'components/Dropdown'
-
+import { useUser } from 'contexts'
 import { getNavigatorLanguage, handleTranslation } from 'helpers'
+import { useEffect, useState } from 'react'
+import { Helmet } from 'react-helmet'
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
+import NotFound from 'scenes/NotFound'
+import { getIntl, markdown } from 'services'
+
 import { ActionMenu } from '../../components'
 import { FlagsDropdown, History, LanguageDropdown, Meta, Share, Sources, Views } from './components'
-import { useUser } from 'contexts'
+import { CREATE_FLAG, INCREMENT_VIEWS_COUNTER, REMOVE_FLAG } from './queries'
 
-const Read = ({ history, match, zNode, loading }) => {
-  const [loaded, setLoaded] = useState(false)
+const Read = ({ zNode, loading }) => {
+  const params = useParams()
+  const navigate = useNavigate()
+
   const [incremented, setIncremented] = useState(false)
 
   const [questionTitle, setQuestionTitle] = useState('')
@@ -36,7 +33,7 @@ const Read = ({ history, match, zNode, loading }) => {
   const originalQuestionLanguage = zNode?.question.language
   const navigatorLanguage = getNavigatorLanguage()
 
-  const translate = language => {
+  const translate = (language) => {
     const content = handleTranslation(language, zNode)
     setQuestionTitle(content.question)
     setAnswerContent(content.answer)
@@ -44,44 +41,41 @@ const Read = ({ history, match, zNode, loading }) => {
   }
 
   useEffect(() => {
-    if (!loaded || incremented) return
+    if (loading || incremented) return
     incrementViewsCounter({ variables: { questionId: zNode.question.id } })
     setIncremented(true)
-  }, [loaded, incremented, incrementViewsCounter, zNode])
+  }, [incremented, incrementViewsCounter, zNode])
 
   useEffect(() => {
-    if (!loaded && zNode && navigatorLanguage) {
-      setLoaded(true)
+    if (!loading && zNode && navigatorLanguage) {
       translate(navigatorLanguage)
     }
-  }, [zNode, loaded])
+  }, [zNode, loading])
 
   const intl = getIntl(Read)
-
-  if (loading) return <Loading />
 
   if (zNode === null) {
     return <NotFound />
   }
 
   const preventAnswerEdit = () => {
-    const certified = zNode?.flags.find(flag => flag.type === 'certified')
-    const isSpecialist = user.specialties.some(specialty =>
-      zNode.tags.some(tag => specialty.name === tag.label.name)
+    const certified = zNode?.flags.find((flag) => flag.type === 'certified')
+    const isSpecialist = user.specialties.some((specialty) =>
+      zNode.tags.some((tag) => specialty.name === tag.label.name),
     )
     if (certified && !isSpecialist) {
       if (window.confirm(intl('alert'))) {
-        return history.push(`/q/${match.params.slug}/answer`)
+        return navigate(`/q/${params.slug}/answer`)
       }
     } else {
-      return history.push(`/q/${match.params.slug}/answer`)
+      return navigate(`/q/${params.slug}/answer`)
     }
   }
 
   /* Redirect to correct URL if old slug used */
   const correctSlug = zNode.question.slug + '-' + zNode.id
-  if (match.params.slug !== correctSlug) {
-    return <Redirect to={'/q/' + correctSlug} />
+  if (params.slug !== correctSlug) {
+    return <Navigate to={'/q/' + correctSlug} />
   }
 
   return (
@@ -92,11 +86,11 @@ const Read = ({ history, match, zNode, loading }) => {
       <ActionMenu backLink="/" backLabel={intl('menu.home')} goBack>
         <FlagsDropdown
           zNode={zNode}
-          onSelect={type => createFlag({ variables: { type, nodeId: zNode.id } })}
-          onRemove={type => removeFlag({ variables: { type, nodeId: zNode.id } })}
+          onSelect={(type) => createFlag({ variables: { type, nodeId: zNode.id } })}
+          onRemove={(type) => removeFlag({ variables: { type, nodeId: zNode.id } })}
         />
         <Dropdown button={<Button icon="edit" label={intl('menu.edit.label')} link />}>
-          <DropdownItem icon="edit" onClick={() => history.push(`/q/${match.params.slug}/edit`)}>
+          <DropdownItem icon="edit" onClick={() => navigate(`/q/${params.slug}/edit`)}>
             {intl('menu.edit.question')}
           </DropdownItem>
           <DropdownItem icon="question_answer" onClick={preventAnswerEdit}>
@@ -110,7 +104,7 @@ const Read = ({ history, match, zNode, loading }) => {
             <div
               style={{
                 display: 'flex',
-                alignItems: 'baseline'
+                alignItems: 'baseline',
               }}
             >
               <h1>{markdown.title(questionTitle)}</h1>
@@ -118,7 +112,7 @@ const Read = ({ history, match, zNode, loading }) => {
                 <p
                   className="small-text"
                   style={{
-                    marginLeft: '1rem'
+                    marginLeft: '1rem',
                   }}
                 >
                   {intl('auto_translated')}
@@ -167,13 +161,13 @@ const Read = ({ history, match, zNode, loading }) => {
               style={{
                 textAlign: 'center',
                 marginTop: '2rem',
-                marginBottom: '2rem'
+                marginBottom: '2rem',
               }}
             >
               <b>{intl('no_answer')}</b>
               <br />
               <br />
-              <Link to={`/q/${match.params.slug}/answer`} className="btn-container">
+              <Link to={`/q/${params.slug}/answer`} className="btn-container">
                 <Button icon="question_answer" primary>
                   {intl('answer')}
                 </Button>
@@ -189,13 +183,6 @@ const Read = ({ history, match, zNode, loading }) => {
   )
 }
 
-Read.propTypes = {
-  history: PropTypes.object.isRequired,
-  match: PropTypes.object.isRequired,
-  zNode: PropTypes.object,
-  loading: PropTypes.bool.isRequired
-}
-
 Read.translations = {
   en: {
     menu: {
@@ -203,8 +190,8 @@ Read.translations = {
       edit: {
         label: 'Edit ...',
         question: 'Question',
-        answer: 'Answer'
-      }
+        answer: 'Answer',
+      },
     },
     certified: 'Certified on',
     auto_translated: 'Automatic translation',
@@ -213,7 +200,7 @@ Read.translations = {
     certified_answer: 'Certified answer',
     recent_answer: 'Latest answer',
     alert:
-      'This answer has been certified by a specialist in this field.\nAre you sure that you want to modify it ?\nThis version will still be kept'
+      'This answer has been certified by a specialist in this field.\nAre you sure that you want to modify it ?\nThis version will still be kept',
   },
   fr: {
     menu: {
@@ -221,8 +208,8 @@ Read.translations = {
       edit: {
         label: 'Modifier ...',
         question: 'Question',
-        answer: 'Réponse'
-      }
+        answer: 'Réponse',
+      },
     },
     certified: 'Certifiée le',
     auto_translated: 'Traduction automatique',
@@ -231,8 +218,8 @@ Read.translations = {
     certified_answer: 'Réponse certifiée',
     recent_answer: 'Dernière réponse',
     alert:
-      'Cette réponse a été certifiée par une personne spécialisée dans le domaine.\nEtes-vous sûr de vouloir la modifier ?\nCelle-ci sera tout de même conservée'
-  }
+      'Cette réponse a été certifiée par une personne spécialisée dans le domaine.\nEtes-vous sûr de vouloir la modifier ?\nCelle-ci sera tout de même conservée',
+  },
 }
 
 export default Read

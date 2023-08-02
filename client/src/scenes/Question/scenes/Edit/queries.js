@@ -1,4 +1,4 @@
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 import { zNodeFragment } from '../../queries'
 
@@ -26,7 +26,7 @@ export const SUBMIT_QUESTION = gql`
 `
 
 export const EDIT_QUESTION = gql`
-  mutation($questionId: ID!, $title: String!, $previousTitle: String!, $tags: [ID!]!) {
+  mutation ($questionId: ID!, $title: String!, $previousTitle: String!, $tags: [ID!]!) {
     updateQuestionAndTags(
       id: $questionId
       title: $title

@@ -1,4 +1,3 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 
 import './List.css'
@@ -12,7 +11,7 @@ const List = ({ children, title, ...otherProps }) => (
 
 List.propTypes = {
   children: PropTypes.node.isRequired,
-  title: PropTypes.node
+  title: PropTypes.node,
 }
 
 export default List

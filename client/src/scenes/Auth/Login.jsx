@@ -1,14 +1,14 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
-import { withRouter, Redirect } from 'react-router-dom'
+import { useState } from 'react'
+import { Navigate, useLocation } from 'react-router-dom'
 
-import { getIntl } from 'services'
 import { useAuth } from 'contexts'
+import { getIntl } from 'services'
 
-import { Loading, Button } from 'components'
+import { Button, Loading } from 'components'
 
-const Login = ({ location }) => {
+const Login = () => {
   const intl = getIntl(Login)
+  const location = useLocation()
 
   const [renewing, setRenewing] = useState(false)
   const redirectedFrom = location.state && location.state.from
@@ -16,7 +16,7 @@ const Login = ({ location }) => {
   const { login, renewAuth, isAuth, wasAuth } = useAuth()
 
   if (isAuth) {
-    return <Redirect to="/" />
+    return <Navigate to="/" />
   }
 
   if (wasAuth) {
@@ -43,24 +43,19 @@ const Login = ({ location }) => {
   )
 }
 
-Login.propTypes = {
-  history: PropTypes.object.isRequired,
-  location: PropTypes.object.isRequired
-}
-
 Login.translations = {
   en: {
     loading: 'Authenticating...',
     welcome: 'Welcome',
     text: 'Please sign in to access the FAQ',
-    sign_in: 'Sign in'
+    sign_in: 'Sign in',
   },
   fr: {
     loading: 'Authentification en cours...',
     welcome: 'Bienvenue',
     text: 'Connectez-vous pour accéder à la FAQ',
-    sign_in: 'Se connecter'
-  }
+    sign_in: 'Se connecter',
+  },
 }
 
-export default withRouter(Login)
+export default Login

@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { getIntl } from 'services'
 
 import { Tab } from 'components'
@@ -23,8 +21,8 @@ Tags.translations = {
       add: 'Add tags',
       more: 'More tags',
       key: 'Category',
-      value: 'Tags'
-    }
+      value: 'Tags',
+    },
   },
   fr: {
     tab: 'Tags',
@@ -32,9 +30,9 @@ Tags.translations = {
       add: 'Ajouter un tags',
       more: 'Plus de tags',
       key: 'Categorie',
-      value: 'Tags'
-    }
-  }
+      value: 'Tags',
+    },
+  },
 }
 
 export default Tags

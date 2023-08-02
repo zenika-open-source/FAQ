@@ -1,6 +1,5 @@
-import React from 'react'
-import PropTypes from 'prop-types'
 import cn from 'classnames'
+import PropTypes from 'prop-types'
 
 const CardText = ({ children, collapsed, className, ...otherProps }) => (
   <div className={cn('card-item card-text', { collapsed }, className)} {...otherProps}>
@@ -11,7 +10,7 @@ const CardText = ({ children, collapsed, className, ...otherProps }) => (
 CardText.propTypes = {
   children: PropTypes.node.isRequired,
   collapsed: PropTypes.bool,
-  className: PropTypes.string
+  className: PropTypes.string,
 }
 
 export default CardText

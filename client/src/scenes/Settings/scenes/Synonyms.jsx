@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Tab, PairInputList } from 'components'
 
 import { getIntl } from 'services'
@@ -15,7 +13,7 @@ const Synonyms = ({ state, dispatch, loading }) => {
         pairs={state.synonyms}
         options={{
           icons: { line: 'loop', value: 'list' },
-          labels: intl('labels')
+          labels: intl('labels'),
         }}
         actions={onListChangeActions('synonyms', dispatch)}
         disabled={loading}
@@ -31,8 +29,8 @@ Synonyms.translations = {
       add: 'Add a synonym',
       more: 'More synonyms',
       key: 'ID',
-      value: 'Synonyms'
-    }
+      value: 'Synonyms',
+    },
   },
   fr: {
     tab: 'Synonymes',
@@ -40,9 +38,9 @@ Synonyms.translations = {
       add: 'Ajouter un synonyme',
       more: 'Plus de synonymes',
       key: 'ID',
-      value: 'Synonymes'
-    }
-  }
+      value: 'Synonymes',
+    },
+  },
 }
 
 export default Synonyms

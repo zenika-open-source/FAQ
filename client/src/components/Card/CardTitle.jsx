@@ -1,4 +1,3 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 
 const CardTitle = ({ children, style, onClick, ...otherProps }) => (
@@ -15,7 +14,7 @@ const CardTitle = ({ children, style, onClick, ...otherProps }) => (
 CardTitle.propTypes = {
   children: PropTypes.node.isRequired,
   style: PropTypes.object,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
 }
 
 export default CardTitle

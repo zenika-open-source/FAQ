@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
 import { useMutation } from '@apollo/client'
+import { useState } from 'react'
 
 import { alert, getIntl } from 'services'
 
-import { Tab, Input, Checkbox, Button } from 'components'
+import { Button, Checkbox, Input, Tab } from 'components'
 
 import { REGENERATE_SLACK_COMMAND_KEY } from '../queries'
 
@@ -20,8 +20,8 @@ const Integrations = ({ state, dispatch, loading }) => {
       .then(({ data }) =>
         dispatch({
           type: 'change_slack_commandkey',
-          data: data.regenerateSlackCommandKey.slackCommandKey
-        })
+          data: data.regenerateSlackCommandKey.slackCommandKey,
+        }),
       )
       .catch(alert.pushDefaultError)
       .finally(() => setSlackHookLoading(false))
@@ -35,10 +35,10 @@ const Integrations = ({ state, dispatch, loading }) => {
         <Checkbox
           label={intl('workplace.label')}
           checked={state.workplaceSharing}
-          onChange={e =>
+          onChange={(e) =>
             dispatch({
               type: 'toggle_workplace',
-              data: e.target.checked
+              data: e.target.checked,
             })
           }
           disabled={loading}
@@ -53,7 +53,7 @@ const Integrations = ({ state, dispatch, loading }) => {
         <Input
           value={state.slackChannelHook || ''}
           style={{ flex: 1, marginRight: '1rem' }}
-          onChange={e => dispatch({ type: 'change_slack_channelhook', data: e.target.value })}
+          onChange={(e) => dispatch({ type: 'change_slack_channelhook', data: e.target.value })}
         />
       </div>
       <div className="inline-input" style={{ marginTop: '1em' }}>
@@ -86,30 +86,30 @@ Integrations.translations = {
     tab: 'Integrations',
     workplace: {
       title: 'Workplace',
-      label: 'Enable Workplace sharing'
+      label: 'Enable Workplace sharing',
     },
     slack: {
       title: 'Slack',
       channel: 'Slack Channel Hook:',
       command: 'Slack Command Hook:',
       generate: 'Generate',
-      regenerate: 'Regenerate'
-    }
+      regenerate: 'Regenerate',
+    },
   },
   fr: {
     tab: 'Intégrations',
     workplace: {
       title: 'Workplace',
-      label: 'Activer le partage par Workplace'
+      label: 'Activer le partage par Workplace',
     },
     slack: {
       title: 'Slack',
       channel: 'Slack Channel Hook:',
       command: 'Slack Command Hook:',
       generate: 'Générer',
-      regenerate: 'Régénérer'
-    }
-  }
+      regenerate: 'Régénérer',
+    },
+  },
 }
 
 export default Integrations

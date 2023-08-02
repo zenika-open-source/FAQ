@@ -1,10 +1,9 @@
-import React from 'react'
-import PropTypes from 'prop-types'
 import cn from 'classnames'
+import PropTypes from 'prop-types'
 
-import CardTitle from './CardTitle'
-import CardText from './CardText'
 import CardActions from './CardActions'
+import CardText from './CardText'
+import CardTitle from './CardTitle'
 
 import './Card.css'
 
@@ -16,7 +15,7 @@ const Card = ({ children, className, ...otherProps }) => (
 
 Card.propTypes = {
   children: PropTypes.node.isRequired,
-  className: PropTypes.string
+  className: PropTypes.string,
 }
 
 Card.Title = CardTitle

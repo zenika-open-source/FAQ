@@ -1,7 +1,7 @@
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
 
 export const CREATE_FLAG = gql`
-  mutation($type: String!, $nodeId: ID!) {
+  mutation ($type: String!, $nodeId: ID!) {
     addFlag(type: $type, nodeId: $nodeId) {
       id
       flags {
@@ -18,7 +18,7 @@ export const CREATE_FLAG = gql`
 `
 
 export const REMOVE_FLAG = gql`
-  mutation($type: String!, $nodeId: ID!) {
+  mutation ($type: String!, $nodeId: ID!) {
     removeFlag(type: $type, nodeId: $nodeId) {
       id
       flags {
@@ -35,7 +35,7 @@ export const REMOVE_FLAG = gql`
 `
 
 export const INCREMENT_VIEWS_COUNTER = gql`
-  mutation($questionId: ID!) {
+  mutation ($questionId: ID!) {
     incrementQuestionViewsCounter(id: $questionId) {
       id
       views

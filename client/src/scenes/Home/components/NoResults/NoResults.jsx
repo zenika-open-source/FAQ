@@ -1,4 +1,3 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
@@ -15,7 +14,7 @@ const NoResults = ({ prefill }) => {
         style={{
           marginBottom: '2rem',
           display: 'inline-flex',
-          alignItems: 'center'
+          alignItems: 'center',
         }}
       >
         {intl('nothing')} &nbsp;
@@ -30,12 +29,12 @@ const NoResults = ({ prefill }) => {
 }
 
 NoResults.propTypes = {
-  prefill: PropTypes.string.isRequired
+  prefill: PropTypes.string.isRequired,
 }
 
 NoResults.translations = {
   en: { nothing: 'Nothing found', ask_question: 'Ask the question!' },
-  fr: { nothing: 'Aucune question trouvée', ask_question: 'Pose la question !' }
+  fr: { nothing: 'Aucune question trouvée', ask_question: 'Pose la question !' },
 }
 
 export default NoResults

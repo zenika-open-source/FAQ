@@ -26,7 +26,7 @@ const Dropdown = ({ className, button, children }) => {
 Dropdown.propTypes = {
   className: PropTypes.string,
   button: PropTypes.node.isRequired,
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
 }
 
 export default Dropdown

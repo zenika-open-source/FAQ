@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react'
 import cn from 'classnames'
 import sortBy from 'lodash/sortBy'
+import { useEffect, useState } from 'react'
 import uuid from 'uuid/v4'
 
+import { Button, Icon, Input } from 'components'
+import Card, { CardActions, CardText, CardTitle } from 'components/Card'
 import { useClickOutside } from 'helpers'
-import { Input, Icon, Button } from 'components'
-import Card, { CardTitle, CardText, CardActions } from 'components/Card'
 
 import './TagsEditor.scss'
 
@@ -27,7 +27,7 @@ const TagInput = ({ changeOrder, value, onChange, onDelete }) => {
         </div>
         {editing ? (
           <div className="input-wrapper">
-            <Input value={newValue} onChange={e => setNewValue(e.target.value)} small autoFocus />
+            <Input value={newValue} onChange={(e) => setNewValue(e.target.value)} small autoFocus />
           </div>
         ) : (
           <div className="value-wrapper" onClick={() => setEditing(true)}>
@@ -67,30 +67,30 @@ const TagInput = ({ changeOrder, value, onChange, onDelete }) => {
 }
 
 const Category = ({ category, categories, onChange }) => {
-  const changeCategoryOrder = delta => () => {
+  const changeCategoryOrder = (delta) => () => {
     onChange(
-      categories.map(cat => {
+      categories.map((cat) => {
         if (cat.order === category.order + delta) return { ...cat, order: cat.order - delta }
         if (cat.order === category.order) return { ...cat, order: cat.order + delta }
         return cat
-      })
+      }),
     )
   }
 
-  const changeCategoryName = name => {
+  const changeCategoryName = (name) => {
     onChange(
-      categories.map(cat => {
+      categories.map((cat) => {
         if (cat.id !== category.id) return cat
         return { ...cat, name }
-      })
+      }),
     )
   }
 
-  const deleteCategory = () => onChange(categories.filter(cat => cat.id !== category.id))
+  const deleteCategory = () => onChange(categories.filter((cat) => cat.id !== category.id))
 
   const addLabel = () =>
     onChange(
-      categories.map(cat => {
+      categories.map((cat) => {
         if (cat.id !== category.id) return cat
         return {
           ...cat,
@@ -99,51 +99,51 @@ const Category = ({ category, categories, onChange }) => {
             {
               id: uuid(),
               name: 'New tag',
-              order: cat.labels.length
-            }
-          ]
+              order: cat.labels.length,
+            },
+          ],
         }
-      })
+      }),
     )
 
-  const deleteLabel = label => () =>
+  const deleteLabel = (label) => () =>
     onChange(
-      categories.map(cat => {
+      categories.map((cat) => {
         if (cat.id !== category.id) return cat
         return {
           ...cat,
-          labels: cat.labels.filter(lab => lab.id !== label.id)
+          labels: cat.labels.filter((lab) => lab.id !== label.id),
         }
-      })
+      }),
     )
 
-  const changeLabelOrder = label => delta => () =>
+  const changeLabelOrder = (label) => (delta) => () =>
     onChange(
-      categories.map(cat => {
+      categories.map((cat) => {
         if (cat.id !== category.id) return cat
         return {
           ...cat,
-          labels: cat.labels.map(lab => {
+          labels: cat.labels.map((lab) => {
             if (lab.order === label.order + delta) return { ...lab, order: lab.order - delta }
             if (lab.order === label.order) return { ...lab, order: lab.order + delta }
             return lab
-          })
+          }),
         }
-      })
+      }),
     )
 
-  const changeLabelName = label => name =>
+  const changeLabelName = (label) => (name) =>
     onChange(
-      categories.map(cat => {
+      categories.map((cat) => {
         if (cat.id !== category.id) return cat
         return {
           ...cat,
-          labels: cat.labels.map(lab => {
+          labels: cat.labels.map((lab) => {
             if (lab.id !== label.id) return lab
             return { ...lab, name }
-          })
+          }),
         }
-      })
+      }),
     )
 
   return (
@@ -159,7 +159,7 @@ const Category = ({ category, categories, onChange }) => {
       </CardTitle>
       <CardText>
         <div className="labels">
-          {sortBy(category.labels, ['order']).map(label => (
+          {sortBy(category.labels, ['order']).map((label) => (
             <div className="label" key={label.id}>
               <TagInput
                 changeOrder={changeLabelOrder(label)}
@@ -194,15 +194,15 @@ const TagsEditor = ({ categories, onChange }) => {
         id: uuid(),
         name: 'New category',
         order: categories.length,
-        labels: []
-      }
+        labels: [],
+      },
     ])
 
   const fillerCount = 3 - ((categories.length + 1) % 3)
 
   return (
     <div className="tags-editor">
-      {sortBy(categories, ['order']).map(category => (
+      {sortBy(categories, ['order']).map((category) => (
         <Category
           key={category.id}
           category={category}

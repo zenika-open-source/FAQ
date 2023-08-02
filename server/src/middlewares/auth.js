@@ -34,39 +34,11 @@ const checkJwt = async (req, res, next, prisma) => {
       }`
     )
 
-  const userNoAuthUpsert = () => {
-    const specialtyId = conf.tagCategories[0]?.labels[1]?.id
-    const specialties = specialtyId ? { specialties: { connect: { id: specialtyId } } } : {}
-    return prisma.mutation.upsertUser(
-      {
-        where: { auth0Id: 'faq-user-no-auth@zenika.com' },
-        create: {
-          auth0Id: 'faq-user-no-auth@zenika.com',
-          admin: false,
-          key: 'enableSkipAuth',
-          name: 'enableSkipAuth',
-          email: 'faq-user-no-auth@zenika.com',
-          picture:
-            'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg',
-          ...specialties
-        },
-        update: {
-          admin: false,
-          key: 'enableSkipAuth',
-          name: 'enableSkipAuth',
-          email: 'faq-user-no-auth@zenika.com',
-          picture:
-            'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg'
-        }
-      },
-      `{
-        id
-        email
-      }`
-    )
-  }
-  if (process.env.DISABLE_AUTH === 'true') {
-    const user = await userNoAuthUpsert()
+  if (process.env.DISABLE_AUTH === 'true' && token) {
+    const user = await userQuery({ id: token })
+    if (!user) {
+      return next(new UnauthorizedError('no-user-found', `No user found for id: ${token}`))
+    }
     req.user = {
       id: user.id,
       email: user.email,

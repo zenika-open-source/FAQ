@@ -1,7 +1,3 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { withRouter } from 'react-router'
-
 import { getIntl } from 'services'
 import { useUser, useConfiguration } from 'contexts'
 
@@ -10,7 +6,7 @@ import Dropdown, { DropdownItem, DropdownDivider } from 'components/Dropdown'
 
 import GithubIcon from '../GithubIcon'
 
-const UserMenu = ({ history }) => {
+const UserMenu = () => {
   const intl = getIntl(UserMenu)
 
   const me = useUser()
@@ -55,25 +51,21 @@ const UserMenu = ({ history }) => {
   )
 }
 
-UserMenu.propTypes = {
-  history: PropTypes.object.isRequired
-}
-
 UserMenu.translations = {
   en: {
     profile: 'Profile',
     settings: 'Settings',
     github: 'Github',
     bug_report: 'Bug report',
-    sign_out: 'Sign out'
+    sign_out: 'Sign out',
   },
   fr: {
     profile: 'Profil',
     settings: 'Paramètres',
     github: 'Github',
     bug_report: 'Signaler un bug',
-    sign_out: 'Deconnexion'
-  }
+    sign_out: 'Deconnexion',
+  },
 }
 
-export default withRouter(UserMenu)
+export default UserMenu

@@ -1,4 +1,3 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 
 const CardAction = ({ children, ...otherProps }) => (
@@ -8,7 +7,7 @@ const CardAction = ({ children, ...otherProps }) => (
 )
 
 CardAction.propTypes = {
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
 }
 
 export default CardAction

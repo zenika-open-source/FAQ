@@ -3,7 +3,7 @@ import { format, formatDistanceToNow, differenceInMilliseconds, subMonths } from
 
 import { markdown } from 'services'
 
-const join = array => {
+const join = (array) => {
   array = compact(array)
   if (array.length <= 1) {
     return array.join('')
@@ -34,7 +34,7 @@ export const formatHistoryAction = (historyAction, options = { relative: true })
     CREATED: {
       Question: () => join([`asked ${what}`, sentencer(meta.tags, 'added', 'tag', true)]),
       Answer: () => join([`answered ${what}`, sentencer(meta.sources, 'added', 'source')]),
-      Flag: () => `flagged ${what} with "${meta.type}"`
+      Flag: () => `flagged ${what} with "${meta.type}"`,
     },
     UPDATED: {
       Question: () => {
@@ -57,26 +57,26 @@ export const formatHistoryAction = (historyAction, options = { relative: true })
         s.push(sentencer(meta.sourcesChanges.removed, 'removed', 'source'))
 
         return join(s)
-      }
+      },
     },
     DELETED: {
-      Flag: () => `removed the flag "${meta.type}"` + (options.relative ? '' : ` from ${what}`)
-    }
+      Flag: () => `removed the flag "${meta.type}"` + (options.relative ? '' : ` from ${what}`),
+    },
   }
 
   const icons = {
     CREATED: {
       Question: 'record_voice_over',
       Answer: 'feedback',
-      Flag: 'flag'
+      Flag: 'flag',
     },
     UPDATED: {
       Question: meta.title ? 'edit' : 'local_offer',
-      Answer: meta.content ? 'question_answer' : 'library_books'
+      Answer: meta.content ? 'question_answer' : 'library_books',
     },
     DELETED: {
-      Flag: 'outlined_flag'
-    }
+      Flag: 'outlined_flag',
+    },
   }
 
   const monthOld = subMonths(new Date(), 1)
@@ -85,7 +85,7 @@ export const formatHistoryAction = (historyAction, options = { relative: true })
   const date =
     differenceInMilliseconds(createdAtDate, monthOld) > 0
       ? formatDistanceToNow(createdAtDate, {
-          addSuffix: true
+          addSuffix: true,
         })
       : format(createdAtDate, 'Pp')
 
@@ -93,6 +93,6 @@ export const formatHistoryAction = (historyAction, options = { relative: true })
     date,
     user,
     sentence: sentences[action][model](),
-    icon: icons[action][model]
+    icon: icons[action][model],
   }
 }

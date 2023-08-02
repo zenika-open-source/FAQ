@@ -48,7 +48,7 @@ Input.propTypes = {
   style: PropTypes.object,
   autoFocus: PropTypes.bool,
   onClear: PropTypes.func,
-  small: PropTypes.bool
+  small: PropTypes.bool,
 }
 
 export default Input

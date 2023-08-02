@@ -1,4 +1,3 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 
 import { DefaultPagination, Loading } from 'components'
@@ -11,11 +10,11 @@ const HistoryActions = ({
   pageCurrent,
   onPageSelected,
   loading,
-  meta
+  meta,
 }) => {
   const shouldShowLoading = loading && (meta ? meta.pageCurrent !== pageCurrent : true)
 
-  const actions = historyActions.map(action => <HistoryAction key={action.id} action={action} />)
+  const actions = historyActions.map((action) => <HistoryAction key={action.id} action={action} />)
 
   return (
     <div>
@@ -36,7 +35,7 @@ HistoryActions.propTypes = {
   pageCurrent: PropTypes.number,
   onPageSelected: PropTypes.func,
   loading: PropTypes.bool,
-  meta: PropTypes.object
+  meta: PropTypes.object,
 }
 
 export default HistoryActions

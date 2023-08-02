@@ -1,22 +1,18 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { Route, Switch, Redirect } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 
-import Login from './Login'
 import Callback from './Callback'
+import Login from './Login'
 import Logout from './Logout'
 
-const Auth = ({ match }) => (
-  <Switch>
-    <Route path={`${match.url}/login`} component={Login} />
-    <Route path={`${match.url}/callback`} component={Callback} />
-    <Route path={`${match.url}/logout`} component={Logout} />
-    <Route render={() => <Redirect to="/" />} />
-  </Switch>
-)
-
-Auth.propTypes = {
-  match: PropTypes.object.isRequired
+const Auth = () => {
+  return (
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/callback" element={<Callback />} />
+      <Route path="/logout" element={<Logout />} />
+      <Route path="*" element={<Navigate to="/" />} />
+    </Routes>
+  )
 }
 
 export default Auth

@@ -1,18 +1,31 @@
 {
   "env": {
     "browser": true,
-    "es6": true
+    "es2022": true
   },
-  "extends": ["standard", "react-app", "prettier", "prettier/standard"],
+  "extends": ["standard", "plugin:react/recommended", "plugin:react/jsx-runtime", "prettier"],
+  "parser": "@babel/eslint-parser",
   "parserOptions": {
     "ecmaVersion": 2019,
     "sourceType": "module",
+    "requireConfigFile": false,
     "ecmaFeatures": {
-      "jsx": true
+      "jsx": true,
+      "modules": true
+    },
+    "babelOptions": {
+      "presets": ["@babel/preset-react"]
+    }
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
     }
   },
   "rules": {
-    "no-console": 1,
+    "no-console": "warn",
+    "react/prop-types": "off",
+    "react/no-unescaped-entities": "off",
     "linebreak-style": ["error", "unix"],
     "space-before-function-paren": [
       "error",

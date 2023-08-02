@@ -1,4 +1,3 @@
-import React from 'react'
 import { Link } from 'react-router-dom'
 
 import { getIntl } from 'services'
@@ -15,7 +14,7 @@ const Navbar = () => {
   const conf = useConfiguration()
 
   return (
-    <div className="navbar">
+    <nav className="navbar">
       <div className="brand">
         <Link to="/" className="title">
           <img alt="emoji" src="/img/favicon/favicon-64.png" />
@@ -45,13 +44,13 @@ const Navbar = () => {
           </Link>
         </Authenticated>
       </div>
-    </div>
+    </nav>
   )
 }
 
 Navbar.translations = {
   en: { report_bug: 'Report a bug', new_question: 'New question' },
-  fr: { report_bug: 'Signaler un bug', new_question: 'Nouvelle question' }
+  fr: { report_bug: 'Signaler un bug', new_question: 'Nouvelle question' },
 }
 
 export default Navbar

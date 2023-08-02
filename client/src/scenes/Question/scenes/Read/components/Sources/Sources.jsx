@@ -1,4 +1,3 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 
 import { getIntl } from 'services'
@@ -16,7 +15,7 @@ const Sources = ({ sources }) => {
         style={{
           color: 'var(--primary-color)',
           margin: '0.7rem',
-          marginBottom: '0'
+          marginBottom: '0',
         }}
       >
         {intl('sources')}
@@ -24,10 +23,10 @@ const Sources = ({ sources }) => {
       <List
         style={{
           fontSize: 'var(--small-font-size)',
-          color: 'var(--secondary-color-font-light)'
+          color: 'var(--secondary-color-font-light)',
         }}
       >
-        {sources.map(source => (
+        {sources.map((source) => (
           <ListItem key={source.id} caption={source.label} icon="library_books" href={source.url} />
         ))}
       </List>
@@ -36,12 +35,12 @@ const Sources = ({ sources }) => {
 }
 
 Sources.propTypes = {
-  sources: PropTypes.array.isRequired
+  sources: PropTypes.array.isRequired,
 }
 
 Sources.translations = {
   en: { sources: 'Sources:' },
-  fr: { sources: 'Sources:' }
+  fr: { sources: 'Sources:' },
 }
 
 export default Sources
