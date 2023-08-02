@@ -1,7 +1,7 @@
 import { Button } from 'components'
 import { addToQueryString, unserialize } from 'helpers'
 import debounce from 'lodash/debounce'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useLocation, useSearchParams } from 'react-router-dom'
 import { getIntl } from 'services'
 
@@ -14,27 +14,26 @@ const Home = () => {
   const params = unserialize(location.search)
   const [, setSearchParams] = useSearchParams()
 
-  const [searchText, setSearchText] = useState(params.q)
-  let debouncedSearchText = searchText
+  const [searchbarText, setSearchbarText] = useState(params.q)
+  const [resultListSearchText, setResultListSearchText] = useState(searchbarText)
+
+  const debouncedSetResultListSearchText = debounce(setResultListSearchText, 200)
+
+  useEffect(() => {
+    debouncedSetResultListSearchText(searchbarText)
+    return () => {
+      debouncedSetResultListSearchText.cancel()
+    }
+  }, [searchbarText])
+
+  useEffect(() => {
+    addToQueryString(setSearchParams, location, {
+      q: resultListSearchText,
+    })
+  }, [resultListSearchText])
+
   const [loading, setLoading] = useState(false)
   const [tags, setTags] = useState(params.tags)
-
-  const onSearchChange = (text) => {
-    setSearchText(text)
-    addToQueryString(setSearchParams, location, {
-      q: text,
-    })
-
-    querySearchProvider()
-  }
-
-  const setDebounceTextSearch = () => {
-    debouncedSearchText = searchText
-  }
-
-  const querySearchProvider = debounce(setDebounceTextSearch, 200)
-
-  const setSearchLoading = (loading) => setLoading(loading)
 
   const onTagsChange = (tags) => {
     const labels = tags.map((tag) => tag.name)
@@ -47,13 +46,13 @@ const Home = () => {
   return (
     <div>
       <Searchbar
-        text={searchText}
+        text={searchbarText}
         tags={tags}
         loading={loading}
-        onTextChange={onSearchChange}
+        onTextChange={setSearchbarText}
         onTagsChange={onTagsChange}
       />
-      <ResultList searchText={debouncedSearchText} setSearchLoading={setSearchLoading} />
+      <ResultList searchText={resultListSearchText} setSearchLoading={setLoading} />
       <Link to="/q/new">
         <Button
           icon="record_voice_over"
