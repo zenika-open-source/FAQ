@@ -7,41 +7,51 @@ const Tips = (props) => {
 
   return (
     <TipsComponent {...props} uid="tips_question">
-      <h3>{intl('title')}</h3>
-      <div style={{ textAlign: 'center' }}>
-        <ul style={{ textAlign: 'left' }}>
+      <h3 className="text-primary flex items-center justify-center">{intl('title')}</h3>
+      <div className="text-center">
+        <ul className="list-none p-0 mx-auto my-4 inline-block text-left">
           {intl('tips').map((tip, i) => (
-            <li key={i}>{tip}</li>
+            <li
+              className="py-[0.1rem] flex items-center leading-5 before:pr-[5px] before:content-['▸'] before:text-primary"
+              key={i}
+            >
+              {tip}
+            </li>
           ))}
         </ul>
       </div>
-      <div className="row-on-mobile">
+      <div className="flex max-[{480px}]:flex-col">
         <div>
-          <h3>
+          <h3 className="text-primary flex items-center justify-center">
             <i className="material-icons" style={{ color: 'green' }}>
               check
             </i>
             {intl('good.title')}
           </h3>
-          <ul>
+          <ul className="list-none p-0 mx-auto inline-block text-left">
             {intl('good.examples').map((example, i) => (
-              <li key={i}>{example}</li>
+              <li
+                className="py-[0.1rem] flex items-center leading-5 before:pr-[5px] before:content-['▸'] before:text-primary"
+                key={i}
+              >
+                {example}
+              </li>
             ))}
           </ul>
         </div>
         <div>
-          <h3>
+          <h3 className="text-primary flex items-center justify-center">
             <i className="material-icons" style={{ color: 'red' }}>
               close
             </i>
             {intl('bad.title')}
           </h3>
-          <table className="misplaced-questions">
+          <table className="border-spacing-0 mt-4 leading-5">
             <tbody>
               {intl('bad.examples').map(([type, example], i) => (
-                <tr key={i}>
-                  <td>▸</td>
-                  <td>
+                <tr className="my-[0.1rem]" key={i}>
+                  <td className="text-primary ">▸</td>
+                  <td className="pr-2">
                     <b>{type}</b>
                   </td>
                   <td>{example}</td>

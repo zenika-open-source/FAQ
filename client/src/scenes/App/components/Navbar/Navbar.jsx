@@ -45,7 +45,7 @@ const Navbar = () => {
         <Authenticated>
           <UserMenu />
           <Link to="/q/new">
-            <Button label={<b>{intl('new_question')}</b>} intent="secondary" size="large" />
+            <Button label={<b>{intl('new_question')}</b>} intent="secondary" size="medium" />
           </Link>
         </Authenticated>
       </div>

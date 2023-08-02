@@ -37,7 +37,3 @@
   margin-top: 0.5rem;
   flex-direction: column;
 }
-
-.searchbar .filters .checkbox + .checkbox {
-  margin-left: 1rem;
-}

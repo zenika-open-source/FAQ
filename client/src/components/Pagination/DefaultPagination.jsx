@@ -18,16 +18,16 @@ const renderPage = ({ index, isCurrent, onClick }) => {
   )
 }
 
-const renderEllipsis = ({ key }) => <Button key={key} label="⋯" action="disabled" />
+const renderEllipsis = ({ key }) => <Button key={key} label="⋯" intent="disabled" />
 
 const renderNav = ({ type, disabled, onClick }) => {
   return (
     <Button
       key={type}
       icon={type === 'previous' ? 'chevron_left' : 'chevron_right'}
-      intent="link"
+      intent={disabled ? 'disabled' : 'link'}
       size="pagination"
-      action={disabled ? 'disabled' : 'raised'}
+      action="raised"
       onClick={onClick}
     />
   )

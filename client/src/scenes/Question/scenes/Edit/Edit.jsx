@@ -116,7 +116,7 @@ const Edit = ({ zNode = null }) => {
       >
         {!showTips && (
           <Button
-            link
+            intent="link"
             icon="lightbulb_outline"
             label={intl('show_tips')}
             onClick={toggleTips(true)}
@@ -143,9 +143,9 @@ const Edit = ({ zNode = null }) => {
         <CardActions>
           <Button
             label={isEditing ? intl('validate.edit') : intl('validate.submit')}
-            disabled={!canSubmit(state)}
-            primary
-            raised
+            intent={canSubmit(state) ? 'primary' : 'disabled'}
+            action="raised"
+            size="large"
             onClick={submitForm}
           />
         </CardActions>

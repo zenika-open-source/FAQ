@@ -24,10 +24,10 @@ export default {
       "error": "#ff3860",
     },
     fontSize: {
-      // sm: "0.7rem",
+      sm: "0.7rem",
       base: "14px",
-      // lg: "1.1rem",
-      // xl: "1.3rem"
+      lg: "1.1rem",
+      xl: "1.3rem"
     },
     extend: {
       spacing: {

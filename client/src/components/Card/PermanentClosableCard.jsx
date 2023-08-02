@@ -34,7 +34,13 @@ class PermanentClosableCard extends Component {
             </span>
             {children}
             <CardActions>
-              <Button secondary raised label={intl('understood')} onClick={close} />
+              <Button
+                intent="tertiary"
+                action="raised"
+                size="medium"
+                label={intl('understood')}
+                onClick={close}
+              />
             </CardActions>
           </Card>
         )}

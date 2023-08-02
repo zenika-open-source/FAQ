@@ -44,7 +44,7 @@ const Home = () => {
   }
 
   return (
-    <div>
+    <div className="relative">
       <Searchbar
         text={searchbarText}
         tags={tags}
@@ -57,11 +57,10 @@ const Home = () => {
         <Button
           icon="record_voice_over"
           data-tooltip={intl('new_question')}
-          style={{ position: 'fixed', bottom: '1rem', right: '1rem' }}
-          primary
-          round
-          raised
-          fixed
+          className="fixed bottom-4 right-4"
+          intent="primary"
+          shape="round"
+          action="raised"
         />
       </Link>
     </div>
