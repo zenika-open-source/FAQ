@@ -15,7 +15,7 @@
     },
     "babelOptions": {
       "presets": ["@babel/preset-react"]
-   }
+    }
   },
   "settings": {
     "react": {
@@ -23,9 +23,9 @@
     }
   },
   "rules": {
-    "no-console": 1,
-    "react/prop-types": 0,
-    "react/no-unescaped-entities": 0,
+    "no-console": "warn",
+    "react/prop-types": "off",
+    "react/no-unescaped-entities": "off",
     "linebreak-style": ["error", "unix"],
     "space-before-function-paren": [
       "error",

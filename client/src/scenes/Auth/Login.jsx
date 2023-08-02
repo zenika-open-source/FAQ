@@ -8,10 +8,10 @@ import { Button, Loading } from 'components'
 
 const Login = () => {
   const intl = getIntl(Login)
-  const { state } = useLocation()
+  const location = useLocation()
 
   const [renewing, setRenewing] = useState(false)
-  const redirectedFrom = state && state.from
+  const redirectedFrom = location.state && location.state.from
 
   const { login, renewAuth, isAuth, wasAuth } = useAuth()
 

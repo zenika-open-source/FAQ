@@ -1,5 +1,3 @@
-import PropTypes from 'prop-types'
-
 import { getIntl } from 'services'
 import { useUser, useConfiguration } from 'contexts'
 
@@ -8,7 +6,7 @@ import Dropdown, { DropdownItem, DropdownDivider } from 'components/Dropdown'
 
 import GithubIcon from '../GithubIcon'
 
-const UserMenu = ({ history }) => {
+const UserMenu = () => {
   const intl = getIntl(UserMenu)
 
   const me = useUser()
@@ -51,10 +49,6 @@ const UserMenu = ({ history }) => {
       </DropdownItem>
     </Dropdown>
   )
-}
-
-UserMenu.propTypes = {
-  history: PropTypes.object,
 }
 
 UserMenu.translations = {
