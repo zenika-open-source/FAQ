@@ -11,7 +11,7 @@ import App from 'scenes/App/App'
 import Auth from 'scenes/Auth/Auth'
 import Home from 'scenes/Home/Home'
 import NotFound from 'scenes/NotFound/NotFound'
-import Question from 'scenes/Question/Question'
+import QuestionRoutes from 'scenes/Question/QuestionRoutes'
 import Settings from 'scenes/Settings/Settings'
 import UserProfile from 'scenes/UserProfile/UserProfile'
 import ApolloWrapper from 'services/apollo'
@@ -22,7 +22,7 @@ const router = createBrowserRouter(
       <Route path="auth/*" element={<Auth />} />
       <Route element={<PrivateRoute />}>
         <Route path="/" element={<Home />} />
-        <Route path="q/*" element={<Question />} />
+        <Route path="q/*" element={<QuestionRoutes />} />
         <Route path="user-profile" element={<UserProfile />} />
         <Route path="settings" element={<Settings />} admin specialist />
       </Route>
