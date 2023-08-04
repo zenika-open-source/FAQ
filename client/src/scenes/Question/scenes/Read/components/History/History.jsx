@@ -11,13 +11,22 @@ const History = () => {
   const [open, setOpen] = useState(false)
 
   return (
-    <div className="history">
-      <div className={cn('toggler', open ? 'up' : 'down')} onClick={() => setOpen((st) => !st)}>
+    <div className="flex flex-col items-center min-h-[1.5rem]">
+      <div
+        className={cn(
+          'group/toggler flex justify-center relative cursor-pointer border border-primary-font',
+          open
+            ? 'group/up border-t-primary [&_.arrow]:top-[-5px] [&_.arrow]:border-b-primary-font [&_.arrow]:border-r-primary-font'
+            : 'group/down hover:border-b-primary [&_.arrow]:top-[18px] [&_.arrow]:border-t-primary-font [&_.arrow]:border-l-primary-font',
+        )}
+        style={{ fontVariant: 'small-caps' }}
+        onClick={() => setOpen((st) => !st)}
+      >
         <span>{intl('title')}</span>
-        <div className="arrow" />
+        <div className="arrow absolute border border-primary w-[10px] h-[10px] rotate-45 group-hover/toggler:w-0 group-hover/toggler:h-0 group-hover/toggler:border-[5.5px] group-hover/down:top-[16px]" />
       </div>
       {open && (
-        <div className="actions">
+        <div className="flex flex-col-reverse w-full">
           <HistoryActions />
         </div>
       )}

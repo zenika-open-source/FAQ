@@ -6,6 +6,7 @@ export default {
   ],
   theme: {
     colors: {
+      transparent: 'transparent',
       "primary": "#af1e3a",
       "primary-light": "#e65564",
       "primary-dark": "#790015",

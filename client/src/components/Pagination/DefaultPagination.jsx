@@ -9,7 +9,6 @@ const renderPage = ({ index, isCurrent, onClick }) => {
     <Button
       key={index}
       label={index}
-      active={isCurrent}
       intent={isCurrent ? 'primary' : 'link'}
       action="raised"
       size="pagination"

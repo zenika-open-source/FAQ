@@ -4,10 +4,11 @@ import cn from 'classnames'
 const CardTitle = ({ children, className, onClick, ...otherProps }) => (
   <div
     className={cn(
-      'bg-secondary-light text-secondary-font p-[0.7rem] relative flex items-center break-words shadow-[0px_3px_4px] shadow-secondary',
+      `bg-secondary-light text-secondary-font p-[0.7rem] relative flex items-center break-words shadow-[0px_3px_4px] shadow-secondary ${
+        onClick ? 'cursor-pointer' : 'cursor-default'
+      }`,
       className,
     )}
-    style={{ cursor: onClick ? 'pointer' : 'initial' }}
     onClick={onClick}
     {...otherProps}
   >

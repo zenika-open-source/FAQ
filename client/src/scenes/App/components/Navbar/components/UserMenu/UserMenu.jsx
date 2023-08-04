@@ -15,7 +15,7 @@ const UserMenu = () => {
   if (!me) return null
 
   return (
-    <Dropdown button={<Avatar image={me.picture} style={{ width: '30px', display: 'block' }} />}>
+    <Dropdown button={<Avatar image={me.picture} className="w-8 block" />}>
       <DropdownItem icon="account_box" path="/user-profile">
         {intl('profile')}
       </DropdownItem>
@@ -26,7 +26,7 @@ const UserMenu = () => {
       </Authenticated>
       <DropdownDivider />
       <DropdownItem
-        icon={<GithubIcon style={{ width: '20px', height: '20px', margin: '2px' }} />}
+        icon={<GithubIcon className="w-5 h-5 m-[2px]" />}
         href="https://github.com/zenika-open-source/FAQ"
         target="_blank"
       >

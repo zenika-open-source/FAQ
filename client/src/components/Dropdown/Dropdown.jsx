@@ -18,7 +18,7 @@ const Dropdown = ({ className, button, children }) => {
       >
         <div className="cursor-pointer">{button}</div>
         <div
-          className={`absolute bg-secondary-light min-w-[160px] z-10 right-0 shadow-[0_8px_16px_0] shadow-[rgba(0, 0, 0, 0.2)]
+          className={`absolute bg-secondary-light min-w-[160px] z-10 right-0 shadow-[0_8px_16px_0_rgb(0,0,0,0.2)]
             ${active ? 'flex flex-col' : 'hidden'}`}
         >
           {children}

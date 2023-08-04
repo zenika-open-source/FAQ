@@ -23,9 +23,7 @@ const Tips = (props) => {
       <div className="flex max-[{480px}]:flex-col">
         <div>
           <h3 className="text-primary flex items-center justify-center">
-            <i className="material-icons" style={{ color: 'green' }}>
-              check
-            </i>
+            <i className="material-icons text-green-600">check</i>
             {intl('good.title')}
           </h3>
           <ul className="list-none p-0 mx-auto inline-block text-left">
@@ -41,9 +39,7 @@ const Tips = (props) => {
         </div>
         <div>
           <h3 className="text-primary flex items-center justify-center">
-            <i className="material-icons" style={{ color: 'red' }}>
-              close
-            </i>
+            <i className="material-icons text-red-600">close</i>
             {intl('bad.title')}
           </h3>
           <table className="border-spacing-0 mt-4 leading-5">

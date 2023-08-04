@@ -25,7 +25,7 @@ const General = ({ state, dispatch, loading }) => {
       <div className="inline-input">
         <Icon material="domain" />
         <Input
-          style={{ flex: 1 }}
+          className="flex-1"
           value={state.authorizedDomains}
           onChange={(e) => dispatch({ type: 'change_domains', data: e.target.value })}
           placeholder={intl('domains.placeholder')}
@@ -36,7 +36,7 @@ const General = ({ state, dispatch, loading }) => {
       <hr />
       <h2>{intl('bug_reporting.title')}</h2>
       <br />
-      <div style={{ marginLeft: '1rem' }}>
+      <div className="ml-4">
         <Radio.Group
           name="bug_reporting"
           selected={state.bugReporting}

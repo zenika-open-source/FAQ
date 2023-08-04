@@ -17,28 +17,31 @@ const Logs = ({ logs, loading, pagesCount, pageCurrent, onPageSelected, meta }) 
 
   return (
     <Card>
-      <CardText className="logs">
-        <h2 style={{ marginBottom: '1rem' }}>{intl('title')}</h2>
+      <CardText>
+        <h2 className="mb-4 font-bold">{intl('title')}</h2>
         <hr />
         {shouldShowLoading && <Loading />}
         {!shouldShowLoading &&
-          logs.map((h) => {
+          logs.map((h, index) => {
             const action = formatHistoryAction(h, { relative: false })
 
             return (
-              <div className="action" key={h.id}>
-                <div className="left">
-                  <div style={{ padding: '0.5rem' }}>
+              <div
+                className={`flex items-center justify-between w-full ${
+                  index === 0 ? '' : 'border-t border-t-secondary-dark'
+                }`}
+                key={h.id}
+              >
+                <div className="flex items-center">
+                  <div className="p-2">
                     <i className="material-icons">{action.icon}</i>
                   </div>
-                  <div style={{ marginLeft: '0.5rem' }}>You {action.sentence}.</div>
+                  <div className="ml-2">You {action.sentence}.</div>
                 </div>
-                <div className="right">
-                  <i style={{ marginLeft: 'auto' }}>{action.date}</i>
+                <div className="flex items-center min-w-[185px] text-right">
+                  <i className="ml-auto">{action.date}</i>
                   <Link to={nodeUrl(h.node)}>
-                    <i className="material-icons" style={{ marginLeft: '10px' }}>
-                      arrow_forward
-                    </i>
+                    <i className="material-icons ml-[10px]">arrow_forward</i>
                   </Link>
                 </div>
               </div>

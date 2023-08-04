@@ -2,7 +2,7 @@ import { cva } from 'class-variance-authority'
 
 const buttonVariants = cva(
   [
-    'relative inline-flex items-center justify-center font-base border border-transparent rounded outline-0 cursor-pointer',
+    'inline-flex items-center justify-center text-base border border-transparent rounded outline-0 cursor-pointer',
   ],
   {
     variants: {
@@ -15,7 +15,7 @@ const buttonVariants = cva(
           'bg-secondary text-secondary-font border-secondary hover:bg-secondary-dark hover:border-secondary-dark',
         link: 'bg-transparent border-none text-primary hover:bg-primary-light hover:text-primary-font font-normal',
         disabled:
-          'bg-transparent border-none text-secondary cursor-default hover:bg-transparent hover:border-transparent hover:text-secondary',
+          'bg-transparent border-primary-font text-secondary cursor-default hover:bg-transparent hover:border-transparent hover:text-secondary',
       },
       shape: {
         round: 'rounded-[25px] p-3',
@@ -55,11 +55,11 @@ const Button = ({
     <button className={buttonVariants({ intent, size, action, shape, className })} {...props}>
       {loading ? (
         <span>
-          <i className="fas fa-spinner fa-spin font-lg" />
+          <i className="fas fa-spinner fa-spin text-lg" />
         </span>
       ) : (
         <>
-          {icon && <i className="material-icons font-lg">{icon}</i>}
+          {icon && <i className="material-icons text-lg">{icon}</i>}
           {label && <span className={icon ? 'ml-2' : ''}>{label}</span>}
           {children && <span className={icon ? 'ml-2' : 'w-max h-max'}>{children}</span>}
         </>

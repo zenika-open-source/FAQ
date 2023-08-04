@@ -11,8 +11,8 @@ const ActionMenu = ({ backLabel, backLink, goBack, title, children }) => {
   const navigate = useNavigate()
 
   return (
-    <div className="action-menu">
-      <div className="back-btn">
+    <div className="flex items-center mb-1">
+      <div className="flex-1">
         {goBack && location.state && location.state.from === 'home' ? (
           <Button
             icon="chevron_left"
@@ -37,7 +37,7 @@ const ActionMenu = ({ backLabel, backLink, goBack, title, children }) => {
       <div className="title">
         <h2>{title}</h2>
       </div>
-      <div className="actions">{children}</div>
+      <div className="flex flex-1 justify-end">{children}</div>
     </div>
   )
 }

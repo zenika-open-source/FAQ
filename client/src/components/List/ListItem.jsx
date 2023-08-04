@@ -3,11 +3,7 @@ import PropTypes from 'prop-types'
 const ListItem = ({ caption, icon, href }) => {
   const ret = (
     <div className="list-item">
-      {icon && (
-        <i className="material-icons" style={{ fontSize: '18px' }}>
-          {icon}
-        </i>
-      )}
+      {icon && <i className="material-icons text-[18px]">{icon}</i>}
       {caption}
     </div>
   )

@@ -43,7 +43,10 @@ const FlagsDropdown = ({ zNode, onSelect, onRemove }) => {
   })
 
   return (
-    <Dropdown button={<Button icon="flag" label={intl('button')} intent="link" size="medium" />}>
+    <Dropdown
+      className="capitalize"
+      button={<Button icon="flag" label={intl('button')} intent="link" size="medium" />}
+    >
       {items}
     </Dropdown>
   )

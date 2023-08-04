@@ -34,31 +34,31 @@ const Integrations = ({ state, dispatch }) => {
       <hr />
       <h2>{intl('slack.title')}</h2>
       <br />
-      <div className="inline-input" style={{ marginTop: '1em' }}>
-        <i style={{ marginLeft: '1em' }}>{intl('slack.channel')}</i>
+      <div className="inline-input mt-[1em]">
+        <i className="ml-[1em]">{intl('slack.channel')}</i>
         <Input
           value={state.slackChannelHook || ''}
-          style={{ flex: 1, marginRight: '1rem' }}
+          className="flex-1 mr-4"
           onChange={(e) => dispatch({ type: 'change_slack_channelhook', data: e.target.value })}
         />
       </div>
-      <div className="inline-input" style={{ marginTop: '1em' }}>
-        <i style={{ marginLeft: '1em' }}>{intl('slack.command')}</i>
+      <div className="inline-input mt-[1em]">
+        <i className="ml-[1em]">{intl('slack.command')}</i>
         <Input
           value={
             state.slackCommandKey
               ? `https://${window.location.host}/rest/integration/slack/${state.slackCommandKey}`
               : ''
           }
-          disabled
-          small
-          style={{ flex: 1, marginLeft: '1rem', marginRight: '1rem' }}
+          intent="disabled"
+          size="small"
+          className="flex-1 ml-4 mr-4"
         />
         <Button
           label={
             (state.slackCommandKey ? intl('slack.regenerate') : intl('slack.generate')) + ' URL'
           }
-          link
+          intent="link"
           loading={slackHookLoading}
           onClick={generateSlackHook}
         />

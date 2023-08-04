@@ -62,9 +62,7 @@ const Settings = () => {
     <div>
       <Card>
         <CardTitle>
-          <h1 className="centered" style={{ width: '100%' }}>
-            {intl('title')}
-          </h1>
+          <h1 className="centered w-full">{intl('title')}</h1>
         </CardTitle>
         <CardText>
           <Tabs>

@@ -27,6 +27,7 @@ const DropdownItem = ({
             if (onClick) onClick(evt)
             setDropdownActive(false)
           }}
+          className="text-secondary-font-dark px-4 py-3 flex items-center justify-between cursor-pointer no-underline hover:bg-secondary"
         >
           {children}
         </Link>
@@ -43,6 +44,7 @@ const DropdownItem = ({
             if (onClick) onClick(evt)
             setDropdownActive(false)
           }}
+          className="text-secondary-font-dark px-4 py-3 flex items-center justify-between cursor-pointer no-underline hover:bg-secondary"
           {...otherProps}
         >
           {children}
@@ -53,12 +55,19 @@ const DropdownItem = ({
 
   return (
     <CustomLink>
-      <span className="left">
-        {icon &&
-          (typeof icon === 'string' ? <i className="material-icons">{icon}</i> : <i>{icon}</i>)}
+      <span className="flex items-center">
+        {icon && (
+          <i
+            className={
+              typeof icon === 'string' ? 'material-icons mr-2 inline-flex' : 'mr-2 inline-flex'
+            }
+          >
+            {icon}
+          </i>
+        )}
         {children}
       </span>
-      <span className="right">
+      <span className="flex items-center">
         {rightIcon &&
           (typeof rightIcon === 'string' ? (
             <i className="material-icons">{rightIcon}</i>

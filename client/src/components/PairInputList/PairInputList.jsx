@@ -36,9 +36,7 @@ const PairInputList = ({ pairs, options, actions, disabled, className, ...rest }
 
   return (
     <div className={cn('pair-input-list', className)} {...rest}>
-      {options.title && !isEmpty ? (
-        <h3 style={{ color: 'var(--primary-color)', margin: '0.7rem' }}>{options.title}</h3>
-      ) : null}
+      {options.title && !isEmpty ? <h3 className="text-primary m-3">{options.title}</h3> : null}
       {pairs.map((pair) => (
         <PairInput
           key={pair.id}
@@ -48,19 +46,15 @@ const PairInputList = ({ pairs, options, actions, disabled, className, ...rest }
           disabled={disabled}
         />
       ))}
-      <div
-        style={{
-          textAlign: isEmpty ? 'left' : 'center',
-        }}
-      >
+      <div className={isEmpty ? 'text-left' : 'text-center'}>
         {
           <Button
             icon={isEmpty ? options.icons.add || options.icons.more : options.icons.more}
             label={isEmpty ? options.labels.add || options.labels.more : options.labels.more}
-            link
-            raised
+            intent={disabled ? 'disabled' : 'link'}
+            action="raised"
+            size="medium"
             onClick={actions.create}
-            disabled={disabled}
           />
         }
       </div>

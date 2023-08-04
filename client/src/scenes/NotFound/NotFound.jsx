@@ -8,8 +8,8 @@ const NotFound = () => {
 
   return (
     <div>
-      <Button icon="chevron_left" label="Home" link onClick={() => navigate('/')} />
-      <div style={{ textAlign: 'center' }}>
+      <Button icon="chevron_left" label="Home" intent="link" onClick={() => navigate('/')} />
+      <div className="text-center">
         <h1>{intl('title')}</h1>
         <br />
         <br />

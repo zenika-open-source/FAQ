@@ -32,21 +32,15 @@ const ResultList = ({
         key={node.id + (opened ? '-opened' : '')}
         collapsed={opened}
         node={node}
-        style={{ marginBottom: '1rem' }}
+        className="mb-4"
       />
     )
   })
 
   return (
-    <div style={{ marginTop: '1rem' }}>
+    <div className="mt-4">
       {!shouldShowLoading && (
-        <p
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            padding: '0 1rem',
-          }}
-        >
+        <p className="flex justify-between px-4">
           <i>
             {searchText ? (
               <span>

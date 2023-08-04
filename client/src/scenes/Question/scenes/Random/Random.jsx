@@ -10,7 +10,7 @@ const Random = ({ randomNode }) => {
     return <Navigate to={`/q/${randomNode.question.slug}-${randomNode.id}`} />
   }
 
-  return <div style={{ textAlign: 'center', marginTop: '3rem' }}>{intl('error')}</div>
+  return <div className="text-center mt-12">{intl('error')}</div>
 }
 
 Random.propTypes = {

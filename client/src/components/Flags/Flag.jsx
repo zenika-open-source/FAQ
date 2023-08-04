@@ -1,9 +1,8 @@
-import PropTypes from 'prop-types'
 import capitalize from 'lodash/capitalize'
-import cn from 'classnames'
+import PropTypes from 'prop-types'
 
-import { getIntl } from 'services'
 import { format } from 'date-fns'
+import { getIntl } from 'services'
 
 const flagMeta = {
   duplicate: {
@@ -33,15 +32,15 @@ const Flag = ({ flag, withlabel, style, ...otherProps }) => {
 
   return (
     <div
-      className={cn('flag', {
-        'with-label': withlabel,
-      })}
+      className={`inline-flex items-center p-1 rounded-xl text-sm text-primary-font ${
+        withlabel ? 'px-[0.3rem]' : ''
+      }`}
       style={{ backgroundColor: flagMeta[flag.type].color, ...style }}
       {...otherProps}
     >
-      <i className="material-icons">{flagMeta[flag.type].icon}</i>
+      <i className="material-icons text-base">{flagMeta[flag.type].icon}</i>
       {withlabel && (
-        <span className="label">
+        <span className="mr-1 uppercase pr-1">
           {capitalize(intl(flag.type))}
           {flag.type === 'certified' &&
             `

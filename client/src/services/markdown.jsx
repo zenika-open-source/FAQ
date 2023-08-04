@@ -26,13 +26,7 @@ class Markdown {
     return (
       <div className="mde-preview">
         <div
-          className="mde-preview-content"
-          style={{
-            marginTop: '0',
-            padding: '0',
-            border: '0',
-            wordBreak: 'break-word',
-          }}
+          className="mde-preview-content mt-0 p-0 border-0 break-words"
           dangerouslySetInnerHTML={{
             __html: this.text(text),
           }}

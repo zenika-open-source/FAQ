@@ -11,13 +11,8 @@ const SpecialtiesList = ({ specialties, userSpecialties, onChange }) => {
 
   return (
     <>
-      <Button
-        icon={'add'}
-        link
-        style={{ padding: 0 }}
-        onClick={() => setOpened((opened) => !opened)}
-      />
-      <ul ref={ref} className="specialtiesList" style={{ display: opened ? 'flex' : 'none' }}>
+      <Button icon={'add'} intent="link" onClick={() => setOpened((opened) => !opened)} />
+      <ul ref={ref} className={`specialtiesList ${opened ? 'flex' : 'hidden'}`}>
         {userSpecialties.map((specialty) => {
           const isSelected = specialties?.filter(({ id }) => id === specialty.id).length > 0
           return (

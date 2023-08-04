@@ -117,6 +117,7 @@ const Edit = ({ zNode = null }) => {
         {!showTips && (
           <Button
             intent="link"
+            size="medium"
             icon="lightbulb_outline"
             label={intl('show_tips')}
             onClick={toggleTips(true)}
@@ -125,8 +126,8 @@ const Edit = ({ zNode = null }) => {
       </ActionMenu>
       <Tips close={toggleTips(false)} open={showTips} />
       <Card>
-        <CardText style={{ display: 'flex', paddingBottom: 0 }}>
-          <CtrlEnter onCtrlEnterCallback={submitForm} style={{ width: '100%' }}>
+        <CardText className="flex pb-0">
+          <CtrlEnter className="w-full" onCtrlEnterCallback={submitForm}>
             <Input
               autoFocus
               icon="help"
@@ -137,7 +138,7 @@ const Edit = ({ zNode = null }) => {
             />
           </CtrlEnter>
         </CardText>
-        <CardText style={{ paddingBottom: '0.5rem' }}>
+        <CardText className="pb-2">
           <TagPicker tags={tags} onChange={onTagsChange} />
         </CardText>
         <CardActions>

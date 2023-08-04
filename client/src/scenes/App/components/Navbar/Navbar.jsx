@@ -35,9 +35,8 @@ const Navbar = () => {
         ) : (
           <a href={`mailto:bug@${import.meta.env.VITE_FAQ_URL}`}>
             <Icon
-              className="h-[0.8rem] w-[0.8rem] mr-0 fill-primary-font"
+              className="h-[0.8rem] w-[0.8rem] mr-0 fill-primary-font text-base"
               material="mail"
-              style={{ fontSize: '14px' }}
             />
             <span className="ml-[0.3rem] mt-[-0.1rem]">{intl('report_bug')}</span>
           </a>
