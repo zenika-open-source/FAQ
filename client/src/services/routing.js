@@ -15,8 +15,8 @@ const routing = {
       history.push(arg)
     }
   },
-  getUIDFromSlug(match) {
-    return match.params.slug.split('-').pop()
+  getUIDFromSlug(params) {
+    return params.slug.split('-').pop()
   },
   getShareUrl(UID) {
     return `${window.location.origin}/q/${UID}`
