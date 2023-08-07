@@ -4,7 +4,8 @@ const {
   slugify,
   deleteCertifedFlagIfNoLongerApplicable,
   storeTranslation,
-  translateContentAndSave
+  translateContentAndSave,
+  createFlagAndUpdateHistoryAndAlgolia
 } = require('../helpers')
 const { algolia, slack } = require('../integrations')
 
@@ -56,10 +57,15 @@ module.exports = {
                 }))
             },
             flags: {
-              create: {
-                type: 'unanswered',
-                user: { connect: { id: ctxUser(ctx).id } }
-              }
+              create: [
+                {
+                  type: 'unanswered',
+                  user: { connect: { id: ctxUser(ctx).id } }
+                }, {
+                  type: 'translated',
+                  user: { connect: { id: ctxUser(ctx).id } }
+                }
+              ]
             }
           }
         },
@@ -187,6 +193,10 @@ module.exports = {
             update: { language: translation.language, text: translation.text }
           }
         }
+      }
+
+      if (translation) {
+        await createFlagAndUpdateHistoryAndAlgolia(history, 'translated', ctx, node.id, ctxUser(ctx).id)
       }
 
       await ctx.prisma.mutation.updateQuestion({
