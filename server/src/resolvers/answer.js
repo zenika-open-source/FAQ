@@ -3,7 +3,8 @@ const {
   ctxUser,
   refreshCertifiedFlag,
   addCertifiedFlagWhenSpecialist,
-  storeTranslation
+  storeTranslation,
+  createFlagAndUpdateHistoryAndAlgolia
 } = require('../helpers')
 const { algolia, mailgun } = require('../integrations')
 
@@ -237,6 +238,16 @@ module.exports = {
         certifiedContent = previousContent
       } else if (!wasCertified && !isCertified && answer.certified) {
         certifiedContent = answer.certified
+      }
+
+      if (certifiedContent) {
+        await createFlagAndUpdateHistoryAndAlgolia(
+          history,
+          'versions',
+          ctx,
+          answer.node.id,
+          ctxUser(ctx).id
+        )
       }
 
       const { language, translation } = await storeTranslation(content)
