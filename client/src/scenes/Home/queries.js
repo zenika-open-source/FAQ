@@ -21,6 +21,7 @@ export const SEARCH_NODES = gql`
         answer {
           id
           content
+          certified
         }
         flags {
           id

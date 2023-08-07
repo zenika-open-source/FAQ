@@ -17,6 +17,7 @@ class Result extends Component {
 
     this.state = {
       collapsed: props.collapsed || false,
+      certified: Boolean(props.node.answer?.certified),
     }
   }
 
@@ -24,7 +25,25 @@ class Result extends Component {
     const intl = getIntl(Result)
 
     const { node } = this.props
-    const { collapsed } = this.state
+    const { collapsed, certified } = this.state
+
+    const renderAnswer = () => {
+      if (certified) {
+        return markdown.html(node.answer.certified)
+      } else {
+        if (node.answer) {
+          const content =
+            node.highlights && node.highlights.answer ? node.highlights.answer : node.answer.content
+          return markdown.html(content)
+        } else {
+          return (
+            <p style={{ textAlign: 'center' }}>
+              <i>{intl('no_answer')}</i>
+            </p>
+          )
+        }
+      }
+    }
 
     return (
       <Card className="result">
@@ -52,19 +71,7 @@ class Result extends Component {
             <i className="material-icons">keyboard_arrow_right</i>
           </Link>
         </CardTitle>
-        <CardText collapsed={collapsed}>
-          {node.answer ? (
-            markdown.html(
-              node.highlights && node.highlights.answer
-                ? node.highlights.answer
-                : node.answer.content,
-            )
-          ) : (
-            <p style={{ textAlign: 'center' }}>
-              <i>{intl('no_answer')}</i>
-            </p>
-          )}
-        </CardText>
+        <CardText collapsed={collapsed}>{renderAnswer()}</CardText>
       </Card>
     )
   }
