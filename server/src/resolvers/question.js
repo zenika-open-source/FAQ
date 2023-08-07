@@ -61,7 +61,8 @@ module.exports = {
                 {
                   type: 'unanswered',
                   user: { connect: { id: ctxUser(ctx).id } }
-                }, {
+                },
+                {
                   type: 'translated',
                   user: { connect: { id: ctxUser(ctx).id } }
                 }
@@ -196,7 +197,13 @@ module.exports = {
       }
 
       if (translation) {
-        await createFlagAndUpdateHistoryAndAlgolia(history, 'translated', ctx, node.id, ctxUser(ctx).id)
+        await createFlagAndUpdateHistoryAndAlgolia(
+          history,
+          'translated',
+          ctx,
+          node.id,
+          ctxUser(ctx).id
+        )
       }
 
       await ctx.prisma.mutation.updateQuestion({
