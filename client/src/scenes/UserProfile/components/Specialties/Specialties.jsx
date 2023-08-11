@@ -3,8 +3,6 @@ import PropTypes from 'prop-types'
 import { getIntl } from 'services'
 import { Loading } from 'components'
 
-import './Specialties.css'
-
 const Specialties = ({ specialties }) => {
   const intl = getIntl(Specialties)
 

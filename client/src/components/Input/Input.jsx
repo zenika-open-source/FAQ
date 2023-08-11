@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
 
-import './Input.css'
-
 class Input extends Component {
   constructor(props) {
     super(props)

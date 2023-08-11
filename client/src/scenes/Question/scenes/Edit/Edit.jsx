@@ -1,5 +1,3 @@
-import './Edit.css'
-
 import { useMutation } from '@apollo/client'
 import { Button, CtrlEnter, Input, Loading, TagPicker } from 'components'
 import Card, { CardActions, CardText, PermanentClosableCard } from 'components/Card'

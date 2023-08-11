@@ -6,8 +6,6 @@ import { Input, TagPicker } from 'components'
 
 import { useConfiguration } from 'contexts'
 
-import './Searchbar.css'
-
 const Searchbar = ({ text, tags, loading, onTextChange, onTagsChange }) => {
   const intl = getIntl(Searchbar)
   const conf = useConfiguration()

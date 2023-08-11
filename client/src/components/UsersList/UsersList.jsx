@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { getIntl } from 'services'
 import { GET_TAG_CATEGORIES, GET_USERS } from './queries'
 
-import './UsersList.css'
 import Specialist from './components/Specialist'
 
 const UsersList = () => {

@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types'
 
 import MDEditor from '@uiw/react-md-editor'
-import '../Input.css'
 
 const MarkdownEditor = ({ content, onChange }) => {
   return (

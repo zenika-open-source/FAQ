@@ -4,8 +4,6 @@ import { formatHistoryAction } from 'helpers'
 
 import Avatar from 'components/Avatar'
 
-import './History.css'
-
 const HistoryAction = ({ action }) => {
   action = formatHistoryAction(action)
 

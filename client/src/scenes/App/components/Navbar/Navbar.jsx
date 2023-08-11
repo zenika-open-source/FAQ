@@ -6,8 +6,6 @@ import { Authenticated, Button, Icon } from 'components'
 
 import { GithubIcon, UserMenu } from './components'
 
-import './Navbar.scss'
-
 const Navbar = () => {
   const intl = getIntl(Navbar)
 

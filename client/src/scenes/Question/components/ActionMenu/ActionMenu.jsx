@@ -1,5 +1,3 @@
-import './ActionMenu.css'
-
 import Button from 'components/Button'
 import PropTypes from 'prop-types'
 import { Link, useLocation, useNavigate } from 'react-router-dom'

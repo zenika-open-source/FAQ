@@ -7,8 +7,6 @@ import { Button, Icon, Input } from 'components'
 import Card, { CardActions, CardText, CardTitle } from 'components/Card'
 import { useClickOutside } from 'helpers'
 
-import './TagsEditor.scss'
-
 const TagInput = ({ changeOrder, value, onChange, onDelete }) => {
   const [newValue, setNewValue] = useState()
   const [editing, setEditing] = useState(false)

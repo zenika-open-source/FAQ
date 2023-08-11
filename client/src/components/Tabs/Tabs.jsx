@@ -1,8 +1,6 @@
 import React, { useState, useMemo } from 'react'
 import cn from 'classnames'
 
-import './Tabs.scss'
-
 export const TabsContext = React.createContext()
 
 const Tabs = ({ children, className, ...rest }) => {

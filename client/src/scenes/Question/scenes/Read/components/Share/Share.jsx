@@ -8,8 +8,6 @@ import Dropdown, { DropdownItem } from 'components/Dropdown'
 
 import Button from 'components/Button'
 
-import './Share.css'
-
 const Share = ({ node }) => {
   const intl = getIntl(Share)
 

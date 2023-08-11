@@ -1,8 +1,6 @@
 import React, { useContext } from 'react'
 import cn from 'classnames'
 
-import './Radio.scss'
-
 const RadioContext = React.createContext()
 
 const Radio = ({ label, value, disabled, className, ...props }) => {

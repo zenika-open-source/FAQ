@@ -1,5 +1,3 @@
-import './Settings.scss'
-
 import { useMutation } from '@apollo/client'
 import { Button, Tabs } from 'components'
 import Card, { CardActions, CardText, CardTitle } from 'components/Card'

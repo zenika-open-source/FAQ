@@ -2,8 +2,6 @@ import PropTypes from 'prop-types'
 
 import { Input, Button } from 'components'
 
-import './PairInput.css'
-
 const PairInput = ({ pair, options, actions, disabled }) => {
   const { key, value } = pair
   return (

@@ -8,8 +8,6 @@ import { useClickOutside } from 'helpers'
 
 import { Button } from 'components'
 
-import './TagPicker.css'
-
 const TagPicker = ({ label, icon, tags, onChange }) => {
   const conf = useConfiguration()
   const [opened, setOpened] = useState(false)

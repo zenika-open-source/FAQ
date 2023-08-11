@@ -4,12 +4,9 @@ import { Link } from 'react-router-dom'
 
 import { getIntl, markdown } from 'services'
 
-// import Avatar from 'components/Avatar'
 import Card, { CardText, CardTitle } from 'components/Card'
 import Flags from 'components/Flags'
 import Tags from 'components/Tags'
-
-import './Result.css'
 
 class Result extends Component {
   constructor(props) {

@@ -2,8 +2,6 @@ import PropTypes from 'prop-types'
 
 import { getIntl } from 'services'
 
-import './Views.css'
-
 const Views = ({ value }) => {
   const intl = getIntl(Views)
   let formattedValue = value || 0

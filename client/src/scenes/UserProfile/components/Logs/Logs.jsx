@@ -8,8 +8,6 @@ import { Loading } from 'components'
 import Card, { CardText } from 'components/Card'
 import { DefaultPagination } from 'components/Pagination'
 
-import './Logs.css'
-
 const Logs = ({ logs, loading, pagesCount, pageCurrent, onPageSelected, meta }) => {
   const intl = getIntl(Logs)
 

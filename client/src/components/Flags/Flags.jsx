@@ -8,8 +8,6 @@ import { getIntl } from 'services'
 
 import Flag, { flagMeta } from './Flag'
 
-import './Flags.css'
-
 const Flags = ({ node, withLabels }) => {
   const intl = getIntl(Flags)
   const flagIntl = getIntl(Flag)

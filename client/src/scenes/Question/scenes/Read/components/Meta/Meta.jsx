@@ -5,8 +5,6 @@ import { getIntl } from 'services'
 
 import Avatar from 'components/Avatar'
 
-import './Meta.css'
-
 const Meta = ({ node }) => {
   const intl = getIntl(Meta)
 

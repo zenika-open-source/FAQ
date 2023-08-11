@@ -2,8 +2,6 @@ import { useContext, createContext } from 'react'
 
 import { useClickOutside } from 'helpers'
 
-import './Modal.scss'
-
 const ModalContext = createContext()
 
 const Modal = ({ active, setActive, loading, children }) => {
@@ -40,7 +38,7 @@ const Title = ({ children }) => {
     <div className="p-4 relative border-b border-b-[#d1d5da] bg-[#f6f8fa] rounded-t [&_h2]:text-[16px] [&_h2]:text-secondary-font-dark">
       {children}
       <span
-        className="absolute right-0 top-0 px-4 py-3 text-[22px] cursor-pointer text-secondary-font-light hover:text-primary after:content-['\00d7']"
+        className="absolute right-0 top-0 px-4 py-3 text-[22px] cursor-pointer text-secondary-font-light hover:text-primary after:content-['×']"
         onClick={closeModal}
       />
     </div>
