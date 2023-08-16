@@ -12,7 +12,7 @@ const Views = ({ value }) => {
   }
 
   return (
-    <span className="views">
+    <span className="text-secondary-font text-sm ml-3 mr-2 flex-shrink-0">
       {formattedValue} {formattedValue > 1 ? intl('views') : intl('view')}
     </span>
   )
