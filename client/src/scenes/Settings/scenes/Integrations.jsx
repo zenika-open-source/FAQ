@@ -29,21 +29,19 @@ const Integrations = ({ state, dispatch }) => {
 
   return (
     <Tab label={intl('tab')}>
-      <h2>{intl('workplace.title')}</h2>
-      <br />
+      <h2 className="mb-2">{intl('workplace.title')}</h2>
       <hr />
-      <h2>{intl('slack.title')}</h2>
-      <br />
-      <div className="inline-input mt-[1em]">
-        <i className="ml-[1em]">{intl('slack.channel')}</i>
+      <h2 className="my-2">{intl('slack.title')}</h2>
+      <div className="flex items-center">
+        <i className="ml-[1em] mr-2">{intl('slack.channel')}</i>
         <Input
           value={state.slackChannelHook || ''}
           className="flex-1 mr-4"
           onChange={(e) => dispatch({ type: 'change_slack_channelhook', data: e.target.value })}
         />
       </div>
-      <div className="inline-input mt-[1em]">
-        <i className="ml-[1em]">{intl('slack.command')}</i>
+      <div className="flex items-center mt-4">
+        <i className="ml-[1em] mr-2">{intl('slack.command')}</i>
         <Input
           value={
             state.slackCommandKey
@@ -59,6 +57,7 @@ const Integrations = ({ state, dispatch }) => {
             (state.slackCommandKey ? intl('slack.regenerate') : intl('slack.generate')) + ' URL'
           }
           intent="link"
+          size="medium"
           loading={slackHookLoading}
           onClick={generateSlackHook}
         />
