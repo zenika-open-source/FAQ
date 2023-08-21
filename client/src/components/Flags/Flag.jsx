@@ -32,7 +32,7 @@ const Flag = ({ flag, withlabel, style, ...otherProps }) => {
 
   return (
     <div
-      className={`inline-flex items-center px-2 py-1 rounded-xl text-sm text-primary-font ${
+      className={`inline-flex items-center p-1 rounded-xl text-sm text-primary-font ${
         withlabel ? 'px-[0.3rem]' : ''
       }`}
       style={{ backgroundColor: flagMeta[flag.type].color, ...style }}

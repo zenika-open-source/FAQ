@@ -57,7 +57,7 @@ const Home = () => {
         <Button
           icon="record_voice_over"
           data-tooltip={intl('new_question')}
-          className="fixed bottom-4 right-4"
+          className="!fixed bottom-4 right-4"
           intent="primary"
           shape="round"
           action="raised"

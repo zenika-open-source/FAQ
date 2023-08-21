@@ -25,7 +25,10 @@ class Result extends Component {
 
     return (
       <Card>
-        <CardTitle className="pr-16" onClick={() => this.setState({ collapsed: !collapsed })}>
+        <CardTitle
+          className="pr-16 [&_em]:font-bold [&_em]:not-italic [&_em]:underline"
+          onClick={() => this.setState({ collapsed: !collapsed })}
+        >
           <div className="flex-grow">
             {!node.highlights ? (
               <h1>{markdown.title(node.question.title)}</h1>

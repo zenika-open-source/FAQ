@@ -18,7 +18,7 @@ const Specialties = ({ specialties }) => {
             {specialties.map((specialty) => (
               <li
                 key={specialty.name}
-                className="flex items-center justify-center w-fit p-1 capitalize bg-primary-font text-primary bodrer border-primary rounded"
+                className="flex items-center justify-center w-fit p-1 capitalize bg-primary-font text-primary bodrer border-primary rounded-sm"
               >
                 <i className="material-icons mr-2 text-base">verified</i>
                 {specialty.name}

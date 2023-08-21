@@ -22,7 +22,7 @@ class Input extends Component {
         onClick={() => this.input.current && this.input.current.focus()}
       >
         {icon && (
-          <span className="input-icon flex items-center text-secondary-dark">
+          <span className="group-focus-within/input:text-primary flex items-center text-secondary-dark">
             <i
               className={
                 typeof icon === 'string'
@@ -35,7 +35,7 @@ class Input extends Component {
           </span>
         )}
         <input
-          className="group-focus-within/input:placeholder:text-transparent outline-none border-0 flex-1 ml-1 h-11 ldaing-11 text-primary-font-dark"
+          className="group-focus-within/input:placeholder:text-transparent outline-none border-0 flex-1 ml-1 h-8 ldaing-11 text-primary-font-dark"
           type="text"
           value={value}
           maxLength={limit}

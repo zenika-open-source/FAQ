@@ -2,12 +2,12 @@ import { Tab, UsersList } from 'components'
 
 import { getIntl } from 'services'
 
-const Specialists = ({ state, dispatch, loading }) => {
+const Specialists = () => {
   const intl = getIntl(Specialists)
 
   return (
     <Tab label={intl('tab')}>
-      <h2>{intl('title')}</h2>
+      <h2 className="mb-2">{intl('title')}</h2>
       <UsersList />
     </Tab>
   )

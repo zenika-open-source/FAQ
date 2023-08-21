@@ -19,7 +19,7 @@ const Searchbar = ({ text, tags, loading, onTextChange, onTagsChange }) => {
     .filter((l) => l)
 
   return (
-    <div className="mt-16 max-[480px]:mt-4 max-w-lg w-auto mx-auto">
+    <div className="mt-16 max-[480px]:mt-4 max-w-lg w-auto mx-auto [&_input]:h-10 [&_input]:leading-10">
       <Input
         icon={
           <>

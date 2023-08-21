@@ -7,7 +7,7 @@ class AlertStack extends Component {
   static contextType = AlertContext
   render() {
     return (
-      <div className="fixed top-[72px] right-0 max-w-full w-[400px] min-w-[30vw]">
+      <div className="fixed top-[72px] right-2 max-w-full w-[400px] min-w-[30vw]">
         {this.context.alerts.map((alert) => (
           <Alert key={alert.id} alert={alert} />
         ))}
