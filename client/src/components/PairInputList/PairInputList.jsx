@@ -1,6 +1,5 @@
-import PropTypes from 'prop-types'
-import cn from 'classnames'
 import merge from 'lodash/merge'
+import PropTypes from 'prop-types'
 
 import { getIntl } from 'services'
 
@@ -35,7 +34,7 @@ const PairInputList = ({ pairs, options, actions, disabled, className, ...rest }
   const isEmpty = pairs.length === 0
 
   return (
-    <div className={cn('pair-input-list', className)} {...rest}>
+    <div className={className} {...rest}>
       {options.title && !isEmpty ? <h3 className="text-primary m-3">{options.title}</h3> : null}
       {pairs.map((pair) => (
         <PairInput

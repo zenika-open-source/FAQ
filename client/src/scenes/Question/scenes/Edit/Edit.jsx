@@ -105,7 +105,7 @@ const Edit = ({ zNode = null }) => {
   }
 
   return (
-    <div className="Edit">
+    <div>
       <Prompt message={intl('prompt_warning')} when={canSubmit(state)} />
       <ActionMenu
         backLabel={!isEditing ? intl('home') : null}
@@ -127,6 +127,7 @@ const Edit = ({ zNode = null }) => {
         <CardText className="flex pb-0">
           <CtrlEnter className="w-full" onCtrlEnterCallback={submitForm}>
             <Input
+              className="m-4 flex-1"
               autoFocus
               icon="help"
               placeholder={intl('placeholder')}
@@ -137,7 +138,11 @@ const Edit = ({ zNode = null }) => {
           </CtrlEnter>
         </CardText>
         <CardText className="pb-2">
-          <TagPicker tags={tags} onChange={onTagsChange} />
+          <TagPicker
+            className="border-t border-t-secondary border-dashed pl-4 pt-2"
+            tags={tags}
+            onChange={onTagsChange}
+          />
         </CardText>
         <CardActions>
           <Button

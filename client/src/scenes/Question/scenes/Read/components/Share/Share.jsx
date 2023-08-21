@@ -15,7 +15,7 @@ const Share = ({ node }) => {
   const shareUrl = routing.getShareUrl(node.id)
 
   return (
-    <div className="share">
+    <div className="ml-2">
       <Dropdown button={<Button icon="share" intent="link" size="small" />}>
         {conf.workplaceSharing ? (
           <DropdownItem

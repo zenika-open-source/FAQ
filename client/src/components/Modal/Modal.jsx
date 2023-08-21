@@ -20,7 +20,7 @@ const Modal = ({ active, setActive, loading, children }) => {
           active ? 'flex' : 'hidden'
         }`}
       >
-        <div className="modal-background" />
+        <div className="absolute w-full h-full bg-secondary-font-dark opacity-40 z-0" />
         <div
           className="relative bg-primary-font max-w-md rounded-sm border border-secondary-font-light shadow-[0_0_18_rgb(0,0,0,0.4)]"
           ref={ref}

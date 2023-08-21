@@ -33,24 +33,29 @@ const Specialist = ({ specialist, services, onUpdateSpecialty }) => {
   }
 
   return (
-    <li className="userElement">
-      <div className="userLeft">
-        <div className="userIcon">
-          <i className="material-icons">{specialist.admin ? 'admin_panel_settings' : 'person'}</i>
+    <li className="px-4 py-2 flex items-center justify-between gap-4 border border-secondary rounded-sm">
+      <div className="flex items-center gap-4">
+        <div>
+          <i className="material-icons text-[2rem]">
+            {specialist.admin ? 'admin_panel_settings' : 'person'}
+          </i>
         </div>
-        <div className="userInfo">
-          <span className="userName">{specialist.name}</span>
-          <span className="userEmail">{specialist.email}</span>
+        <div className="flex flex-col gap-2">
+          <span className="font-bold">{specialist.name}</span>
+          <span className="text-sm">{specialist.email}</span>
         </div>
       </div>
-      <div className="userRight">
-        <div className="userSpecialties">
+      <div className="relative flex items-center gap-1">
+        <div className="flex items-center flex-wrap gap-2">
           {specialties &&
             specialties.map((specialty) => (
-              <div key={specialty.id} className="userSpecialty">
-                <span>{specialty.name}</span>
+              <div
+                key={specialty.id}
+                className="bg-primary-light text-primary-font leading-3 px-2 py-1 rounded-sm text-base flex items-end my-[0.1rem] mr-[0.4rem]"
+              >
+                <span style={{ fontVariant: 'small-caps' }}>{specialty.name}</span>
                 <i
-                  className="material-icons"
+                  className="material-icons text-sm ml-1 cursor-pointer flex items-end hover:font-bold"
                   onClick={() =>
                     onSpecialtyChange({
                       data: specialties.filter(({ id }) => id !== specialty.id),

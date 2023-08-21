@@ -60,7 +60,7 @@ const Settings = () => {
     <div>
       <Card>
         <CardTitle>
-          <h1 className="centered w-full">{intl('title')}</h1>
+          <h1 className="text-center w-full">{intl('title')}</h1>
         </CardTitle>
         <CardText>
           <Tabs>
@@ -71,14 +71,18 @@ const Settings = () => {
                 <Synonyms state={state} dispatch={dispatch} loading={loading} />
               </>
             )}
-            {(isAdmin || isSpecialist) && (
-              <Specialists state={state} dispatch={dispatch} loading={loading} />
-            )}
+            {(isAdmin || isSpecialist) && <Specialists />}
             {isAdmin && <Integrations state={state} dispatch={dispatch} loading={loading} />}
           </Tabs>
         </CardText>
         <CardActions>
-          <Button primary label={intl('validate')} onClick={onSave} loading={loading} />
+          <Button
+            intent="primary"
+            size="medium"
+            label={intl('validate')}
+            onClick={onSave}
+            loading={loading}
+          />
         </CardActions>
       </Card>
     </div>

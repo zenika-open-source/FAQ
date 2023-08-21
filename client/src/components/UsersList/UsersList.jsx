@@ -30,7 +30,7 @@ const UsersList = () => {
   return (
     <section>
       <input
-        className="usersSearch"
+        className="w-full px-2 py-1 rounded-sm border border-secondary outline-none mb-6  focus:border-primary"
         type="text"
         name="usersSearch"
         id="usersSearch"
@@ -39,8 +39,8 @@ const UsersList = () => {
         onChange={(e) => setUserSearchText(e.target.value)}
       />
       {userSearchResults.length > 0 && (
-        <div className="resultsContainer">
-          <ul className="usersList">
+        <div className="relative w-full z-[2]">
+          <ul className="w-full m-0 py-4 absolute top-0 left-0 bg-primary-font list-none">
             {userSearchResults.map((user) => (
               <Specialist
                 specialist={user}
@@ -52,7 +52,7 @@ const UsersList = () => {
           </ul>
         </div>
       )}
-      <ul className="usersList">
+      <ul className="flex flex-col pl-0 gap-4 list-none">
         {specialists &&
           specialists.map((specialist) => (
             <Specialist

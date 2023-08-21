@@ -5,7 +5,7 @@ import MDEditor from '@uiw/react-md-editor'
 const MarkdownEditor = ({ content, onChange }) => {
   return (
     <div data-color-mode="light">
-      <MDEditor className="markdown-editor" value={content} onChange={onChange} />
+      <MDEditor className="w-full" value={content} onChange={onChange} />
     </div>
   )
 }

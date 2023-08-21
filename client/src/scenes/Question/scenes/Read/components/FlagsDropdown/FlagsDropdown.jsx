@@ -28,7 +28,10 @@ const FlagsDropdown = ({ zNode, onSelect, onRemove }) => {
         icon={flagMeta[type].icon}
         rightIcon={
           isSelected ? (
-            <i className="material-icons close-icon" onClick={() => isSelected && onRemove(type)}>
+            <i
+              className="material-icons cursor-pointer hover:text-red-500"
+              onClick={() => isSelected && onRemove(type)}
+            >
               close
             </i>
           ) : null
@@ -52,7 +55,7 @@ const FlagsDropdown = ({ zNode, onSelect, onRemove }) => {
 }
 
 FlagsDropdown.propTypes = {
-  flags: PropTypes.array.isRequired,
+  zNode: PropTypes.object.isRequired,
   onSelect: PropTypes.func.isRequired,
   onRemove: PropTypes.func.isRequired,
 }

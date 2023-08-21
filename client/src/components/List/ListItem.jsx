@@ -2,8 +2,8 @@ import PropTypes from 'prop-types'
 
 const ListItem = ({ caption, icon, href }) => {
   const ret = (
-    <div className="list-item">
-      {icon && <i className="material-icons text-[18px]">{icon}</i>}
+    <div className="px-[0.6rem] py-[0.4rem] inline-flex items-center cursor-pointer hover:bg-secondary">
+      {icon && <i className="material-icons mr-2 text-[18px]">{icon}</i>}
       {caption}
     </div>
   )
