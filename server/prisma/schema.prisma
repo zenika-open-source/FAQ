@@ -1,0 +1,169 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator nexusPrisma {
+   provider = "nexus-prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Answer {
+  id          String       @id @db.VarChar(25)
+  content     String
+  createdAt   DateTime
+  updatedAt   DateTime
+  language    String
+  translation String?      @db.VarChar(25)
+  certified   String?
+  Translation Translation? @relation(fields: [translation], references: [id], onUpdate: NoAction)
+  Source      Source[]     @relation("AnswerSources")
+  ZNode       ZNode[]      @relation("NodeAnswer")
+  User        User[]       @relation("UserAnswers")
+}
+
+model Configuration {
+  id                              String                            @id @db.VarChar(25)
+  name                            String                            @unique(map: "default$default.Configuration.name._UNIQUE")
+  title                           String
+  auth0Domain                     String
+  auth0ClientId                   String
+  algoliaAppId                    String?
+  algoliaApiKey                   String?
+  algoliaSynonyms                 String?
+  mailgunDomain                   String?
+  mailgunApiKey                   String?
+  slackChannelHook                String?
+  slackCommandKey                 String?
+  tags                            String?
+  workplaceSharing                Boolean?
+  bugReporting                    String?
+  updatedAt                       DateTime
+  createdAt                       DateTime
+  Configuration_authorizedDomains Configuration_authorizedDomains[]
+  TagCategory                     TagCategory[]                     @relation("ConfigurationTags")
+}
+
+model Configuration_authorizedDomains {
+  nodeId        String        @db.VarChar(25)
+  position      Int
+  value         String
+  Configuration Configuration @relation(fields: [nodeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([nodeId, position])
+}
+
+model Flag {
+  id        String   @id @db.VarChar(25)
+  type      String
+  createdAt DateTime
+  updatedAt DateTime
+  ZNode     ZNode[]  @relation("NodeFlags")
+  User      User[]   @relation("UserFlags")
+}
+
+model HistoryAction {
+  id        String   @id @db.VarChar(25)
+  action    String
+  model     String
+  meta      String?
+  createdAt DateTime
+  updatedAt DateTime
+  ZNode     ZNode[]  @relation("NodeHistoryActions")
+  User      User[]   @relation("UserHistoryActions")
+}
+
+model Question {
+  id          String       @id @db.VarChar(25)
+  title       String
+  slug        String
+  views       Int?
+  createdAt   DateTime
+  updatedAt   DateTime
+  language    String
+  translation String?      @db.VarChar(25)
+  Translation Translation? @relation(fields: [translation], references: [id], onUpdate: NoAction)
+  ZNode       ZNode[]      @relation("NodeQuestion")
+  User        User[]       @relation("UserQuestions")
+}
+
+model Source {
+  id        String   @id @db.VarChar(25)
+  label     String
+  url       String
+  updatedAt DateTime
+  createdAt DateTime
+  Answer    Answer[] @relation("AnswerSources")
+}
+
+model Tag {
+  id        String     @id @db.VarChar(25)
+  createdAt DateTime
+  updatedAt DateTime
+  ZNode     ZNode[]    @relation("NodeTags")
+  TagLabel  TagLabel[] @relation("TagsLabel")
+  User      User[]     @relation("UserTags")
+}
+
+model TagCategory {
+  id            String          @id @db.VarChar(25)
+  name          String
+  order         Int
+  updatedAt     DateTime
+  createdAt     DateTime
+  Configuration Configuration[] @relation("ConfigurationTags")
+  TagLabel      TagLabel[]      @relation("TagLabelsCategory")
+}
+
+model TagLabel {
+  id          String        @id @db.VarChar(25)
+  name        String
+  order       Int
+  createdAt   DateTime
+  updatedAt   DateTime
+  TagCategory TagCategory[] @relation("TagLabelsCategory")
+  Tag         Tag[]         @relation("TagsLabel")
+  User        User[]        @relation("UserSpecialties")
+}
+
+model Translation {
+  id       String     @id @db.VarChar(25)
+  language String
+  text     String
+  Answer   Answer[]
+  Question Question[]
+}
+
+model User {
+  id            String          @id @db.VarChar(25)
+  auth0Id       String?         @unique(map: "default$default.User.auth0Id._UNIQUE")
+  key           String?
+  admin         Boolean
+  name          String?
+  email         String?
+  picture       String?
+  locale        String?
+  createdAt     DateTime
+  updatedAt     DateTime
+  Answer        Answer[]        @relation("UserAnswers")
+  Flag          Flag[]          @relation("UserFlags")
+  HistoryAction HistoryAction[] @relation("UserHistoryActions")
+  Question      Question[]      @relation("UserQuestions")
+  TagLabel      TagLabel[]      @relation("UserSpecialties")
+  Tag           Tag[]           @relation("UserTags")
+}
+
+model ZNode {
+  id            String          @id @db.VarChar(25)
+  highlights    String?
+  updatedAt     DateTime
+  createdAt     DateTime
+  Answer        Answer[]        @relation("NodeAnswer")
+  Flag          Flag[]          @relation("NodeFlags")
+  HistoryAction HistoryAction[] @relation("NodeHistoryActions")
+  Question      Question[]      @relation("NodeQuestion")
+  Tag           Tag[]           @relation("NodeTags")
+}
