@@ -240,7 +240,7 @@ module.exports = {
         certifiedContent = answer.certified
       }
 
-      if (certifiedContent) {
+      if (certifiedContent && !answer.node.flags.find(flag => flag.type === 'versions')) {
         await createFlagAndUpdateHistoryAndAlgolia(
           history,
           'versions',
