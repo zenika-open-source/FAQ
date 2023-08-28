@@ -26,6 +26,10 @@ const flagMeta = {
     icon: 'verified',
     color: '#caac00',
   },
+  versions: {
+    icon: 'group',
+    color: '#1E2019',
+  },
 }
 
 const Flag = ({ flag, withlabel, style, ...otherProps }) => {
@@ -68,6 +72,7 @@ Flag.translations = {
     unanswered: 'unanswered',
     certified: 'certified',
     certifiedAdd: ' on ',
+    versions: 'multiple versions',
   },
   fr: {
     duplicate: 'doublon',
@@ -76,6 +81,7 @@ Flag.translations = {
     unanswered: 'sans réponse',
     certified: 'certifiée',
     certifiedAdd: ' le ',
+    versions: 'plusieurs versions',
   },
 }
 
