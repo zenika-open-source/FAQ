@@ -33,7 +33,7 @@ const Read = ({ zNode, loading }) => {
   const originalQuestionLanguage = zNode?.question.language
   const navigatorLanguage = getNavigatorLanguage()
 
-  const translate = (language) => {
+  const translate = language => {
     const content = handleTranslation(language, zNode)
     setQuestionTitle(content.question)
     setAnswerContent(content.answer)
@@ -59,9 +59,9 @@ const Read = ({ zNode, loading }) => {
   }
 
   const preventAnswerEdit = () => {
-    const certified = zNode?.flags.find((flag) => flag.type === 'certified')
-    const isSpecialist = user.specialties.some((specialty) =>
-      zNode.tags.some((tag) => specialty.name === tag.label.name),
+    const certified = zNode?.flags.find(flag => flag.type === 'certified')
+    const isSpecialist = user.specialties.some(specialty =>
+      zNode.tags.some(tag => specialty.name === tag.label.name)
     )
     if (certified && !isSpecialist) {
       if (window.confirm(intl('alert'))) {
@@ -86,8 +86,8 @@ const Read = ({ zNode, loading }) => {
       <ActionMenu backLink="/" backLabel={intl('menu.home')} goBack>
         <FlagsDropdown
           zNode={zNode}
-          onSelect={(type) => createFlag({ variables: { type, nodeId: zNode.id } })}
-          onRemove={(type) => removeFlag({ variables: { type, nodeId: zNode.id } })}
+          onSelect={type => createFlag({ variables: { type, nodeId: zNode.id } })}
+          onRemove={type => removeFlag({ variables: { type, nodeId: zNode.id } })}
         />
         <Dropdown button={<Button icon="edit" label={intl('menu.edit.label')} link />}>
           <DropdownItem icon="edit" onClick={() => navigate(`/q/${params.slug}/edit`)}>
@@ -104,19 +104,21 @@ const Read = ({ zNode, loading }) => {
             <div
               style={{
                 display: 'flex',
-                alignItems: 'baseline',
+                alignItems: 'baseline'
               }}
             >
               <h1>{markdown.title(questionTitle)}</h1>
               {isTranslated && (
-                <p
-                  className="small-text"
+                <span
+                  data-tooltip={intl('auto_translated')}
                   style={{
-                    marginLeft: '1rem',
+                    marginLeft: '1rem'
                   }}
                 >
-                  {intl('auto_translated')}
-                </p>
+                  <i className="material-icons" style={{ fontSize: '1rem' }}>
+                    translate
+                  </i>
+                </span>
               )}
             </div>
             {zNode.tags.length > 0 && <Tags tags={zNode.tags} />}
@@ -161,7 +163,7 @@ const Read = ({ zNode, loading }) => {
               style={{
                 textAlign: 'center',
                 marginTop: '2rem',
-                marginBottom: '2rem',
+                marginBottom: '2rem'
               }}
             >
               <b>{intl('no_answer')}</b>
@@ -190,8 +192,8 @@ Read.translations = {
       edit: {
         label: 'Edit ...',
         question: 'Question',
-        answer: 'Answer',
-      },
+        answer: 'Answer'
+      }
     },
     certified: 'Certified on',
     auto_translated: 'Automatic translation',
@@ -200,7 +202,7 @@ Read.translations = {
     certified_answer: 'Certified answer',
     recent_answer: 'Latest answer',
     alert:
-      'This answer has been certified by a specialist in this field.\nAre you sure that you want to modify it ?\nThis version will still be kept',
+      'This answer has been certified by a specialist in this field.\nAre you sure that you want to modify it ?\nThis version will still be kept'
   },
   fr: {
     menu: {
@@ -208,8 +210,8 @@ Read.translations = {
       edit: {
         label: 'Modifier ...',
         question: 'Question',
-        answer: 'Réponse',
-      },
+        answer: 'Réponse'
+      }
     },
     certified: 'Certifiée le',
     auto_translated: 'Traduction automatique',
@@ -218,8 +220,8 @@ Read.translations = {
     certified_answer: 'Réponse certifiée',
     recent_answer: 'Dernière réponse',
     alert:
-      'Cette réponse a été certifiée par une personne spécialisée dans le domaine.\nEtes-vous sûr de vouloir la modifier ?\nCelle-ci sera tout de même conservée',
-  },
+      'Cette réponse a été certifiée par une personne spécialisée dans le domaine.\nEtes-vous sûr de vouloir la modifier ?\nCelle-ci sera tout de même conservée'
+  }
 }
 
 export default Read
