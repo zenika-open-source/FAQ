@@ -469,7 +469,7 @@ test.beforeAll(async ({ playwright }) => {
   })
   config = await upsertConfigMutation(apiContext)
   prisma._meta = { ...prisma._meta, configuration: config.upsertConfiguration }
-    ; ({ tag, tagEdit } = await tagsQuery(apiContext))
+  ;({ tag, tagEdit } = await tagsQuery(apiContext))
 })
 
 test.beforeEach(async () => {
@@ -803,7 +803,12 @@ test('Should be able to translate the question and answer', async ({ page }) => 
   await page.getByRole('button', { name: 'translate' }).hover()
   await page.getByText('Anglais', { exact: true }).click()
   await expect(page.getByRole('heading', { name: 'This is a question' })).toBeVisible()
-  await expect(page.locator('span').filter({ hasText: 'translate' }).locator('i')).toBeVisible()
+  await expect(
+    page
+      .locator('span')
+      .filter({ hasText: 'translate' })
+      .locator('i')
+  ).toBeVisible()
   await expect(page.getByText('This is an answer', { exact: true })).toBeVisible()
 })
 
