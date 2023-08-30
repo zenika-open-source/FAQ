@@ -26,10 +26,10 @@ class Result extends Component {
     const { node } = this.props
     const { collapsed } = this.state
     const navigatorLanguage = getNavigatorLanguage()
-    const isTranslated = navigatorLanguage !== node.question.language
+    const isTranslated = navigatorLanguage !== node.question?.language
 
     const getTitle = () => {
-      if (navigatorLanguage === node.question.language) {
+      if (navigatorLanguage === node.question.language || node.question.language === '') {
         return node.question.title
       } else {
         return node.question.translation.text
@@ -37,7 +37,7 @@ class Result extends Component {
     }
 
     const getAnswer = () => {
-      if (navigatorLanguage === node.answer.language) {
+      if (navigatorLanguage === node.answer?.language || node.answer.language === '') {
         return node.answer.content
       } else {
         return node.answer.translation.text
@@ -61,8 +61,8 @@ class Result extends Component {
           </div>
           <Flags node={node} withLabels={false} />
           {isTranslated && (
-            <span data-tooltip={intl('auto_translated')} style={{marginLeft: "1rem"}}>
-              <i className='material-icons'>translate</i>
+            <span data-tooltip={intl('auto_translated')} style={{ marginLeft: '1rem' }}>
+              <i className="material-icons">translate</i>
             </span>
           )}
           <Link
@@ -78,9 +78,7 @@ class Result extends Component {
         <CardText collapsed={collapsed}>
           {node.answer ? (
             markdown.html(
-              node.highlights && node.highlights.answer
-                ? node.highlights.answer
-                : getAnswer(),
+              node.highlights && node.highlights.answer ? node.highlights.answer : getAnswer(),
             )
           ) : (
             <p style={{ textAlign: 'center' }}>
@@ -99,8 +97,8 @@ Result.propTypes = {
 }
 
 Result.translations = {
-  en: { no_answer: 'No answer yet...', auto_translated: 'Automatic translation', },
-  fr: { no_answer: 'Pas encore de réponse...', auto_translated: 'Traduction automatique', },
+  en: { no_answer: 'No answer yet...', auto_translated: 'Automatic translation' },
+  fr: { no_answer: 'Pas encore de réponse...', auto_translated: 'Traduction automatique' },
 }
 
 export default Result
