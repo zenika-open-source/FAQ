@@ -115,7 +115,12 @@ const Read = ({ zNode, loading }) => {
                     marginLeft: '1rem',
                   }}
                 >
-                  <i className="material-icons" style={{ fontSize: '1rem' }}>
+                  <i
+                    className="material-icons"
+                    aria-label={intl('auto_translated')}
+                    role="img"
+                    style={{ fontSize: '1rem' }}
+                  >
                     translate
                   </i>
                 </span>
