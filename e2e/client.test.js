@@ -803,7 +803,7 @@ test('Should be able to translate the question and answer', async ({ page }) => 
   await page.getByRole('button', { name: 'translate' }).hover()
   await page.getByText('Anglais', { exact: true }).click()
   await expect(page.getByRole('heading', { name: 'This is a question' })).toBeVisible()
-  await expect(page.getByText('Traduction automatique', { exact: true })).toBeVisible()
+  await expect(page.getByRole('img', { name: 'Traduction automatique' })).toBeVisible()
   await expect(page.getByText('This is an answer', { exact: true })).toBeVisible()
 })
 

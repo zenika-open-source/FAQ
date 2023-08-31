@@ -109,14 +109,21 @@ const Read = ({ zNode, loading }) => {
             >
               <h1>{markdown.title(questionTitle)}</h1>
               {isTranslated && (
-                <p
-                  className="small-text"
+                <span
+                  data-tooltip={intl('auto_translated')}
                   style={{
                     marginLeft: '1rem',
                   }}
                 >
-                  {intl('auto_translated')}
-                </p>
+                  <i
+                    className="material-icons"
+                    aria-label={intl('auto_translated')}
+                    role="img"
+                    style={{ fontSize: '1rem' }}
+                  >
+                    translate
+                  </i>
+                </span>
               )}
             </div>
             {zNode.tags.length > 0 && <Tags tags={zNode.tags} />}
