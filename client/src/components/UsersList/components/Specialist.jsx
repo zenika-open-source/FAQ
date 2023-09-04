@@ -50,6 +50,7 @@ const Specialist = ({ specialist, services, onUpdateSpecialty }) => {
           {specialties &&
             specialties.map((specialty) => (
               <div
+                role="generic"
                 key={specialty.id}
                 className="bg-primary-light text-primary-font leading-3 px-2 py-1 rounded-sm text-base flex items-end my-[0.1rem] mr-[0.4rem]"
               >
