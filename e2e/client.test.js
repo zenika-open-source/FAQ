@@ -469,7 +469,7 @@ test.beforeAll(async ({ playwright }) => {
   })
   config = await upsertConfigMutation(apiContext)
   prisma._meta = { ...prisma._meta, configuration: config.upsertConfiguration }
-    ; ({ tag, tagEdit } = await tagsQuery(apiContext))
+  ;({ tag, tagEdit } = await tagsQuery(apiContext))
 })
 
 test.beforeEach(async () => {
@@ -758,7 +758,7 @@ test('Should be able to add a specialty to a user', async ({ page }) => {
   await page.getByRole('link', { name: 'Paramètres' }).click()
   await page.getByText('Spécialistes', { exact: true }).click()
   const userLocator = page.getByRole('listitem').last()
-  const userSpecialty = userLocator.getByRole("generic")
+  const userSpecialty = userLocator.getByRole('generic')
   await expect(userSpecialty.first().locator('span')).toHaveText('payroll')
   const addSpecialty = userLocator.getByRole('button', { hasText: 'add' })
   await addSpecialty.click()
@@ -777,7 +777,7 @@ test("Should be able to remove a user's specialty", async ({ page }) => {
   await page.getByRole('link', { name: 'Paramètres' }).click()
   await page.getByText('Spécialistes', { exact: true }).click()
   const userLocator = page.getByRole('listitem').last()
-  const userSpecialty = userLocator.getByRole("generic")
+  const userSpecialty = userLocator.getByRole('generic')
   await expect(userSpecialty.first().locator('span')).toHaveText('payroll')
   const addSpecialty = userLocator.getByRole('button', { hasText: 'add' })
   await addSpecialty.click()
@@ -849,7 +849,7 @@ test('Should be able, as a specialist, to give my specialty to other users', asy
   await page.getByRole('link', { name: 'Paramètres' }).click()
   await page.getByText('Spécialistes', { exact: true }).click()
   const userLocator = page.getByRole('listitem').last()
-  const userSpecialty = userLocator.getByRole("generic")
+  const userSpecialty = userLocator.getByRole('generic')
   await expect(userSpecialty.first().locator('span')).toHaveText('payroll')
   const addSpecialty = userLocator.getByRole('button', { name: 'add' })
   await addSpecialty.click()
