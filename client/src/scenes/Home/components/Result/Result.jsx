@@ -8,6 +8,8 @@ import Card, { CardText, CardTitle } from 'components/Card'
 import Flags from 'components/Flags'
 import Tags from 'components/Tags'
 
+import { getNavigatorLanguage } from 'helpers'
+
 class Result extends Component {
   constructor(props) {
     super(props)
@@ -22,6 +24,24 @@ class Result extends Component {
 
     const { node } = this.props
     const { collapsed } = this.state
+    const navigatorLanguage = getNavigatorLanguage()
+    const isTranslated = navigatorLanguage !== node.question?.language
+
+    const getTitle = () => {
+      if (navigatorLanguage === node.question.language || node.question.language === '') {
+        return node.question.title
+      } else {
+        return node.question.translation.text
+      }
+    }
+
+    const getAnswer = () => {
+      if (navigatorLanguage === node.answer?.language || node.answer.language === '') {
+        return node.answer.content
+      } else {
+        return node.answer.translation.text
+      }
+    }
 
     return (
       <Card>
@@ -30,15 +50,22 @@ class Result extends Component {
           onClick={() => this.setState({ collapsed: !collapsed })}
         >
           <div className="flex-grow">
-            {!node.highlights ? (
-              <h1>{markdown.title(node.question.title)}</h1>
-            ) : (
-              <h1
-                dangerouslySetInnerHTML={{
-                  __html: markdown.title(node.highlights.question),
-                }}
-              />
-            )}
+            <div className="flex items-baseline gap-4">
+              {!node.highlights ? (
+                <h1>{markdown.title(getTitle())}</h1>
+              ) : (
+                <h1
+                  dangerouslySetInnerHTML={{
+                    __html: markdown.title(node.highlights.question),
+                  }}
+                />
+              )}
+              {isTranslated && (
+                <span data-tooltip={intl('auto_translated')}>
+                  <i className="material-icons text-primary !text-base">translate</i>
+                </span>
+              )}
+            </div>
             {node.tags.length > 0 && <Tags tags={node.tags} />}
           </div>
           <Flags node={node} withLabels={false} />
@@ -55,9 +82,7 @@ class Result extends Component {
         <CardText collapsed={collapsed}>
           {node.answer ? (
             markdown.html(
-              node.highlights && node.highlights.answer
-                ? node.highlights.answer
-                : node.answer.content,
+              node.highlights && node.highlights.answer ? node.highlights.answer : getAnswer(),
             )
           ) : (
             <p className="text-center">
@@ -76,8 +101,8 @@ Result.propTypes = {
 }
 
 Result.translations = {
-  en: { no_answer: 'No answer yet...' },
-  fr: { no_answer: 'Pas encore de réponse...' },
+  en: { no_answer: 'No answer yet...', auto_translated: 'Automatic translation' },
+  fr: { no_answer: 'Pas encore de réponse...', auto_translated: 'Traduction automatique' },
 }
 
 export default Result

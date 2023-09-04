@@ -13,7 +13,7 @@ export default compose(
     variables: () => {
       const params = useParams()
       return {
-        tag: params.tag
+        tag: params.tag,
       }
     },
     fetchPolicy: 'network-only',

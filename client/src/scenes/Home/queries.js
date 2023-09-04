@@ -17,10 +17,20 @@ export const SEARCH_NODES = gql`
           title
           slug
           createdAt
+          language
+          translation {
+            text
+            language
+          }
         }
         answer {
           id
           content
+          language
+          translation {
+            text
+            language
+          }
         }
         flags {
           id

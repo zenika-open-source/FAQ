@@ -105,10 +105,18 @@ const Read = ({ zNode, loading }) => {
       <Card className="mt-0">
         <CardTitle className="p-5">
           <div className="flex-grow">
-            <div className="flex items-baseline">
+            <div className="flex items-baseline gap-4">
               <h1>{markdown.title(questionTitle)}</h1>
               {isTranslated && (
-                <p className="font-xs text-secondary-font-light ml-4">{intl('auto_translated')}</p>
+                <span data-tooltip={intl('auto_translated')}>
+                  <i
+                    className="material-icons text-primary !text-base"
+                    aria-label={intl('auto_translated')}
+                    role="img"
+                  >
+                    translate
+                  </i>
+                </span>
               )}
             </div>
             {zNode.tags.length > 0 && <Tags tags={zNode.tags} />}
