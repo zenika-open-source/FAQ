@@ -25,7 +25,7 @@ class Result extends Component {
     const { node } = this.props
     const { collapsed } = this.state
     const navigatorLanguage = getNavigatorLanguage()
-    const isTranslated = navigatorLanguage !== node.question?.language
+    const isTranslated = node.question?.language && navigatorLanguage !== node.question?.language
 
     const getTitle = () => {
       if (navigatorLanguage === node.question.language || node.question.language === '') {
