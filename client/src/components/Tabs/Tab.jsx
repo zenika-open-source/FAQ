@@ -11,7 +11,13 @@ const Tab = ({ label, children, className, ...rest }) => {
   }, [label, register])
 
   return (
-    <div className={cn('tab', className, { 'is-active': label === current })} {...rest}>
+    <div
+      className={cn(
+        `p-4 border border-[#dbdbdb] border-t-0 ${label === current ? 'block' : 'hidden'}`,
+        className,
+      )}
+      {...rest}
+    >
       {children}
     </div>
   )

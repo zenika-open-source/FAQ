@@ -6,11 +6,16 @@ const Tips = (props) => {
 
   return (
     <TipsComponent {...props} uid="tips_answer">
-      <h3>{intl('title')}</h3>
-      <div style={{ textAlign: 'center' }}>
-        <ul style={{ textAlign: 'left' }}>
+      <h3 className="text-primary flex items-center justify-center">{intl('title')}</h3>
+      <div className="text-center">
+        <ul className="list-none p-0 mx-auto inline-block text-left">
           {intl('tips').map((tip, i) => (
-            <li key={i}>{tip}</li>
+            <li
+              className="py-[0.1rem] flex items-center leading-5 before:pr-[5px] before:content-['▸'] before:text-primary"
+              key={i}
+            >
+              {tip}
+            </li>
           ))}
         </ul>
       </div>

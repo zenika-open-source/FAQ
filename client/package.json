@@ -9,6 +9,7 @@
     "apollo3-cache-persist": "^0.14.1",
     "auth0-js": "^9.12.1",
     "babel-runtime": "^6.26.0",
+    "class-variance-authority": "^0.7.0",
     "classnames": "^2.2.5",
     "copy-to-clipboard": "^3.2.0",
     "date-fns": "^2.30.0",
@@ -51,6 +52,7 @@
     "@babel/eslint-parser": "^7.22.9",
     "@babel/preset-react": "^7.22.5",
     "@vitejs/plugin-react": "^4.0.0",
+    "autoprefixer": "^10.4.14",
     "dotenv": "^5.0.0",
     "dotenv-cli": "^1.4.0",
     "eslint": "^8.42.0",
@@ -62,9 +64,10 @@
     "eslint-plugin-react": "^7.32.2",
     "husky": "^3.1.0",
     "lint-staged": "^13.2.3",
+    "postcss": "^8.4.27",
     "prettier": "^3.0.0",
-    "sass": "^1.52.3",
-    "vite": "^4.1.4"
+    "tailwindcss": "^3.3.3",
+    "vite": "^4.4.7"
   },
   "overrides": {
     "react-error-overlay": "6.0.9"

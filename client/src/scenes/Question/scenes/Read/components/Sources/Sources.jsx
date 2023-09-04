@@ -10,22 +10,9 @@ const Sources = ({ sources }) => {
   if (sources.length === 0) return ''
 
   return (
-    <div style={{ borderTop: '1px dashed var(--secondary-color)' }}>
-      <h3
-        style={{
-          color: 'var(--primary-color)',
-          margin: '0.7rem',
-          marginBottom: '0',
-        }}
-      >
-        {intl('sources')}
-      </h3>
-      <List
-        style={{
-          fontSize: 'var(--small-font-size)',
-          color: 'var(--secondary-color-font-light)',
-        }}
-      >
+    <div className="border-t border-t-secondary">
+      <h3 className="text-primary m-3 mb-0">{intl('sources')}</h3>
+      <List className="text-sm text-secondary-font-light">
         {sources.map((source) => (
           <ListItem key={source.id} caption={source.label} icon="library_books" href={source.url} />
         ))}

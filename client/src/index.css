@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-size: 14px;
+    --h1-font-size: 1.3rem;
+    --h2-font-size: 1.1rem;
+    --small-font-size: 0.7rem;
+    --primary: #af1e3a;
+    --secondary-font: #494949;
+  }
+
+  html,
+  body {
+    font-family: 'Lato', sans-serif;
+    height: 100%;
+  }
+
+  #root {
+    height: 100%;
+  }
+
+  h1 {
+    font-size: var(--h1-font-size);
+    font-weight: 700;
+  }
+
+  h2 {
+    font-size: var(--h2-font-size);
+  }
+
+  h3 {
+    font-size: var(--font-size);
+    font-weight: bold;
+  }
+
+  hr {
+    border: 0;
+    border-top: 1px dotted #8c8b8b;
+  }
+
+  a {
+    text-decoration: none;
+    color: var(--primary);
+  }
+
+  a.discret {
+    text-decoration: none !important;
+    color: var(--secondary-font) !important;
+  }
+}
+
+@layer components {
+  .main > div {
+    max-width: 820px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0.5rem;
+    padding-left: 10px;
+    padding-right: 10px;
+    position: relative;
+  }
+
+  .card-text.collapsed {
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .card-text a:not(.btn-container) {
+    text-decoration: underline;
+  }
+
+  .card-text img {
+    max-width: 100%;
+  }
+}

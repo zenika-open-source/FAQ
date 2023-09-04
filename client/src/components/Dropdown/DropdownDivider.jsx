@@ -1,11 +1,3 @@
-const DropdownDivider = () => (
-  <div
-    style={{
-      borderTop: '1.1px solid LightGrey',
-      width: '100%',
-      margin: '7px 0',
-    }}
-  />
-)
+const DropdownDivider = () => <div className="border-t border-t-secondary-font w-full" />
 
 export default DropdownDivider

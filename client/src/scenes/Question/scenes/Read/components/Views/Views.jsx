@@ -2,8 +2,6 @@ import PropTypes from 'prop-types'
 
 import { getIntl } from 'services'
 
-import './Views.css'
-
 const Views = ({ value }) => {
   const intl = getIntl(Views)
   let formattedValue = value || 0
@@ -14,7 +12,7 @@ const Views = ({ value }) => {
   }
 
   return (
-    <span className="views">
+    <span className="text-secondary-font text-sm ml-3 mr-2 flex-shrink-0">
       {formattedValue} {formattedValue > 1 ? intl('views') : intl('view')}
     </span>
   )

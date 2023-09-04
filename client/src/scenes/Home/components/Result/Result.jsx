@@ -8,7 +8,6 @@ import Card, { CardText, CardTitle } from 'components/Card'
 import Flags from 'components/Flags'
 import Tags from 'components/Tags'
 
-import './Result.css'
 import { getNavigatorLanguage } from 'helpers'
 
 class Result extends Component {
@@ -45,34 +44,39 @@ class Result extends Component {
     }
 
     return (
-      <Card className="result">
-        <CardTitle onClick={() => this.setState({ collapsed: !collapsed })}>
-          <div className="grow">
-            {!node.highlights ? (
-              <h1>{markdown.title(getTitle())}</h1>
-            ) : (
-              <h1
-                dangerouslySetInnerHTML={{
-                  __html: markdown.title(node.highlights.question),
-                }}
-              />
-            )}
+      <Card>
+        <CardTitle
+          className="pr-16 [&_em]:font-bold [&_em]:not-italic [&_em]:underline"
+          onClick={() => this.setState({ collapsed: !collapsed })}
+        >
+          <div className="flex-grow">
+            <div className="flex items-baseline gap-4">
+              {!node.highlights ? (
+                <h1>{markdown.title(getTitle())}</h1>
+              ) : (
+                <h1
+                  dangerouslySetInnerHTML={{
+                    __html: markdown.title(node.highlights.question),
+                  }}
+                />
+              )}
+              {isTranslated && (
+                <span data-tooltip={intl('auto_translated')}>
+                  <i className="material-icons text-primary !text-base">translate</i>
+                </span>
+              )}
+            </div>
             {node.tags.length > 0 && <Tags tags={node.tags} />}
           </div>
           <Flags node={node} withLabels={false} />
-          {isTranslated && (
-            <span data-tooltip={intl('auto_translated')} style={{ marginLeft: '1rem' }}>
-              <i className="material-icons">translate</i>
-            </span>
-          )}
           <Link
             to={{
               pathname: `/q/${node.question.slug}-${node.id}`,
               state: { from: 'home' },
             }}
-            className="open-card"
+            className="absolute top-0 right-0 h-full w-12 border-l border-l-secondary flex items-center justify-center rounded-r-sm hover:bg-primary hover:text-primary-font"
           >
-            <i className="material-icons">keyboard_arrow_right</i>
+            <i className="material-icons text-[2rem]">keyboard_arrow_right</i>
           </Link>
         </CardTitle>
         <CardText collapsed={collapsed}>
@@ -81,7 +85,7 @@ class Result extends Component {
               node.highlights && node.highlights.answer ? node.highlights.answer : getAnswer(),
             )
           ) : (
-            <p style={{ textAlign: 'center' }}>
+            <p className="text-center">
               <i>{intl('no_answer')}</i>
             </p>
           )}

@@ -56,18 +56,18 @@ const UserProfile = () => {
     <div>
       <Card>
         <Card.Text>
-          <h1 className="centered">{intl('title')}</h1>
+          <h1 className="text-center">{intl('title')}</h1>
         </Card.Text>
       </Card>
       <Card>
         <Card.Text>
-          <h2>{intl('identity.title')}</h2>
+          <h2 className="font-bold">{intl('identity.title')}</h2>
           <hr />
-          <div className="card-form">
+          <div className="my-4">
             <label htmlFor="name">{intl('identity.name')}</label>
             <input
               id="name"
-              className="card-input"
+              className="block w-full mt-1 mb-4 p-1 border outline-none border-secondary-font focus-within:border-primary"
               value={name}
               onChange={(e) => setName(e.target.value)}
               autoComplete="off"
@@ -75,23 +75,16 @@ const UserProfile = () => {
             <label htmlFor="email">{intl('identity.email')}</label>
             <input
               id="email"
-              className="card-input"
+              className="block w-full mt-1 mb-4 p-1 border outline-none border-secondary-font focus-within:border-primary"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
             <label htmlFor="picture">{intl('identity.picture')}</label>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <Avatar
-                image={picture}
-                style={{
-                  width: '60px',
-                  height: '60px',
-                  marginRight: '20px',
-                }}
-              />
+            <div className="flex items-center">
+              <Avatar image={picture} className="w-16 h-16 mr-5" />
               <input
                 id="picture"
-                className="card-input"
+                className="block w-full mt-1 mb-4 p-1 border outline-none border-secondary-font focus-within:border-primary"
                 value={picture}
                 onChange={(e) => setPicture(e.target.value)}
               />
@@ -99,7 +92,12 @@ const UserProfile = () => {
           </div>
         </Card.Text>
         <Card.Actions>
-          <Button primary type="button" disabled={saveLoading || deleteLoading} onClick={save}>
+          <Button
+            intent={saveLoading || deleteLoading ? 'disabled' : 'primary'}
+            type="button"
+            size="medium"
+            onClick={save}
+          >
             {intl('identity.save')}
           </Button>
         </Card.Actions>
@@ -108,22 +106,22 @@ const UserProfile = () => {
       <Logs userId={user.id} />
       <Card>
         <Card.Text>
-          <h2 style={{ marginBottom: '1rem' }}>{intl('gdpr.title')}</h2>
-          <hr />
-          <p>
-            <span style={{ marginRight: '5px' }}>{intl('gdpr.contact')}</span>
+          <h2 className="mb-4 font-bold">{intl('gdpr.title')}</h2>
+          <hr className="border border-dotted border-primary-font border-t-secondary-derk" />
+          <p className="my-2">
+            <span className="mr-1">{intl('gdpr.contact')}</span>
             <a href={`mailto:contact@${import.meta.env.VITE_FAQ_URL}`}>
               contact@{import.meta.env.VITE_FAQ_URL}
             </a>
           </p>
-          <hr />
-          <p>
+          <hr className="border border-dotted border-primary-font border-t-secondary-dark" />
+          <p className="my-2">
             {intl('gdpr.erase.label')}
             <Button
-              secondary
-              disabled={saveLoading || deleteLoading}
+              intent={saveLoading || deleteLoading ? 'disabled' : 'tertiary'}
+              className="ml-4"
+              size="medium"
               data-tooltip={intl('gdpr.erase.tooltip')}
-              style={{ marginLeft: '1rem' }}
               onClick={() => setModalActive(true)}
             >
               {intl('gdpr.erase.button')}
@@ -143,9 +141,8 @@ const UserProfile = () => {
           <Input value={goodbye} onChange={(e) => setGoodbye(e.target.value)} />
           <br />
           <Button
-            primary
-            style={{ width: '100%' }}
-            disabled={goodbye !== 'goodbye' || saveLoading || deleteLoading}
+            intent={goodbye !== 'goodbye' || saveLoading || deleteLoading ? 'disabled' : 'primary'}
+            className="w-full"
             onClick={deleteData}
             loading={saveLoading || deleteLoading}
           >

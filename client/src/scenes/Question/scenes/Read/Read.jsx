@@ -89,7 +89,11 @@ const Read = ({ zNode, loading }) => {
           onSelect={(type) => createFlag({ variables: { type, nodeId: zNode.id } })}
           onRemove={(type) => removeFlag({ variables: { type, nodeId: zNode.id } })}
         />
-        <Dropdown button={<Button icon="edit" label={intl('menu.edit.label')} link />}>
+        <Dropdown
+          button={
+            <Button icon="edit" label={intl('menu.edit.label')} intent="link" size="medium" />
+          }
+        >
           <DropdownItem icon="edit" onClick={() => navigate(`/q/${params.slug}/edit`)}>
             {intl('menu.edit.question')}
           </DropdownItem>
@@ -98,28 +102,17 @@ const Read = ({ zNode, loading }) => {
           </DropdownItem>
         </Dropdown>
       </ActionMenu>
-      <Card>
-        <CardTitle style={{ padding: '1.2rem' }}>
-          <div className="grow">
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'baseline',
-              }}
-            >
+      <Card className="mt-0">
+        <CardTitle className="p-5">
+          <div className="flex-grow">
+            <div className="flex items-baseline gap-4">
               <h1>{markdown.title(questionTitle)}</h1>
               {isTranslated && (
-                <span
-                  data-tooltip={intl('auto_translated')}
-                  style={{
-                    marginLeft: '1rem',
-                  }}
-                >
+                <span data-tooltip={intl('auto_translated')}>
                   <i
-                    className="material-icons"
+                    className="material-icons text-primary !text-base"
                     aria-label={intl('auto_translated')}
                     role="img"
-                    style={{ fontSize: '1rem' }}
                   >
                     translate
                   </i>
@@ -136,46 +129,35 @@ const Read = ({ zNode, loading }) => {
               onLanguageChanged={translate}
               originalLanguage={originalQuestionLanguage}
               primary={isTranslated}
-              link={!isTranslated}
             />
           )}
         </CardTitle>
         {zNode.answer?.certified && (
-          <CardText style={{ border: '2px solid #caac00', marginTop: '0.5rem' }}>
-            <p className="small-text centered" style={{ padding: '0.5rem', margin: '0' }}>
+          <CardText className="border-2 border-[#caac00] mt-2">
+            <p className="font-xs text-secondary-font-light text-center p-2 m-0">
               {intl('certified_answer')}
             </p>
-            <div style={{ padding: '0.5rem', margin: '0' }}>
-              {markdown.html(zNode.answer.certified)}
-            </div>
+            <div className="p-2 m-0">{markdown.html(zNode.answer.certified)}</div>
           </CardText>
         )}
         <CardText>
           {zNode.answer ? (
             <>
               {zNode.answer.certified && (
-                <p className="small-text centered" style={{ padding: '0.5rem', margin: '0' }}>
+                <p className="font-xs text-secondary-font-light text-center p-2 m-0">
                   {intl('recent_answer')}
                 </p>
               )}
-              <div style={{ padding: '0.5rem', marginBottom: '0.5rem' }}>
-                {markdown.html(answerContent)}
-              </div>
+              <div className="p-2 mb-0">{markdown.html(answerContent)}</div>
               <Sources sources={zNode.answer.sources} />
             </>
           ) : (
-            <div
-              style={{
-                textAlign: 'center',
-                marginTop: '2rem',
-                marginBottom: '2rem',
-              }}
-            >
+            <div className="text-center my-8">
               <b>{intl('no_answer')}</b>
               <br />
               <br />
               <Link to={`/q/${params.slug}/answer`} className="btn-container">
-                <Button icon="question_answer" primary>
+                <Button icon="question_answer" intent="primary" size="large">
                   {intl('answer')}
                 </Button>
               </Link>

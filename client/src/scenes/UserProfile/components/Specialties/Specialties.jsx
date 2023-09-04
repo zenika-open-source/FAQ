@@ -3,8 +3,6 @@ import PropTypes from 'prop-types'
 import { getIntl } from 'services'
 import { Loading } from 'components'
 
-import './Specialties.css'
-
 const Specialties = ({ specialties }) => {
   const intl = getIntl(Specialties)
 
@@ -12,20 +10,23 @@ const Specialties = ({ specialties }) => {
 
   return (
     <Card>
-      <CardText className="specialties">
-        <h2 style={{ marginBottom: '1rem' }}>{intl('title')}</h2>
-        <hr />
+      <CardText>
+        <h2 className="mb-4 font-bold">{intl('title')}</h2>
+        <hr className="mb-2" />
         {specialties.length > 0 ? (
-          <ul className="specialtiesList">
+          <ul className="flex items-center justify-start flex-wrap gap-4">
             {specialties.map((specialty) => (
-              <li key={specialty.name} className="specialty">
-                <i className="material-icons">verified</i>
+              <li
+                key={specialty.name}
+                className="flex items-center justify-center w-fit p-1 capitalize bg-primary-font text-primary bodrer border-primary rounded-sm"
+              >
+                <i className="material-icons mr-2 text-base">verified</i>
                 {specialty.name}
               </li>
             ))}
           </ul>
         ) : (
-          <p>{intl('empty')}</p>
+          <p className="text-center">{intl('empty')}</p>
         )}
       </CardText>
     </Card>

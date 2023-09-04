@@ -6,8 +6,6 @@ import { Input, TagPicker } from 'components'
 
 import { useConfiguration } from 'contexts'
 
-import './Searchbar.css'
-
 const Searchbar = ({ text, tags, loading, onTextChange, onTagsChange }) => {
   const intl = getIntl(Searchbar)
   const conf = useConfiguration()
@@ -21,7 +19,7 @@ const Searchbar = ({ text, tags, loading, onTextChange, onTagsChange }) => {
     .filter((l) => l)
 
   return (
-    <div className="searchbar">
+    <div className="mt-16 max-[480px]:mt-4 max-w-lg w-auto mx-auto [&_input]:h-10 [&_input]:leading-10">
       <Input
         icon={
           <>
@@ -40,7 +38,7 @@ const Searchbar = ({ text, tags, loading, onTextChange, onTagsChange }) => {
         onChange={(e) => onTextChange(e.target.value)}
         onClear={() => onTextChange('')}
       />
-      <div className="filters">
+      <div className="flex mt-2 flex-col">
         <TagPicker
           label={intl('filter.tags')}
           icon="local_offer"

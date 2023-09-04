@@ -1,9 +1,7 @@
 import PropTypes from 'prop-types'
 
-import './Avatar.css'
-
 const Avatar = ({ image, alt, ...otherProps }) => (
-  <img className="avatar" src={image} alt={alt || 'avatar'} {...otherProps} />
+  <img className="w-10 h-auto" src={image} alt={alt || 'avatar'} {...otherProps} />
 )
 
 Avatar.propTypes = {

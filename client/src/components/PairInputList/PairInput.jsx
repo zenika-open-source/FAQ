@@ -2,16 +2,16 @@ import PropTypes from 'prop-types'
 
 import { Input, Button } from 'components'
 
-import './PairInput.css'
-
 const PairInput = ({ pair, options, actions, disabled }) => {
   const { key, value } = pair
   return (
-    <div className="pair-input">
-      <i className="material-icons">{options.icons.line}</i>
-      <div className="pair-input-inputs">
+    <div className="group/pair-input flex items-center mb-2">
+      <i className="material-icons group-focus-within/pair-input:text-primary">
+        {options.icons.line}
+      </i>
+      <div className="flex items-center flex-1 ml-2">
         <Input
-          className="pair-input-key"
+          className="w-2/5 mr-2 [&_input]:h-7 [&_input]:min-w-0 [&_input]:leading-7"
           icon={options.icons.key}
           placeholder={options.labels.key}
           value={key}
@@ -19,7 +19,7 @@ const PairInput = ({ pair, options, actions, disabled }) => {
           disabled={disabled}
         />
         <Input
-          className="pair-input-value"
+          className="flex-1 [&_input]:h-7 [&_input]:min-w-0 [&_input]:leading-7"
           icon={options.icons.value}
           placeholder={options.labels.value}
           value={value}
@@ -28,12 +28,11 @@ const PairInput = ({ pair, options, actions, disabled }) => {
         />
       </div>
       <Button
-        style={{ padding: '0.3rem', marginLeft: '0.5rem' }}
+        className="p-[0.3rem] ml-2"
         icon="close"
-        link
-        raised
+        intent={disabled ? 'disabled' : 'link'}
+        action="raised"
         onClick={() => actions.delete(pair)}
-        disabled={disabled}
       />
     </div>
   )

@@ -1,8 +1,6 @@
 import React, { useState, useMemo } from 'react'
 import cn from 'classnames'
 
-import './Tabs.scss'
-
 export const TabsContext = React.createContext()
 
 const Tabs = ({ children, className, ...rest }) => {
@@ -22,21 +20,26 @@ const Tabs = ({ children, className, ...rest }) => {
 
   return (
     <TabsContext.Provider value={value}>
-      <div className={cn('tabs', className)}>
-        <div className="tabs-list">
-          <ul>
+      <div className={className}>
+        <div className="flex items-stretch text-base justify-between overflow-hidden overflow-x-auto whitespace-nowrap">
+          <ul className="flex flex-grow flex-shrink-0 justify-center items-center border-b border-b-[#dbdbdb] m-0">
             {tabs.map((label) => (
               <li
                 key={label}
                 onClick={() => setCurrent(label)}
-                className={cn({ 'is-active': label === active })}
+                className={cn('block', {
+                  '[&_span]:bg-primary-font [&_span]:border-[#dbdbdb] [&_span]:border-b-secondary-light [&_span]:text-primary':
+                    label === active,
+                })}
               >
-                <span>{label}</span>
+                <span className="cursor-pointer flex items-center justify-center -mb-px px-4 py-2 align-top border border-transparent rounded-tl-4 rounded-tr-4 hover:text-[#363636] hover:bg-[#f5f5f5] hover:border-b-secondary-light">
+                  {label}
+                </span>
               </li>
             ))}
           </ul>
         </div>
-        <div className="tabs-items">{children}</div>
+        <div>{children}</div>
       </div>
     </TabsContext.Provider>
   )

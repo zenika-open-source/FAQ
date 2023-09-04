@@ -1,5 +1,3 @@
-import './ActionMenu.css'
-
 import Button from 'components/Button'
 import PropTypes from 'prop-types'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
@@ -11,26 +9,33 @@ const ActionMenu = ({ backLabel, backLink, goBack, title, children }) => {
   const navigate = useNavigate()
 
   return (
-    <div className="action-menu">
-      <div className="back-btn">
+    <div className="flex items-center mb-1">
+      <div className="flex-1">
         {goBack && location.state && location.state.from === 'home' ? (
           <Button
             icon="chevron_left"
             label={backLabel || intl('back')}
-            link
-            raised
+            intent="link"
+            action="raised"
+            size="medium"
             onClick={() => navigate(-1)}
           />
         ) : (
           <Link to={backLink}>
-            <Button icon="chevron_left" label={backLabel || intl('back')} link raised />
+            <Button
+              icon="chevron_left"
+              label={backLabel || intl('back')}
+              intent="link"
+              action="raised"
+              size="medium"
+            />
           </Link>
         )}
       </div>
       <div className="title">
         <h2>{title}</h2>
       </div>
-      <div className="actions">{children}</div>
+      <div className="flex flex-1 justify-end">{children}</div>
     </div>
   )
 }

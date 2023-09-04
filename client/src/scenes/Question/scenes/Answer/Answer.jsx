@@ -107,7 +107,8 @@ const Answer = ({ zNode }) => {
       <ActionMenu backLink={`/q/${zNode.question.slug}-${zNode.id}`}>
         {!showTips && (
           <Button
-            link
+            intent="link"
+            size="medium"
             icon="lightbulb_outline"
             label={intl('show_tips')}
             onClick={toggleTips(true)}
@@ -115,9 +116,9 @@ const Answer = ({ zNode }) => {
         )}
       </ActionMenu>
       <Tips close={toggleTips(false)} open={showTips} />
-      <Card style={{ marginTop: '0.3rem' }}>
-        <CardTitle style={{ padding: '1.2rem' }}>
-          <div className="grow">
+      <Card className="mt-1">
+        <CardTitle className="p-5">
+          <div className="flex-grow">
             <h1>{markdown.title(zNode.question.title)}</h1>
           </div>
           <Flags node={zNode} withLabels={true} />
@@ -129,7 +130,7 @@ const Answer = ({ zNode }) => {
         </CardText>
         <CardText>
           <PairInputList
-            style={{ borderTop: '1px dashed var(--secondary-color)' }}
+            className="border border-primary-font border-dashed border-t-secondary pt-2"
             pairs={sources}
             options={{
               title: intl('sources.title'),
@@ -142,9 +143,9 @@ const Answer = ({ zNode }) => {
         <CardActions>
           <Button
             label={zNode.answer ? intl('validate.edit') : intl('validate.submit')}
-            primary
-            raised
-            disabled={!canSubmit(state)}
+            intent={canSubmit(state) ? 'primary' : 'disabled'}
+            action="raised"
+            size="large"
             onClick={submitForm}
           />
         </CardActions>

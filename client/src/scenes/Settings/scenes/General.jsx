@@ -7,9 +7,8 @@ const General = ({ state, dispatch, loading }) => {
 
   return (
     <Tab label={intl('tab')}>
-      <h2>{intl('title.title')}</h2>
-      <br />
-      <div className="inline-input">
+      <h2 className="mb-2">{intl('title.title')}</h2>
+      <div className="flex items-center [&_i]:mr-2">
         <Icon material="home" />
         <Input
           value={state.title}
@@ -18,25 +17,21 @@ const General = ({ state, dispatch, loading }) => {
           disabled={loading}
         />
       </div>
-      <br />
-      <hr />
-      <h2>{intl('domains.title')}</h2>
-      <br />
-      <div className="inline-input">
+      <hr className="my-6" />
+      <h2 className="mb-2">{intl('domains.title')}</h2>
+      <div className="flex items-center [&_i]:mr-2">
         <Icon material="domain" />
         <Input
-          style={{ flex: 1 }}
-          value={state.authorizedDomains}
+          className="flex-1"
+          value={state?.authorizedDomains ?? ''}
           onChange={(e) => dispatch({ type: 'change_domains', data: e.target.value })}
           placeholder={intl('domains.placeholder')}
           disabled={loading}
         />
       </div>
-      <br />
-      <hr />
-      <h2>{intl('bug_reporting.title')}</h2>
-      <br />
-      <div style={{ marginLeft: '1rem' }}>
+      <hr className="my-6" />
+      <h2 className="mb-2">{intl('bug_reporting.title')}</h2>
+      <div className="ml-4">
         <Radio.Group
           name="bug_reporting"
           selected={state.bugReporting}

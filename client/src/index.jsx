@@ -5,6 +5,8 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from 'react-router-dom'
+import './index.css'
+import 'styles/tooltip.css'
 
 import { PrivateRoute } from 'components'
 import App from 'scenes/App/App'

@@ -15,7 +15,7 @@ class ErrorBoundary extends Component {
     const intl = getIntl(ErrorBoundary)
 
     if (this.state.hasError) {
-      return <h1 style={{ textAlign: 'center', marginTop: '3rem' }}>{intl('message')}</h1>
+      return <h1 className="text-center mt-12">{intl('message')}</h1>
     }
 
     return this.props.children

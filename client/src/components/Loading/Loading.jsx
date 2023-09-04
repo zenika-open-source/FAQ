@@ -8,9 +8,9 @@ const Loading = ({ text }) => {
   const intl = getIntl(Loading)
 
   return (
-    <div style={{ textAlign: 'center', marginTop: '3rem' }}>
-      <div className="loader">
-        <svg className="circular" viewBox="25 25 50 50">
+    <div className="text-center mt-12">
+      <div className="relative my-0 mx-auto w-24 h-24 before:content-[''] before:block before:pt-[100%] origin-center">
+        <svg className="h-full w-full absolute inset-0 m-auto animate-spin" viewBox="25 25 50 50">
           <circle
             className="path"
             cx="50"

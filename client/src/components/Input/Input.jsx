@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
 
-import './Input.css'
-
 class Input extends Component {
   constructor(props) {
     super(props)
@@ -15,23 +13,42 @@ class Input extends Component {
     const { className, value, limit, icon, style, onClear, small, ...otherProps } = this.props
     return (
       <div
-        className={cn('input', className, { small })}
+        className={cn(
+          'group/input border border-secondary bg-secondary-light p-px pl-2 flex items-center hover:border-[#b9b9b9] hover:border-l-[#a0a0a0] focus-within:!border-primary',
+          className,
+          { small },
+        )}
         style={style}
         onClick={() => this.input.current && this.input.current.focus()}
       >
         {icon && (
-          <span className="input-icon">
-            {typeof icon === 'string' ? <i className="material-icons">{icon}</i> : <i>{icon}</i>}
+          <span className="group-focus-within/input:text-primary flex items-center text-secondary-dark">
+            <i
+              className={
+                typeof icon === 'string'
+                  ? 'material-icons w-[18px] mx-1 group-focus-within/input:text-primary'
+                  : 'w-[18px] mx-1 group-focus-within/input:text-primary'
+              }
+            >
+              {icon}
+            </i>
           </span>
         )}
-        <input type="text" value={value} maxLength={limit} ref={this.input} {...otherProps} />
+        <input
+          className="group-focus-within/input:placeholder:text-transparent outline-none border-0 flex-1 ml-1 h-8 ldaing-11 text-primary-font-dark"
+          type="text"
+          value={value}
+          maxLength={limit}
+          ref={this.input}
+          {...otherProps}
+        />
         {limit && (
-          <i className="limit">
+          <i className="text-xs text-secondary-dark">
             {value ? value.length : 0}/{limit}
           </i>
         )}
         {onClear && value.length > 0 && (
-          <i className="close material-icons" onClick={onClear}>
+          <i className="text-primary-light cursor-pointer material-icons" onClick={onClear}>
             close
           </i>
         )}

@@ -1,4 +1,4 @@
-import 'styles'
+// import 'styles'
 
 import { AlertProvider, AlertStack, ErrorBoundary } from 'components'
 import { AuthProvider, ConfigurationProvider, UserProvider } from 'contexts'
@@ -17,7 +17,7 @@ setDefaultOptions({
 
 const App = () => {
   return (
-    <div className="app theme">
+    <div className="flex flex-col bg-background text-primary min-h-full overflow-hidden text-base">
       <Helmet>
         <title>FAQ</title>
       </Helmet>
@@ -26,7 +26,7 @@ const App = () => {
           <AuthProvider>
             <UserProvider>
               <Navbar />
-              <main className="main">
+              <main className="mt-navbar w-full overflow-auto pb-8 flex-1 main">
                 <ErrorBoundary>
                   <Outlet />
                 </ErrorBoundary>

@@ -1,5 +1,3 @@
-import './Edit.css'
-
 import { useMutation } from '@apollo/client'
 import { Button, CtrlEnter, Input, Loading, TagPicker } from 'components'
 import Card, { CardActions, CardText, PermanentClosableCard } from 'components/Card'
@@ -107,7 +105,7 @@ const Edit = ({ zNode = null }) => {
   }
 
   return (
-    <div className="Edit">
+    <div>
       <Prompt message={intl('prompt_warning')} when={canSubmit(state)} />
       <ActionMenu
         backLabel={!isEditing ? intl('home') : null}
@@ -116,7 +114,8 @@ const Edit = ({ zNode = null }) => {
       >
         {!showTips && (
           <Button
-            link
+            intent="link"
+            size="medium"
             icon="lightbulb_outline"
             label={intl('show_tips')}
             onClick={toggleTips(true)}
@@ -125,9 +124,10 @@ const Edit = ({ zNode = null }) => {
       </ActionMenu>
       <Tips close={toggleTips(false)} open={showTips} />
       <Card>
-        <CardText style={{ display: 'flex', paddingBottom: 0 }}>
-          <CtrlEnter onCtrlEnterCallback={submitForm} style={{ width: '100%' }}>
+        <CardText className="flex pb-0">
+          <CtrlEnter className="w-full" onCtrlEnterCallback={submitForm}>
             <Input
+              className="m-4 flex-1"
               autoFocus
               icon="help"
               placeholder={intl('placeholder')}
@@ -137,15 +137,19 @@ const Edit = ({ zNode = null }) => {
             />
           </CtrlEnter>
         </CardText>
-        <CardText style={{ paddingBottom: '0.5rem' }}>
-          <TagPicker tags={tags} onChange={onTagsChange} />
+        <CardText className="pb-2">
+          <TagPicker
+            className="border-t border-t-secondary border-dashed pl-4 pt-2"
+            tags={tags}
+            onChange={onTagsChange}
+          />
         </CardText>
         <CardActions>
           <Button
             label={isEditing ? intl('validate.edit') : intl('validate.submit')}
-            disabled={!canSubmit(state)}
-            primary
-            raised
+            intent={canSubmit(state) ? 'primary' : 'disabled'}
+            action="raised"
+            size="large"
             onClick={submitForm}
           />
         </CardActions>

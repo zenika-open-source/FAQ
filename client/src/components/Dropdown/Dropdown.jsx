@@ -2,8 +2,6 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames'
 
-import './Dropdown.scss'
-
 export const DropdownContext = React.createContext()
 
 const Dropdown = ({ className, button, children }) => {
@@ -12,12 +10,17 @@ const Dropdown = ({ className, button, children }) => {
   return (
     <DropdownContext.Provider value={setActive}>
       <div
-        className={cn('dropdown', className)}
+        className={cn('relative', className)}
         onMouseEnter={() => setActive(true)}
         onMouseLeave={() => setActive(false)}
       >
-        <div className="dropbtn">{button}</div>
-        <div className={cn('dropdown-content', { active })}>{children}</div>
+        <div className="cursor-pointer">{button}</div>
+        <div
+          className={`absolute bg-secondary-light min-w-[160px] z-10 right-0 shadow-[0_8px_16px_0_rgb(0,0,0,0.2)]
+            ${active ? 'flex flex-col' : 'hidden'}`}
+        >
+          {children}
+        </div>
       </div>
     </DropdownContext.Provider>
   )

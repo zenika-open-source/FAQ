@@ -5,10 +5,11 @@ import CardActions from './CardActions'
 import CardText from './CardText'
 import CardTitle from './CardTitle'
 
-import './Card.css'
-
 const Card = ({ children, className, ...otherProps }) => (
-  <div className={cn(className, 'card')} {...otherProps}>
+  <div
+    className={cn(className, 'w-full relative mt-4 border border-secondary rounded-sm')}
+    {...otherProps}
+  >
     {children}
   </div>
 )

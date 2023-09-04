@@ -29,15 +29,16 @@ const Login = () => {
   }
 
   return (
-    <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+    <div className="text-center !mt-8">
       <h1>{intl('welcome')}</h1>
-      <p>{intl('text')}</p>
+      <p className="my-3">{intl('text')}</p>
       <Button
         icon="fingerprint"
         label={intl('sign_in')}
         onClick={() => login(redirectedFrom)}
-        primary
-        raised
+        intent="primary"
+        action="raised"
+        size="large"
       />
     </div>
   )

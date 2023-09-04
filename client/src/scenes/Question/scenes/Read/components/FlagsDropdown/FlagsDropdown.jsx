@@ -6,7 +6,6 @@ import { Flag, flagMeta } from 'components/Flags'
 import Dropdown, { DropdownItem } from 'components/Dropdown'
 import Button from 'components/Button'
 
-import './FlagsDropdown.css'
 import { answerCanBeCertified } from 'helpers'
 import { useUser } from 'contexts'
 
@@ -29,7 +28,10 @@ const FlagsDropdown = ({ zNode, onSelect, onRemove }) => {
         icon={flagMeta[type].icon}
         rightIcon={
           isSelected ? (
-            <i className="material-icons close-icon" onClick={() => isSelected && onRemove(type)}>
+            <i
+              className="material-icons cursor-pointer hover:text-red-500"
+              onClick={() => isSelected && onRemove(type)}
+            >
               close
             </i>
           ) : null
@@ -42,11 +44,18 @@ const FlagsDropdown = ({ zNode, onSelect, onRemove }) => {
     )
   })
 
-  return <Dropdown button={<Button icon="flag" label={intl('button')} link />}>{items}</Dropdown>
+  return (
+    <Dropdown
+      className="capitalize"
+      button={<Button icon="flag" label={intl('button')} intent="link" size="medium" />}
+    >
+      {items}
+    </Dropdown>
+  )
 }
 
 FlagsDropdown.propTypes = {
-  flags: PropTypes.array.isRequired,
+  zNode: PropTypes.object.isRequired,
   onSelect: PropTypes.func.isRequired,
   onRemove: PropTypes.func.isRequired,
 }

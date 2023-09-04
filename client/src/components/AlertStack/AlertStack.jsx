@@ -3,13 +3,11 @@ import { Component } from 'react'
 import Alert from './Alert'
 import AlertContext from './AlertContext'
 
-import './AlertStack.css'
-
 class AlertStack extends Component {
   static contextType = AlertContext
   render() {
     return (
-      <div className="alert-stack">
+      <div className="fixed top-[72px] right-2 max-w-full w-[400px] min-w-[30vw]">
         {this.context.alerts.map((alert) => (
           <Alert key={alert.id} alert={alert} />
         ))}

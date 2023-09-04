@@ -3,11 +3,11 @@ import { useState } from 'react'
 
 import { alert, getIntl } from 'services'
 
-import { Button, Checkbox, Input, Tab } from 'components'
+import { Button, Input, Tab } from 'components'
 
 import { REGENERATE_SLACK_COMMAND_KEY } from '../queries'
 
-const Integrations = ({ state, dispatch, loading }) => {
+const Integrations = ({ state, dispatch }) => {
   const intl = getIntl(Integrations)
 
   const [slackHookLoading, setSlackHookLoading] = useState(false)
@@ -29,50 +29,35 @@ const Integrations = ({ state, dispatch, loading }) => {
 
   return (
     <Tab label={intl('tab')}>
-      <h2>{intl('workplace.title')}</h2>
-      <br />
-      <div style={{ marginLeft: '1rem' }}>
-        <Checkbox
-          label={intl('workplace.label')}
-          checked={state.workplaceSharing}
-          onChange={(e) =>
-            dispatch({
-              type: 'toggle_workplace',
-              data: e.target.checked,
-            })
-          }
-          disabled={loading}
-        />
-      </div>
-      <br />
+      <h2 className="mb-2">{intl('workplace.title')}</h2>
       <hr />
-      <h2>{intl('slack.title')}</h2>
-      <br />
-      <div className="inline-input" style={{ marginTop: '1em' }}>
-        <i style={{ marginLeft: '1em' }}>{intl('slack.channel')}</i>
+      <h2 className="my-2">{intl('slack.title')}</h2>
+      <div className="flex items-center">
+        <i className="ml-[1em] mr-2">{intl('slack.channel')}</i>
         <Input
           value={state.slackChannelHook || ''}
-          style={{ flex: 1, marginRight: '1rem' }}
+          className="flex-1 mr-4"
           onChange={(e) => dispatch({ type: 'change_slack_channelhook', data: e.target.value })}
         />
       </div>
-      <div className="inline-input" style={{ marginTop: '1em' }}>
-        <i style={{ marginLeft: '1em' }}>{intl('slack.command')}</i>
+      <div className="flex items-center mt-4">
+        <i className="ml-[1em] mr-2">{intl('slack.command')}</i>
         <Input
           value={
             state.slackCommandKey
               ? `https://${window.location.host}/rest/integration/slack/${state.slackCommandKey}`
               : ''
           }
-          disabled
-          small
-          style={{ flex: 1, marginLeft: '1rem', marginRight: '1rem' }}
+          intent="disabled"
+          size="small"
+          className="flex-1 ml-4 mr-4"
         />
         <Button
           label={
             (state.slackCommandKey ? intl('slack.regenerate') : intl('slack.generate')) + ' URL'
           }
-          link
+          intent="link"
+          size="medium"
           loading={slackHookLoading}
           onClick={generateSlackHook}
         />

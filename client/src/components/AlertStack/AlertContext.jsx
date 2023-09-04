@@ -40,7 +40,7 @@ class AlertProvider extends Component {
     this.setState((state) => ({
       alerts: state.alerts.map((a) => {
         if (a !== alert) return a
-        return { ...alert, closed: true }
+        return { ...alert, shown: false, closed: true }
       }),
     }))
 
