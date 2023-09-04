@@ -3,7 +3,6 @@ const express = require('express')
 const secure = require('express-force-https')
 const path = require('path')
 const cors = require('cors')
-const { makeSchema } = require('nexus')
 
 const resolvers = require('./resolvers')
 const directives = require('./directives')
@@ -16,14 +15,6 @@ const logger = require('./helpers/logger')
 
 const gqlEndpoint = '/gql'
 const restEndpoint = '/rest'
-
-const schema = makeSchema({
-  types: [Test],
-  outputs: {
-    schema: 'src/schema.graphql',
-    typegen: 'src/nexus.ts'
-  }
-})
 
 const server = new GraphQLServer({
   schema,

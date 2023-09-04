@@ -15,8 +15,6 @@
     "jwks-rsa": "^1.6.0",
     "lodash": "^4.17.21",
     "mjml": "^4.5.1",
-    "nexus": "^1.2.0",
-    "nexus-prisma": "^2.0.1",
     "node-fetch": "^2.6.7",
     "path": "^0.12.7",
     "prisma-binding": "^2.3.16",
