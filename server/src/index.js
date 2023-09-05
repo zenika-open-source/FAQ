@@ -17,7 +17,6 @@ const gqlEndpoint = '/gql'
 const restEndpoint = '/rest'
 
 const server = new GraphQLServer({
-  schema,
   typeDefs: 'src/schema.graphql',
   resolvers,
   schemaDirectives: directives,
