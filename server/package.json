@@ -2,6 +2,7 @@
   "name": "faq_server",
   "version": "1.0.0",
   "dependencies": {
+    "@graphql-tools/utils": "^7.10.0",
     "@prisma/client": "^5.1.1",
     "algoliasearch": "^3.35.1",
     "express": "^4.17.3",

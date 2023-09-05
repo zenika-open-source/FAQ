@@ -1,4 +1,4 @@
-const { SchemaDirectiveVisitor } = require('graphql-tools')
+const { SchemaDirectiveVisitor } = require('@graphql-tools/utils')
 const { defaultFieldResolver } = require('graphql')
 
 class AdminDirective extends SchemaDirectiveVisitor {
