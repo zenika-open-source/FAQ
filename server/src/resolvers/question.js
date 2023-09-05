@@ -15,7 +15,7 @@ const confTagLabels = ctx =>
 module.exports = {
   Query: {
     zNode: async (_, args, ctx, info) => {
-      let node = await ctx.prisma.query.zNode(args, info)
+      let node = await ctx.prisma.zNode.findUnique({ where: { id: args.id } }, info)
       if (!node.question.language || (node.answer && !node.answer?.language)) {
         node = await translateContentAndSave(node, ctx, info)
       }

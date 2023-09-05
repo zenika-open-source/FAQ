@@ -1,6 +1,5 @@
-const { Prisma } = require('prisma-binding')
 const { MultiTenant } = require('prisma-multi-tenant')
-const path = require('path')
+const { PrismaClient } = require('@prisma/client')
 const logger = require('./helpers/logger')
 
 const multiTenant = new MultiTenant({
@@ -9,11 +8,7 @@ const multiTenant = new MultiTenant({
     logger.info(
       `instanciating prisma client for service "${name}", stage "${stage}", and endpoint "${endpoint}"`
     )
-    return new Prisma({
-      typeDefs: path.join(__dirname, '/generated/prisma.graphql'),
-      endpoint,
-      secret: process.env.PRISMA_API_SECRET
-    })
+    return new PrismaClient()
   },
   nameStageFromReq: req => {
     // Env vars take precedence
