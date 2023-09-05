@@ -13,12 +13,14 @@ model Answer {
   createdAt   DateTime
   updatedAt   DateTime
   language    String
-  translation String?      @db.VarChar(25)
   certified   String?
-  Translation Translation? @relation(fields: [translation], references: [id], onUpdate: NoAction)
-  Source      Source[]     @relation("AnswerSources")
-  ZNode       ZNode[]      @relation("NodeAnswer")
-  User        User[]       @relation("UserAnswers")
+  translationId String?
+  translation Translation? @relation(fields: [translationId], references: [id], name: "AnswerTranslation")
+  sources     Source[]
+  nodeId      String       @unique
+  node        ZNode        @relation(fields: [nodeId], references: [id])
+  userId      String
+  user        User         @relation(fields: [userId], references: [id])
 }
 
 model Configuration {
@@ -39,15 +41,15 @@ model Configuration {
   bugReporting                    String?
   updatedAt                       DateTime
   createdAt                       DateTime
-  Configuration_authorizedDomains Configuration_authorizedDomains[]
-  TagCategory                     TagCategory[]                     @relation("ConfigurationTags")
+  authorizedDomains               AuthorizedDomains[]
+  tagCategories                   TagCategory[]
 }
 
-model Configuration_authorizedDomains {
+model AuthorizedDomains {
   nodeId        String        @db.VarChar(25)
   position      Int
   value         String
-  Configuration Configuration @relation(fields: [nodeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  configuration Configuration @relation(fields: [nodeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@id([nodeId, position])
 }
@@ -57,8 +59,10 @@ model Flag {
   type      String
   createdAt DateTime
   updatedAt DateTime
-  ZNode     ZNode[]  @relation("NodeFlags")
-  User      User[]   @relation("UserFlags")
+  nodeId    String
+  node      ZNode  @relation(fields: [nodeId], references: [id])
+  userId    String
+  user      User   @relation(fields: [userId], references: [id])
 }
 
 model HistoryAction {
@@ -68,8 +72,10 @@ model HistoryAction {
   meta      String?
   createdAt DateTime
   updatedAt DateTime
-  ZNode     ZNode[]  @relation("NodeHistoryActions")
-  User      User[]   @relation("UserHistoryActions")
+  nodeId    String
+  node      ZNode  @relation(fields: [nodeId], references: [id])
+  userId    String
+  user      User   @relation(fields: [userId], references: [id])
 }
 
 model Question {
@@ -80,10 +86,12 @@ model Question {
   createdAt   DateTime
   updatedAt   DateTime
   language    String
-  translation String?      @db.VarChar(25)
-  Translation Translation? @relation(fields: [translation], references: [id], onUpdate: NoAction)
-  ZNode       ZNode[]      @relation("NodeQuestion")
-  User        User[]       @relation("UserQuestions")
+  translationId String?
+  translation Translation? @relation(fields: [translationId], references: [id], name: "QuestionTranslation")
+  nodeId    String @unique
+  node      ZNode  @relation(fields: [nodeId], references: [id])
+  userId    String
+  user      User   @relation(fields: [userId], references: [id])
 }
 
 model Source {
@@ -92,16 +100,20 @@ model Source {
   url       String
   updatedAt DateTime
   createdAt DateTime
-  Answer    Answer[] @relation("AnswerSources")
+  answerId  String
+  answer    Answer @relation(fields: [answerId], references: [id])
 }
 
 model Tag {
   id        String     @id @db.VarChar(25)
   createdAt DateTime
   updatedAt DateTime
-  ZNode     ZNode[]    @relation("NodeTags")
-  TagLabel  TagLabel[] @relation("TagsLabel")
-  User      User[]     @relation("UserTags")
+  nodeId    String
+  node     ZNode    @relation(fields: [nodeId], references: [id])
+  labelId String
+  label  TagLabel @relation(fields: [labelId], references: [id])
+  userId  String
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model TagCategory {
@@ -110,8 +122,9 @@ model TagCategory {
   order         Int
   updatedAt     DateTime
   createdAt     DateTime
-  Configuration Configuration[] @relation("ConfigurationTags")
-  TagLabel      TagLabel[]      @relation("TagLabelsCategory")
+  configurationId String
+  configuration Configuration @relation(fields: [configurationId], references: [id])
+  labels      TagLabel[]
 }
 
 model TagLabel {
@@ -120,17 +133,18 @@ model TagLabel {
   order       Int
   createdAt   DateTime
   updatedAt   DateTime
-  TagCategory TagCategory[] @relation("TagLabelsCategory")
-  Tag         Tag[]         @relation("TagsLabel")
-  User        User[]        @relation("UserSpecialties")
+  categoryId  String
+  category    TagCategory    @relation(fields: [categoryId], references: [id])
+  tags        Tag[]
+  specialists User[]
 }
 
 model Translation {
   id       String     @id @db.VarChar(25)
   language String
   text     String
-  Answer   Answer[]
-  Question Question[]
+  question  Question @relation(name: "QuestionTranslation")
+  answer    Answer @relation(name: "AnswerTranslation")
 }
 
 model User {
@@ -144,12 +158,12 @@ model User {
   locale        String?
   createdAt     DateTime
   updatedAt     DateTime
-  Answer        Answer[]        @relation("UserAnswers")
-  Flag          Flag[]          @relation("UserFlags")
-  HistoryAction HistoryAction[] @relation("UserHistoryActions")
-  Question      Question[]      @relation("UserQuestions")
-  TagLabel      TagLabel[]      @relation("UserSpecialties")
-  Tag           Tag[]           @relation("UserTags")
+  Answer        Answer[]
+  flags         Flag[]
+  history       HistoryAction[]
+  questions     Question[]
+  specialties   TagLabel[]
+  tags          Tag[]
 }
 
 model ZNode {
@@ -157,9 +171,9 @@ model ZNode {
   highlights    String?
   updatedAt     DateTime
   createdAt     DateTime
-  Answer        Answer[]        @relation("NodeAnswer")
-  Flag          Flag[]          @relation("NodeFlags")
-  HistoryAction HistoryAction[] @relation("NodeHistoryActions")
-  Question      Question[]      @relation("NodeQuestion")
-  Tag           Tag[]           @relation("NodeTags")
+  answer        Answer
+  flags          Flag[]
+  history HistoryAction[]
+  question      Question
+  tags           Tag[]
 }
