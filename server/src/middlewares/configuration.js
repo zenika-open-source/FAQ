@@ -40,13 +40,13 @@ const refreshConfiguration = async tenant => {
             select: {
               id: true,
               order: true,
-              name: true,
-            },
-          },
-        },
+              name: true
+            }
+          }
+        }
       },
       workplaceSharing: true,
-      bugReporting: true,
+      bugReporting: true
     }
   })
   if (!conf) {
