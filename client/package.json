@@ -67,7 +67,7 @@
     "postcss": "^8.4.31",
     "prettier": "^3.0.0",
     "tailwindcss": "^3.3.3",
-    "vite": "^4.4.7"
+    "vite": "^4.4.12"
   },
   "overrides": {
     "react-error-overlay": "6.0.9"
