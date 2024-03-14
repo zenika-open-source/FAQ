@@ -76,4 +76,16 @@
   .card-text img {
     max-width: 100%;
   }
+
+  .mde-preview p {
+    margin-bottom: 1rem;
+  }
+
+  .mde-preview p:first-child {
+    margin-top: 0;
+  }
+
+  .mde-preview p:last-child {
+    margin-bottom: 0;
+  }
 }
