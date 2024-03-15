@@ -26,7 +26,7 @@ class Markdown {
     return (
       <div className="mde-preview">
         <div
-          className="mde-preview-content mt-0 p-0 border-0 break-words"
+          className="mde-preview-content mt-0 p-0 border-0 break-words prose"
           dangerouslySetInnerHTML={{
             __html: this.text(text),
           }}
