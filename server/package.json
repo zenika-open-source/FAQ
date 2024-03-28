@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "dependencies": {
     "algoliasearch": "^3.35.1",
-    "express": "^4.17.3",
+    "express": "^4.19.2",
     "express-force-https": "^1.0.0",
     "express-jwt": "^6.0.0",
     "form-data": "^2.5.1",
