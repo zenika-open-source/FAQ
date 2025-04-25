@@ -2,9 +2,7 @@
 
 # FAQ Zenika
 
-Internal Knowledge Database for your organization - https://demo.faq.team
-
-**:sparkles: Interested in having a hosted version of the FAQ for your organization? [Contact us!](mailto://thibaud.courtoison@zenika.com)**
+Internal Knowledge Database for your organization.
 
 ## What is FAQ?
 
@@ -17,26 +15,26 @@ Internal Knowledge Database for your organization - https://demo.faq.team
 - **Integrated:** Works well with your existing tool suite
 - **Internationalized:** Open to the world
 
-## Architecture
+## Technologies
 
-#### Frontend :
+#### Frontend
 
 - JS _(React, Apollo)_
 - CSS _(Custom-made)_
 
-#### Backend :
+#### Backend
 
 - Node JS
 - Prisma
 - PostgreSQL
 
-#### Backing services :
+#### Backing services
 
-- Algolia _(FullTextSearch-as-a-Service)_
+- Algolia _(Search-as-a-Service)_
 - Mailgun _(Mail-as-a-Service)_
 - Auth0 _(Auth-as-a-Service)_
 
-#### Integrations :
+#### Integrations
 
 - Slack: Sending new questions into a dedicated channel and `/faq` command
 - Workplace: Button to share questions
